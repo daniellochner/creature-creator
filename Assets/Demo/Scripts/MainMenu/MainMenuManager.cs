@@ -88,8 +88,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
-            SetupSettings();
+            //SetupSettings();
             SetupMultiplayer();
+
+
+            //PlayerData playerData = new PlayerData()
+            //{
+            //    username = "123"
+            //};
+            //NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(playerData));
+            //UnityTransport ipTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("IP");
+            //ipTransport.SetConnectionData("127.0.0.1", 1337);
+            //NetworkManager.Singleton.NetworkConfig.NetworkTransport = ipTransport;
+            //NetworkManager.Singleton.StartHost();
         }
         private void SetupSettings()
         {
@@ -150,32 +161,32 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupMultiplayer()
         {
-            roleDropdown.onValueChanged.AddListener((role) =>
-            {
-                switch ((RoleType)role)
-                {
-                    case RoleType.Client:
-                        joinCreateText.text = "Join";
-                        break;
-                    case RoleType.Host:
-                        joinCreateText.text = "Create";
-                        break;
-                }
-            });
-            connectionDropdown.onValueChanged.AddListener((connection) =>
-            {
-                switch ((ConnectionType)connection)
-                {
-                    case ConnectionType.Relay:
-                        relayConnectionGO.SetActive(true);
-                        ipConnectionGO.SetActive(false);
-                        break;
-                    case ConnectionType.Ip:
-                        relayConnectionGO.SetActive(false);
-                        ipConnectionGO.SetActive(true);
-                        break;
-                }
-            });
+            //roleDropdown.onValueChanged.AddListener((role) =>
+            //{
+            //    switch ((RoleType)role)
+            //    {
+            //        case RoleType.Client:
+            //            joinCreateText.text = "Join";
+            //            break;
+            //        case RoleType.Host:
+            //            joinCreateText.text = "Create";
+            //            break;
+            //    }
+            //});
+            //connectionDropdown.onValueChanged.AddListener((connection) =>
+            //{
+            //    switch ((ConnectionType)connection)
+            //    {
+            //        case ConnectionType.Relay:
+            //            relayConnectionGO.SetActive(true);
+            //            ipConnectionGO.SetActive(false);
+            //            break;
+            //        case ConnectionType.Ip:
+            //            relayConnectionGO.SetActive(false);
+            //            ipConnectionGO.SetActive(true);
+            //            break;
+            //    }
+            //});
 
             NetworkManager.Singleton.OnServerStarted += OnServerStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
@@ -403,7 +414,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ResetData()
         {
-            ConfirmationDialog.Confirm("Reset Data", "Are you sure your want to reset your data? (Note: This will not remove your creatures).", noEvent: DemoManager.Instance.Data.Revert);
+            ConfirmationDialog.Confirm("Reset Save Data", "Are you sure your want to reset your save data? Please note that this action is irreversible.", noEvent: DemoManager.Instance.Data.Revert);
         }
 
         public void SubscribeToYouTubeChannel()
