@@ -17,7 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MinMax minMaxSoundEffectsDB;
 
         [Header("Data")]
-        [SerializeField, ReadOnly] private DemoData data;
+        [SerializeField, ReadOnly] private DemoProgress progress;
+        [SerializeField, ReadOnly] private DemoSettings settings;
         [Space]
         [Button("Save")] [SerializeField] private bool save;
         [Button("Load")] [SerializeField] private bool load;
@@ -27,28 +28,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public DemoKeys Keys => keys;
         public MinMax MinMaxMusicDB => minMaxMusicDB;
         public MinMax MinMaxSoundEffectsDB => minMaxSoundEffectsDB;
-        public DemoData Data => data;
-
-        public Vector2Int DisplaySize
-        {
-            get
-            {
-                switch (data.DisplaySize)
-                {
-                    case 1:
-                        return new Vector2Int(1024, 576);
-                    case 2:
-                        return new Vector2Int(1024, 768);
-                    case 3:
-                        return new Vector2Int(1280, 720);
-                    case 4:
-                        return new Vector2Int(1600, 900);
-                    case 5:
-                        return new Vector2Int(1920, 1080);                     
-                }
-                return new Vector2Int(Screen.width, Screen.height); // Fullscreen
-            }
-        }
+        public DemoProgress Progress => progress;
+        public DemoSettings Settings => settings;
 
         private string DataDir { get; set; }
         #endregion
@@ -90,11 +71,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Save()
         {
-            SaveUtility.Save(JsonUtility.ToJson(data), Path.Combine(DataDir, "demo.json"));
+            SaveUtility.Save(JsonUtility.ToJson(progress), Path.Combine(DataDir, "demo.json"));
+            SaveUtility.Save(JsonUtility.ToJson(settings), Path.Combine(DataDir, "settings.json"));
         }
         public void Load()
         {
-            data = JsonUtility.FromJson<DemoData>(SaveUtility.Load(Path.Combine(DataDir, "demo.json"))) ?? new DemoData();
+            progress = JsonUtility.FromJson<DemoProgress>(SaveUtility.Load(Path.Combine(DataDir, "demo.json"))) ?? new DemoProgress();
+            settings = JsonUtility.FromJson<DemoSettings>(SaveUtility.Load(Path.Combine(DataDir, "settings.json"))) ?? new DemoSettings();
         }
 
         public void OnUncontrolledShutdown()

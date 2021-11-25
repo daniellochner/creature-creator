@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [Serializable]
-    public class DemoData
+    public class DemoProgress
     {
         #region Fields
         [SerializeField, Range(0, 100)] private float experience = 0;
@@ -16,15 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int startingCash = 1000;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
-        [Space]
-        [SerializeField] private int displaySize = 0;
-        [SerializeField] private int qualityLevel = 2;
-        [SerializeField, Range(0, 1)] private float musicVolume = 0.75f;
-        [SerializeField, Range(0, 1)] private float soundEffectsVolume = 0.75f;
-        [SerializeField] private bool debugMode = false;
-        [SerializeField] private bool hideChat = false;
-        [SerializeField] private bool previewFeatures = false;
-        [SerializeField] private bool shownHint = false;
         #endregion
 
         #region Properties
@@ -76,46 +67,6 @@ namespace DanielLochner.Assets.CreatureCreator
             get => unlockedPatterns;
             set => unlockedPatterns = value;
         }
-        public int DisplaySize
-        {
-            get => displaySize;
-            set => displaySize = value;
-        }
-        public int QualityLevel
-        {
-            get => qualityLevel;
-            set => qualityLevel = value;
-        }
-        public float MusicVolume
-        {
-            get => musicVolume;
-            set => musicVolume = Mathf.Clamp01(value);
-        }
-        public float SoundEffectsVolume
-        {
-            get => soundEffectsVolume;
-            set => soundEffectsVolume = Mathf.Clamp01(value);
-        }
-        public bool DebugMode
-        {
-            get => debugMode;
-            set => debugMode = value;
-        }
-        public bool HideChat
-        {
-            get => hideChat;
-            set => hideChat = value;
-        }
-        public bool PreviewFeatures
-        {
-            get => previewFeatures;
-            set => previewFeatures = value;
-        }
-        public bool ShownHint
-        {
-            get => shownHint;
-            set => shownHint = value;
-        }
 
         public static float MaxExperience = 100;
         public static int MaxLevel = 50;
@@ -129,14 +80,6 @@ namespace DanielLochner.Assets.CreatureCreator
             StartingCash = 1000;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
-            DisplaySize = 0;
-            QualityLevel = 2;
-            MusicVolume = 0.75f;
-            SoundEffectsVolume = 0.75f;
-            DebugMode = false;
-            HideChat = false;
-            PreviewFeatures = false;
-            ShownHint = false;
         }
         #endregion
     }

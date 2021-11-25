@@ -113,74 +113,66 @@ namespace DanielLochner.Assets.CreatureCreator
             //NetworkManager.Singleton.NetworkConfig.NetworkTransport = ipTransport;
             //NetworkManager.Singleton.StartHost();
         }
-        private void SetupSettings()
-        {
-            displaySizeDropdown.onValueChanged.AddListener(delegate (int displaySize)
-            {
-                Screen.SetResolution(DemoManager.Instance.DisplaySize.x, DemoManager.Instance.DisplaySize.y, displaySize == 0);
-                DemoManager.Instance.Data.DisplaySize = displaySize;
-                DemoManager.Instance.Save();
-            });
-            displaySizeDropdown.value = DemoManager.Instance.Data.DisplaySize;
+        //private void SetupSettings()
+        //{
+        //    displaySizeDropdown.onValueChanged.AddListener(delegate (int displaySize)
+        //    {
+        //        Screen.SetResolution(DemoManager.Instance.Settings.Resolution.x, DemoManager.Instance.Settings.Resolution.y, displaySize == 0);
+        //        DemoManager.Instance.Settings.Resolution = displaySize;
+        //        DemoManager.Instance.Save();
+        //    });
+        //    displaySizeDropdown.value = DemoManager.Instance.Data.DisplaySize;
 
-            qualityLevelDropdown.onValueChanged.AddListener(delegate (int qualityLevel)
-            {
-                QualitySettings.SetQualityLevel(qualityLevel);
-                DemoManager.Instance.Data.QualityLevel = qualityLevel;
-                DemoManager.Instance.Save();
-            });
-            qualityLevelDropdown.value = DemoManager.Instance.Data.QualityLevel;
+        //    musicSlider.onValueChanged.AddListener(delegate (float musicVolume)
+        //    {
+        //        masterAudioMixer.SetFloat("MusicVolume", Mathf.Lerp(DemoManager.Instance.MinMaxMusicDB.min, DemoManager.Instance.MinMaxMusicDB.max, musicVolume));
+        //        DemoManager.Instance.Data.MusicVolume = musicVolume;
+        //        DemoManager.Instance.Save();
+        //    });
+        //    musicSlider.value = DemoManager.Instance.Settings.MusicVolume;
 
-            musicSlider.onValueChanged.AddListener(delegate (float musicVolume)
-            {
-                masterAudioMixer.SetFloat("MusicVolume", Mathf.Lerp(DemoManager.Instance.MinMaxMusicDB.min, DemoManager.Instance.MinMaxMusicDB.max, musicVolume));
-                DemoManager.Instance.Data.MusicVolume = musicVolume;
-                DemoManager.Instance.Save();
-            });
-            musicSlider.value = DemoManager.Instance.Data.MusicVolume;
+        //    soundEffectsSlider.onValueChanged.AddListener(delegate (float soundEffectsVolume)
+        //    {
+        //        masterAudioMixer.SetFloat("SoundEffectsVolume", Mathf.Lerp(DemoManager.Instance.MinMaxSoundEffectsDB.min, DemoManager.Instance.MinMaxSoundEffectsDB.max, soundEffectsVolume));
+        //        DemoManager.Instance.Data.SoundEffectsVolume = soundEffectsVolume;
+        //        DemoManager.Instance.Save();
+        //    });
+        //    soundEffectsSlider.value = DemoManager.Instance.Data.SoundEffectsVolume;
 
-            soundEffectsSlider.onValueChanged.AddListener(delegate (float soundEffectsVolume)
-            {
-                masterAudioMixer.SetFloat("SoundEffectsVolume", Mathf.Lerp(DemoManager.Instance.MinMaxSoundEffectsDB.min, DemoManager.Instance.MinMaxSoundEffectsDB.max, soundEffectsVolume));
-                DemoManager.Instance.Data.SoundEffectsVolume = soundEffectsVolume;
-                DemoManager.Instance.Save();
-            });
-            soundEffectsSlider.value = DemoManager.Instance.Data.SoundEffectsVolume;
+        //    debugModeToggle.onValueChanged.AddListener(delegate (bool debugMode)
+        //    {
+        //        DebugLogManager.Instance.gameObject.SetActive(debugMode);
 
-            debugModeToggle.onValueChanged.AddListener(delegate (bool debugMode)
-            {
-                DebugLogManager.Instance.gameObject.SetActive(debugMode);
+        //        DemoManager.Instance.Data.DebugMode = debugMode;
+        //        DemoManager.Instance.Save();
+        //    });
+        //    debugModeToggle.isOn = DemoManager.Instance.Data.DebugMode;
 
-                DemoManager.Instance.Data.DebugMode = debugMode;
-                DemoManager.Instance.Save();
-            });
-            debugModeToggle.isOn = DemoManager.Instance.Data.DebugMode;
+        //    hideChatToggle.onValueChanged.AddListener(delegate (bool hideChat)
+        //    {
+        //        DemoManager.Instance.Data.HideChat = hideChat;
+        //        DemoManager.Instance.Save();
+        //    });
+        //    hideChatToggle.isOn = DemoManager.Instance.Data.HideChat;
 
-            hideChatToggle.onValueChanged.AddListener(delegate (bool hideChat)
-            {
-                DemoManager.Instance.Data.HideChat = hideChat;
-                DemoManager.Instance.Save();
-            });
-            hideChatToggle.isOn = DemoManager.Instance.Data.HideChat;
-
-            previewFeaturesToggle.onValueChanged.AddListener(delegate (bool previewFeatures)
-            {
-                DemoManager.Instance.Data.PreviewFeatures = previewFeatures;
-                DemoManager.Instance.Save();
-            });
-            previewFeaturesToggle.isOn = DemoManager.Instance.Data.PreviewFeatures;
-        }
+        //    previewFeaturesToggle.onValueChanged.AddListener(delegate (bool previewFeatures)
+        //    {
+        //        DemoManager.Instance.Data.PreviewFeatures = previewFeatures;
+        //        DemoManager.Instance.Save();
+        //    });
+        //    previewFeaturesToggle.isOn = DemoManager.Instance.Data.PreviewFeatures;
+        //}
         private void SetupProgress()
         {
             // Username
             //usernameText.text = DemoManager.Instance.Data.Username;
 
             // Level/Experience
-            levelText.text = DemoManager.Instance.Data.Level.ToString();
-            experienceSlider.SetValueWithoutNotify(DemoManager.Instance.Data.Experience);
+            levelText.text = DemoManager.Instance.Progress.Level.ToString();
+            experienceSlider.SetValueWithoutNotify(DemoManager.Instance.Progress.Experience);
 
             // Cash
-            cashText.text = $"${DemoManager.Instance.Data.StartingCash}";
+            cashText.text = $"${DemoManager.Instance.Progress.StartingCash}";
 
             // Body Parts
             Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
@@ -202,12 +194,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     StatisticsMenu.Instance.Clear();
                 });
                 bodyPartUI.DragUI.enabled = false;
-                if (!DemoManager.Instance.Data.UnlockedBodyParts.Contains(bodyPartID))
+                if (!DemoManager.Instance.Progress.UnlockedBodyParts.Contains(bodyPartID))
                 {
                     bodyPartUI.CanvasGroup.alpha = 0.25f;
                 }
             }
-            bodyPartsText.text = $"{DemoManager.Instance.Data.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
+            bodyPartsText.text = $"{DemoManager.Instance.Progress.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
 
             // Patterns
             Database patterns = DatabaseManager.GetDatabase("Patterns");
@@ -219,12 +211,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 patternUI.SelectToggle.enabled = false;
                 patternUI.ClickUI.enabled = false;
-                if (!DemoManager.Instance.Data.UnlockedPatterns.Contains(patternID))
+                if (!DemoManager.Instance.Progress.UnlockedPatterns.Contains(patternID))
                 {
                     patternUI.CanvasGroup.alpha = 0.25f;
                 }
             }
-            patternsText.text = $"{DemoManager.Instance.Data.UnlockedPatterns.Count}/{patterns.Objects.Count}";
+            patternsText.text = $"{DemoManager.Instance.Progress.UnlockedPatterns.Count}/{patterns.Objects.Count}";
         }
         private void SetupMultiplayer()
         {
@@ -483,7 +475,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             //Note: This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> delete your creatures.
 
-            ConfirmationDialog.Confirm("Reset Progress", "Are you sure your want to reset your save data? Please note that this action is irreversible.", noEvent: DemoManager.Instance.Data.Revert);
+            ConfirmationDialog.Confirm("Reset Progress", "Are you sure your want to reset your save data? Please note that this action is irreversible.", noEvent: DemoManager.Instance.Progress.Revert);
         }
 
         public void SubscribeToYouTubeChannel()
