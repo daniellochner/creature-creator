@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
-    public class ControlRebindDialog : MenuSingleton<ControlRebindDialog>
+    public class KeybindDialog : MenuSingleton<KeybindDialog>
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI messageText;

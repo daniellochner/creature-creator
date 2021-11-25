@@ -414,7 +414,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ResetData()
         {
-            ConfirmationDialog.Confirm("Reset Save Data", "Are you sure your want to reset your save data? Please note that this action is irreversible.", noEvent: DemoManager.Instance.Data.Revert);
+            //Note: This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> delete your creatures.
+
+            ConfirmationDialog.Confirm("Reset Progress", "Are you sure your want to reset your save data? Please note that this action is irreversible.", noEvent: DemoManager.Instance.Data.Revert);
         }
 
         public void SubscribeToYouTubeChannel()

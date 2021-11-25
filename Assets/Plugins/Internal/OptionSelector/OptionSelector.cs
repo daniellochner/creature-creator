@@ -10,19 +10,17 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private TextMeshProUGUI selectedOptionText;
         [SerializeField] private Option[] options;
-        [SerializeField] private int currentOptionIndex;
+        [SerializeField] private int defaultOptionIndex;
+
+        [Header("Debug")]
+        [SerializeField, ReadOnly] private int currentOptionIndex;
         #endregion
 
         #region Methods
-#if UNITY_EDITOR
-        private void OnValidate()
+        private void Start()
         {
-            if (!Application.isPlaying && options.Length > 0)
-            {
-                selectedOptionText.text = options[currentOptionIndex].Name;
-            }
+            Select(defaultOptionIndex, false);
         }
-#endif
 
         public void Next()
         {
@@ -43,13 +41,16 @@ namespace DanielLochner.Assets
             Select(nextOptionIndex);
         }
 
-        public void Select(int optionIndex)
+        public void Select(int optionIndex, bool notify = true)
         {
             currentOptionIndex = Math.Max(0, Math.Min(optionIndex, options.Length - 1));
 
             Option selectedOption = options[currentOptionIndex];
             selectedOptionText.text = selectedOption.Name;
-            selectedOption.OnSelected?.Invoke();
+            if (notify)
+            {
+                selectedOption.OnSelected?.Invoke();
+            }
         }
         #endregion
 

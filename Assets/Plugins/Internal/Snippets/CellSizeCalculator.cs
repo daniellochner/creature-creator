@@ -15,7 +15,8 @@ namespace DanielLochner.Assets
 
         public int NumberOfColumns { get { return numberOfColumns; } set { numberOfColumns = value; } }
 
-        public void Initialize()
+        [ContextMenu("Calculate")]
+        public void Calculate()
         {
             if (gridLayoutGroup == null || rectTransform == null)
             {
@@ -31,7 +32,7 @@ namespace DanielLochner.Assets
 
         private void Start()
         {
-            Initialize();
+            Calculate();
         }
     }
 }

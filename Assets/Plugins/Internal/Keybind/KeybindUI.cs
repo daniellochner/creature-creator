@@ -25,7 +25,7 @@ namespace DanielLochner.Assets
         #region Methods
         private void Start()
         {
-            rebindButton.onClick.AddListener(() => ControlRebindDialog.Rebind(this));
+            rebindButton.onClick.AddListener(() => KeybindDialog.Rebind(this));
             keyText.text = defaultKey.ToString();
         }
 
