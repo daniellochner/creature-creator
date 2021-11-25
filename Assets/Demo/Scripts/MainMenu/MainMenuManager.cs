@@ -44,6 +44,17 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle previewFeaturesToggle;
         [SerializeField] private AudioMixer masterAudioMixer;
 
+
+        [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private Slider experienceSlider;
+        [SerializeField] private TextMeshProUGUI bodyPartsText;
+        [SerializeField] private TextMeshProUGUI patternsText;
+        [SerializeField] private TextMeshProUGUI cashText;
+        [SerializeField] private BodyPartUI bodyPartUIPrefab;
+        [SerializeField] private PatternUI patternUIPrefab;
+        [SerializeField] private GridLayoutGroup unlockedBodyParts;
+        [SerializeField] private GridLayoutGroup unlockedPatterns;
+
         private Coroutine updateNetStatusCoroutine, loadMultiplayerCoroutine;
         private ProfanityFilter filter = new ProfanityFilter();
         private bool isConnecting;
@@ -89,8 +100,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Setup()
         {
             //SetupSettings();
+            SetupProgress();
             SetupMultiplayer();
-
 
             //PlayerData playerData = new PlayerData()
             //{
@@ -158,6 +169,62 @@ namespace DanielLochner.Assets.CreatureCreator
                 DemoManager.Instance.Save();
             });
             previewFeaturesToggle.isOn = DemoManager.Instance.Data.PreviewFeatures;
+        }
+        private void SetupProgress()
+        {
+            // Username
+            //usernameText.text = DemoManager.Instance.Data.Username;
+
+            // Level/Experience
+            levelText.text = DemoManager.Instance.Data.Level.ToString();
+            experienceSlider.SetValueWithoutNotify(DemoManager.Instance.Data.Experience);
+
+            // Cash
+            cashText.text = $"${DemoManager.Instance.Data.StartingCash}";
+
+            // Body Parts
+            Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
+            foreach (string bodyPartID in bodyParts.Objects.Keys)
+            {
+                BodyPart bodyPart = bodyParts.GetEntry<BodyPart>(bodyPartID);
+                BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, unlockedBodyParts.transform);
+                bodyPartUI.Setup(bodyPart);
+
+                bodyPartUI.HoverUI.OnEnter.AddListener(delegate
+                {
+                    if (!Input.GetMouseButton(0))
+                    {
+                        StatisticsMenu.Instance.Setup(bodyPart);
+                    }
+                });
+                bodyPartUI.HoverUI.OnExit.AddListener(delegate
+                {
+                    StatisticsMenu.Instance.Clear();
+                });
+                bodyPartUI.DragUI.enabled = false;
+                if (!DemoManager.Instance.Data.UnlockedBodyParts.Contains(bodyPartID))
+                {
+                    bodyPartUI.CanvasGroup.alpha = 0.25f;
+                }
+            }
+            bodyPartsText.text = $"{DemoManager.Instance.Data.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
+
+            // Patterns
+            Database patterns = DatabaseManager.GetDatabase("Patterns");
+            foreach (string patternID in patterns.Objects.Keys)
+            {
+                Texture2D pattern = patterns.GetEntry<Texture2D>(patternID);
+                PatternUI patternUI = Instantiate(patternUIPrefab, unlockedPatterns.transform);
+                patternUI.Setup(pattern);
+
+                patternUI.SelectToggle.enabled = false;
+                patternUI.ClickUI.enabled = false;
+                if (!DemoManager.Instance.Data.UnlockedPatterns.Contains(patternID))
+                {
+                    patternUI.CanvasGroup.alpha = 0.25f;
+                }
+            }
+            patternsText.text = $"{DemoManager.Instance.Data.UnlockedPatterns.Count}/{patterns.Objects.Count}";
         }
         private void SetupMultiplayer()
         {

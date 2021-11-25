@@ -16,8 +16,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI dietText;
         [SerializeField] private TextMeshProUGUI speedText;
         [SerializeField] private TextMeshProUGUI abilitiesText;
+        #endregion
 
-        private bool hasEntered;
+        #region Properties
+        public bool HasEntered { get; set; }
         #endregion
 
         #region Methods
@@ -53,30 +55,19 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             Open();
-            hasEntered = true;
+            HasEntered = true;
         }
         public void Clear()
         {
-            hasEntered = false;
+            HasEntered = false;
 
-            EditorManager.Instance.Invoke(delegate
+            this.Invoke(delegate
             {
-                if (!hasEntered)
+                if (!HasEntered)
                 {
                     Close();
                 }
             }, 0.15f);
-        }
-
-        public override void Open(bool instant = false)
-        {
-            gameObject.SetActive(true);
-            base.Open(instant);
-        }
-        public override void OnEndClose()
-        {
-            base.OnEndClose();
-            gameObject.SetActive(false);
         }
         #endregion
     }

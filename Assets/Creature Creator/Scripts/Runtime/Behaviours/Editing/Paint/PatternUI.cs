@@ -12,11 +12,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private Toggle selectToggle;
         [SerializeField] private ClickUI clickUI;
+        [SerializeField] private CanvasGroup canvasGroup;
         #endregion
 
         #region Properties
         public Toggle SelectToggle => selectToggle;
         public ClickUI ClickUI => clickUI;
+        public CanvasGroup CanvasGroup => canvasGroup;
         #endregion
 
         #region Methods

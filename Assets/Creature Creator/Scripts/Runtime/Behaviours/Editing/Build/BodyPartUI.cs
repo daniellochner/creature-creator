@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private DragUI dragUI;
         [SerializeField] private HoverUI hoverUI;
         [SerializeField] private ClickUI clickUI;
+        [SerializeField] private CanvasGroup canvasGroup;
 
         private BodyPart bodyPart;
         #endregion
@@ -23,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public DragUI DragUI => dragUI;
         public HoverUI HoverUI => hoverUI;
         public ClickUI ClickUI => clickUI;
+        public CanvasGroup CanvasGroup => canvasGroup;
         #endregion
 
         #region Methods
