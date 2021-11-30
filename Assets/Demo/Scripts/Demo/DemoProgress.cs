@@ -11,14 +11,17 @@ namespace DanielLochner.Assets.CreatureCreator
     public class DemoProgress
     {
         #region Fields
-        [SerializeField, Range(0, 100)] private float experience = 0;
+        [SerializeField, Range(0, 1)] private float experience = 0;
         [SerializeField, Range(0, 50)] private int level = 0;
-        [SerializeField] private int startingCash = 1000;
+        [SerializeField] private int cash = 1000;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
         #endregion
 
         #region Properties
+        public static float MaxExperience = 100;
+        public static int MaxLevel = 50;
+
         public float Experience
         {
             get => experience;
@@ -27,14 +30,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 experience = value;
                 if (experience >= MaxExperience)
                 {
-                    if (level >= MaxLevel)
+                    if (Level >= MaxLevel)
                     {
                         experience = MaxExperience;
                     }
                     else
                     {
                         float levels = experience / MaxExperience;
-                        level += (int)levels;
+                        Level += (int)levels;
                         experience = (levels - (int)levels) * MaxExperience;
                     }
                 }
@@ -52,32 +55,27 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-        public int StartingCash
+        public int Cash
         {
-            get => startingCash;
-            set => startingCash = value;
+            get => cash;
+            set => cash = value;
         }
         public List<string> UnlockedBodyParts
         {
             get => unlockedBodyParts;
-            set => unlockedBodyParts = value;
         }
         public List<string> UnlockedPatterns
         {
             get => unlockedPatterns;
-            set => unlockedPatterns = value;
         }
-
-        public static float MaxExperience = 100;
-        public static int MaxLevel = 50;
         #endregion
 
         #region Methods
-        public void Revert()
+        public void Reset()
         {
             Experience = 0;
             Level = 0;
-            StartingCash = 1000;
+            Cash = 1000;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
         }

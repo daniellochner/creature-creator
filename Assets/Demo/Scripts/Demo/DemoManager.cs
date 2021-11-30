@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using System.IO;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,8 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Settings")]
         [SerializeField] private DemoKeys keys;
-        [SerializeField] private MinMax minMaxMusicDB;
-        [SerializeField] private MinMax minMaxSoundEffectsDB;
 
         [Header("Data")]
         [SerializeField, ReadOnly] private DemoProgress progress;
@@ -25,11 +22,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public DemoKeys Keys => keys;
-        public MinMax MinMaxMusicDB => minMaxMusicDB;
-        public MinMax MinMaxSoundEffectsDB => minMaxSoundEffectsDB;
-        public DemoProgress Progress => progress;
-        public DemoSettings Settings => settings;
+        public static DemoKeys Keys => Instance.keys;
+        public static DemoProgress Progress => Instance.progress;
+        public static DemoSettings Settings => Instance.settings;
 
         private string DataDir { get; set; }
         #endregion
@@ -52,15 +47,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Directory.CreateDirectory(DataDir);
             }
-
-            if (File.Exists(Path.Combine(DataDir, "demo.json")))
-            {
-                Load();
-            }
-            else
-            {
-                Save();
-            }
+            Load();
+            Save();
         }
         private void Setup()
         {
@@ -71,13 +59,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Save()
         {
-            SaveUtility.Save(JsonUtility.ToJson(progress), Path.Combine(DataDir, "demo.json"));
-            SaveUtility.Save(JsonUtility.ToJson(settings), Path.Combine(DataDir, "settings.json"));
+            SaveUtility.Save(Path.Combine(DataDir, "progress.dat"), progress, keys.ProgressEncryption.Value);
+            SaveUtility.Save(Path.Combine(DataDir, "settings.dat"), settings);
         }
         public void Load()
         {
-            progress = JsonUtility.FromJson<DemoProgress>(SaveUtility.Load(Path.Combine(DataDir, "demo.json"))) ?? new DemoProgress();
-            settings = JsonUtility.FromJson<DemoSettings>(SaveUtility.Load(Path.Combine(DataDir, "settings.json"))) ?? new DemoSettings();
+            progress = SaveUtility.Load<DemoProgress>(Path.Combine(DataDir, "progress.dat"), keys.ProgressEncryption.Value);
+            settings = SaveUtility.Load<DemoSettings>(Path.Combine(DataDir, "settings.dat"));
         }
 
         public void OnUncontrolledShutdown()

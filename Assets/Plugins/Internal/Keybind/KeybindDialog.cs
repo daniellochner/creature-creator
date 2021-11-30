@@ -1,12 +1,10 @@
-﻿// Menus
+﻿// Keybind
 // Copyright (c) Daniel Lochner
 
 using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
@@ -17,12 +15,12 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Rebind(KeybindUI controlUI)
+        public static void Rebind(KeybindUI keybindUI)
         {
-            Instance.messageText.text = $"Press any key to rebind \"{controlUI.Action}\"\n.Press ESC to cancel.";
-            Instance.StartCoroutine(Instance.RebindRoutine(controlUI));
+            Instance.messageText.text = $"Press any key to rebind to \"{keybindUI.Action}\"\n.Press ESC to cancel.";
+            Instance.StartCoroutine(Instance.RebindRoutine(keybindUI));
         }
-        private IEnumerator RebindRoutine(KeybindUI controlUI)
+        private IEnumerator RebindRoutine(KeybindUI keybindUI)
         {
             Open();
 
@@ -36,7 +34,7 @@ namespace DanielLochner.Assets
                         {
                             if (Input.GetKeyDown(key))
                             {
-                                controlUI.Rebind(key);
+                                keybindUI.Rebind(key);
                                 break;
                             }
                         }

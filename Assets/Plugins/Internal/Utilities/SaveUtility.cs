@@ -1,23 +1,26 @@
 ﻿using System.IO;
+using UnityEngine;
 
 namespace DanielLochner.Assets
 {
     public static class SaveUtility
     {
-        public static void Save(string text, string filePath)
+        public static void Save<T>(string filePath, T data, string encryptionKey = null)
         {
-            File.WriteAllText(filePath, text);
+            File.WriteAllText(filePath, StringCipher.Encrypt(JsonUtility.ToJson(data), encryptionKey));
         }
-        public static string Load(string filePath)
+        public static T Load<T>(string filePath, string encryptionKey = null) where T : class, new()
         {
+            T tmp = null;
             if (File.Exists(filePath))
             {
-                return File.ReadAllText(filePath);
+                try
+                {
+                    tmp = JsonUtility.FromJson<T>(StringCipher.Decrypt(File.ReadAllText(filePath), encryptionKey));
+                }
+                catch { return null; }
             }
-            else
-            {
-                return null;
-            }
+            return tmp ?? new T();
         }
     }
 }

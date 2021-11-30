@@ -222,7 +222,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             foreach (string creaturePath in Directory.GetFiles(creaturesDirectory))
             {
-                CreatureData creatureData = DecryptCreature(SaveUtility.Load(creaturePath));
+                CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath, creatureEncryptionKey.Value);
                 if (creatureData != null)
                 {
                     AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
@@ -360,14 +360,14 @@ namespace DanielLochner.Assets.CreatureCreator
             //PerformOperation(operation: delegate
             //{
             //    string encryptedText = EncryptCreature(player.Creature.Constructor.Data);
-            //    string path = Path.Combine(creaturesDirectory, $"{player.Creature.Constructor.Data.Name}.json");
+            //    string path = Path.Combine(creaturesDirectory, $"{player.Creature.Constructor.Data.Name}.dat");
 
             //    SaveUtility.Save(encryptedText, path);
             //},
             //restructure: true);
 
             string encryptedText = EncryptCreature(creatureData);
-            string path = Path.Combine(creaturesDirectory, $"{creatureData.Name}.json");
+            string path = Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat");
             SaveUtility.Save(encryptedText, path);
 
             player.Creature.Editor.LoadedCreature = creatureData.Name;
@@ -384,7 +384,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else return;
 
-            CreatureData creatureData = DecryptCreature(SaveUtility.Load(Path.Combine(creaturesDirectory, $"{creatureName}.json")));
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureName}.dat"), creatureEncryptionKey.Value);
             ConfirmUnsavedChanges(() => Load(creatureData), "loading");
         }
         public void Load(CreatureData creatureData)
@@ -428,7 +428,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     string creaturePath = paths[0];
 
-                    CreatureData creatureData = DecryptCreature(SaveUtility.Load(creaturePath), "");
+                    CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath);
                     if (creatureData != null && IsValidName(creatureData.Name))
                     {
                         Save(creatureData);
@@ -481,7 +481,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Data
-            SaveUtility.Save(JsonUtility.ToJson(creatureData), Path.Combine(creaturePath, $"{creatureData.Name}.json"));
+            SaveUtility.Save(JsonUtility.ToJson(creatureData), Path.Combine(creaturePath, $"{creatureData.Name}.dat"));
 
             // Screenshot
             player.Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)
@@ -661,7 +661,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     creaturesUI.Remove(creatureUI);
                     Destroy(creatureUI.gameObject);
-                    File.Delete(Path.Combine(creaturesDirectory, $"{creatureName}.json"));
+                    File.Delete(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
 
                     if (creatureName.Equals(player.Creature.Editor.LoadedCreature))
                     {
@@ -885,7 +885,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (CreatureUI creatureUI in creaturesUI)
             {
-                CreatureData creatureData = DecryptCreature(SaveUtility.Load(Path.Combine(creaturesDirectory, $"{creatureUI.name}.json")));
+                CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureUI.name}.dat"), creatureEncryptionKey.Value);
 
                 bool canLoadCreature = CanLoadCreature(creatureData, out string errorMessage);
 

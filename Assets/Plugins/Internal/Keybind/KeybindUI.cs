@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace DanielLochner.Assets
@@ -11,6 +12,7 @@ namespace DanielLochner.Assets
         [SerializeField] private TextMeshProUGUI keyText;
         [SerializeField] private Button rebindButton;
         [SerializeField] private GameObject resetGO;
+        [SerializeField] private UnityEvent<KeyCode> onRebind;
         [Space]
         [SerializeField] private KeyCode defaultKey;
 
@@ -20,6 +22,7 @@ namespace DanielLochner.Assets
 
         #region Properties
         public string Action => actionText.text;
+        public UnityEvent<KeyCode> OnRebind => onRebind;
         #endregion
 
         #region Methods
@@ -29,12 +32,17 @@ namespace DanielLochner.Assets
             keyText.text = defaultKey.ToString();
         }
 
-        public void Rebind(KeyCode key)
+        public void Rebind(KeyCode key, bool notify = true)
         {
             keyText.text = key.ToString();
 
             currentKey = key;
             resetGO.SetActive(true);
+
+            if (notify)
+            {
+                onRebind.Invoke(key);
+            }
         }
 
         public void Reset()

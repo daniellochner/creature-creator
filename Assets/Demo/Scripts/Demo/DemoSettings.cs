@@ -1,3 +1,6 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Video")]
-        [SerializeField] private Vector2Int resolution = new Vector2Int(Screen.width, Screen.height);
+        [SerializeField] private int resolution = 0;
         [SerializeField] private bool fullscreen = true;
         [SerializeField] private bool vSync = false;
         [Space]
@@ -18,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextureQualityType textureQuality = TextureQualityType.Medium;
         [SerializeField] private AmbientOcclusionType ambientOcclusion = AmbientOcclusionType.MSVO;
         [SerializeField] private AntialiasingType antialiasing = AntialiasingType.HighSMAA;
-        [SerializeField] private ScreenSpaceReflectionType screenSpaceReflection = ScreenSpaceReflectionType.Medium;
+        [SerializeField] private ScreenSpaceReflectionsType screenSpaceReflections = ScreenSpaceReflectionsType.Medium;
         [SerializeField] private bool anisotropicFiltering = true;
         [SerializeField] private bool bloom = true;
         [SerializeField] private bool depthOfField = true;
@@ -30,8 +33,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 1)] private float soundEffectsVolume = 0.75f;
 
         [Header("Gameplay")]
-        [SerializeField] private string username = "Creature";
-        [SerializeField] private List<string> creaturePresets = new List<string>();
+        [SerializeField] private string onlineUsername = "";
+        [SerializeField] private List<CreatureData> creaturePresets = new List<CreatureData>();
         [SerializeField] private bool debugMode = false;
         [SerializeField] private bool previewFeatures = true;
         [SerializeField] private bool networkStats = true;
@@ -46,10 +49,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public Vector2Int Resolution
+        public int Resolution
         {
             get => resolution;
-            set => resolution = value;
+            set => resolution = Mathf.Clamp(value, 0, Screen.resolutions.Length - 1);
         }
         public bool Fullscreen
         {
@@ -86,10 +89,10 @@ namespace DanielLochner.Assets.CreatureCreator
             get => antialiasing;
             set => antialiasing = value;
         }
-        public ScreenSpaceReflectionType ScreenSpaceReflection
+        public ScreenSpaceReflectionsType ScreenSpaceReflections
         {
-            get => screenSpaceReflection;
-            set => screenSpaceReflection = value;
+            get => screenSpaceReflections;
+            set => screenSpaceReflections = value;
         }
         public bool AnisotropicFiltering
         {
@@ -115,25 +118,25 @@ namespace DanielLochner.Assets.CreatureCreator
         public float MasterVolume
         {
             get => masterVolume;
-            set => masterVolume = value;
+            set => masterVolume = Mathf.Clamp01(value);
         }
         public float MusicVolume
         {
             get => musicVolume;
-            set => musicVolume = value;
+            set => musicVolume = Mathf.Clamp01(value);
         }
         public float SoundEffectsVolume
         {
             get => soundEffectsVolume;
-            set => soundEffectsVolume = value;
+            set => soundEffectsVolume = Mathf.Clamp01(value);
         }
 
-        public string Username
+        public string OnlineUsername
         {
-            get => username;
-            set => username = value;
+            get => onlineUsername;
+            set => onlineUsername = value;
         }
-        public List<string> CreaturePresets
+        public List<CreatureData> CreaturePresets
         {
             get => creaturePresets;
             set => creaturePresets = value;
@@ -186,20 +189,13 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Methods
-        public void Revert()
-        {
-
-        }
-        #endregion
-
         #region Enums
         public enum PresetType
         {
+            Custom,
             Low,
             Medium,
-            High,
-            Custom
+            High
         }
         public enum CreatureMeshQualityType
         {
@@ -233,7 +229,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MediumSMAA,
             HighSMAA
         }
-        public enum ScreenSpaceReflectionType
+        public enum ScreenSpaceReflectionsType
         {
             None,
             Low,

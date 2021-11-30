@@ -11,12 +11,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private SecretKey googleAPI;
         [SerializeField] private SecretKey pinnedCommentId;
         [SerializeField] private SecretKey creatureEncryption;
+        [SerializeField] private SecretKey progressEncryption;
         #endregion
 
         #region Properties
         public SecretKey GoogleAPI => googleAPI;
         public SecretKey PinnedCommentId => pinnedCommentId;
         public SecretKey CreatureEncryption => creatureEncryption;
+        public SecretKey ProgressEncryption => progressEncryption;
         #endregion
     }
 }
