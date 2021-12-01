@@ -35,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Gameplay")]
         [SerializeField] private string onlineUsername = "";
         [SerializeField] private List<CreatureData> creaturePresets = new List<CreatureData>();
+        [SerializeField] private bool cameraShake = true;
         [SerializeField] private bool debugMode = false;
         [SerializeField] private bool previewFeatures = true;
         [SerializeField] private bool networkStats = true;
@@ -140,6 +141,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => creaturePresets;
             set => creaturePresets = value;
+        }
+        public bool CameraShake
+        {
+            get => cameraShake;
+            set => cameraShake = value;
         }
         public bool DebugMode
         {

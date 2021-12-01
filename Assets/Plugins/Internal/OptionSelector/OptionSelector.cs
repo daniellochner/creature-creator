@@ -21,6 +21,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
+        public int SelectedOption => currentOptionIndex;
         public List<Option> Options => options;
         public UnityEvent<int> OnSelected => onSelected;
         #endregion
@@ -70,6 +71,11 @@ namespace DanielLochner.Assets
                 OnSelected?.Invoke(optionIndex);
             }
             previousOptionIndex = currentOptionIndex;
+        }
+
+        public void Select(Enum option, bool notify = true)
+        {
+            Select(Convert.ToInt32(option), notify);
         }
         #endregion
 

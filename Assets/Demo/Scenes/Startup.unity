@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 182049364}
   - component: {fileID: 182049365}
+  - component: {fileID: 182049367}
   - component: {fileID: 182049366}
   m_Layer: 0
   m_Name: Other
@@ -181,6 +182,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxPayloadSize: 1024
   maxPlayers: 16
+--- !u!114 &182049367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182049363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c13214d53e604c64ba6b6c85caa52268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &231216500
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -804,15 +817,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keys: {fileID: 11400000, guid: 47b4f42a184d44247972e60938b0d01a, type: 2}
-  minMaxMusicDB:
-    min: -20
-    max: 1
-  minMaxSoundEffectsDB:
-    min: -20
-    max: 1
   progress:
-    level: 0
     experience: 0
+    level: 0
     cash: 1000
     unlockedBodyParts: []
     unlockedPatterns: []
@@ -825,7 +832,7 @@ MonoBehaviour:
     textureQuality: 1
     ambientOcclusion: 2
     antialiasing: 4
-    screenSpaceReflection: 2
+    screenSpaceReflections: 2
     anisotropicFiltering: 1
     bloom: 1
     depthOfField: 1
@@ -833,8 +840,9 @@ MonoBehaviour:
     masterVolume: 1
     musicVolume: 0.75
     soundEffectsVolume: 0.75
-    username: Creature
+    onlineUsername: 
     creaturePresets: []
+    cameraShake: 1
     debugMode: 0
     previewFeatures: 1
     networkStats: 1
@@ -846,6 +854,8 @@ MonoBehaviour:
     invertVertical: 0
   save: 0
   load: 0
+  references:
+    version: 1
 --- !u!4 &140453851891507817
 Transform:
   m_ObjectHideFlags: 0

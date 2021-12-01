@@ -12,7 +12,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject padlockIcon;
         [SerializeField] private Button joinButton;
 
-        public void Setup(int currentPlayers, int maxPlayers, string name, string map, string version, bool isPasswordProtected)
+        public Button JoinButton => joinButton;
+
+        public void Setup(string lobbyId, int currentPlayers, int maxPlayers, string name, string map, string version, bool isPasswordProtected)
         {
             playersText.text = $"{currentPlayers}/{maxPlayers}";
             nameText.text = name;

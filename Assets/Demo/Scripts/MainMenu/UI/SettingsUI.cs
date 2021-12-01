@@ -42,6 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TMP_InputField onlineUsernameTextField;
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Button creaturePresetsButton;
+        [SerializeField] private Toggle cameraShakeToggle;
         [SerializeField] private Toggle debugModeToggle;
         [SerializeField] private Toggle previewFeaturesToggle;
         [SerializeField] private Toggle networkStatsToggle;
@@ -69,148 +70,148 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 resolutionOS.Options.Add(new OptionSelector.Option()
                 {
-                    Name = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}"
+                    Name = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
                 });
             }
-            resolutionOS.Select(DemoManager.Settings.Resolution, false);
             resolutionOS.OnSelected.AddListener(delegate (int option)
             {
                 Screen.SetResolution(Screen.resolutions[option].width, Screen.resolutions[option].height, Screen.fullScreen, Screen.resolutions[option].refreshRate);
                 DemoManager.Settings.Resolution = option;
             });
+            resolutionOS.Select(DemoManager.Settings.Resolution);
 
             // Fullscreen
-            fullscreenToggle.SetIsOnWithoutNotify(DemoManager.Settings.Fullscreen);
             fullscreenToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 Screen.fullScreen = isOn;
                 DemoManager.Settings.Fullscreen = isOn;
             });
+            fullscreenToggle.isOn = DemoManager.Settings.Fullscreen;
 
             // V-Sync
-            vSyncToggle.SetIsOnWithoutNotify(DemoManager.Settings.VSync);
             vSyncToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.VSync = isOn;
             });
+            vSyncToggle.isOn = DemoManager.Settings.VSync;
 
             // Preset
             presetOS.SetupUsingEnum<PresetType>();
-            presetOS.Select((int)PresetType.Custom, false);
             presetOS.OnSelected.AddListener(delegate (int option)
             {
             });
+            presetOS.Select(PresetType.Custom);
 
             // Creature Mesh Quality
             creatureMeshQualityOS.SetupUsingEnum<CreatureMeshQualityType>();
-            creatureMeshQualityOS.Select((int)DemoManager.Settings.CreatureMeshQuality, false);
             creatureMeshQualityOS.OnSelected.AddListener(delegate (int option)
             {
                 DemoManager.Settings.CreatureMeshQuality = (CreatureMeshQualityType)option;
             });
+            creatureMeshQualityOS.Select(DemoManager.Settings.CreatureMeshQuality);
 
             // Shadow Quality
             shadowQualityOS.SetupUsingEnum<ShadowQualityType>();
-            shadowQualityOS.Select((int)DemoManager.Settings.ShadowQuality, false);
             shadowQualityOS.OnSelected.AddListener(delegate (int option)
             {
                 DemoManager.Settings.ShadowQuality = (ShadowQualityType)option;
             });
+            shadowQualityOS.Select(DemoManager.Settings.ShadowQuality);
 
             // Texture Quality
             textureQualityOS.SetupUsingEnum<TextureQualityType>();
-            textureQualityOS.Select((int)DemoManager.Settings.TextureQuality, false);
             textureQualityOS.OnSelected.AddListener(delegate (int option)
             {
                 DemoManager.Settings.TextureQuality = (TextureQualityType)option;
             });
+            textureQualityOS.Select(DemoManager.Settings.TextureQuality);
 
             // Ambient Occlusion
             ambientOcclusionOS.SetupUsingEnum<AmbientOcclusionType>();
-            ambientOcclusionOS.Select((int)DemoManager.Settings.AmbientOcclusion, false);
             ambientOcclusionOS.OnSelected.AddListener(delegate (int option)
             {
                 DemoManager.Settings.AmbientOcclusion = (AmbientOcclusionType)option;
             });
+            ambientOcclusionOS.Select(DemoManager.Settings.AmbientOcclusion);
 
             // Antialiasing
             antialiasingOS.SetupUsingEnum<AntialiasingType>();
-            antialiasingOS.Select((int)DemoManager.Settings.Antialiasing, false);
             antialiasingOS.OnSelected.AddListener(delegate (int option)
             {
                 DemoManager.Settings.Antialiasing = (AntialiasingType)option;
             });
+            antialiasingOS.Select(DemoManager.Settings.Antialiasing);
 
             // Screen Space Reflections
             screenSpaceReflectionsOS.SetupUsingEnum<ScreenSpaceReflectionsType>();
-            screenSpaceReflectionsOS.Select((int)DemoManager.Settings.ScreenSpaceReflections, false);
             screenSpaceReflectionsOS.OnSelected.AddListener(delegate (int option)
             {
                 DemoManager.Settings.ScreenSpaceReflections = (ScreenSpaceReflectionsType)option;
             });
+            screenSpaceReflectionsOS.Select(DemoManager.Settings.ScreenSpaceReflections);
 
             // Anisotropic Filtering
-            anisotropicFilteringToggle.SetIsOnWithoutNotify(DemoManager.Settings.AnisotropicFiltering);
             anisotropicFilteringToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.AnisotropicFiltering = isOn;
             });
+            anisotropicFilteringToggle.isOn = DemoManager.Settings.AnisotropicFiltering;
 
             // Bloom
-            bloomToggle.SetIsOnWithoutNotify(DemoManager.Settings.Bloom);
             bloomToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.Bloom = isOn;
             });
+            bloomToggle.isOn = DemoManager.Settings.Bloom;
 
             // Depth Of Field
-            depthOfFieldToggle.SetIsOnWithoutNotify(DemoManager.Settings.DepthOfField);
             depthOfFieldToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.DepthOfField = isOn;
             });
+            depthOfFieldToggle.isOn = DemoManager.Settings.DepthOfField;
 
             // Motion Blur
-            motionBlurToggle.SetIsOnWithoutNotify(DemoManager.Settings.MotionBlur);
             motionBlurToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.MotionBlur = isOn;
             });
+            motionBlurToggle.isOn = DemoManager.Settings.MotionBlur;
             #endregion
 
             #region Audio
             // Master Volume
-            masterVolumeSlider.SetValueWithoutNotify(DemoManager.Settings.MasterVolume);
             masterVolumeSlider.onValueChanged.AddListener(delegate (float value)
             {
                 masterAudioMixer.SetFloat("MasterVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value));
                 DemoManager.Settings.MasterVolume = value;
             });
+            masterVolumeSlider.value = DemoManager.Settings.MasterVolume;
 
             // Music Volume
-            musicVolumeSlider.SetValueWithoutNotify(DemoManager.Settings.MusicVolume);
             musicVolumeSlider.onValueChanged.AddListener(delegate (float value)
             {
                 masterAudioMixer.SetFloat("MusicVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value));
                 DemoManager.Settings.MusicVolume = value;
             });
+            musicVolumeSlider.value = DemoManager.Settings.MusicVolume;
 
             // Sound Effects Volume
-            soundEffectsVolumeSlider.SetValueWithoutNotify(DemoManager.Settings.SoundEffectsVolume);
             soundEffectsVolumeSlider.onValueChanged.AddListener(delegate (float value)
             {
                 masterAudioMixer.SetFloat("SoundEffectsVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value));
                 DemoManager.Settings.SoundEffectsVolume = value;
             });
+            soundEffectsVolumeSlider.value = DemoManager.Settings.SoundEffectsVolume;
             #endregion
 
             #region Gameplay
             // Online Username
-            onlineUsernameTextField.SetTextWithoutNotify(DemoManager.Settings.OnlineUsername);
             onlineUsernameTextField.onValueChanged.AddListener(delegate (string text) 
             {
                 DemoManager.Settings.OnlineUsername = text;
             });
+            onlineUsernameTextField.text = DemoManager.Settings.OnlineUsername;
             
             // Creature Preset(s)
             int presets = DemoManager.Settings.CreaturePresets.Count;
@@ -239,41 +240,48 @@ namespace DanielLochner.Assets.CreatureCreator
                 );
             });
 
+            // Camera Shake
+            cameraShakeToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                DemoManager.Settings.CameraShake = isOn;
+            });
+            cameraShakeToggle.isOn = DemoManager.Settings.CameraShake;
+
             // Debug Mode
-            debugModeToggle.SetIsOnWithoutNotify(DemoManager.Settings.DebugMode);
             debugModeToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DebugLogManager.Instance.gameObject.SetActive(isOn);
                 DemoManager.Settings.DebugMode = isOn;
             });
+            debugModeToggle.isOn = DemoManager.Settings.DebugMode;
 
             // Preview Features
-            previewFeaturesToggle.SetIsOnWithoutNotify(DemoManager.Settings.PreviewFeatures);
             previewFeaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.PreviewFeatures = isOn;
             });
+            previewFeaturesToggle.isOn = DemoManager.Settings.PreviewFeatures;
 
             // Network Stats
-            networkStatsToggle.SetIsOnWithoutNotify(DemoManager.Settings.NetworkStats);
             networkStatsToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.NetworkStats = isOn;
             });
+            networkStatsToggle.isOn = DemoManager.Settings.NetworkStats;
 
             // Tutorial
-            tutorialToggle.SetIsOnWithoutNotify(DemoManager.Settings.NetworkStats);
             tutorialToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.Tutorial = isOn;
             });
+            tutorialToggle.isOn = DemoManager.Settings.NetworkStats;
 
             // World Chat
-            worldChatToggle.SetIsOnWithoutNotify(DemoManager.Settings.WorldChat);
             worldChatToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.WorldChat = isOn;
             });
+            worldChatToggle.isOn = DemoManager.Settings.WorldChat;
 
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
@@ -284,32 +292,32 @@ namespace DanielLochner.Assets.CreatureCreator
 
             #region Controls
             // Camera Sensitivity (Horizontal)
-            cameraSensitivityHorizontalSlider.SetValueWithoutNotify(DemoManager.Settings.CameraSensitivityHorizontal);
             cameraSensitivityHorizontalSlider.onValueChanged.AddListener(delegate (float value)
             {
                 DemoManager.Settings.CameraSensitivityHorizontal = value;
             });
+            cameraSensitivityHorizontalSlider.value = DemoManager.Settings.CameraSensitivityHorizontal;
 
             // Camera Sensitivity (Vertical)
-            cameraSensitivityVerticalSlider.SetValueWithoutNotify(DemoManager.Settings.CameraSensitivityVertical);
             cameraSensitivityVerticalSlider.onValueChanged.AddListener(delegate (float value)
             {
                 DemoManager.Settings.CameraSensitivityVertical = value;
             });
+            cameraSensitivityVerticalSlider.value = DemoManager.Settings.CameraSensitivityVertical;
 
             // Invert Horizontal
-            invertHorizontalToggle.SetIsOnWithoutNotify(DemoManager.Settings.InvertHorizontal);
             invertHorizontalToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.InvertHorizontal = isOn;
             });
+            invertHorizontalToggle.isOn = DemoManager.Settings.InvertHorizontal;
 
             // Invert Vertical
-            invertVerticalToggle.SetIsOnWithoutNotify(DemoManager.Settings.InvertVertical);
             invertVerticalToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 DemoManager.Settings.InvertVertical = isOn;
             });
+            invertVerticalToggle.isOn = DemoManager.Settings.InvertVertical;
             #endregion
         }
         #endregion
