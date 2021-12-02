@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7328919672290106455
+--- !u!1 &981996808766512304
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7328919672290106451}
-  - component: {fileID: 7328919672290106453}
-  - component: {fileID: 7328919672290106452}
+  - component: {fileID: 981996808766512269}
+  - component: {fileID: -8638041438984211807}
+  - component: {fileID: 384159566301628347}
   m_Layer: 0
-  m_Name: NetworkInactivityManager
+  m_Name: NetworkStatsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7328919672290106451
+--- !u!4 &981996808766512269
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7328919672290106455}
+  m_GameObject: {fileID: 981996808766512304}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,13 +32,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7328919672290106453
+--- !u!114 &-8638041438984211807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7328919672290106455}
+  m_GameObject: {fileID: 981996808766512304}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
@@ -48,19 +48,16 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &7328919672290106452
+--- !u!114 &384159566301628347
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7328919672290106455}
+  m_GameObject: {fileID: 981996808766512304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaab61276827b174ca9181fbdc397292, type: 3}
+  m_Script: {fileID: 11500000, guid: adbd976a82c1d61469b96955b9aece16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inactiveTime: 300
-  warnTime: 60
-  kickHost: 1
-  timeLeft: 300
+  m_PingIntervalSeconds: 0.5

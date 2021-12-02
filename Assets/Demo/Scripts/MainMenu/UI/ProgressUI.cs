@@ -39,14 +39,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Setup()
         {
-            // Level
-            levelText.text = DemoManager.Progress.Level.ToString();
-
-            // Experience
-            experienceSlider.value = DemoManager.Progress.Experience;
+            // Level/Experience
+            levelText.text = ProgressManager.Data.Level.ToString();
+            experienceSlider.value = ProgressManager.Data.Experience;
 
             // Cash
-            cashText.text = $"${DemoManager.Progress.Cash}";
+            cashText.text = $"${ProgressManager.Data.Cash}";
 
             // Body Parts
             Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
@@ -68,14 +66,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     StatisticsMenu.Instance.Clear();
                 });
                 bodyPartUI.DragUI.enabled = false;
-                if (!DemoManager.Progress.UnlockedBodyParts.Contains(bodyPartID))
+                if (!ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID))
                 {
                     bodyPartUI.CanvasGroup.alpha = 0.25f;
                 }
             }
-            bodyPartsText.text = $"{DemoManager.Progress.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
+            bodyPartsText.text = $"{ProgressManager.Data.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
             bodyPartsSlider.maxValue = bodyParts.Objects.Count;
-            bodyPartsSlider.value = DemoManager.Progress.UnlockedBodyParts.Count;
+            bodyPartsSlider.value = ProgressManager.Data.UnlockedBodyParts.Count;
             bodyPartsTitleText.text = $"Unlocked Body Parts ({bodyPartsText.text})";
 
             // Patterns
@@ -88,14 +86,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 patternUI.SelectToggle.enabled = false;
                 patternUI.ClickUI.enabled = false;
-                if (!DemoManager.Progress.UnlockedPatterns.Contains(patternID))
+                if (!ProgressManager.Data.UnlockedPatterns.Contains(patternID))
                 {
                     patternUI.CanvasGroup.alpha = 0.25f;
                 }
             }
-            patternsText.text = $"{DemoManager.Progress.UnlockedPatterns.Count}/{patterns.Objects.Count}";
+            patternsText.text = $"{ProgressManager.Data.UnlockedPatterns.Count}/{patterns.Objects.Count}";
             patternsSlider.maxValue = patterns.Objects.Count;
-            patternsSlider.value = DemoManager.Progress.UnlockedPatterns.Count;
+            patternsSlider.value = ProgressManager.Data.UnlockedPatterns.Count;
             patternsTitleText.text = $"Unlocked Patterns ({patternsText.text})";
         }
         #endregion

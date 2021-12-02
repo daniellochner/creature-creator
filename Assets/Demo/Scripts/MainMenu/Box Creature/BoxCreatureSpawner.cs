@@ -34,8 +34,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else if (checkYouTube)
             {
-                string key = DemoManager.Keys.GoogleAPI.Value;
-                string parentId = DemoManager.Keys.PinnedCommentId.Value;
+                string key = DatabaseManager.GetDatabaseEntry<SecretKey>("Keys", "GoogleAPI").Value;
+                string parentId = DatabaseManager.GetDatabaseEntry<SecretKey>("Keys", "PinnedCommentId").Value;
 
                 // Parent
                 UnityWebRequest getParent = UnityWebRequest.Get($"https://youtube.googleapis.com/youtube/v3/comments?part=snippet&id={parentId}&textFormat=plainText&key={key}");

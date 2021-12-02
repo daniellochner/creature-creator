@@ -182,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxPayloadSize: 1024
   maxPlayers: 16
+  password: 
 --- !u!114 &182049367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,46 +817,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3bf11850604904889369134ad00669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keys: {fileID: 11400000, guid: 47b4f42a184d44247972e60938b0d01a, type: 2}
-  progress:
-    experience: 0
-    level: 0
-    cash: 1000
-    unlockedBodyParts: []
-    unlockedPatterns: []
-  settings:
-    resolution: 0
-    fullscreen: 1
-    vSync: 0
-    creatureMeshQuality: 1
-    shadowQuality: 1
-    textureQuality: 1
-    ambientOcclusion: 2
-    antialiasing: 4
-    screenSpaceReflections: 2
-    anisotropicFiltering: 1
-    bloom: 1
-    depthOfField: 1
-    motionBlur: 0
-    masterVolume: 1
-    musicVolume: 0.75
-    soundEffectsVolume: 0.75
-    onlineUsername: 
-    creaturePresets: []
-    cameraShake: 1
-    debugMode: 0
-    previewFeatures: 1
-    networkStats: 1
-    tutorial: 1
-    worldChat: 1
-    cameraSensitivityHorizontal: 0.5
-    cameraSensitivityVertical: 0.5
-    invertHorizontal: 0
-    invertVertical: 0
-  save: 0
-  load: 0
-  references:
-    version: 1
 --- !u!4 &140453851891507817
 Transform:
   m_ObjectHideFlags: 0
@@ -880,6 +841,8 @@ GameObject:
   m_Component:
   - component: {fileID: 140453851891507817}
   - component: {fileID: 140453851891507816}
+  - component: {fileID: 140453851891507833}
+  - component: {fileID: 140453851891507832}
   m_Layer: 0
   m_Name: Demo
   m_TagString: Untagged
@@ -887,6 +850,39 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &140453851891507832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140453851891507831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62bc6192be9f424799b14bb962824d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: progress.dat
+  encryptionKey: {fileID: 11400000, guid: 30b425dec1a4c8a4eb7d5718b3d3c5dd, type: 2}
+--- !u!114 &140453851891507833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140453851891507831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d43d45dba354f4b8da1fad821da027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: settings.dat
+  encryptionKey: {fileID: 0}
+  baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+  masterAudioMixer: {fileID: 24100000, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
+  minMaxVolumeDB:
+    min: -20
+    max: 1
 --- !u!1 &5031318366247838804
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,12 +952,15 @@ MonoBehaviour:
     _keyValues:
     - Body Parts
     - Patterns
+    - Keys
     _keys:
     - Body Parts
     - Patterns
+    - Keys
     _values:
     - {fileID: 11400000, guid: ccc0a5882387d374c828d2130ddd8650, type: 2}
     - {fileID: 11400000, guid: 9bd0b8f44b7837a40a388ecc7dbb94e2, type: 2}
+    - {fileID: 11400000, guid: 598da08ed38b6214199bc6a750961419, type: 2}
 --- !u!4 &5382483745399707348
 Transform:
   m_ObjectHideFlags: 0
@@ -1016,7 +1015,7 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 3136049851853010831, guid: 53925d6e49d197e4fb48b5f5567373ef, type: 3}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 7328919672290106455, guid: de8a86576f20d284dba243e0dc53a881, type: 3}
+      Prefab: {fileID: 6583322222584885990, guid: ee495a3e0952f5544bdb6f563177d144, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -1026,12 +1025,12 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
-      Prefab: {fileID: 981996808766512304, guid: d997a0b1aee464e4db3ad81c909e492c, type: 3}
+      Prefab: {fileID: 7328919672290106455, guid: de8a86576f20d284dba243e0dc53a881, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
-      Prefab: {fileID: 6583322222584885990, guid: ee495a3e0952f5544bdb6f563177d144, type: 3}
+      Prefab: {fileID: 981996808766512304, guid: d997a0b1aee464e4db3ad81c909e492c, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}

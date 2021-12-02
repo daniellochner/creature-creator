@@ -239,7 +239,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Load preset/null creature (and defaults).
             if (creaturePresets.Length > 0)
             {
-                player.Creature.Editor.Load(DecryptCreature(creaturePresets[UnityEngine.Random.Range(0, creaturePresets.Length)].text));
+                player.Creature.Editor.Load(JsonUtility.FromJson<CreatureData>(creaturePresets[UnityEngine.Random.Range(0, creaturePresets.Length)].text));
             }
             else
             {
@@ -357,18 +357,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             creatureUI.SelectToggle.SetIsOnWithoutNotify(true);
 
-            //PerformOperation(operation: delegate
-            //{
-            //    string encryptedText = EncryptCreature(player.Creature.Constructor.Data);
-            //    string path = Path.Combine(creaturesDirectory, $"{player.Creature.Constructor.Data.Name}.dat");
-
-            //    SaveUtility.Save(encryptedText, path);
-            //},
-            //restructure: true);
-
-            string encryptedText = EncryptCreature(creatureData);
             string path = Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat");
-            SaveUtility.Save(encryptedText, path);
+            SaveUtility.Save(path, creatureData, creatureEncryptionKey.Value);
 
             player.Creature.Editor.LoadedCreature = creatureData.Name;
             player.Creature.Editor.IsDirty = false;
@@ -481,7 +471,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Data
-            SaveUtility.Save(JsonUtility.ToJson(creatureData), Path.Combine(creaturePath, $"{creatureData.Name}.dat"));
+            SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), JsonUtility.ToJson(creatureData));
 
             // Screenshot
             player.Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)
@@ -1060,32 +1050,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void ConfirmUnsavedChanges(UnityAction operation, string operationPCN)
         {
             ConfirmOperation(operation, player.Creature.Editor.IsDirty && !string.IsNullOrEmpty(player.Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{player.Creature.Editor.LoadedCreature}\" without saving. Are you sure you wish to continue {operationPCN}?");
-        }
-
-        /// <summary>
-        /// Encrypts creature data using an encryption key.
-        /// </summary>
-        /// <param name="creatureData">The creature data to be encrypted.</param>
-        /// <param name="encryptionKey">The secret key to use for encryption.</param>
-        /// <returns>The encrypted creature data (as text).</returns>
-        private string EncryptCreature(CreatureData creatureData, string encryptionKey = null)
-        {
-            return StringCipher.Encrypt(JsonUtility.ToJson(creatureData), encryptionKey ?? creatureEncryptionKey.Value);
-        }
-
-        /// <summary>
-        /// Decrypts creature data using an encryption key.
-        /// </summary>
-        /// <param name="encryptedCreatureData">The encrypted creature data to be decrypted.</param>
-        /// <param name="encryptionKey">The secret key to use for decryption.</param>
-        /// <returns>The decrypted creature data.</returns>
-        private CreatureData DecryptCreature(string encryptedCreatureData, string encryptionKey = null)
-        {
-            try
-            {
-                return JsonUtility.FromJson<CreatureData>(StringCipher.Decrypt(encryptedCreatureData, encryptionKey ?? creatureEncryptionKey.Value));
-            }
-            catch { return null; }
         }
         #endregion
         #endregion

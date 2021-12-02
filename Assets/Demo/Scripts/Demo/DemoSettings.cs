@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Video")]
-        [SerializeField] private int resolution = 0;
+        [SerializeField] private Resolution resolution = new Resolution();
         [SerializeField] private bool fullscreen = true;
         [SerializeField] private bool vSync = false;
         [Space]
@@ -43,17 +43,17 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool worldChat = true;
 
         [Header("Controls")]
-        [SerializeField, Range(0, 1)] private float cameraSensitivityHorizontal = 0.5f;
-        [SerializeField, Range(0, 1)] private float cameraSensitivityVertical = 0.5f;
+        [SerializeField, Range(0, 1)] private float sensitivityHorizontal = 0.5f;
+        [SerializeField, Range(0, 1)] private float sensitivityVertical = 0.5f;
         [SerializeField] private bool invertHorizontal = false;
         [SerializeField] private bool invertVertical = false;
         #endregion
 
         #region Properties
-        public int Resolution
+        public Resolution Resolution
         {
             get => resolution;
-            set => resolution = Mathf.Clamp(value, 0, Screen.resolutions.Length - 1);
+            set => resolution = value;
         }
         public bool Fullscreen
         {
@@ -173,15 +173,15 @@ namespace DanielLochner.Assets.CreatureCreator
             set => worldChat = value;
         }
 
-        public float CameraSensitivityHorizontal
+        public float SensitivityHorizontal
         {
-            get => cameraSensitivityHorizontal;
-            set => cameraSensitivityHorizontal = value;
+            get => sensitivityHorizontal;
+            set => sensitivityHorizontal = value;
         }
-        public float CameraSensitivityVertical
+        public float SensitivityVertical
         {
-            get => cameraSensitivityVertical;
-            set => cameraSensitivityVertical = value;
+            get => sensitivityVertical;
+            set => sensitivityVertical = value;
         }
         public bool InvertHorizontal
         {
@@ -199,9 +199,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public enum PresetType
         {
             Custom,
+            VeryLow,
             Low,
             Medium,
-            High
+            High,
+            VeryHigh
         }
         public enum CreatureMeshQualityType
         {
@@ -211,6 +213,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public enum ShadowQualityType
         {
+            None,
             Low,
             Medium,
             High

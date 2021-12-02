@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using IngameDebugConsole;
 using SimpleFileBrowser;
 using System;
 using TMPro;
@@ -32,8 +31,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle motionBlurToggle;
         
         [Header("Audio")]
-        [SerializeField] private AudioMixer masterAudioMixer;
-        [SerializeField] private MinMax minMaxVolumeDB;
         [SerializeField] private Slider masterVolumeSlider;
         [SerializeField] private Slider musicVolumeSlider;
         [SerializeField] private Slider soundEffectsVolumeSlider;
@@ -51,8 +48,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button resetProgressButton;
 
         [Header("Controls")]
-        [SerializeField] private Slider cameraSensitivityHorizontalSlider;
-        [SerializeField] private Slider cameraSensitivityVerticalSlider;
+        [SerializeField] private Slider sensitivityHorizontalSlider;
+        [SerializeField] private Slider sensitivityVerticalSlider;
         [SerializeField] private Toggle invertHorizontalToggle;
         [SerializeField] private Toggle invertVerticalToggle;
         #endregion
@@ -66,168 +63,235 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             #region Video
             // Resolution
-            foreach (Resolution resolution in Screen.resolutions)
+            for (int i = 0; i < Screen.resolutions.Length; ++i)
             {
+                Resolution resolution = Screen.resolutions[i];
                 resolutionOS.Options.Add(new OptionSelector.Option()
                 {
                     Name = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
                 });
+                if (resolution.Equals(Screen.currentResolution))
+                {
+                    resolutionOS.Select(i, false);
+                }
             }
             resolutionOS.OnSelected.AddListener(delegate (int option)
             {
-                Screen.SetResolution(Screen.resolutions[option].width, Screen.resolutions[option].height, Screen.fullScreen, Screen.resolutions[option].refreshRate);
-                DemoManager.Settings.Resolution = option;
+                SettingsManager.Instance.SetResolution(Screen.resolutions[option]);
             });
-            resolutionOS.Select(DemoManager.Settings.Resolution);
 
             // Fullscreen
+            fullscreenToggle.SetIsOnWithoutNotify(SettingsManager.Data.Fullscreen);
             fullscreenToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                Screen.fullScreen = isOn;
-                DemoManager.Settings.Fullscreen = isOn;
+                SettingsManager.Instance.SetFullscreen(isOn);
             });
-            fullscreenToggle.isOn = DemoManager.Settings.Fullscreen;
 
             // V-Sync
+            vSyncToggle.SetIsOnWithoutNotify(SettingsManager.Data.VSync);
             vSyncToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.VSync = isOn;
+                SettingsManager.Instance.SetVSync(isOn);
             });
-            vSyncToggle.isOn = DemoManager.Settings.VSync;
 
             // Preset
             presetOS.SetupUsingEnum<PresetType>();
+            presetOS.Select(PresetType.Custom, false);
             presetOS.OnSelected.AddListener(delegate (int option)
             {
+                PresetType presetType = (PresetType)option;
+                switch (presetType)
+                {
+                    case PresetType.VeryLow:
+                        creatureMeshQualityOS.Select(CreatureMeshQualityType.Low);
+                        shadowQualityOS.Select(ShadowQualityType.Low);
+                        textureQualityOS.Select(TextureQualityType.Low);
+                        ambientOcclusionOS.Select(AmbientOcclusionType.None);
+                        antialiasingOS.Select(AntialiasingType.None);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
+                        anisotropicFilteringToggle.isOn = false;
+                        bloomToggle.isOn = false;
+                        depthOfFieldToggle.isOn = false;
+                        motionBlurToggle.isOn = false;
+                        break;
+
+                    case PresetType.Low:
+                        creatureMeshQualityOS.Select(CreatureMeshQualityType.Low);
+                        shadowQualityOS.Select(ShadowQualityType.Low);
+                        textureQualityOS.Select(TextureQualityType.Low);
+                        ambientOcclusionOS.Select(AmbientOcclusionType.None);
+                        antialiasingOS.Select(AntialiasingType.None);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
+                        anisotropicFilteringToggle.isOn = false;
+                        bloomToggle.isOn = false;
+                        depthOfFieldToggle.isOn = false;
+                        motionBlurToggle.isOn = false;
+                        break;
+
+                    case PresetType.Medium:
+                        creatureMeshQualityOS.Select(CreatureMeshQualityType.Medium);
+                        shadowQualityOS.Select(ShadowQualityType.Medium);
+                        textureQualityOS.Select(TextureQualityType.Medium);
+                        ambientOcclusionOS.Select(AmbientOcclusionType.SAO);
+                        antialiasingOS.Select(AntialiasingType.FXAA);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Medium);
+                        anisotropicFilteringToggle.isOn = true;
+                        bloomToggle.isOn = true;
+                        depthOfFieldToggle.isOn = false;
+                        motionBlurToggle.isOn = false;
+                        break;
+
+                    case PresetType.High:
+                        creatureMeshQualityOS.Select(CreatureMeshQualityType.High);
+                        shadowQualityOS.Select(ShadowQualityType.High);
+                        textureQualityOS.Select(TextureQualityType.High);
+                        ambientOcclusionOS.Select(AmbientOcclusionType.MSVO);
+                        antialiasingOS.Select(AntialiasingType.HighSMAA);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.High);
+                        anisotropicFilteringToggle.isOn = true;
+                        bloomToggle.isOn = true;
+                        depthOfFieldToggle.isOn = true;
+                        motionBlurToggle.isOn = true;
+                        break;
+
+                    case PresetType.VeryHigh:
+                        creatureMeshQualityOS.Select(CreatureMeshQualityType.High);
+                        shadowQualityOS.Select(ShadowQualityType.High);
+                        textureQualityOS.Select(TextureQualityType.High);
+                        ambientOcclusionOS.Select(AmbientOcclusionType.MSVO);
+                        antialiasingOS.Select(AntialiasingType.HighSMAA);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.High);
+                        anisotropicFilteringToggle.isOn = true;
+                        bloomToggle.isOn = true;
+                        depthOfFieldToggle.isOn = true;
+                        motionBlurToggle.isOn = true;
+                        break;
+                }
             });
-            presetOS.Select(PresetType.Custom);
 
             // Creature Mesh Quality
             creatureMeshQualityOS.SetupUsingEnum<CreatureMeshQualityType>();
+            creatureMeshQualityOS.Select(SettingsManager.Data.CreatureMeshQuality, false);
             creatureMeshQualityOS.OnSelected.AddListener(delegate (int option)
             {
-                DemoManager.Settings.CreatureMeshQuality = (CreatureMeshQualityType)option;
+                SettingsManager.Instance.SetCreatureMeshQuality((CreatureMeshQualityType)option);
             });
-            creatureMeshQualityOS.Select(DemoManager.Settings.CreatureMeshQuality);
 
             // Shadow Quality
             shadowQualityOS.SetupUsingEnum<ShadowQualityType>();
+            shadowQualityOS.Select(SettingsManager.Data.ShadowQuality, false);
             shadowQualityOS.OnSelected.AddListener(delegate (int option)
             {
-                DemoManager.Settings.ShadowQuality = (ShadowQualityType)option;
+                SettingsManager.Instance.SetShadowQuality((ShadowQualityType)option);
             });
-            shadowQualityOS.Select(DemoManager.Settings.ShadowQuality);
 
             // Texture Quality
             textureQualityOS.SetupUsingEnum<TextureQualityType>();
+            textureQualityOS.Select(SettingsManager.Data.TextureQuality, false);
             textureQualityOS.OnSelected.AddListener(delegate (int option)
             {
-                DemoManager.Settings.TextureQuality = (TextureQualityType)option;
+                SettingsManager.Instance.SetTextureQuality((TextureQualityType)option);
             });
-            textureQualityOS.Select(DemoManager.Settings.TextureQuality);
 
             // Ambient Occlusion
             ambientOcclusionOS.SetupUsingEnum<AmbientOcclusionType>();
+            ambientOcclusionOS.Select(SettingsManager.Data.AmbientOcclusion, false);
             ambientOcclusionOS.OnSelected.AddListener(delegate (int option)
             {
-                DemoManager.Settings.AmbientOcclusion = (AmbientOcclusionType)option;
+                SettingsManager.Instance.SetAmbientOcclusion((AmbientOcclusionType)option);
             });
-            ambientOcclusionOS.Select(DemoManager.Settings.AmbientOcclusion);
 
             // Antialiasing
             antialiasingOS.SetupUsingEnum<AntialiasingType>();
+            antialiasingOS.Select(SettingsManager.Data.Antialiasing, false);
             antialiasingOS.OnSelected.AddListener(delegate (int option)
             {
-                DemoManager.Settings.Antialiasing = (AntialiasingType)option;
+                SettingsManager.Instance.SetAntialiasing((AntialiasingType)option);
             });
-            antialiasingOS.Select(DemoManager.Settings.Antialiasing);
 
             // Screen Space Reflections
             screenSpaceReflectionsOS.SetupUsingEnum<ScreenSpaceReflectionsType>();
+            screenSpaceReflectionsOS.Select(SettingsManager.Data.ScreenSpaceReflections, false);
             screenSpaceReflectionsOS.OnSelected.AddListener(delegate (int option)
             {
-                DemoManager.Settings.ScreenSpaceReflections = (ScreenSpaceReflectionsType)option;
+                SettingsManager.Instance.SetScreenSpaceReflections((ScreenSpaceReflectionsType)option);
             });
-            screenSpaceReflectionsOS.Select(DemoManager.Settings.ScreenSpaceReflections);
 
             // Anisotropic Filtering
+            anisotropicFilteringToggle.SetIsOnWithoutNotify(SettingsManager.Data.AnisotropicFiltering);
             anisotropicFilteringToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.AnisotropicFiltering = isOn;
+                SettingsManager.Instance.SetAnisotropicFiltering(isOn);
             });
-            anisotropicFilteringToggle.isOn = DemoManager.Settings.AnisotropicFiltering;
 
             // Bloom
+            bloomToggle.SetIsOnWithoutNotify(SettingsManager.Data.Bloom);
             bloomToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.Bloom = isOn;
+                SettingsManager.Instance.SetBloom(isOn);
             });
-            bloomToggle.isOn = DemoManager.Settings.Bloom;
 
             // Depth Of Field
+            depthOfFieldToggle.SetIsOnWithoutNotify(SettingsManager.Data.DepthOfField);
             depthOfFieldToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.DepthOfField = isOn;
+                SettingsManager.Instance.SetDepthOfField(isOn);
             });
-            depthOfFieldToggle.isOn = DemoManager.Settings.DepthOfField;
 
             // Motion Blur
+            motionBlurToggle.SetIsOnWithoutNotify(SettingsManager.Data.MotionBlur);
             motionBlurToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.MotionBlur = isOn;
+                SettingsManager.Instance.SetMotionBlur(isOn);
             });
-            motionBlurToggle.isOn = DemoManager.Settings.MotionBlur;
             #endregion
 
             #region Audio
             // Master Volume
+            masterVolumeSlider.SetValueWithoutNotify(SettingsManager.Data.MasterVolume);
             masterVolumeSlider.onValueChanged.AddListener(delegate (float value)
             {
-                masterAudioMixer.SetFloat("MasterVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value));
-                DemoManager.Settings.MasterVolume = value;
+                SettingsManager.Instance.SetMasterVolume(value);
             });
-            masterVolumeSlider.value = DemoManager.Settings.MasterVolume;
 
             // Music Volume
+            musicVolumeSlider.SetValueWithoutNotify(SettingsManager.Data.MusicVolume);
             musicVolumeSlider.onValueChanged.AddListener(delegate (float value)
             {
-                masterAudioMixer.SetFloat("MusicVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value));
-                DemoManager.Settings.MusicVolume = value;
+                SettingsManager.Instance.SetMusicVolume(value);
             });
-            musicVolumeSlider.value = DemoManager.Settings.MusicVolume;
 
             // Sound Effects Volume
+            soundEffectsVolumeSlider.SetValueWithoutNotify(SettingsManager.Data.SoundEffectsVolume);
             soundEffectsVolumeSlider.onValueChanged.AddListener(delegate (float value)
             {
-                masterAudioMixer.SetFloat("SoundEffectsVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value));
-                DemoManager.Settings.SoundEffectsVolume = value;
+                SettingsManager.Instance.SetSoundEffectsVolume(value);
             });
-            soundEffectsVolumeSlider.value = DemoManager.Settings.SoundEffectsVolume;
             #endregion
 
             #region Gameplay
             // Online Username
+            onlineUsernameTextField.text = SettingsManager.Data.OnlineUsername;
             onlineUsernameTextField.onValueChanged.AddListener(delegate (string text) 
             {
-                DemoManager.Settings.OnlineUsername = text;
+                SettingsManager.Instance.SetOnlineUsername(text);
             });
-            onlineUsernameTextField.text = DemoManager.Settings.OnlineUsername;
             
             // Creature Preset(s)
-            int presets = DemoManager.Settings.CreaturePresets.Count;
+            int presets = SettingsManager.Data.CreaturePresets.Count;
             creaturePresetsText.text = (presets == 0) ? "None" : $"{presets} presets";
             creaturePresetsButton.onClick.AddListener(delegate
             {
                 FileBrowser.ShowLoadDialog(
                     onSuccess: delegate (string[] paths)
                     {
-                        DemoManager.Settings.CreaturePresets.Clear();
+                        SettingsManager.Data.CreaturePresets.Clear();
                         foreach (string path in paths)
                         {
                             CreatureData creature = SaveUtility.Load<CreatureData>(path);
                             if (creature != null)
                             {
-                                DemoManager.Settings.CreaturePresets.Add(creature);
+                                SettingsManager.Data.CreaturePresets.Add(creature);
                             }
                         }
                     },
@@ -241,83 +305,82 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Camera Shake
+            cameraShakeToggle.SetIsOnWithoutNotify(SettingsManager.Data.CameraShake);
             cameraShakeToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.CameraShake = isOn;
+                SettingsManager.Instance.SetCameraShake(isOn);
             });
-            cameraShakeToggle.isOn = DemoManager.Settings.CameraShake;
 
             // Debug Mode
+            debugModeToggle.SetIsOnWithoutNotify(SettingsManager.Data.DebugMode);
             debugModeToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DebugLogManager.Instance.gameObject.SetActive(isOn);
-                DemoManager.Settings.DebugMode = isOn;
+                SettingsManager.Instance.SetDebugMode(isOn);
             });
-            debugModeToggle.isOn = DemoManager.Settings.DebugMode;
 
             // Preview Features
+            previewFeaturesToggle.SetIsOnWithoutNotify(SettingsManager.Data.PreviewFeatures);
             previewFeaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.PreviewFeatures = isOn;
+                SettingsManager.Instance.SetPreviewFeatures(isOn);
             });
-            previewFeaturesToggle.isOn = DemoManager.Settings.PreviewFeatures;
 
             // Network Stats
+            networkStatsToggle.SetIsOnWithoutNotify(SettingsManager.Data.NetworkStats);
             networkStatsToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.NetworkStats = isOn;
+                SettingsManager.Instance.SetNetworkStats(isOn);
             });
-            networkStatsToggle.isOn = DemoManager.Settings.NetworkStats;
 
             // Tutorial
+            tutorialToggle.SetIsOnWithoutNotify(SettingsManager.Data.NetworkStats);
             tutorialToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.Tutorial = isOn;
+                SettingsManager.Instance.SetTutorial(isOn);
             });
-            tutorialToggle.isOn = DemoManager.Settings.NetworkStats;
 
             // World Chat
+            worldChatToggle.SetIsOnWithoutNotify(SettingsManager.Data.WorldChat);
             worldChatToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.WorldChat = isOn;
+                SettingsManager.Instance.SetWorldChat(isOn);
             });
-            worldChatToggle.isOn = DemoManager.Settings.WorldChat;
 
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> remove your creatures.", noEvent: DemoManager.Progress.Reset);
+                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> remove your creatures.", noEvent: ProgressManager.Data.Reset);
             });
             #endregion
 
             #region Controls
-            // Camera Sensitivity (Horizontal)
-            cameraSensitivityHorizontalSlider.onValueChanged.AddListener(delegate (float value)
+            // Sensitivity (Horizontal)
+            sensitivityHorizontalSlider.SetValueWithoutNotify(SettingsManager.Data.SensitivityHorizontal);
+            sensitivityHorizontalSlider.onValueChanged.AddListener(delegate (float value)
             {
-                DemoManager.Settings.CameraSensitivityHorizontal = value;
+                SettingsManager.Instance.SetSensitivityHorizontal(value);
             });
-            cameraSensitivityHorizontalSlider.value = DemoManager.Settings.CameraSensitivityHorizontal;
 
-            // Camera Sensitivity (Vertical)
-            cameraSensitivityVerticalSlider.onValueChanged.AddListener(delegate (float value)
+            // Sensitivity (Vertical)
+            sensitivityVerticalSlider.SetValueWithoutNotify(SettingsManager.Data.SensitivityVertical);
+            sensitivityVerticalSlider.onValueChanged.AddListener(delegate (float value)
             {
-                DemoManager.Settings.CameraSensitivityVertical = value;
+                SettingsManager.Instance.SetSensitivityVertical(value);
             });
-            cameraSensitivityVerticalSlider.value = DemoManager.Settings.CameraSensitivityVertical;
 
             // Invert Horizontal
+            invertHorizontalToggle.SetIsOnWithoutNotify(SettingsManager.Data.InvertHorizontal);
             invertHorizontalToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.InvertHorizontal = isOn;
+                SettingsManager.Instance.SetInvertHorizontal(isOn);
             });
-            invertHorizontalToggle.isOn = DemoManager.Settings.InvertHorizontal;
 
             // Invert Vertical
+            invertVerticalToggle.SetIsOnWithoutNotify(SettingsManager.Data.InvertVertical);
             invertVerticalToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                DemoManager.Settings.InvertVertical = isOn;
+                SettingsManager.Instance.SetInvertVertical(isOn);
             });
-            invertVerticalToggle.isOn = DemoManager.Settings.InvertVertical;
             #endregion
         }
         #endregion

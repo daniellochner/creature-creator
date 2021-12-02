@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (DemoManager.Settings.PreviewFeatures)
+            if (SettingsManager.Data.PreviewFeatures)
             {
                 optionsRT.sizeDelta = new Vector2(0f, 325f);
                 importGO.SetActive(true);

@@ -17,13 +17,6 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void Start()
-        {
-            NetworkShutdownManager.Instance.OnShutdown += delegate
-            {
-                DeleteLobbies();
-            };
-        }
         private void OnApplicationQuit()
         {
             DeleteLobbies();
@@ -36,7 +29,7 @@ namespace DanielLochner.Assets
                 Lobbies.Instance.DeleteLobbyAsync(lobbyId);
             }
         }
-        public async Task CreateLobbyAsync(string name, int maxPlayers, CreateLobbyOptions options)
+        public async Task<Lobby> CreateLobbyAsync(string name, int maxPlayers, CreateLobbyOptions options)
         {
             if (createdLobbyIds.Count > 3)
             {
@@ -51,6 +44,8 @@ namespace DanielLochner.Assets
                 StopCoroutine(pingLobbyCoroutine);
             }
             pingLobbyCoroutine = StartCoroutine(HeartbeatLobbyRoutine(lobby.Id, 10));
+
+            return lobby;
         }
         private IEnumerator HeartbeatLobbyRoutine(string lobbyId, float waitTime)
         {

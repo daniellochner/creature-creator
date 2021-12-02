@@ -16,6 +16,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -28,6 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private RectTransform worldsRT;
         [SerializeField] private GameObject noneGO;
         [SerializeField] private GameObject refreshGO;
+        [SerializeField] private TMP_InputField lobbyCodeInputField;
 
         [Header("Host")]
         [SerializeField] private TMP_InputField worldNameInputField;
@@ -48,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private Coroutine updateNetStatusCoroutine;
         private ProfanityFilter filter = new ProfanityFilter();
-        private bool isConnecting;
+        private bool isConnecting, isRefreshing;
         #endregion
 
         #region Properties
@@ -84,11 +86,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     UpdateNetworkStatus("Username cannot be longer than 16 characters.", Color.white);
                     return false;
                 }
-                PlayerData playerData = new PlayerData()
-                {
-                    username = username
-                };
-                NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(playerData));
                 return true;
             }
         }
@@ -124,6 +121,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 joinOffsetRT.offsetMin = new Vector2(joinOffsetRT.offsetMin.x, isConnecting ? 75 : 0);
             }
         }
+        private bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                isRefreshing = value;
+                refreshGO.SetActive(isRefreshing);
+            }
+        }
         #endregion
 
         #region Methods
@@ -144,8 +150,6 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkManager.Singleton.OnServerStarted += OnServerStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
-
-            Authenticate();
         }
         private void SetupJoin()
         {
@@ -190,51 +194,69 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
 
-        public void SP_Play()
+        public void Play()
         {
             SceneManager.LoadScene("Singleplayer");
         }
-        public async void MP_Join(string joinCode)
+        public async void Join(string lobbyCode, string joinCode, string password = "")
         {
             if (!IsConnectedToInternet || !IsValidPlayer)
             {
                 return;
             }
 
-            await AuthenticateAsync();
+            try
+            {
+                await Authenticate();
 
-            UpdateNetworkStatus("Connecting to Relay...", Color.yellow, -1);
-            JoinAllocation join = await Relay.Instance.JoinAllocationAsync(worldNameInputField.text);
+                UpdateNetworkStatus("Joining Lobby...", Color.yellow, -1);
+                JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions()
+                {
+                    Player = new Unity.Services.Lobbies.Models.Player(allocationId: joinCode)
+                };
+                await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
 
-            UnityTransport relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
-            relayTransport.SetRelayServerData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
+                JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
+                UnityTransport relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
+                relayTransport.SetRelayServerData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                SetConnectionData();
 
-            UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
-            NetworkManager.Singleton.StartClient();
+                UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
+                NetworkManager.Singleton.StartClient();
+            }
+            catch (Exception e)
+            {
+                UpdateNetworkStatus(e.Message, Color.red);
+                Debug.Log(e);
+            }
         }
-        public async void MP_Create()
+        public async void Create()
         {
             if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName)
             {
                 return;
             }
 
-            await AuthenticateAsync();
-
-            UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
-            Allocation host = await Relay.Instance.CreateAllocationAsync(10);
-
-            UpdateNetworkStatus("Generating Join Code...", Color.yellow, -1);
-            string joinCode = await Relay.Instance.GetJoinCodeAsync(host.AllocationId);
-
-            UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
             try
             {
-                bool isPrivate = (VisibilityType)visibilityOS.SelectedOption == VisibilityType.Private;
+                await Authenticate();
+
+                UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
+                Allocation host = await Relay.Instance.CreateAllocationAsync(10);
+                UnityTransport relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
+                relayTransport.SetRelayServerData(host.RelayServer.IpV4, (ushort)host.RelayServer.Port, host.AllocationIdBytes, host.Key, host.ConnectionData);
+                NetworkPlayersManager.Instance.Password = passwordInputField.text;
+                SetConnectionData();
+
+                UpdateNetworkStatus("Generating Join Code...", Color.yellow, -1);
+                string joinCode = await Relay.Instance.GetJoinCodeAsync(host.AllocationId);
+
+                UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
+                bool isPrivate = ((VisibilityType)visibilityOS.SelectedOption) == VisibilityType.Private;
                 string mapName = ((MapType)mapOS.SelectedOption).ToString();
                 string version = Application.version.ToString();
                 bool isPasswordProtected = !string.IsNullOrEmpty(passwordInputField.text);
-
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = isPrivate,
@@ -244,81 +266,39 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "map", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "isPasswordProtected", new DataObject(DataObject.VisibilityOptions.Public, isPasswordProtected.ToString()) }
-                    }
+                    },
+                    Player = new Unity.Services.Lobbies.Models.Player(allocationId: joinCode)
                 };
                 await LobbyCreationHandler.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
+                
+                UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
+                NetworkManager.Singleton.StartHost();
             }
-            catch (LobbyServiceException e)
+            catch (Exception e)
             {
                 UpdateNetworkStatus($"{e.Message}", Color.red);
                 Debug.Log(e);
-                return;
             }
-            
-            UnityTransport relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
-            relayTransport.SetRelayServerData(host.RelayServer.IpV4, (ushort)host.RelayServer.Port, host.AllocationIdBytes, host.Key, host.ConnectionData);
+        }
+        public async void Refresh()
+        {
+            await Authenticate();
 
-            UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
-            NetworkManager.Singleton.StartHost();
-        }
-        public void Cancel()
-        {
-            if (!IsConnecting) return;
-            if (updateNetStatusCoroutine != null) StopCoroutine(updateNetStatusCoroutine);
-            NetworkShutdownManager.Instance.Shutdown();
-            HideNetworkStatus();
-            IsConnecting = false;
-        }
-
-        private async void Authenticate()
-        {
-            await AuthenticateAsync();
-        }
-        private async Task AuthenticateAsync()
-        {
-            if (UnityServices.State != ServicesInitializationState.Initialized)
-            {
-                UpdateNetworkStatus("Initializing...", Color.yellow, -1);
-                await UnityServices.InitializeAsync();
-            }
-            if (!AuthenticationService.Instance.IsSignedIn)
-            {
-                UpdateNetworkStatus("Authenticating...", Color.yellow, -1);
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            }
-            HideNetworkStatus();
-        }
-
-        public async void RefreshWorlds()
-        {
-            await AuthenticateAsync();
+            IsRefreshing = true;
 
             worldsRT.transform.DestroyChildren();
-            refreshGO.SetActive(true);
             noneGO.SetActive(false);
+
             try
             {
                 QueryLobbiesOptions options = new QueryLobbiesOptions()
                 {
-                    Count = 25
+                    // TODO: ordering and filters
                 };
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync(options)).Results;
                 foreach (Lobby lobby in lobbies)
                 {
-                    WorldUI worldUI = Instantiate(worldUIPrefab, worldsRT);
-                    worldUI.Setup(lobby.Id, lobby.Players.Count, lobby.MaxPlayers, lobby.Name, lobby.Data["map"].Value, lobby.Data["version"].Value, bool.Parse(lobby.Data["isPasswordProtected"].Value));
-                    worldUI.JoinButton.onClick.AddListener(async delegate
-                    {
-                        try
-                        {
-                            await Lobbies.Instance.JoinLobbyByIdAsync(lobby.Id);
-                        }
-                        catch (LobbyServiceException e)
-                        {
-                            UpdateNetworkStatus(e.Message, Color.red);
-                            Debug.Log(e);
-                        }
-                    });
+                    Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
                 }
                 noneGO.SetActive(lobbies.Count == 0);
             }
@@ -328,14 +308,46 @@ namespace DanielLochner.Assets.CreatureCreator
                 noneGO.SetActive(true);
                 Debug.Log(e);
             }
-            refreshGO.SetActive(false);
-        }
 
+            IsRefreshing = false;
+        }
+        public void Cancel()
+        {
+            if (!IsConnecting) return;
+            if (updateNetStatusCoroutine != null) StopCoroutine(updateNetStatusCoroutine);
+            NetworkShutdownManager.Instance.Shutdown();
+            HideNetworkStatus();
+            IsConnecting = false;
+        }
+        //public void Join()
+        //{
+        //    Join(lobbyCodeInputField.text); // join code?
+        //}
+
+        private async Task Authenticate()
+        {
+            await UnityServices.InitializeAsync();
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                UpdateNetworkStatus("Authenticating...", Color.yellow, -1);
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                HideNetworkStatus();
+            }
+        }
+        private void SetConnectionData()
+        {
+            ConnectionData data = new ConnectionData()
+            {
+                username = onlineUsernameInputField.text,
+                password = passwordInputField.text
+            };
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
+        }
         public void ToggleMenu()
         {
-            if (!multiplayerMenu.IsOpen)
+            if (!multiplayerMenu.IsOpen && !IsRefreshing)
             {
-                RefreshWorlds();
+                Refresh();
             }
             multiplayerMenu.Toggle();
         }

@@ -14,6 +14,9 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private int maxPayloadSize = 1024;
         [SerializeField] private int maxPlayers = 16;
+        
+        [Header("Debug")]
+        [SerializeField, ReadOnly] private string password;
         #endregion
 
         #region Properties
@@ -21,6 +24,12 @@ namespace DanielLochner.Assets
 
         public Action<PlayerData> OnPlayerAdd { get; set; }
         public Action<PlayerData> OnPlayerRemove { get; set; }
+
+        public string Password
+        {
+            get => password;
+            set => password = value;
+        }
         #endregion
 
         #region Methods
@@ -62,8 +71,18 @@ namespace DanielLochner.Assets
                 return;
             }
 
-            PlayerData playerData = JsonUtility.FromJson<PlayerData>(Encoding.UTF8.GetString(data));
-            playerData.clientId = clientId;
+            ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(data));
+            if (connectionData.password != Password)
+            {
+                connectionApproved(false, null, false, null, null);
+                return;
+            }
+
+            PlayerData playerData = new PlayerData()
+            {
+                clientId = clientId,
+                username = connectionData.username
+            };
             Add(playerData);
 
             connectionApproved(true, null, true, null, null);

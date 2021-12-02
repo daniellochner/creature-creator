@@ -17,8 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkCreature networkCreature = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreature>();
             EditorManager.Instance.Player = networkCreature.Player;
             networkCreature.Player.gameObject.SetActive(true);
-            EditorManager.Instance.UnlockedBodyParts = DemoManager.Progress.UnlockedBodyParts;
-            EditorManager.Instance.UnlockedPatterns = DemoManager.Progress.UnlockedPatterns;
+            EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
+            EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
             EditorManager.Instance.Setup();
 
             CreatureInformationManager.Instance.Setup();

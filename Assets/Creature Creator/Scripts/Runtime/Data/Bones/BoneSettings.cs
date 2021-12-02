@@ -17,10 +17,26 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public float Radius => radius;
-        public float Length => length;
-        public int Segments => segments;
-        public int Rings => rings;
+        public float Radius
+        {
+            get => radius;
+            set => radius = value;
+        }
+        public float Length
+        {
+            get => length;
+            set => length = value;
+        }
+        public int Segments
+        {
+            get => segments;
+            set => segments = value;
+        }
+        public int Rings
+        {
+            get => rings;
+            set => rings = value;
+        }
         #endregion
     }
 }
