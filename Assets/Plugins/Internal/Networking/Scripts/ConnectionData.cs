@@ -10,6 +10,12 @@ namespace DanielLochner.Assets
         public FixedString32Bytes username;
         public FixedString32Bytes password;
 
+        public ConnectionData(string username, string password)
+        {
+            this.username = username;
+            this.password = password;
+        }
+
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref username);

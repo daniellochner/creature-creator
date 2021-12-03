@@ -14,8 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsHost)
             {
-                NetworkPlayersManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
-                NetworkPlayersManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
+                NetworkHostManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
+                NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
             }
             HandleExistingPlayers();
         }
@@ -46,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         public void HandleExistingPlayersServerRpc(ulong clientId)
         {
-            foreach (PlayerData playerData in NetworkPlayersManager.Instance.Players.Values)
+            foreach (PlayerData playerData in NetworkHostManager.Instance.Players.Values)
             {
                 NetworkCreature networkedCreature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreature>();
                 if (!networkedCreature.IsHidden.Value)

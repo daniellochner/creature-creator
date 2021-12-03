@@ -8,52 +8,62 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [Serializable]
-    public class DemoSettings
+    public class DemoSettings : Data
     {
         #region Fields
         [Header("Video")]
-        [SerializeField] private Resolution resolution = new Resolution();
-        [SerializeField] private bool fullscreen = true;
-        [SerializeField] private bool vSync = false;
+        [SerializeField] private Vector2Int displaySize;
+        [SerializeField] private int refreshRate;
+        [SerializeField] private bool fullscreen;
+        [SerializeField] private bool vSync;
         [Space]
-        [SerializeField] private CreatureMeshQualityType creatureMeshQuality = CreatureMeshQualityType.Medium;
-        [SerializeField] private ShadowQualityType shadowQuality = ShadowQualityType.Medium;
-        [SerializeField] private TextureQualityType textureQuality = TextureQualityType.Medium;
-        [SerializeField] private AmbientOcclusionType ambientOcclusion = AmbientOcclusionType.MSVO;
-        [SerializeField] private AntialiasingType antialiasing = AntialiasingType.HighSMAA;
-        [SerializeField] private ScreenSpaceReflectionsType screenSpaceReflections = ScreenSpaceReflectionsType.Medium;
-        [SerializeField] private bool anisotropicFiltering = true;
-        [SerializeField] private bool bloom = true;
-        [SerializeField] private bool depthOfField = true;
-        [SerializeField] private bool motionBlur = false;
+        [SerializeField] private CreatureMeshQualityType creatureMeshQuality;
+        [SerializeField] private ShadowQualityType shadowQuality;
+        [SerializeField] private TextureQualityType textureQuality;
+        [SerializeField] private AmbientOcclusionType ambientOcclusion;
+        [SerializeField] private AntialiasingType antialiasing;
+        [SerializeField] private ScreenSpaceReflectionsType screenSpaceReflections;
+        [SerializeField] private bool anisotropicFiltering ;
+        [SerializeField] private bool bloom;
+        [SerializeField] private bool depthOfField;
+        [SerializeField] private bool motionBlur;
 
         [Header("Audio")]
-        [SerializeField, Range(0, 1)] private float masterVolume = 1f;
-        [SerializeField, Range(0, 1)] private float musicVolume = 0.75f;
-        [SerializeField, Range(0, 1)] private float soundEffectsVolume = 0.75f;
+        [SerializeField, Range(0, 1)] private float masterVolume;
+        [SerializeField, Range(0, 1)] private float musicVolume;
+        [SerializeField, Range(0, 1)] private float soundEffectsVolume;
 
         [Header("Gameplay")]
-        [SerializeField] private string onlineUsername = "";
-        [SerializeField] private List<CreatureData> creaturePresets = new List<CreatureData>();
-        [SerializeField] private bool cameraShake = true;
-        [SerializeField] private bool debugMode = false;
-        [SerializeField] private bool previewFeatures = true;
-        [SerializeField] private bool networkStats = true;
-        [SerializeField] private bool tutorial = true;
-        [SerializeField] private bool worldChat = true;
+        [SerializeField] private string onlineUsername;
+        [SerializeField] private List<CreatureData> creaturePresets;
+        [SerializeField] private bool cameraShake;
+        [SerializeField] private bool debugMode;
+        [SerializeField] private bool previewFeatures;
+        [SerializeField] private bool networkStats;
+        [SerializeField] private bool tutorial;
+        [SerializeField] private bool worldChat;
 
         [Header("Controls")]
-        [SerializeField, Range(0, 1)] private float sensitivityHorizontal = 0.5f;
-        [SerializeField, Range(0, 1)] private float sensitivityVertical = 0.5f;
-        [SerializeField] private bool invertHorizontal = false;
-        [SerializeField] private bool invertVertical = false;
+        [SerializeField, Range(0, 1)] private float sensitivityHorizontal;
+        [SerializeField, Range(0, 1)] private float sensitivityVertical;
+        [SerializeField] private bool invertHorizontal;
+        [SerializeField] private bool invertVertical;
         #endregion
 
         #region Properties
         public Resolution Resolution
         {
-            get => resolution;
-            set => resolution = value;
+            get => new Resolution()
+            {
+                height = displaySize.x,
+                width = displaySize.y,
+                refreshRate = refreshRate
+            };
+            set
+            {
+                displaySize = new Vector2Int(value.width, value.height);
+                refreshRate = value.refreshRate;
+            }
         }
         public bool Fullscreen
         {
@@ -192,6 +202,43 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => invertVertical;
             set => invertVertical = value;
+        }
+        #endregion
+
+        #region Methods
+        public override void Reset()
+        {
+            Resolution = Screen.currentResolution;
+            Fullscreen = true;
+            VSync = false;
+
+            CreatureMeshQuality = CreatureMeshQualityType.Medium;
+            ShadowQuality = ShadowQualityType.Medium;
+            TextureQuality = TextureQualityType.Medium;
+            Antialiasing = AntialiasingType.FXAA;
+            ScreenSpaceReflections = ScreenSpaceReflectionsType.Medium;
+            AnisotropicFiltering = true;
+            Bloom = true;
+            DepthOfField = false;
+            MotionBlur = false;
+
+            MasterVolume = 1f;
+            MusicVolume = 0.75f;
+            SoundEffectsVolume = 0.75f;
+
+            OnlineUsername = "";
+            CreaturePresets.Clear();
+            CameraShake = true;
+            DebugMode = false;
+            PreviewFeatures = false;
+            NetworkStats = true;
+            Tutorial = true;
+            WorldChat = true;
+
+            SensitivityHorizontal = 0.5f;
+            SensitivityVertical = 0.5f;
+            InvertHorizontal = false;
+            InvertVertical = false;
         }
         #endregion
 

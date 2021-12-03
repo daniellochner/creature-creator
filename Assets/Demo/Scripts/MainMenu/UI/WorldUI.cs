@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             int players = lobby.Players.Count;
             int maxPlayers = lobby.MaxPlayers;
-            string mapName = lobby.Data["map"].Value;
+            string mapName = lobby.Data["mapName"].Value;
             string version = lobby.Data["version"].Value;
             string joinCode = lobby.Data["joinCode"].Value;
             bool isPasswordProtected = bool.Parse(lobby.Data["isPasswordProtected"].Value);
@@ -35,12 +35,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     InputDialog.Input("Password Required", "Enter the password...", submitEvent: delegate (string password)
                     {
-                        multiplayerUI.Join(lobby.LobbyCode, joinCode, password);
+                        multiplayerUI.Join(lobby.LobbyCode, password);
                     });
                 }
                 else
                 {
-                    multiplayerUI.Join(lobby.LobbyCode, joinCode);
+                    multiplayerUI.Join(lobby.LobbyCode);
                 }
             });
         }

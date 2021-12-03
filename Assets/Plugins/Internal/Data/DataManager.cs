@@ -3,13 +3,12 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public abstract class DataManager<T, M> : MonoBehaviourSingleton<T> where T : DataManager<T, M> where M : class, new()
+    public abstract class DataManager<T, M> : MonoBehaviourSingleton<T> where T : DataManager<T, M> where M : Data, new()
     {
         #region Fields
         [SerializeField] private string fileName;
         [SerializeField] private SecretKey encryptionKey;
-
-        private M data;
+        [SerializeField] private M data;
         #endregion
 
         #region Properties
@@ -22,8 +21,13 @@ namespace DanielLochner.Assets
         protected override void Awake()
         {
             base.Awake();
+
+            if (!File.Exists(Path.Combine(Application.persistentDataPath, fileName)))
+            {
+                Data.Reset();
+                Save();
+            }
             Load();
-            Save();
         }
         [ContextMenu("Save")]
         public virtual void Save()
