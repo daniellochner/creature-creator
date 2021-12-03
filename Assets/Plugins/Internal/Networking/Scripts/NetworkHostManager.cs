@@ -6,10 +6,7 @@ using System.Collections.Generic;
 
 namespace DanielLochner.Assets
 {
-    /// <summary>
-    /// Used by host/server to manage players in place of NetworkManager.Singleton.ConnectedClients.
-    /// </summary>
-    public class NetworkPlayersManager : MonoBehaviourSingleton<NetworkPlayersManager>
+    public class NetworkHostManager : MonoBehaviourSingleton<NetworkHostManager>
     {
         #region Fields
         [SerializeField] private int maxPayloadSize = 1024;
@@ -56,7 +53,7 @@ namespace DanielLochner.Assets
             OnPlayerAdd = OnPlayerRemove = null;
             Players.Clear();
         }
-
+        
         private void ApproveConnection(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate connectionApproved)
         {
             if (data.Length > maxPayloadSize)
