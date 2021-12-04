@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
-using static DanielLochner.Assets.CreatureCreator.DemoSettings;
+using static DanielLochner.Assets.CreatureCreator.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -349,7 +349,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> remove your creatures.", noEvent: ProgressManager.Data.Reset);
+                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> remove your creatures.", noEvent: ProgressManager.Data.Revert);
             });
             #endregion
 

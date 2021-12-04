@@ -32,6 +32,8 @@ namespace DanielLochner.Assets
         {
             EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
             {
+                if (SceneManager.GetActiveScene().name.Equals("Testing")) return;
+
                 switch (state)
                 {
                     case PlayModeStateChange.ExitingEditMode:

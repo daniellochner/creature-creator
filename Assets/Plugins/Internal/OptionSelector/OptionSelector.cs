@@ -21,12 +21,23 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        public int SelectedOption => currentOptionIndex;
+        public int Selected => currentOptionIndex;
         public List<Option> Options => options;
         public UnityEvent<int> OnSelected => onSelected;
         #endregion
 
         #region Methods
+        public void SetupUsingEnum<T>()
+        {
+            foreach (var type in Enum.GetValues(typeof(T)))
+            {
+                options.Add(new Option()
+                {
+                    Name = type.ToString()
+                });
+            }
+        }
+
         public void Next()
         {
             int nextOptionIndex = currentOptionIndex + 1;
@@ -46,16 +57,6 @@ namespace DanielLochner.Assets
             Select(nextOptionIndex);
         }
 
-        public void SetupUsingEnum<T>()
-        {
-            foreach (var type in Enum.GetValues(typeof(T)))
-            {
-                options.Add(new Option()
-                {
-                    Name = type.ToString()
-                });
-            }
-        }
         public void Select(int optionIndex, bool notify = true)
         {
             currentOptionIndex = Math.Max(0, Math.Min(optionIndex, options.Count - 1));
@@ -72,7 +73,6 @@ namespace DanielLochner.Assets
             }
             previousOptionIndex = currentOptionIndex;
         }
-
         public void Select(Enum option, bool notify = true)
         {
             Select(Convert.ToInt32(option), notify);

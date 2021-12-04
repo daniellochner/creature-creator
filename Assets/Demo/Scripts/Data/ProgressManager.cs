@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class ProgressManager : DataManager<ProgressManager, DemoProgress>
+    public class ProgressManager : DataManager<ProgressManager, Progress>
     {
 
     }

@@ -132,8 +132,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 182049364}
-  - component: {fileID: 182049365}
   - component: {fileID: 182049367}
+  - component: {fileID: 182049365}
   - component: {fileID: 182049366}
   m_Layer: 0
   m_Name: Other
@@ -320,8 +320,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5031318366247838805}
   - {fileID: 140453851891507817}
+  - {fileID: 5031318366247838805}
   - {fileID: 5560976020738981253}
   - {fileID: 1071129234}
   - {fileID: 5382483745399707348}
@@ -350,7 +350,6 @@ GameObject:
   m_Component:
   - component: {fileID: 533690185}
   - component: {fileID: 533690188}
-  - component: {fileID: 533690189}
   - component: {fileID: 533690186}
   m_Layer: 0
   m_Name: Transports
@@ -432,37 +431,11 @@ MonoBehaviour:
     reqReferences: {fileID: 0}
     isExpanded: 0
     _keyValues:
-    - IP
     - Relay
     _keys:
-    - IP
     - Relay
     _values:
-    - {fileID: 533690189}
     - {fileID: 533690186}
---- !u!114 &533690189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 533690184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ProtocolType: 0
-  m_MaximumPacketSize: 1400
-  m_MaxPacketQueueSize: 128
-  m_SendQueueBatchSize: 6144
-  m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 30000
-  ConnectionData:
-    Address: 127.0.0.1
-    Port: 7777
 --- !u!1001 &1071129233
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -805,18 +778,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: MainMenu
---- !u!114 &140453851891507816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 140453851891507831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d3bf11850604904889369134ad00669, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &140453851891507817
 Transform:
   m_ObjectHideFlags: 0
@@ -829,7 +790,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 467471145}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &140453851891507831
 GameObject:
@@ -840,11 +801,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 140453851891507817}
-  - component: {fileID: 140453851891507816}
   - component: {fileID: 140453851891507833}
   - component: {fileID: 140453851891507832}
   m_Layer: 0
-  m_Name: Demo
+  m_Name: Data
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -864,6 +824,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileName: progress.dat
   encryptionKey: {fileID: 11400000, guid: 30b425dec1a4c8a4eb7d5718b3d3c5dd, type: 2}
+  data:
+    experience: 0
+    level: 0
+    cash: 1000
+    unlockedBodyParts: []
+    unlockedPatterns: []
 --- !u!114 &140453851891507833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,11 +844,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileName: settings.dat
   encryptionKey: {fileID: 0}
+  data:
+    displaySize: {x: 0, y: 0}
+    refreshRate: 0
+    fullscreen: 0
+    vSync: 0
+    creatureMeshQuality: 0
+    shadowQuality: 0
+    textureQuality: 0
+    ambientOcclusion: 0
+    antialiasing: 0
+    screenSpaceReflections: 0
+    anisotropicFiltering: 0
+    bloom: 0
+    depthOfField: 0
+    motionBlur: 0
+    masterVolume: 0
+    musicVolume: 0
+    soundEffectsVolume: 0
+    onlineUsername: 
+    creaturePresets: []
+    cameraShake: 0
+    debugMode: 0
+    previewFeatures: 0
+    networkStats: 0
+    tutorial: 0
+    worldChat: 0
+    sensitivityHorizontal: 0
+    sensitivityVertical: 0
+    invertHorizontal: 0
+    invertVertical: 0
   baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
   masterAudioMixer: {fileID: 24100000, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
   minMaxVolumeDB:
     min: -20
     max: 1
+  references:
+    version: 1
 --- !u!1 &5031318366247838804
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +910,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 467471145}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5031318366247838806
 MonoBehaviour:
@@ -1011,7 +1009,7 @@ MonoBehaviour:
   LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 533690189}
+    NetworkTransport: {fileID: 533690186}
     PlayerPrefab: {fileID: 3136049851853010831, guid: 53925d6e49d197e4fb48b5f5567373ef, type: 3}
     NetworkPrefabs:
     - Override: 0
@@ -1035,7 +1033,7 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     TickRate: 30
-    ClientConnectionBufferTimeout: 5
+    ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
     ConnectionData: 
     EnableTimeResync: 0

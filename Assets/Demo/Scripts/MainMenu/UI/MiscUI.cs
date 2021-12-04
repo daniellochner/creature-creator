@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SocialMediaUI : MonoBehaviour
+    public class MiscUI : MonoBehaviour
     {
         public void SubscribeToYouTubeChannel()
         {
@@ -21,6 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ViewGitHubSourceCode()
         {
             Application.OpenURL("https://github.com/daniellochner/Creature-Creator");
+        }
+        public void Quit()
+        {
+            ConfirmationDialog.Confirm("Quit", "Are you sure you want to exit this application?", yesEvent: Application.Quit);
         }
     }
 }

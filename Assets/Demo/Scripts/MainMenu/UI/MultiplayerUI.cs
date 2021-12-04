@@ -15,39 +15,40 @@ using UnityEngine.UI;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using System.Collections.Generic;
-using System.Collections;
 using System;
-using System.Linq;
+using System.Text;
+using System.Collections;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class MultiplayerUI : MonoBehaviour
     {
         #region Fields
-        [Header("Join")]
-        [SerializeField] private RectTransform joinOffsetRT;
-        [SerializeField] private WorldUI worldUIPrefab;
-        [SerializeField] private RectTransform worldsRT;
-        [SerializeField] private GameObject noneGO;
-        [SerializeField] private GameObject refreshGO;
-        [SerializeField] private TMP_InputField lobbyCodeInputField;
-
-        [Header("Host")]
-        [SerializeField] private TMP_InputField worldNameInputField;
         [SerializeField] private TMP_InputField onlineUsernameInputField;
-        [SerializeField] private OptionSelector mapOS;
-        [SerializeField] private OptionSelector visibilityOS;
-        [SerializeField] private TMP_InputField passwordInputField;
-        [SerializeField] private GameObject passwordGO;
-        [SerializeField] private Slider maxPlayersSlider;
-        
-        [Header("General")]
-        [SerializeField] private Menu multiplayerHintMenu;
         [SerializeField] private TextMeshProUGUI networkStatusText;
         [SerializeField] private BlinkingText networkStatusBT;
         [SerializeField] private GameObject cancelGO;
         [SerializeField] private GameObject createGO;
         [SerializeField] private Menu multiplayerMenu;
+        [SerializeField] private Menu multiplayerHintMenu;
+
+        [Header("Join")]
+        [SerializeField] private WorldUI worldUIPrefab;
+        [SerializeField] private RectTransform joinOffsetRT;
+        [SerializeField] private RectTransform worldsRT;
+        [SerializeField] private GameObject noneGO;
+        [SerializeField] private GameObject refreshGO;
+        [SerializeField] private Button refreshButton;
+        [SerializeField] private TMP_InputField lobbyCodeInputField;
+
+        [Header("Create")]
+        [SerializeField] private TMP_InputField worldNameInputField;
+        [SerializeField] private TMP_InputField passwordInputField;
+        [SerializeField] private OptionSelector mapOS;
+        [SerializeField] private OptionSelector visibilityOS;
+        [SerializeField] private GameObject passwordGO;
+        [SerializeField] private Toggle passwordToggle;
+        [SerializeField] private Slider maxPlayersSlider;
 
         private Coroutine updateNetStatusCoroutine;
         private ProfanityFilter filter = new ProfanityFilter();
@@ -148,29 +149,25 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
 
-            SetupHost();
-            SetupJoin();
-
-            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
-        }
-        private void SetupJoin()
-        {
-        }
-        private void SetupHost()
-        {
             // Map
             mapOS.SetupUsingEnum<MapType>();
             mapOS.Select(MapType.Farm);
 
-            // Lobby Type
+            // Visibility
             visibilityOS.SetupUsingEnum<VisibilityType>();
             visibilityOS.OnSelected.AddListener(delegate (int option)
             {
                 passwordGO.gameObject.SetActive((VisibilityType)option == VisibilityType.Public);
             });
             visibilityOS.Select(VisibilityType.Public);
+
+            NetworkShutdownManager.Instance.OnUncontrolledShutdown = OnUncontrolledShutdown;
+            NetworkShutdownManager.Instance.OnUncontrolledClientShutdown = OnUncontrolledClientShutdown;
+            NetworkShutdownManager.Instance.OnUncontrolledHostShutdown = OnUncontrolledHostShutdown;
+
+            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
         }
         private void Shutdown()
         {
@@ -196,6 +193,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             UpdateNetworkStatus(message, Color.green);
             NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
+        private void OnUncontrolledShutdown()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        private void OnUncontrolledClientShutdown()
+        {
+            InformationDialog.Inform("Disconnected!", "You lost connection.");
+        }
+        private void OnUncontrolledHostShutdown()
+        {
+            InformationDialog.Inform("Disconnected!", "The host lost connection.");
         }
 
         public void Play()
@@ -263,9 +272,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
                 string version = Application.version;
-                string mapName = ((MapType)mapOS.SelectedOption).ToString();
-                bool isPrivate = ((VisibilityType)visibilityOS.SelectedOption) == VisibilityType.Private;
-                bool isPasswordProtected = !string.IsNullOrEmpty(password);
+                string mapName = ((MapType)mapOS.Selected).ToString();
+                bool isPrivate = ((VisibilityType)visibilityOS.Selected) == VisibilityType.Private;
+                bool isPasswordProtected = passwordToggle.isOn && !string.IsNullOrEmpty(password);
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = isPrivate,
@@ -298,6 +307,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             worldsRT.transform.DestroyChildren();
             noneGO.SetActive(false);
+            refreshButton.interactable = false;
+            this.Invoke(delegate
+            {
+                refreshButton.interactable = true;
+            }, 2f);
 
             try
             {
@@ -333,6 +347,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Join(lobbyCodeInputField.text);
         }
+        public void ToggleMenu()
+        {
+            if (!multiplayerMenu.IsOpen && !IsRefreshing)
+            {
+                Refresh();
+            }
+            multiplayerMenu.Toggle();
+        }
 
         private async Task Authenticate()
         {
@@ -347,16 +369,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetConnectionData(string username, string password)
         {
             ConnectionData data = new ConnectionData(username, password);
-            NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
-        }
-
-        public void ToggleMenu()
-        {
-            if (!multiplayerMenu.IsOpen && !IsRefreshing)
-            {
-                Refresh();
-            }
-            multiplayerMenu.Toggle();
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
         }
 
         private void UpdateNetworkStatus(string status, Color color, float duration = 5)
@@ -398,11 +411,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Public,
             Private
-        }
-        public enum ConnectionType
-        {
-            Ip,
-            Relay
         }
         #endregion
     }

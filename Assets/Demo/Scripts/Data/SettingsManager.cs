@@ -4,11 +4,11 @@
 using IngameDebugConsole;
 using UnityEngine;
 using UnityEngine.Audio;
-using static DanielLochner.Assets.CreatureCreator.DemoSettings;
+using static DanielLochner.Assets.CreatureCreator.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SettingsManager : DataManager<SettingsManager, DemoSettings>
+    public class SettingsManager : DataManager<SettingsManager, Settings>
     {
         #region Fields
         [Header("Settings")]

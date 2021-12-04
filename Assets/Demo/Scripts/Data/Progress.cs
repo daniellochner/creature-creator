@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [Serializable]
-    public class DemoProgress : Data
+    public class Progress : Data
     {
         #region Fields
         [SerializeField, Range(0, 1)] private float experience = 0;
@@ -71,7 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public override void Reset()
+        public override void Revert()
         {
             Experience = 0;
             Level = 0;

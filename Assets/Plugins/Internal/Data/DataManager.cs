@@ -8,7 +8,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private string fileName;
         [SerializeField] private SecretKey encryptionKey;
-        [SerializeField] private M data;
+        [SerializeField, ReadOnly] private M data;
         #endregion
 
         #region Properties
@@ -24,7 +24,7 @@ namespace DanielLochner.Assets
 
             if (!File.Exists(Path.Combine(Application.persistentDataPath, fileName)))
             {
-                Data.Reset();
+                Data.Revert();
                 Save();
             }
             Load();

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [Serializable]
-    public class DemoSettings : Data
+    public class Settings : Data
     {
         #region Fields
         [Header("Video")]
@@ -55,8 +55,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => new Resolution()
             {
-                height = displaySize.x,
-                width = displaySize.y,
+                width = displaySize.x,
+                height = displaySize.y,
                 refreshRate = refreshRate
             };
             set
@@ -206,10 +206,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public override void Reset()
+        public override void Revert()
         {
             Resolution = Screen.currentResolution;
-            Fullscreen = true;
+            Fullscreen = Screen.fullScreen;
             VSync = false;
 
             CreatureMeshQuality = CreatureMeshQualityType.Medium;
