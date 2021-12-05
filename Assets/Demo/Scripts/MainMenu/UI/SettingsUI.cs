@@ -5,7 +5,6 @@ using SimpleFileBrowser;
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 using static DanielLochner.Assets.CreatureCreator.Settings;
 
@@ -14,6 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SettingsUI : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private Menu settingsMenu;
+
         [Header("Video")]
         [SerializeField] private OptionSelector resolutionOS;
         [SerializeField] private Toggle fullscreenToggle;
@@ -59,6 +60,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
+        private void OnDestroy()
+        {
+            if (SettingsManager.Instance) SettingsManager.Instance.Save();
+        }
+        private void OnApplicationQuit()
+        {
+            OnDestroy();
+        }
+
         private void Setup()
         {
             #region Video
@@ -382,6 +392,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetInvertVertical(isOn);
             });
             #endregion
+        }
+
+        public void ToggleMenu()
+        {
+            if (settingsMenu.IsOpen)
+            {
+                SettingsManager.Instance.Save();
+            }
+            settingsMenu.Toggle();
         }
         #endregion
     }
