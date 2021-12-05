@@ -168,14 +168,14 @@ namespace DanielLochner.Assets.CreatureCreator
             constructible.name = $"{bodyPartName} (C)";
 
             // 2.2. ...to Animatable
-            BodyPartConstructor constructibleCopy1 = Instantiate(constructible, root);
-            constructibleCopy1.name = $"{bodyPartName} (A)";
-            ConvertToAnimatable(constructibleCopy1, typeMapping[type].animateType);
+            BodyPartConstructor animatable = Instantiate(constructible, root); // Copy constructible
+            animatable.name = $"{bodyPartName} (A)";
+            ConvertToAnimatable(animatable, typeMapping[type].animateType);
 
             // 2.3. ...to Editable
-            BodyPartConstructor constructibleCopy2 = Instantiate(constructible, root);
-            constructibleCopy2.name = $"{bodyPartName} (E)";
-            ConvertToEditable(constructibleCopy2, typeMapping[type].editType, moveToolPrefab);
+            BodyPartConstructor editable = Instantiate(animatable, root); // Copy animatable
+            editable.name = $"{bodyPartName} (E)";
+            ConvertToEditable(editable, typeMapping[type].editType, moveToolPrefab);
 
             // 3. Save
             Save(root, bodyPart, outputDirectory, type, database);

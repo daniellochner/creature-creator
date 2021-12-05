@@ -24,8 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(Texture pattern)
         {
-            name = pattern.name;
-
             Image graphic = selectToggle.graphic as Image;
             Image targetGraphic = selectToggle.targetGraphic as Image;
 

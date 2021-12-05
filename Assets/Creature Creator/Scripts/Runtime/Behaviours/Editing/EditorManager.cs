@@ -678,6 +678,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid as RectTransform);
             bodyPartUI.Setup(bodyPart);
+            bodyPartUI.name = bodyPartID;
 
             bodyPartUI.HoverUI.OnEnter.AddListener(delegate
             {
@@ -756,6 +757,7 @@ namespace DanielLochner.Assets.CreatureCreator
             PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT.transform);
             patternsUI.Add(patternUI);
             patternUI.Setup(pattern);
+            patternUI.name = patternID;
 
             patternUI.SelectToggle.group = patternsToggleGroup;
             patternUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)

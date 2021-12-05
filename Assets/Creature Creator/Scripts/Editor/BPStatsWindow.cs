@@ -10,8 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Database bodyParts;
-        [SerializeField] private MinMax minMaxHealth;
-        [SerializeField] private int maxComplexity;
+        [SerializeField] private MinMax minMaxHealth = new MinMax(5, 15);
+        [SerializeField] private int maxComplexity = 10;
 
         private SerializedProperty _bodyParts, _minMaxHealth, _maxComplexity;
         private SerializedObject target;

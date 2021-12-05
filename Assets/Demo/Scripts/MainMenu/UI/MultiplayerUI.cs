@@ -241,7 +241,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetConnectionData(onlineUsernameInputField.text, password);
 
                 UpdateNetworkStatus("Joined.", Color.green);
-                await Task.Delay(1000);
+                await Task.Delay(250);
                 LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartClient());
             }
             catch (Exception e)
@@ -289,10 +289,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
                 Lobby lobby = await LobbyCreationHandler.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
-                Debug.Log(lobby.LobbyCode);
 
                 UpdateNetworkStatus("Created.", Color.green);
-                await Task.Delay(1000);
+                await Task.Delay(250);
                 LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartHost());
             }
             catch (Exception e)
