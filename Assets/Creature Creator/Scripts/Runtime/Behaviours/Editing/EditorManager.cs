@@ -834,7 +834,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (player.Creature.Editor.PaintedBodyPart)
             {
-                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetColours(primaryColour, secondaryColour);
+                BodyPartConstructor constructor = player.Creature.Editor.PaintedBodyPart.BodyPartConstructor;
+                constructor.SetColours(primaryColour, secondaryColour);
+
+                primaryColourPicker.gameObject.SetActive(constructor.BodyPart.DefaultColours.primary.a != 0);
+                secondaryColourPicker.gameObject.SetActive(constructor.BodyPart.DefaultColours.secondary.a != 0);
             }
             else
             {
@@ -842,6 +846,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 patternMaterial.SetColor("_PrimaryCol", primaryColour);
                 patternMaterial.SetColor("_SecondaryCol", secondaryColour);
+
+                primaryColourPicker.gameObject.SetActive(true);
+                secondaryColourPicker.gameObject.SetActive(true);
             }
         }
         public void UpdateStatistics()
