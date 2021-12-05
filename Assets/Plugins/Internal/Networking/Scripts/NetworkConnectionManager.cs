@@ -50,8 +50,7 @@ namespace DanielLochner.Assets
                 }
             }
 
-            NetworkShutdownManager.Instance.Shutdown();
-            SceneManager.LoadScene("MainMenu");
+            LoadingManager.LoadScene("MainMenu", () => NetworkShutdownManager.Instance.Shutdown());
         }
 
         public void Kick(ulong clientId, string reason = default)

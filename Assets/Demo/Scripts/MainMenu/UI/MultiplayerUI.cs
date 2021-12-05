@@ -165,35 +165,35 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown = OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown = OnUncontrolledHostShutdown;
 
-            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
+            //NetworkManager.Singleton.OnServerStarted += OnServerStarted;
+            //NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+            //NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
         }
         private void Shutdown()
         {
-            NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
+            //NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
+            //NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+            //NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
         }
 
-        private void OnServerStarted()
-        {
-            OnMultiplayerSuccess("Created.");
-        }
-        private void OnClientDisconnect(ulong clientID)
-        {
-            UpdateNetworkStatus("Connection failed.", Color.red);
-            IsConnecting = false;
-        }
-        private void OnClientConnect(ulong clientID)
-        {
-            OnMultiplayerSuccess("Connected.");
-        }
-        private void OnMultiplayerSuccess(string message)
-        {
-            UpdateNetworkStatus(message, Color.green);
-            NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        }
+        //private void OnServerStarted()
+        //{
+        //    OnMultiplayerSuccess("Created.");
+        //}
+        //private void OnClientDisconnect(ulong clientID)
+        //{
+        //    UpdateNetworkStatus("Connection failed.", Color.red);
+        //    IsConnecting = false;
+        //}
+        //private void OnClientConnect(ulong clientID)
+        //{
+        //    OnMultiplayerSuccess("Connected.");
+        //}
+        //private void OnMultiplayerSuccess(string message)
+        //{
+        //    UpdateNetworkStatus(message, Color.green);
+        //    NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        //}
         private void OnUncontrolledShutdown()
         {
             SceneManager.LoadScene("MainMenu");
@@ -240,8 +240,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 relayTransport.SetRelayServerData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
                 SetConnectionData(onlineUsernameInputField.text, password);
 
-                UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
-                NetworkManager.Singleton.StartClient();
+                UpdateNetworkStatus("Joined.", Color.green);
+                await Task.Delay(1000);
+                LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartClient());
             }
             catch (Exception e)
             {
@@ -290,8 +291,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 Lobby lobby = await LobbyCreationHandler.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
                 Debug.Log(lobby.LobbyCode);
 
-                UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
-                NetworkManager.Singleton.StartHost();
+                UpdateNetworkStatus("Created.", Color.green);
+                await Task.Delay(1000);
+                LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartHost());
             }
             catch (Exception e)
             {
@@ -308,11 +310,7 @@ namespace DanielLochner.Assets.CreatureCreator
             worldsRT.transform.DestroyChildren();
             noneGO.SetActive(false);
             refreshButton.interactable = false;
-            this.Invoke(delegate
-            {
-                refreshButton.interactable = true;
-            }, 2f);
-
+            
             try
             {
                 QueryLobbiesOptions options = new QueryLobbiesOptions()
@@ -333,6 +331,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 Debug.Log(e);
             }
 
+            this.Invoke(delegate
+            {
+                refreshButton.interactable = true;
+            }, 1f);
             IsRefreshing = false;
         }
         public void Cancel()
