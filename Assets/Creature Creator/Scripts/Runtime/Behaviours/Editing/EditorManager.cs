@@ -13,6 +13,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using UnityFBXExporter;
 using ProfanityDetector;
 using SimpleFileBrowser;
+using static DanielLochner.Assets.CreatureCreator.BodyPart;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -806,6 +807,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             primaryColourPicker.SetColour(primaryColour);
             secondaryColourPicker.SetColour(secondaryColour);
+
+            BodyPartEditor bpe = player.Creature.Editor.PaintedBodyPart;
+            if (bpe)
+            {
+                BodyPartDefaultColours colours = bpe.BodyPartConstructor.BodyPart.DefaultColours;
+                primaryColourPicker.gameObject.SetActive(colours.primary.a != 0);
+                secondaryColourPicker.gameObject.SetActive(colours.secondary.a != 0);
+            }
+            else
+            {
+                primaryColourPicker.gameObject.SetActive(true);
+                secondaryColourPicker.gameObject.SetActive(true);
+            }
         }
 
         public void UpdateBodyPartTotals()
@@ -834,11 +848,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (player.Creature.Editor.PaintedBodyPart)
             {
-                BodyPartConstructor constructor = player.Creature.Editor.PaintedBodyPart.BodyPartConstructor;
-                constructor.SetColours(primaryColour, secondaryColour);
-
-                primaryColourPicker.gameObject.SetActive(constructor.BodyPart.DefaultColours.primary.a != 0);
-                secondaryColourPicker.gameObject.SetActive(constructor.BodyPart.DefaultColours.secondary.a != 0);
+                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetColours(primaryColour, secondaryColour);
             }
             else
             {
@@ -846,9 +856,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 patternMaterial.SetColor("_PrimaryCol", primaryColour);
                 patternMaterial.SetColor("_SecondaryCol", secondaryColour);
-
-                primaryColourPicker.gameObject.SetActive(true);
-                secondaryColourPicker.gameObject.SetActive(true);
             }
         }
         public void UpdateStatistics()
