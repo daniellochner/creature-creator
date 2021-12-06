@@ -6,6 +6,7 @@ namespace DanielLochner.Assets
     public abstract class DataManager<T, M> : MonoBehaviourSingleton<T> where T : DataManager<T, M> where M : Data, new()
     {
         #region Fields
+        [Header("Data")]
         [SerializeField] private string fileName;
         [SerializeField] private SecretKey encryptionKey;
         [SerializeField, ReadOnly] private M data;

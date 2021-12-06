@@ -1,25 +1,20 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
-using System.Threading.Tasks;
 using Unity.Netcode;
-using Unity.Services.Lobbies;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class DemoSetup : MonoBehaviourSingleton<DemoSetup>
+    public class SetupGame : MonoBehaviourSingleton<SetupGame>
     {
         #region Methods
-        public void Setup()
+        private void Start()
         {
-            if (!NetworkManager.Singleton.IsHost) return;
-
-            NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
-            NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
-
+            Setup();
+        }
+        private void Setup()
+        {
             NetworkCreature networkCreature = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreature>();
             EditorManager.Instance.Player = networkCreature.Player;
             networkCreature.Player.gameObject.SetActive(true);
@@ -30,15 +25,11 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureInformationManager.Instance.Setup();
             NetworkCreaturesMenu.Instance.Setup();
             NetworkCreaturesManager.Instance.Setup();
-        }
 
-        private void OnInactivityKick()
-        {
-            InformationDialog.Instance.Close(true);
-        }
-        private void OnInactivityWarn(int warnTime)
-        {
-            InformationDialog.Inform("Inactivity Warning!", $"You will be kicked due to inactivity in {warnTime} seconds.", "Cancel");
+            //if (isPrivate)
+            //{
+            //    InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{lobby.LobbyCode}\".\nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+            //}
         }
         #endregion
     }

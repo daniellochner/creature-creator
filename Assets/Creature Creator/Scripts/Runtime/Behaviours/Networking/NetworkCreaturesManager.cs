@@ -19,6 +19,16 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             HandleExistingPlayers();
         }
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (NetworkHostManager.Instance)
+            {
+                NetworkHostManager.Instance.OnPlayerAdd -= PlayerJoinClientRpc;
+                NetworkHostManager.Instance.OnPlayerRemove -= PlayerLeaveClientRpc;
+            }
+        }
 
         [ClientRpc]
         private void PlayerJoinClientRpc(PlayerData playerData)
@@ -48,11 +58,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PlayerData playerData in NetworkHostManager.Instance.Players.Values)
             {
-                NetworkCreature networkedCreature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreature>();
-                if (!networkedCreature.IsHidden.Value)
-                {
-                    networkedCreature.LoadPlayerClientRpc(playerData, JsonUtility.ToJson(networkedCreature.PlayerCreature.Constructor.Data), NetworkUtils.SendTo(clientId));
-                }
+                NetworkCreature creature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreature>();
+                string creatureData = JsonUtility.ToJson(creature.PlayerCreature.Constructor.Data);
+
+                creature.LoadPlayerClientRpc(playerData, creatureData, NetworkUtils.SendTo(clientId));
             }
         }
         public void HandleExistingPlayers()

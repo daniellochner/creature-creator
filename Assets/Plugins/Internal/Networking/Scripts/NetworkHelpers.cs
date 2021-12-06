@@ -6,10 +6,18 @@ namespace DanielLochner.Assets
 {
     public class NetworkHelpers : MonoBehaviour
     {
+        #region Fields
         [SerializeField] private NetworkObject[] helpers;
         [SerializeField] private UnityEvent onSpawned;
+        #endregion
 
+        #region Methods
         private void Start()
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += Spawn;
+        }
+
+        public void Spawn(ulong clientId)
         {
             if (NetworkManager.Singleton.IsHost)
             {
@@ -20,5 +28,6 @@ namespace DanielLochner.Assets
             }
             onSpawned.Invoke();
         }
+        #endregion
     }
 }

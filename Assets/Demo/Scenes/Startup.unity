@@ -134,8 +134,9 @@ GameObject:
   - component: {fileID: 182049364}
   - component: {fileID: 182049365}
   - component: {fileID: 182049366}
-  - component: {fileID: 182049367}
+  - component: {fileID: 182049369}
   - component: {fileID: 182049368}
+  - component: {fileID: 182049367}
   m_Layer: 0
   m_Name: Other
   m_TagString: Untagged
@@ -208,6 +209,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df00fe02d6379f7469b23272707e96fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &182049369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182049363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8525535132824442bee2f498859422b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  helpers:
+  - {fileID: 2812499329033076479, guid: f904356ac4dc69f40b3292ea85bc5982, type: 3}
+  - {fileID: 7265491829816527811, guid: de8a86576f20d284dba243e0dc53a881, type: 3}
+  - {fileID: -8638041438984211807, guid: d997a0b1aee464e4db3ad81c909e492c, type: 3}
+  - {fileID: 4433383066789701670, guid: ee495a3e0952f5544bdb6f563177d144, type: 3}
+  onSpawned:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1621430838}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.SetupNetwork,
+          Assembly-CSharp
+        m_MethodName: Setup
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &231216500
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -338,6 +372,7 @@ Transform:
   - {fileID: 5560976020738981253}
   - {fileID: 1071129234}
   - {fileID: 5382483745399707348}
+  - {fileID: 1621430837}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -799,6 +834,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: MainMenu
+--- !u!1 &1621430836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1621430837}
+  - component: {fileID: 1621430838}
+  m_Layer: 0
+  m_Name: Setup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1621430837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621430836}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 467471145}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1621430838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621430836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0840cc87be24db248a8c0f325f0348ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &140453851891507817
 Transform:
   m_ObjectHideFlags: 0

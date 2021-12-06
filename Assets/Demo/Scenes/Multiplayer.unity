@@ -1595,7 +1595,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 235307936}
-  - component: {fileID: 235307938}
   - component: {fileID: 235307937}
   m_Layer: 0
   m_Name: Setup
@@ -1630,39 +1629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2200b5581d17b2644b5a0ab424f9cc2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &235307938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235307935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8525535132824442bee2f498859422b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  helpers:
-  - {fileID: 2812499329033076479, guid: f904356ac4dc69f40b3292ea85bc5982, type: 3}
-  - {fileID: 7265491829816527811, guid: de8a86576f20d284dba243e0dc53a881, type: 3}
-  - {fileID: -8638041438984211807, guid: d997a0b1aee464e4db3ad81c909e492c, type: 3}
-  - {fileID: 4433383066789701670, guid: ee495a3e0952f5544bdb6f563177d144, type: 3}
-  onSpawned:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 235307937}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.DemoSetup,
-          Assembly-CSharp
-        m_MethodName: Setup
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  networkHelpers: {fileID: 0}
 --- !u!1 &245684636
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,6 @@ using Unity.Services.Lobbies.Models;
 using System.Collections.Generic;
 using System;
 using System.Text;
-using System.Collections;
 using System.Security.Cryptography;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -52,11 +51,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle passwordToggle;
         [SerializeField] private Slider maxPlayersSlider;
 
-        private Coroutine updateNetStatusCoroutine;
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
         private bool isConnecting, isRefreshing;
         private UnityTransport relayTransport;
+        private Coroutine updateNetStatusCoroutine;
         #endregion
 
         #region Properties
@@ -143,6 +142,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
+        private void OnDestroy()
+        {
+            if (NetworkManager.Singleton) Shutdown();
+        }
+
         private void Setup()
         {
             relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
@@ -159,22 +163,34 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             visibilityOS.Select(VisibilityType.Public);
 
-            NetworkShutdownManager.Instance.OnUncontrolledShutdown = OnUncontrolledShutdown;
-            NetworkShutdownManager.Instance.OnUncontrolledClientShutdown = OnUncontrolledClientShutdown;
-            NetworkShutdownManager.Instance.OnUncontrolledHostShutdown = OnUncontrolledHostShutdown;
+            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
+        }
+        private void Shutdown()
+        {
+            NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
         }
 
-        private void OnUncontrolledShutdown()
+        private void OnServerStarted()
         {
-            SceneManager.LoadScene("MainMenu");
+            OnMultiplayerSuccess("Created.");
         }
-        private void OnUncontrolledClientShutdown()
+        private void OnClientDisconnect(ulong clientID)
         {
-            InformationDialog.Inform("Disconnected!", "You lost connection.");
+            UpdateNetworkStatus("Connection failed.", Color.red);
+            IsConnecting = false;
         }
-        private void OnUncontrolledHostShutdown()
+        private void OnClientConnect(ulong clientID)
         {
-            InformationDialog.Inform("Disconnected!", "The host lost connection.");
+            OnMultiplayerSuccess("Connected.");
+        }
+        private void OnMultiplayerSuccess(string message)
+        {
+            UpdateNetworkStatus(message, Color.green);
+            NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
 
         public void Play()
@@ -202,8 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool isValidPasswordHash = string.IsNullOrEmpty(lobbyPasswordHash) || sha256.VerifyHash(password, lobbyPasswordHash);
                 if (!isValidPasswordHash)
                 {
-                    UpdateNetworkStatus("Invalid password.", Color.red);
-                    return;
+                    throw new Exception("Invalid password.");
                 }
                 
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
@@ -217,9 +232,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 relayTransport.SetRelayServerData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
                 SetConnectionData(onlineUsernameInputField.text, password);
 
-                UpdateNetworkStatus("Joined.", Color.green);
-                await Task.Delay(1000);
-                LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartClient());
+                UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
+                NetworkManager.Singleton.StartClient();
             }
             catch (Exception e)
             {
@@ -238,45 +252,40 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 await Authenticate();
 
+                bool isPrivate = ((VisibilityType)visibilityOS.Selected) == VisibilityType.Private;
+                bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
+
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(10);
                 relayTransport.SetRelayServerData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
                 string username = onlineUsernameInputField.text;
-                string password = NetworkHostManager.Instance.Password = passwordInputField.text;
+                string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 SetConnectionData(username, password);
 
                 UpdateNetworkStatus("Generating Join Code...", Color.yellow, -1);
                 string joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
                 UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
-                string passwordHash = (passwordToggle.isOn && !string.IsNullOrEmpty(password)) ? sha256.GetHash(password) : "";
                 string version = Application.version;
                 string mapName = ((MapType)mapOS.Selected).ToString();
-                bool isPrivate = ((VisibilityType)visibilityOS.Selected) == VisibilityType.Private;
+                string passwordHash = usePassword ? sha256.GetHash(password) : "";
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = isPrivate,
                     Data = new Dictionary<string, DataObject>()
                     {
-                        { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
+                        { "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode) },
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
-                        { "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode) }
+                        { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) }
                     },
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
                 Lobby lobby = await LobbyHelper.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
-                
-                UpdateNetworkStatus("Created.", Color.green);
-                await Task.Delay(1000);
-                LoadingManager.LoadScene("Multiplayer", null, delegate
-                {
-                    NetworkManager.Singleton.StartHost();
-                    if (isPrivate)
-                    {
-                        InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{lobby.LobbyCode}\".\nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
-                    }
-                });
+                Debug.Log(lobby.LobbyCode);
+
+                UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
+                NetworkManager.Singleton.StartHost();
             }
             catch (Exception e)
             {

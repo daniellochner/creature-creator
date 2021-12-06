@@ -107,7 +107,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void LoadPlayerClientRpc(PlayerData playerData, string creatureData, ClientRpcParams clientRpcParams)
         {
             NetworkCreaturesMenu.Instance.AddPlayer(playerData);
-            ReconstructAndShowClientRpc(creatureData);
+            if (!IsHidden.Value)
+            {
+                ReconstructAndShowClientRpc(creatureData);
+            }
         }
         #endregion
 
