@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Collections;
+using System.Security.Cryptography;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -53,6 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private Coroutine updateNetStatusCoroutine;
         private ProfanityFilter filter = new ProfanityFilter();
+        private SHA256 sha256 = SHA256.Create();
         private bool isConnecting, isRefreshing;
         private UnityTransport relayTransport;
         #endregion
@@ -189,14 +191,21 @@ namespace DanielLochner.Assets.CreatureCreator
             try
             {
                 await Authenticate();
-
+                
                 UpdateNetworkStatus("Joining Lobby...", Color.yellow, -1);
                 JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions()
                 {
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId)
                 };
                 Lobby lobby = await LobbyHelper.Instance.JoinLobbyAsync(lobbyCode, options);
-
+                string lobbyPasswordHash = lobby.Data["passwordHash"].Value;
+                bool isValidPasswordHash = string.IsNullOrEmpty(lobbyPasswordHash) || sha256.VerifyHash(password, lobbyPasswordHash);
+                if (!isValidPasswordHash)
+                {
+                    UpdateNetworkStatus("Invalid password.", Color.red);
+                    return;
+                }
+                
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
                 string joinCode = lobby.Data["joinCode"].Value;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
@@ -240,18 +249,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 string joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
                 UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
+                string passwordHash = (passwordToggle.isOn && !string.IsNullOrEmpty(password)) ? sha256.GetHash(password) : "";
                 string version = Application.version;
                 string mapName = ((MapType)mapOS.Selected).ToString();
                 bool isPrivate = ((VisibilityType)visibilityOS.Selected) == VisibilityType.Private;
-                bool isPasswordProtected = passwordToggle.isOn && !string.IsNullOrEmpty(password);
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = isPrivate,
                     Data = new Dictionary<string, DataObject>()
                     {
+                        { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
-                        { "isPasswordProtected", new DataObject(DataObject.VisibilityOptions.Public, isPasswordProtected.ToString()) },
                         { "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode) }
                     },
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
@@ -287,11 +296,7 @@ namespace DanielLochner.Assets.CreatureCreator
             
             try
             {
-                QueryLobbiesOptions options = new QueryLobbiesOptions()
-                {
-                    // TODO: ordering and filters
-                };
-                List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync(options)).Results;
+                List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
                     Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);

@@ -23,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
             string mapName = lobby.Data["mapName"].Value;
             string version = lobby.Data["version"].Value;
             string joinCode = lobby.Data["joinCode"].Value;
-            bool isPasswordProtected = bool.Parse(lobby.Data["isPasswordProtected"].Value);
+            bool isPasswordProtected = !string.IsNullOrEmpty(lobby.Data["passwordHash"].Value);
 
             playersText.text = $"{players}/{maxPlayers}";
             nameText.text = lobby.Name;
@@ -31,17 +31,19 @@ namespace DanielLochner.Assets.CreatureCreator
             padlockIcon.SetActive(isPasswordProtected);
             joinButton.onClick.AddListener(delegate 
             {
-                if (isPasswordProtected)
-                {
-                    InputDialog.Input("Password Required", "Enter the password...", submitEvent: delegate (string password)
-                    {
-                        multiplayerUI.Join(lobby.LobbyCode, password);
-                    });
-                }
-                else
-                {
-                    multiplayerUI.Join(lobby.LobbyCode);
-                }
+                Debug.Log("Lobby Code:");
+                Debug.Log(lobby.LobbyCode);
+                //if (isPasswordProtected)
+                //{
+                //    InputDialog.Input("Password Required", "Enter the password...", submitEvent: delegate (string password)
+                //    {
+                //        multiplayerUI.Join(lobby.LobbyCode, password);
+                //    });
+                //}
+                //else
+                //{
+                //    multiplayerUI.Join(lobby.LobbyCode);
+                //}
             });
         }
         #endregion
