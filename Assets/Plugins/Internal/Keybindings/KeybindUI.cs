@@ -23,32 +23,32 @@ namespace DanielLochner.Assets
         #region Properties
         public string Action => actionText.text;
         public UnityEvent<KeyCode> OnRebind => onRebind;
+        public KeyCode Selected => currentKey;
         #endregion
 
         #region Methods
         private void Start()
         {
-            rebindButton.onClick.AddListener(() => KeybindDialog.Rebind(this));
             keyText.text = defaultKey.ToString();
+            rebindButton.onClick.AddListener(() => KeybindingsDialog.Rebind(this));
         }
-
-        public void Rebind(KeyCode key, bool notify = true)
-        {
-            keyText.text = key.ToString();
-
-            currentKey = key;
-            resetGO.SetActive(true);
-
-            if (notify)
-            {
-                onRebind.Invoke(key);
-            }
-        }
-
         public void Reset()
         {
             Rebind(defaultKey);
             resetGO.SetActive(false);
+        }
+
+        public void Rebind(KeyCode key, bool notify = true)
+        {
+            keyText.text = (currentKey = key).ToString();
+            if (currentKey != defaultKey)
+            {
+                resetGO.SetActive(true);
+            }
+            if (notify)
+            {
+                onRebind.Invoke(key);
+            }
         }
         #endregion
     }

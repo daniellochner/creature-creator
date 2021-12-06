@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup()
         {
+            if (!NetworkManager.Singleton.IsHost) return;
+
             NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
             NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
 

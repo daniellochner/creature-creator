@@ -132,9 +132,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 182049364}
-  - component: {fileID: 182049367}
   - component: {fileID: 182049365}
   - component: {fileID: 182049366}
+  - component: {fileID: 182049367}
   m_Layer: 0
   m_Name: Other
   m_TagString: Untagged
@@ -288,7 +288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1296656003056293723, guid: e5ccd376f5ef5a943bda7102d5f922c4, type: 3}
       propertyPath: m_Name
-      value: KeybindDialog
+      value: KeybindingsDialog
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5ccd376f5ef5a943bda7102d5f922c4, type: 3}
@@ -458,6 +458,14 @@ PrefabInstance:
     - target: {fileID: 11414302, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_Value
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11440770, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1280
+      objectReference: {fileID: 0}
+    - target: {fileID: 11440770, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 720
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -801,6 +809,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 140453851891507817}
+  - component: {fileID: 140453851891507834}
   - component: {fileID: 140453851891507833}
   - component: {fileID: 140453851891507832}
   m_Layer: 0
@@ -881,6 +890,34 @@ MonoBehaviour:
     max: 1
   references:
     version: 1
+--- !u!114 &140453851891507834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140453851891507831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8454ddfcdc46cf3418a7269c67f2a5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: keybindings.dat
+  encryptionKey: {fileID: 0}
+  data:
+    walkForwards: 0
+    walkBackwards: 0
+    walkLeft: 0
+    walkRight: 0
+    jump: 0
+    sprint: 0
+    interact: 0
+    drop: 0
+    talk: 0
+    viewPlayers: 0
+    copy: 0
+    viewMap: 0
+    freeLook: 0
 --- !u!1 &5031318366247838804
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,6 +1110,18 @@ PrefabInstance:
     - target: {fileID: 5560976019947480322, guid: 5dd19b6444555c440ae13f39e0484a50, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560976019947480332, guid: 5dd19b6444555c440ae13f39e0484a50, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560976019947480332, guid: 5dd19b6444555c440ae13f39e0484a50, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560976019947480332, guid: 5dd19b6444555c440ae13f39e0484a50, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5560976019947480334, guid: 5dd19b6444555c440ae13f39e0484a50, type: 3}
       propertyPath: m_Pivot.x

@@ -11,7 +11,9 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private int maxPayloadSize = 1024;
         [SerializeField] private int maxPlayers = 16;
-        [SerializeField] private string password;
+
+        [Header("Debug")]
+        [SerializeField, ReadOnly] private string password;
         #endregion
 
         #region Properties

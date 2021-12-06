@@ -141,11 +141,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
-        private void OnDestroy()
-        {
-            if (NetworkManager.Singleton) Shutdown();
-        }
-
         private void Setup()
         {
             relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
@@ -165,36 +160,8 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkShutdownManager.Instance.OnUncontrolledShutdown = OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown = OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown = OnUncontrolledHostShutdown;
-
-            //NetworkManager.Singleton.OnServerStarted += OnServerStarted;
-            //NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
-            //NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
-        }
-        private void Shutdown()
-        {
-            //NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
-            //NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
-            //NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
         }
 
-        //private void OnServerStarted()
-        //{
-        //    OnMultiplayerSuccess("Created.");
-        //}
-        //private void OnClientDisconnect(ulong clientID)
-        //{
-        //    UpdateNetworkStatus("Connection failed.", Color.red);
-        //    IsConnecting = false;
-        //}
-        //private void OnClientConnect(ulong clientID)
-        //{
-        //    OnMultiplayerSuccess("Connected.");
-        //}
-        //private void OnMultiplayerSuccess(string message)
-        //{
-        //    UpdateNetworkStatus(message, Color.green);
-        //    NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        //}
         private void OnUncontrolledShutdown()
         {
             SceneManager.LoadScene("MainMenu");
@@ -228,7 +195,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId)
                 };
-                Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
+                Lobby lobby = await LobbyHelper.Instance.JoinLobbyAsync(lobbyCode, options);
 
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
                 string joinCode = lobby.Data["joinCode"].Value;
@@ -242,7 +209,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetConnectionData(onlineUsernameInputField.text, password);
 
                 UpdateNetworkStatus("Joined.", Color.green);
-                await Task.Delay(500);
+                await Task.Delay(1000);
                 LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartClient());
             }
             catch (Exception e)
@@ -289,11 +256,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     },
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
-                Lobby lobby = await LobbyCreationHandler.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
-
+                Lobby lobby = await LobbyHelper.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
+                
                 UpdateNetworkStatus("Created.", Color.green);
-                await Task.Delay(500);
-                LoadingManager.LoadScene("Multiplayer", null, () => NetworkManager.Singleton.StartHost());
+                await Task.Delay(1000);
+                LoadingManager.LoadScene("Multiplayer", null, delegate
+                {
+                    NetworkManager.Singleton.StartHost();
+                    if (isPrivate)
+                    {
+                        InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{lobby.LobbyCode}\".\nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+                    }
+                });
             }
             catch (Exception e)
             {
@@ -337,6 +311,13 @@ namespace DanielLochner.Assets.CreatureCreator
             }, 1f);
             IsRefreshing = false;
         }
+        public void TryRefresh()
+        {
+            if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.CurrentPanel == 0)
+            {
+                Refresh();
+            }
+        }
         public void Cancel()
         {
             if (!IsConnecting) return;
@@ -348,13 +329,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Join()
         {
             Join(lobbyCodeInputField.text);
-        }
-        public void TryRefresh()
-        {
-            if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.CurrentPanel == 0)
-            {
-                Refresh();
-            }
         }
 
         private async Task Authenticate()

@@ -34,7 +34,8 @@ namespace DanielLochner.Assets.CreatureCreator
             SetAntialiasing(Data.Antialiasing);
             SetScreenSpaceReflections(Data.ScreenSpaceReflections);
             SetBloom(Data.Bloom);
-            SetDebugMode(Data.DepthOfField);
+            SetDebugMode(Data.DebugMode);
+            SetDepthOfField(Data.DepthOfField);
             SetMotionBlur(Data.MotionBlur);
 
             SetMasterVolume(Data.MasterVolume);

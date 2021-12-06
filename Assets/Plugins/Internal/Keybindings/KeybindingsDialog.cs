@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class KeybindDialog : MenuSingleton<KeybindDialog>
+    public class KeybindingsDialog : MenuSingleton<KeybindingsDialog>
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI messageText;
