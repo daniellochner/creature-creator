@@ -9,11 +9,18 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class LobbyCreationHandler : MonoBehaviourSingleton<LobbyCreationHandler>
+    public class LobbyHelper : MonoBehaviourSingleton<LobbyHelper>
     {
         #region Fields
         private Coroutine heartbeatLobbyCoroutine;
         private ConcurrentQueue<string> createdLobbyIds = new ConcurrentQueue<string>();
+        #endregion
+
+        #region Properties
+        public string JoinedLobbyCode
+        {
+            get; private set;
+        }
         #endregion
 
         #region Methods
@@ -30,6 +37,7 @@ namespace DanielLochner.Assets
             }
             Lobby lobby = await Lobbies.Instance.CreateLobbyAsync(name, maxPlayers, options);
             createdLobbyIds.Enqueue(lobby.Id);
+            JoinedLobbyCode = lobby.LobbyCode;
 
             if (heartbeatLobbyCoroutine != null)
             {
@@ -37,6 +45,12 @@ namespace DanielLochner.Assets
             }
             heartbeatLobbyCoroutine = StartCoroutine(HeartbeatLobbyRoutine(lobby.Id, 10));
 
+            return lobby;
+        }
+        public async Task<Lobby> JoinLobbyAsync(string lobbyCode, JoinLobbyByCodeOptions options)
+        {
+            Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
+            JoinedLobbyCode = lobby.LobbyCode;
             return lobby;
         }
 
