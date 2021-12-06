@@ -17,7 +17,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        public string JoinedLobbyCode
+        public Lobby JoinedLobby
         {
             get; private set;
         }
@@ -37,7 +37,7 @@ namespace DanielLochner.Assets
             }
             Lobby lobby = await Lobbies.Instance.CreateLobbyAsync(name, maxPlayers, options);
             createdLobbyIds.Enqueue(lobby.Id);
-            JoinedLobbyCode = lobby.LobbyCode;
+            JoinedLobby = lobby;
 
             if (heartbeatLobbyCoroutine != null)
             {
@@ -50,7 +50,7 @@ namespace DanielLochner.Assets
         public async Task<Lobby> JoinLobbyAsync(string lobbyCode, JoinLobbyByCodeOptions options)
         {
             Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
-            JoinedLobbyCode = lobby.LobbyCode;
+            JoinedLobby = lobby;
             return lobby;
         }
 

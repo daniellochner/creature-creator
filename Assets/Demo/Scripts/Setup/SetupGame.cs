@@ -26,10 +26,10 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkCreaturesMenu.Instance.Setup();
             NetworkCreaturesManager.Instance.Setup();
 
-            //if (isPrivate)
-            //{
-            //    InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{lobby.LobbyCode}\".\nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
-            //}
+            if (NetworkManager.Singleton.IsHost && LobbyHelper.Instance.JoinedLobby.IsPrivate)
+            {
+                InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{LobbyHelper.Instance.JoinedLobby.LobbyCode}\".\nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+            }
         }
         #endregion
     }
