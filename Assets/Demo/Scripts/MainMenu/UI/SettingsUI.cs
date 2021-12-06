@@ -13,8 +13,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SettingsUI : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private Menu settingsMenu;
-
         [Header("Video")]
         [SerializeField] private OptionSelector resolutionOS;
         [SerializeField] private Toggle fullscreenToggle;
@@ -392,15 +390,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetInvertVertical(isOn);
             });
             #endregion
-        }
-
-        public void ToggleMenu()
-        {
-            if (settingsMenu.IsOpen)
-            {
-                SettingsManager.Instance.Save();
-            }
-            settingsMenu.Toggle();
         }
         #endregion
     }

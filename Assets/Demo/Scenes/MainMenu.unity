@@ -2256,10 +2256,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 348299799}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.Menu, Assembly-CSharp-firstpass
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 532916506}
         m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.MultiplayerUI,
           Assembly-CSharp
-        m_MethodName: ToggleMenu
+        m_MethodName: TryRefresh
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5969,6 +5981,7 @@ MonoBehaviour:
   createGO: {fileID: 88745019}
   multiplayerMenu: {fileID: 348299799}
   multiplayerHintMenu: {fileID: 1905437031}
+  multiplayerSSS: {fileID: 2107704826}
   worldUIPrefab: {fileID: 2059318724390045123, guid: 2a72cdea4c6d47043b1beba8db6b0038, type: 3}
   joinOffsetRT: {fileID: 425021536}
   worldsRT: {fileID: 1373893662}
@@ -9400,10 +9413,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1669968180}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.SettingsUI,
-          Assembly-CSharp
-        m_MethodName: ToggleMenu
+      - m_Target: {fileID: 1211324580}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.Menu, Assembly-CSharp-firstpass
+        m_MethodName: Toggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18517,7 +18529,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75b51db80e4f854fa94a05cc7fd995b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settingsMenu: {fileID: 1211324580}
   resolutionOS: {fileID: 1427671620}
   fullscreenToggle: {fileID: 1790850655}
   vSyncToggle: {fileID: 337771582}
@@ -22275,7 +22286,20 @@ MonoBehaviour:
   useUnscaledTime: 0
   onPanelChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 532916506}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.MultiplayerUI,
+          Assembly-CSharp
+        m_MethodName: TryRefresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPanelSelecting:
     m_PersistentCalls:
       m_Calls: []

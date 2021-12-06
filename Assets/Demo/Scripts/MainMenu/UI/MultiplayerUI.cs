@@ -31,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject createGO;
         [SerializeField] private Menu multiplayerMenu;
         [SerializeField] private Menu multiplayerHintMenu;
+        [SerializeField] private SimpleScrollSnap multiplayerSSS;
 
         [Header("Join")]
         [SerializeField] private WorldUI worldUIPrefab;
@@ -348,13 +349,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Join(lobbyCodeInputField.text);
         }
-        public void ToggleMenu()
+        public void TryRefresh()
         {
-            if (!multiplayerMenu.IsOpen && !IsRefreshing)
+            if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.CurrentPanel == 0)
             {
                 Refresh();
             }
-            multiplayerMenu.Toggle();
         }
 
         private async Task Authenticate()
