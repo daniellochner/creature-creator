@@ -48,7 +48,7 @@ namespace DanielLochner.Assets
         {
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) || Input.mouseScrollDelta.magnitude > 0)
                 {
                     Freeze();
                     HasInteractedWithUI = true;
@@ -58,7 +58,7 @@ namespace DanielLochner.Assets
                     Unfreeze();
                 }
             }
-            else if (Input.GetMouseButtonUp(0) && HasInteractedWithUI)
+            else if ((Input.GetMouseButtonUp(0) || Input.mouseScrollDelta.magnitude > 0) && HasInteractedWithUI)
             {
                 Unfreeze();
                 HasInteractedWithUI = false;
