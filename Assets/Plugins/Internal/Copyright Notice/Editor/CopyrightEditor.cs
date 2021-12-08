@@ -18,6 +18,11 @@ namespace DanielLochner.Assets
 
         public override void OnInspectorGUI()
         {
+            CopyrightNotice();
+            base.OnInspectorGUI();
+        }
+        public void CopyrightNotice()
+        {
             if (GetType().Namespace != null)
             {
                 Type type = target.GetType();
@@ -32,7 +37,6 @@ namespace DanielLochner.Assets
                     GUILayout.EndVertical();
                 }
             }
-            base.OnInspectorGUI();
         }
     }
 }

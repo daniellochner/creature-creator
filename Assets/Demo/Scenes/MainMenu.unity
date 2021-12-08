@@ -4313,7 +4313,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 392689547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52b97a942a9e0045861c38d61554548, type: 3}
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 107880052}
@@ -6187,47 +6187,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 583702877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54aaa385a9b88e84e9d50b9804aaa24e, type: 3}
+  m_Script: {fileID: 11500000, guid: 226c5379b57de37468d8622fe21c50f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementType: 0
   movementAxis: 0
-  automaticallyLayout: 1
+  useAutomaticLayout: 1
+  automaticLayoutSpacing: 0
   sizeControl: 1
   size: {x: 400, y: 250}
-  automaticLayoutSpacing: 0
-  leftMargin: 0
-  rightMargin: 0
-  topMargin: 0
-  bottomMargin: 0
-  infinitelyScroll: 0
-  infiniteScrollingEndSpacing: 0
+  automaticLayoutMargins:
+    Left: 0
+    Right: 0
+    Top: 0
+    Bottom: 0
+  useInfiniteScrolling: 0
+  infiniteScrollingSpacing: 0.25
   useOcclusionCulling: 0
   startingPanel: 0
-  swipeGestures: 1
+  useSwipeGestures: 1
   minimumSwipeSpeed: 0
   previousButton: {fileID: 0}
   nextButton: {fileID: 0}
-  pagination: {fileID: 1846915985}
-  toggleNavigation: 1
+  pagination: {fileID: 1846915987}
+  useToggleNavigation: 1
   snapTarget: 2
-  snappingSpeed: 10
-  thresholdSnappingSpeed: -1
-  hardSnap: 1
+  snapSpeed: 10
+  thresholdSpeedToSnap: -1
+  useHardSnapping: 1
   useUnscaledTime: 0
-  onPanelChanged:
+  onTransitionEffects:
     m_PersistentCalls:
       m_Calls: []
-  onPanelSelecting:
+  onPanelCentered:
     m_PersistentCalls:
       m_Calls: []
   onPanelSelected:
     m_PersistentCalls:
       m_Calls: []
-  onPanelChanging:
-    m_PersistentCalls:
-      m_Calls: []
-  transitionEffects: []
 --- !u!114 &583702880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11167,10 +11164,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1023813772}
   - component: {fileID: 1023813774}
-  - component: {fileID: 1023813775}
   - component: {fileID: 1023813773}
+  - component: {fileID: 1023813775}
   m_Layer: 5
-  m_Name: Scroll View
+  m_Name: ScrollView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11241,7 +11238,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1023813771}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52b97a942a9e0045861c38d61554548, type: 3}
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 206111829}
@@ -11823,7 +11820,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1064926819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52b97a942a9e0045861c38d61554548, type: 3}
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1373893662}
@@ -14127,7 +14124,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2107704826}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.SimpleScrollSnap, Assembly-CSharp-firstpass
+        m_TargetAssemblyTypeName: DanielLochner.Assets.SimpleScrollSnap.SimpleScrollSnap,
+          Assembly-CSharp-firstpass
         m_MethodName: GoToPanel
         m_Mode: 3
         m_Arguments:
@@ -19409,7 +19407,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1797166111}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52b97a942a9e0045861c38d61554548, type: 3}
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1676369122}
@@ -19839,7 +19837,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1879566352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52b97a942a9e0045861c38d61554548, type: 3}
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 416604504}
@@ -22017,7 +22015,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2076622698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52b97a942a9e0045861c38d61554548, type: 3}
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1476197105}
@@ -22462,60 +22460,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 2107704824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54aaa385a9b88e84e9d50b9804aaa24e, type: 3}
+  m_Script: {fileID: 11500000, guid: 226c5379b57de37468d8622fe21c50f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementType: 0
   movementAxis: 0
-  automaticallyLayout: 1
+  useAutomaticLayout: 1
+  automaticLayoutSpacing: 0
   sizeControl: 1
   size: {x: 400, y: 250}
-  automaticLayoutSpacing: 0.25
-  leftMargin: 0
-  rightMargin: 0
-  topMargin: 0
-  bottomMargin: 0
-  infinitelyScroll: 0
-  infiniteScrollingEndSpacing: 0
+  automaticLayoutMargins:
+    Left: 0
+    Right: 0
+    Top: 0
+    Bottom: 0
+  useInfiniteScrolling: 0
+  infiniteScrollingSpacing: 0.25
   useOcclusionCulling: 0
   startingPanel: 0
-  swipeGestures: 1
+  useSwipeGestures: 1
   minimumSwipeSpeed: 0
   previousButton: {fileID: 0}
   nextButton: {fileID: 0}
-  pagination: {fileID: 4554443669270300757}
-  toggleNavigation: 1
+  pagination: {fileID: 2558942502947353814}
+  useToggleNavigation: 1
   snapTarget: 2
-  snappingSpeed: 10
-  thresholdSnappingSpeed: -1
-  hardSnap: 1
+  snapSpeed: 10
+  thresholdSpeedToSnap: -1
+  useHardSnapping: 1
   useUnscaledTime: 0
-  onPanelChanged:
+  onTransitionEffects:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 532916506}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.MultiplayerUI,
-          Assembly-CSharp
-        m_MethodName: TryRefresh
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onPanelSelecting:
+      m_Calls: []
+  onPanelCentered:
     m_PersistentCalls:
       m_Calls: []
   onPanelSelected:
     m_PersistentCalls:
       m_Calls: []
-  onPanelChanging:
-    m_PersistentCalls:
-      m_Calls: []
-  transitionEffects: []
 --- !u!114 &2107704827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23280,7 +23262,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!222 &534855929240001534
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23679,7 +23661,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!224 &4961692487689520887 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2538067378495034639, guid: 52add9dea4c304d4d9af42f5aea7ea3b, type: 3}

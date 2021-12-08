@@ -52,7 +52,6 @@ namespace DanielLochner.Assets
         {
             serializedObject.Update();
 
-            HeaderInformation();
             Movement();
             Bounds();
             Other();
@@ -61,17 +60,7 @@ namespace DanielLochner.Assets
             serializedObject.ApplyModifiedProperties();
             PrefabUtility.RecordPrefabInstancePropertyModifications(drag);
         }
-
-        private void HeaderInformation()
-        {
-            GUILayout.BeginVertical("HelpBox");
-            GUILayout.Space(10);
-            GUILayout.Label("Drag", new GUIStyle() { fontSize = 28, alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold });
-            GUILayout.Label("Copyright © Daniel Lochner", new GUIStyle() { fontSize = 14, alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Italic });
-            GUILayout.Space(10);
-            GUILayout.EndVertical();
-        }
-
+        
         private void Movement()
         {
             EditorGUILayout.Space();

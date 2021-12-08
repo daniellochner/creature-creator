@@ -1629,7 +1629,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2200b5581d17b2644b5a0ab424f9cc2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkHelpers: {fileID: 0}
 --- !u!1 &245684636
 GameObject:
   m_ObjectHideFlags: 0
@@ -3208,7 +3207,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   toggleTransition: 1
   graphic: {fileID: 35651372}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 1050785757}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5469,7 +5468,7 @@ GameObject:
   - component: {fileID: 908746941}
   - component: {fileID: 908746942}
   m_Layer: 5
-  m_Name: Pattern
+  m_Name: Patterns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5510,11 +5509,11 @@ MonoBehaviour:
   m_Content: {fileID: 68598825}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
-  m_Inertia: 1
+  m_Inertia: 0
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 75
   m_Viewport: {fileID: 1777863906}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -6129,6 +6128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1050785755}
+  - component: {fileID: 1050785757}
   - component: {fileID: 1050785756}
   m_Layer: 5
   m_Name: Pagination
@@ -6186,6 +6186,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1050785757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050785754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &1059808391
 GameObject:
   m_ObjectHideFlags: 0
@@ -8241,7 +8254,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   toggleTransition: 1
   graphic: {fileID: 1987435593}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 1050785757}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -11311,7 +11324,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   toggleTransition: 1
   graphic: {fileID: 344073446}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 1050785757}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -12705,7 +12718,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   toggleTransition: 1
   graphic: {fileID: 1813401479}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 1050785757}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14286,7 +14299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224199893008863580}
   - component: {fileID: 114022742903161742}
-  - component: {fileID: 114045889328235540}
+  - component: {fileID: 1469405573798803}
   m_Layer: 5
   m_Name: Scroll-Snap
   m_TagString: Untagged
@@ -14294,6 +14307,53 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1469405573798803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469405573798802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226c5379b57de37468d8622fe21c50f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementType: 0
+  movementAxis: 0
+  useAutomaticLayout: 1
+  automaticLayoutSpacing: 0
+  sizeControl: 1
+  size: {x: 400, y: 250}
+  automaticLayoutMargins:
+    Left: 0
+    Right: 0
+    Top: 0
+    Bottom: 0
+  useInfiniteScrolling: 0
+  infiniteScrollingSpacing: 0.25
+  useOcclusionCulling: 0
+  startingPanel: 0
+  useSwipeGestures: 1
+  minimumSwipeSpeed: 0
+  previousButton: {fileID: 0}
+  nextButton: {fileID: 0}
+  pagination: {fileID: 1050785757}
+  useToggleNavigation: 1
+  snapTarget: 2
+  snapSpeed: 10
+  thresholdSpeedToSnap: -1
+  useHardSnapping: 1
+  useUnscaledTime: 0
+  onTransitionEffects:
+    m_PersistentCalls:
+      m_Calls: []
+  onPanelCentered:
+    m_PersistentCalls:
+      m_Calls: []
+  onPanelSelected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1729886834207818
 GameObject:
   m_ObjectHideFlags: 0
@@ -14323,11 +14383,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 224913017641344136}
-  m_Horizontal: 0
+  m_Horizontal: 1
   m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
-  m_Inertia: 1
+  m_Inertia: 0
   m_DecelerationRate: 0.01
   m_ScrollSensitivity: 0
   m_Viewport: {fileID: 224376674306478894}
@@ -14340,56 +14400,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &114045889328235540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469405573798802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54aaa385a9b88e84e9d50b9804aaa24e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementType: 0
-  movementAxis: 0
-  automaticallyLayout: 1
-  sizeControl: 1
-  size: {x: 400, y: 250}
-  automaticLayoutSpacing: 0
-  leftMargin: 0
-  rightMargin: 0
-  topMargin: 0
-  bottomMargin: 0
-  infinitelyScroll: 0
-  infiniteScrollingEndSpacing: 0
-  useOcclusionCulling: 1
-  startingPanel: 0
-  swipeGestures: 0
-  minimumSwipeSpeed: 0
-  previousButton: {fileID: 0}
-  nextButton: {fileID: 0}
-  pagination: {fileID: 1050785754}
-  toggleNavigation: 1
-  snapTarget: 2
-  snappingSpeed: 10
-  thresholdSnappingSpeed: -1
-  hardSnap: 1
-  useUnscaledTime: 0
-  onPanelChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onPanelSelecting:
-    m_PersistentCalls:
-      m_Calls: []
-  onPanelSelected:
-    m_PersistentCalls:
-      m_Calls: []
-  onPanelChanging:
-    m_PersistentCalls:
-      m_Calls: []
-  transitionEffects: []
 --- !u!224 &224199893008863580
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14620,7 +14630,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1270341616918811147}
-  - component: {fileID: 3959526415439914497}
+  - component: {fileID: 1348943423529553552}
   m_Layer: 5
   m_Name: Extremities
   m_TagString: Untagged
@@ -14628,6 +14638,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1348943423529553552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348943423529553551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 8538718521113398862}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 2
+  m_Elasticity: 0.1
+  m_Inertia: 0
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 75
+  m_Viewport: {fileID: 3315220147624573508}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1348943423733271675
 GameObject:
   m_ObjectHideFlags: 0
@@ -14637,7 +14677,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1270341616719876351}
-  - component: {fileID: 3959526415107286261}
+  - component: {fileID: 1348943423733271676}
   m_Layer: 5
   m_Name: Features
   m_TagString: Untagged
@@ -14645,6 +14685,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1348943423733271676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348943423733271675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 8538718521451859130}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 2
+  m_Elasticity: 0.1
+  m_Inertia: 0
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 75
+  m_Viewport: {fileID: 3315220147421968560}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1348943424042154976
 GameObject:
   m_ObjectHideFlags: 0
@@ -14654,7 +14724,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1270341617431275364}
-  - component: {fileID: 3959526415969801070}
+  - component: {fileID: 1348943424042154977}
   m_Layer: 5
   m_Name: Limbs
   m_TagString: Untagged
@@ -14662,6 +14732,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1348943424042154977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348943424042154976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 8538718521678822177}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 2
+  m_Elasticity: 0.1
+  m_Inertia: 0
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 75
+  m_Viewport: {fileID: 3315220148152225579}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1348943424239890644
 GameObject:
   m_ObjectHideFlags: 0
@@ -14671,7 +14771,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1270341617284918352}
-  - component: {fileID: 3959526415546488922}
+  - component: {fileID: 1348943424239890645}
   m_Layer: 5
   m_Name: Accessories
   m_TagString: Untagged
@@ -14679,6 +14779,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1348943424239890645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348943424239890644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b062ed099cb30744394aab356d0dd584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 588547088}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 2
+  m_Elasticity: 0.1
+  m_Inertia: 0
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 75
+  m_Viewport: {fileID: 3315220147989349407}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!224 &2645263997825644435
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15158,126 +15288,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6ecdff4f0e51f49b7a8a8e6573bd28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3959526415107286261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348943423733271675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 8538718521451859130}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 3315220147421968560}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 0
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3959526415439914497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348943423529553551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 8538718521113398862}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 3315220147624573508}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 0
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3959526415546488922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348943424239890644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 588547088}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 3315220147989349407}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 0
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3959526415969801070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348943424042154976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 8538718521678822177}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 3315220148152225579}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 0
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4072904597963593784
 GameObject:
   m_ObjectHideFlags: 0
