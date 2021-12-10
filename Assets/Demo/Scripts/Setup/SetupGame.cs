@@ -20,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
             networkCreature.Player.gameObject.SetActive(true);
             EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
             EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
+            EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
+            EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
             EditorManager.Instance.Setup();
 
             CreatureInformationManager.Instance.Setup();

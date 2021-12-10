@@ -10,6 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class ProgressUI : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private GameObject hiddenIconPrefab;
+
         [Header("Level/Experience")]
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private Slider experienceSlider;
@@ -70,6 +72,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     bodyPartUI.CanvasGroup.alpha = 0.25f;
                 }
+                GameObject hiddenIconGO = Instantiate(hiddenIconPrefab, bodyPartUI.transform);
+                hiddenIconGO.SetActive(SettingsManager.Data.HiddenBodyParts.Contains(bodyPartID));
+                bodyPartUI.ClickUI.OnLeftClick.AddListener(delegate
+                {
+                    int i = SettingsManager.Data.HiddenBodyParts.IndexOf(bodyPartID);
+                    if (i == -1)
+                    {
+                        SettingsManager.Data.HiddenBodyParts.Add(bodyPartID);
+                        hiddenIconGO.SetActive(true);
+                    }
+                    else
+                    {
+                        SettingsManager.Data.HiddenBodyParts.Remove(bodyPartID);
+                        hiddenIconGO.SetActive(false);
+                    }
+                });
             }
             bodyPartsText.text = $"{ProgressManager.Data.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
             bodyPartsSlider.maxValue = bodyParts.Objects.Count;
@@ -85,11 +103,26 @@ namespace DanielLochner.Assets.CreatureCreator
                 patternUI.Setup(pattern);
 
                 patternUI.SelectToggle.enabled = false;
-                patternUI.ClickUI.enabled = false;
                 if (!ProgressManager.Data.UnlockedPatterns.Contains(patternID))
                 {
                     patternUI.CanvasGroup.alpha = 0.25f;
                 }
+                GameObject hiddenIconGO = Instantiate(hiddenIconPrefab, patternUI.transform);
+                hiddenIconGO.SetActive(SettingsManager.Data.HiddenPatterns.Contains(patternID));
+                patternUI.ClickUI.OnLeftClick.AddListener(delegate
+                {
+                    int i = SettingsManager.Data.HiddenPatterns.IndexOf(patternID);
+                    if (i == -1)
+                    {
+                        SettingsManager.Data.HiddenPatterns.Add(patternID);
+                        hiddenIconGO.SetActive(true);
+                    }
+                    else
+                    {
+                        SettingsManager.Data.HiddenPatterns.Remove(patternID);
+                        hiddenIconGO.SetActive(false);
+                    }
+                });
             }
             patternsText.text = $"{ProgressManager.Data.UnlockedPatterns.Count}/{patterns.Objects.Count}";
             patternsSlider.maxValue = patterns.Objects.Count;

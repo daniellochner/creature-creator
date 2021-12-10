@@ -31,19 +31,17 @@ namespace DanielLochner.Assets.CreatureCreator
             padlockIcon.SetActive(isPasswordProtected);
             joinButton.onClick.AddListener(delegate 
             {
-                Debug.Log("Lobby Code:");
-                Debug.Log(lobby.LobbyCode);
-                //if (isPasswordProtected)
-                //{
-                //    InputDialog.Input("Password Required", "Enter the password...", submitEvent: delegate (string password)
-                //    {
-                //        multiplayerUI.Join(lobby.LobbyCode, password);
-                //    });
-                //}
-                //else
-                //{
-                //    multiplayerUI.Join(lobby.LobbyCode);
-                //}
+                if (isPasswordProtected)
+                {
+                    InputDialog.Input("Password Required", "Enter the password...", submitEvent: delegate (string password)
+                    {
+                        multiplayerUI.Join(lobby.LobbyCode, password);
+                    });
+                }
+                else
+                {
+                    multiplayerUI.Join(lobby.LobbyCode);
+                }
             });
         }
         #endregion

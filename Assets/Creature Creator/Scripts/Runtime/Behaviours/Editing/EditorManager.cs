@@ -89,6 +89,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public List<string> UnlockedBodyParts { get; set; } = new List<string>();
         public List<string> UnlockedPatterns { get; set; } = new List<string>();
+        public List<string> HiddenPatterns { get; set; } = new List<string>();
+        public List<string> HiddenBodyParts { get; set; } = new List<string>();
 
         public bool IsVisible
         {
@@ -154,7 +156,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             foreach (string bodyPartID in UnlockedBodyParts)
             {
-                AddBodyPartUI(bodyPartID);
+                if (!HiddenBodyParts.Contains(bodyPartID)) AddBodyPartUI(bodyPartID);
             }
             UpdateBodyPartTotals();
             bodyPartsToggle.onValueChanged.AddListener(delegate
@@ -212,7 +214,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             foreach (string patternID in UnlockedPatterns)
             {
-                AddPatternUI(patternID);
+                if (!HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
             }
 
             // Options
@@ -743,10 +745,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
-            //bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
-            //{
-            //    RemoveBodyPartUI(bodyPartUI);
-            //});
+            bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
+            {
+                ConfirmationDialog.Confirm("Hide Body Part?", $"Are you sure you want to hide \"{bodyPart.name}\" from the editor?", yesEvent: delegate 
+                {
+                    RemoveBodyPartUI(bodyPartUI);
+                    HiddenBodyParts.Add(bodyPartID);
+                });
+            });
 
             if (update)
             {
@@ -778,10 +784,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
-            //patternUI.ClickUI.OnRightClick.AddListener(delegate
-            //{
-            //    RemovePatternUI(patternUI);
-            //});
+            patternUI.ClickUI.OnRightClick.AddListener(delegate
+            {
+                ConfirmationDialog.Confirm("Hide Pattern?", $"Are you sure you want to hide \"{pattern.name}\" from the editor?", yesEvent: delegate
+                {
+                    RemovePatternUI(patternUI);
+                    HiddenPatterns.Add(patternID);
+                });
+            });
 
             if (update)
             {
@@ -802,6 +812,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             Destroy(bodyPartUI.gameObject);
+            this.InvokeAtEndOfFrame(UpdateBodyPartTotals);
         }
         public void RemovePatternUI(PatternUI patternUI)
         {
@@ -831,18 +842,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (string type in bodyPartGrids.Keys)
             {
-                int count = 0;
-                foreach (string unlockedBodyPart in UnlockedBodyParts)
-                {
-                    BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", unlockedBodyPart);
-                    if (bodyPart.PluralForm == type)
-                    {
-                        count++;
-                    }
-                }
-
+                int count = bodyPartGrids[type].grid.transform.childCount;
                 TextMeshProUGUI title = bodyPartGrids[type].title;
-                title.SetText(type.ToString() + " (" + count + ")");
+                title.SetText($"{type.ToString()} ({count})");
                 title.gameObject.SetActive(count > 0);
             }
         }
