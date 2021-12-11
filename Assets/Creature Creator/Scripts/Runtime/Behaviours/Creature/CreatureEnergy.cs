@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private CreatureHealth CreatureHealth { get; set; }
 
         public Action<float> OnEnergyChanged { get; set; }
+        public bool DepleteEnergy { get; set; }
 
         public float Energy
         {
@@ -46,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator EnergyDepletionRoutine(float energyDepletionRate, float healthTickRate, float healthTickDamage)
         {
-            while (!CreatureHealth.IsDead)
+            while (!CreatureHealth.IsDead && DepleteEnergy)
             {
                 yield return new WaitForSeconds(1f);
                 Energy -= energyDepletionRate;

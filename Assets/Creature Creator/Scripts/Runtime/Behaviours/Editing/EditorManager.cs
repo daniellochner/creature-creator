@@ -276,6 +276,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Editor.UseTemporaryOutline = false;
             player.Creature.Editor.Deselect();
             player.Creature.Animator.IsAnimated = false;
+            player.Creature.Energy.DepleteEnergy = false;
 
             SetCameraOffset(-0.75f);
         }
@@ -304,6 +305,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Editor.UseTemporaryOutline = false;
             player.Creature.Editor.Deselect();
             player.Creature.Animator.IsAnimated = true;
+            player.Creature.Energy.DepleteEnergy = true;
 
             SetCameraOffset(0f);
         }
@@ -329,6 +331,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Editor.UseTemporaryOutline = true;
             player.Creature.Editor.Deselect();
             player.Creature.Animator.IsAnimated = false;
+            player.Creature.Energy.DepleteEnergy = false;
 
             SetCameraOffset(0.75f);
         }
