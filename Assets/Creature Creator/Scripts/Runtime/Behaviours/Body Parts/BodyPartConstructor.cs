@@ -267,10 +267,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Flipped = bpc;
             bpc.Flipped = this;
 
-            if (!(this is LimbConstructor)) // Prevents limbs from flipping over local x-axis.
-            {
-                Model.localScale = new Vector3(-Model.localScale.x, Model.localScale.y, Model.localScale.z);
-            }
+            Model.localScale = new Vector3(-Model.localScale.x, Model.localScale.y, Model.localScale.z);
         }
         public virtual void SetAttached(AttachedBodyPart abp)
         {

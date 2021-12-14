@@ -2,20 +2,38 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class LimbEditor : BodyPartEditor
     {
         #region Fields
+        private LookAtConstraint[] boneConstraints;
+        private RotationConstraint extremityConstraint;
         private MeshRenderer[] toolRenderers;
         private SphereCollider[] toolColliders;
+        private bool isHandlingAlignment;
         #endregion
 
         #region Properties
         public LimbConstructor LimbConstructor => BodyPartConstructor as LimbConstructor;
         public LimbEditor FlippedLimb => Flipped as LimbEditor;
 
+        public bool IsHandlingAlignment
+        {
+            get => isHandlingAlignment;
+            set
+            {
+                isHandlingAlignment = value;
+
+                foreach (LookAtConstraint boneConstraint in boneConstraints)
+                {
+                    boneConstraint.constraintActive = isHandlingAlignment;
+                }
+                extremityConstraint.constraintActive = isHandlingAlignment;
+            }
+        }
         public override bool IsInteractable
         {
             get => base.IsInteractable;
@@ -46,12 +64,29 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void OnEnable()
+        {
+            IsHandlingAlignment = true;
+        }
+        private void OnDisable()
+        {
+            IsHandlingAlignment = false;
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
 
             toolRenderers = LimbConstructor.Root.GetComponentsInChildren<MeshRenderer>();
             toolColliders = LimbConstructor.Root.GetComponentsInChildren<SphereCollider>();
+
+            int numBones = LimbConstructor.Bones.Length;
+            boneConstraints = new LookAtConstraint[numBones - 1];
+            for (int i = 0; i < numBones - 1; i++)
+            {
+                boneConstraints[i] = LimbConstructor.Bones[i].GetComponent<LookAtConstraint>();
+            }
+            extremityConstraint = LimbConstructor.Bones[numBones - 1].GetComponent<RotationConstraint>();
         }
 
         public override void Setup(CreatureEditor creatureEditor)
@@ -133,12 +168,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             for (int i = 0; i < LimbConstructor.Bones.Length; i++)
             {
-                int index = i;
-
-                Transform bone = LimbConstructor.Bones[index];
-
-                if (index > 0)
+                Transform bone = LimbConstructor.Bones[i];
+                if (i > 0)
                 {
+                    int index = i;
+
                     Scroll boneScroll = bone.gameObject.GetComponent<Scroll>();
                     boneScroll.OnScrollUp.AddListener(delegate
                     {
@@ -230,6 +264,11 @@ namespace DanielLochner.Assets.CreatureCreator
                             CreatureEditor.IsDirty = true;
                         }
                     });
+                }
+                if (i < LimbConstructor.Bones.Length - 1)
+                {
+                    boneConstraints[i].worldUpObject = CreatureEditor.transform;
+                    boneConstraints[i].useUpObject = true;
                 }
             }
 

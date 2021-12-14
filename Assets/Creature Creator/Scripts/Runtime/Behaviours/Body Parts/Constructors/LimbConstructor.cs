@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -119,16 +120,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Weight
                 FlippedLimb.SetWeight(i, GetWeight(i));
             }
-            FlippedLimb.Realign();
-        }
-
-        public void Realign()
-        {
-            for (int j = 1; j < Bones.Length; j++)
-            {
-                Bones[j - 1].rotation = Quaternion.LookRotation(Bones[j].position - Bones[j - 1].position, CreatureConstructor.transform.right) * Quaternion.Euler(90, 0, 0);
-            }
-            Bones[Bones.Length - 1].rotation = Bones[Bones.Length - 2].rotation;
         }
 
         public float GetWeight(int index)
@@ -156,6 +147,15 @@ namespace DanielLochner.Assets.CreatureCreator
             SetWeight(index, GetWeight(index) - amount);
         }
 
+        public override void SetFlipped(BodyPartConstructor bpc)
+        {
+            IsFlipped = true;
+
+            Flipped = bpc;
+            bpc.Flipped = this;
+
+            Root.localScale = new Vector3(-Root.localScale.x, Root.localScale.y, Root.localScale.z);
+        }
         public override void SetAttached(AttachedBodyPart abp)
         {
             if (abp.boneIndex == -1)

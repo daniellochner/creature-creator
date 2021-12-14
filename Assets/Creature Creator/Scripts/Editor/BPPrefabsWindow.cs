@@ -6,6 +6,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -360,11 +361,13 @@ namespace DanielLochner.Assets.CreatureCreator
             if (constructor is LimbConstructor)
             {
                 LimbConstructor limbConstructor = constructor as LimbConstructor;
+                LimbEditor limbEditor = editor as LimbEditor;
 
                 for (int i = 0; i < limbConstructor.Bones.Length; i++)
                 {
                     Transform bone = limbConstructor.Bones[i];
 
+                    // Controls
                     if (i > 0)
                     {
                         Rigidbody boneRB = bone.gameObject.AddComponent<Rigidbody>();
@@ -387,6 +390,38 @@ namespace DanielLochner.Assets.CreatureCreator
                             boneDrag.worldDirection = Vector3.up;
                             boneDrag.cylinderHeight = 0;
                         }
+                    }
+
+                    // Constraints
+                    if (i < limbConstructor.Bones.Length - 1)
+                    {
+                        LookAtConstraint boneConstraint = bone.gameObject.AddComponent<LookAtConstraint>();
+                        Quaternion offset = GetRotationOffset(limbConstructor.Bones[i + 1], limbConstructor.Bones[i]);
+
+                        boneConstraint.AddSource(new ConstraintSource()
+                        {
+                            sourceTransform = limbConstructor.Bones[i + 1],
+                            weight = 1f
+                        });
+                        boneConstraint.rotationAtRest = bone.localEulerAngles;
+                        boneConstraint.rotationOffset = offset.eulerAngles;
+                        boneConstraint.constraintActive = true;
+                        boneConstraint.locked = true;
+                    }
+                    else
+                    {
+                        RotationConstraint extremityConstraint = bone.gameObject.AddComponent<RotationConstraint>();
+                        Quaternion offset = GetRotationOffset(bone, limbConstructor.Bones[i - 1]);
+
+                        extremityConstraint.AddSource(new ConstraintSource()
+                        {
+                            sourceTransform = limbConstructor.Bones[i - 1],
+                            weight = 1f
+                        });
+                        extremityConstraint.rotationAtRest = bone.localEulerAngles;
+                        extremityConstraint.rotationOffset = offset.eulerAngles;
+                        extremityConstraint.constraintActive = true;
+                        //extremityConstraint.locked = true; // Must lock manually - bug with Unity's RotationConstraint
                     }
 
                     GameObject moveTool = Instantiate(moveToolPrefab, bone);
@@ -441,6 +476,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public static void ShowWindow()
         {
             GetWindow<BPPrefabsWindow>("Body Part Prefabs");
+        }
+
+        private Quaternion GetRotationOffset(Transform target, Transform source)
+        {
+            Quaternion lookAt = Quaternion.LookRotation(target.position - source.position);
+            Quaternion offset = Quaternion.Inverse(lookAt) * source.rotation;
+            return offset;
         }
         #endregion
 

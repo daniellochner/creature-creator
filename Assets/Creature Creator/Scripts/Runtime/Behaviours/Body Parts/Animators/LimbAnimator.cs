@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -11,7 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         protected Vector3[] defaultPositions;
-
         protected Transform target, limb;
         protected ChainIKConstraint limbIK; //protected TwoBoneIKConstraint limbIK;
         #endregion
@@ -25,16 +25,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Update()
-        {
-            if (!CreatureAnimator.IsAnimated)
-            {
-                target.position = LimbConstructor.Extremity.position;
-            }
-        }
         protected virtual void LateUpdate()
         {
-            UpdateBoneRotations();
+            HandleTarget();
         }
         protected virtual void OnDestroy()
         {
@@ -43,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Destroy(limbIK.gameObject);
             }
         }
-
+        
         public override void Setup(CreatureAnimator creatureAnimator)
         {
             base.Setup(creatureAnimator);
@@ -117,7 +110,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public void UpdateBoneRotations()
+        public void HandleTarget()
         {
             if (CreatureAnimator.IsAnimated)
             {
@@ -125,7 +118,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                LimbConstructor.Realign();
+                target.position = LimbConstructor.Extremity.position;
             }
         }
         #endregion
