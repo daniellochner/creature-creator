@@ -70,14 +70,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 BodyPartConstructor bpc = prefab.constructible.GetComponent<BodyPartConstructor>();
                 Mesh mesh = null;
 
-                Renderer renderer = bpc.Model.GetComponent<Renderer>();
+                Renderer renderer = bpc.Model.GetComponentInChildren<Renderer>();
                 if (renderer is SkinnedMeshRenderer)
                 {
                     mesh = (renderer as SkinnedMeshRenderer).sharedMesh;
                 }
                 else
                 {
-                    mesh = bpc.Model.GetComponent<MeshFilter>().sharedMesh;
+                    mesh = bpc.Model.GetComponentInChildren<MeshFilter>().sharedMesh;
                 }
 
                 float scaleFactor = 25f * 25f * 25f;

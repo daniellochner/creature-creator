@@ -84,7 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Click = GetComponent<Click>();
             Select = GetComponent<Select>();
 
-            meshCollider = BodyPartConstructor.Model.GetComponent<MeshCollider>();
+            meshCollider = BodyPartConstructor.Model.GetComponentInChildren<MeshCollider>();
             colliderMesh = new Mesh();
         }
 

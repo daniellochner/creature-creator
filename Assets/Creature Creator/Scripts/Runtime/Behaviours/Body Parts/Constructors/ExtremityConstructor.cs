@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -22,14 +23,19 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Attach(attachedBodyPart);
 
             // Connected Limb
-            foreach (LimbConstructor limb in CreatureConstructor.Root.GetComponentsInChildren<LimbConstructor>())
+            LimbConstructor connectedLimb = null, connectedLimbF = null;
+            foreach (LimbConstructor limb in CreatureConstructor.Limbs)
             {
                 if (limb.AttachedLimb.GUID == AttachedExtremity.connectedLimbGUID)
                 {
-                    ConnectToLimb(limb);
+                    connectedLimb  = limb;
+                    connectedLimbF = limb.FlippedLimb;
                     break;
                 }
             }
+            float distance  = Vector3.Distance(connectedLimb. Extremity.position, transform.position);
+            float distanceF = Vector3.Distance(connectedLimbF.Extremity.position, transform.position);
+            ConnectToLimb(distance < distanceF ? connectedLimb : connectedLimbF); // Connect to whichever is closer.
         }
 
         public override void Flip()

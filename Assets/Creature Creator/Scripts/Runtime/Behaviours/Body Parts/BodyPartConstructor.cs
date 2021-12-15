@@ -93,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Initialize()
         {
-            SkinnedMeshRenderer = model.GetComponent<SkinnedMeshRenderer>();
+            SkinnedMeshRenderer = model.GetComponentInChildren<SkinnedMeshRenderer>();
         }
 
         public virtual void Setup(CreatureConstructor creatureConstructor)

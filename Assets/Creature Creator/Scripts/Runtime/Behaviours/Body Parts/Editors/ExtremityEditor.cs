@@ -45,8 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (ExtremityConstructor.ConnectedLimb != null)
             {
-                Transform extremity = ExtremityConstructor.ConnectedLimb.Extremity;
-                transform.SetPositionAndRotation(extremity.position, extremity.rotation);
+                transform.position = ExtremityConstructor.ConnectedLimb.Extremity.position;
             }
         }
         #endregion
