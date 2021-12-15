@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6164124116240961679}
   - component: {fileID: 952965310948439297}
   m_Layer: 0
-  m_Name: Model
+  m_Name: Offset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,11 +24,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6677514724594964335}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7517293127846792761}
+  m_Father: {fileID: 831436212690873944}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &952965310948439297
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7517293127846792761}
-  - component: {fileID: 6954875446579783399}
+  - component: {fileID: 1748410754596262995}
   - component: {fileID: 4325597557928032112}
   m_Layer: 0
   m_Name: Primal Paw (A)
@@ -113,11 +113,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6164124116240961679}
+  - {fileID: 831436212690873944}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6954875446579783399
+--- !u!114 &1748410754596262995
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,28 +126,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 7421762462522940322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f82ac88c5fb97468755399b6c32b74, type: 3}
+  m_Script: {fileID: 11500000, guid: e4779254bcd64044dbfd1276d767a8cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: {fileID: 11400000, guid: ade0bcb199b988b40b8ea44c2c632edc, type: 2}
   model: {fileID: 6164124116240961679}
   stretchMap:
     reorderableList:
-      canAdd: 0
-      canRemove: 0
-      draggable: 0
-      expandable: 0
-      multipleSelection: 0
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
       isExpanded: 0
       label:
-        m_Text: 
+        m_Text: Keys
         m_Image: {fileID: 0}
         m_Tooltip: 
-      headerHeight: 0
-      footerHeight: 0
-      slideEasing: 0
-      verticalSpacing: 0
-      showDefaultBackground: 0
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
       elementDisplayType: 0
       elementNameProperty: 
       elementNameOverride: 
@@ -169,3 +169,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8222539740008785222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 831436212690873944}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &831436212690873944
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8222539740008785222}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6164124116240961679}
+  m_Father: {fileID: 7517293127846792761}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

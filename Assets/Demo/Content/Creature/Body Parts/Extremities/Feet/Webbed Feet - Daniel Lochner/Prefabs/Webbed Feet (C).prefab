@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8431128801837260527
+--- !u!1 &3917745457484506105
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7149301873920270079}
-  - component: {fileID: 425024797642096632}
-  - component: {fileID: 7835739290416276112}
+  - component: {fileID: 8184693076665672217}
+  - component: {fileID: 7303076275773572628}
+  - component: {fileID: 3327118876467421771}
   m_Layer: 0
-  m_Name: Model
+  m_Name: Offset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7149301873920270079
+--- !u!4 &8184693076665672217
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8431128801837260527}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 3917745457484506105}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 869176891279080602}
+  m_Father: {fileID: 7149301873920270079}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &425024797642096632
+--- !u!33 &7303076275773572628
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8431128801837260527}
+  m_GameObject: {fileID: 3917745457484506105}
   m_Mesh: {fileID: 7319459725605846406, guid: c41ff56c367b2714f9efc5f2434a2555, type: 3}
---- !u!23 &7835739290416276112
+--- !u!23 &3327118876467421771
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8431128801837260527}
+  m_GameObject: {fileID: 3917745457484506105}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -83,6 +83,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8431128801837260527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7149301873920270079}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7149301873920270079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8431128801837260527}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8184693076665672217}
+  m_Father: {fileID: 869176891279080602}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9043874921094858000
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 869176891279080602}
-  - component: {fileID: 7252424225712231465}
+  - component: {fileID: -5728137404502094470}
   m_Layer: 0
   m_Name: Webbed Feet (C)
   m_TagString: Untagged
@@ -115,7 +146,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7252424225712231465
+--- !u!114 &-5728137404502094470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,28 +155,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 9043874921094858000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f82ac88c5fb97468755399b6c32b74, type: 3}
+  m_Script: {fileID: 11500000, guid: e4779254bcd64044dbfd1276d767a8cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: {fileID: 11400000, guid: f1f2b2eb80f9e394297812fe7e0c6969, type: 2}
   model: {fileID: 7149301873920270079}
   stretchMap:
     reorderableList:
-      canAdd: 0
-      canRemove: 0
-      draggable: 0
-      expandable: 0
-      multipleSelection: 0
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
       isExpanded: 0
       label:
-        m_Text: 
+        m_Text: Keys
         m_Image: {fileID: 0}
         m_Tooltip: 
-      headerHeight: 0
-      footerHeight: 0
-      slideEasing: 0
-      verticalSpacing: 0
-      showDefaultBackground: 0
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
       elementDisplayType: 0
       elementNameProperty: 
       elementNameOverride: 

@@ -39,14 +39,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SaveType.Foot, new PrefabTypes()
                 {
-                    constructType = ConstructType.Extremity,
+                    constructType = ConstructType.Foot,
                     editType = EditType.Foot
                 }
             },
             {
                 SaveType.Hand, new PrefabTypes()
                 {
-                    constructType = ConstructType.Extremity,
+                    constructType = ConstructType.Hand,
                     editType = EditType.Hand
                 }
             },
@@ -223,8 +223,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 case ConstructType.Leg:
                     constructor = bodyPartGO.AddComponent<LegConstructor>();
                     break;
-                case ConstructType.Extremity:
+                case ConstructType.Hand:
                     constructor = bodyPartGO.AddComponent<ExtremityConstructor>();
+                    break;
+                case ConstructType.Foot:
+                    constructor = bodyPartGO.AddComponent<FootConstructor>();
                     break;
                 case ConstructType.Mouth:
                     constructor = bodyPartGO.AddComponent<MouthConstructor>();
@@ -503,7 +506,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Default,
             Arm,
             Leg,
-            Extremity,
+            Hand,
+            Foot,
             Mouth
         }
 
