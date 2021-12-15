@@ -25,6 +25,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 LimbConstructor limb = hitInfo.collider.GetComponentInParent<LimbConstructor>();
                 if (CanConnectToLimb(limb))
                 {
+                    ExtremityConstructor current = limb.ConnectedExtremity;
+                    if (current != null && current != ExtremityConstructor && current != ExtremityConstructor.Flipped)
+                    {
+                        current.DisconnectFromLimb();
+                        current.Detach();
+                    }
                     ExtremityConstructor.ConnectToLimb(limb);
                     aPosition = limb.Extremity.position;
                     aRotation = limb.Extremity.rotation;
