@@ -338,7 +338,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             foreach (Renderer renderer in constructor.Model.GetComponentsInChildren<Renderer>())
             {
-                renderer.gameObject.GetOrAddComponent<MeshCollider>();
+                MeshCollider collider = renderer.gameObject.GetOrAddComponent<MeshCollider>();
+                if (renderer is MeshRenderer)
+                {
+                    collider.sharedMesh = renderer.GetComponent<MeshFilter>().sharedMesh;
+                }
+                else if (renderer is SkinnedMeshRenderer)
+                {
+                    collider.sharedMesh = (renderer as SkinnedMeshRenderer).sharedMesh;
+                }
             }
 
             constructor.gameObject.GetOrAddComponent<Hover>();

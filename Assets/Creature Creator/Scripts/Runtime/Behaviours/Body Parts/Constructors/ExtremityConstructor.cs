@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,15 +47,17 @@ namespace DanielLochner.Assets.CreatureCreator
             FlippedExtremity.ConnectToLimb(ConnectedLimb.FlippedLimb);
         }
 
-        public void ConnectToLimb(LimbConstructor limb)
+        public virtual void ConnectToLimb(LimbConstructor limb)
         {
             ConnectedLimb = limb;
             ConnectedLimb.ConnectedExtremity = this;
+            limb.OnConnectExtremity?.Invoke(this);
         }
-        public void DisconnectFromLimb()
+        public virtual void DisconnectFromLimb()
         {
             if (ConnectedLimb != null)
             {
+                ConnectedLimb.OnDisconnectExtremity?.Invoke(this);
                 ConnectedLimb.ConnectedExtremity = null;
                 ConnectedLimb = null;
             }

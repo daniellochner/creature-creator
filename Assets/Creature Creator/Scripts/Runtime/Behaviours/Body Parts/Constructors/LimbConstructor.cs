@@ -49,7 +49,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public LimbConstructor FlippedLimb => Flipped as LimbConstructor;
 
         public ExtremityConstructor ConnectedExtremity { get; set; }
+
         public Action<int, float> OnSetWeight { get; set; }
+        public Action<ExtremityConstructor> OnConnectExtremity { get; set; }
+        public Action<ExtremityConstructor> OnDisconnectExtremity { get; set; }
 
         public override bool CanMirror => true; // Always mirror limbs.
         #endregion

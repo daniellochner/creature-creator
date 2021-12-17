@@ -49,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Action OnStretch { get; set; }
         public Action OnAttach { get; set; }
+        public Action<Vector3> OnScale { get; set; }
 
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
         public Material BodyPartPrimaryMat { get; private set; }
@@ -217,6 +218,8 @@ namespace DanielLochner.Assets.CreatureCreator
             transform.localScale = scale;
             transform.localScale = transform.localScale.Clamp(minMaxScale.min, minMaxScale.max);
             Flipped.transform.localScale = transform.localScale;
+
+            OnScale?.Invoke(scale);
         }
 
         public void AddStretchIndex(StretchAxis axis, bool isPositive, int index)
