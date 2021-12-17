@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private MeshRenderer[] toolRenderers;
         private SphereCollider[] toolColliders;
         private bool isHandlingAlignment;
+        private Quaternion[] offsets;
         #endregion
 
         #region Properties
@@ -80,13 +81,13 @@ namespace DanielLochner.Assets.CreatureCreator
             toolRenderers = LimbConstructor.Root.GetComponentsInChildren<MeshRenderer>();
             toolColliders = LimbConstructor.Root.GetComponentsInChildren<SphereCollider>();
 
-            int numBones = LimbConstructor.Bones.Length;
-            boneConstraints = new LookAtConstraint[numBones - 1];
-            for (int i = 0; i < numBones - 1; i++)
+            Transform[] bones = LimbConstructor.Bones;
+            boneConstraints = new LookAtConstraint[bones.Length - 1];
+            for (int i = 0; i < bones.Length - 1; i++)
             {
-                boneConstraints[i] = LimbConstructor.Bones[i].GetComponent<LookAtConstraint>();
+                boneConstraints[i] = bones[i].GetComponent<LookAtConstraint>();
             }
-            extremityConstraint = LimbConstructor.Bones[numBones - 1].GetComponent<RotationConstraint>();
+            extremityConstraint = bones[bones.Length - 1].GetComponent<RotationConstraint>();
         }
 
         public override void Setup(CreatureEditor creatureEditor)
@@ -265,11 +266,11 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     });
                 }
-                //if (i < LimbConstructor.Bones.Length - 1)
-                //{
-                //    boneConstraints[i].worldUpObject = CreatureEditor.transform;
-                //    boneConstraints[i].useUpObject = true;
-                //}
+                if (i < LimbConstructor.Bones.Length - 1)
+                {
+                    boneConstraints[i].worldUpObject = CreatureEditor.transform;
+                    boneConstraints[i].useUpObject = true;
+                }
             }
 
             UpdateMeshCollider();
@@ -284,7 +285,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateMeshCollider();
             };
         }
-
+        
         public override BodyPartEditor Copy()
         {
             LimbEditor copiedLE = base.Copy() as LimbEditor;
@@ -313,7 +314,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return copiedLE;
         }
-
         public override void Deselect()
         {
             base.Deselect();
