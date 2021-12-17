@@ -280,7 +280,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 limbConstructor.Extremity = new GameObject("Extremity").transform;
-                limbConstructor.Extremity.SetParent(limbConstructor.Bones[limbConstructor.Bones.Length - 1]);
+                limbConstructor.Extremity.SetParent(limbConstructor.Bones[limbConstructor.Bones.Length - 1], false);
             }
 
             return constructor;

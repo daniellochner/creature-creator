@@ -87,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 return;
             }
 
-            Vector3 extremityOffset = CreatureAnimator.CreatureConstructor.Body.TransformVector(Vector3.ProjectOnPlane(defaultPositions[defaultPositions.Length - 1] / 4f, CreatureAnimator.transform.up));
+            Vector3 extremityOffset = CreatureAnimator.CreatureConstructor.Body.TransformVector(Vector3.ProjectOnPlane(defaultBonePositions[defaultBonePositions.Length - 1] / 4f, CreatureAnimator.transform.up));
             Vector3 velocityOffset = (CreatureAnimator.MoveThreshold / 2f) * CreatureAnimator.CreatureConstructor.Body.forward;
             Vector3 origin = transform.position + (extremityOffset + velocityOffset);
 

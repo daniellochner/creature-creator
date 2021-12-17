@@ -5,6 +5,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class LegConstructor : LimbConstructor
     {
+        private void LateUpdate()
+        {
+            Extremity.rotation = CreatureConstructor.Body.rotation;
+        }
+
         public override void Add()
         {
             base.Add();

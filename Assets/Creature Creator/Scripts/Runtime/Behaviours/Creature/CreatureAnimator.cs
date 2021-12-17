@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float moveThreshold;
         [SerializeField] private float timeToMove;
 
-        private bool isAnimated;
+        private bool isAnimated, hasCapturedDefaults;
         #endregion
 
         #region Properties
@@ -47,8 +47,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 Limbs = GetComponentsInChildren<LimbAnimator>();
                 Legs = GetComponentsInChildren<LegAnimator>();
 
-                Reposition(isAnimated);
                 Restructure(isAnimated);
+                Reposition(isAnimated);
 
                 if (isAnimated)
                 {
@@ -95,43 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
-        public void Reposition(bool isAnimated)
-        {
-            if (isAnimated)
-            {
-                DefaultHeight = CreatureConstructor.Body.localPosition.y;
-
-                if (CreatureConstructor.Legs.Count == 0) // Legless creatures should "fall" to the ground.
-                {
-                    Mesh bodyMesh = new Mesh();
-                    CreatureConstructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-
-                    float minY = Mathf.Infinity;
-                    foreach (Vector3 vertex in bodyMesh.vertices)
-                    {
-                        if (vertex.y < minY)
-                        {
-                            minY = vertex.y;
-                        }
-                    }
-
-                    CreatureConstructor.Body.localPosition = Vector3.up * Mathf.Abs(minY);
-                }
-            }
-            else if (DefaultHeight != Mathf.NegativeInfinity)
-            {
-                CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
-                CreatureConstructor.Root.localPosition = Vector3.zero;
-
-                DefaultHeight = Mathf.NegativeInfinity;
-            }
-
-            foreach (LimbAnimator limb in Limbs)
-            {
-                limb.Reposition(isAnimated);
-            }
-        }
-        private void Restructure(bool isAnimated)
+        public void Restructure(bool isAnimated)
         {
             if (isAnimated)
             {
@@ -169,12 +133,57 @@ namespace DanielLochner.Assets.CreatureCreator
                 limb.Restructure(isAnimated);
             }
         }
-        private void Rebuild()
+        public void Reposition(bool isAnimated)
+        {
+            if (isAnimated)
+            {
+                CaptureDefaults();
+
+                if (CreatureConstructor.Legs.Count == 0) // Legless creatures should "fall" to the ground.
+                {
+                    Mesh bodyMesh = new Mesh();
+                    CreatureConstructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
+
+                    float minY = Mathf.Infinity;
+                    foreach (Vector3 vertex in bodyMesh.vertices)
+                    {
+                        if (vertex.y < minY)
+                        {
+                            minY = vertex.y;
+                        }
+                    }
+
+                    CreatureConstructor.Body.localPosition = Vector3.up * Mathf.Abs(minY);
+                }
+            }
+            else if (hasCapturedDefaults)
+            {
+                RestoreDefaults();
+            }
+
+            foreach (LimbAnimator limb in Limbs)
+            {
+                limb.Reposition(isAnimated);
+            }
+        }
+        public void Rebuild()
         {
             RigBuilder.Build();
             Animator.Rebind();
 
             SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
+        }
+
+        private void CaptureDefaults()
+        {
+            DefaultHeight = CreatureConstructor.Body.localPosition.y;
+            hasCapturedDefaults = true;
+        }
+        private void RestoreDefaults()
+        {
+            CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
+            CreatureConstructor.Root.localPosition = Vector3.zero;
+            hasCapturedDefaults = false;
         }
         #endregion
     }

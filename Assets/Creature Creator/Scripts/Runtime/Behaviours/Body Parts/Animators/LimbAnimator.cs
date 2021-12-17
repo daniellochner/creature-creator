@@ -11,9 +11,12 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LimbAnimator : BodyPartAnimator
     {
         #region Fields
-        protected Vector3[] defaultPositions;
         protected Transform target, limb;
         protected ChainIKConstraint limbIK; //protected TwoBoneIKConstraint limbIK;
+        
+        protected Vector3[] defaultBonePositions;
+        protected Quaternion defaultExtremityRotation;
+        protected bool hasCapturedDefaults;
         #endregion
 
         #region Properties
@@ -21,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public LimbAnimator FlippedLimb => Flipped as LimbAnimator;
 
         public Transform Target => target;
-        public Vector3[] DefaultPositions => defaultPositions;
+        public Vector3[] DefaultPositions => defaultBonePositions;
         #endregion
 
         #region Methods
@@ -36,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Destroy(limbIK.gameObject);
             }
         }
-        
+
         public override void Setup(CreatureAnimator creatureAnimator)
         {
             base.Setup(creatureAnimator);
@@ -76,25 +79,6 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
-        public virtual void Reposition(bool isAnimated)
-        {
-            if (isAnimated)
-            {
-                defaultPositions = new Vector3[LimbConstructor.Bones.Length];
-                for (int i = 0; i < defaultPositions.Length; i++)
-                {
-                    defaultPositions[i] = CreatureAnimator.CreatureConstructor.Body.InverseTransformPoint(LimbConstructor.Bones[i].position);
-                }
-            }
-            else if (defaultPositions != null)
-            {
-                for (int i = 0; i < defaultPositions.Length; i++)
-                {
-                    LimbConstructor.Bones[i].position = CreatureAnimator.CreatureConstructor.Body.TransformPoint(defaultPositions[i]);
-                }
-                defaultPositions = null;
-            }
-        }
         public virtual void Restructure(bool isAnimated)
         {
             // Limb
@@ -103,11 +87,55 @@ namespace DanielLochner.Assets.CreatureCreator
                 LimbConstructor.Bones[i].SetParent(isAnimated ? LimbConstructor.Bones[i - 1] : LimbConstructor.Root);
             }
 
-            // Connected extremity
+            // Connected Extremity
             if (LimbConstructor.ConnectedExtremity != null)
             {
                 LimbConstructor.ConnectedExtremity.transform.SetParent(isAnimated ? LimbConstructor.Extremity : CreatureAnimator.CreatureConstructor.Bones[LimbConstructor.AttachedLimb.boneIndex]);
             }
+        }
+        public virtual void Reposition(bool isAnimated)
+        {
+            if (isAnimated)
+            {
+                CaptureDefaults();
+            }
+            else if (hasCapturedDefaults)
+            {
+                RestoreDefaults();
+            }
+        }
+        private void CaptureDefaults()
+        {
+            // Limb
+            defaultBonePositions = new Vector3[LimbConstructor.Bones.Length];
+            for (int i = 0; i < defaultBonePositions.Length; i++)
+            {
+                defaultBonePositions[i] = CreatureAnimator.CreatureConstructor.Body.InverseTransformPoint(LimbConstructor.Bones[i].position);
+            }
+
+            // Connected Extremity
+            if (LimbConstructor.ConnectedExtremity != null)
+            {
+                defaultExtremityRotation = Quaternion.Inverse(CreatureAnimator.CreatureConstructor.Body.rotation) * LimbConstructor.ConnectedExtremity.transform.rotation;
+            }
+
+            hasCapturedDefaults = true;
+        }
+        private void RestoreDefaults()
+        {
+            // Limb
+            for (int i = 0; i < defaultBonePositions.Length; i++)
+            {
+                LimbConstructor.Bones[i].position = CreatureAnimator.CreatureConstructor.Body.TransformPoint(defaultBonePositions[i]);
+            }
+
+            // Connected Extremity
+            if (LimbConstructor.ConnectedExtremity != null)
+            {
+                LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.CreatureConstructor.Body.rotation * defaultExtremityRotation;
+            }
+
+            hasCapturedDefaults = false;
         }
 
         public void HandleTarget()
