@@ -10,12 +10,30 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public ExtremityConstructor ExtremityConstructor => BodyPartConstructor as ExtremityConstructor;
         public ExtremityEditor FlippedExtremity => Flipped as ExtremityEditor;
+
+        public LimbEditor ConnectedLimb { get; set; }
         #endregion
 
         #region Methods
         private void LateUpdate()
         {
             HandleConnection();
+        }
+
+        public override void Setup(CreatureEditor creatureEditor)
+        {
+            base.Setup(creatureEditor);
+
+            ExtremityConstructor.OnConnectToLimb += delegate (LimbConstructor constructor)
+            {
+                ConnectedLimb = constructor.GetComponent<LimbEditor>();
+                ConnectedLimb.ConnectedExtremity = this;
+            };
+            ExtremityConstructor.OnDisconnectFromLimb += delegate
+            {
+                ConnectedLimb.ConnectedExtremity = null;
+                ConnectedLimb = null;
+            };
         }
 
         public override bool CanAttach(out Vector3 aPosition, out Quaternion aRotation)
@@ -26,18 +44,24 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (CanConnectToLimb(limb))
                 {
                     ExtremityConstructor current = limb.ConnectedExtremity;
-                    if (current != null && current != ExtremityConstructor && current != ExtremityConstructor.Flipped)
+                    if (current != ExtremityConstructor)
                     {
-                        current.DisconnectFromLimb();
-                        current.Detach();
+                        if (current != null && current != ExtremityConstructor.Flipped)
+                        {
+                            current.DisconnectFromLimb();
+                            current.Detach();
+                        }
+                        ExtremityConstructor.ConnectToLimb(limb);
                     }
-                    ExtremityConstructor.ConnectToLimb(limb);
                     aPosition = limb.Extremity.position;
                     aRotation = limb.Extremity.rotation;
                     return true;
                 }
             }
-            ExtremityConstructor.DisconnectFromLimb();
+            if (ExtremityConstructor.ConnectedLimb != null)
+            {
+                ExtremityConstructor.DisconnectFromLimb();
+            }
             aPosition = Drag.TargetPosition;
             aRotation = transform.rotation;
             return false;

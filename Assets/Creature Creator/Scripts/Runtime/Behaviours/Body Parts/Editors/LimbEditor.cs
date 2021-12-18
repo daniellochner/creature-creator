@@ -21,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public LimbConstructor LimbConstructor => BodyPartConstructor as LimbConstructor;
         public LimbEditor FlippedLimb => Flipped as LimbEditor;
 
+        public ExtremityEditor ConnectedExtremity { get; set; }
+
         public bool IsHandlingAlignment
         {
             get => isHandlingAlignment;

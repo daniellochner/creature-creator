@@ -14,6 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public LegEditor FlippedLeg => FlippedLimb as LegEditor;
+
+        public FootEditor ConnectedFoot => ConnectedExtremity as FootEditor;
         #endregion
 
         #region Methods
@@ -22,24 +24,27 @@ namespace DanielLochner.Assets.CreatureCreator
             HandleFloor();
         }
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            footBoneDrag = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1].GetComponent<Drag>();
+        }
+
         public override void Setup(CreatureEditor creatureEditor)
         {
             base.Setup(creatureEditor);
 
-            footBoneDrag = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1].GetComponent<Drag>();
-
             LimbConstructor.OnConnectExtremity += delegate (ExtremityConstructor extremity)
             {
                 FootConstructor foot = extremity as FootConstructor;
-                float scaledBaseOffset = foot.BaseOffset * foot.transform.localScale.y;
-
-                SetFootOffset(scaledBaseOffset);
-                FlippedLeg.SetFootOffset(scaledBaseOffset);
+                SetFootOffset(foot.Offset);
+                FlippedLeg.SetFootOffset(foot.Offset);
             };
-            LimbConstructor.OnDisconnectExtremity += delegate (ExtremityConstructor extremity)
+            LimbConstructor.OnDisconnectExtremity += delegate
             {
-                SetFootOffset(0);
-                FlippedLeg.SetFootOffset(0);
+                SetFootOffset(0f, true);
+                FlippedLeg.SetFootOffset(0f, true);
             };
 
             Drag.OnPress.AddListener(delegate
@@ -59,14 +64,18 @@ namespace DanielLochner.Assets.CreatureCreator
             });
         }
         
+        public void SetFootOffset(float offset, bool updateCollider = false)
+        {
+            footBoneDrag.boundsOffset = Vector3.up * offset;
+            if (updateCollider)
+            {
+                UpdateMeshCollider();
+            }
+        }
+
         private void HandleFloor()
         {
             footBoneDrag.transform.position = footBoneDrag.ClampToBounds(footBoneDrag.transform.position);
-        }
-
-        public void SetFootOffset(float offset)
-        {
-            footBoneDrag.boundsOffset = Vector3.up * offset;
         }
         #endregion
     }

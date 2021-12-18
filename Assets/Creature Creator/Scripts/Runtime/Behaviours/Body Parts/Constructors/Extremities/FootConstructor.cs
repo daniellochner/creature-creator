@@ -15,24 +15,22 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public LegConstructor ConnectedLeg => ConnectedLimb as LegConstructor;
 
-        public float BaseOffset
+        public float Offset
         {
-            get => baseOffset;
+            get => baseOffset * transform.localScale.y;
         }
         #endregion
 
         #region Methods
-        public override void SetScale(Vector3 scale, MinMax minMaxScale)
+        public override void Setup(CreatureConstructor creatureConstructor)
         {
-            base.SetScale(scale, minMaxScale);
+            base.Setup(creatureConstructor);
 
-            if (ConnectedLeg != null)
+            OnScale += delegate
             {
-                float scaledBaseOffset = BaseOffset * scale.y;
-
-                ConnectedLeg.SetFootOffset(scaledBaseOffset);
-                ConnectedLeg.FlippedLeg.SetFootOffset(scaledBaseOffset);
-            }
+                ConnectedLeg.SetFootOffset(Offset);
+                ConnectedLeg.FlippedLeg.SetFootOffset(Offset);
+            };
         }
         #endregion
     }

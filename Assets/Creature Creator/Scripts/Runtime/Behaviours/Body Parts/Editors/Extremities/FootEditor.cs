@@ -9,6 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Properties
         public FootConstructor FootConstructor => ExtremityConstructor as FootConstructor;
+
+        public LegEditor ConnectedLeg => ConnectedLimb as LegEditor;
         #endregion
 
         #region Methods
@@ -16,16 +18,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup(creatureEditor);
 
-            BodyPartConstructor.OnScale += delegate (Vector3 scale)
+            ExtremityConstructor.OnScale += delegate
             {
-                if (ExtremityConstructor.ConnectedLimb != null)
-                {
-                    float scaledBaseOffset = FootConstructor.BaseOffset * scale.y;
-
-                    LegEditor leg = ExtremityConstructor.ConnectedLimb.GetComponent<LegEditor>();
-                    leg.SetFootOffset(scaledBaseOffset);
-                    leg.FlippedLeg.SetFootOffset(scaledBaseOffset);
-                }
+                ConnectedLeg.SetFootOffset(FootConstructor.Offset, true);
+                ConnectedLeg.FlippedLeg.SetFootOffset(FootConstructor.Offset, true);
             };
         }
 

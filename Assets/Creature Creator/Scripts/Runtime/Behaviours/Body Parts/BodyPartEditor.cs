@@ -9,8 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BodyPartEditor : MonoBehaviour, IFlippable<BodyPartEditor>
     {
         #region Fields
-        private Mesh colliderMesh;
-        private MeshCollider meshCollider;
+        protected Mesh colliderMesh;
+        protected MeshCollider meshCollider;
 
         private bool isInteractable;
         #endregion

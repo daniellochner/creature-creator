@@ -15,6 +15,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public LimbConstructor ConnectedLimb { get; set; }
 
+        public Action<LimbConstructor> OnConnectToLimb { get; set; }
+        public Action OnDisconnectFromLimb { get; set; }
+
         public override bool CanMirror => true; // Always mirror extremities.
         #endregion
 
@@ -51,13 +54,17 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConnectedLimb = limb;
             ConnectedLimb.ConnectedExtremity = this;
+
+            OnConnectToLimb?.Invoke(limb);
             limb.OnConnectExtremity?.Invoke(this);
         }
         public virtual void DisconnectFromLimb()
         {
             if (ConnectedLimb != null)
             {
-                ConnectedLimb.OnDisconnectExtremity?.Invoke(this);
+                ConnectedLimb.OnDisconnectExtremity?.Invoke();
+                OnDisconnectFromLimb?.Invoke();
+
                 ConnectedLimb.ConnectedExtremity = null;
                 ConnectedLimb = null;
             }

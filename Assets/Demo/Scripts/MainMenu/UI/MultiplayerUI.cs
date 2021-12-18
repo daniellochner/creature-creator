@@ -282,7 +282,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
                 Lobby lobby = await LobbyHelper.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
-                Debug.Log(lobby.LobbyCode);
 
                 UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
                 NetworkManager.Singleton.StartHost();

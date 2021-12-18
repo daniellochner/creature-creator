@@ -49,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Action OnStretch { get; set; }
         public Action OnAttach { get; set; }
+        public Action OnDetach { get; set; }
         public Action<Vector3> OnScale { get; set; }
 
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
@@ -162,6 +163,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public virtual void Detach()
         {
             CreatureConstructor.RemoveBodyPart(IsFlipped ? Flipped : this);
+            OnDetach?.Invoke();
         }
 
         public virtual void Flip()

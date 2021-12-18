@@ -20,19 +20,17 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Setup(CreatureConstructor creatureConstructor)
         {
             base.Setup(creatureConstructor);
-
+            
             OnConnectExtremity += delegate (ExtremityConstructor extremity)
             {
                 FootConstructor foot = extremity as FootConstructor;
-                float scaledBaseOffset = foot.BaseOffset * foot.transform.localScale.y;
-
-                SetFootOffset(scaledBaseOffset);
-                FlippedLeg.SetFootOffset(scaledBaseOffset);
+                SetFootOffset(foot.Offset);
+                FlippedLeg.SetFootOffset(foot.Offset);
             };
-            OnDisconnectExtremity += delegate (ExtremityConstructor extremity)
+            OnDisconnectExtremity += delegate
             {
-                SetFootOffset(0);
-                FlippedLeg.SetFootOffset(0);
+                SetFootOffset(0f);
+                FlippedLeg.SetFootOffset(0f);
             };
         }
 
