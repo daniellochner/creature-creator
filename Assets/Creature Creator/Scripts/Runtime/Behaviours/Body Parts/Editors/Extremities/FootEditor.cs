@@ -20,9 +20,23 @@ namespace DanielLochner.Assets.CreatureCreator
 
             ExtremityConstructor.OnScale += delegate
             {
-                ConnectedLeg.SetFootOffset(FootConstructor.Offset, true);
-                ConnectedLeg.FlippedLeg.SetFootOffset(FootConstructor.Offset, true);
+                ConnectedLeg.SetFootOffset(FootConstructor.Offset);
+                ConnectedLeg.FlippedLeg.SetFootOffset(FootConstructor.Offset);
             };
+            Drag.OnPress.AddListener(delegate
+            {
+                if (ConnectedLeg != null)
+                {
+                    ConnectedLeg.UseShadow = ConnectedLeg.FlippedLeg.UseShadow = true;
+                }
+            });
+            Drag.OnRelease.AddListener(delegate
+            {
+                if (ConnectedLeg != null)
+                {
+                    ConnectedLeg.UseShadow = ConnectedLeg.FlippedLeg.UseShadow = false;
+                }
+            });
         }
 
         public override bool CanConnectToLimb(LimbConstructor limb)

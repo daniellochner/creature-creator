@@ -10,12 +10,19 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         private Drag footBoneDrag;
         private float dragRadius;
+
+        private MeshCollider shadowCollider;
         #endregion
 
         #region Properties
         public LegEditor FlippedLeg => FlippedLimb as LegEditor;
-
         public FootEditor ConnectedFoot => ConnectedExtremity as FootEditor;
+
+        public bool UseShadow
+        {
+            get => shadowCollider.gameObject.activeSelf;
+            set => shadowCollider.gameObject.SetActive(value);
+        }
         #endregion
 
         #region Methods
@@ -29,24 +36,24 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Initialize();
 
             footBoneDrag = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1].GetComponent<Drag>();
+
+            GameObject shadow = new GameObject("Shadow");
+            shadow.transform.SetParent(LimbConstructor.Model, false);
+            shadow.layer = LayerMask.NameToLayer("Body Parts");
+            shadow.tag = "Body Part";
+            shadowCollider = shadow.AddComponent<MeshCollider>();
+            UseShadow = false;
         }
 
         public override void Setup(CreatureEditor creatureEditor)
         {
             base.Setup(creatureEditor);
 
-            LimbConstructor.OnConnectExtremity += delegate (ExtremityConstructor extremity)
-            {
-                FootConstructor foot = extremity as FootConstructor;
-                SetFootOffset(foot.Offset);
-                FlippedLeg.SetFootOffset(foot.Offset);
-            };
-            LimbConstructor.OnDisconnectExtremity += delegate
-            {
-                SetFootOffset(0f, true);
-                FlippedLeg.SetFootOffset(0f, true);
-            };
-
+            SetupInteraction();
+            SetupConstructor();
+        }
+        private void SetupInteraction()
+        {
             Drag.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
@@ -63,14 +70,34 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
         }
-        
-        public void SetFootOffset(float offset, bool updateCollider = false)
+        private void SetupConstructor()
+        {
+            LimbConstructor.OnConnectExtremity += delegate (ExtremityConstructor extremity)
+            {
+                FootConstructor foot = extremity as FootConstructor;
+                SetFootOffset(foot.Offset);
+                FlippedLeg.SetFootOffset(foot.Offset);
+
+                shadowCollider.sharedMesh = Instantiate(colliderMesh);
+                UseShadow = FlippedLeg.UseShadow = true;
+            };
+            LimbConstructor.OnDisconnectExtremity += delegate
+            {
+                SetFootOffset(0f);
+                FlippedLeg.SetFootOffset(0f);
+
+                UseShadow = FlippedLeg.UseShadow = false;
+            };
+            CreatureEditor.CreatureConstructor.OnConstructCreature += delegate
+            {
+                UseShadow = FlippedLeg.UseShadow = false;
+            };
+        }
+
+        public void SetFootOffset(float offset)
         {
             footBoneDrag.boundsOffset = Vector3.up * offset;
-            if (updateCollider)
-            {
-                UpdateMeshCollider();
-            }
+            this.InvokeAtEndOfFrame(UpdateMeshCollider);
         }
 
         private void HandleFloor()
