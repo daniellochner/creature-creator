@@ -19,8 +19,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public LegConstructor LegConstructor => LimbConstructor as LegConstructor;
         public LegAnimator FlippedLeg => Flipped as LegAnimator;
 
-        public Transform Anchor => anchor;
-
         public bool IsMovingToTarget { get; private set; }
 
         public Vector3 ExtremityOffset { get; set; }
@@ -63,66 +61,77 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup(creatureAnimator);
 
             anchor = new GameObject("Anchor").transform;
-            anchor.SetParent(Dynamic.Transform, true);
+            anchor.SetParent(LimbConstructor.Extremity, false);
         }
 
         public override void Restructure(bool isAnimated)
         {
             base.Restructure(isAnimated);
 
-            anchor.SetParent(isAnimated ? Dynamic.Transform : limb, true);
+            if (isAnimated)
+            {
+                anchor.SetParent(Dynamic.Transform);
+                anchor.SetPositionAndRotation(LimbConstructor.Extremity.position, LimbConstructor.Extremity.rotation);
+            }
+            else
+            {
+                anchor.SetParent(LimbConstructor.Extremity);
+                anchor.localPosition = Vector3.zero;
+                anchor.localRotation = Quaternion.identity;
+                anchor.localScale = Vector3.one;
+            }
 
-            ExtremityOffset = transform.position - LegConstructor.Extremity.position;
+            //ExtremityOffset = transform.position - LegConstructor.Extremity.position;
         }
 
-        public void HandleMovement()
-        {
-            if (!CreatureAnimator.IsAnimated)
-            {
-                return;
-            }
+        //public void HandleMovement()
+        //{
+        //    if (!CreatureAnimator.IsAnimated)
+        //    {
+        //        return;
+        //    }
 
-            if (IsMovingToTarget || FlippedLeg.IsMovingToTarget)
-            {
-                return;
-            }
+        //    if (IsMovingToTarget || FlippedLeg.IsMovingToTarget)
+        //    {
+        //        return;
+        //    }
 
-            Vector3 extremityOffset = CreatureAnimator.CreatureConstructor.Body.TransformVector(Vector3.ProjectOnPlane(defaultBonePositions[defaultBonePositions.Length - 1] / 4f, CreatureAnimator.transform.up));
-            Vector3 velocityOffset = (CreatureAnimator.MoveThreshold / 2f) * CreatureAnimator.CreatureConstructor.Body.forward;
-            Vector3 origin = transform.position + (extremityOffset + velocityOffset);
+        //    Vector3 extremityOffset = CreatureAnimator.CreatureConstructor.Body.TransformVector(Vector3.ProjectOnPlane(defaultBonePositions[defaultBonePositions.Length - 1] / 4f, CreatureAnimator.transform.up));
+        //    Vector3 velocityOffset = (CreatureAnimator.MoveThreshold / 2f) * CreatureAnimator.CreatureConstructor.Body.forward;
+        //    Vector3 origin = transform.position + (extremityOffset + velocityOffset);
 
-            if (Physics.Raycast(origin, -CreatureAnimator.transform.up, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))
-            {
-                if (Vector3.Distance(hitInfo.point, anchor.position) > CreatureAnimator.MoveThreshold)
-                {
-                    StartCoroutine(MoveToTargetRoutine(hitInfo.point));
-                }
-            }
-        }
+        //    if (Physics.Raycast(origin, -CreatureAnimator.transform.up, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        //    {
+        //        if (Vector3.Distance(hitInfo.point, anchor.position) > CreatureAnimator.MoveThreshold)
+        //        {
+        //            StartCoroutine(MoveToTargetRoutine(hitInfo.point));
+        //        }
+        //    }
+        //}
 
-        private IEnumerator MoveToTargetRoutine(Vector3 targetPosition)
-        {
-            IsMovingToTarget = true;
+        //private IEnumerator MoveToTargetRoutine(Vector3 targetPosition)
+        //{
+        //    IsMovingToTarget = true;
 
-            Vector3 initialPosition = anchor.position;
-            float timeElapsed = 0f;
-            float progress = 0f;
+        //    Vector3 initialPosition = anchor.position;
+        //    float timeElapsed = 0f;
+        //    float progress = 0f;
 
-            while (progress < 1)
-            {
-                timeElapsed += Time.deltaTime;
-                progress = timeElapsed / CreatureAnimator.TimeToMove;
+        //    while (progress < 1)
+        //    {
+        //        timeElapsed += Time.deltaTime;
+        //        progress = timeElapsed / CreatureAnimator.TimeToMove;
 
-                Vector3 position = Vector3.Lerp(initialPosition, targetPosition, progress);
-                position += CreatureAnimator.transform.up * Mathf.Sin(progress * Mathf.PI) * CreatureAnimator.LiftHeight;
+        //        Vector3 position = Vector3.Lerp(initialPosition, targetPosition, progress);
+        //        position += CreatureAnimator.transform.up * Mathf.Sin(progress * Mathf.PI) * CreatureAnimator.LiftHeight;
 
-                anchor.position = position;
+        //        anchor.position = position;
 
-                yield return null;
-            }
+        //        yield return null;
+        //    }
 
-            IsMovingToTarget = false;
-        }
+        //    IsMovingToTarget = false;
+        //}
         #endregion
     }
 }

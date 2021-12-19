@@ -140,14 +140,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void HandleTarget()
         {
-            if (CreatureAnimator.IsAnimated)
-            {
-                target.rotation = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1].rotation;
-            }
-            else
-            {
-                target.position = LimbConstructor.Extremity.position;
-            }
+            target.rotation = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1].rotation;
         }
         #endregion
     }
