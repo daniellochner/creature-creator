@@ -18,5 +18,22 @@ namespace DanielLochner.Assets
             transform.localScale = serializableTransform.scale;
             transform.rotation = world.rotation * serializableTransform.rotation;
         }
+        
+        public static void SetWorldScale(this Transform transform, Vector3 scale)
+        {
+            if (transform.parent == null)
+            {
+                transform.localScale = scale;
+            }
+            else
+            {
+                Vector3 parentWorldScale = transform.parent.lossyScale;
+                float x = scale.x / parentWorldScale.x;
+                float y = scale.y / parentWorldScale.y;
+                float z = scale.z / parentWorldScale.z;
+
+                transform.localScale = new Vector3(x, y, z);
+            }
+        }
     }
 }
