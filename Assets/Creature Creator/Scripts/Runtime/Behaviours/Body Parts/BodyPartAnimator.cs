@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(BodyPartConstructor))]
+    //[RequireComponent(typeof(BodyPartConstructor))]
     public class BodyPartAnimator : MonoBehaviour, IFlippable<BodyPartAnimator>
     {
         #region Properties
