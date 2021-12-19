@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -27,8 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TMP_InputField onlineUsernameInputField;
         [SerializeField] private TextMeshProUGUI networkStatusText;
         [SerializeField] private BlinkingText networkStatusBT;
-        [SerializeField] private GameObject cancelGO;
-        [SerializeField] private GameObject createGO;
+        [SerializeField] private Button createButton;
         [SerializeField] private Menu multiplayerMenu;
         [SerializeField] private Menu multiplayerHintMenu;
         [SerializeField] private SimpleScrollSnap.SimpleScrollSnap multiplayerSSS;
@@ -119,11 +119,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 isConnecting = value;
-
-                cancelGO.SetActive(isConnecting);
-                createGO.SetActive(!isConnecting);
-
-                joinOffsetRT.offsetMin = new Vector2(joinOffsetRT.offsetMin.x, isConnecting ? 75 : 0);
+                createButton.interactable = !isConnecting;
             }
         }
         private bool IsRefreshing
@@ -203,11 +199,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return;
             }
+            IsConnecting = true;
 
             try
             {
                 await Authenticate();
-                
+
                 UpdateNetworkStatus("Joining Lobby...", Color.yellow, -1);
                 JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions()
                 {
@@ -220,7 +217,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     throw new Exception("Invalid password.");
                 }
-                
+
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
                 string joinCode = lobby.Data["joinCode"].Value;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
@@ -238,7 +235,7 @@ namespace DanielLochner.Assets.CreatureCreator
             catch (Exception e)
             {
                 UpdateNetworkStatus(e.Message, Color.red);
-                Debug.Log(e);
+                IsConnecting = false;
             }
         }
         public async void Create()
@@ -247,6 +244,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return;
             }
+            IsConnecting = true;
 
             try
             {
@@ -289,7 +287,7 @@ namespace DanielLochner.Assets.CreatureCreator
             catch (Exception e)
             {
                 UpdateNetworkStatus($"{e.Message}", Color.red);
-                Debug.Log(e);
+                IsConnecting = false;
             }
         }
         public async void Refresh()
