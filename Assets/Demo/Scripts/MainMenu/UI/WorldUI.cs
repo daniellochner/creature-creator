@@ -15,6 +15,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button joinButton;
         #endregion
 
+        #region Properties
+        public Button JoinButton => joinButton;
+        #endregion
+
         #region Methods
         public void Setup(MultiplayerUI multiplayerUI, Lobby lobby)
         {

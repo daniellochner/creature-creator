@@ -120,6 +120,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 isConnecting = value;
                 createButton.interactable = !isConnecting;
+
+                foreach (Transform worldRT in worldsRT)
+                {
+                    WorldUI worldUI = worldsRT.GetComponent<WorldUI>();
+                    worldUI.JoinButton.interactable = !isConnecting;
+                }
             }
         }
         private bool IsRefreshing
