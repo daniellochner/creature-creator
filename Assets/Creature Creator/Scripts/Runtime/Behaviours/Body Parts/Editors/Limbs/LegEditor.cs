@@ -74,22 +74,23 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             LimbConstructor.OnConnectExtremity += delegate (ExtremityConstructor extremity)
             {
-                FootConstructor foot = extremity as FootConstructor;
-                SetFootOffset(foot.Offset);
-                FlippedLeg.SetFootOffset(foot.Offset);
+                FootConstructor constructor = extremity as FootConstructor;
+                FootEditor editor = constructor.GetComponent<FootEditor>();
 
-                shadowCollider.sharedMesh = Instantiate(colliderMesh);
-                UseShadow = FlippedLeg.UseShadow = true;
+                if (editor.Drag.IsPressing)
+                {
+                    shadowCollider.sharedMesh = Instantiate(colliderMesh);
+                    UseShadow = FlippedLeg.UseShadow = true;
+                }
+
+                SetFootOffset(constructor.Offset);
+                FlippedLeg.SetFootOffset(constructor.Offset);
             };
             LimbConstructor.OnDisconnectExtremity += delegate
             {
                 SetFootOffset(0f);
                 FlippedLeg.SetFootOffset(0f);
 
-                UseShadow = FlippedLeg.UseShadow = false;
-            };
-            CreatureEditor.CreatureConstructor.OnConstructCreature += delegate
-            {
                 UseShadow = FlippedLeg.UseShadow = false;
             };
         }

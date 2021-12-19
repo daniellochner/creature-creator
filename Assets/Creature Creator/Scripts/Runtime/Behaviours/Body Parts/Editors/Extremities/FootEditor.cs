@@ -23,6 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ConnectedLeg.SetFootOffset(FootConstructor.Offset);
                 ConnectedLeg.FlippedLeg.SetFootOffset(FootConstructor.Offset);
             };
+
             Drag.OnPress.AddListener(delegate
             {
                 if (ConnectedLeg != null)
