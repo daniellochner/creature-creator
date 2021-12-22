@@ -11,31 +11,30 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         private Transform anchor;
-
-        //private Coroutine moveToAnchorCoroutine;
+        private Coroutine moveToTargetCoroutine;
         #endregion
-        
+
         #region Properties
+        public Transform Anchor => anchor;
+
         public LegConstructor LegConstructor => LimbConstructor as LegConstructor;
         public LegAnimator FlippedLeg => Flipped as LegAnimator;
-
-        public bool IsMovingToTarget { get; private set; }
-
-        public Vector3 ExtremityOffset { get; set; }
 
         public float Length
         {
             get
             {
                 float length = 0;
-
                 for (int i = 0; i < LimbConstructor.Bones.Length - 1; i++)
                 {
                     length += Vector3.Distance(LimbConstructor.Bones[i].position, LimbConstructor.Bones[i + 1].position);
                 }
-
                 return length;
             }
+        }
+        public bool IsMovingToTarget
+        {
+            get; private set;
         }
         #endregion
 
@@ -80,58 +79,39 @@ namespace DanielLochner.Assets.CreatureCreator
                 anchor.localRotation = Quaternion.identity;
                 anchor.localScale = Vector3.one;
             }
-
-            //ExtremityOffset = transform.position - LegConstructor.Extremity.position;
         }
 
-        //public void HandleMovement()
-        //{
-        //    if (!CreatureAnimator.IsAnimated)
-        //    {
-        //        return;
-        //    }
+        public void MoveToPosition(Vector3 position, float timeToMove, float liftHeight)
+        {
+            if (moveToTargetCoroutine != null)
+            {
+                StopCoroutine(moveToTargetCoroutine);
+            }
+            moveToTargetCoroutine = StartCoroutine(MoveToPositionRoutine(position, timeToMove, liftHeight));
+        }
+        private IEnumerator MoveToPositionRoutine(Vector3 position, float timeToMove, float liftHeight)
+        {
+            IsMovingToTarget = true;
 
-        //    if (IsMovingToTarget || FlippedLeg.IsMovingToTarget)
-        //    {
-        //        return;
-        //    }
+            Vector3 initialPosition = anchor.position;
+            float timeElapsed = 0f;
+            float progress = 0f;
 
-        //    Vector3 extremityOffset = CreatureAnimator.CreatureConstructor.Body.TransformVector(Vector3.ProjectOnPlane(defaultBonePositions[defaultBonePositions.Length - 1] / 4f, CreatureAnimator.transform.up));
-        //    Vector3 velocityOffset = (CreatureAnimator.MoveThreshold / 2f) * CreatureAnimator.CreatureConstructor.Body.forward;
-        //    Vector3 origin = transform.position + (extremityOffset + velocityOffset);
+            while (progress < 1)
+            {
+                timeElapsed += Time.deltaTime;
+                progress = timeElapsed / timeToMove;
 
-        //    if (Physics.Raycast(origin, -CreatureAnimator.transform.up, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))
-        //    {
-        //        if (Vector3.Distance(hitInfo.point, anchor.position) > CreatureAnimator.MoveThreshold)
-        //        {
-        //            StartCoroutine(MoveToTargetRoutine(hitInfo.point));
-        //        }
-        //    }
-        //}
+                Vector3 targetPosition = Vector3.Lerp(initialPosition, position, progress);
+                targetPosition += CreatureAnimator.transform.up * Mathf.Sin(progress * Mathf.PI) * liftHeight;
 
-        //private IEnumerator MoveToTargetRoutine(Vector3 targetPosition)
-        //{
-        //    IsMovingToTarget = true;
+                anchor.position = position;
 
-        //    Vector3 initialPosition = anchor.position;
-        //    float timeElapsed = 0f;
-        //    float progress = 0f;
+                yield return null;
+            }
 
-        //    while (progress < 1)
-        //    {
-        //        timeElapsed += Time.deltaTime;
-        //        progress = timeElapsed / CreatureAnimator.TimeToMove;
-
-        //        Vector3 position = Vector3.Lerp(initialPosition, targetPosition, progress);
-        //        position += CreatureAnimator.transform.up * Mathf.Sin(progress * Mathf.PI) * CreatureAnimator.LiftHeight;
-
-        //        anchor.position = position;
-
-        //        yield return null;
-        //    }
-
-        //    IsMovingToTarget = false;
-        //}
+            IsMovingToTarget = false;
+        }
         #endregion
     }
 }

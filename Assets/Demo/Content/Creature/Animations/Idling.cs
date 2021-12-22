@@ -8,20 +8,20 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class Idling : SceneLinkedSMB<CreatureAnimator>
     {
+        #region Fields
         [SerializeField] private float d = 0.025f;
         [SerializeField] private float t = 0.5f;
         [SerializeField, ReadOnly] private float idlingTime;
+        #endregion
 
-        private bool hasLegs;
-
+        #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             idlingTime = 0f;
-            hasLegs = m_MonoBehaviour.CreatureConstructor.Legs.Count > 0;
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
         {
-            if (hasLegs)
+            if (m_MonoBehaviour.CreatureConstructor.Legs.Count > 0)
             {
                 m_MonoBehaviour.CreatureConstructor.Root.localPosition = new Vector3(0, d * Mathf.Cos(idlingTime / t) - d, 0);
                 idlingTime += Time.deltaTime;
@@ -31,5 +31,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.zero;
         }
+        #endregion
     }
 }

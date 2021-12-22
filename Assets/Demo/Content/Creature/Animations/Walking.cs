@@ -9,20 +9,59 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class Walking : SceneLinkedSMB<CreatureAnimator>
     {
-        //public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        #region Fields
+        private float moveThreshold = 0.25f;
+        private float liftHeight = 0.25f;
+        private float timeToMove = 0.5f;
+        #endregion
+
+        public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            liftHeight = m_MonoBehaviour.CreatureConstructor.Root.localPosition.y * 0.25f;
+        }
+        public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            HandleBody();
+            foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+            {
+                HandleLeg(leg);
+            }
+        }
+
+        private void HandleBody()
+        {
+        }
+        private void HandleLeg(LegAnimator leg)
+        {
+        }
+        
+
+        //if (IsMovingToTarget || FlippedLeg.IsMovingToTarget)
         //{
-        //    // slowly move up to default root pos.
+        //    return;
         //}
 
-        //public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    UpdatePositionAndRotation();
+        //Vector3 extremityOffset = m_MonoBehaviour.CreatureConstructor.Body.TransformVector(Vector3.ProjectOnPlane(defaultBonePositions[defaultBonePositions.Length - 1] / 4f, CreatureAnimator.transform.up));
+        //Vector3 velocityOffset = (CreatureAnimator.MoveThreshold / 2f) * CreatureAnimator.CreatureConstructor.Body.forward;
+        //Vector3 origin = transform.position + (extremityOffset + velocityOffset);
 
-        //    foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+        //if (Physics.Raycast(origin, -CreatureAnimator.transform.up, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        //{
+        //    Vector3 pos = hitInfo.point;
+
+        //    Debug.DrawLine(origin, pos);
+
+
+        //    if (Vector3.Distance(pos, anchor.position) > CreatureAnimator.MoveThreshold)
         //    {
-        //        leg.HandleMovement();
+        //        if (LegConstructor.ConnectedFoot != null)
+        //        {
+        //            pos += CreatureAnimator.transform.up * LegConstructor.ConnectedFoot.Offset;
+        //        }
+        //        StartCoroutine(MoveToTargetRoutine(pos));
         //    }
         //}
+        
         //private void UpdatePositionAndRotation()
         //{
         //    if (m_MonoBehaviour.Legs.Length > 0)
@@ -63,5 +102,10 @@ namespace DanielLochner.Assets.CreatureCreator
         //        //CreatureConstructor.Body.localRotation = Quaternion.LookRotation(Vector3.Cross(forward, right));
         //    }
         //}
+
+
+
+
+
     }
 }

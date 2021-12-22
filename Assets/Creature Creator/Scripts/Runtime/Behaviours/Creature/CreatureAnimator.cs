@@ -14,19 +14,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Setup")]
         [SerializeField] private Transform rig;
         
-        [Header("Settings")]
-        [SerializeField] private float liftHeight;
-        [SerializeField] private float moveThreshold;
-        [SerializeField] private float timeToMove;
-
         private bool isAnimated, hasCapturedDefaults;
         #endregion
 
         #region Properties
         public Transform Rig => rig;
-        public float LiftHeight => liftHeight;
-        public float MoveThreshold => moveThreshold;
-        public float TimeToMove => timeToMove;
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
         public Animator Animator { get; private set; }

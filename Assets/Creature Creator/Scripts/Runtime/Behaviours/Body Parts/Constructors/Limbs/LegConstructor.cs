@@ -9,6 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Properties
         public LegConstructor FlippedLeg => FlippedLimb as LegConstructor;
+
+        public FootConstructor ConnectedFoot => ConnectedExtremity as FootConstructor;
         #endregion
 
         #region Methods

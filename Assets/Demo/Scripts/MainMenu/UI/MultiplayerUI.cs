@@ -319,7 +319,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateNetworkStatus(e.Message, Color.red);
                 noneGO.SetActive(true);
-                Debug.Log(e);
             }
 
             this.Invoke(delegate
