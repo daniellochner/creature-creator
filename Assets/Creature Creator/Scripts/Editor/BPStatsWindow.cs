@@ -83,7 +83,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPart.Transformations |= Transformation.Pivot;
                     bodyPart.Transformations |= Transformation.PivotXY;
                 }
-                bodyPart.Transformations |= Transformation.Rotate;
+                if (!(bodyPart is Foot))
+                {
+                    bodyPart.Transformations |= Transformation.Rotate;
+                }
 
                 // Complexity
                 bodyPart.Complexity = Math.Min(bodyPart.BaseComplexity + bodyPart.Abilities.Count, maxComplexity);
