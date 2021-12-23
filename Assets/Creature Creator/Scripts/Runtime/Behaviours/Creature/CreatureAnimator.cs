@@ -15,10 +15,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Transform rig;
         
         private bool isAnimated, hasCapturedDefaults;
+        private Vector3 velocity, prevPosition, angularVelocity;
+        private Quaternion prevRotation;
         #endregion
 
         #region Properties
         public Transform Rig => rig;
+        public Vector3 Velocity => velocity;
+        public Vector3 AngularVelocity => angularVelocity;
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
         public Animator Animator { get; private set; }
@@ -28,6 +32,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public LimbAnimator[] Limbs { get; set; }
         public LegAnimator[] Legs { get; set; }
+
+        public LegAnimator[] LLegs { get; set; }
+        public LegAnimator[] RLegs { get; set; }
 
         public bool IsAnimated
         {
@@ -39,6 +46,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 Limbs = GetComponentsInChildren<LimbAnimator>();
                 Legs = GetComponentsInChildren<LegAnimator>();
 
+                LLegs = new LegAnimator[Legs.Length / 2];
+                RLegs = new LegAnimator[Legs.Length / 2];
+                int li = 0, ri = 0;
+                foreach (LegAnimator leg in Legs)
+                {
+                    if (leg.transform.localPosition.x < 0)
+                    {
+                        LLegs[li++] = leg;
+                    }
+                    else
+                    {
+                        RLegs[ri++] = leg;
+                    }
+                }
+
                 Restructure(isAnimated);
                 Reposition(isAnimated);
 
@@ -49,12 +71,38 @@ namespace DanielLochner.Assets.CreatureCreator
                 Animator.enabled = isAnimated; // Comment out to temporarily disable creature animations!
             }
         }
+
+        public bool IsTurningRight
+        {
+            get; private set;
+        }
         #endregion
 
         #region Methods
         private void Awake()
         {
             Initialize();
+        }
+        private void FixedUpdate()
+        {
+            Vector3 deltaPosition = transform.position - prevPosition;
+            velocity = deltaPosition / Time.fixedDeltaTime;
+            prevPosition = transform.position;
+
+            Quaternion deltaRotation = CreatureConstructor.Body.rotation * Quaternion.Inverse(prevRotation);
+            prevRotation = CreatureConstructor.Body.rotation;
+            deltaRotation.ToAngleAxis(out float angle, out var axis);
+            angularVelocity = (angle / Time.fixedDeltaTime) * axis;
+
+            if (angularVelocity.y > 0)
+            {
+                IsTurningRight = true;
+            }
+            else
+            if (angularVelocity.y < 0)
+            {
+                IsTurningRight = false;
+            }
         }
 
         private void Initialize()
