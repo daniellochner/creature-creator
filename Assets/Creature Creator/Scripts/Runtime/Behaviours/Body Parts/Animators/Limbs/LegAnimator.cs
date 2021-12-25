@@ -10,8 +10,10 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LegAnimator : LimbAnimator
     {
         #region Fields
+        [Header("Leg")]
+        [SerializeField] private AnimationCurve moveCurve;
+
         private Transform anchor;
-        private Coroutine moveToTargetCoroutine;
         #endregion
 
         #region Properties
@@ -30,6 +32,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     length += Vector3.Distance(LimbConstructor.Bones[i].position, LimbConstructor.Bones[i + 1].position);
                 }
                 return length;
+            }
+        }
+        public Vector3 DefaultFootPosition
+        {
+            get => defaultBonePositions[defaultBonePositions.Length - 1];
+        }
+
+        public bool IsGrounded
+        {
+            get
+            {
+                return Physics.Raycast(LegConstructor.Extremity.position, -CreatureAnimator.transform.up, LegConstructor.ConnectedFoot.Offset + 0.001f, LayerMask.GetMask("Ground"));
             }
         }
         public bool IsMovingToTarget
@@ -81,31 +95,27 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public void MoveToPosition(Vector3 position, float timeToMove, float liftHeight)
-        {
-            if (moveToTargetCoroutine != null)
-            {
-                StopCoroutine(moveToTargetCoroutine);
-            }
-            moveToTargetCoroutine = StartCoroutine(MoveToPositionRoutine(position, timeToMove, liftHeight));
-        }
-        private IEnumerator MoveToPositionRoutine(Vector3 position, float timeToMove, float liftHeight)
+        public IEnumerator MoveToTargetRoutine(Vector3 targetPosition, Quaternion targetRotation, float timeToMove, float liftHeight)
         {
             IsMovingToTarget = true;
 
             Vector3 initialPosition = anchor.position;
-            float timeElapsed = 0f;
-            float progress = 0f;
+            Quaternion initialRotation = anchor.rotation;
 
-            while (progress < 1)
+            float timeElapsed = 0f, progress = 0f;
+            while (progress < 1f)
             {
                 timeElapsed += Time.deltaTime;
                 progress = timeElapsed / timeToMove;
 
-                Vector3 targetPosition = Vector3.Lerp(initialPosition, position, progress);
-                targetPosition += CreatureAnimator.transform.up * Mathf.Sin(progress * Mathf.PI) * liftHeight;
-
+                // Position
+                Vector3 position = Vector3.Lerp(initialPosition, targetPosition, progress);
+                position += (liftHeight * moveCurve.Evaluate(progress)) * CreatureAnimator.transform.up; // Mathf.Sin(progress * Mathf.PI)
                 anchor.position = position;
+
+                // Rotation
+                Quaternion rotation = Quaternion.Slerp(initialRotation, targetRotation, progress);
+                anchor.rotation = rotation;
 
                 yield return null;
             }
