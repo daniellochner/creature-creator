@@ -625,6 +625,25 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Body.position = mean;
         }
+
+        #region Helpers
+        public Vector3 FromBodySpace(Vector3 position)
+        {
+            return Body.TransformPoint(position);
+        }
+        public Vector3 ToBodySpace(Vector3 position)
+        {
+            return Body.InverseTransformPoint(position);
+        }
+        public Quaternion FromBodySpace(Quaternion rotation)
+        {
+            return Body.rotation * rotation;
+        }
+        public Quaternion ToBodySpace(Quaternion rotation)
+        {
+            return Quaternion.Inverse(Body.rotation) * rotation;
+        }
+        #endregion
         #endregion
     }
 }
