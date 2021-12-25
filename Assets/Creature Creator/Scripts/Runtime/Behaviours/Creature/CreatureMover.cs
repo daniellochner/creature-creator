@@ -45,13 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public bool RequestToMove => requestToMove;
-
-        public float MovementSpeed
-        {
-            get => movementSpeed;
-            set => movementSpeed = value;
-        }
-
+        
         public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureAnimator CreatureAnimator { get; private set; }
         public Transform Platform { get; set; }
@@ -171,7 +165,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     direction = (vertical + horizontal).normalized;
                     canRotate = true;
-                    canMove = kInput;
+                    canMove = kInput && !Input.GetKey(KeyCode.LeftControl);
 
                     break;
                     #endregion
