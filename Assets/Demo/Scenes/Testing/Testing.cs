@@ -3,12 +3,7 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
-    private Vector3 prev;
-
-    private void FixedUpdate()
+    private void Start()
     {
-        Vector3 d = transform.position - prev;
-        Debug.Log(d / Time.deltaTime);
-        prev = transform.position;
     }
 }

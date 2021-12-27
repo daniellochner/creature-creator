@@ -42,6 +42,9 @@ namespace DanielLochner.Assets.CreatureCreator
             foreach (LimbConstructor limb in ragdoll.Limbs)
             {
                 SetupLimbRagdoll(limb);
+
+                limb.FlippedLimb.Root.localScale = Vector3.one;
+                limb.Flip();
                 SetupLimbRagdoll(limb.FlippedLimb);
             }
 
@@ -97,6 +100,18 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetupBoneRagdoll(limb.Bones[i], 0.05f, 10);
             }
+
+            if (limb.ConnectedExtremity != null)
+            {
+                limb.ConnectedExtremity.transform.parent = limb.Extremity;
+
+                Quaternion prevRotation = limb.ConnectedExtremity.transform.rotation;
+                limb.InvokeAtEndOfFrame(delegate
+                {
+                    limb.ConnectedExtremity.transform.rotation = prevRotation;
+                });
+            }
+
             FixedJoint fixedJoint = limb.Bones[0].gameObject.AddComponent<FixedJoint>();
             fixedJoint.connectedBody = limb.transform.parent.GetComponent<Rigidbody>();
         }

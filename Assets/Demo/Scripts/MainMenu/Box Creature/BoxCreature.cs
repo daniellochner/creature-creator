@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             GetComponent<Click>().enabled = false;
-            Destroy(creatureConstructor.gameObject);
+            creatureConstructor.gameObject.SetActive(false);
 
             CreatureConstructor ragdoll = creatureConstructor.GetComponent<CreatureRagdoll>().Generate(creatureConstructor.Data);
             foreach (Transform bone in ragdoll.Bones)

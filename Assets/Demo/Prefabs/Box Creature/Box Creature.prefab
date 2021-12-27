@@ -174,31 +174,6 @@ LookAtConstraint:
   m_IsContraintActive: 1
   m_IsLocked: 0
   m_Sources: []
---- !u!114 &3992068388528788094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6552146102000777615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d48cc88e887d7a4fbfe3716af3a01f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5015750740111739069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6552146102000777615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23ec86d7a4df8374cb259b3eed7f80f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
 --- !u!1 &8306326962767920301
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +187,7 @@ GameObject:
   - component: {fileID: 5362528213047906643}
   - component: {fileID: -5428230303113445427}
   - component: {fileID: 3888261549127104295}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Box Creature
   m_TagString: Conveyor Belt
   m_Icon: {fileID: 0}
@@ -275,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b29843322ac8fb4e9f2d56a57036c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: {x: 0, y: 20, z: 25}
+  force: {x: 0, y: 10, z: 15}
   creatureName: {fileID: 2684779515686565113}
 --- !u!114 &3888261549127104295
 MonoBehaviour:
@@ -373,3 +348,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3002746977395476857, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
   m_PrefabInstance: {fileID: 8306326963308359925}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3992068388528788094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6552146102000777615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d48cc88e887d7a4fbfe3716af3a01f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5015750740111739069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6552146102000777615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ec86d7a4df8374cb259b3eed7f80f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}

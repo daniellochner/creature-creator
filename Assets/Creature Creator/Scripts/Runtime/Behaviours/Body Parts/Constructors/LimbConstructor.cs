@@ -157,7 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Flipped = bpc;
             bpc.Flipped = this;
 
-            Root.localScale = new Vector3(-Root.localScale.x, Root.localScale.y, Root.localScale.z);
+            Root.localScale = new Vector3(-1f, 1f, 1f);
         }
         public override void SetAttached(AttachedBodyPart abp)
         {

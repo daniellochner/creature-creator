@@ -119,6 +119,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 initialPosition = LegConstructor.Extremity.position;
             Quaternion initialRotation = LegConstructor.Extremity.rotation;
 
+
+            //float t = Mathf.Clamp01(0f, Vector3.Distance(initialPosition, targetPosition) / 0.2f);
+            
+
             float timeElapsed = 0f, progress = 0f;
             while (progress < 1f)
             {
