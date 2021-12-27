@@ -18,10 +18,10 @@ namespace DanielLochner.Assets
 
         public override void OnInspectorGUI()
         {
-            CopyrightNotice();
+            ShowCopyrightNotice();
             base.OnInspectorGUI();
         }
-        public void CopyrightNotice()
+        public void ShowCopyrightNotice()
         {
             if (GetType().Namespace != null)
             {

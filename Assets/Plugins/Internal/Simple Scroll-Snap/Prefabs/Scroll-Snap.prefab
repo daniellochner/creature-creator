@@ -515,7 +515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3252892436986328052}
   - component: {fileID: 3252892436986328054}
-  - component: {fileID: 3252892436986328053}
+  - component: {fileID: 5681489238896921518}
   m_Layer: 0
   m_Name: Scroll-Snap
   m_TagString: Untagged
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3252892436986328053
+--- !u!114 &5681489238896921518
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -582,13 +582,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3252892436986328043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 226c5379b57de37468d8622fe21c50f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 54aaa385a9b88e84e9d50b9804aaa24e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movementType: 0
   movementAxis: 0
   useAutomaticLayout: 1
   automaticLayoutSpacing: 0.25
+  sizeControl: 1
+  size: {x: 400, y: 250}
   automaticLayoutMargins:
     Left: 0
     Right: 0
@@ -612,10 +614,16 @@ MonoBehaviour:
   onTransitionEffects:
     m_PersistentCalls:
       m_Calls: []
-  onPanelCentered:
+  onPanelSelecting:
     m_PersistentCalls:
       m_Calls: []
   onPanelSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  onPanelCentering:
+    m_PersistentCalls:
+      m_Calls: []
+  onPanelCentered:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &3252892437202590428

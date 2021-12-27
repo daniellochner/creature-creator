@@ -1,4 +1,4 @@
-﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
+﻿// Simple Scroll-Snap - https://assetstore.unity.com/packages/tools/gui/simple-scroll-snap-140884
 // Copyright (c) Daniel Lochner
 
 using UnityEditor;

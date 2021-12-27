@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.SimpleScrollSnap
 {
+    [RequireComponent(typeof(SimpleScrollSnap))]
     public abstract class TransitionEffectBase<T> : MonoBehaviour where T : Component
     {
         #region Fields
