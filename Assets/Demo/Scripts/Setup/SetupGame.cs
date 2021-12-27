@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (NetworkManager.Singleton.IsHost && LobbyHelper.Instance.JoinedLobby.IsPrivate)
             {
-                InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{LobbyHelper.Instance.JoinedLobby.LobbyCode}\".\nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+                InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{LobbyHelper.Instance.JoinedLobby.LobbyCode}\". \nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
             }
         }
         #endregion

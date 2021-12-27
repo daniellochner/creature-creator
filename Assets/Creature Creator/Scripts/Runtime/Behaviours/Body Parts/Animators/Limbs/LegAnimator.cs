@@ -12,8 +12,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Leg")]
         [SerializeField] private AnimationCurve moveCurve;
+        [SerializeField] private float timeToMove = 0.25f;
+        [SerializeField] private float liftHeight = 0.2f;
 
         private Transform anchor;
+        private float maxLength;
+        private Vector3? prevPosition = null, velocity;
         #endregion
 
         #region Properties
@@ -22,7 +26,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public LegConstructor LegConstructor => LimbConstructor as LegConstructor;
         public LegAnimator FlippedLeg => Flipped as LegAnimator;
 
+        public Vector3 Velocity => (Vector3)velocity;
+        public float TimeToMove => timeToMove;
+
         public float Length
+        {
+            get => Vector3.Distance(transform.position, LegConstructor.Extremity.position);
+        }
+        public float MaxLength
         {
             get
             {
@@ -58,6 +69,12 @@ namespace DanielLochner.Assets.CreatureCreator
             base.LateUpdate();
 
             target.SetPositionAndRotation(anchor.position, anchor.rotation);
+
+            if (prevPosition != null)
+            {
+                velocity = (transform.position - prevPosition) / Time.deltaTime;
+            }
+            prevPosition = transform.position;
         }
         protected override void OnDestroy()
         {
@@ -95,12 +112,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public IEnumerator MoveToTargetRoutine(Vector3 targetPosition, Quaternion targetRotation, float timeToMove, float liftHeight)
+        public IEnumerator MoveToTargetRoutine(Vector3 targetPosition, Quaternion targetRotation)
         {
             IsMovingToTarget = true;
 
-            Vector3 initialPosition = anchor.position;
-            Quaternion initialRotation = anchor.rotation;
+            Vector3 initialPosition = LegConstructor.Extremity.position;
+            Quaternion initialRotation = LegConstructor.Extremity.rotation;
 
             float timeElapsed = 0f, progress = 0f;
             while (progress < 1f)

@@ -17,16 +17,16 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Transform rig;
 
         private bool isAnimated, hasCapturedDefaults;
-        private Vector3 velocity, prevPosition, angularVelocity;
-        private Quaternion prevRotation;
+        private Vector3? velocity, angularVelocity, prevPosition = null;
+        private Quaternion? prevRotation = null;
 
         private Coroutine dropDownCoroutine;
         #endregion
 
         #region Properties
         public Transform Rig => rig;
-        public Vector3 Velocity => velocity;
-        public Vector3 AngularVelocity => angularVelocity;
+        public Vector3 Velocity => (Vector3)velocity;
+        public Vector3 AngularVelocity => (Vector3)angularVelocity;
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
         public Animator Animator { get; private set; }
@@ -71,17 +71,23 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            Vector3 deltaPosition = transform.position - prevPosition;
-            velocity = deltaPosition / Time.fixedDeltaTime;
+            if (prevPosition != null)
+            {
+                Vector3 deltaPosition = transform.position - (Vector3)prevPosition;
+                velocity = deltaPosition / Time.fixedDeltaTime;
+                Animator.SetFloat("Speed", Velocity.magnitude);
+            }
             prevPosition = transform.position;
-            Animator.SetFloat("Speed", velocity.magnitude);
 
-            Quaternion deltaRotation = CreatureConstructor.Body.localRotation * Quaternion.Inverse(prevRotation);
-            deltaRotation.ToAngleAxis(out float angle, out var axis);
-            angularVelocity = (angle / Time.fixedDeltaTime) * axis;
+            if (prevRotation != null)
+            {
+                Quaternion deltaRotation = CreatureConstructor.Body.localRotation * Quaternion.Inverse((Quaternion)prevRotation);
+                deltaRotation.ToAngleAxis(out float angle, out var axis);
+                angularVelocity = (angle / Time.fixedDeltaTime) * axis;
+                Animator.SetFloat("Angular Velocity", AngularVelocity.y);
+                Animator.SetBool("IsTurning", !Mathf.Approximately(AngularVelocity.y, 0f));
+            }
             prevRotation = CreatureConstructor.Body.localRotation;
-            Animator.SetFloat("Angular Velocity", angularVelocity.y);
-            Animator.SetBool("IsTurning", !Mathf.Approximately(angularVelocity.y, 0f));
         }
 
         private void Initialize()
@@ -180,8 +186,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     float maxPExtended = Mathf.NegativeInfinity;
                     foreach (LegAnimator leg in RLegs) // Unnecessary to loop through both left and right legs
                     {
-                        float length = Vector3.Distance(leg.transform.position, leg.LegConstructor.Extremity.position);
-                        float pExtended = length / leg.Length;
+                        float pExtended = leg.Length / leg.MaxLength;
 
                         if (pExtended > maxPExtended)
                         {
@@ -192,7 +197,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (maxPExtended > 0.9f)
                     {
-                        float targetLength = 0.9f * mostExtendedLeg.Length;
+                        float targetLength = 0.9f * mostExtendedLeg.MaxLength;
 
                         float a = CreatureConstructor.ToBodySpace(mostExtendedLeg.LegConstructor.Extremity.position).x;
                         float c = targetLength;

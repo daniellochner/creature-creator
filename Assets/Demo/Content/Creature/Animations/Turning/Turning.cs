@@ -28,6 +28,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         protected void HandleLeg(LegAnimator leg)
         {
+            //float dot = Vector3.Dot(leg.Anchor.forward, m_MonoBehaviour.CreatureConstructor.Body.forward);
+            //if (dot < 0.75f)
+            //{
+            //    return true;
+            //}
+
+
             //if (Vector3.Dot(leg.Anchor.forward, leg.LegConstructor.Extremity.forward) < turnThreshold && !leg.FlippedLeg.IsMovingToTarget)
             //{
             //    Vector3 position = m_MonoBehaviour.CreatureConstructor.Body.TransformPoint(leg.DefaultFootPosition);
