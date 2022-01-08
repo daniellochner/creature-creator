@@ -35,5 +35,22 @@ namespace DanielLochner.Assets
                 transform.localScale = new Vector3(x, y, z);
             }
         }
+
+        public static Vector3 L2WSpace(this Transform transform, Vector3 position)
+        {
+            return transform.TransformPoint(position);
+        }
+        public static Vector3 W2LSpace(this Transform transform, Vector3 position)
+        {
+            return transform.InverseTransformPoint(position);
+        }
+        public static Quaternion L2WSpace(this Transform transform, Quaternion rotation)
+        {
+            return transform.rotation * rotation;
+        }
+        public static Quaternion W2LSpace(this Transform transform, Quaternion rotation)
+        {
+            return Quaternion.Inverse(transform.rotation) * rotation;
+        }
     }
 }
