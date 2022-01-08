@@ -22,11 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Initialize();
         }
 
-        private void Initialize()
+        protected virtual void Initialize()
         {
             BodyPartConstructor = GetComponent<BodyPartConstructor>();
         }
-
         public virtual void Setup(CreatureAnimator creatureAnimator)
         {
             CreatureAnimator = creatureAnimator;

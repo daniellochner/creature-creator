@@ -107,6 +107,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3002746977395476858, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
   m_PrefabInstance: {fileID: 2596882310839369190}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &982379299394450591 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3002746977395476857, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+  m_PrefabInstance: {fileID: 2596882310839369190}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &982379299394450579 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
@@ -243,9 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rig: {fileID: 1971731999}
-  liftHeight: 0.2
-  moveThreshold: 0.5
-  timeToMove: 0.2
+  extensionThreshold: 0.9
 --- !u!114 &1640302634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +289,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4154505160006543205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneShape: 1
+  drawBones: 1
+  drawTripods: 0
+  boneSize: 1
+  tripodSize: 1
+  boneColor: {r: 0, g: 0, b: 1, a: 0.5}
+  m_Transforms: []
 --- !u!114 &8494628076202705300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +321,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+--- !u!114 &7822822624893297552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70812401d0c2d04aae196f776a16d36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useThisTransform: 1
+  source: {fileID: 982379299394450591}
+  sourcePosition: {fileID: 982379299394450591}
+  sourceRotation: {fileID: 982379299394450591}
 --- !u!114 &7696278918816451154
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,24 +15,25 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CameraOrbit cameraOrbit;
         [SerializeField] private GameObject targetPrefab;
 
-        [Header("Settings")]
+        [Header("Physical")]
+        [SerializeField] private bool requestToMove;
         [SerializeField] private float movementSpeed;
+        [SerializeField] private float rotationSpeed;
         [SerializeField] private float movementSmoothing;
         [SerializeField] private float angleToMove;
         [SerializeField] private float contactDistance;
         [SerializeField] private float stoppingDistance;
         [SerializeField] private float thresholdWalkSpeed;
-        [Space]
+        
+        [Header("Non-Physical")]
         [SerializeField] private float positionSmoothing;
         [SerializeField] private float rotationSmoothing;
-        [Space]
-        [SerializeField] private bool requestToMove;
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private Vector3 velocity;
 
         private Camera mainCamera;
-        private Animator animator;
+        private Animator targetAnimator;
         private CapsuleCollider capsuleCollider;
         private GameObject targetGO;
         private Rigidbody rb;
@@ -181,7 +182,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         if (Input.GetMouseButtonDown(1) || targetGO == null)
                         {
                             targetGO = Instantiate(targetPrefab, position, rotation, Dynamic.WorldCanvas);
-                            animator = targetGO.GetComponent<Animator>();
+                            targetAnimator = targetGO.GetComponent<Animator>();
                         }
 
                         targetGO.transform.SetPositionAndRotation(position, rotation);
@@ -198,9 +199,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     #endregion
             }
 
-            if (animator != null)
+            if (targetAnimator != null)
             {
-                animator.SetBool("IsHolding", pInput && !kInput);
+                targetAnimator.SetBool("IsHolding", pInput && !kInput);
             }
 
             if (direction != Vector3.zero)
@@ -216,10 +217,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandlePhysicalMovement()
         {
-            rb.MovePosition(rb.position + moveDisplacement * movementSpeed * Time.deltaTime);
+            rb.MovePosition(rb.position + moveDisplacement * Time.deltaTime);
             isGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
-
-            CreatureAnimator.Animator.SetBool("IsWalking", IsGrounded && moveDisplacement.magnitude > thresholdWalkSpeed);
         }
         private void HandleNonPhysicalMovement()
         {
@@ -255,7 +254,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Rotate(Quaternion rotation)
         {
-            CreatureConstructor.Body.rotation = Quaternion.Slerp(CreatureConstructor.Body.rotation, rotation, Time.deltaTime * rotationSmoothing);
+            CreatureConstructor.Body.rotation = Quaternion.RotateTowards(CreatureConstructor.Body.rotation, rotation, Time.deltaTime * rotationSpeed);
         }
 
         public void SetTargetPosition(Vector3 position)

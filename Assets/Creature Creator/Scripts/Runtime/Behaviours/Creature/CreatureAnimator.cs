@@ -8,31 +8,32 @@ using UnityEngine.Animations.Rigging;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    /// <summary>
+    /// Provides useful interface for creature animations.
+    /// </summary>
     [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
         [Header("Setup")]
         [SerializeField] private Transform rig;
+        [SerializeField] private float extensionThreshold = 0.9f;
 
         private bool isAnimated, hasCapturedDefaults;
-        private Vector3? velocity, angularVelocity, prevPosition = null;
-        private Quaternion? prevRotation = null;
-
-        private Coroutine dropDownCoroutine;
+        private Coroutine moveBodyCoroutine;
         #endregion
 
         #region Properties
         public Transform Rig => rig;
-        public Vector3 Velocity => (Vector3)velocity;
-        public Vector3 AngularVelocity => (Vector3)angularVelocity;
 
-        public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
         public Animator Animator { get; private set; }
         public RigBuilder RigBuilder { get; private set; }
-
+        public KinematicVelocity Velocity { get; private set; }
         public CreatureConstructor CreatureConstructor { get; private set; }
+
+        public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
 
         public LimbAnimator[] Limbs { get; private set; }
         public LegAnimator[] Legs { get; private set; }
@@ -46,21 +47,19 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 isAnimated = value;
 
-                if (isAnimated)
-                {
-                    InitializeLimbs();
-                }
+                if (isAnimated) InitializeLimbs();
 
+                RestoreDefaults(isAnimated);
                 Restructure(isAnimated);
-                CaptureAndRestoreDefaults(isAnimated);
                 Reposition(isAnimated);
 
-                if (isAnimated)
-                {
-                    Rebuild();
-                }
+                if (isAnimated) Rebuild();
                 Animator.enabled = isAnimated; // Comment out to temporarily disable creature animations!
             }
+        }
+        public bool IsMovingBody
+        {
+            get; private set;
         }
         #endregion
 
@@ -71,23 +70,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            if (prevPosition != null)
-            {
-                Vector3 deltaPosition = transform.position - (Vector3)prevPosition;
-                velocity = deltaPosition / Time.fixedDeltaTime;
-                Animator.SetFloat("Speed", Velocity.magnitude);
-            }
-            prevPosition = transform.position;
-
-            if (prevRotation != null)
-            {
-                Quaternion deltaRotation = CreatureConstructor.Body.localRotation * Quaternion.Inverse((Quaternion)prevRotation);
-                deltaRotation.ToAngleAxis(out float angle, out var axis);
-                angularVelocity = (angle / Time.fixedDeltaTime) * axis;
-                Animator.SetFloat("Angular Velocity", AngularVelocity.y);
-                Animator.SetBool("IsTurning", !Mathf.Approximately(AngularVelocity.y, 0f));
-            }
-            prevRotation = CreatureConstructor.Body.localRotation;
+            Animator.SetFloat("Speed", new Vector3(Velocity.Linear.x, 0f, Velocity.Linear.z).magnitude);
+            Animator.SetFloat("Angular Speed", Mathf.Abs(Velocity.Angular.y));
         }
 
         private void Initialize()
@@ -95,15 +79,45 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator = GetComponent<Animator>();
             RigBuilder = GetComponent<RigBuilder>();
             CreatureConstructor = GetComponent<CreatureConstructor>();
+            Velocity = GetComponent<KinematicVelocity>();
 
             Rebuild();
+        }
+        private void InitializeLimbs()
+        {
+            Limbs = GetComponentsInChildren<LimbAnimator>();
+
+            List<LegAnimator> legs = new List<LegAnimator>(GetComponentsInChildren<LegAnimator>());
+            legs.Sort((legA, legB) =>
+            {
+                float posA = legA.LimbConstructor.CreatureConstructor.Body.W2LSpace(legA.transform.position).z;
+                float posB = legB.LimbConstructor.CreatureConstructor.Body.W2LSpace(legB.transform.position).z;
+
+                return posB.CompareTo(posA);
+            });
+            Legs = legs.ToArray();
+
+            LLegs = new LegAnimator[Legs.Length / 2];
+            RLegs = new LegAnimator[Legs.Length / 2];
+            int li = 0, ri = 0;
+            foreach (LegAnimator leg in Legs)
+            {
+                if (leg.transform.localPosition.x < 0)
+                {
+                    LLegs[li++] = leg;
+                }
+                else
+                {
+                    RLegs[ri++] = leg;
+                }
+            }
         }
 
         public void Setup()
         {
             SetupConstruction();
         }
-        private void SetupConstruction()
+        public void SetupConstruction()
         {
             CreatureConstructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
             {
@@ -124,6 +138,29 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
+        public void RestoreDefaults(bool isAnimated)
+        {
+            if (isAnimated)
+            {
+                DefaultHeight = CreatureConstructor.Body.localPosition.y;
+                hasCapturedDefaults = true;
+            }
+            else if (hasCapturedDefaults)
+            {
+                if (moveBodyCoroutine != null)
+                {
+                    StopCoroutine(moveBodyCoroutine);
+                    IsMovingBody = false;
+                }
+                CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
+                hasCapturedDefaults = false;
+            }
+
+            foreach (LimbAnimator limb in Limbs)
+            {
+                limb.RestoreDefaults(isAnimated);
+            }
+        }
         public void Restructure(bool isAnimated)
         {
             if (isAnimated)
@@ -160,57 +197,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 limb.Restructure(isAnimated);
             }
         }
-        public void CaptureAndRestoreDefaults(bool isAnimated)
-        {
-            if (isAnimated)
-            {
-                CaptureDefaults();
-            }
-            else if (hasCapturedDefaults)
-            {
-                RestoreDefaults();
-            }
-
-            foreach (LimbAnimator limb in Limbs)
-            {
-                limb.Reposition(isAnimated);
-            }
-        }
         public void Reposition(bool isAnimated)
         {
             if (isAnimated)
             {
-                if (Legs.Length > 0) // Creatures with legs should slump down (to allow for slack while walking)
-                {
-                    LegAnimator mostExtendedLeg = null;
-                    float maxPExtended = Mathf.NegativeInfinity;
-                    foreach (LegAnimator leg in RLegs) // Unnecessary to loop through both left and right legs
-                    {
-                        float pExtended = leg.Length / leg.MaxLength;
-
-                        if (pExtended > maxPExtended)
-                        {
-                            maxPExtended = pExtended;
-                            mostExtendedLeg = leg;
-                        }
-                    }
-
-                    if (maxPExtended > 0.9f)
-                    {
-                        float targetLength = 0.9f * mostExtendedLeg.MaxLength;
-
-                        float a = CreatureConstructor.ToBodySpace(mostExtendedLeg.LegConstructor.Extremity.position).x;
-                        float c = targetLength;
-                        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2)); // Pythagorean theorem
-
-                        float currentHeight = CreatureConstructor.transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
-                        float o = currentHeight - b;
-
-                        Vector3 offset = CreatureConstructor.Body.localPosition - Vector3.up * o;
-                        dropDownCoroutine = StartCoroutine(DropDownRoutine(offset, EasingFunction.EaseOutExpo, 1f));
-                    }
-                }
-                else // Creatures without legs should fall down to the ground
+                if (Legs.Length == 0) // Creatures without legs should fall down to the ground.
                 {
                     Mesh bodyMesh = new Mesh();
                     CreatureConstructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
@@ -225,8 +216,42 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     Vector3 offset = Vector3.up * Mathf.Abs(minY);
-                    dropDownCoroutine = StartCoroutine(DropDownRoutine(offset, EasingFunction.EaseOutBounce, 1f));
+                    moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutBounce));
                 }
+                //else // Creatures with legs should slump down (to effectively "put weight" on their legs).
+                //{
+                //    // Determine the most extended leg and record its percentage extended.
+                //    // If too extended (i.e., exceeds extension threshold), slump body down by an offset:
+                //    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
+
+                //    LegAnimator mostExtendedLeg = null;
+                //    float maxLegExtension = Mathf.NegativeInfinity;
+                //    foreach (LegAnimator leg in RLegs) // Unnecessary to loop through both left and right legs.
+                //    {
+                //        float legExtension = leg.Length / leg.MaxLength;
+                //        if (legExtension > maxLegExtension)
+                //        {
+                //            maxLegExtension = legExtension;
+                //            mostExtendedLeg = leg;
+                //        }
+                //    }
+
+                //    float targetHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
+                //    if (maxLegExtension > extensionThreshold)
+                //    {
+                //        float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
+
+                //        float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
+                //        float c = targetLength;
+                //        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
+
+                //        float currentHeight = targetHeight;
+                //        targetHeight = b;
+
+                //        Vector3 offset = CreatureConstructor.Body.localPosition + Vector3.up * (targetHeight - currentHeight);
+                //        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
+                //    }
+                //}
             }
         }
         public void Rebuild()
@@ -236,68 +261,21 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
         }
-
-        private void CaptureDefaults()
+        
+        private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)
         {
-            DefaultHeight = CreatureConstructor.Body.localPosition.y;
-            hasCapturedDefaults = true;
-        }
-        private void RestoreDefaults()
-        {
-            if (dropDownCoroutine != null)
-            {
-                StopCoroutine(dropDownCoroutine);
-            }
-            CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
-            CreatureConstructor.Root.localPosition = Vector3.zero;
-            hasCapturedDefaults = false;
-        }
-        private void InitializeLimbs()
-        {
-            Limbs = GetComponentsInChildren<LimbAnimator>();
+            IsMovingBody = true;
 
-            List<LegAnimator> legs = new List<LegAnimator>(GetComponentsInChildren<LegAnimator>());
-            legs.Sort((legA, legB) =>
-            {
-                float posA = legA.LimbConstructor.CreatureConstructor.ToBodySpace(legA.transform.position).z;
-                float posB = legB.LimbConstructor.CreatureConstructor.ToBodySpace(legB.transform.position).z;
-
-                return posB.CompareTo(posA);
-            });
-            Legs = legs.ToArray();
-            
-            LLegs = new LegAnimator[Legs.Length / 2];
-            RLegs = new LegAnimator[Legs.Length / 2];
-            int li = 0, ri = 0;
-            foreach (LegAnimator leg in Legs)
-            {
-                if (leg.transform.localPosition.x < 0)
-                {
-                    LLegs[li++] = leg;
-                }
-                else
-                {
-                    RLegs[ri++] = leg;
-                }
-            }
-        }
-
-        private IEnumerator DropDownRoutine(Vector3 dropPosition, EasingFunction.Function easingFunction, float timeToMove)
-        {
             Vector3 initialPosition = CreatureConstructor.Body.localPosition;
-
-            float timeElapsed = 0f, progress = 0f;
-            while (progress < 1f)
+            yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
             {
-                timeElapsed += Time.deltaTime;
-                progress = timeElapsed / timeToMove;
-
-                float t = easingFunction(1f, 0f, progress);
-                Vector3 position = Vector3.Lerp(initialPosition, dropPosition, 1f - t);
+                float t = 1f - easingFunction(1f, 0f, progress);
+                Vector3 position = Vector3.Lerp(initialPosition, targetPosition, t);
                 CreatureConstructor.Body.localPosition = position;
+            }, 
+            timeToMove);
 
-                yield return null;
-            }
+            IsMovingBody = false;
         }
         #endregion
     }
