@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool unlockAllPatterns;
         [SerializeField] private SecretKey creatureEncryptionKey;
         [SerializeField] private bool setupOnStart;
+        [SerializeField] private int startingCash = 1000;
 
         [Header("General")]
         [SerializeField] private Player player;
@@ -128,6 +129,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => player;
             set => player = value;
+        }
+        public int BaseCash
+        {
+            get => startingCash;
+            set => startingCash = value;
         }
         #endregion
 
@@ -294,16 +300,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Player
             CreatureInformationManager.Instance.Respawn();
+            player.Creature.Constructor.Recenter();
             player.Creature.Constructor.UpdateConfiguration();
             player.Creature.Mover.SetTargetPosition(player.Creature.transform.position);
             player.Creature.Mover.IsMovable = true;
             player.Creature.Constructor.IsTextured = true;
-            player.Creature.Constructor.Recenter();
             player.Creature.Editor.IsInteractable = false;
             player.Creature.Editor.IsEditing = false;
             player.Creature.Editor.IsDraggable = false;
             player.Creature.Editor.UseTemporaryOutline = false;
             player.Creature.Editor.Deselect();
+            player.Creature.Animator.Velocity.Reset();
             player.Creature.Animator.IsAnimated = true;
             player.Creature.Energy.DepleteEnergy = true;
 
@@ -544,7 +551,7 @@ namespace DanielLochner.Assets.CreatureCreator
             totalComplexity += creatureData.Bones.Count;
 
             bool creatureIsTooComplicated = totalComplexity > player.Creature.Constructor.MaxComplexity;
-            bool creatureIsTooExpensive = totalCost > player.Creature.Editor.StartingCash;
+            bool creatureIsTooExpensive = totalCost > BaseCash;
 
             // Error Message
             List<string> errors = new List<string>();
@@ -554,7 +561,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             if (creatureIsTooExpensive)
             {
-                errors.Add($"is too expensive. ({totalCost}/{player.Creature.Editor.StartingCash})");
+                errors.Add($"is too expensive. ({totalCost}/{BaseCash})");
             }
             if (!patternIsUnlocked)
             {

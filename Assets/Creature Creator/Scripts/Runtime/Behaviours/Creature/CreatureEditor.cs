@@ -21,7 +21,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioClip resizeAudioClip;
 
         [Header("Settings")]
-        [SerializeField] private int startingCash = 1000;
         [SerializeField] private float addOrRemoveCooldown = 0.05f;
         [SerializeField] private int angleLimit = 30;
 
@@ -46,7 +45,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CameraOrbit CameraOrbit => cameraOrbit;
-        public int StartingCash => startingCash;
         public float AddOrRemoveCooldown => addOrRemoveCooldown;
         public AudioClip StretchAudioClip => stretchAudioClip;
         public AudioClip ResizeAudioClip => resizeAudioClip;
@@ -190,7 +188,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureConstructor = GetComponent<CreatureConstructor>();
             CreatureMover = GetComponent<CreatureMover>();
 
-            Cash = StartingCash;
+            Cash = EditorManager.Instance.BaseCash;
         }
 
         public void Setup()
@@ -553,7 +551,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor.Demolish();
 
-            Cash = StartingCash;
+            Cash = EditorManager.Instance.BaseCash;
             if (creatureData != null)
             {
                 CreatureConstructor.Construct(creatureData);
