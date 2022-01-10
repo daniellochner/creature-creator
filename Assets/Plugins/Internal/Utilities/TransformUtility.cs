@@ -36,6 +36,15 @@ namespace DanielLochner.Assets
             }
         }
 
+        public static void LerpTo(this Transform transform, Vector3 position, float smoothing)
+        {
+            transform.position = Vector3.Lerp(transform.position, position, Time.deltaTime * smoothing);
+        }
+        public static void SlerpTo(this Transform transform, Quaternion rotation, float smoothing)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * smoothing);
+        }
+
         public static Vector3 L2WSpace(this Transform transform, Vector3 position)
         {
             return transform.TransformPoint(position);
