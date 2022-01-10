@@ -20,8 +20,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Setup")]
         [SerializeField] private Transform rig;
         [SerializeField] private float extensionThreshold = 0.9f;
+        [SerializeField] private float baseMovementSpeed = 0.8f;
+        [SerializeField] private float baseTurnSpeed = 120;
+        [SerializeField] private float contactDistance = 0.01f;
 
-        private bool isAnimated, hasCapturedDefaults;
+        private bool isAnimated, isGrounded, hasCapturedDefaults;
         private Coroutine moveBodyCoroutine;
         #endregion
 
@@ -40,6 +43,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public LegAnimator[] LLegs { get; private set; }
         public LegAnimator[] RLegs { get; private set; }
 
+
+        public bool IsGrounded
+        {
+            get => isGrounded;
+        }
         public bool IsAnimated
         {
             get => isAnimated;
@@ -47,13 +55,20 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 isAnimated = value;
 
-                if (isAnimated) InitializeLimbs();
+                if (isAnimated)
+                {
+                    InitializeBodyParts();
+                }
 
                 RestoreDefaults(isAnimated);
                 Restructure(isAnimated);
                 Reposition(isAnimated);
 
-                if (isAnimated) Rebuild();
+                if (isAnimated)
+                {
+                    Rebuild();
+                    Recalculate();
+                }
                 Animator.enabled = isAnimated; // Comment out to temporarily disable creature animations!
             }
         }
@@ -70,8 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            Animator.SetFloat("Speed", new Vector3(Velocity.Linear.x, 0f, Velocity.Linear.z).magnitude);
-            Animator.SetFloat("Angular Speed", Mathf.Abs(Velocity.Angular.y));
+            HandleAnimatorState();
         }
 
         private void Initialize()
@@ -83,7 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Rebuild();
         }
-        private void InitializeLimbs()
+        private void InitializeBodyParts()
         {
             Limbs = GetComponentsInChildren<LimbAnimator>();
 
@@ -134,7 +148,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             CreatureConstructor.OnConstructCreature += delegate
             {
-                InitializeLimbs();
+                InitializeBodyParts();
             };
         }
 
@@ -261,7 +275,25 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
         }
-        
+        public void Recalculate()
+        {
+            int numLegs = Legs.Length;
+            Animator.SetBool("HasLegs", numLegs != 0);
+            int numArms = Limbs.Length - numLegs;
+            Animator.SetBool("HasArms", numArms != 0);
+        }
+
+        private void HandleAnimatorState()
+        {
+            isGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
+            Animator.SetBool("IsGrounded", isGrounded);
+
+            float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
+            float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
+            Animator.SetFloat("%LSpeed", l);
+            Animator.SetFloat("%ASpeed", a);
+        }
+
         private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;

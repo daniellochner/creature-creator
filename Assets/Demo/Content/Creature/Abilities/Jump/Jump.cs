@@ -11,19 +11,21 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Jump")]
         [SerializeField] private float jumpForce;
 
-        private CreatureMover creatureMover;
+        private CreatureAnimator creatureAnimator;
+        private Rigidbody rigidbody;
 
-        public override bool CanPerform => creatureMover.IsGrounded;
+        public override bool CanPerform => creatureAnimator.IsGrounded;
 
         public override void Setup(CreatureAbilities creatureAbilities)
         {
             base.Setup(creatureAbilities);
 
-            creatureMover = creatureAbilities.GetComponent<CreatureMover>();
+            creatureAnimator = creatureAbilities.GetComponent<CreatureAnimator>();
+            rigidbody = creatureAbilities.GetComponent<Rigidbody>();
         }
         public override void OnPerform()
         {
-            creatureMover.GetComponent<Rigidbody>().AddForce(creatureMover.transform.up * jumpForce, ForceMode.Impulse);
+            rigidbody.AddForce(rigidbody.transform.up * jumpForce, ForceMode.Impulse);
         }
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class PickingUp : SceneLinkedSMB<CreatureAnimator>
+    public class Interacting : SceneLinkedSMB<CreatureAnimator>
     {
 
     }

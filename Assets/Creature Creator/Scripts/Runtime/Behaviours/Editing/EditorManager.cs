@@ -273,7 +273,6 @@ namespace DanielLochner.Assets.CreatureCreator
             buildToggle.SetIsOnWithoutNotify(true);
 
             // Player
-            player.Creature.Mover.IsMovable = false;
             player.Creature.Mover.UsePhysicalMovement = false;
             player.Creature.Constructor.IsTextured = false;
             player.Creature.Editor.IsInteractable = true;
@@ -302,8 +301,8 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureInformationManager.Instance.Respawn();
             player.Creature.Constructor.Recenter();
             player.Creature.Constructor.UpdateConfiguration();
-            player.Creature.Mover.SetTargetPosition(player.Creature.transform.position);
-            player.Creature.Mover.IsMovable = true;
+            player.Creature.Mover.TargetPosition = player.Creature.transform.position;
+            player.Creature.Mover.UsePhysicalMovement = true;
             player.Creature.Constructor.IsTextured = true;
             player.Creature.Editor.IsInteractable = false;
             player.Creature.Editor.IsEditing = false;
@@ -329,7 +328,6 @@ namespace DanielLochner.Assets.CreatureCreator
             paintToggle.SetIsOnWithoutNotify(true);
 
             // Player
-            player.Creature.Mover.IsMovable = false;
             player.Creature.Mover.UsePhysicalMovement = false;
             player.Creature.Constructor.IsTextured = true;
             player.Creature.Editor.IsInteractable = true;
@@ -1040,7 +1038,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             // Record current state.
             float yRotation = player.Creature.Constructor.Body.localEulerAngles.y;
-            bool isMovable = player.Creature.Mover.IsMovable;
+            bool isMovable = player.Creature.Mover.UsePhysicalMovement;
             bool isAnimated = player.Creature.Animator.IsAnimated;
 
             // Reset to default state.
@@ -1058,7 +1056,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Constructor.Body.localRotation = Quaternion.Euler(0, yRotation, 0);
             player.Creature.Constructor.IsTextured = player.Creature.Constructor.IsTextured;
             player.Creature.Editor.IsEditing = player.Creature.Editor.IsEditing;
-            player.Creature.Mover.IsMovable = isMovable;
+            player.Creature.Mover.UsePhysicalMovement = isMovable;
             player.Creature.Animator.IsAnimated = isAnimated;
         }
 

@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureConstructor), typeof(CreatureAnimator))]
+    [RequireComponent(typeof(CreatureAnimator))]
+    [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureMover : MonoBehaviour
     {
         #region Fields
@@ -17,12 +18,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Physical")]
         [SerializeField] private bool requestToMove;
-        [SerializeField] private float movementSpeed;
-        [SerializeField] private float rotationSpeed;
-        [SerializeField] private float movementSmoothing;
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private float turnSpeed;
+        [SerializeField] private float moveSmoothTime;
+        [SerializeField] private float turnSmoothTime;
         [SerializeField] private float angleToMove;
-        [SerializeField] private float contactDistance;
-        [SerializeField] private float stoppingDistance;
         [SerializeField] private float thresholdWalkSpeed;
         
         [Header("Non-Physical")]
@@ -31,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private Vector3 velocity;
+        [SerializeField, ReadOnly] private Vector3 angularVelocity;
 
         private Camera mainCamera;
         private Animator targetAnimator;
@@ -38,9 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private GameObject targetGO;
         private Rigidbody rb;
 
-        private bool isMovable, isGrounded, usePhysicalMovement;
-        private int flapCount;
-        private Vector3 moveDisplacement, targetPosition, keyboardForward, keyboardRight, previousPosition;
+        private bool usePhysicalMovement;
+        private Vector3 keyboardForward, keyboardRight, moveDisplacement;
         private InputMode inputMode;
         #endregion
 
@@ -51,37 +51,26 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAnimator CreatureAnimator { get; private set; }
         public Transform Platform { get; set; }
 
+        public Vector3 TargetPosition { get; set; }
+
         public Action<Vector3> OnMoveRequest { get; set; }
-        public Action<Quaternion> OnRotateRequest { get; set; }
+        public Action<float> OnTurnRequest { get; set; }
 
-        public bool IsGrounded
-        {
-            get => isGrounded;
-        }
-        public bool IsMovable
-        {
-            get => isMovable;
-            set
-            {
-                isMovable = value;
-
-                // Physics
-                foreach (Transform bone in CreatureConstructor.Bones)
-                {
-                    bone.GetComponent<Rigidbody>().isKinematic = isMovable;
-                }
-                rb.constraints = isMovable ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
-            }
-        }
         public bool UsePhysicalMovement
         {
             get => usePhysicalMovement;
             set
             {
                 usePhysicalMovement = value;
+
                 cameraFollower.useFixedUpdate = usePhysicalMovement; // Used to fix camera jittering issue.
 
-                moveDisplacement = Vector3.zero;
+                // Physics
+                foreach (Transform bone in CreatureConstructor.Bones)
+                {
+                    bone.GetComponent<Rigidbody>().isKinematic = usePhysicalMovement;
+                }
+                rb.constraints = usePhysicalMovement ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
             }
         }
         #endregion
@@ -90,13 +79,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Initialize();
-        }
-        private void Update()
-        {
-            if (IsMovable)
-            {
-                HandleInput();
-            }
         }
         private void FixedUpdate()
         {
@@ -107,7 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void LateUpdate()
         {
-            if (!UsePhysicalMovement && !IsMovable)
+            if (!UsePhysicalMovement)
             {
                 HandleNonPhysicalMovement();
             }
@@ -125,30 +107,25 @@ namespace DanielLochner.Assets.CreatureCreator
             Platform = transform;
         }
 
-        private void HandleInput()
+        private void HandlePhysicalMovement()
         {
             bool kInput = Input.GetButton("Vertical") || Input.GetButton("Horizontal");
             bool pInput = Input.GetMouseButton(1);
-
-            if ((kInput || pInput) && !UsePhysicalMovement)
-            {
-                UsePhysicalMovement = true;
-            }
 
             bool setK = kInput || (!pInput && inputMode == InputMode.Keyboard);
             bool setP = pInput || (!kInput && inputMode == InputMode.Pointer);
 
             if (setK)
             {
-                SetInputMode(InputMode.Keyboard);
+                inputMode = InputMode.Keyboard;
             }
             else if (setP)
             {
-                SetInputMode(InputMode.Pointer);
+                inputMode = InputMode.Pointer;
             }
 
             Vector3 direction = Vector3.zero;
-            bool canRotate = false, canMove = false;
+            bool canTurn = false, canMove = false;
 
             switch (inputMode)
             {
@@ -165,7 +142,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 horizontal = keyboardRight * Input.GetAxisRaw("Horizontal");
 
                     direction = (vertical + horizontal).normalized;
-                    canRotate = true;
+                    canTurn = true;
                     canMove = kInput && !Input.GetKey(KeyCode.LeftControl);
 
                     break;
@@ -186,14 +163,14 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
 
                         targetGO.transform.SetPositionAndRotation(position, rotation);
-                        SetTargetPosition(position);
+                        TargetPosition = position;
                     }
 
-                    Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
+                    Vector3 displacement = Vector3.ProjectOnPlane(TargetPosition - transform.position, transform.up);
 
                     direction = displacement.normalized;
-                    canRotate = displacement.magnitude > stoppingDistance;
-                    canMove = canRotate;
+                    canTurn = displacement.magnitude > moveSpeed * moveSmoothTime;
+                    canMove = canTurn;
 
                     break;
                     #endregion
@@ -206,24 +183,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (direction != Vector3.zero)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction, transform.up);
-                if (canRotate)
+                float angle = Vector3.SignedAngle(transform.forward, direction, transform.up);
+                if (canTurn)
                 {
-                    RequestRotate(targetRotation);
+                    RequestTurn(angle);
                 }
-                canMove &= Quaternion.Angle(CreatureConstructor.Body.rotation, targetRotation) < angleToMove;
+                canMove &= Vector3.Angle(CreatureConstructor.Body.forward, direction) < angleToMove;
             }
             RequestMove(canMove ? direction : Vector3.zero);
         }
-        private void HandlePhysicalMovement()
-        {
-            rb.MovePosition(rb.position + moveDisplacement * Time.deltaTime);
-            isGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
-        }
         private void HandleNonPhysicalMovement()
         {
-            transform.position = Vector3.Lerp(transform.position, Platform.transform.position, Time.deltaTime * positionSmoothing);
-            CreatureConstructor.Body.rotation = Quaternion.Slerp(CreatureConstructor.Body.rotation, transform.rotation, Time.deltaTime * rotationSmoothing);
+            transform.LerpTo(Platform.transform.position, positionSmoothing);
+            CreatureConstructor.Body.SlerpTo(transform.rotation, rotationSmoothing);
         }
 
         public void RequestMove(Vector3 direction)
@@ -237,33 +209,27 @@ namespace DanielLochner.Assets.CreatureCreator
                 Move(direction);
             }
         }
-        public void RequestRotate(Quaternion rotation)
+        public void RequestTurn(float angle)
         {
             if (requestToMove)
             {
-                OnRotateRequest?.Invoke(rotation);
+                OnTurnRequest?.Invoke(angle);
             }
             else
             {
-                Rotate(rotation);
+                Turn(angle);
             }
         }
         public void Move(Vector3 direction)
         {
-            moveDisplacement = Vector3.SmoothDamp(moveDisplacement, direction * movementSpeed, ref velocity, movementSmoothing);
+            Vector3 displacement = direction * moveSpeed * Time.fixedDeltaTime;
+            moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
+            transform.position += moveDisplacement;
         }
-        public void Rotate(Quaternion rotation)
+        public void Turn(float angle)
         {
-            CreatureConstructor.Body.rotation = Quaternion.RotateTowards(CreatureConstructor.Body.rotation, rotation, Time.deltaTime * rotationSpeed);
-        }
-
-        public void SetTargetPosition(Vector3 position)
-        {
-            targetPosition = position;
-        }
-        public void SetInputMode(InputMode mode)
-        {
-            inputMode = mode;
+            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
+            CreatureConstructor.Body.localRotation = QuaternionUtility.SmoothDamp(CreatureConstructor.Body.localRotation, rotation, ref angularVelocity, turnSmoothTime, turnSpeed, Time.fixedDeltaTime);
         }
         #endregion
 

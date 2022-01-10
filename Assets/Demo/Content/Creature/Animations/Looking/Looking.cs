@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class LookingAt : SceneLinkedSMB<CreatureAnimator>
+    public class Looking : SceneLinkedSMB<CreatureAnimator>
     {
     }
 }

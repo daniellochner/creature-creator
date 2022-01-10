@@ -54,7 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (player.Creature.Mover.RequestToMove)
                 {
-                    player.Creature.Mover.OnRotateRequest += RequestToRotate;
+                    player.Creature.Mover.OnTurnRequest += RequestToTurn;
                     player.Creature.Mover.OnMoveRequest += RequestToMove;
                 }
             }
@@ -173,20 +173,20 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Rotate
+        #region Turn
         [ServerRpc]
-        private void RequestToRotateServerRpc(Quaternion rotation, ulong clientId)
+        private void RequestToTurnServerRpc(float angle, ulong clientId)
         {
-            RequestToRotateClientRpc(rotation, NetworkUtils.SendTo(clientId));
+            RequestToTurnClientRpc(angle, NetworkUtils.SendTo(clientId));
         }
         [ClientRpc]
-        private void RequestToRotateClientRpc(Quaternion rotation, ClientRpcParams clientRpcParams)
+        private void RequestToTurnClientRpc(float angle, ClientRpcParams clientRpcParams)
         {
-            player.Creature.Mover.Rotate(rotation);
+            player.Creature.Mover.Turn(angle);
         }
-        private void RequestToRotate(Quaternion rotation)
+        private void RequestToTurn(float angle)
         {
-            RequestToRotateServerRpc(rotation, OwnerClientId);
+            RequestToTurnServerRpc(angle, OwnerClientId);
         }
         #endregion
 
