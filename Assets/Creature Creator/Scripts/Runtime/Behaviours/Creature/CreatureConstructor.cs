@@ -73,11 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public List<Transform> Bones { get; set; } = new List<Transform>();
         public List<BodyPartConstructor> BodyParts { get; set; } = new List<BodyPartConstructor>();
-
         public List<LimbConstructor> Limbs { get; set; } = new List<LimbConstructor>();
-        public List<ArmConstructor> Arms { get; set; } = new List<ArmConstructor>();
-        public List<LegConstructor> Legs { get; set; } = new List<LegConstructor>();
-        public List<MouthConstructor> Mouths { get; set; } = new List<MouthConstructor>();
 
         public bool IsTextured
         {
@@ -138,8 +134,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 RemoveBodyPart(BodyParts[0]);
             }
-            BodyParts.Clear();
-
             Root.DestroyChildren();
             Bones.Clear();
 
@@ -379,10 +373,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (CanAddBone(index))
             {
                 // Detach body parts
-                foreach (BodyPartConstructor bpc in BodyParts)
-                {
-                    bpc.transform.parent = bpc.Flipped.transform.parent = Dynamic.Transform;
-                }
+                DetachBodyParts();
 
                 // Add bone
                 Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
@@ -401,10 +392,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ConstructBody();
 
                 // Reattach body parts
-                foreach (BodyPartConstructor bpc in BodyParts)
-                {
-                    bpc.transform.parent = bpc.Flipped.transform.parent = Bones[bpc.NearestBone];
-                }
+                ReattachBodyParts();
             }
         }
         public void AddBoneToFront()
@@ -439,10 +427,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (CanRemoveBone(index))
             {
                 // Detach body parts
-                foreach (BodyPartConstructor bpc in BodyParts)
-                {
-                    bpc.transform.parent = bpc.Flipped.transform.parent = Dynamic.Transform;
-                }
+                DetachBodyParts();
 
                 // Remove bone
                 OnPreRemoveBone?.Invoke(index);
@@ -458,10 +443,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ConstructBody();
 
                 // Reattach body parts
-                foreach (BodyPartConstructor bpc in BodyParts)
-                {
-                    bpc.transform.parent = bpc.Flipped.transform.parent = Bones[bpc.NearestBone];
-                }
+                ReattachBodyParts();
             }
         }
         public void RemoveBoneFromFront()
@@ -478,6 +460,20 @@ namespace DanielLochner.Assets.CreatureCreator
             bool noAttachedLimbs = Bones[index].GetComponentsInChildren<BodyPartConstructor>().Length == 0;
 
             return noAttachedLimbs && !tooFewBones;
+        }
+        private void DetachBodyParts()
+        {
+            foreach (BodyPartConstructor bodyPart in BodyParts)
+            {
+                bodyPart.transform.parent = bodyPart.Flipped.transform.parent = Dynamic.Transform;
+            }
+        }
+        private void ReattachBodyParts()
+        {
+            foreach (BodyPartConstructor bodyPart in BodyParts)
+            {
+                bodyPart.transform.parent = bodyPart.Flipped.transform.parent = Bones[bodyPart.NearestBone];
+            }
         }
 
         public float GetWeight(int index)
@@ -600,9 +596,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateAttachedBodyPartConfiguration()
         {
-            foreach (BodyPartConstructor bpc in BodyParts)
+            foreach (BodyPartConstructor bodyPart in BodyParts)
             {
-                bpc.UpdateAttachmentConfiguration();
+                bodyPart.UpdateAttachmentConfiguration();
             }
         }
         public void UpdateOrigin()
