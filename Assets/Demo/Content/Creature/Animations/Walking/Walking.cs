@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -10,26 +11,27 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Walking : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
-        [SerializeField] private float baseMovementSpeed = 0.8f;
-        [SerializeField] private float baseRotationSpeed = 180f;
-        [SerializeField] private float baseTimeToMove = 0.2f; // shortest legs' time to move
-        [SerializeField] private float bodySmoothing = 4f;
-        [SerializeField] private float maxRoll = 5f;
-        [SerializeField] private float maxPitch = 5f;
-        [SerializeField] private float stepHeight = 0.2f;
-        [SerializeField] private float liftHeight = 0.2f;
-        private float maxHeightOffset = Mathf.Infinity;
+        private float baseMovementSpeed = 0.8f;
+        private float baseRotationSpeed = 120f;
+        private float baseTimeToMove = 0.2f;
+
+        private float bodySmoothing = 2.5f;
+        private float maxRoll = 10f;
+        private float maxPitch = 10f;
+        private float stepHeight = 0.2f;
+        private float liftHeight = 0.2f;
+
+        private LegAnimator[] llegs, rlegs;
+        private LegAnimator mostExtendedLeg;
 
         private int numPairs;
+        private float[] times;
+        private float maxTime;
         private float walkTimeScale = 1f;
-        private LegAnimator mostExtendedLeg;
+        private float timeLeftToMove;
 
         private Coroutine[] movePairs;
         private Coroutine[][] moveFeet;
-
-        private float[] times;
-        private float maxTimeToMove = Mathf.NegativeInfinity;
-        private float timeToMoveLegs;
         #endregion
 
         #region Methods
@@ -37,11 +39,28 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!m_MonoBehaviour.IsAnimated) return;
 
-            LegAnimator[] pairs = m_MonoBehaviour.LLegs;
+            numPairs = m_MonoBehaviour.Legs.Count / 2;
+            movePairs = new Coroutine[numPairs];
+            moveFeet = new Coroutine[numPairs][];
 
-            // Determine the pair of legs with the least maneuverability (i.e., the most extended pair of legs).
+            llegs = new LegAnimator[numPairs];
+            rlegs = new LegAnimator[numPairs];
+            int li = 0, ri = 0;
+            foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+            {
+                if (m_MonoBehaviour.CreatureConstructor.Body.W2LSpace(leg.transform.position).x < 0)
+                {
+                    llegs[li++] = leg;
+                }
+                else
+                {
+                    rlegs[ri++] = leg;
+                }
+            }
+
+            // Determines the pair of legs with the least maneuverability (i.e., the most extended pair of legs).
             float minDistance = Mathf.Infinity;
-            foreach (LegAnimator leg in pairs)
+            foreach (LegAnimator leg in llegs)
             {
                 float distance = leg.MaxDistance;
                 if (distance < minDistance)
@@ -51,35 +70,28 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Determine the number of times the most extended leg should move with respect to each leg.
-            int[] frequencies = new int[pairs.Length];
+            // Determines the number of times the most extended leg should move with respect to each leg.
+            int[] frequencies = new int[numPairs];
             int maxFrequency = int.MinValue;
-            for (int i = 0; i < pairs.Length; ++i)
+            for (int i = 0; i < numPairs; ++i)
             {
-                int frequency = frequencies[i] = Mathf.FloorToInt(pairs[i].MaxDistance / minDistance);
+                int frequency = frequencies[i] = Mathf.FloorToInt(llegs[i].MaxDistance / minDistance);
                 if (frequency > maxFrequency)
                 {
                     maxFrequency = frequency;
                 }
             }
 
-            // Determine the time to move for each leg.
-            maxTimeToMove = maxFrequency * baseTimeToMove;
-            times = new float[pairs.Length];
+            // Determines the time to move for each leg.
+            maxTime = maxFrequency * baseTimeToMove;
+            times = new float[numPairs];
             for (int i = 0; i < times.Length; ++i)
             {
                 float timesInMax = maxFrequency / frequencies[i];
-                times[i] = maxTimeToMove / timesInMax;
+                times[i] = maxTime / timesInMax;
             }
-
-            // TODO: recalculate walk params
-            numPairs = m_MonoBehaviour.Legs.Length / 2;
-
             
-            maxHeightOffset = Mathf.Sqrt(Mathf.Pow(mostExtendedLeg.MaxLength, 2) - Mathf.Pow(mostExtendedLeg.MaxDistance, 2));
-
-            movePairs = new Coroutine[numPairs];
-            moveFeet = new Coroutine[numPairs][];
+            liftHeight = m_MonoBehaviour.DefaultHeight * 0.25f;
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -92,23 +104,23 @@ namespace DanielLochner.Assets.CreatureCreator
 
             m_MonoBehaviour.CreatureConstructor.Root.localRotation = Quaternion.identity;
             m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.zero;
-            timeToMoveLegs = 0f;
+            timeLeftToMove = 0f;
         }
 
         #region Legs
         private void HandleLegs()
         {
-            if (timeToMoveLegs <= 0)
+            if (timeLeftToMove <= 0)
             {
                 for (int i = 0; i < numPairs; ++i)
                 {
                     movePairs[i] = m_MonoBehaviour.StartCoroutine(MovePairRoutine(i));
                 }
-                timeToMoveLegs = 2f * maxTimeToMove;
+                timeLeftToMove = 2f * maxTime;
             }
             else
             {
-                timeToMoveLegs -= Time.deltaTime * walkTimeScale;
+                timeLeftToMove -= Time.deltaTime * walkTimeScale;
             }
 
             float angularSpeed = Mathf.Abs(m_MonoBehaviour.Velocity.Angular.y);
@@ -123,13 +135,13 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator MovePairRoutine(int pair)
         {
             float timeToMove = times[pair];
-            int cycles = (int)(maxTimeToMove / timeToMove);
+            int cycles = (int)(maxTime / timeToMove);
 
             moveFeet[pair] = new Coroutine[2];
             for (int i = 0; i < cycles; ++i)
             {
-                LegAnimator lleg = m_MonoBehaviour.LLegs[pair];
-                LegAnimator rleg = m_MonoBehaviour.RLegs[pair];
+                LegAnimator lleg = llegs[pair];
+                LegAnimator rleg = rlegs[pair];
 
                 LegAnimator leg1 = (pair % 2 == 0) ? lleg : rleg;
                 LegAnimator leg2 = (pair % 2 == 0) ? rleg : lleg;
@@ -163,20 +175,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 Coroutine moveLFoot = moveFeet[i][0];
                 if (moveLFoot != null)
                 {
-                    m_MonoBehaviour.LLegs[i].StopCoroutine(moveLFoot);
+                    llegs[i].StopCoroutine(moveLFoot);
                 }
                 Coroutine moveRFoot = moveFeet[i][1];
                 if (moveRFoot != null)
                 {
-                    m_MonoBehaviour.RLegs[i].StopCoroutine(moveRFoot);
+                    rlegs[i].StopCoroutine(moveRFoot);
                 }
             }
 
             foreach (LegAnimator leg in m_MonoBehaviour.Legs)
             {
-                Vector3 defaultPosition = m_MonoBehaviour.CreatureConstructor.Body.TransformPoint(leg.DefaultFootPosition);
-                Vector3 defaultRotation = m_MonoBehaviour.CreatureConstructor.Body.eulerAngles;
-                leg.StartCoroutine(leg.MoveFootRoutine(defaultPosition, Quaternion.Euler(defaultRotation), 0.25f, 0f));
+                Vector3 pos = GetTargetFootPosition(leg, 0f);
+                Quaternion rot = m_MonoBehaviour.CreatureConstructor.Body.rotation;
+                leg.StartCoroutine(leg.MoveFootRoutine(pos, rot, 0.25f, 0f));
             }
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
@@ -217,7 +229,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 avgHeight += height;
             }
-            avgHeight /= m_MonoBehaviour.Legs.Length;
+            avgHeight /= m_MonoBehaviour.Legs.Count;
 
             float t = m_MonoBehaviour.Velocity.Linear.magnitude / baseMovementSpeed;
             float offset = (avgHeight - minHeight) / 2f;
@@ -230,19 +242,19 @@ namespace DanielLochner.Assets.CreatureCreator
             Quaternion roll = Quaternion.identity, pitch = Quaternion.identity;
 
             // Roll
-            Vector3 avgRFeetPos = GetAverageFeetPosition(m_MonoBehaviour.RLegs);
-            Vector3 avgLFeetPos = GetAverageFeetPosition(m_MonoBehaviour.LLegs);
+            Vector3 avgRFeetPos = GetAverageFeetPosition(rlegs);
+            Vector3 avgLFeetPos = GetAverageFeetPosition(llegs);
 
             Vector3 rollVector = avgRFeetPos - avgLFeetPos;
             float rollAngle = Mathf.Clamp(Vector3.SignedAngle(m_MonoBehaviour.CreatureConstructor.Body.right, rollVector, m_MonoBehaviour.CreatureConstructor.Body.forward), -maxRoll, maxRoll);
             roll = Quaternion.AngleAxis(rollAngle, Vector3.forward);
 
             // Pitch
-            int numPairs = m_MonoBehaviour.Legs.Length / 2;
+            int numPairs = m_MonoBehaviour.Legs.Count / 2;
             if (numPairs >= 2)
             {
-                Vector3 avgFFeetPos = GetAverageFeetPosition(m_MonoBehaviour.LLegs[0], m_MonoBehaviour.RLegs[0]);
-                Vector3 avgBFeetPos = GetAverageFeetPosition(m_MonoBehaviour.LLegs[numPairs - 1], m_MonoBehaviour.RLegs[numPairs - 1]);
+                Vector3 avgFFeetPos = GetAverageFeetPosition(llegs[0], rlegs[0]);
+                Vector3 avgBFeetPos = GetAverageFeetPosition(llegs[numPairs - 1], rlegs[numPairs - 1]);
 
                 Vector3 pitchVector = avgFFeetPos - avgBFeetPos;
                 float pitchAngle = Mathf.Clamp(Vector3.SignedAngle(m_MonoBehaviour.CreatureConstructor.Body.forward, pitchVector, m_MonoBehaviour.CreatureConstructor.Body.right), -maxPitch, maxPitch);

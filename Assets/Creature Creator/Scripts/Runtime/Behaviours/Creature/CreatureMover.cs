@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private Animator targetAnimator;
         private CapsuleCollider capsuleCollider;
         private GameObject targetGO;
-        private Rigidbody rb;
+        private new Rigidbody rigidbody;
 
         private bool usePhysicalMovement;
         private Vector3 keyboardForward, keyboardRight, moveDisplacement;
@@ -49,14 +49,14 @@ namespace DanielLochner.Assets.CreatureCreator
         
         public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureAnimator CreatureAnimator { get; private set; }
-        public Transform Platform { get; set; }
 
+        public Transform Platform { get; set; }
         public Vector3 TargetPosition { get; set; }
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
 
-        public bool UsePhysicalMovement
+        public bool IsMovable
         {
             get => usePhysicalMovement;
             set
@@ -70,7 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     bone.GetComponent<Rigidbody>().isKinematic = usePhysicalMovement;
                 }
-                rb.constraints = usePhysicalMovement ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
+                rigidbody.constraints = usePhysicalMovement ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
             }
         }
         #endregion
@@ -82,16 +82,16 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            if (UsePhysicalMovement)
+            if (IsMovable)
             {
-                HandlePhysicalMovement();
+                HandleMovement();
             }
         }
         private void LateUpdate()
         {
-            if (!UsePhysicalMovement)
+            if (!IsMovable)
             {
-                HandleNonPhysicalMovement();
+                HandlePlatform();
             }
         }
 
@@ -101,13 +101,13 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureAnimator = GetComponent<CreatureAnimator>();
 
             capsuleCollider = GetComponent<CapsuleCollider>();
-            rb = GetComponent<Rigidbody>();
+            rigidbody = GetComponent<Rigidbody>();
             mainCamera = Camera.main;
 
             Platform = transform;
         }
 
-        private void HandlePhysicalMovement()
+        private void HandleMovement()
         {
             bool kInput = Input.GetButton("Vertical") || Input.GetButton("Horizontal");
             bool pInput = Input.GetMouseButton(1);
@@ -192,7 +192,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             RequestMove(canMove ? direction : Vector3.zero);
         }
-        private void HandleNonPhysicalMovement()
+        private void HandlePlatform()
         {
             transform.LerpTo(Platform.transform.position, positionSmoothing);
             CreatureConstructor.Body.SlerpTo(transform.rotation, rotationSmoothing);

@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,29 +25,31 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float baseTurnSpeed = 120;
         [SerializeField] private float contactDistance = 0.01f;
 
-        private bool isAnimated, isGrounded, hasCapturedDefaults;
+        private Animator animator;
+        private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
+        private bool isAnimated, hasCapturedDefaults;
         #endregion
 
         #region Properties
         public Transform Rig => rig;
 
-        public Animator Animator { get; private set; }
-        public RigBuilder RigBuilder { get; private set; }
-        public KinematicVelocity Velocity { get; private set; }
         public CreatureConstructor CreatureConstructor { get; private set; }
+        public KinematicVelocity Velocity { get; private set; }
+
+        public List<LimbAnimator> Limbs { get; private set; } = new List<LimbAnimator>();
+        public List<ArmAnimator> Arms { get; private set; } = new List<ArmAnimator>();
+        public List<LegAnimator> Legs { get; private set; } = new List<LegAnimator>();
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
 
-        public LimbAnimator[] Limbs { get; private set; }
-        public LegAnimator[] Legs { get; private set; }
-        public LegAnimator[] LLegs { get; private set; }
-        public LegAnimator[] RLegs { get; private set; }
-
-
+        public bool IsMovingBody
+        {
+            get; private set;
+        }
         public bool IsGrounded
         {
-            get => isGrounded;
+            get; private set;
         }
         public bool IsAnimated
         {
@@ -57,24 +60,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (isAnimated)
                 {
-                    InitializeBodyParts();
+                    Reinitialize();
                 }
-
                 RestoreDefaults(isAnimated);
                 Restructure(isAnimated);
-                Reposition(isAnimated);
-
                 if (isAnimated)
                 {
                     Rebuild();
-                    Recalculate();
                 }
-                Animator.enabled = isAnimated; // Comment out to temporarily disable creature animations!
+
+                animator.enabled = isAnimated; // Remove to temporarily disable creature animations.
             }
-        }
-        public bool IsMovingBody
-        {
-            get; private set;
         }
         #endregion
 
@@ -85,46 +81,23 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            HandleAnimatorState();
+            IsGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
+            animator.SetBool("IsGrounded", IsGrounded);
+
+            float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
+            float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
+            animator.SetFloat("%LSpeed", l);
+            animator.SetFloat("%ASpeed", a);
         }
 
         private void Initialize()
         {
-            Animator = GetComponent<Animator>();
-            RigBuilder = GetComponent<RigBuilder>();
+            animator = GetComponent<Animator>();
+            rigBuilder = GetComponent<RigBuilder>();
             CreatureConstructor = GetComponent<CreatureConstructor>();
             Velocity = GetComponent<KinematicVelocity>();
 
             Rebuild();
-        }
-        private void InitializeBodyParts()
-        {
-            Limbs = GetComponentsInChildren<LimbAnimator>();
-
-            List<LegAnimator> legs = new List<LegAnimator>(GetComponentsInChildren<LegAnimator>());
-            legs.Sort((legA, legB) =>
-            {
-                float posA = legA.LimbConstructor.CreatureConstructor.Body.W2LSpace(legA.transform.position).z;
-                float posB = legB.LimbConstructor.CreatureConstructor.Body.W2LSpace(legB.transform.position).z;
-
-                return posB.CompareTo(posA);
-            });
-            Legs = legs.ToArray();
-
-            LLegs = new LegAnimator[Legs.Length / 2];
-            RLegs = new LegAnimator[Legs.Length / 2];
-            int li = 0, ri = 0;
-            foreach (LegAnimator leg in Legs)
-            {
-                if (leg.transform.localPosition.x < 0)
-                {
-                    LLegs[li++] = leg;
-                }
-                else
-                {
-                    RLegs[ri++] = leg;
-                }
-            }
         }
 
         public void Setup()
@@ -148,7 +121,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             CreatureConstructor.OnConstructCreature += delegate
             {
-                InitializeBodyParts();
+                Reinitialize();
             };
         }
 
@@ -157,65 +130,8 @@ namespace DanielLochner.Assets.CreatureCreator
             if (isAnimated)
             {
                 DefaultHeight = CreatureConstructor.Body.localPosition.y;
-                hasCapturedDefaults = true;
-            }
-            else if (hasCapturedDefaults)
-            {
-                if (moveBodyCoroutine != null)
-                {
-                    StopCoroutine(moveBodyCoroutine);
-                    IsMovingBody = false;
-                }
-                CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
-                hasCapturedDefaults = false;
-            }
 
-            foreach (LimbAnimator limb in Limbs)
-            {
-                limb.RestoreDefaults(isAnimated);
-            }
-        }
-        public void Restructure(bool isAnimated)
-        {
-            if (isAnimated)
-            {
-                bool isUpper = Limbs.Length > 0;
-                for (int i = CreatureConstructor.Bones.Count - 1; i > 0; i--)
-                {
-                    if (CreatureConstructor.Bones[i].GetComponentsInChildren<LegConstructor>().Length > 0)
-                    {
-                        isUpper = false;
-                    }
-
-                    if (isUpper)
-                    {
-                        CreatureConstructor.Bones[i].SetParent(CreatureConstructor.Bones[i - 1]);
-                    }
-                    else
-                    {
-                        CreatureConstructor.Bones[i - 1].SetParent(CreatureConstructor.Bones[i]);
-                    }
-                }
-            }
-            else
-            {
-                foreach (Transform bone in CreatureConstructor.Bones)
-                {
-                    bone.SetParent(CreatureConstructor.Root);
-                    bone.SetAsLastSibling();
-                }
-            }
-            
-            foreach (LimbAnimator limb in Limbs)
-            {
-                limb.Restructure(isAnimated);
-            }
-        }
-        public void Reposition(bool isAnimated)
-        {
-            if (isAnimated)
-            {
-                if (Legs.Length == 0) // Creatures without legs should fall down to the ground.
+                if (Legs.Count == 0) // Creatures without legs should fall down to the ground.
                 {
                     Mesh bodyMesh = new Mesh();
                     CreatureConstructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
@@ -232,7 +148,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 offset = Vector3.up * Mathf.Abs(minY);
                     moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutBounce));
                 }
-                //else // Creatures with legs should slump down (to effectively "put weight" on their legs).
+                //else // Creatures with legs should slump down to put weight on them.
                 //{
                 //    // Determine the most extended leg and record its percentage extended.
                 //    // If too extended (i.e., exceeds extension threshold), slump body down by an offset:
@@ -266,34 +182,105 @@ namespace DanielLochner.Assets.CreatureCreator
                 //        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
                 //    }
                 //}
+
+                hasCapturedDefaults = true;
+            }
+            else if (hasCapturedDefaults)
+            {
+                if (moveBodyCoroutine != null)
+                {
+                    StopCoroutine(moveBodyCoroutine);
+                    IsMovingBody = false;
+                }
+                CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
+                hasCapturedDefaults = false;
+            }
+
+            foreach (LimbAnimator limb in Limbs)
+            {
+                limb.RestoreDefaults(isAnimated);
+            }
+        }
+        public void Restructure(bool isAnimated)
+        {
+            if (isAnimated)
+            {
+                bool isUpper = Limbs.Count > 0;
+                for (int i = CreatureConstructor.Bones.Count - 1; i > 0; i--)
+                {
+                    if (CreatureConstructor.Bones[i].GetComponentsInChildren<LegConstructor>().Length > 0)
+                    {
+                        isUpper = false;
+                    }
+
+                    if (isUpper)
+                    {
+                        CreatureConstructor.Bones[i].SetParent(CreatureConstructor.Bones[i - 1]);
+                    }
+                    else
+                    {
+                        CreatureConstructor.Bones[i - 1].SetParent(CreatureConstructor.Bones[i]);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Transform bone in CreatureConstructor.Bones)
+                {
+                    bone.SetParent(CreatureConstructor.Root);
+                    bone.SetAsLastSibling();
+                }
+            }
+
+            foreach (LimbAnimator limb in Limbs)
+            {
+                limb.Restructure(isAnimated);
+            }
+        }
+        public void Reinitialize()
+        {
+            Limbs.Clear();
+            Arms.Clear();
+            Legs.Clear();
+
+            List<LimbConstructor> sorted = new List<LimbConstructor>(CreatureConstructor.Limbs);
+            sorted.Sort((bodyPartA, bodyPartB) =>
+            {
+                float posA = bodyPartA.CreatureConstructor.Body.W2LSpace(bodyPartA.transform.position).z;
+                float posB = bodyPartB.CreatureConstructor.Body.W2LSpace(bodyPartB.transform.position).z;
+
+                return posB.CompareTo(posA);
+            });            
+            foreach (LimbConstructor constructor in sorted)
+            {
+                LimbAnimator animator = constructor.GetComponent<LimbAnimator>();
+                Limbs.Add(animator);
+                Limbs.Add(animator.FlippedLimb);
+                if (animator is ArmAnimator)
+                {
+                    ArmAnimator arm = animator as ArmAnimator;
+                    Arms.Add(arm);
+                    Arms.Add(arm.FlippedLimb as ArmAnimator);
+                }
+                else
+                if (animator is LegAnimator)
+                {
+                    LegAnimator leg = animator as LegAnimator;
+                    Legs.Add(leg);
+                    Legs.Add(leg.FlippedLeg);
+                }
             }
         }
         public void Rebuild()
         {
-            RigBuilder.Build();
-            Animator.Rebind();
+            rigBuilder.Build();
+            animator.Rebind();
+            SceneLinkedSMB<CreatureAnimator>.Initialize(animator, this);
 
-            SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
+            animator.SetBool("HasArms", Arms.Count != 0);
+            animator.SetBool("HasLegs", Legs.Count != 0);
         }
-        public void Recalculate()
-        {
-            int numLegs = Legs.Length;
-            Animator.SetBool("HasLegs", numLegs != 0);
-            int numArms = Limbs.Length - numLegs;
-            Animator.SetBool("HasArms", numArms != 0);
-        }
-
-        private void HandleAnimatorState()
-        {
-            isGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
-            Animator.SetBool("IsGrounded", isGrounded);
-
-            float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
-            float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
-            Animator.SetFloat("%LSpeed", l);
-            Animator.SetFloat("%ASpeed", a);
-        }
-
+        
         private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;

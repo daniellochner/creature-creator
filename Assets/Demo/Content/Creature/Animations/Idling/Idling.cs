@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
         {
-            if (m_MonoBehaviour.Legs.Length > 0)
+            if (m_MonoBehaviour.Legs.Count > 0)
             {
                 m_MonoBehaviour.CreatureConstructor.Root.localPosition = new Vector3(0, breatheHeight * Mathf.Cos(idlingTime / breatheTime) - breatheHeight, 0);
                 idlingTime += Time.deltaTime;

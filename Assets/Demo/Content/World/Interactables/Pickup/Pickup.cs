@@ -7,7 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public override bool CanInteract(CreatureInteractor creatureInteractor)
         {
-            return base.CanInteract(creatureInteractor) && creatureInteractor.Creature.Animator.Arms.Length > 0;
+            return base.CanInteract(creatureInteractor) && creatureInteractor.Creature.Animator.Arms.Count > 0;
         }
     }
 }
