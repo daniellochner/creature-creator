@@ -3,85 +3,26 @@
 
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 using System;
 using System.IO;
 using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class BPPrefabsWindow : EditorWindow
+    public class BPSetupWindow : EditorWindow
     {
         #region Fields
+        [SerializeField] private SaveType type;
         [SerializeField] private GameObject moveToolPrefab;
+        [SerializeField] private MinMax minMaxHealth = new MinMax(5, 15);
+        [SerializeField] private int maxComplexity = 10;
         [SerializeField] private Database database;
         [SerializeField] private string outputDirectory;
-        [SerializeField] private SaveType type;
         [SerializeField] private GameObject[] models;
 
-        private SerializedProperty _models, _type, _database, _outputDirectory, _moveTool;
+        private SerializedProperty _type, _moveTool, _database, _outputDirectory, _minMaxHealth, _maxComplexity, _models;
         private SerializedObject target;
-
-        private Dictionary<SaveType, PrefabTypes> typeMapping = new Dictionary<SaveType, PrefabTypes>()
-        {
-            {
-                SaveType.Detail, new PrefabTypes()
-            },
-            {
-                SaveType.Tail, new PrefabTypes()
-            },
-            {
-                SaveType.Weapon, new PrefabTypes()
-            },
-            {
-                SaveType.Wing, new PrefabTypes()
-            },
-            {
-                SaveType.Foot, new PrefabTypes()
-                {
-                    constructType = ConstructType.Foot,
-                    editType = EditType.Foot
-                }
-            },
-            {
-                SaveType.Hand, new PrefabTypes()
-                {
-                    constructType = ConstructType.Hand,
-                    editType = EditType.Hand
-                }
-            },
-            {
-                SaveType.Ear, new PrefabTypes()
-            },
-            {
-                SaveType.Eye, new PrefabTypes()
-            },
-            {
-                SaveType.Mouth, new PrefabTypes()
-                {
-                    constructType = ConstructType.Mouth
-                }
-            },
-            {
-                SaveType.Nose, new PrefabTypes()
-            },
-            {
-                SaveType.Arm, new PrefabTypes()
-                {
-                    constructType = ConstructType.Arm,
-                    animateType = AnimateType.Limb,
-                    editType = EditType.Arm
-                }
-            },
-            {
-                SaveType.Leg, new PrefabTypes()
-                {
-                    constructType = ConstructType.Leg,
-                    animateType = AnimateType.Leg,
-                    editType = EditType.Leg
-                }
-            }
-        };
+        private bool showSettings = true;
         #endregion
 
         #region Properties
@@ -99,43 +40,55 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             target = new SerializedObject(this);
 
-            _models = target.FindProperty("models");
             _type = target.FindProperty("type");
+            _moveTool = target.FindProperty("moveToolPrefab");
+            _minMaxHealth = target.FindProperty("minMaxHealth");
+            _maxComplexity = target.FindProperty("maxComplexity");
             _database = target.FindProperty("database");
             _outputDirectory = target.FindProperty("outputDirectory");
-            _moveTool = target.FindProperty("moveToolPrefab");
+            _models = target.FindProperty("models");
         }
         private void OnGUI()
         {
             target.Update();
 
+            showSettings = EditorGUILayout.Foldout(showSettings, "Settings", true, EditorStyles.foldoutHeader);
+            if (showSettings)
+            {
+                EditorGUILayout.PropertyField(_type);
+                if (IsLimb)
+                {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(_moveTool);
+                    EditorGUI.indentLevel--;
+                }
+                EditorGUILayout.PropertyField(_minMaxHealth);
+                EditorGUILayout.PropertyField(_maxComplexity);
+                EditorGUILayout.PropertyField(_database);
+                EditorGUILayout.PropertyField(_outputDirectory);
+                EditorGUILayout.Space();
+            }
             EditorGUILayout.PropertyField(_models, new GUIContent("Models"), true);
 
-            EditorGUILayout.PropertyField(_type);
-            if (IsLimb)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_moveTool);
-                EditorGUI.indentLevel--;
-            }
-
-            EditorGUILayout.PropertyField(_database);
-            EditorGUILayout.PropertyField(_outputDirectory);
-
-            EditorGUILayout.Space();
-
-            if (!database || string.IsNullOrEmpty(outputDirectory) || (IsLimb && !moveToolPrefab))
+            if (!database || string.IsNullOrEmpty(outputDirectory) || (IsLimb && !moveToolPrefab) || maxComplexity == 0f || minMaxHealth.min == 0f || minMaxHealth.max == 0f)
             {
                 GUI.enabled = false;
             }
-            if (GUILayout.Button("Setup Body Parts"))
+            if (GUILayout.Button("Setup Body Part(s)"))
             {
                 foreach (GameObject model in models)
                 {
                     Setup(model);
                 }
+                UpdateStats();
+            }
+            if (GUILayout.Button("Update"))
+            {
+                UpdateStats();
+                UpdateComponentTypes();
             }
             GUI.enabled = true;
+            EditorGUILayout.Space();
 
             target.ApplyModifiedProperties();
         }
@@ -164,19 +117,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // 2. Convert...
             // 2.1. ...to Constructible
-            BodyPartConstructor constructible = ConvertToConstructible(prepared, bodyPart, typeMapping[type].constructType);
+            BodyPartConstructor constructible = ConvertToConstructible(prepared, bodyPart);
             constructible.transform.SetParent(root);
             constructible.name = $"{bodyPartName} (C)";
 
             // 2.2. ...to Animatable
             BodyPartConstructor animatable = Instantiate(constructible, root); // Copy constructible
             animatable.name = $"{bodyPartName} (A)";
-            ConvertToAnimatable(animatable, typeMapping[type].animateType);
+            ConvertToAnimatable(animatable);
 
             // 2.3. ...to Editable
             BodyPartConstructor editable = Instantiate(animatable, root); // Copy animatable
             editable.name = $"{bodyPartName} (E)";
-            ConvertToEditable(editable, typeMapping[type].editType, moveToolPrefab);
+            ConvertToEditable(editable, moveToolPrefab);
 
             // 3. Save
             Save(root, bodyPart, outputDirectory, type, database);
@@ -184,7 +137,6 @@ namespace DanielLochner.Assets.CreatureCreator
             // 4. Clean Up
             DestroyImmediate(root.gameObject);
         }
-
         public GameObject Prepare(GameObject model, Transform parent)
         {
             GameObject bodyPart = new GameObject(model.name);
@@ -211,31 +163,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return bodyPart;
         }
-        public BodyPartConstructor ConvertToConstructible(GameObject bodyPartGO, BodyPart bodyPart, ConstructType constructType)
+        public BodyPartConstructor ConvertToConstructible(GameObject bodyPartGO, BodyPart bodyPart)
         {
             // Type
-            BodyPartConstructor constructor = null;
-            switch (constructType)
-            {
-                case ConstructType.Arm:
-                    constructor = bodyPartGO.AddComponent<ArmConstructor>();
-                    break;
-                case ConstructType.Leg:
-                    constructor = bodyPartGO.AddComponent<LegConstructor>();
-                    break;
-                case ConstructType.Hand:
-                    constructor = bodyPartGO.AddComponent<ExtremityConstructor>();
-                    break;
-                case ConstructType.Foot:
-                    constructor = bodyPartGO.AddComponent<FootConstructor>();
-                    break;
-                case ConstructType.Mouth:
-                    constructor = bodyPartGO.AddComponent<MouthConstructor>();
-                    break;
-                default:
-                    constructor = bodyPartGO.AddComponent<BodyPartConstructor>();
-                    break;
-            }
+            BodyPartConstructor constructor = bodyPartGO.AddComponent(GetConstructorType(bodyPart.GetType())) as BodyPartConstructor;
             constructor.BodyPart = bodyPart;
 
             // Model
@@ -285,50 +216,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return constructor;
         }
-        public BodyPartAnimator ConvertToAnimatable(BodyPartConstructor constructor, AnimateType animateType)
+        public BodyPartAnimator ConvertToAnimatable(BodyPartConstructor constructor)
         {
             // Type
-            BodyPartAnimator animator = null;
-            switch (animateType)
-            {
-                case AnimateType.Limb:
-                    animator = constructor.gameObject.AddComponent<LimbAnimator>();
-                    break;
-                case AnimateType.Leg:
-                    animator = constructor.gameObject.AddComponent<LegAnimator>();
-                    break;
-                default:
-                    animator = constructor.gameObject.AddComponent<BodyPartAnimator>();
-                    break;
-            }
-
+            BodyPartAnimator animator = constructor.gameObject.AddComponent(GetAnimatorType(constructor.BodyPart.GetType())) as BodyPartAnimator;
             return animator;
         }
-        public BodyPartEditor ConvertToEditable(BodyPartConstructor constructor, EditType editType, GameObject moveToolPrefab)
+        public BodyPartEditor ConvertToEditable(BodyPartConstructor constructor, GameObject moveToolPrefab)
         {
-            BodyPartEditor editor = null;
-            switch (editType)
-            {
-                case EditType.Arm:
-                    editor = constructor.gameObject.AddComponent<ArmEditor>();
-                    break;
-                case EditType.Leg:
-                    editor = constructor.gameObject.AddComponent<LegEditor>();
-                    break;
-                case EditType.Extremity:
-                    editor = constructor.gameObject.AddComponent<ExtremityEditor>();
-                    break;
-                case EditType.Hand:
-                    editor = constructor.gameObject.AddComponent<HandEditor>();
-                    break;
-                case EditType.Foot:
-                    editor = constructor.gameObject.AddComponent<FootEditor>();
-                    break;
-                default:
-                    editor = constructor.gameObject.AddComponent<BodyPartEditor>();
-                    break;
-            }
-
+            BodyPartEditor editor = constructor.gameObject.AddComponent(GetEditorType(constructor.BodyPart.GetType())) as BodyPartEditor;
             constructor.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Body Parts"));
             constructor.Model.tag = "Body Part";
 
@@ -391,7 +287,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         Drag boneDrag = bone.gameObject.AddComponent<Drag>();
                         boneDrag.boundsShape = Drag.BoundsShape.Cylinder;
                         boneDrag.updatePlaneOnPress = true;
-                        if (i < limbConstructor.Bones.Length - 1 || limbConstructor is ArmConstructor)
+                        if (i < limbConstructor.Bones.Length - 1 || limbConstructor.Limb is Arm)
                         {
                             boneDrag.mousePlaneAlignment = Drag.MousePlaneAlignment.WithCamera;
                         }
@@ -407,7 +303,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     if (i < limbConstructor.Bones.Length - 1)
                     {
                         LookAtConstraint boneConstraint = bone.gameObject.AddComponent<LookAtConstraint>();
-                        Quaternion offset = GetRotationOffset(limbConstructor.Bones[i + 1], limbConstructor.Bones[i]);
+                        Quaternion offset = QuaternionUtility.GetRotationOffset(limbConstructor.Bones[i + 1], limbConstructor.Bones[i]);
 
                         boneConstraint.AddSource(new ConstraintSource()
                         {
@@ -422,7 +318,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     else
                     {
                         RotationConstraint extremityConstraint = bone.gameObject.AddComponent<RotationConstraint>();
-                        Quaternion offset = GetRotationOffset(bone, limbConstructor.Bones[i - 1]);
+                        Quaternion offset = QuaternionUtility.GetRotationOffset(bone, limbConstructor.Bones[i - 1]);
 
                         extremityConstraint.AddSource(new ConstraintSource()
                         {
@@ -483,61 +379,166 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        [MenuItem("Creature Creator/Body Part Prefabs")]
+        public void UpdateStats()
+        {
+            MinMax minMaxVolume = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            foreach (var obj in database.Objects.Values)
+            {
+                BodyPart bodyPart = obj as BodyPart;
+
+                float volume = bodyPart.Volume;
+                if (volume > minMaxVolume.max)
+                {
+                    minMaxVolume.max = volume;
+                }
+                else
+                if (volume < minMaxVolume.min)
+                {
+                    minMaxVolume.min = volume;
+                }
+            }
+
+            foreach (var obj in database.Objects.Values)
+            {
+                BodyPart bodyPart = obj as BodyPart;
+
+                // Transformations
+                if (!(bodyPart is Limb))
+                {
+                    bodyPart.Transformations |= Transformation.Scale;
+                }
+                if (!(bodyPart is Limb || bodyPart is Extremity))
+                {
+                    bodyPart.Transformations |= Transformation.Pivot;
+                    bodyPart.Transformations |= Transformation.PivotXY;
+                }
+                if (!(bodyPart is Foot))
+                {
+                    bodyPart.Transformations |= Transformation.Rotate;
+                }
+
+                // Complexity
+                bodyPart.Complexity = Math.Min(bodyPart.BaseComplexity + bodyPart.Abilities.Count, maxComplexity);
+
+                // Health
+                float t = Mathf.InverseLerp(minMaxVolume.min, minMaxVolume.max, bodyPart.Volume);
+                bodyPart.Health = (int)Mathf.Lerp(minMaxHealth.min, minMaxHealth.max, t);
+
+                // Price
+                int tValue = 0;
+                if (bodyPart.Transformations.HasFlag(Transformation.Rotate) || bodyPart.Transformations.HasFlag(Transformation.Scale)) tValue++;
+                if (bodyPart.Transformations.HasFlag(Transformation.Pivot) || bodyPart.Transformations.HasFlag(Transformation.PivotXY)) tValue++;
+                if (bodyPart.Transformations.HasFlag(Transformation.StretchX)) tValue++;
+                if (bodyPart.Transformations.HasFlag(Transformation.StretchY)) tValue++;
+                if (bodyPart.Transformations.HasFlag(Transformation.StretchZ)) tValue++;
+
+                int nonFunctionalValue = bodyPart.Appeal + tValue;
+                int functionalValue = bodyPart.Health + bodyPart.Complexity;
+
+                bodyPart.Price = (int)(0.6f * functionalValue + 0.4f * nonFunctionalValue) * 5;
+            }
+        }
+        public void UpdateComponentTypes()
+        {
+            foreach (var obj in database.Objects.Values)
+            {
+                BodyPart bodyPart = obj as BodyPart;
+
+                // Editors
+                Type expectedEditorType = GetEditorType(bodyPart.GetType());
+                GameObject editable = bodyPart.GetPrefab(BodyPart.PrefabType.Editable);
+                CheckTypeMismatch(editable.GetComponent<BodyPartEditor>(), expectedEditorType);
+                
+                // Animators
+                Type expectedAnimatorType = GetAnimatorType(bodyPart.GetType());
+                GameObject animatable = bodyPart.GetPrefab(BodyPart.PrefabType.Animatable);
+                CheckTypeMismatch(editable.GetComponent<BodyPartAnimator>(), expectedAnimatorType);
+                CheckTypeMismatch(animatable.GetComponent<BodyPartAnimator>(), expectedAnimatorType);
+
+                // Constructors
+                Type expectedConstructorType = GetConstructorType(bodyPart.GetType());
+                GameObject constructible = bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
+                CheckTypeMismatch(editable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
+                CheckTypeMismatch(animatable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
+                CheckTypeMismatch(constructible.GetComponent<BodyPartConstructor>(), expectedConstructorType);
+            }
+        }
+        public void CheckTypeMismatch(Component component, Type expectedType)
+        {
+            if (component != null)
+            {
+                component.MoveToTop();
+                if (component.GetType() != expectedType)
+                {
+                    Debug.Log($"Type mismatch for '{component.name}'! ({component.GetType().Name} -> {expectedType.Name})");
+
+                    Component newComponent = component.gameObject.AddComponent(expectedType);
+                    component.CopyValues();
+                    newComponent.PasteValues();
+                    DestroyImmediate(component, true);
+                    newComponent.MoveToTop();
+                }
+            }
+            else
+            {
+                Debug.LogError("Component doesn't exist!");
+            }
+        }
+
+        private Type GetEditorType(Type type)
+        {
+            switch (type.Name)
+            {
+                case "Arm":
+                    return typeof(LimbEditor);
+                case "Leg":
+                    return typeof(LegEditor);
+                case "Hand":
+                    return typeof(HandEditor);
+                case "Foot":
+                    return typeof(FootEditor);
+            }
+            return typeof(BodyPartEditor);
+        }
+        private Type GetAnimatorType(Type type)
+        {
+            switch (type.Name)
+            {
+                case "Arm":
+                    return typeof(ArmAnimator);
+                case "Leg":
+                    return typeof(LegAnimator);
+                case "Mouth":
+                    return typeof(MouthAnimator);
+                case "Tail":
+                    return typeof(TailAnimator);
+            }
+            return typeof(BodyPartAnimator);
+        }
+        private Type GetConstructorType(Type type)
+        {
+            switch (type.Name)
+            {
+                case "Arm":
+                    return typeof(LimbConstructor);
+                case "Leg":
+                    return typeof(LegConstructor);
+                case "Hand":
+                    return typeof(ExtremityConstructor);
+                case "Foot":
+                    return typeof(FootConstructor);
+            }
+            return typeof(BodyPartConstructor);
+        }
+
+        [MenuItem("Creature Creator/Window/Body Part Setup")]
         public static void ShowWindow()
         {
-            GetWindow<BPPrefabsWindow>("Body Part Prefabs");
-        }
-
-        private Quaternion GetRotationOffset(Transform target, Transform source)
-        {
-            Quaternion lookAt = Quaternion.LookRotation(target.position - source.position);
-            Quaternion offset = Quaternion.Inverse(lookAt) * source.rotation;
-            return offset;
-        }
-        #endregion
-
-        #region Inner Classes
-        [Serializable]
-        private class PrefabTypes
-        {
-            public ConstructType constructType = ConstructType.Default;
-            public AnimateType animateType = AnimateType.Default;
-            public EditType editType = EditType.Default;
+            GetWindow<BPSetupWindow>("Body Part Setup");
         }
         #endregion
 
         #region Enums
-        [Serializable]
-        public enum ConstructType
-        {
-            Default,
-            Arm,
-            Leg,
-            Hand,
-            Foot,
-            Mouth
-        }
-
-        [Serializable]
-        public enum AnimateType
-        {
-            Default,
-            Limb,
-            Leg
-        }
-
-        [Serializable]
-        public enum EditType
-        {
-            Default,
-            Arm,
-            Leg,
-            Extremity,
-            Hand,
-            Foot
-        }
-
         [Serializable]
         public enum SaveType
         {
