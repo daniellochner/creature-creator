@@ -4,6 +4,13 @@ namespace DanielLochner.Assets
 {
     public class QuaternionUtility : MonoBehaviour
     {
+        public static Quaternion GetRotationOffset(Transform target, Transform source)
+        {
+            Quaternion lookAt = Quaternion.LookRotation(target.position - source.position);
+            Quaternion offset = Quaternion.Inverse(lookAt) * source.rotation;
+            return offset;
+        }
+
         public static Quaternion SmoothDamp(Quaternion current, Quaternion target, ref Vector3 currentVelocity, float smoothTime, float maxSpeed, float deltaTime)
         {
             Vector3 c = current.eulerAngles;
