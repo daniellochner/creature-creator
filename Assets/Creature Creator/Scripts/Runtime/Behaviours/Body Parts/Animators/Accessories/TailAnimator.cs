@@ -3,7 +3,7 @@
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class ArmEditor : LimbEditor
+    public class TailAnimator : BodyPartAnimator
     {
     }
 }

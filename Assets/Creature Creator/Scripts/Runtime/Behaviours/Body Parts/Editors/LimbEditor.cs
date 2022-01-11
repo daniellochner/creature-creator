@@ -221,7 +221,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     Drag boneDrag = bone.gameObject.GetComponent<Drag>();
                     boneDrag.world = Drag.world;
                     boneDrag.cylinderRadius = CreatureEditor.CreatureConstructor.MaxRadius;
-                    if (index < LimbConstructor.Bones.Length - 1 || this is ArmEditor)
+                    if (index < LimbConstructor.Bones.Length - 1 || LimbConstructor.Limb is Arm)
                     {
                         boneDrag.cylinderHeight = CreatureEditor.CreatureConstructor.MaxHeight;
                     }

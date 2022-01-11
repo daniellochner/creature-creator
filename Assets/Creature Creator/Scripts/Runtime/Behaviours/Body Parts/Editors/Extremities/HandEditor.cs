@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override bool CanConnectToLimb(LimbConstructor limb)
         {
-            return base.CanConnectToLimb(limb) && limb is ArmConstructor;
+            return base.CanConnectToLimb(limb) && limb.Limb is Arm;
         }
         #endregion
     }
