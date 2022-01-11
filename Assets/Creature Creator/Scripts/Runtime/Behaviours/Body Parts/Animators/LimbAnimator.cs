@@ -129,6 +129,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 LimbConstructor.ConnectedExtremity.transform.SetParent(isAnimated ? LimbConstructor.Extremity : CreatureAnimator.CreatureConstructor.Bones[LimbConstructor.AttachedLimb.boneIndex]);
             }
         }
+        public virtual void Reinitialize()
+        {
+
+        }
 
         protected virtual void HandleTarget()
         {

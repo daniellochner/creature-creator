@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Setup")]
         [SerializeField] private Transform rig;
-        [SerializeField] private float extensionThreshold = 0.9f;
+        [SerializeField] private float extensionThreshold = 0.95f;
         [SerializeField] private float baseMovementSpeed = 0.8f;
         [SerializeField] private float baseTurnSpeed = 120;
         [SerializeField] private float contactDistance = 0.01f;
@@ -148,40 +148,43 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 offset = Vector3.up * Mathf.Abs(minY);
                     moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutBounce));
                 }
-                //else // Creatures with legs should slump down to put weight on them.
-                //{
-                //    // Determine the most extended leg and record its percentage extended.
-                //    // If too extended (i.e., exceeds extension threshold), slump body down by an offset:
-                //    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
+                else // Creatures with legs should slump down to put weight on them.
+                {
+                    // Determine the most extended leg and record its extension percentage.
+                    LegAnimator mostExtendedLeg = null;
+                    float maxExtension = Mathf.NegativeInfinity;
+                    foreach (LegAnimator leg in Legs)
+                    {
+                        if (leg.IsFlipped)
+                        {
+                            continue;
+                        }
 
-                //    LegAnimator mostExtendedLeg = null;
-                //    float maxLegExtension = Mathf.NegativeInfinity;
-                //    foreach (LegAnimator leg in RLegs) // Unnecessary to loop through both left and right legs.
-                //    {
-                //        float legExtension = leg.Length / leg.MaxLength;
-                //        if (legExtension > maxLegExtension)
-                //        {
-                //            maxLegExtension = legExtension;
-                //            mostExtendedLeg = leg;
-                //        }
-                //    }
+                        float extension = leg.Length / leg.MaxLength;
+                        if (extension > maxExtension)
+                        {
+                            maxExtension = extension;
+                            mostExtendedLeg = leg;
+                        }
+                    }
 
-                //    float targetHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
-                //    if (maxLegExtension > extensionThreshold)
-                //    {
-                //        float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
+                    // If the most extended leg is too extended (i.e., exceeds the extension threshold), slump body down by an offset:
+                    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
+                    if (maxExtension > extensionThreshold)
+                    {
+                        float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
 
-                //        float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
-                //        float c = targetLength;
-                //        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
+                        float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
+                        float c = targetLength;
+                        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
 
-                //        float currentHeight = targetHeight;
-                //        targetHeight = b;
+                        float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
+                        float targetHeight = b;
 
-                //        Vector3 offset = CreatureConstructor.Body.localPosition + Vector3.up * (targetHeight - currentHeight);
-                //        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
-                //    }
-                //}
+                        Vector3 offset = CreatureConstructor.Body.localPosition + Vector3.up * (targetHeight - currentHeight);
+                        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
+                    }
+                }
 
                 hasCapturedDefaults = true;
             }
@@ -269,6 +272,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     Legs.Add(leg);
                     Legs.Add(leg.FlippedLeg);
                 }
+            }
+
+            foreach (LegAnimator leg in Legs)
+            {
+                leg.Reinitialize();
             }
         }
         public void Rebuild()

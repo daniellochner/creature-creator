@@ -68,27 +68,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Anchor.SetParent(LimbConstructor.Extremity, false);
         }
 
-        public override void RestoreDefaults(bool isAnimated)
-        {
-            base.RestoreDefaults(isAnimated);
-
-            if (isAnimated)
-            {
-                // Max Length
-                float length = 0;
-                for (int i = 0; i < LimbConstructor.Bones.Length - 1; i++)
-                {
-                    length += Vector3.Distance(LimbConstructor.Bones[i].position, LimbConstructor.Bones[i + 1].position);
-                }
-                MaxLength = length;
-
-                // Max Distance
-                float a = Vector3.ProjectOnPlane(transform.position - LegConstructor.Extremity.position, CreatureAnimator.transform.up).magnitude;
-                float c = MaxLength;
-                float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
-                MaxDistance = b;
-            }
-        }
         public override void Restructure(bool isAnimated)
         {
             base.Restructure(isAnimated);
@@ -106,7 +85,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 Anchor.localScale = Vector3.one;
             }
         }
-        
+        public override void Reinitialize()
+        {
+            base.Reinitialize();
+
+            // Max Length
+            float length = 0;
+            for (int i = 0; i < LimbConstructor.Bones.Length - 1; i++)
+            {
+                length += Vector3.Distance(LimbConstructor.Bones[i].position, LimbConstructor.Bones[i + 1].position);
+            }
+            MaxLength = length;
+
+            // Max Distance
+            float a = Vector3.ProjectOnPlane(transform.position - LegConstructor.Extremity.position, CreatureAnimator.transform.up).magnitude;
+            float c = MaxLength;
+            float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
+            MaxDistance = b;
+        }
+
         protected override void HandleTarget()
         {
             target.SetPositionAndRotation(Anchor.position, Anchor.rotation);
