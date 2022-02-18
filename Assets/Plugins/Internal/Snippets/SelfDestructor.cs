@@ -6,7 +6,9 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private float lifetime = 0.1f;
-        private float elapsedTime = 0f;
+
+        [Header("Debug")]
+        [SerializeField, ReadOnly] private float elapsedTime = 0f;
         #endregion
 
         #region Methods
