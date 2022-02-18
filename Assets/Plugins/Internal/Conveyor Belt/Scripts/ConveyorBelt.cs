@@ -3,31 +3,24 @@
 
 using UnityEngine;
 
-namespace DanielLochner.Assets
+namespace DanielLochner.Assets.CreatureCreator
 {
     public class ConveyorBelt : MonoBehaviour
     {
-        #region Fields
-        [SerializeField] private Material belt;
-        [SerializeField] private float speed;
-        #endregion
+        [SerializeField] private float offset = 0.991725f;
+        [SerializeField] private Belt belt;
+        [SerializeField] private Animator[] gears;
 
-        #region Methods
-        private void Update()
+        private void Start()
         {
-            belt.mainTextureOffset += new Vector2(0, speed / transform.localScale.z * belt.mainTextureScale.y * Time.deltaTime);
-        }
-        private void OnDestroy()
-        {
-            belt.mainTextureOffset = Vector2.zero;
-        }
-        private void OnCollisionStay(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Conveyor Belt"))
+            float r = belt.transform.position.y - transform.position.y;
+            float w = belt.Speed / r;
+            float rps = w / (2f * Mathf.PI); // revolutions per second
+
+            foreach (Animator gear in gears)
             {
-                collision.transform.position += transform.forward * speed * Time.deltaTime;
+                gear.SetFloat("RPS", rps * offset);
             }
         }
-        #endregion
     }
 }
