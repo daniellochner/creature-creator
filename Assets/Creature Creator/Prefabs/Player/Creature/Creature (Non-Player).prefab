@@ -52,6 +52,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+      propertyPath: boneSettings.rings
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+      propertyPath: boneSettings.segments
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 3002746977395476857, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -249,6 +257,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rig: {fileID: 1971731999}
   extensionThreshold: 0.9
+  baseMovementSpeed: 0.8
+  baseTurnSpeed: 120
+  contactDistance: 0.01
 --- !u!114 &1640302634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,19 +319,6 @@ MonoBehaviour:
   tripodSize: 1
   boneColor: {r: 0, g: 0, b: 1, a: 0.5}
   m_Transforms: []
---- !u!114 &8494628076202705300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 982379299394450588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23ec86d7a4df8374cb259b3eed7f80f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
 --- !u!114 &7822822624893297552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,6 +335,19 @@ MonoBehaviour:
   source: {fileID: 982379299394450591}
   sourcePosition: {fileID: 982379299394450591}
   sourceRotation: {fileID: 982379299394450591}
+--- !u!114 &8494628076202705300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ec86d7a4df8374cb259b3eed7f80f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
 --- !u!114 &7696278918816451154
 MonoBehaviour:
   m_ObjectHideFlags: 0

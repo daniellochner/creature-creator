@@ -39,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private GameObject targetGO;
         private new Rigidbody rigidbody;
 
-        private bool usePhysicalMovement;
+        private bool isMovable;
         private Vector3 keyboardForward, keyboardRight, moveDisplacement;
         private InputMode inputMode;
         #endregion
@@ -58,19 +58,24 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool IsMovable
         {
-            get => usePhysicalMovement;
+            get => isMovable;
             set
             {
-                usePhysicalMovement = value;
+                isMovable = value;
 
-                cameraFollower.useFixedUpdate = usePhysicalMovement; // Used to fix camera jittering issue.
+                //cameraFollower.useFixedUpdate = isMovable; // Used to fix camera jittering issue.
+
+                if (!isMovable)
+                {
+                    moveDisplacement = Vector3.zero;
+                }
 
                 // Physics
                 foreach (Transform bone in CreatureConstructor.Bones)
                 {
-                    bone.GetComponent<Rigidbody>().isKinematic = usePhysicalMovement;
+                    bone.GetComponent<Rigidbody>().isKinematic = isMovable;
                 }
-                rigidbody.constraints = usePhysicalMovement ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
+                rigidbody.constraints = isMovable ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
             }
         }
         #endregion
@@ -80,20 +85,24 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             if (IsMovable)
             {
                 HandleMovement();
             }
-        }
-        private void LateUpdate()
-        {
-            if (!IsMovable)
+            else
             {
                 HandlePlatform();
             }
         }
+        //private void LateUpdate()
+        //{
+        //    if (!IsMovable)
+        //    {
+        //        HandlePlatform();
+        //    }
+        //}
 
         private void Initialize()
         {
@@ -222,14 +231,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Move(Vector3 direction)
         {
-            Vector3 displacement = direction * moveSpeed * Time.fixedDeltaTime;
+            Vector3 displacement = direction * moveSpeed * Time.deltaTime;
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
             transform.position += moveDisplacement;
         }
         public void Turn(float angle)
         {
             Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
-            CreatureConstructor.Body.localRotation = QuaternionUtility.SmoothDamp(CreatureConstructor.Body.localRotation, rotation, ref angularVelocity, turnSmoothTime, turnSpeed, Time.fixedDeltaTime);
+            CreatureConstructor.Body.localRotation = QuaternionUtility.SmoothDamp(CreatureConstructor.Body.localRotation, rotation, ref angularVelocity, turnSmoothTime, turnSpeed, Time.deltaTime);
         }
         #endregion
 

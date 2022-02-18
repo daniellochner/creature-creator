@@ -242,8 +242,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetupCreature()
         {
             // Setup components (in correct order).
-            player.Creature.Animator.Setup();
-            player.Creature.Editor.Setup();
+            player.Creature.Setup();
 
             // Load preset/null creature (and defaults).
             if (creaturePresets.Length > 0)
@@ -487,7 +486,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Data
-            SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), JsonUtility.ToJson(creatureData));
+            SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), creatureData);
 
             // Screenshot
             player.Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)

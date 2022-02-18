@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private float bodySmoothing = 2.5f;
         private float maxRoll = 10f;
-        private float maxPitch = 10f;
+        private float maxPitch = 30f;
         private float stepHeight = 0.2f;
         private float liftHeight = 0.2f;
 
@@ -147,6 +147,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 LegAnimator leg2 = (pair % 2 == 0) ? rleg : lleg;
                 
                 Quaternion rot = m_MonoBehaviour.CreatureConstructor.Body.rotation;
+                float liftHeight = m_MonoBehaviour.CreatureConstructor.transform.W2LSpace(leg1.transform.position).y * 0.4f;
 
                 Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove);
                 float t1 = Mathf.Clamp01(Vector3.Distance(leg1.Anchor.position, pos1) / leg1.MaxDistance);                
@@ -196,11 +197,11 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, m_MonoBehaviour.Velocity.Angular * timeToMove);
             Vector3 worldPos = Vector3.ProjectOnPlane(m_MonoBehaviour.CreatureConstructor.Body.TransformPoint(localPos), m_MonoBehaviour.transform.up);
             worldPos += m_MonoBehaviour.Velocity.Linear * timeToMove;
-            
-            Vector3 origin = worldPos + m_MonoBehaviour.transform.up * stepHeight;
+
+            Vector3 origin = worldPos + m_MonoBehaviour.transform.up;// * stepHeight;
             Vector3 dir = -m_MonoBehaviour.transform.up;
 
-            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, 2f * stepHeight, LayerMask.GetMask("Ground")))
+            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, 2f/*2f * stepHeight*/, LayerMask.GetMask("Ground")))
             {
                 return hitInfo.point + (m_MonoBehaviour.transform.up * leg.LegConstructor.ConnectedFoot.Offset);
             }
@@ -232,7 +233,7 @@ namespace DanielLochner.Assets.CreatureCreator
             avgHeight /= m_MonoBehaviour.Legs.Count;
 
             float t = m_MonoBehaviour.Velocity.Linear.magnitude / baseMovementSpeed;
-            float offset = (avgHeight - minHeight) / 2f;
+            float offset = avgHeight - minHeight;
             Vector3 targetPosition = Vector3.Lerp(Vector3.zero, -Vector3.up * offset, t);
 
             m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.Lerp(m_MonoBehaviour.CreatureConstructor.Root.localPosition, targetPosition, Time.deltaTime * bodySmoothing);

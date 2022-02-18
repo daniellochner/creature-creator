@@ -60,7 +60,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Initialize();
-            Setup();
         }
         private void Update()
         {
@@ -80,7 +79,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureCollider = GetComponent<CreatureCollider>();
             CreaturePhotographer = GetComponent<CreaturePhotographer>();
         }
-        private void Setup()
+        public void Setup()
         {
             CreatureConstructor.OnConstructCreature += delegate
             {

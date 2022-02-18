@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float baseTurnSpeed = 120;
         [SerializeField] private float contactDistance = 0.01f;
 
+        private Transform head, tail, limbs;
         private Animator animator;
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
@@ -103,6 +104,15 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup()
         {
             SetupConstruction();
+
+            head = new GameObject("Head").transform;
+            head.SetParent(Rig, false);
+
+            tail = new GameObject("Tail").transform;
+            tail.SetParent(Rig, false);
+
+            limbs = new GameObject("Limbs").transform;
+            limbs.SetParent(Rig, false);
         }
         public void SetupConstruction()
         {
@@ -209,21 +219,66 @@ namespace DanielLochner.Assets.CreatureCreator
             if (isAnimated)
             {
                 bool isUpper = Limbs.Count > 0;
-                for (int i = CreatureConstructor.Bones.Count - 1; i > 0; i--)
+                int n = CreatureConstructor.Bones.Count, h = 0, t = n - 1;
+                for (int i = n - 1; i >= 0; --i)
                 {
-                    if (CreatureConstructor.Bones[i].GetComponentsInChildren<LegConstructor>().Length > 0)
+                    if (CreatureConstructor.Bones[i].GetComponentsInChildren<LimbConstructor>().Length > 0)
                     {
-                        isUpper = false;
+                        if (isUpper)
+                        {
+                            h = i;
+                            isUpper = false;
+                        }
+                        t = i;
                     }
 
-                    if (isUpper)
+                    if (i > 0)
                     {
-                        CreatureConstructor.Bones[i].SetParent(CreatureConstructor.Bones[i - 1]);
+                        if (isUpper)
+                        {
+                            CreatureConstructor.Bones[i].SetParent(CreatureConstructor.Bones[i - 1]);
+                        }
+                        else
+                        {
+                            CreatureConstructor.Bones[i - 1].SetParent(CreatureConstructor.Bones[i]);
+                        }
                     }
-                    else
+                }
+
+                if (Limbs.Count > 0)
+                {
+                    for (int i = n - 1; i > h; --i)
                     {
-                        CreatureConstructor.Bones[i - 1].SetParent(CreatureConstructor.Bones[i]);
+                        Transform bone = new GameObject($"Bone.{i}").transform;
+                        bone.SetParent(head, false);
+                        bone.SetAsFirstSibling();
+
+                        DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                        damping.data = new DampedTransformData()
+                        {
+                            constrainedObject = CreatureConstructor.Bones[i],
+                            sourceObject = CreatureConstructor.Bones[i - 1],
+                            dampPosition = 0f,
+                            dampRotation = 0f,
+                            maintainAim = true
+                        };
                     }
+                }
+                for (int i = 0; i < t; ++i)
+                {
+                    Transform bone = new GameObject($"Bone.{i}").transform;
+                    bone.SetParent(tail, false);
+                    bone.SetAsFirstSibling();
+
+                    DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                    damping.data = new DampedTransformData()
+                    {
+                        constrainedObject = CreatureConstructor.Bones[i],
+                        sourceObject = CreatureConstructor.Bones[i + 1],
+                        dampPosition = 0f,
+                        dampRotation = 0.75f,
+                        maintainAim = true
+                    };
                 }
             }
             else
@@ -233,6 +288,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     bone.SetParent(CreatureConstructor.Root);
                     bone.SetAsLastSibling();
                 }
+
+                head.DestroyChildren();
+                tail.DestroyChildren();
             }
 
             foreach (LimbAnimator limb in Limbs)

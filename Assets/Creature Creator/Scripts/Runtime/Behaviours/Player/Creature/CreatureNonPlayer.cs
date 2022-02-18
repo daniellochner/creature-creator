@@ -25,6 +25,12 @@ namespace DanielLochner.Assets.CreatureCreator
             informer = GetComponent<CreatureInformer>();
         }
 #endif
+
+        public override void Setup()
+        {
+            base.Setup();
+            Informer.Setup();
+        }
         #endregion
     }
 }

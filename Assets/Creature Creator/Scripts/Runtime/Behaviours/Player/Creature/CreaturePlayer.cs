@@ -49,6 +49,12 @@ namespace DanielLochner.Assets.CreatureCreator
             interactor = GetComponent<CreatureInteractor>();
         }
 #endif
+
+        public override void Setup()
+        {
+            base.Setup();
+            Editor.Setup();
+        }
         #endregion
     }
 }

@@ -43,6 +43,11 @@ namespace DanielLochner.Assets.CreatureCreator
             killer = GetComponent<CreatureKiller>();
         }
 #endif
+
+        public virtual void Setup()
+        {
+            Animator.Setup();
+        }
         #endregion
     }
 }
