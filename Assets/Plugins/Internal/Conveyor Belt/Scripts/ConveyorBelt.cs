@@ -7,7 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class ConveyorBelt : MonoBehaviour
     {
-        [SerializeField] private float offset = 0.991725f;
+        [SerializeField] private float s = 0.991725f;
         [SerializeField] private Belt belt;
         [SerializeField] private Animator[] gears;
 
@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             foreach (Animator gear in gears)
             {
-                gear.SetFloat("RPS", rps * offset);
+                gear.SetFloat("RPS", rps * s);
             }
         }
     }

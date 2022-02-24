@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private BoxCreature boxCreaturePrefab;
+        [SerializeField] private Animator spawnerAnimator;
         [SerializeField] private bool checkYouTube;
         [Space]
         [SerializeField] private TextAsset[] creatureTextAssets;
@@ -87,7 +88,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     Quaternion rotation = transform.rotation * Quaternion.Euler(Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset));
 
                     BoxCreature boxCreature = Instantiate(boxCreaturePrefab, position, rotation, transform);
-                    boxCreature.Setup(JsonUtility.FromJson<CreatureData>(creatures[index % creatures.Count]));
+                    boxCreature.Spawn(JsonUtility.FromJson<CreatureData>(creatures[index % creatures.Count]));
+                    spawnerAnimator.SetTrigger("Spawn");
 
                     yield return new WaitForSeconds(spawnCooldown);
                 }

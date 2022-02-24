@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -20,17 +21,23 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            creatureName.GetComponent<Canvas>().worldCamera = mainCamera = Camera.main;
+            creatureName.GetComponent<Canvas>().worldCamera = mainCamera = Camera.main.transform.GetChild(0).GetComponent<Camera>();
             creatureName.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource()
             {
                 sourceTransform = mainCamera.transform, weight = 1
             });
         }
 
-        public void Setup(CreatureData creatureData)
+        public void Spawn(CreatureData creatureData)
         {
             creatureConstructor = GetComponentInChildren<CreatureConstructor>();
             creatureConstructor.Construct(creatureData);
+
+            this.InvokeOverTime(delegate (float progress)
+            {
+                transform.localScale = Vector3.one * Mathf.Lerp(0, 1, progress);
+            }, 0.5f);
+
 
             creatureName.GetComponent<TextMeshProUGUI>().text = creatureData.Name;
         }
