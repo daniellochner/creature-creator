@@ -1,10 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -12,22 +9,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Vector3 force;
-        [SerializeField] private GameObject creatureName;
 
         private Camera mainCamera;
         private CreatureConstructor creatureConstructor;
         #endregion
 
         #region Methods
-        private void Start()
-        {
-            creatureName.GetComponent<Canvas>().worldCamera = mainCamera = Camera.main.transform.GetChild(0).GetComponent<Camera>();
-            creatureName.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource()
-            {
-                sourceTransform = mainCamera.transform, weight = 1
-            });
-        }
-
         public void Spawn(CreatureData creatureData)
         {
             creatureConstructor = GetComponentInChildren<CreatureConstructor>();
@@ -37,9 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 transform.localScale = Vector3.one * Mathf.Lerp(0, 1, progress);
             }, 0.5f);
-
-
-            creatureName.GetComponent<TextMeshProUGUI>().text = creatureData.Name;
         }
         public void ReplaceWithRagdoll()
         {

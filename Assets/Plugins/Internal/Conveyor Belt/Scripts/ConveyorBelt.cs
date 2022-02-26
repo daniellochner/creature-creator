@@ -7,9 +7,9 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class ConveyorBelt : MonoBehaviour
     {
-        [SerializeField] private float s = 0.991725f;
         [SerializeField] private Belt belt;
         [SerializeField] private Animator[] gears;
+        [SerializeField] private float s;
 
         private void Start()
         {

@@ -13,14 +13,21 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private BoxCreature boxCreaturePrefab;
+        [SerializeField] private Transform boxCreaturesRoot;
         [SerializeField] private Animator spawnerAnimator;
+        [SerializeField] private AudioSource spawnerAudioSource;
+        [SerializeField] private AudioClip prepareAudioClip;
+        [SerializeField] private AudioClip spawnAudioClip;
+        [SerializeField] private TraumaInducer traumaInducer;
         [SerializeField] private bool checkYouTube;
         [Space]
         [SerializeField] private TextAsset[] creatureTextAssets;
         [SerializeField] private float spawnCooldown;
+        [SerializeField] private float spawnStart;
         [SerializeField] private float rotationOffset;
 
         private List<string> creatures = new List<string>();
+        private int index;
         #endregion
 
         #region Methods
@@ -75,25 +82,29 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            yield return new WaitForSeconds(1); // Wait at least 1 second before spawning creatures
-
             if (creatures.Count > 0)
             {
+                yield return new WaitForSeconds(spawnStart);
                 creatures.Shuffle();
-
-                int index = 0;
                 while (true)
                 {
-                    Vector3 position = transform.position;
-                    Quaternion rotation = transform.rotation * Quaternion.Euler(Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset));
-
-                    BoxCreature boxCreature = Instantiate(boxCreaturePrefab, position, rotation, transform);
-                    boxCreature.Spawn(JsonUtility.FromJson<CreatureData>(creatures[index % creatures.Count]));
                     spawnerAnimator.SetTrigger("Spawn");
-
                     yield return new WaitForSeconds(spawnCooldown);
                 }
             }
+        }
+
+        public void PrepareEvent()
+        {
+            spawnerAudioSource.PlayOneShot(prepareAudioClip);
+        }
+        public void SpawnEvent()
+        {
+            spawnerAudioSource.PlayOneShot(spawnAudioClip);
+
+            Quaternion rotation = boxCreaturesRoot.rotation * Quaternion.Euler(Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset));
+            BoxCreature boxCreature = Instantiate(boxCreaturePrefab, boxCreaturesRoot.position, rotation, boxCreaturesRoot);
+            boxCreature.Spawn(JsonUtility.FromJson<CreatureData>(creatures[index++ % creatures.Count]));
         }
         #endregion
     }
