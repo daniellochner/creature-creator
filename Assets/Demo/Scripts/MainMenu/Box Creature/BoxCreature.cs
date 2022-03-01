@@ -8,16 +8,22 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BoxCreature : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private CreatureConstructor creatureConstructor;
+        [SerializeField] private Click click;
+        [Space]
         [SerializeField] private Vector3 force;
 
         private Camera mainCamera;
-        private CreatureConstructor creatureConstructor;
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            mainCamera = Camera.main;
+        }
+
         public void Spawn(CreatureData creatureData)
         {
-            creatureConstructor = GetComponentInChildren<CreatureConstructor>();
             creatureConstructor.Construct(creatureData);
 
             this.InvokeOverTime(delegate (float progress)
@@ -27,13 +33,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ReplaceWithRagdoll()
         {
-            if (CanvasUtility.IsPointerOverUI)
+            if (creatureConstructor.gameObject.activeSelf == false)
             {
                 return;
             }
-
-            GetComponent<Click>().enabled = false;
             creatureConstructor.gameObject.SetActive(false);
+            click.enabled = false;
 
             CreatureConstructor ragdoll = creatureConstructor.GetComponent<CreatureRagdoll>().Generate(creatureConstructor.Data);
             foreach (Transform bone in ragdoll.Bones)

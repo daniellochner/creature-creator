@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4041236049360367947}
   - component: {fileID: 4041236049360367945}
   - component: {fileID: 4041236049360367946}
+  - component: {fileID: 2862971131670024434}
   m_Layer: 0
   m_Name: Zoom
   m_TagString: MainCamera
@@ -84,6 +85,29 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4041236049360367948}
   m_Enabled: 1
+--- !u!114 &2862971131670024434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041236049360367948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ee01e66702087b4798e633ca34c7956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxUpdateRate: Infinity
+  preview: 0
+  blurAlgorithmSelection: 0
+  blurConfig: {fileID: 11400000, guid: 56e4e092b72a8014990bda37c4838c8a, type: 2}
+  downsample: 0
+  blurRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &4041236049601487436
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +197,7 @@ GameObject:
   - component: {fileID: 4041236050074530309}
   - component: {fileID: 4041236050074530308}
   - component: {fileID: 4041236050074530307}
+  - component: {fileID: 4379939900963799764}
   m_Layer: 13
   m_Name: Tools/UI
   m_TagString: Untagged
@@ -299,6 +324,29 @@ MonoBehaviour:
   m_AfterStackBundles:
   - assemblyQualifiedName: UnityEngine.Rendering.PostProcessing.Blur, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &4379939900963799764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041236050074530310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ee01e66702087b4798e633ca34c7956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxUpdateRate: Infinity
+  preview: 0
+  blurAlgorithmSelection: 0
+  blurConfig: {fileID: 11400000, guid: 56e4e092b72a8014990bda37c4838c8a, type: 2}
+  downsample: 0
+  blurRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &4041236050173656928
 GameObject:
   m_ObjectHideFlags: 0

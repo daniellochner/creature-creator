@@ -17547,6 +17547,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: -1269401475396898753, guid: 95f5d0702bfc6734c834aadb09722a99, type: 3}
+      propertyPath: m_CastShadows
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: -1052120079468382490, guid: 95f5d0702bfc6734c834aadb09722a99, type: 3}
       propertyPath: m_RootOrder
       value: 31
@@ -20983,7 +20987,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 3.495e-41, y: 0, z: 0, w: 8e-45}
+  m_BoundingSphereOverride: {x: 4.5905e-41, y: 0, z: 0, w: -8.746541e+9}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -28795,6 +28799,8 @@ GameObject:
   - component: {fileID: 1646424370}
   - component: {fileID: 1646424371}
   - component: {fileID: 1646424372}
+  - component: {fileID: 1646424374}
+  - component: {fileID: 1646424373}
   m_Layer: 13
   m_Name: Camera
   m_TagString: MainCamera
@@ -28969,6 +28975,36 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &1646424373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646424366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ee1c62c905bb24ea7c9cf3d9d40b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TraumaExponent: 1
+  MaximumAngularShake: {x: 5, y: 5, z: 5}
+  MaximumTranslationShake: {x: 0.75, y: 0.75, z: 0.75}
+--- !u!114 &1646424374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646424366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d7e76ed207560344b85e880c2e9c0f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  receiver: {fileID: 1646424373}
+  creatures: {fileID: 2133011056}
+  stress: 0.25
 --- !u!1 &1651154319
 GameObject:
   m_ObjectHideFlags: 0
@@ -33526,7 +33562,7 @@ Light:
   m_Color: {r: 1, g: 0.39215687, b: 0, a: 1}
   m_Intensity: 2.5
   m_Range: 10
-  m_SpotAngle: 149
+  m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
@@ -33569,7 +33605,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.5905e-41, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 4.5905e-41, y: 0, z: 0, w: -8.746541e+9}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
