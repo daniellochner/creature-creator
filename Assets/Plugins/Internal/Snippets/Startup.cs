@@ -11,7 +11,6 @@ namespace DanielLochner.Assets
     public class Startup : MonoBehaviour
     {
         [SerializeField] public string sceneToLoad;
-
         private void Start()
         {
             SceneManager.LoadScene(sceneToLoad);
@@ -22,6 +21,11 @@ namespace DanielLochner.Assets
     [InitializeOnLoad]
     public static class LoadStartupScene
     {
+        private static string[] IgnoredScenes =
+        {
+            "Testing"
+        };
+
         private static string PreviousScene
         {
             get => EditorPrefs.GetString("prevScene");
@@ -32,7 +36,10 @@ namespace DanielLochner.Assets
         {
             EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
             {
-                if (SceneManager.GetActiveScene().name.Equals("Testing")) return;
+                foreach (string ignoredScene in IgnoredScenes)
+                {
+                    if (SceneManager.GetActiveScene().name.Equals(ignoredScene)) return;
+                }
 
                 switch (state)
                 {
