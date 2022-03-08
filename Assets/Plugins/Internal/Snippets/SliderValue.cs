@@ -13,13 +13,12 @@ namespace DanielLochner.Assets
         private void Awake()
         {
             slider = GetComponent<Slider>();
-
             slider.onValueChanged.AddListener(SetValue);
             SetValue(slider.value);
         }
-        private void SetValue(float value)
+        public void SetValue(float value)
         {
-            valueText.text = (value).ToString();
+            valueText.text = value.ToString();
         }
     }
 }
