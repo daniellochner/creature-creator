@@ -560,7 +560,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                CreatureConstructor.AddBone(0, Vector3.up * 0.75f, Quaternion.identity, 0f);
+                CreatureConstructor.AddBone(0, Vector3.up * 1.5f, Quaternion.identity, 0f);
                 CreatureConstructor.AddBoneToBack();
                 CreatureConstructor.Body.localPosition = new Vector3(0, CreatureConstructor.Body.localPosition.y, 0); // Added bones aren't initially center-aligned.
                 CreatureConstructor.SetColours(Color.white, Color.black);

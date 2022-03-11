@@ -192,12 +192,12 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnMultiplayerSuccess(string message)
         {
             UpdateNetworkStatus(message, Color.green);
-            NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer", UnityEngine.SceneManagement.LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
 
         public void Play()
         {
-            SceneManager.LoadScene("Singleplayer");
+            SceneManager.LoadScene("Island");
         }
         public async void Join(string lobbyCode, string password = "")
         {
@@ -395,8 +395,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public enum MapType
         {
             Farm,
-            Island,
-            ObstacleCourse
+            Island
         }
         public enum VisibilityType
         {

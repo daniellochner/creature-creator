@@ -19,11 +19,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(1, 5)] private int appeal = 1;
 
         [SerializeField] private Transformation transformations;
-        [SerializeField, HasFlag("transformations", Transformation.Pivot | Transformation.PivotXY)] private float pivotOffset = 0.5f;
+        [SerializeField, HasFlag("transformations", Transformation.Pivot | Transformation.PivotXY)] public float pivotOffset = 0.5f;
         [SerializeField, HasFlag("transformations", Transformation.Rotate)] private float rotateScaleFactor = 1f;
         [SerializeField, HasFlag("transformations", Transformation.Scale)] private MinMax minMaxScale = new MinMax(0.25f, 2.5f);
         [SerializeField, HasFlag("transformations", Transformation.Scale)] private float scaleIncrement = 0.1f;
-        [SerializeField, HasFlag("transformations", Transformation.StretchX | Transformation.StretchY | Transformation.StretchZ)] private float stretchDistance = 0.25f;
+        [SerializeField, HasFlag("transformations", Transformation.StretchX | Transformation.StretchY | Transformation.StretchZ)] public float stretchDistance = 0.25f;
         [SerializeField] private float toolsScaleFactor = 1f;
 
         [SerializeField] private List<Ability> abilities;

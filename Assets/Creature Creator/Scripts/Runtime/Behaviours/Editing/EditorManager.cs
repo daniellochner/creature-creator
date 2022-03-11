@@ -282,7 +282,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Animator.IsAnimated = false;
             player.Creature.Energy.DepleteEnergy = false;
 
-            SetCameraOffset(-0.75f);
+            SetCameraOffset(-1.5f);
         }
         public void Play()
         {
@@ -337,12 +337,12 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Animator.IsAnimated = false;
             player.Creature.Energy.DepleteEnergy = false;
 
-            SetCameraOffset(0.75f);
+            SetCameraOffset(1.5f);
         }
 
         private void SetCameraOffset(float x)
         {
-            player.Camera.OffsetPosition = new Vector3(x, 1f, player.Camera.OffsetPosition.z);
+            player.Camera.OffsetPosition = new Vector3(x, 2f, player.Camera.OffsetPosition.z);
         }
         #endregion
 
