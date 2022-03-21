@@ -192,7 +192,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnMultiplayerSuccess(string message)
         {
             UpdateNetworkStatus(message, Color.green);
-            NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene("Multiplayer_Base"/*mapOS.Options[mapOS.Selected].Name*/, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
 
         public void Play()
