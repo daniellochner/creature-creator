@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     creature.ReplaceWithRagdoll();
                 }
 
-                #region N.E.S.T Easter Egg
+                #region Easter Egg
                 rumbleCount++;
                 if ((rumbleCount >= rumblesToSpawn) && (Time.time <= timeToSpawn) && !nestGO.activeSelf)
                 {
