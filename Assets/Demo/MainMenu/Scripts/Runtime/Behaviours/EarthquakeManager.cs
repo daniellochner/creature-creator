@@ -19,9 +19,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioClip rumble;
 
         [Header("Other")]
-        [SerializeField] private GameObject nestGO;
-        [SerializeField] private int rumblesToSpawn;
-        [SerializeField] private float timeToSpawn;
+        [SerializeField] private GameObject nest;
+        [SerializeField] private int targetRumbleCount;
 
         private int rumbleCount;
         #endregion
@@ -42,13 +41,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     creature.ReplaceWithRagdoll();
                 }
 
-                #region Easter Egg
                 rumbleCount++;
-                if ((rumbleCount >= rumblesToSpawn) && (Time.time <= timeToSpawn) && !nestGO.activeSelf)
+                if (rumbleCount >= targetRumbleCount && creatures.childCount == 0 && !nest.activeSelf)
                 {
-                    nestGO.SetActive(true);
+                    nest.SetActive(true);
                 }
-                #endregion
             }
         }
         #endregion

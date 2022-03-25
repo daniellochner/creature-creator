@@ -17856,6 +17856,8 @@ MonoBehaviour:
     min: 0.9
     max: 1.1
   cooldown: 1
+  stressReceiver: {fileID: 0}
+  stress: 0
 --- !u!82 &1042851709
 AudioSource:
   m_ObjectHideFlags: 0
@@ -20784,9 +20786,8 @@ MonoBehaviour:
   - {fileID: 1977144077}
   audioSource: {fileID: 1272804632}
   rumble: {fileID: 8300000, guid: 8e8711629ae8ed8489f75788aea1dbf6, type: 3}
-  nestGO: {fileID: 796793163441730006}
-  rumblesToSpawn: 10
-  timeToSpawn: 3
+  nest: {fileID: 796793163441730006}
+  targetRumbleCount: 5
 --- !u!82 &1272804632
 AudioSource:
   m_ObjectHideFlags: 0
@@ -36652,6 +36653,8 @@ GameObject:
   - component: {fileID: 562860862888103049}
   - component: {fileID: 821604259}
   - component: {fileID: 796793163441730007}
+  - component: {fileID: 796793163441730008}
+  - component: {fileID: 796793163441730009}
   m_Layer: 0
   m_Name: Nest
   m_TagString: Conveyor Belt
@@ -36673,6 +36676,123 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 15
   elapsedTime: 0
+--- !u!114 &796793163441730008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796793163441730006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9745b6d8e541334b9330df7a59c7d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleFX: {fileID: 0}
+  soundFX:
+  - {fileID: 8300000, guid: 8e8711629ae8ed8489f75788aea1dbf6, type: 3}
+  minMaxPitch:
+    min: 0.9
+    max: 1.1
+  cooldown: 15
+  stressReceiver: {fileID: 1646424373}
+  stress: 0.5
+--- !u!82 &796793163441730009
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796793163441730006}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!33 &979312910645641911
 MeshFilter:
   m_ObjectHideFlags: 0

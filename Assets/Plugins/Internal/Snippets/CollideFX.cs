@@ -9,9 +9,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioClip[] soundFX;
         [SerializeField] private MinMax minMaxPitch;
         [SerializeField] private float cooldown;
+        [SerializeField] private StressReceiver stressReceiver;
+        [SerializeField, DontDrawIf("stressReceiver", null)] private float stress;
 
         private AudioSource audioSource;
-        private float timeOfLast;
+        private float timeOfLast = Mathf.NegativeInfinity;
         #endregion
 
         #region Methods
@@ -31,9 +33,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     audioSource.pitch = Random.Range(minMaxPitch.min, minMaxPitch.max);
                     audioSource.PlayOneShot(soundFX[Random.Range(0, soundFX.Length)]);
                 }
-                if (particleFX)
+                if (particleFX != null)
                 {
                     Instantiate(particleFX, collision.contacts[0].point, Quaternion.identity);
+                }
+                if (stressReceiver != null)
+                {
+                    stressReceiver.InduceStress(stress);
                 }
 
                 timeOfLast = Time.time;
