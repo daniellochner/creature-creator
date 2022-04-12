@@ -18,7 +18,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.IsEditing = true;
                 other.GetComponent<CreatureMover>().Platform = transform;
-                other.GetComponentInParent<NetworkCreature>().Hide();
+
+                NetworkCreature networkCreature = other.GetComponentInParent<NetworkCreature>();
+                if (networkCreature != null)
+                {
+                    networkCreature.Hide();
+                }
 
                 hasEntered = true;
             }
@@ -28,7 +33,12 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Player") && hasEntered)
             {
                 EditorManager.Instance.IsEditing = false;
-                other.GetComponentInParent<NetworkCreature>().ReconstructAndShow();
+
+                NetworkCreature networkCreature = other.GetComponentInParent<NetworkCreature>();
+                if (networkCreature != null)
+                {
+                    networkCreature.ReconstructAndShow();
+                }
 
                 hasEntered = false;
             }

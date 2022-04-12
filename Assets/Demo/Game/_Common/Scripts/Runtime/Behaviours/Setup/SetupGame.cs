@@ -8,6 +8,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class SetupGame : MonoBehaviourSingleton<SetupGame>
     {
+        #region Fields
+        [SerializeField] private Platform platform;
+        #endregion
+
         #region Methods
         private void Start()
         {
@@ -16,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Setup()
         {
             NetworkCreature networkCreature = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreature>();
+            networkCreature.transform.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
+
             EditorManager.Instance.Player = networkCreature.Player;
             networkCreature.Player.gameObject.SetActive(true);
             EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
