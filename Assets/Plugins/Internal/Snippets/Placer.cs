@@ -7,20 +7,19 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private GameObject prefab;
         [SerializeField] private int count;
+        [SerializeField] private bool alignToSurface;
 
         [Header("Position")]
         [SerializeField] private float spacing = 1f;
         [SerializeField] private MinMax minMaxPosOffset;
-        [SerializeField] private bool alignToSurface;
 
         [Header("Rotation")]
         [SerializeField] private Vector3 defaultRotation;
-        [SerializeField] private bool randomizeRotation;
-        [SerializeField, DrawIf("randomizeRotation", true)] private MinMax minMaxRotOffset = new MinMax(0f, 360f);
+        [SerializeField] private Vector3Int normalAlignment = Vector3Int.one;
+        [SerializeField] private MinMax minMaxRotOffset;
 
         [Header("Scale")]
-        [SerializeField] private bool randomizeScale;
-        [SerializeField, DrawIf("randomizeScale", true)] private MinMax minMaxScale = new MinMax(0.9f, 1.1f);
+        [SerializeField] private MinMax minMaxScale = new MinMax(1f, 1f);
 
         [SerializeField, Button("Place")] private bool place;
         #endregion
@@ -36,6 +35,11 @@ namespace DanielLochner.Assets
             get => count;
             set => count = value;
         }
+        public bool AlignToSurface
+        {
+            get => alignToSurface;
+            set => alignToSurface = value;
+        }
 
         public float Spacing
         {
@@ -47,21 +51,11 @@ namespace DanielLochner.Assets
             get => minMaxPosOffset;
             set => minMaxPosOffset = value;
         }
-        public bool AlignToSurface
-        {
-            get => alignToSurface;
-            set => alignToSurface = value;
-        }
 
         public Vector3 DefaultRotation
         {
             get => defaultRotation;
             set => defaultRotation = value;
-        }
-        public bool RandomizeRotation
-        {
-            get => randomizeRotation;
-            set => randomizeRotation = value;
         }
         public MinMax MinMaxRotOffset
         {
@@ -69,11 +63,6 @@ namespace DanielLochner.Assets
             set => minMaxRotOffset = value;
         }
 
-        public bool RandomizeScale
-        {
-            get => randomizeScale;
-            set => randomizeScale = value;
-        }
         public MinMax MinMaxScale
         {
             get => minMaxScale;
@@ -88,34 +77,20 @@ namespace DanielLochner.Assets
 
             for (int i = 0; i < count; i++)
             {
-                GameObject prefabGO = Instantiate(prefab, transform, false);
-                prefabGO.name = prefab.name;
+                GameObject obj = Instantiate(prefab, transform, false);
+                obj.name = prefab.name;
 
-                // Position
-                Vector3 origin = transform.position + transform.forward * (spacing * i + Random.Range(minMaxPosOffset.min, minMaxPosOffset.max));
+                Vector3 origin = transform.position + transform.forward * (spacing * i + minMaxPosOffset.Random);
+                obj.transform.position = origin;
                 if (alignToSurface && Physics.Raycast(origin, -transform.up, out RaycastHit hitInfo))
                 {
-                    prefabGO.transform.position = hitInfo.point;
+                    obj.transform.position = hitInfo.point;
+                    obj.transform.up = hitInfo.normal.Multiply(transform.TransformDirection(normalAlignment));
                 }
-                else
-                {
-                    prefabGO.transform.position = origin;
-                }
-
-                // Rotation
-                prefabGO.transform.localRotation = Quaternion.Euler(defaultRotation);
-                if (randomizeRotation)
-                {
-                    prefabGO.transform.localRotation *= Quaternion.Euler(0f, Random.Range(minMaxRotOffset.min, minMaxRotOffset.max), 0f);
-                }
-
-                // Scale
-                if (randomizeScale)
-                {
-                    prefabGO.transform.localScale *= Random.Range(minMaxScale.min, minMaxScale.max);
-                }
+                obj.transform.localScale *= minMaxScale.Random;
+                obj.transform.localRotation *= Quaternion.Euler(defaultRotation) * Quaternion.Euler(0f, minMaxRotOffset.Random, 0f);
             }
-            #endregion
         }
+        #endregion
     }
 }

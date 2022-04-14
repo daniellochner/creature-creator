@@ -36,9 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 placer.Spacing = spacing;
                 placer.MinMaxPosOffset = minMaxPosOffset;
                 placer.AlignToSurface = true;
-                placer.RandomizeRotation = true;
                 placer.MinMaxRotOffset = minMaxRotOffset;
-                placer.RandomizeScale = true;
                 placer.MinMaxScale = minMaxScale;
 
                 placer.Place();
