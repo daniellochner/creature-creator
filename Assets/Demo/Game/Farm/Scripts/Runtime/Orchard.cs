@@ -32,10 +32,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 Placer placer = root.AddComponent<Placer>();
                 placer.Prefab = tree;
+                placer.AlignToSurface = true;
+                placer.NormalAlignment = Vector3Int.zero;
                 placer.Count = count;
                 placer.Spacing = spacing;
                 placer.MinMaxPosOffset = minMaxPosOffset;
-                placer.AlignToSurface = true;
                 placer.MinMaxRotOffset = minMaxRotOffset;
                 placer.MinMaxScale = minMaxScale;
 

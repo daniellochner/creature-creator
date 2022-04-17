@@ -62,6 +62,11 @@ namespace DanielLochner.Assets
             get => minMaxRotOffset;
             set => minMaxRotOffset = value;
         }
+        public Vector3Int NormalAlignment
+        {
+            get => normalAlignment;
+            set => normalAlignment = value;
+        }
 
         public MinMax MinMaxScale
         {

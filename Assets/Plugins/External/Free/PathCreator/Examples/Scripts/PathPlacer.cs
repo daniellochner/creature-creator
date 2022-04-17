@@ -9,7 +9,8 @@ namespace PathCreation.Examples {
         public GameObject prefab;
         public GameObject holder;
         public int links = 1;
-        public float offset;
+        public float posOffset;
+        public Vector3 rotOffset;
 
         private float spacing = 3;
 
@@ -22,11 +23,12 @@ namespace PathCreation.Examples {
                 VertexPath path = pathCreator.path;
 
                 spacing = Mathf.Max(minSpacing, pathCreator.path.length / links);
-                float dst = offset;
+                float dst = posOffset;
                 while (dst < path.length) {
                     Vector3 point = path.GetPointAtDistance (dst);
-                    Quaternion rot = path.GetRotationAtDistance (dst);
-                    Instantiate (prefab, point, rot, holder.transform);
+                    Quaternion rot = path.GetRotationAtDistance(dst);
+                    Transform obj = Instantiate (prefab, point, rot, holder.transform).transform;
+                    obj.localRotation *= Quaternion.Euler(rotOffset);
                     dst += spacing;
                 }
             }
