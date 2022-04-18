@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Material lockedMat;
         [Space]
         [SerializeField] private bool isUnlockable;
-        [SerializeField] private string bodyPartID;
+        [SerializeField] public string bodyPartID;
         #endregion
 
         #region Properties

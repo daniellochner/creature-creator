@@ -10,9 +10,9 @@ public class PrefabNameTrimmer : MonoBehaviour
     {
         foreach (Transform t in GetComponentsInChildren<Transform>())
         {
-            if (Regex.IsMatch(t.gameObject.name, ".* ([0-9]*)"))
+            if (Regex.IsMatch(t.name, @".* \([0-9]*\)"))
             {
-                t.gameObject.name = t.gameObject.name.Substring(0, t.name.LastIndexOf('('));
+                t.name = t.name.Substring(0, t.name.LastIndexOf('('));
             }
         }
     }

@@ -1,21 +1,47 @@
 using UnityEngine;
 
 using DanielLochner.Assets.CreatureCreator;
+using DanielLochner.Assets;
+using System.Collections.Generic;
 
 public class Testing : MonoBehaviour
 {
-    public Transform c;
-    public bool move;
+    public Database db;
 
-    Vector3 md = Vector3.zero;
+    //[ContextMenu("Print")]
+    //public void Print()
+    //{
+    //    string text = "";
 
-    Vector3 vel;
+    //    foreach (string id in db.Objects.Keys)
+    //    {
+    //        BodyPart bp = db.Objects[id] as BodyPart;
 
-    private void LateUpdate()
-    {
-        Vector3 target = move ? c.forward : Vector3.zero;
-        md = Vector3.SmoothDamp(md, target * Time.deltaTime, ref vel, 1f);
+    //        text += id + "," + bp.name + "\n";
+    //    }
 
-        c.position += md;
-    }
+
+    //    Debug.Log(text);
+    //}
+
+
+    //[ContextMenu("Realign")]
+    //public void Realign()
+    //{
+    //    foreach (UnlockableBodyPart ubp in GetComponentsInChildren<UnlockableBodyPart>())
+    //    {
+    //        if (Physics.Raycast(ubp.transform.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hitInfo, 2f))
+    //        {
+    //            ubp.transform.position = hitInfo.point;
+    //        }
+    //        else
+    //        {
+    //            Debug.Log(ubp.name, ubp);
+    //        }
+    //    }
+    //}
+
+
+
+
 }
