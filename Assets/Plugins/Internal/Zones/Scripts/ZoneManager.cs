@@ -1,18 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+// Zones
+// Copyright (c) Daniel Lochner
+
 using UnityEngine;
 
-public class ZoneManager : MonoBehaviour
+namespace DanielLochner.Assets
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ZoneManager : MonoBehaviourSingleton<ZoneManager>
     {
-        
-    }
+        #region Fields
+        [SerializeField] private Zone currentZone;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private Zone previousZone;
+        #endregion
+
+        #region Properties
+        public Zone CurrentZone
+        {
+            get => currentZone;
+            set => currentZone = value;
+        }
+        #endregion
+
+        #region Methods
+        public void EnterZone(Zone zone)
+        {
+            if (currentZone == this || previousZone == this) return;
+
+            NotificationsManager.Notify($"You entered {zone.name}.");
+            currentZone = previousZone = zone;
+        }
+        #endregion
     }
 }

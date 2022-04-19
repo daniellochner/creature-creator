@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+// Zones
+// Copyright (c) Daniel Lochner
+
 using UnityEngine;
 
-public class Zone : MonoBehaviour
+namespace DanielLochner.Assets
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Zone : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        #region Methods
+        public void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                ZoneManager.Instance.EnterZone(this);
+            }
+        }
+        public void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                ZoneManager.Instance.CurrentZone = null;
+            }
+        }
+        #endregion
     }
 }

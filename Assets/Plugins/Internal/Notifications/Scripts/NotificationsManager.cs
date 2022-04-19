@@ -25,6 +25,7 @@ namespace DanielLochner.Assets
             Instantiate(Instance.notificationPrefab, Instance.notificationsRT).Setup(icon, title, description);
         }
 
+#if UNITY_EDITOR
         public void TestNotify()
         {
             if (Application.isPlaying)
@@ -39,6 +40,7 @@ namespace DanielLochner.Assets
                 }
             }
         }
-        #endregion
+#endif
+#endregion
     }
 }

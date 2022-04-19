@@ -41,6 +41,15 @@ public class Testing : MonoBehaviour
     //    }
     //}
 
+    [ContextMenu("Collider")]
+    public void Collider()
+    {
+        foreach (UnlockableBodyPart ubp in GetComponentsInChildren<UnlockableBodyPart>())
+        {
+            SphereCollider sc = ubp.gameObject.AddComponent<SphereCollider>();
+            sc.radius = 0.5f;
+        }
+    }
 
 
 
