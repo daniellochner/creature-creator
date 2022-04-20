@@ -26,7 +26,7 @@ namespace DanielLochner.Assets
         {
             if (currentZone == this || previousZone == this) return;
 
-            NotificationsManager.Notify($"You entered {zone.name}.");
+            NotificationsManager.Notify($"You entered \"{zone.name}\".");
             currentZone = previousZone = zone;
         }
         #endregion
