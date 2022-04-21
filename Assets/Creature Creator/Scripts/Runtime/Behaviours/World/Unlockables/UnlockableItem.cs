@@ -18,10 +18,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (IsUnlocked)
-            {
-                gameObject.SetActive(false);
-            }
+            //if (IsUnlocked)
+            //{
+            //    gameObject.SetActive(false);
+            //}
         }
 
         private void OnTriggerEnter(Collider other)

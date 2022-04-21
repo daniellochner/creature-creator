@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class UnlockableBodyPart : UnlockableItem
     {
         #region Fields
-        [SerializeField] private string bodyPartID;
+        [SerializeField] public string bodyPartID;
         #endregion
 
         #region Properties

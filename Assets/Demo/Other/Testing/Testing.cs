@@ -3,10 +3,11 @@ using UnityEngine;
 using DanielLochner.Assets.CreatureCreator;
 using DanielLochner.Assets;
 using System.Collections.Generic;
+using UnityEditor;
 
 public class Testing : MonoBehaviour
 {
-    public Database db;
+    //public Database db;
 
     //[ContextMenu("Print")]
     //public void Print()
@@ -97,6 +98,72 @@ public class Testing : MonoBehaviour
     //    }
 
     //}
+
+    public Material patternMat;
+    public Material bodyPartMat;
+
+    public UnlockableBodyPart ubp;
+    public UnlockablePattern up;
+    public UnlockableCollection uc;
+
+    public Transform bodyPartsT;
+    public Transform patternsT;
+    public Transform collectionsT;
+
+    public Database bodyPartsDB;
+
+    [ContextMenu("MOVE")]
+    public void Move()
+    {
+        foreach (UnlockableItem item in GetComponentsInChildren<UnlockableItem>())
+        {
+            if (item is UnlockableBodyPart)
+            {
+                UnlockableBodyPart t1 = PrefabUtility.InstantiatePrefab(ubp, bodyPartsT) as UnlockableBodyPart;
+                t1.transform.SetPositionAndRotation(item.transform.position, item.transform.rotation);
+                t1.bodyPartID = (item as UnlockableBodyPart).bodyPartID;
+
+                DanielLochner.Assets.CreatureCreator.BodyPart bp = bodyPartsDB.Objects[t1.bodyPartID] as DanielLochner.Assets.CreatureCreator.BodyPart;
+
+                GameObject go = PrefabUtility.InstantiatePrefab(bp.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Constructible), t1.transform.GetChild(1)) as GameObject;
+
+                Transform PREV = item.transform.GetChild(0).GetChild(0); // change this when go to FARM!
+                go.transform.SetPositionAndRotation(PREV.position, PREV.rotation);
+                go.transform.localScale = PREV.localScale;
+
+                BodyPartConstructor bpc = go.GetComponent<BodyPartConstructor>();
+                Material mat = new Material(bodyPartMat);
+
+                Renderer r = bpc.GetComponentInChildren<Renderer>();
+                Material[] mats = new Material[r.materials.Length];
+                for (int i = 0; i < r.materials.Length; i++)
+                {
+                    mats[i] = mat;
+                }
+                r.materials = mats;
+
+                DestroyImmediate(bpc);
+            }
+            else 
+            if (item is UnlockablePattern)
+            {
+                UnlockablePattern t2 = PrefabUtility.InstantiatePrefab(up, patternsT) as UnlockablePattern;
+                t2.transform.SetPositionAndRotation(item.transform.position, item.transform.rotation);
+                t2.patternID = (item as UnlockablePattern).patternID;
+
+                Material mat = new Material(patternMat);
+                mat.mainTexture = item.GetComponentInChildren<MeshRenderer>().material.mainTexture;
+                t2.GetComponentInChildren<MeshRenderer>().material = mat;
+            }
+            else
+            {
+                UnlockableCollection t3 = PrefabUtility.InstantiatePrefab(uc, collectionsT) as UnlockableCollection;
+                t3.transform.SetPositionAndRotation(item.transform.position, item.transform.rotation);
+                t3.items = (item as UnlockableCollection).items;
+            }
+        }
+    }
+
 
 
 }

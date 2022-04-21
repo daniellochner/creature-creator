@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private int cash;
-        [SerializeField] private List<Item> items;
+        [SerializeField] public List<Item> items;
         #endregion
 
         #region Properties
