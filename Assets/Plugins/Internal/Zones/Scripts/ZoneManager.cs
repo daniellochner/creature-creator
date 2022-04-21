@@ -24,9 +24,9 @@ namespace DanielLochner.Assets
         #region Methods
         public void EnterZone(Zone zone)
         {
-            if (currentZone == this || previousZone == this) return;
+            if (currentZone == zone || previousZone == zone) return;
 
-            NotificationsManager.Notify($"You entered \"{zone.name}\".");
+            NotificationsManager.Notify($"You entered <b>{zone.name}</b>.");
             currentZone = previousZone = zone;
         }
         #endregion

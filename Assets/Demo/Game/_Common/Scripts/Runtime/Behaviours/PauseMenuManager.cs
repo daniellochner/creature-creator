@@ -3,6 +3,7 @@
 
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -19,7 +20,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Leave()
         {
-            NetworkConnectionManager.Instance.Leave();
+            if (NetworkManager.Singleton.IsListening)
+            {
+                NetworkConnectionManager.Instance.Leave();
+            }
+            else
+            {
+                SceneManager.LoadScene("MainMenu");
+            }
         }
         #endregion
     }
