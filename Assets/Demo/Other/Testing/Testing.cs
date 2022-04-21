@@ -214,22 +214,22 @@ public class Testing : MonoBehaviour
     //}
 
 
-    public Material mat;
-    [ContextMenu("MATERIAL")]
-    public void MATERIAL()
-    {
-        foreach (UnlockableBodyPart ubp in GetComponentsInChildren<UnlockableBodyPart>())
-        {
-            Renderer r = ubp.transform.GetChild(1).GetChild(2).GetComponentInChildren<Renderer>();
+    //public Material mat;
+    //[ContextMenu("MATERIAL")]
+    //public void MATERIAL()
+    //{
+    //    foreach (UnlockableBodyPart ubp in GetComponentsInChildren<UnlockableBodyPart>())
+    //    {
+    //        Renderer r = ubp.transform.GetChild(1).GetChild(2).GetComponentInChildren<Renderer>();
 
-            Material[] mats = new Material[r.materials.Length];
-            for (int i = 0; i < mats.Length; i++)
-            {
-                mats[i] = mat;
-            }
-            r.materials = mats;
-        }
-    }
+    //        Material[] mats = new Material[r.materials.Length];
+    //        for (int i = 0; i < mats.Length; i++)
+    //        {
+    //            mats[i] = mat;
+    //        }
+    //        r.materials = mats;
+    //    }
+    //}
 
 
     //[ContextMenu("MOVE UP")]

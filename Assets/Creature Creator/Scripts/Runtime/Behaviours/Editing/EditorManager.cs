@@ -255,6 +255,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             player.Creature.Editor.IsInteractable = true;
             player.Creature.Editor.IsEditing = true;
+            player.Creature.Editor.Cash = BaseCash;
         }
         #endregion
 
@@ -610,7 +611,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Unlocks
         public void UnlockPattern(string patternID)
         {
-            if (UnlockedPatterns.Contains(patternID)) return;
+            //if (UnlockedPatterns.Contains(patternID)) return;
 
             Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
 

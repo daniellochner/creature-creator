@@ -187,8 +187,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor = GetComponent<CreatureConstructor>();
             CreatureMover = GetComponent<CreatureMover>();
-
-            Cash = EditorManager.Instance.BaseCash;
         }
 
         public void Setup()

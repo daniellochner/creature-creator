@@ -33,7 +33,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Player") && isUnlockable)
             {
                 OnUnlock();
-                gameObject.SetActive(false);
             }
         }
 

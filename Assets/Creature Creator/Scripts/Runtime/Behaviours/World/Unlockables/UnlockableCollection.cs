@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,6 +38,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected override void OnUnlock()
         {
+            StartCoroutine(UnlockRoutine());
+        }
+        protected override void OnSpawn()
+        {
+        }
+
+        private IEnumerator UnlockRoutine()
+        {
             foreach (Item item in items)
             {
                 if (item.itemType == UnlockableItemType.BodyPart)
@@ -48,11 +57,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     EditorManager.Instance.UnlockPattern(item.itemID);
                 }
+
+                yield return new WaitForSeconds(0.2f);
             }
+
             ProgressManager.Data.Cash += cash;
-        }
-        protected override void OnSpawn()
-        {
+            NotificationsManager.Notify($"You received ${cash}!");
+
+            ProgressManager.Instance.Save();
+
+            gameObject.SetActive(false);
         }
         #endregion
 

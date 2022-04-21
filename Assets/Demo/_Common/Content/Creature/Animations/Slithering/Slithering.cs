@@ -27,14 +27,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            float t = animator.GetFloat("%LSpeed");
-            float x = t * width * Mathf.Sin(slitherTime);
+            //float t = animator.GetFloat("%LSpeed");
+            //float x = t * width * Mathf.Sin(slitherTime);
 
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = new Vector3(x, 0, 0);
-            slitherTime += Time.deltaTime;
+            //m_MonoBehaviour.CreatureConstructor.Root.localPosition = new Vector3(x, 0, 0);
+            //slitherTime += Time.deltaTime;
 
-            Vector3 pos = m_MonoBehaviour.CreatureConstructor.Body.L2WSpace(headPos) + m_MonoBehaviour.CreatureConstructor.Body.forward * movementSpeed;
-            m_MonoBehaviour.CreatureConstructor.Bones[m_MonoBehaviour.CreatureConstructor.Bones.Count - 1].LookAt(pos, m_MonoBehaviour.CreatureConstructor.Body.up);
+            //Vector3 pos = m_MonoBehaviour.CreatureConstructor.Body.L2WSpace(headPos) + m_MonoBehaviour.CreatureConstructor.Body.forward * movementSpeed;
+            //m_MonoBehaviour.CreatureConstructor.Bones[m_MonoBehaviour.CreatureConstructor.Bones.Count - 1].LookAt(pos, m_MonoBehaviour.CreatureConstructor.Body.up);
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
