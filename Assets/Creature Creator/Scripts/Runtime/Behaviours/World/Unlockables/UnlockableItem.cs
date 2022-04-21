@@ -22,6 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 gameObject.SetActive(false);
             }
+            else
+            {
+                OnSpawn();
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -34,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         protected abstract void OnUnlock();
+        protected abstract void OnSpawn();
         #endregion
     }
 }

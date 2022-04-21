@@ -23,7 +23,7 @@ namespace DanielLochner.Assets
     {
         private static string[] IgnoredScenes =
         {
-            "Testing", "Island"
+            "Testing"
         };
 
         private static string PreviousScene

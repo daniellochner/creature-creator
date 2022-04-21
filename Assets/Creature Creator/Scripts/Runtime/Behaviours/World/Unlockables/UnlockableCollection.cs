@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private int cash;
-        [SerializeField] public List<Item> items;
+        [SerializeField] private List<Item> items;
         #endregion
 
         #region Properties
@@ -50,6 +50,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             ProgressManager.Data.Cash += cash;
+        }
+        protected override void OnSpawn()
+        {
         }
         #endregion
 

@@ -214,4 +214,68 @@ public class Testing : MonoBehaviour
     //}
 
 
+    public Material mat;
+    [ContextMenu("MATERIAL")]
+    public void MATERIAL()
+    {
+        foreach (UnlockableBodyPart ubp in GetComponentsInChildren<UnlockableBodyPart>())
+        {
+            Renderer r = ubp.transform.GetChild(1).GetChild(2).GetComponentInChildren<Renderer>();
+
+            Material[] mats = new Material[r.materials.Length];
+            for (int i = 0; i < mats.Length; i++)
+            {
+                mats[i] = mat;
+            }
+            r.materials = mats;
+        }
+    }
+
+
+    //[ContextMenu("MOVE UP")]
+    //public void MoveUp()
+    //{
+    //    foreach (UnlockableBodyPart ubp in GetComponentsInChildren<UnlockableBodyPart>())
+    //    {
+    //        Transform model = ubp.transform.GetChild(1).GetChild(2).GetChild(0);
+
+    //        Mesh mesh = null;
+
+    //        SkinnedMeshRenderer smr = model.GetComponentInChildren<SkinnedMeshRenderer>();
+    //        if (smr == null)
+    //        {
+    //            mesh = model.GetComponentInChildren<MeshFilter>().sharedMesh;
+    //        }
+    //        else
+    //        {
+    //            mesh = smr.sharedMesh;
+    //        }
+
+    //        float minY = Mathf.Infinity;
+    //        float maxY = Mathf.NegativeInfinity;
+
+    //        foreach (Vector3 vertex in mesh.vertices)
+    //        {
+    //            Vector3 worldV = model.L2WSpace(vertex);
+
+    //            if (worldV.y > maxY)
+    //            {
+    //                maxY = worldV.y;
+    //            }
+    //            else if (worldV.y < minY)
+    //            {
+    //                minY = worldV.y;
+    //            }
+    //        }
+
+
+    //        float avgY = (maxY + minY) / 2f;
+
+
+    //        Transform effect1 = ubp.transform.GetChild(1).GetChild(0);
+    //        Transform effect2 = ubp.transform.GetChild(1).GetChild(1);
+
+    //        effect1.position = effect2.position = new Vector3(effect1.position.x, avgY, effect1.position.z);
+    //    }
+    //}
 }
