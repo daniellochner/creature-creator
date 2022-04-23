@@ -59,14 +59,21 @@ namespace DanielLochner.Assets
             IsDead = true;
             OnDie();
         }
+        public void Respawn()
+        {
+            Health = minMaxHealth.max;
+            IsDead = false;
+            OnRespawn();
+        }
 
         protected virtual void OnTakeDamage(float damage)
         {
-
         }
         protected virtual void OnDie()
         {
-
+        }
+        protected virtual void OnRespawn()
+        {
         }
 
 #if UNITY_EDITOR

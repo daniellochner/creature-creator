@@ -611,7 +611,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Unlocks
         public void UnlockPattern(string patternID)
         {
-            //if (UnlockedPatterns.Contains(patternID)) return;
+            if (UnlockedPatterns.Contains(patternID)) return;
 
             Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
 
@@ -730,7 +730,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     editorAudioSource.PlayOneShot(createAudioClip);
 
                     Ray ray = player.Camera.Camera.ScreenPointToRay(Input.mousePosition);
-                    Plane plane = new Plane(player.Camera.Camera.transform.forward, player.Creature.Mover.Platform.position);
+                    Plane plane = new Plane(player.Camera.Camera.transform.forward, player.Creature.Mover.Platform.transform.position);
 
                     if (plane.Raycast(ray, out float distance))
                     {

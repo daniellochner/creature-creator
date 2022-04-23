@@ -21,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI copyKUI;
         [SerializeField] private KeybindUI viewMapKUI;
         [SerializeField] private KeybindUI freeLookKUI;
+        [SerializeField] private KeybindUI respawnKUI;
         #endregion
 
         #region Methods
@@ -119,6 +120,13 @@ namespace DanielLochner.Assets.CreatureCreator
             freeLookKUI.OnRebind.AddListener(delegate (KeyCode key)
             {
                 KeybindingsManager.Data.FreeLook = key;
+            });
+
+            // Respawn
+            respawnKUI.Rebind(KeybindingsManager.Data.Respawn, false);
+            respawnKUI.OnRebind.AddListener(delegate (KeyCode key)
+            {
+                KeybindingsManager.Data.Respawn = key;
             });
         }
         #endregion

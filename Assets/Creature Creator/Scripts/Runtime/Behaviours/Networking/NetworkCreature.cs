@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsOwner)
             {
-                player.Creature.Health.OnRespawn += RespawnServerRpc;
+                //player.Creature.Health.OnRespawn += RespawnServerRpc;
                 player.Creature.Health.OnHealthChanged += SetHealthServerRpc;
                 player.Creature.Energy.OnEnergyChanged += SetEnergyServerRpc;
                 player.Creature.Age.OnAgeChanged += SetAgeServerRpc;
@@ -157,21 +157,21 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Respawn
-        [ServerRpc]
-        private void RespawnServerRpc()
-        {
-            RespawnClientRpc();
-        }
-        [ClientRpc]
-        private void RespawnClientRpc()
-        {
-            if (!IsOwner)
-            {
-                Destroy(NonPlayerCreature.Killer.Corpse);
-            }
-        }
-        #endregion
+        //#region Respawn
+        //[ServerRpc]
+        //private void RespawnServerRpc()
+        //{
+        //    RespawnClientRpc();
+        //}
+        //[ClientRpc]
+        //private void RespawnClientRpc()
+        //{
+        //    if (!IsOwner)
+        //    {
+        //        Destroy(NonPlayerCreature.Killer.Corpse);
+        //    }
+        //}
+        //#endregion
 
         #region Turn
         [ServerRpc]

@@ -34,6 +34,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GridLayoutGroup patternsGrid;
         #endregion
 
+        #region Properties
+        private Database BodyParts => DatabaseManager.GetDatabase("Body Parts");
+        private Database Patterns  => DatabaseManager.GetDatabase("Patterns");
+        #endregion
+
         #region Methods
         private void Start()
         {
@@ -41,20 +46,13 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Setup()
         {
-            // Level/Experience
-            levelText.text = ProgressManager.Data.Level.ToString();
-            experienceSlider.value = ProgressManager.Data.Experience;
-
-            // Cash
-            cashText.text = $"${ProgressManager.Data.Cash}";
-
             // Body Parts
-            Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
-            foreach (string bodyPartID in bodyParts.Objects.Keys)
+            foreach (string bodyPartID in BodyParts.Objects.Keys)
             {
-                BodyPart bodyPart = bodyParts.GetEntry<BodyPart>(bodyPartID);
+                BodyPart bodyPart = BodyParts.GetEntry<BodyPart>(bodyPartID);
                 BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, bodyPartsGrid.transform);
                 bodyPartUI.Setup(bodyPart);
+                bodyPartUI.name = bodyPartID;
 
                 bodyPartUI.HoverUI.OnEnter.AddListener(delegate
                 {
@@ -68,10 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     StatisticsMenu.Instance.Clear();
                 });
                 bodyPartUI.DragUI.enabled = false;
-                if (!ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID))
-                {
-                    bodyPartUI.CanvasGroup.alpha = 0.25f;
-                }
+
                 GameObject hiddenIconGO = Instantiate(hiddenIconPrefab, bodyPartUI.transform);
                 hiddenIconGO.SetActive(SettingsManager.Data.HiddenBodyParts.Contains(bodyPartID));
                 bodyPartUI.ClickUI.OnLeftClick.AddListener(delegate
@@ -89,24 +84,16 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 });
             }
-            bodyPartsText.text = $"{ProgressManager.Data.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
-            bodyPartsSlider.maxValue = bodyParts.Objects.Count;
-            bodyPartsSlider.value = ProgressManager.Data.UnlockedBodyParts.Count;
-            bodyPartsTitleText.text = $"Unlocked Body Parts ({bodyPartsText.text})";
 
             // Patterns
-            Database patterns = DatabaseManager.GetDatabase("Patterns");
-            foreach (string patternID in patterns.Objects.Keys)
+            foreach (string patternID in Patterns.Objects.Keys)
             {
-                Texture2D pattern = patterns.GetEntry<Texture2D>(patternID);
+                Texture2D pattern = Patterns.GetEntry<Texture2D>(patternID);
                 PatternUI patternUI = Instantiate(patternUIPrefab, patternsGrid.transform);
                 patternUI.Setup(pattern);
+                patternUI.name = patternID;
 
                 patternUI.SelectToggle.enabled = false;
-                if (!ProgressManager.Data.UnlockedPatterns.Contains(patternID))
-                {
-                    patternUI.CanvasGroup.alpha = 0.25f;
-                }
                 GameObject hiddenIconGO = Instantiate(hiddenIconPrefab, patternUI.transform);
                 hiddenIconGO.SetActive(SettingsManager.Data.HiddenPatterns.Contains(patternID));
                 patternUI.ClickUI.OnLeftClick.AddListener(delegate
@@ -124,8 +111,36 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 });
             }
-            patternsText.text = $"{ProgressManager.Data.UnlockedPatterns.Count}/{patterns.Objects.Count}";
-            patternsSlider.maxValue = patterns.Objects.Count;
+
+            UpdateInfo();
+        }
+
+        public void UpdateInfo()
+        {
+            // Level/Experience
+            levelText.text = ProgressManager.Data.Level.ToString();
+            experienceSlider.value = ProgressManager.Data.Experience;
+
+            // Cash
+            cashText.text = $"${ProgressManager.Data.Cash}";
+
+            // Body Parts
+            foreach (BodyPartUI bodyPartUI in bodyPartsGrid.GetComponentsInChildren<BodyPartUI>())
+            {
+                bodyPartUI.CanvasGroup.alpha = ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartUI.name) ? 1f : 0.25f;
+            }
+            bodyPartsText.text = $"{ProgressManager.Data.UnlockedBodyParts.Count}/{BodyParts.Objects.Count}";
+            bodyPartsSlider.maxValue = BodyParts.Objects.Count;
+            bodyPartsSlider.value = ProgressManager.Data.UnlockedBodyParts.Count;
+            bodyPartsTitleText.text = $"Unlocked Body Parts ({bodyPartsText.text})";
+
+            // Patterns
+            foreach (PatternUI patternUI in patternsGrid.GetComponentsInChildren<PatternUI>())
+            {
+                patternUI.CanvasGroup.alpha = ProgressManager.Data.UnlockedPatterns.Contains(patternUI.name) ? 1f : 0.25f;
+            }
+            patternsText.text = $"{ProgressManager.Data.UnlockedPatterns.Count}/{Patterns.Objects.Count}";
+            patternsSlider.maxValue = Patterns.Objects.Count;
             patternsSlider.value = ProgressManager.Data.UnlockedPatterns.Count;
             patternsTitleText.text = $"Unlocked Patterns ({patternsText.text})";
         }

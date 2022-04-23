@@ -25,8 +25,7 @@ namespace DanielLochner.Assets
 
             if (!File.Exists(Path.Combine(Application.persistentDataPath, fileName)))
             {
-                Data.Revert();
-                Save();
+                Revert();
             }
             Load();
         }
@@ -39,6 +38,12 @@ namespace DanielLochner.Assets
         public virtual void Load()
         {
             data = SaveUtility.Load<M>(Path.Combine(Application.persistentDataPath, fileName), EncryptionKeyValue);
+        }
+        [ContextMenu("Revert")]
+        public void Revert()
+        {
+            Data.Revert();
+            Save();
         }
         #endregion
     }

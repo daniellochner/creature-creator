@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -13,8 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureConstructor Constructor { get; private set; }
         public CreatureKiller Killer { get; private set; }
         public CreatureMover Mover { get; private set; }
-
-        public Action OnRespawn { get; set; }
         #endregion
 
         #region Methods
@@ -27,24 +24,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
         protected override void OnDie()
         {
+            EditorManager.Instance.IsVisible = false;
+
             Killer.Kill();
 
-            EditorManager.Instance.IsVisible = false;
+            InformationDialog.Inform("You Died!", $"Press the button below to respawn at the last platform where you edited your creature.", "Respawn", Respawn);
         }
-
-        [ContextMenu("Respawn")]
-        public void Respawn()
+        protected override void OnRespawn()
         {
-            Destroy(Killer.Corpse);
+            Mover.TeleportToPlatform();
+            Killer.Respawn();
 
-            transform.position = Mover.Platform.position;
-            Constructor.Body.rotation = transform.rotation;
-            gameObject.SetActive(true);
+            CreatureInformationManager.Instance.Respawn();
 
-            EditorManager.Instance.Build();
             EditorManager.Instance.IsVisible = true;
-
-            OnRespawn?.Invoke();
         }
         #endregion
     }

@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle tutorialToggle;
         [SerializeField] private Toggle worldChatToggle;
         [SerializeField] private Button resetProgressButton;
+        [SerializeField] private ProgressUI progressUI;
 
         [Header("Controls")]
         [SerializeField] private Slider sensitivityHorizontalSlider;
@@ -58,15 +59,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
-        private void OnDestroy()
-        {
-            if (SettingsManager.Instance) SettingsManager.Instance.Save();
-        }
-        private void OnApplicationQuit()
-        {
-            OnDestroy();
-        }
-
         private void Setup()
         {
             #region Video
@@ -357,7 +349,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> remove your creatures.", noEvent: ProgressManager.Data.Revert);
+                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your cash, level and experience. It will <u>not</u> remove your creatures.", yesEvent: ResetProgress);
             });
             #endregion
 
@@ -390,6 +382,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetInvertVertical(isOn);
             });
             #endregion
+        }
+
+        public void ResetProgress()
+        {
+            ProgressManager.Instance.Revert();
+            progressUI.UpdateInfo();
         }
         #endregion
     }

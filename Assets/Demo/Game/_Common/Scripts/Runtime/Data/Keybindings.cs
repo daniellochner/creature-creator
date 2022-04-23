@@ -20,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeyCode copy;
         [SerializeField] private KeyCode viewMap;
         [SerializeField] private KeyCode freeLook;
+        [SerializeField] private KeyCode respawn;
         #endregion
 
         #region Properties
@@ -88,6 +89,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => freeLook;
             set => freeLook = value;
         }
+        public KeyCode Respawn
+        {
+            get => respawn;
+            set => respawn = value;
+        }
         #endregion
 
         #region Methods
@@ -106,6 +112,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Copy = KeyCode.LeftAlt;
             ViewMap = KeyCode.M;
             FreeLook = KeyCode.LeftAlt;
+            Respawn = KeyCode.R;
         }
         #endregion
     }

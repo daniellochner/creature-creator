@@ -56,6 +56,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
+            EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
+            EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
+            EditorManager.Instance.BaseCash = ProgressManager.Data.Cash;
+            EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
+            EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
+
             if (IsNetworkedGame)
             {
                 SetupMP();
@@ -64,24 +70,23 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetupSP();
             }
+            CreatureInformationManager.Instance.Setup();
+
         }
         private void SetupMP()
         {
             NetworkCreature networkCreature = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreature>();
-            networkCreature.transform.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
 
             EditorManager.Instance.Player = networkCreature.Player;
-            networkCreature.Player.gameObject.SetActive(true);
-            EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
-            EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
-            EditorManager.Instance.BaseCash = ProgressManager.Data.Cash;
-            EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
-            EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
-            EditorManager.Instance.Setup();
 
-            CreatureInformationManager.Instance.Setup();
-            NetworkCreaturesMenu.Instance.Setup();
+            networkCreature.Player.Creature.Mover.Platform = platform;
+            networkCreature.Player.Creature.Mover.TeleportToPlatform();
+            networkCreature.Player.gameObject.SetActive(true);
+            
+            EditorManager.Instance.Setup();
+            
             NetworkCreaturesManager.Instance.Setup();
+            NetworkCreaturesMenu.Instance.Setup();
 
             if (NetworkManager.Singleton.IsHost && LobbyHelper.Instance.JoinedLobby.IsPrivate)
             {

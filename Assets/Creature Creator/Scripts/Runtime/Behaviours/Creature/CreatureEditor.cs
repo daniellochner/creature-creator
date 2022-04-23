@@ -632,7 +632,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleStretchTools(int oldIndex, int newIndex, Transform tool)
         {
-            Plane stretchPlane = new Plane(transform.right, CreatureMover.Platform.position);
+            Plane stretchPlane = new Plane(transform.right, CreatureMover.Platform.transform.position);
 
             Ray ray = cameraOrbit.Camera.ScreenPointToRay(Input.mousePosition);
             if (stretchPlane.Raycast(ray, out float distance))
