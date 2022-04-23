@@ -43,6 +43,17 @@ namespace DanielLochner.Assets.CreatureCreator
             get => age;
             set => age = Mathf.Max(0, value);
         }
+
+        public string FormattedAge
+        {
+            get
+            {
+                int minutes = age / 60;
+                int seconds = age % 60;
+
+                return $"{minutes}m{seconds}s";
+            }
+        }
         #endregion
 
         #region Methods

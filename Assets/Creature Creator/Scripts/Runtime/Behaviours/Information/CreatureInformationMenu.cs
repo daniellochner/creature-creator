@@ -34,7 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateInfo()
         {
-            nameAgeText.text = $"<u>{information.Name}</u> ({FormatAge(information.Age)})";
+            nameAgeText.text = $"<u>{information.Name}</u> ({information.FormattedAge})";
             healthSlider.value = information.Health;
             energySlider.value = information.Energy;
 
@@ -46,13 +46,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 photoImage.sprite = Sprite.Create(information.Photo, new Rect(position, size), pivot);
             }
-        }
-        private string FormatAge(int age)
-        {
-            int minutes = age / 60;
-            int seconds = age % 60;
-
-            return $"{minutes}m{seconds}s";
         }
         #endregion
     }

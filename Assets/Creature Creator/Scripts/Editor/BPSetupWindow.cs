@@ -80,7 +80,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Setup(model);
                 }
-                UpdateStats();
             }
             if (GUILayout.Button("Update"))
             {

@@ -78,6 +78,18 @@ namespace DanielLochner.Assets.CreatureCreator
             Cash = 1000;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
+
+            if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
+            {
+                GrantSupporterPerks();
+            }
+        }
+
+        public void GrantSupporterPerks()
+        {
+            UnlockedBodyParts.AddRange(SupporterPerks.BODY_PARTS);
+            UnlockedPatterns.AddRange(SupporterPerks.PATTERNS);
+            Cash += 100;
         }
         #endregion
     }

@@ -39,8 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Destroy(Corpse);
             gameObject.SetActive(true);
 
-            CreatureAnimator.IsAnimated = false;
-            CreatureAnimator.IsAnimated = true;
+            CreatureAnimator.Rebuild();
 
             OnRespawn?.Invoke();
         }

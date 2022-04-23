@@ -57,6 +57,11 @@ namespace DanielLochner.Assets
                     {
                         InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", submitEvent: delegate (string colourHEX)
                         {
+                            if (!colourHEX.StartsWith("#"))
+                            {
+                                colourHEX = colourHEX.Insert(0, "#");
+                            }
+
                             if (ColorUtility.TryParseHtmlString(colourHEX, out colour))
                             {
                                 colourUI.SetColour(colour);

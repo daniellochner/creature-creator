@@ -11,11 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (other.CompareTag("Player"))
             {
-                this.InvokeAtEndOfFrame(delegate // CAN'T SET ANIMATED TO FALSE IN PHYSICS FRAME?!?!?!
-                {
-                    other.GetComponent<CreatureHealth>().Die();
-                });
-
+                this.InvokeAtEndOfFrame(other.GetComponent<CreatureHealth>().Die); // Can't set IsAnimated to false in physics frame?
             }
         }
     }

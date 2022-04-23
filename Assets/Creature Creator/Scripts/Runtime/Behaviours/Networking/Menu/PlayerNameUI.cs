@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(PlayerData playerData)
         {
-            backgroundImage.color = (NetworkManager.Singleton.LocalClientId == playerData.clientId) ? playerColour : nonPlayerColour;
+            SetColour((NetworkManager.Singleton.LocalClientId == playerData.clientId) ? playerColour : nonPlayerColour);
             nameText.text = playerData.username.ToString();
 
             if (NetworkManager.Singleton.ServerClientId == playerData.clientId)
@@ -44,6 +44,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetCreatureName(string creatureName)
         {
             nameText.text = $"{playerData.username} ({creatureName})";
+        }
+        public void SetColour(Color colour)
+        {
+            backgroundImage.color = colour;
         }
         #endregion
     }

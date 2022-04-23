@@ -6,6 +6,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureKiller))]
+    [RequireComponent(typeof(CreatureMover))]
     public class CreatureHealth : PlayerHealth
     {
         #region Properties
@@ -28,11 +29,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Killer.Kill();
 
-            InformationDialog.Inform("You Died!", $"Press the button below to respawn at the last platform where you edited your creature.", "Respawn", Respawn);
+            CreatureInformation info = CreatureInformationManager.Instance.Information;
+            string name = info.Name.Equals("Unnamed") ? "You" : info.Name;
+            string age = info.FormattedAge;
+            
+            InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", Respawn);
         }
         protected override void OnRespawn()
         {
-            Mover.TeleportToPlatform();
+            Mover.Teleport(Mover.Platform);
             Killer.Respawn();
 
             CreatureInformationManager.Instance.Respawn();

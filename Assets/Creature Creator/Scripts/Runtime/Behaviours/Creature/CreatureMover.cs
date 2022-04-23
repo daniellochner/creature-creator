@@ -15,7 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Follower cameraFollower;
         [SerializeField] private CameraOrbit cameraOrbit;
         [SerializeField] private GameObject targetPrefab;
-        [SerializeField] private Platform platform;
 
         [Header("Physical")]
         [SerializeField] private bool requestToMove;
@@ -27,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float thresholdWalkSpeed;
         
         [Header("Non-Physical")]
+        [SerializeField] private Platform platform;
         [SerializeField] private float positionSmoothing;
         [SerializeField] private float rotationSmoothing;
 
@@ -51,7 +51,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureAnimator CreatureAnimator { get; private set; }
 
-        public Platform Platform { get; set; }
+        public Platform Platform
+        {
+            get => platform;
+            set => platform = value;
+        }
         public Vector3 TargetPosition { get; set; }
 
         public Action<Vector3> OnMoveRequest { get; set; }
@@ -106,8 +110,6 @@ namespace DanielLochner.Assets.CreatureCreator
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
             mainCamera = Camera.main;
-
-            Platform = platform;
         }
 
         private void HandleMovement()
@@ -237,13 +239,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Teleport(Vector3 position, Quaternion rotation)
         {
-            transform.position = (TargetPosition = position);
-            CreatureConstructor.Body.rotation = transform.rotation;
+            transform.position = TargetPosition = position;
+            transform.rotation = rotation;
+            CreatureConstructor.Body.localRotation = Quaternion.identity;
 
             moveDisplacement = Vector3.zero;
         }
-        public void TeleportToPlatform()
+        public void Teleport(Platform platform)
         {
+            Platform = platform;
             Teleport(Platform.transform.position, Platform.transform.rotation);
         }
         #endregion
