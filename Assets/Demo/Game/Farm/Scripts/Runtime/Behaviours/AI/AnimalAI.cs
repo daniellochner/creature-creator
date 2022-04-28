@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class AnimalAI : StateMachine
+    public class AnimalAI<T> : StateMachine<T>
     {
         #region Fields
         [SerializeField] private TextAsset data;

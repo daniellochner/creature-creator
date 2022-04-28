@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public abstract class StateMachine : MonoBehaviour
+    public abstract class StateMachine<T> : MonoBehaviour
     {
         #region Fields
-        private BaseState currentState;
+        private BaseState<T> currentState;
         #endregion
 
         #region Properties
-        protected virtual Dictionary<string, BaseState> States { get; set; }
+        protected virtual Dictionary<string, BaseState<T>> States { get; set; }
         #endregion
 
         #region Methods

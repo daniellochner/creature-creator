@@ -79,7 +79,11 @@ SkinnedMeshRenderer:
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 2262296453248369306, guid: 7eb60ee694813664d935220c94f7301b, type: 3}
   m_Bones: []
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
+  - 0
+  - 0
+  - 0
   m_RootBone: {fileID: 0}
   m_AABB:
     m_Center: {x: -0.00040338817, y: 0.0060935263, z: 0.01921238}
@@ -95,7 +99,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8296947345641114780}
   - component: {fileID: 1246615694849975872}
-  - component: {fileID: 5218090483479277528}
+  - component: {fileID: 3283841947362511194}
+  - component: {fileID: -883715865596952481}
   m_Layer: 0
   m_Name: Feathered Toothbrush (A)
   m_TagString: Untagged
@@ -139,7 +144,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 0
+      isExpanded: 1
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -162,7 +167,7 @@ MonoBehaviour:
       positive: 0
     - negative: 2
       positive: 3
---- !u!114 &5218090483479277528
+--- !u!114 &3283841947362511194
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,6 +176,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4241909954976781435}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b33960f84728a44297bac6971981373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &-883715865596952481
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4241909954976781435}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f23c0855d4d68da4d9ccac0bff2a208b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

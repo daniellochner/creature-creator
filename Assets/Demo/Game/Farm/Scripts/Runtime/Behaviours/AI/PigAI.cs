@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class PigAI : AnimalAI
+    public class PigAI : AnimalAI<PigAI>
     {
 
     }

@@ -78,12 +78,14 @@ SkinnedMeshRenderer:
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: -2008522802869532733, guid: 341e5974835e98b4198194f69d4c4ba8, type: 3}
   m_Bones: []
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
+  - 0
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 1
+    m_Center: {x: 0.1369544, y: 0.2332574, z: 0.7587552}
+    m_Extent: {x: 0.24195954, y: 0.70148844, z: 0.82224417}
+  m_DirtyAABB: 0
 --- !u!1 &5323567423748259762
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +96,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8196182301507210783}
   - component: {fileID: 210721143976212611}
-  - component: {fileID: 316154947482029689}
+  - component: {fileID: 8026916143321983616}
+  - component: {fileID: 3369771939844116962}
   m_Layer: 0
   m_Name: Wicked Wings (A)
   m_TagString: Untagged
@@ -159,7 +162,7 @@ MonoBehaviour:
     _values:
     - negative: 0
       positive: 1
---- !u!114 &316154947482029689
+--- !u!114 &8026916143321983616
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,6 +171,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 5323567423748259762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b33960f84728a44297bac6971981373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &3369771939844116962
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5323567423748259762}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f23c0855d4d68da4d9ccac0bff2a208b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -3,15 +3,15 @@
 
 namespace DanielLochner.Assets
 {
-    public abstract class BaseState
+    public abstract class BaseState<T>
     {
         #region Properties
-        public string Name { get; private set; }
-        public StateMachine StateMachine { get; private set; }
+        public virtual string Name { get; private set; }
+        public T StateMachine { get; private set; }
         #endregion
 
         #region Methods
-        public BaseState(string name, StateMachine stateMachine)
+        public BaseState(string name, T stateMachine)
         {
             Name = name;
             StateMachine = stateMachine;

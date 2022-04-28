@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SeagullAI : AnimalAI
+    public class SeagullAI : AnimalAI<SeagullAI>
     {
         #region Fields
         [Header("Seagull")]
@@ -26,62 +26,22 @@ namespace DanielLochner.Assets.CreatureCreator
         public AnimationCurve FlightPath => flightPath;
         public float FrightDistance => frightDistance;
 
-        public Transform CurrentPerchPoint { get; set; }
-        #endregion
-
-        #region Methods
-        public override void Start()
+        public Transform CurrentPerchPoint
         {
-            base.Start();
-            transform.position = (CurrentPerchPoint = perchPoints.GetChild(Random.Range(0, perchPoints.childCount))).position;
+            get;
+            set;
         }
-
-        protected override void InitializeStates()
+        public Transform RandomPerchPoint
         {
-            States = new Dictionary<string, BaseState>()
-            {
-                { "IDL", new Idling(this) },
-                { "FLY", new Flying(this) }
-            };
-            ChangeState("IDL");
-        }
-        #endregion
-
-        #region States
-        public class Idling : BaseState
-        {
-            private SeagullAI seagullAI;
-
-            public Idling(SeagullAI s) : base("Idling", s) { seagullAI = s; }
-
-            public override void UpdateLogic()
-            {
-                if (Vector3.Distance(Player.Instance.Creature.transform.position, StateMachine.transform.position) < seagullAI.FrightDistance)
-                {
-                    seagullAI.ChangeState("FLY");
-                }
-            }
-        }
-        public class Flying : BaseState
-        {
-            private SeagullAI seagullAI;
-
-            public Flying(SeagullAI s) : base("Flying", s) { seagullAI = s; }
-
-            public override void Enter()
-            {
-                FlyToRandomPerchPoint();
-            }
-
-            private void FlyToRandomPerchPoint()
+            get
             {
                 List<Transform> points = new List<Transform>();
-                foreach (Transform point in seagullAI.PerchPoints)
+                foreach (Transform point in perchPoints)
                 {
                     bool isFarEnough = true;
                     foreach (CreatureBase creature in FindObjectsOfType<CreatureBase>())
                     {
-                        if (Vector3.Distance(creature.transform.position, point.position) < seagullAI.FrightDistance)
+                        if (Vector3.Distance(creature.transform.position, point.position) < frightDistance)
                         {
                             isFarEnough = false;
                             break;
@@ -93,22 +53,73 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                Transform perchPoint = points[Random.Range(0, points.Count)];
-                seagullAI.StartCoroutine(FlyToPerchPointRoutine(perchPoint));
+                return points[Random.Range(0, points.Count)];
             }
+        }
+        #endregion
+
+        #region Methods
+        public override void Start()
+        {
+            base.Start();
+            transform.position = (CurrentPerchPoint = RandomPerchPoint).position;
+        }
+
+        protected override void InitializeStates()
+        {
+            States = new Dictionary<string, BaseState<SeagullAI>>()
+            {
+                { "IDL", new Idling(this) },
+                { "FLY", new Flying(this) }
+            };
+            ChangeState("IDL");
+        }
+        #endregion
+
+        #region Inner Classes
+        public class Idling : BaseState<SeagullAI>
+        {
+            public Idling(SeagullAI sm) : base("Idling", sm) { }
+
+            public override void UpdateLogic()
+            {
+                if (Vector3.Distance(Player.Instance.Creature.transform.position, StateMachine.transform.position) < StateMachine.FrightDistance)
+                {
+                    StateMachine.ChangeState("FLY");
+                }
+            }
+        }
+        public class Flying : BaseState<SeagullAI>
+        {
+            public Flying(SeagullAI sm) : base("Flying", sm) { }
+
+            public override void Enter()
+            {
+                StateMachine.StartCoroutine(FlyToPerchPointRoutine(StateMachine.RandomPerchPoint));
+            }
+
             private IEnumerator FlyToPerchPointRoutine(Transform perchPoint)
             {
-                float flightDistance = Vector3.Distance(seagullAI.CurrentPerchPoint.position, perchPoint.position);
-                float flightTime = flightDistance / seagullAI.FlightSpeed;
+                Quaternion cur = StateMachine.transform.rotation;
+                Quaternion tar = Quaternion.LookRotation(Vector3.ProjectOnPlane(perchPoint.position - StateMachine.transform.position, Vector3.up));
 
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
-                    seagullAI.transform.position = Vector3.Lerp(seagullAI.CurrentPerchPoint.position, perchPoint.position, progress) + (Vector3.up * (seagullAI.FlightHeight * seagullAI.FlightPath.Evaluate(progress)));
+                    StateMachine.transform.rotation = Quaternion.Slerp(cur, tar, progress);
+                },
+                1f);
+
+                float flightDistance = Vector3.Distance(StateMachine.CurrentPerchPoint.position, perchPoint.position);
+                float flightTime = flightDistance / StateMachine.FlightSpeed;
+
+                yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
+                {
+                    StateMachine.transform.position = Vector3.Lerp(StateMachine.CurrentPerchPoint.position, perchPoint.position, progress) + (Vector3.up * (StateMachine.FlightHeight * StateMachine.FlightPath.Evaluate(progress)));
                 },
                 flightTime);
 
-                seagullAI.CurrentPerchPoint = perchPoint;
-                seagullAI.ChangeState("IDL");
+                StateMachine.CurrentPerchPoint = perchPoint;
+                StateMachine.ChangeState("IDL");
             }
         }
         #endregion

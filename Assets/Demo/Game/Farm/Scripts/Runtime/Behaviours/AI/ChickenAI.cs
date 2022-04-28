@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class ChickenAI : AnimalAI
+    public class ChickenAI : AnimalAI<ChickenAI>
     {
 
     }
