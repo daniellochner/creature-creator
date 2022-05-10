@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private CreatureHealth CreatureHealth { get; set; }
 
         public Action<float> OnEnergyChanged { get; set; }
-        public bool DepleteEnergy { get; set; }
+        public bool DepleteEnergy { get; set; } = true;
 
         public float Energy
         {

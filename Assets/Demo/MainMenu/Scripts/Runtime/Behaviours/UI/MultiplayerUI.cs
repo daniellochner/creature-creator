@@ -123,8 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 foreach (Transform worldRT in worldsRT)
                 {
-                    WorldUI worldUI = worldsRT.GetComponent<WorldUI>();
-                    worldUI.JoinButton.interactable = !isConnecting;
+                    worldRT.GetComponent<WorldUI>().JoinButton.interactable = !isConnecting;
                 }
             }
         }
@@ -240,6 +239,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (Exception e)
             {
+                Debug.Log(e);
+
                 UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
             }

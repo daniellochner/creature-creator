@@ -58,8 +58,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PlayerData playerData in NetworkHostManager.Instance.Players.Values)
             {
-                NetworkCreature creature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreature>();
-                string creatureData = JsonUtility.ToJson(creature.PlayerCreature.Constructor.Data);
+                NetworkCreaturePlayer creature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreaturePlayer>();
+                string creatureData = JsonUtility.ToJson(creature.SourceCreature.Constructor.Data);
 
                 creature.LoadPlayerClientRpc(playerData, creatureData, NetworkUtils.SendTo(clientId));
             }

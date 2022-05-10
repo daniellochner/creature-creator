@@ -61,8 +61,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void Start()
         {
-            base.Start();
             transform.position = (CurrentPerchPoint = RandomPerchPoint).position;
+            base.Start();
         }
 
         protected override void InitializeStates()

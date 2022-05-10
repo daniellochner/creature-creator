@@ -10,14 +10,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private TextAsset data;
 
-        protected CreatureNonPlayer creature;
+        protected CreatureSource creature;
         #endregion
 
         #region Methods
         public override void Awake()
         {
             base.Awake();
-            creature = GetComponent<CreatureNonPlayer>();
+            creature = GetComponentInParent<CreatureSource>();
         }
         public virtual void Start()
         {

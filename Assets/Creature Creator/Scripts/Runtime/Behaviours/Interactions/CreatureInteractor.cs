@@ -5,17 +5,17 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreaturePlayer))]
+    [RequireComponent(typeof(CreatureSourcePlayer))]
     public class CreatureInteractor : Interactor
     {
         #region Properties
-        public CreaturePlayer Creature { get; private set; }
+        public CreatureSourcePlayer Creature { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            Creature = GetComponent<CreaturePlayer>();
+            Creature = GetComponent<CreatureSourcePlayer>();
         }
         #endregion
     }

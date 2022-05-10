@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Leave()
         {
-            if (SetupGame.Instance.IsNetworkedGame)
+            if (SetupGame.IsNetworkedGame)
             {
                 NetworkConnectionManager.Instance.Leave();
             }

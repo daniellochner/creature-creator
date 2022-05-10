@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,11 +11,11 @@ namespace DanielLochner.Assets.CreatureCreator
     public class NetworkCreature : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private Player player;
-        [SerializeField] private CreatureNonPlayer nonPlayerCreature;
+        [SerializeField] protected CreatureSource source;
+        [SerializeField] protected CreatureTargetBase target;
 
-        private NetworkObject networkObject;
-        private NetworkTransform networkTransform;
+        protected NetworkObject networkObject;
+        protected NetworkTransform networkTransform;
         #endregion
 
         #region Properties
@@ -23,9 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<int> Age { get; private set; } = new NetworkVariable<int>();
         public NetworkVariable<bool> IsHidden { get; private set; } = new NetworkVariable<bool>();
 
-        public Player Player => player;
-        public CreaturePlayer PlayerCreature => player.Creature;
-        public CreatureNonPlayer NonPlayerCreature => nonPlayerCreature;
+        public CreatureSource SourceCreature => source;
+        public virtual CreatureTargetBase TargetCreature => target;
         #endregion
 
         #region Methods
@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public override void OnNetworkSpawn()
         {
-            Setup();
+            Setup(IsOwner);
         }
 
         private void Initialize()
@@ -43,41 +43,28 @@ namespace DanielLochner.Assets.CreatureCreator
             networkObject = GetComponent<NetworkObject>();
             networkTransform = GetComponent<NetworkTransform>();
         }
-        private void Setup()
+        public virtual void Setup(bool isOwner)
         {
-            if (IsOwner)
-            {
-                //player.Creature.Health.OnRespawn += RespawnServerRpc;
-                player.Creature.Health.OnHealthChanged += SetHealthServerRpc;
-                player.Creature.Energy.OnEnergyChanged += SetEnergyServerRpc;
-                player.Creature.Age.OnAgeChanged += SetAgeServerRpc;
+            source.gameObject.SetActive(isOwner);
+            target.gameObject.SetActive(!isOwner);
 
-                if (player.Creature.Mover.RequestToMove)
-                {
-                    player.Creature.Mover.OnTurnRequest += RequestToTurn;
-                    player.Creature.Mover.OnMoveRequest += RequestToMove;
-                }
-            }
-            else
+            if (isOwner)
             {
-                Health.OnValueChanged += delegate (float oldHealth, float newHealth)
-                {
-                    NonPlayerCreature.Informer.Information.Health = newHealth;
+                SourceCreature.Health.OnHealthChanged += (float health) => SetInfo(health, SetHealthServerRpc, SetHealth);
+                SourceCreature.Energy.OnEnergyChanged += (float energy) => SetInfo(energy, SetEnergyServerRpc, SetEnergy);
+                SourceCreature.Age.OnAgeChanged += (int age) => SetInfo(age, SetAgeServerRpc, SetAge);
 
-                    if (newHealth <= 0)
-                    {
-                        NonPlayerCreature.Killer.Kill();
-                    }
-                };
-                Energy.OnValueChanged += delegate (float oldEnergy, float newEnergy)
+                SourceCreature.Informer.OnRespawn += delegate
                 {
-                    NonPlayerCreature.Informer.Information.Energy = newEnergy;
-                };
-                Age.OnValueChanged += delegate (int oldAge, int newAge)
-                {
-                    NonPlayerCreature.Informer.Information.Age = newAge;
+                    SourceCreature.Health.HealthPercentage = 1f;
+                    SourceCreature.Energy.Energy = 1f;
+                    SourceCreature.Age.Start();
                 };
             }
+
+            Health.OnValueChanged += InformHealth;
+            Energy.OnValueChanged += InformEnergy;
+            Age.OnValueChanged += InformAge;
         }
 
         #region Hide
@@ -92,119 +79,109 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                NonPlayerCreature.gameObject.SetActive(false);
+                TargetCreature.gameObject.SetActive(false);
             }
         }
         public void Hide()
         {
             HideServerRpc();
-            //networkTransform.Capture = false;
-        }
-        #endregion
-
-        #region Load Player
-        [ClientRpc]
-        public void LoadPlayerClientRpc(PlayerData playerData, string creatureData, ClientRpcParams clientRpcParams)
-        {
-            NetworkCreaturesMenu.Instance.AddPlayer(playerData);
-            if (!IsHidden.Value)
-            {
-                ReconstructAndShowClientRpc(creatureData);
-            }
-        }
-        #endregion
-
-        #region Move
-        [ServerRpc]
-        private void RequestToMoveServerRpc(Vector3 direction, ulong clientId)
-        {
-            RequestToMoveClientRpc(direction, NetworkUtils.SendTo(clientId));
-        }
-        [ClientRpc]
-        private void RequestToMoveClientRpc(Vector3 direction, ClientRpcParams clientRpcParams)
-        {
-            player.Creature.Mover.Move(direction);
-        }
-        private void RequestToMove(Vector3 direction)
-        {
-            RequestToMoveServerRpc(direction, OwnerClientId);
         }
         #endregion
 
         #region Reconstruct And Show
         [ServerRpc]
-        private void ReconstructAndShowServerRpc(string creatureData)
+        protected void ReconstructAndShowServerRpc(string creatureData)
         {
             ReconstructAndShowClientRpc(creatureData);
             IsHidden.Value = false;
         }
         [ClientRpc]
-        private void ReconstructAndShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
+        protected void ReconstructAndShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
         {
             CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
             if (!IsOwner)
             {
-                NonPlayerCreature.Constructor.Demolish();
-                NonPlayerCreature.gameObject.SetActive(true);
-                NonPlayerCreature.Constructor.Construct(data);
+                TargetCreature.Constructor.Demolish();
+                TargetCreature.gameObject.SetActive(true);
+                TargetCreature.Constructor.Construct(data);
             }
             NetworkCreaturesMenu.Instance.SetName(OwnerClientId, data.Name);
         }
         public void ReconstructAndShow()
         {
-            ReconstructAndShowServerRpc(JsonUtility.ToJson(PlayerCreature.Constructor.Data));
-            //networkTransform.Capture = true;
+            ReconstructAndShowServerRpc(JsonUtility.ToJson(SourceCreature.Constructor.Data));
         }
         #endregion
 
-        //#region Respawn
-        //[ServerRpc]
-        //private void RespawnServerRpc()
-        //{
-        //    RespawnClientRpc();
-        //}
-        //[ClientRpc]
-        //private void RespawnClientRpc()
-        //{
-        //    if (!IsOwner)
-        //    {
-        //        Destroy(NonPlayerCreature.Killer.Corpse);
-        //    }
-        //}
-        //#endregion
-
-        #region Turn
+        #region Respawn
         [ServerRpc]
-        private void RequestToTurnServerRpc(float angle, ulong clientId)
+        private void RespawnServerRpc()
         {
-            RequestToTurnClientRpc(angle, NetworkUtils.SendTo(clientId));
+            RespawnClientRpc();
         }
         [ClientRpc]
-        private void RequestToTurnClientRpc(float angle, ClientRpcParams clientRpcParams)
+        private void RespawnClientRpc()
         {
-            player.Creature.Mover.Turn(angle);
-        }
-        private void RequestToTurn(float angle)
-        {
-            RequestToTurnServerRpc(angle, OwnerClientId);
+            if (!IsOwner)
+            {
+                Destroy(TargetCreature.Killer.Corpse);
+            }
         }
         #endregion
 
-        #region Set Information
+        #region Information
+        private void SetInfo<T>(T value, Action<T> nF, Action<T> nnF)
+        {
+            if (SetupGame.IsNetworkedGame)
+            {
+                nF.Invoke(value);
+            }
+            else
+            {
+                nnF.Invoke(value);
+            }
+        }
+
+        private void SetHealth(float health)
+        {
+            Health.Value = Mathf.InverseLerp(SourceCreature.Health.MinMaxHealth.min, SourceCreature.Health.MinMaxHealth.max, health);
+        }
+        private void SetEnergy(float energy)
+        {
+            Energy.Value = energy;
+        }
+        private void SetAge(int age)
+        {
+            Age.Value = age;
+        }
+
         [ServerRpc]
         private void SetHealthServerRpc(float health)
         {
-            Health.Value = Mathf.InverseLerp(player.Creature.Health.MinMaxHealth.min, player.Creature.Health.MinMaxHealth.max, health);
+            SetHealth(health);
         }
         [ServerRpc]
         private void SetEnergyServerRpc(float energy)
         {
-            Energy.Value = energy;
+            SetEnergy(energy);
         }
         [ServerRpc]
         private void SetAgeServerRpc(int age)
         {
-            Age.Value = age;
+            SetAge(age);
+        }
+        
+        private void InformHealth(float oldHealth, float newHealth)
+        {
+            TargetCreature.Informer.Information.Health = newHealth;
+        }
+        private void InformEnergy(float oldEnergy, float newEnergy)
+        {
+            TargetCreature.Informer.Information.Energy = newEnergy;
+        }
+        private void InformAge(int oldAge, int newAge)
+        {
+            TargetCreature.Informer.Information.Age = newAge;
         }
         #endregion
         #endregion

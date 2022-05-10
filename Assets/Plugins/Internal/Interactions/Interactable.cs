@@ -22,7 +22,9 @@ namespace DanielLochner.Assets
         public virtual bool CanInteract(Interactor interactor)
         {
             float distance = Vector3.Distance(transform.position, interactor.transform.position);
-            return distance > minMaxInteractionRange.min && distance < minMaxInteractionRange.max;
+            bool isWithinRange = (distance > minMaxInteractionRange.min) && (distance < minMaxInteractionRange.max);
+
+            return isWithinRange;
         }
         public virtual bool CanHighlight(Interactor interactor) => CanInteract(interactor);
 
