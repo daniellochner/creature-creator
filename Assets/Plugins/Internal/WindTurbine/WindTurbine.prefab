@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2109856762995431088}
   - component: {fileID: 6993042303301431103}
   - component: {fileID: 1298290688449357244}
+  - component: {fileID: 953490429672942838}
   m_Layer: 0
   m_Name: Turbine
   m_TagString: Untagged
@@ -178,6 +179,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &953490429672942838
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3951723461120935031}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2e86a4a3878b3eb49bc1b16629312b76, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4986286384175057270
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +209,6 @@ GameObject:
   - component: {fileID: 5654561393692595148}
   - component: {fileID: 8779435651257883753}
   - component: {fileID: 6787528804847888547}
-  - component: {fileID: 5328797250046014505}
   - component: {fileID: 34956962565782621}
   m_Layer: 0
   m_Name: WindTurbine
@@ -262,25 +281,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &5328797250046014505
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4986286384175057270}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2e86a4a3878b3eb49bc1b16629312b76, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &34956962565782621
 MonoBehaviour:
   m_ObjectHideFlags: 0

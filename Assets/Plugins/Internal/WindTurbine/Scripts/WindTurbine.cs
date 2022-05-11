@@ -10,7 +10,7 @@ namespace DanielLochner.Assets
         [SerializeField] private MinMax minMaxRate;
         private void Awake()
         {
-            GetComponent<Animator>().SetFloat("RPS", Random.Range(minMaxRate.min, minMaxRate.max));
+            GetComponentInChildren<Animator>().SetFloat("RPS", Random.Range(minMaxRate.min, minMaxRate.max));
         }
     }
 }
