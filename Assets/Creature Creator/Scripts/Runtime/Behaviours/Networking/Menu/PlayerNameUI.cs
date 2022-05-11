@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetColour((NetworkManager.Singleton.LocalClientId == playerData.clientId) ? playerColour : nonPlayerColour);
             nameText.text = playerData.username.ToString();
 
-            if (NetworkManager.Singleton.ServerClientId == playerData.clientId)
+            if (NetworkManager.ServerClientId == playerData.clientId)
             {
                 hostGO.SetActive(true);
             }

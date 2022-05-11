@@ -19,6 +19,7 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 using System.Threading;
+using Unity.Netcode.Transports.UTP;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -215,6 +216,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId)
                 };
+
                 Lobby lobby = await LobbyHelper.Instance.JoinLobbyAsync(lobbyCode, options);
                 string lobbyPasswordHash = lobby.Data["passwordHash"].Value;
                 bool isValidPasswordHash = string.IsNullOrEmpty(lobbyPasswordHash) || sha256.VerifyHash(password, lobbyPasswordHash);

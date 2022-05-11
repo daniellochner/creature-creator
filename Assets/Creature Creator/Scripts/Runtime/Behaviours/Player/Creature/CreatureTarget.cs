@@ -28,8 +28,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override void Setup()
         {
-            Selector.Setup();
             base.Setup();
+            Selector.Setup();
         }
         #endregion
     }

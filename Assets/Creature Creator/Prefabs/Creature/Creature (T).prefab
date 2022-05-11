@@ -98,7 +98,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3002746977395476858, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
       propertyPath: m_Name
-      value: Creature (Non-Player)
+      value: Creature (T)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
@@ -210,7 +210,8 @@ MonoBehaviour:
   cloner: {fileID: 8494628076202705300}
   photographer: {fileID: -9020272506099403498}
   killer: {fileID: 3979165202273956639}
-  informer: {fileID: -3588625786838544996}
+  informer: {fileID: 0}
+  selector: {fileID: -3588625786838544996}
 --- !u!114 &-3588625786838544996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,15 +227,9 @@ MonoBehaviour:
   cursorIcon: {fileID: 2800000, guid: c3eac3ba6c18d3f4eb4b9338cc064e6c, type: 3}
   minMaxInteractionRange:
     min: 0
-    max: 10
+    max: 50
   informationMenuPrefab: {fileID: 1257471989696206141, guid: f2f494ecd6ba5f14fb6ae8e08066afe0, type: 3}
   informationSelectCirclePrefab: {fileID: 6934024238365535033, guid: a057762bebc43be4497953e485c8f86f, type: 3}
-  information:
-    name: Unnamed
-    photo: {fileID: 0}
-    health: 1
-    energy: 1
-    age: 0
 --- !u!114 &1640302633
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public CreatureSourceNonPlayer SourceNonPlayerCreature => SourceCreature as CreatureSourceNonPlayer;
 
-        public override CreatureTargetBase TargetCreature => IsOwner ? SourceNonPlayerCreature : base.TargetCreature;
+        public override CreatureTargetBase TargetCreature => IsOWNER ? SourceNonPlayerCreature : base.TargetCreature;
         #endregion
 
         #region Methods

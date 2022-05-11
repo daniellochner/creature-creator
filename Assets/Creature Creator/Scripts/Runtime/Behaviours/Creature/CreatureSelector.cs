@@ -58,11 +58,12 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Collider = GetComponent<CreatureCollider>();
             Informer = GetComponent<CreatureInformer>();
+
+            informationMenu = Instantiate(informationMenuPrefab, Dynamic.OverlayCanvas);
         }
 
         public void Setup()
         {
-            informationMenu = Instantiate(informationMenuPrefab, Dynamic.OverlayCanvas);
             Informer.Setup(informationMenu);
         }
 
