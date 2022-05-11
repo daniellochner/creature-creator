@@ -47,9 +47,11 @@ namespace DanielLochner.Assets
             if (debug) Debug.Log($"Pasted {count} values to '{component.name}'.");
         }
 
+#if UNITY_EDITOR
         public static void MoveToTop(this Component component)
         {
             while (UnityEditorInternal.ComponentUtility.MoveComponentUp(component)) ;
         }
+#endif
     }
 }

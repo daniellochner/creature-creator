@@ -8,7 +8,7 @@ namespace DanielLochner.Assets
     public class PlayerData : INetworkSerializable
     {
         public ulong clientId;
-        public FixedString32Bytes username;
+        public string username;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {

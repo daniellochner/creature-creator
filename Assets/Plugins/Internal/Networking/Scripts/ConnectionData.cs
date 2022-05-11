@@ -7,8 +7,8 @@ namespace DanielLochner.Assets
     [Serializable]
     public class ConnectionData : INetworkSerializable
     {
-        public FixedString32Bytes username;
-        public FixedString32Bytes password;
+        public string username;
+        public string password;
 
         public ConnectionData(string username, string password)
         {
