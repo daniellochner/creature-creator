@@ -8,6 +8,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class NetworkCreatureNonPlayer : NetworkCreature
     {
+        #region Fields
+        private bool despawn;
+        #endregion
+
         #region Properties
         public CreatureSourceNonPlayer SourceNonPlayerCreature => SourceCreature as CreatureSourceNonPlayer;
 
@@ -15,6 +19,25 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            if (despawn)
+            {
+                Despawn();
+            }
+        }
+        public void Despawn()
+        {
+            if (NetworkObject.IsSpawned)
+            {
+                NetworkObject.Despawn(true);
+            }
+            else
+            {
+                despawn = true;
+            }
+        }
         #endregion
     }
 }

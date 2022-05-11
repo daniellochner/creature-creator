@@ -532,7 +532,7 @@ namespace DanielLochner.Assets.CreatureCreator
             return typeof(BodyPartConstructor);
         }
 
-        [MenuItem("Creature Creator/Window/Body Part Setup")]
+        [MenuItem("Window/Creature Creator/Body Part Setup")]
         public static void ShowWindow()
         {
             GetWindow<BPSetupWindow>("Body Part Setup");

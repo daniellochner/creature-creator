@@ -51,6 +51,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject passwordGO;
         [SerializeField] private Toggle passwordToggle;
         [SerializeField] private Slider maxPlayersSlider;
+        [SerializeField] private Toggle pvpToggle;
+        [SerializeField] private Toggle pveToggle;
+        [SerializeField] private Toggle npcToggle;
 
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
@@ -276,6 +279,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 string version = Application.version;
                 string mapName = ((MapType)mapOS.Selected).ToString();
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
+                string pvp = pvpToggle.isOn.ToString();
+                string pve = pveToggle.isOn.ToString();
+                string npc = npcToggle.isOn.ToString();
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = isPrivate,
@@ -284,7 +290,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode) },
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
-                        { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) }
+                        { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
+                        { "pvp", new DataObject(DataObject.VisibilityOptions.Public, pvp) },
+                        { "pve", new DataObject(DataObject.VisibilityOptions.Public, pve) },
+                        { "npc", new DataObject(DataObject.VisibilityOptions.Public, npc) }
                     },
                     Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };

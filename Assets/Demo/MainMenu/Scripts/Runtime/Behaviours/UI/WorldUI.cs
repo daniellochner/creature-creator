@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private TextMeshProUGUI playersText;
         [SerializeField] private TextMeshProUGUI nameText;
-        [SerializeField] private TextMeshProUGUI mapVersionText;
+        [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private GameObject padlockIcon;
         [SerializeField] private Button joinButton;
         #endregion
@@ -28,10 +28,13 @@ namespace DanielLochner.Assets.CreatureCreator
             string version = lobby.Data["version"].Value;
             string joinCode = lobby.Data["joinCode"].Value;
             bool isPasswordProtected = !string.IsNullOrEmpty(lobby.Data["passwordHash"].Value);
+            bool pvp = bool.Parse(lobby.Data["pvp"].Value);
+            bool pve = bool.Parse(lobby.Data["pve"].Value);
+            bool npc = bool.Parse(lobby.Data["npc"].Value);
 
             playersText.text = $"{players}/{maxPlayers}";
             nameText.text = lobby.Name;
-            mapVersionText.text = $"{mapName} ({version})";
+            descriptionText.text = $"{mapName} ({version}) | {FormatTag("PVP", pvp)}, {FormatTag("PVE", pve)}, {FormatTag("NPCs", npc)}";
             padlockIcon.SetActive(isPasswordProtected);
             joinButton.onClick.AddListener(delegate 
             {
@@ -47,6 +50,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     multiplayerUI.Join(lobby.LobbyCode);
                 }
             });
+        }
+
+        private string FormatTag(string tag, bool enabled)
+        {
+            return $"{(enabled ? "<s>" : "")}{tag}{(enabled ? "</s>" : "")}";
         }
         #endregion
     }

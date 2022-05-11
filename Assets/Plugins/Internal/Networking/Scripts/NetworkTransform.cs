@@ -76,7 +76,7 @@ namespace DanielLochner.Assets
         }
         private void CapturePositionAndRotation()
         {
-            if (Capture)
+            if (Capture && IsSpawned)
             {
                 CapturePositionAndRotationServerRpc(sourcePosition.position, sourceRotation.rotation);
             }

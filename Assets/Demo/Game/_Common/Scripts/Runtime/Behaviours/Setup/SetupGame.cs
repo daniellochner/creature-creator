@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -87,14 +88,21 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkCreaturesManager.Instance.Setup();
             NetworkCreaturesMenu.Instance.Setup();
 
-            if (NetworkManager.Singleton.IsHost && LobbyHelper.Instance.JoinedLobby.IsPrivate)
+            Lobby lobby = LobbyHelper.Instance.JoinedLobby;
+            if (NetworkManager.Singleton.IsHost && lobby.IsPrivate)
             {
-                InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{LobbyHelper.Instance.JoinedLobby.LobbyCode}\". \nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+                InformationDialog.Inform("Lobby Code", $"The code to your private lobby is \"{lobby.LobbyCode}\". \nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+            }
+            if (!bool.Parse(lobby.Data["npc"].Value))
+            {
+                foreach (NetworkCreatureNonPlayer creature in FindObjectsOfType<NetworkCreatureNonPlayer>())
+                {
+                    creature.Despawn();
+                }
             }
         }
         private void SetupSP()
         {
-
             player.Player.gameObject.SetActive(true);
 
             foreach (NetworkCreature creature in FindObjectsOfType<NetworkCreature>())
