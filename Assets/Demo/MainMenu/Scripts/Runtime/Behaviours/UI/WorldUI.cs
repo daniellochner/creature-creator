@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(MultiplayerUI multiplayerUI, Lobby lobby)
         {
+            string id = lobby.Id;
             int players = lobby.Players.Count;
             int maxPlayers = lobby.MaxPlayers;
             string mapName = lobby.Data["mapName"].Value;
@@ -42,12 +43,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     InputDialog.Input("Password Required", "Enter the password...", submitEvent: delegate (string password)
                     {
-                        multiplayerUI.Join(lobby.LobbyCode, password);
+                        multiplayerUI.Join(id, MultiplayerUI.JoinType.LobbyId, password);
                     });
                 }
                 else
                 {
-                    multiplayerUI.Join(lobby.LobbyCode);
+                    multiplayerUI.Join(id, MultiplayerUI.JoinType.LobbyId);
                 }
             });
         }

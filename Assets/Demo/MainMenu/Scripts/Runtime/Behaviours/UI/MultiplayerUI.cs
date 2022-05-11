@@ -18,8 +18,8 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Security.Cryptography;
-using System.Threading;
 using Unity.Netcode.Transports.UTP;
+using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -202,7 +202,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SceneManager.LoadScene("Island");
         }
-        public async void Join(string lobbyCode, string password = "")
+        public async void Join(string joinCode, JoinType joinType, string password = "")
         {
             if (!IsConnectedToInternet || !IsValidPlayer)
             {
@@ -215,12 +215,27 @@ namespace DanielLochner.Assets.CreatureCreator
                 await Authenticate();
 
                 UpdateNetworkStatus("Joining Lobby...", Color.yellow, -1);
-                JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions()
-                {
-                    Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId)
-                };
 
-                Lobby lobby = await LobbyHelper.Instance.JoinLobbyAsync(lobbyCode, options);
+                LobbyPlayer player = new LobbyPlayer(AuthenticationService.Instance.PlayerId);
+                Lobby lobby = null;
+                switch (joinType)
+                {
+                    case JoinType.LobbyCode:
+                        JoinLobbyByCodeOptions optionsLobbyCode = new JoinLobbyByCodeOptions()
+                        {
+                            Player = player
+                        };
+                        lobby = await LobbyHelper.Instance.JoinLobbyByCodeAsync(joinCode, optionsLobbyCode);
+                        break;
+
+                    case JoinType.LobbyId:
+                        JoinLobbyByIdOptions optionsLobbyId = new JoinLobbyByIdOptions()
+                        {
+                            Player = player
+                        };
+                        lobby = await LobbyHelper.Instance.JoinLobbyByIdAsync(joinCode, optionsLobbyId);
+                        break;
+                }
                 string lobbyPasswordHash = lobby.Data["passwordHash"].Value;
                 bool isValidPasswordHash = string.IsNullOrEmpty(lobbyPasswordHash) || sha256.VerifyHash(password, lobbyPasswordHash);
                 if (!isValidPasswordHash)
@@ -229,12 +244,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
-                string joinCode = lobby.Data["joinCode"].Value;
-                JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
-                await Lobbies.Instance.UpdatePlayerAsync(lobby.Id, options.Player.Id, new UpdatePlayerOptions()
+                string relayJoinCode = lobby.Data["joinCode"].Value;
+                JoinAllocation join = await Relay.Instance.JoinAllocationAsync(relayJoinCode);
+                await Lobbies.Instance.UpdatePlayerAsync(lobby.Id, player.Id, new UpdatePlayerOptions()
                 {
                     AllocationId = join.AllocationId.ToString(),
-                    ConnectionInfo = joinCode
+                    ConnectionInfo = relayJoinCode
                 });
                 relayTransport.SetRelayServerData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
                 SetConnectionData(onlineUsernameInputField.text, password);
@@ -244,8 +259,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (Exception e)
             {
-                Debug.Log(e);
-
                 UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
             }
@@ -295,7 +308,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "pve", new DataObject(DataObject.VisibilityOptions.Public, pve) },
                         { "npc", new DataObject(DataObject.VisibilityOptions.Public, npc) }
                     },
-                    Player = new Unity.Services.Lobbies.Models.Player(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
+                    Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
                 Lobby lobby = await LobbyHelper.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
 
@@ -356,7 +369,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Join()
         {
-            Join(lobbyCodeInputField.text);
+            Join(lobbyCodeInputField.text, JoinType.LobbyCode);
         }
 
         private async Task Authenticate()
@@ -413,6 +426,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Public,
             Private
+        }
+        public enum JoinType
+        {
+            LobbyCode,
+            LobbyId
         }
         #endregion
     }

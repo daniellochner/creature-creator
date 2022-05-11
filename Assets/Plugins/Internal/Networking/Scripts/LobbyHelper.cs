@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Netcode;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -47,11 +45,13 @@ namespace DanielLochner.Assets
 
             return lobby;
         }
-        public async Task<Lobby> JoinLobbyAsync(string lobbyCode, JoinLobbyByCodeOptions options)
+        public async Task<Lobby> JoinLobbyByIdAsync(string lobbyId, JoinLobbyByIdOptions options)
         {
-            Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
-            JoinedLobby = lobby;
-            return lobby;
+            return (JoinedLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options));
+        }
+        public async Task<Lobby> JoinLobbyByCodeAsync(string lobbyCode, JoinLobbyByCodeOptions options)
+        {
+            return (JoinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options));
         }
 
         private void DeleteActiveLobbies()
