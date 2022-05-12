@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CreatureAge : MonoBehaviour
+    public class CreatureAger : MonoBehaviour
     {
         #region Fields
         [SerializeField, ReadOnly] private int age;
