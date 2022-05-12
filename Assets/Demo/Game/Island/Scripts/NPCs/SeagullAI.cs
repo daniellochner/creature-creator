@@ -69,20 +69,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             States = new Dictionary<string, BaseState<SeagullAI>>()
             {
-                { "IDL", new Idling(this) },
+                { "PER", new Perching(this) },
                 { "FLY", new Flying(this) }
             };
-            ChangeState("IDL");
+            ChangeState("PER");
         }
         #endregion
 
         #region Inner Classes
-        public class Idling : BaseState<SeagullAI>
+        public class Perching : Idling<SeagullAI>
         {
-            public Idling(SeagullAI sm) : base("Idling", sm) { }
+            public Perching(SeagullAI sm) : base(sm) { }
 
             public override void UpdateLogic()
             {
+                base.UpdateLogic();
                 if (Vector3.Distance(Player.Instance.Creature.transform.position, StateMachine.transform.position) < StateMachine.FrightDistance)
                 {
                     StateMachine.ChangeState("FLY");
@@ -119,7 +120,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 flightTime);
 
                 StateMachine.CurrentPerchPoint = perchPoint;
-                StateMachine.ChangeState("IDL");
+                StateMachine.ChangeState("PER");
             }
         }
         #endregion

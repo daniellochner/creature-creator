@@ -16,7 +16,7 @@ namespace DanielLochner.Assets
 
         public float Random
         {
-            get => UnityEngine.Random.Range(max, max);
+            get => UnityEngine.Random.Range(min, max);
         }
     }
 }

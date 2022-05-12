@@ -19,7 +19,7 @@ namespace DanielLochner.Assets
 
         public void Spawn(ulong clientId)
         {
-            if (NetworkManager.Singleton.IsHost)
+            if (NetworkManager.Singleton.IsHost && clientId == NetworkManager.Singleton.LocalClientId)
             {
                 foreach (NetworkObject helper in helpers)
                 {

@@ -251,7 +251,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     AllocationId = join.AllocationId.ToString(),
                     ConnectionInfo = relayJoinCode
                 });
-                relayTransport.SetRelayServerData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                relayTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData, true);
                 SetConnectionData(onlineUsernameInputField.text, password);
 
                 UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
@@ -280,7 +280,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(10);
-                relayTransport.SetRelayServerData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
+                relayTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, true);
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 SetConnectionData(username, password);

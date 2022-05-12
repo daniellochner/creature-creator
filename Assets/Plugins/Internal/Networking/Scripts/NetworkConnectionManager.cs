@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -24,21 +25,14 @@ namespace DanielLochner.Assets
         }
         public void ForceDisconnect(string reason)
         {
-            // Bug: MLAPI cannot be shutdown from within an RPC (https://github.com/Unity-Technologies/com.unity.multiplayer.mlapi/issues/942).
-            // Temporary workaround: Invoke "NetworkManager.Shutdown()" at the end of the frame (once the rpc queue has been cleared).
-            InvokeUtility.InvokeAtEndOfFrame(this, delegate
-            {
-                NetworkShutdownManager.Instance.Shutdown();
-                SceneManager.LoadScene("MainMenu");
-                InformationDialog.Inform("Disconnected!", reason);
-            });
+            Leave(() => InformationDialog.Inform("Disconnected!", reason));
         }
 
-        public void Leave()
+        public void Leave(Action onLeave = null)
         {
-            StartCoroutine(LeaveRoutine());
+            StartCoroutine(LeaveRoutine(onLeave));
         }
-        private IEnumerator LeaveRoutine()
+        private IEnumerator LeaveRoutine(Action onLeave)
         {
             // Disconnect all connected players before the host leaves the game.
             if (IsHost)
@@ -52,6 +46,8 @@ namespace DanielLochner.Assets
 
             NetworkShutdownManager.Instance.Shutdown();
             SceneManager.LoadScene("MainMenu");
+
+            onLeave?.Invoke();
         }
 
         public void Kick(ulong clientId, string reason = default)
