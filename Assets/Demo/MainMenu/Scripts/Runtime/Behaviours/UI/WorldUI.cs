@@ -55,7 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private string FormatTag(string tag, bool enabled)
         {
-            return $"{(enabled ? "<s>" : "")}{tag}{(enabled ? "</s>" : "")}";
+            return $"{(enabled ? "" : "<s>")}{tag}{(enabled ? "" : "</s>")}";
         }
         #endregion
     }
