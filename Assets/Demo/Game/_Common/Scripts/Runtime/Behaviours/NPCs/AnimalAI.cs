@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class AnimalAI<T> : StateMachine<T> where T : StateMachine<T>
+    public class AnimalAI<T> : StateMachine<T> where T : AnimalAI<T>
     {
         #region Fields
         [Header("Animal")]
@@ -14,6 +14,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AmbientNoisesInfo ambientNoises;
 
         protected CreatureSource creature;
+        #endregion
+
+        #region Properties
+        protected override string StartState => "IDL";
         #endregion
 
         #region Methods
@@ -31,15 +35,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Inner Classes
-        public class Idling<S> : BaseState<S> where S : AnimalAI<S>
+        public class Idling : BaseState<T>
         {
             private float timeLeft;
 
-            public Idling(S sm) : base("Idling", sm)
+            public Idling(string n, T sm) : base("Idling", sm) { }
+
+            public override void Enter()
             {
                 timeLeft = StateMachine.ambientNoises.cooldown.Random;
             }
-
             public override void UpdateLogic()
             {
                 if (StateMachine.ambientNoises.noises.Length > 0)

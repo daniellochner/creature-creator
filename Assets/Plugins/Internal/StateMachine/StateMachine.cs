@@ -2,25 +2,27 @@
 // Copyright (c) Daniel Lochner
 
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public abstract class StateMachine<T> : MonoBehaviour
+    public abstract class StateMachine<T> : MonoBehaviour where T : StateMachine<T>
     {
         #region Fields
         private BaseState<T> currentState;
         #endregion
 
         #region Properties
-        protected virtual Dictionary<string, BaseState<T>> States { get; set; }
+        protected virtual Dictionary<string, BaseState<T>> States { get; set; } = new Dictionary<string, BaseState<T>>();
+
+        protected virtual string StartState { get; }
         #endregion
 
         #region Methods
         public virtual void Awake()
         {
-            InitializeStates();
+            Initialize();
+            ChangeState(StartState);
         }
         public virtual void Update()
         {
@@ -31,9 +33,10 @@ namespace DanielLochner.Assets
             currentState?.UpdatePhysics();
         }
 
-        protected virtual void InitializeStates()
+        protected virtual void Initialize()
         {
         }
+
         public void ChangeState(string stateID)
         {
             currentState?.Exit();

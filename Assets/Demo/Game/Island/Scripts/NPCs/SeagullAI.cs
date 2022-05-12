@@ -56,6 +56,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 return points[Random.Range(0, points.Count)];
             }
         }
+
+        protected override string StartState => "PER";
         #endregion
 
         #region Methods
@@ -65,21 +67,17 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Start();
         }
 
-        protected override void InitializeStates()
+        protected override void Initialize()
         {
-            States = new Dictionary<string, BaseState<SeagullAI>>()
-            {
-                { "PER", new Perching(this) },
-                { "FLY", new Flying(this) }
-            };
-            ChangeState("PER");
+            States.Add("PER", new Perching(this));
+            States.Add("FLY", new Flying(this));
         }
         #endregion
 
         #region Inner Classes
-        public class Perching : Idling<SeagullAI>
+        public class Perching : Idling
         {
-            public Perching(SeagullAI sm) : base(sm) { }
+            public Perching(SeagullAI sm) : base("Perching", sm) { }
 
             public override void UpdateLogic()
             {

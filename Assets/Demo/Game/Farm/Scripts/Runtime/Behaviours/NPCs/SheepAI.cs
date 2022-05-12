@@ -7,8 +7,12 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SheepAI : FarmAnimalAI<CowAI>
+    public class SheepAI : FarmAnimalAI<SheepAI>
     {
-
+        protected override void Initialize()
+        {
+            States.Add("WAN", new Wandering(this));
+            States.Add("REP", new Repositioning(this));
+        }
     }
 }

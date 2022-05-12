@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 709837870172304164, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: adb3640f8dc2a964190fdd9e465acefe, type: 2}
+      objectReference: {fileID: 9100000, guid: 1b1e23864fe2585469988ac565963074, type: 2}
     - target: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -126,7 +126,7 @@ PrefabInstance:
     - target: {fileID: 7130936800487778048, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: adb3640f8dc2a964190fdd9e465acefe, type: 2}
+      objectReference: {fileID: 9100000, guid: 1b1e23864fe2585469988ac565963074, type: 2}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.isExpanded
       value: 1
@@ -185,6 +185,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+--- !u!4 &1602982143509779003 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+  m_PrefabInstance: {fileID: 4353620142736014488}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &490437196048191600 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4225863522935155944, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
@@ -200,7 +205,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -234,8 +239,8 @@ MonoBehaviour:
       min: 0
       max: 0
   wander:
-    radius: 0
+    radius: 10
     cooldown:
-      min: 0
-      max: 0
-    center: {fileID: 0}
+      min: 10
+      max: 50
+    center: {fileID: 1602982143509779003}

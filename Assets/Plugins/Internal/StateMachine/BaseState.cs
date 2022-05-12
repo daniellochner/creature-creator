@@ -3,7 +3,7 @@
 
 namespace DanielLochner.Assets
 {
-    public abstract class BaseState<T>
+    public abstract class BaseState<T> where T : StateMachine<T>
     {
         #region Properties
         public virtual string Name { get; private set; }

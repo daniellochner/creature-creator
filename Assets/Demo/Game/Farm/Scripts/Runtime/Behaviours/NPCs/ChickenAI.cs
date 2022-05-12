@@ -9,6 +9,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class ChickenAI : FarmAnimalAI<ChickenAI>
     {
-
+        protected override void Initialize()
+        {
+            States.Add("WAN", new Wandering(this));
+            States.Add("REP", new Repositioning(this));
+        }
     }
 }

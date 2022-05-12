@@ -8,12 +8,33 @@ using UnityEngine.AI;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class FarmAnimalAI<T> : AnimalAI<T> where T : StateMachine<T>
+    public class FarmAnimalAI<T> : AnimalAI<T> where T : FarmAnimalAI<T>
     {
         #region Fields
         [SerializeField] private WanderInfo wander;
 
         private NavMeshAgent agent;
+        #endregion
+
+        #region Properties
+        public bool IsMovingToPosition
+        {
+            get
+            {
+                if (agent.isPathStale || agent.isStopped)
+                {
+                    return false;
+                }
+                else if (agent.pathPending)
+                {
+                    return true;
+                }
+
+                return (agent.remainingDistance > agent.stoppingDistance);
+            }
+        }
+
+        protected override string StartState => "WAN";
         #endregion
 
         #region Methods
@@ -25,23 +46,41 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnDrawGizmos()
         {
-            Gizmos.DrawWireSphere(transform.position, wander.radius);
+            if (wander.center != null)
+            {
+                Gizmos.DrawWireSphere(wander.center.position, wander.radius);
+            }
         }
         #endregion
 
         #region Inner Classes
-        public class Wandering<S> : BaseState<S> where S : FarmAnimalAI<S>
+        public class Wandering : Idling
         {
             private float timeLeft;
 
-            public Wandering(S sm) : base("Wandering", sm) { }
+            public Wandering(T sm) : base("Wandering", sm) { }
 
+            public override void Enter()
+            {
+                base.Enter();
+                timeLeft = StateMachine.wander.cooldown.Random;
+            }
             public override void UpdateLogic()
             {
-                TimerUtility.OnTimer(ref timeLeft, StateMachine.wander.cooldown.Random, Time.deltaTime, WanderToRandomPosition);
-            }
+                base.UpdateLogic();
 
-            private void WanderToRandomPosition()
+                TimerUtility.OnTimer(ref timeLeft, StateMachine.wander.cooldown.Random, Time.deltaTime, delegate 
+                {
+                    StateMachine.ChangeState("REP");
+                });
+            }
+        }
+
+        public class Repositioning : BaseState<T>
+        {
+            public Repositioning(T sm) : base("Repositioning", sm) { }
+
+            public override void Enter()
             {
                 Vector3 direction = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, 360f), Vector3.up) * StateMachine.transform.forward;
                 float distance = UnityEngine.Random.Range(0f, StateMachine.wander.radius);
@@ -52,6 +91,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     position = hit.position;
                 }
                 StateMachine.agent.SetDestination(position);
+            }
+            public override void UpdateLogic()
+            {
+                if (!StateMachine.IsMovingToPosition)
+                {
+                    StateMachine.ChangeState("WAN");
+                }
             }
         }
 
