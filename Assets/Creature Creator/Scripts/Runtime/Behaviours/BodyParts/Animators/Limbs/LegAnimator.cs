@@ -60,6 +60,15 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        protected override void LateUpdate()
+        {
+            base.LateUpdate();
+            if (LegConstructor.ConnectedFoot != null)
+            {
+                LegConstructor.ConnectedFoot.transform.forward = CreatureAnimator.transform.forward;
+            }
+        }
+
         public override void Setup(CreatureAnimator creatureAnimator)
         {
             base.Setup(creatureAnimator);

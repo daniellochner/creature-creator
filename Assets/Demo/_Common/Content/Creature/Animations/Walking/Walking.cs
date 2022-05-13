@@ -48,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
             int li = 0, ri = 0;
             foreach (LegAnimator leg in m_MonoBehaviour.Legs)
             {
-                if (m_MonoBehaviour.CreatureConstructor.Body.W2LSpace(leg.transform.position).x < 0)
+                if (m_MonoBehaviour.Constructor.Body.W2LSpace(leg.transform.position).x < 0)
                 {
                     llegs[li++] = leg;
                 }
@@ -102,8 +102,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             StopMovingLegs();
 
-            m_MonoBehaviour.CreatureConstructor.Root.localRotation = Quaternion.identity;
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.zero;
+            m_MonoBehaviour.Constructor.Root.localRotation = Quaternion.identity;
+            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
             timeLeftToMove = 0f;
         }
 
@@ -146,8 +146,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 LegAnimator leg1 = (pair % 2 == 0) ? lleg : rleg;
                 LegAnimator leg2 = (pair % 2 == 0) ? rleg : lleg;
                 
-                Quaternion rot = m_MonoBehaviour.CreatureConstructor.Body.rotation;
-                float liftHeight = m_MonoBehaviour.CreatureConstructor.transform.W2LSpace(leg1.transform.position).y * 0.4f;
+                Quaternion rot = m_MonoBehaviour.Constructor.Body.rotation;
+                float liftHeight = m_MonoBehaviour.Constructor.transform.W2LSpace(leg1.transform.position).y * 0.4f;
 
                 Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove);
                 float t1 = Mathf.Clamp01(Vector3.Distance(leg1.Anchor.position, pos1) / leg1.MaxDistance);                
@@ -188,14 +188,14 @@ namespace DanielLochner.Assets.CreatureCreator
             foreach (LegAnimator leg in m_MonoBehaviour.Legs)
             {
                 Vector3 pos = GetTargetFootPosition(leg, 0f);
-                Quaternion rot = m_MonoBehaviour.CreatureConstructor.Body.rotation;
+                Quaternion rot = m_MonoBehaviour.Constructor.Body.rotation;
                 leg.StartCoroutine(leg.MoveFootRoutine(pos, rot, 0.25f, 0f));
             }
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
             Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, m_MonoBehaviour.Velocity.Angular * timeToMove);
-            Vector3 worldPos = Vector3.ProjectOnPlane(m_MonoBehaviour.CreatureConstructor.Body.TransformPoint(localPos), m_MonoBehaviour.transform.up);
+            Vector3 worldPos = Vector3.ProjectOnPlane(m_MonoBehaviour.Constructor.Body.TransformPoint(localPos), m_MonoBehaviour.transform.up);
             worldPos += m_MonoBehaviour.Velocity.Linear * timeToMove;
 
             Vector3 origin = worldPos + m_MonoBehaviour.transform.up;// * stepHeight;
@@ -223,7 +223,7 @@ namespace DanielLochner.Assets.CreatureCreator
             float avgHeight = 0f, minHeight = Mathf.Infinity;
             foreach (LegAnimator leg in m_MonoBehaviour.Legs)
             {
-                float height = m_MonoBehaviour.CreatureConstructor.Body.W2LSpace(leg.LegConstructor.Extremity.position).y;
+                float height = m_MonoBehaviour.Constructor.Body.W2LSpace(leg.LegConstructor.Extremity.position).y;
                 if (height < minHeight)
                 {
                     minHeight = height;
@@ -236,7 +236,7 @@ namespace DanielLochner.Assets.CreatureCreator
             float offset = avgHeight - minHeight;
             Vector3 targetPosition = Vector3.Lerp(Vector3.zero, -Vector3.up * offset, t);
 
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.Lerp(m_MonoBehaviour.CreatureConstructor.Root.localPosition, targetPosition, Time.deltaTime * bodySmoothing);
+            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.Lerp(m_MonoBehaviour.Constructor.Root.localPosition, targetPosition, Time.deltaTime * bodySmoothing);
         }
         private void HandleBodyRotation()
         {
@@ -247,7 +247,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 avgLFeetPos = GetAverageFeetPosition(llegs);
 
             Vector3 rollVector = avgRFeetPos - avgLFeetPos;
-            float rollAngle = Mathf.Clamp(Vector3.SignedAngle(m_MonoBehaviour.CreatureConstructor.Body.right, rollVector, m_MonoBehaviour.CreatureConstructor.Body.forward), -maxRoll, maxRoll);
+            float rollAngle = Mathf.Clamp(Vector3.SignedAngle(m_MonoBehaviour.Constructor.Body.right, rollVector, m_MonoBehaviour.Constructor.Body.forward), -maxRoll, maxRoll);
             roll = Quaternion.AngleAxis(rollAngle, Vector3.forward);
 
             // Pitch
@@ -258,14 +258,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 Vector3 avgBFeetPos = GetAverageFeetPosition(llegs[numPairs - 1], rlegs[numPairs - 1]);
 
                 Vector3 pitchVector = avgFFeetPos - avgBFeetPos;
-                float pitchAngle = Mathf.Clamp(Vector3.SignedAngle(m_MonoBehaviour.CreatureConstructor.Body.forward, pitchVector, m_MonoBehaviour.CreatureConstructor.Body.right), -maxPitch, maxPitch);
+                float pitchAngle = Mathf.Clamp(Vector3.SignedAngle(m_MonoBehaviour.Constructor.Body.forward, pitchVector, m_MonoBehaviour.Constructor.Body.right), -maxPitch, maxPitch);
                 pitch = Quaternion.AngleAxis(pitchAngle, Vector3.right);
             }
 
             float t = m_MonoBehaviour.Velocity.Linear.magnitude / baseMovementSpeed;
             Quaternion targetRotation = Quaternion.Lerp(Quaternion.identity, roll * pitch, t);
 
-            m_MonoBehaviour.CreatureConstructor.Root.localRotation = Quaternion.Slerp(m_MonoBehaviour.CreatureConstructor.Root.localRotation, targetRotation, Time.deltaTime * bodySmoothing);
+            m_MonoBehaviour.Constructor.Root.localRotation = Quaternion.Slerp(m_MonoBehaviour.Constructor.Root.localRotation, targetRotation, Time.deltaTime * bodySmoothing);
         }
 
         private Vector3 GetAverageFeetPosition(params LegAnimator[] legs)

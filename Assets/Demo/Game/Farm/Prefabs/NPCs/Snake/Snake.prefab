@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 709837870172304164, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: df07b01a435d09249a9317da2e2a5226, type: 2}
+      objectReference: {fileID: 9100000, guid: bc81bd1e33467b5479a173d9e3e45830, type: 2}
     - target: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -134,7 +134,7 @@ PrefabInstance:
     - target: {fileID: 7130936800487778048, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: df07b01a435d09249a9317da2e2a5226, type: 2}
+      objectReference: {fileID: 9100000, guid: bc81bd1e33467b5479a173d9e3e45830, type: 2}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.isExpanded
       value: 1
@@ -205,11 +205,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
---- !u!4 &1602982143509779003 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
-  m_PrefabInstance: {fileID: 4353620142736014488}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &490437196048191600 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4225863522935155944, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
@@ -239,11 +234,10 @@ MonoBehaviour:
       min: 10
       max: 25
   wander:
-    radius: 10
+    bounds: {fileID: 0}
     cooldown:
       min: 10
       max: 50
-    center: {fileID: 1602982143509779003}
 --- !u!195 &7588401264203120532
 NavMeshAgent:
   m_ObjectHideFlags: 0

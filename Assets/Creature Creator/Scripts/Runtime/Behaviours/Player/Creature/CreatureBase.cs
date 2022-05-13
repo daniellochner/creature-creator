@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreaturePhotographer))]
     [RequireComponent(typeof(CreatureKiller))]
     [RequireComponent(typeof(CreatureEffector))]
+    [RequireComponent(typeof(CreatureScaler))]
     public class CreatureBase : MonoBehaviour
     {
         #region Fields
@@ -22,6 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreaturePhotographer photographer;
         [SerializeField] private CreatureKiller killer;
         [SerializeField] private CreatureEffector effector;
+        [SerializeField] private CreatureScaler scaler;
         #endregion
 
         #region Properties
@@ -32,6 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreaturePhotographer Photographer => photographer;
         public CreatureKiller Killer => killer;
         public CreatureEffector Effector => effector;
+        public CreatureScaler Scaler => scaler;
         #endregion
 
         #region Methods
@@ -45,11 +48,13 @@ namespace DanielLochner.Assets.CreatureCreator
             cloner = GetComponent<CreatureCloner>();
             killer = GetComponent<CreatureKiller>();
             effector = GetComponent<CreatureEffector>();
+            scaler = GetComponent<CreatureScaler>();
         }
 #endif
 
         public virtual void Setup()
         {
+            Scaler.Setup();
             Animator.Setup();
         }
         #endregion

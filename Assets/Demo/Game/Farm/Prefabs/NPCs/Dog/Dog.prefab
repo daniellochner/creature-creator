@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 709837870172304164, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 1b1e23864fe2585469988ac565963074, type: 2}
+      objectReference: {fileID: 9100000, guid: 1d68a78cc1d392b43ab33120ab81c9df, type: 2}
     - target: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -126,7 +126,7 @@ PrefabInstance:
     - target: {fileID: 7130936800487778048, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 1b1e23864fe2585469988ac565963074, type: 2}
+      objectReference: {fileID: 9100000, guid: 1d68a78cc1d392b43ab33120ab81c9df, type: 2}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.isExpanded
       value: 1
@@ -185,11 +185,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
---- !u!4 &1602982143509779003 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
-  m_PrefabInstance: {fileID: 4353620142736014488}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &490437196048191600 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4225863522935155944, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
@@ -229,18 +224,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad64c9af735199449e5eeeb689c1ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 4900000, guid: 4d8dbd308f61a5c46ab29f62a62fdf56, type: 3}
+  data: {fileID: 4900000, guid: ed8fba822f388034eb2051a30201ed4d, type: 3}
   ambientNoises:
     noises: []
-    pitch:
-      min: 0
-      max: 0
     cooldown:
       min: 0
       max: 0
   wander:
-    radius: 10
+    bounds: {fileID: 0}
     cooldown:
       min: 10
       max: 50
-    center: {fileID: 1602982143509779003}
+  goodestBoy: {fileID: 4900000, guid: 4d8dbd308f61a5c46ab29f62a62fdf56, type: 3}

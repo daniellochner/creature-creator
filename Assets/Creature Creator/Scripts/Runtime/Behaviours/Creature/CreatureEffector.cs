@@ -27,18 +27,10 @@ namespace DanielLochner.Assets.CreatureCreator
             audioSource = GetComponent<AudioSource>();
         }
 
-        public void PlaySound(string sound, float pitch = 1f, float volume = 1f)
+        public void PlaySound(string sound, float volume = 1f)
         {
-            float tmpVolume = audioSource.volume;
-            float tmpPitch  = audioSource.pitch;
-
-            audioSource.volume = volume;
-            audioSource.pitch  = pitch;
-            audioSource.PlayOneShot(soundFX[sound]);
+            audioSource.PlayOneShot(soundFX[sound], volume);
             OnPlaySound?.Invoke(sound);
-
-            audioSource.volume = tmpVolume;
-            audioSource.pitch  = tmpPitch;
         }
         #endregion
     }

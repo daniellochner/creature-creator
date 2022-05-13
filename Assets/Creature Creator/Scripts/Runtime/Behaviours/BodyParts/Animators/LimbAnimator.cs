@@ -87,13 +87,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 defaultBonePositions = new Vector3[LimbConstructor.Bones.Length];
                 for (int i = 0; i < defaultBonePositions.Length; i++)
                 {
-                    defaultBonePositions[i] = CreatureAnimator.CreatureConstructor.Body.InverseTransformPoint(LimbConstructor.Bones[i].position);
+                    defaultBonePositions[i] = CreatureAnimator.Constructor.Body.InverseTransformPoint(LimbConstructor.Bones[i].position);
                 }
 
                 // Connected Extremity
                 if (LimbConstructor.ConnectedExtremity != null)
                 {
-                    defaultExtremityRotation = Quaternion.Inverse(CreatureAnimator.CreatureConstructor.Body.rotation) * LimbConstructor.ConnectedExtremity.transform.rotation;
+                    defaultExtremityRotation = Quaternion.Inverse(CreatureAnimator.Constructor.Body.rotation) * LimbConstructor.ConnectedExtremity.transform.rotation;
                 }
 
                 hasCapturedDefaults = true;
@@ -103,13 +103,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Limb
                 for (int i = 0; i < defaultBonePositions.Length; i++)
                 {
-                    LimbConstructor.Bones[i].position = CreatureAnimator.CreatureConstructor.Body.TransformPoint(defaultBonePositions[i]);
+                    LimbConstructor.Bones[i].position = CreatureAnimator.Constructor.Body.TransformPoint(defaultBonePositions[i]);
                 }
 
                 // Connected Extremity
                 if (LimbConstructor.ConnectedExtremity != null)
                 {
-                    LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.CreatureConstructor.Body.rotation * defaultExtremityRotation;
+                    LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.Constructor.Body.rotation * defaultExtremityRotation;
                 }
 
                 hasCapturedDefaults = false;
@@ -126,7 +126,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Connected Extremity
             if (LimbConstructor.ConnectedExtremity != null)
             {
-                LimbConstructor.ConnectedExtremity.transform.SetParent(isAnimated ? LimbConstructor.Extremity : CreatureAnimator.CreatureConstructor.Bones[LimbConstructor.AttachedLimb.boneIndex]);
+                LimbConstructor.ConnectedExtremity.transform.SetParent(isAnimated ? LimbConstructor.Extremity : CreatureAnimator.Constructor.Bones[LimbConstructor.AttachedLimb.boneIndex]);
             }
         }
         public virtual void Reinitialize()

@@ -10,9 +10,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private float flapCooldown;
         [SerializeField] private float flapHeight;
+        [SerializeField] private string[] flapSounds;
 
-        private float timeToFlap, flapTime;
         private WingAnimator[] wings;
+        private float timeLeft;
         #endregion
 
         #region Methods
@@ -27,25 +28,16 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 wing.IsPrepared = true;
             }
-            flapTime = 0f;
+
+            foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+            {
+                leg.Anchor.SetParent(m_MonoBehaviour.Constructor.Root);
+                leg.Anchor.SetPositionAndRotation(m_MonoBehaviour.Constructor.Body.L2WSpace(leg.DefaultFootPosition), Quaternion.identity);
+            }
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (timeToFlap <= 0f)
-            {
-                foreach (WingAnimator wing in wings)
-                {
-                    wing.Flap();
-                }
-                timeToFlap = flapCooldown;
-            }
-            timeToFlap -= Time.deltaTime;
-
-            float c = flapCooldown / 4f;
-            float a = (flapTime - ((c * Mathf.PI) / 2f)) / c;
-            float y = flapHeight * Mathf.Sin(a) + flapHeight;
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.up * y;
-            flapTime += Time.deltaTime;
+            TimerUtility.OnTimer(ref timeLeft, flapCooldown, Time.deltaTime, Flap);
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -53,7 +45,29 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 wing.IsPrepared = false;
             }
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.zero;
+            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
+
+            foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+            {
+                leg.Anchor.SetParent(Dynamic.Transform);
+            }
+        }
+
+        private void Flap()
+        {
+            foreach (WingAnimator wing in wings)
+            {
+                wing.Flap();
+
+                string flapSound = flapSounds[Random.Range(0, flapSounds.Length)];
+                m_MonoBehaviour.Effector.PlaySound(flapSound, 0.5f);
+            }
+            m_MonoBehaviour.InvokeOverTime(delegate (float progress)
+            {
+                float y = flapHeight * Mathf.Sin(progress * Mathf.PI);
+                m_MonoBehaviour.Constructor.Root.localPosition = Vector3.up * y;
+            }, 
+            flapCooldown / 2f);
         }
         #endregion
     }

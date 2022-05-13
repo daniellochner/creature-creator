@@ -1,7 +1,6 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(CreatureConstructor))]
+    [RequireComponent(typeof(CreatureEffector))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
@@ -35,8 +35,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public Transform Rig => rig;
 
-        public CreatureConstructor CreatureConstructor { get; private set; }
         public KinematicVelocity Velocity { get; private set; }
+        public CreatureConstructor Constructor { get; private set; }
+        public CreatureEffector Effector { get; private set; }
 
         public List<LimbAnimator> Limbs { get; private set; } = new List<LimbAnimator>();
         public List<ArmAnimator> Arms { get; private set; } = new List<ArmAnimator>();
@@ -95,8 +96,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
-            CreatureConstructor = GetComponent<CreatureConstructor>();
             Velocity = GetComponent<KinematicVelocity>();
+            Constructor = GetComponent<CreatureConstructor>();
+            Effector = GetComponent<CreatureEffector>();
 
             Rebuild();
         }
@@ -116,7 +118,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetupConstruction()
         {
-            CreatureConstructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
+            Constructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
             {
                 BodyPartAnimator mainBPA = main.GetComponent<BodyPartAnimator>();
                 mainBPA?.Setup(this);
@@ -125,11 +127,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 flippedBPA?.SetFlipped(mainBPA);
                 flippedBPA?.Setup(this);
             };
-            CreatureConstructor.OnBodyPartPrefabOverride += delegate (BodyPart bodyPart)
+            Constructor.OnBodyPartPrefabOverride += delegate (BodyPart bodyPart)
             {
                 return bodyPart.GetPrefab(BodyPart.PrefabType.Animatable) ?? bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
             };
-            CreatureConstructor.OnConstructCreature += delegate
+            Constructor.OnConstructCreature += delegate
             {
                 Reinitialize();
             };
@@ -139,12 +141,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (isAnimated)
             {
-                DefaultHeight = CreatureConstructor.Body.localPosition.y;
+                DefaultHeight = Constructor.Body.localPosition.y;
 
                 if (Legs.Count == 0) // Creatures without legs should fall down to the ground.
                 {
                     Mesh bodyMesh = new Mesh();
-                    CreatureConstructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
+                    Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
 
                     float minY = Mathf.Infinity;
                     foreach (Vector3 vertex in bodyMesh.vertices)
@@ -191,7 +193,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
                         float targetHeight = b;
 
-                        Vector3 offset = CreatureConstructor.Body.localPosition + Vector3.up * (targetHeight - currentHeight);
+                        Vector3 offset = Constructor.Body.localPosition + Vector3.up * (targetHeight - currentHeight);
                         moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
                     }
                 }
@@ -205,7 +207,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     StopCoroutine(moveBodyCoroutine);
                     IsMovingBody = false;
                 }
-                CreatureConstructor.Body.localPosition = Vector3.up * DefaultHeight;
+                Constructor.Body.localPosition = Vector3.up * DefaultHeight;
                 hasCapturedDefaults = false;
             }
 
@@ -219,10 +221,10 @@ namespace DanielLochner.Assets.CreatureCreator
             if (isAnimated)
             {
                 bool isUpper = Limbs.Count > 0;
-                int n = CreatureConstructor.Bones.Count, h = 0, t = n - 1;
+                int n = Constructor.Bones.Count, h = 0, t = n - 1;
                 for (int i = n - 1; i >= 0; --i)
                 {
-                    if (CreatureConstructor.Bones[i].GetComponentsInChildren<LimbConstructor>().Length > 0)
+                    if (Constructor.Bones[i].GetComponentsInChildren<LimbConstructor>().Length > 0)
                     {
                         if (isUpper)
                         {
@@ -236,11 +238,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         if (isUpper)
                         {
-                            CreatureConstructor.Bones[i].SetParent(CreatureConstructor.Bones[i - 1]);
+                            Constructor.Bones[i].SetParent(Constructor.Bones[i - 1]);
                         }
                         else
                         {
-                            CreatureConstructor.Bones[i - 1].SetParent(CreatureConstructor.Bones[i]);
+                            Constructor.Bones[i - 1].SetParent(Constructor.Bones[i]);
                         }
                     }
                 }
@@ -256,8 +258,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
                         damping.data = new DampedTransformData()
                         {
-                            constrainedObject = CreatureConstructor.Bones[i],
-                            sourceObject = CreatureConstructor.Bones[i - 1],
+                            constrainedObject = Constructor.Bones[i],
+                            sourceObject = Constructor.Bones[i - 1],
                             dampPosition = 0f,
                             dampRotation = 0f,
                             maintainAim = true
@@ -273,8 +275,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
                     damping.data = new DampedTransformData()
                     {
-                        constrainedObject = CreatureConstructor.Bones[i],
-                        sourceObject = CreatureConstructor.Bones[i + 1],
+                        constrainedObject = Constructor.Bones[i],
+                        sourceObject = Constructor.Bones[i + 1],
                         dampPosition = 0f,
                         dampRotation = 0.75f,
                         maintainAim = true
@@ -283,9 +285,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                foreach (Transform bone in CreatureConstructor.Bones)
+                foreach (Transform bone in Constructor.Bones)
                 {
-                    bone.SetParent(CreatureConstructor.Root);
+                    bone.SetParent(Constructor.Root);
                     bone.SetAsLastSibling();
                 }
 
@@ -304,7 +306,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Arms.Clear();
             Legs.Clear();
 
-            List<LimbConstructor> sorted = new List<LimbConstructor>(CreatureConstructor.Limbs);
+            List<LimbConstructor> sorted = new List<LimbConstructor>(Constructor.Limbs);
             sorted.Sort((bodyPartA, bodyPartB) =>
             {
                 float posA = bodyPartA.CreatureConstructor.Body.W2LSpace(bodyPartA.transform.position).z;
@@ -351,12 +353,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             IsMovingBody = true;
 
-            Vector3 initialPosition = CreatureConstructor.Body.localPosition;
+            Vector3 initialPosition = Constructor.Body.localPosition;
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
             {
                 float t = 1f - easingFunction(1f, 0f, progress);
                 Vector3 position = Vector3.Lerp(initialPosition, targetPosition, t);
-                CreatureConstructor.Body.localPosition = position;
+                Constructor.Body.localPosition = position;
             }, 
             timeToMove);
 

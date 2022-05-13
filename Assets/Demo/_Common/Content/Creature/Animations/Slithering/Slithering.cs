@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (m_MonoBehaviour.IsAnimated)
             {
-                headPos = m_MonoBehaviour.CreatureConstructor.Body.W2LSpace(m_MonoBehaviour.CreatureConstructor.Bones[m_MonoBehaviour.CreatureConstructor.Bones.Count - 1].position);
+                headPos = m_MonoBehaviour.Constructor.Body.W2LSpace(m_MonoBehaviour.Constructor.Bones[m_MonoBehaviour.Constructor.Bones.Count - 1].position);
                 slitherTime = 0f;
             }
         }
@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.zero;
+            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
         }
         #endregion
     }

@@ -102,11 +102,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 Quaternion cur = StateMachine.transform.rotation;
                 Quaternion tar = Quaternion.LookRotation(Vector3.ProjectOnPlane(perchPoint.position - StateMachine.transform.position, Vector3.up));
 
+                foreach (LegAnimator leg in StateMachine.creature.Animator.Legs)
+                {
+                    leg.Anchor.SetParent(StateMachine.transform);
+                }
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
                     StateMachine.transform.rotation = Quaternion.Slerp(cur, tar, progress);
-                },
-                1f);
+                }, 0.5f);
+                foreach (LegAnimator leg in StateMachine.creature.Animator.Legs)
+                {
+                    leg.Anchor.SetParent(Dynamic.Transform);
+                }
 
                 float flightDistance = Vector3.Distance(StateMachine.CurrentPerchPoint.position, perchPoint.position);
                 float flightTime = flightDistance / StateMachine.FlightSpeed;
@@ -114,8 +121,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
                     StateMachine.transform.position = Vector3.Lerp(StateMachine.CurrentPerchPoint.position, perchPoint.position, progress) + (Vector3.up * (StateMachine.FlightHeight * StateMachine.FlightPath.Evaluate(progress)));
-                },
-                flightTime);
+                }, flightTime);
 
                 StateMachine.CurrentPerchPoint = perchPoint;
                 StateMachine.ChangeState("PER");

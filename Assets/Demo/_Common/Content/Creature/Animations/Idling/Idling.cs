@@ -23,13 +23,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (animator.GetBool("HasLegs"))
             {
-                m_MonoBehaviour.CreatureConstructor.Root.localPosition = new Vector3(0, breatheHeight * Mathf.Cos(idleTime / breatheTime) - breatheHeight, 0);
+                m_MonoBehaviour.Constructor.Root.localPosition = new Vector3(0, breatheHeight * Mathf.Cos(idleTime / breatheTime) - breatheHeight, 0);
                 idleTime += Time.deltaTime;
             }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.CreatureConstructor.Root.localPosition = Vector3.zero;
+            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
         }
         #endregion
     }

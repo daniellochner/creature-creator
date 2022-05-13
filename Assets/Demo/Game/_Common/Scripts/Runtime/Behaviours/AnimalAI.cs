@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         protected override string StartState => "IDL";
+
+        public CreatureSource Creature => creature;
         #endregion
 
         #region Methods
@@ -55,7 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void MakeRandomAmbientNoise()
             {
-                StateMachine.creature.Effector.PlaySound(StateMachine.ambientNoises.noises[UnityEngine.Random.Range(0, StateMachine.ambientNoises.noises.Length)], StateMachine.ambientNoises.pitch.Random);
+                StateMachine.creature.Effector.PlaySound(StateMachine.ambientNoises.noises[UnityEngine.Random.Range(0, StateMachine.ambientNoises.noises.Length)]);
             }
         }
 
@@ -63,7 +65,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public class AmbientNoisesInfo
         {
             public string[] noises;
-            public MinMax pitch;
             public MinMax cooldown;
         }
         #endregion

@@ -56,6 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Action OnPreDemolish { get; set; }
         public Action OnConstructBody { get; set; }
+        public Action OnPreConstructCreature { get; set; }
         public Action OnConstructCreature { get; set; }
         public Action<int> OnSetupBone { get; set; }
         public Action<int> OnAddBone { get; set; }
@@ -107,6 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (debug) Timer.Start("Creature");
 
+            OnPreConstructCreature?.Invoke();
             SetName(data.Name);
             for (int i = 0; i < data.Bones.Count; i++)
             {
