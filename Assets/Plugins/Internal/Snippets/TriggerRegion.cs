@@ -14,7 +14,7 @@ namespace DanielLochner.Assets
             {
                 if (other.CompareTag(triggerable.tag))
                 {
-                    triggerable.onEnter.Invoke();
+                    triggerable.onEnter.Invoke(other);
                 }
             }
         }
@@ -24,7 +24,7 @@ namespace DanielLochner.Assets
             {
                 if (other.CompareTag(triggerable.tag))
                 {
-                    triggerable.onExit.Invoke();
+                    triggerable.onExit.Invoke(other);
                 }
             }
         }
@@ -33,8 +33,8 @@ namespace DanielLochner.Assets
         public class Triggerable
         {
             public string tag;
-            public UnityEvent onEnter;
-            public UnityEvent onExit;
+            public UnityEvent<Collider> onEnter;
+            public UnityEvent<Collider> onExit;
         }
     }
 }

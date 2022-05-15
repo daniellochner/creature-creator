@@ -6,24 +6,24 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public abstract class StateMachine<T> : MonoBehaviour where T : StateMachine<T>
+    public abstract class StateMachine : MonoBehaviour
     {
         #region Fields
-        private BaseState<T> currentState;
-        #endregion
+        [SerializeField] private string startState;
+        [SerializeReference] private List<BaseState> states;
 
-        #region Properties
-        protected virtual Dictionary<string, BaseState<T>> States { get; set; } = new Dictionary<string, BaseState<T>>();
-
-        protected virtual string StartState { get; }
+        [SerializeField, ReadOnly] private BaseState currentState;
         #endregion
 
         #region Methods
         public virtual void Awake()
         {
-            Initialize();
-            ChangeState(StartState);
+            ChangeState(startState);
         }
+        public virtual void Reset()
+        {
+        }
+
         public virtual void Update()
         {
             currentState?.UpdateLogic();
@@ -33,15 +33,15 @@ namespace DanielLochner.Assets
             currentState?.UpdatePhysics();
         }
 
-        protected virtual void Initialize()
+        public void AddState(BaseState state)
         {
+            states.Add(state);
         }
-
-        public void ChangeState(string stateID)
+        public void ChangeState(string id)
         {
             currentState?.Exit();
-            currentState = States[stateID];
-            currentState.Enter();
+            currentState = states.Find(x => x.ID == id);
+            currentState?.Enter();
         }
         #endregion
     }

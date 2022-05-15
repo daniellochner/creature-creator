@@ -40,20 +40,20 @@ namespace DanielLochner.Assets
             {
                 if (prevPosition != null)
                 {
-                    Vector3 deltaPosition = sourcePosition.localPosition - (Vector3)prevPosition;
+                    Vector3 deltaPosition = sourcePosition.position - (Vector3)prevPosition;
                     Linear = deltaPosition / Time.fixedDeltaTime;
                 }
-                prevPosition = sourcePosition.localPosition;
+                prevPosition = sourcePosition.position;
             }
             if (sourceRotation)
             {
                 if (prevRotation != null)
                 {
-                    Quaternion deltaRotation = sourceRotation.localRotation * Quaternion.Inverse((Quaternion)prevRotation);
+                    Quaternion deltaRotation = sourceRotation.rotation * Quaternion.Inverse((Quaternion)prevRotation);
                     deltaRotation.ToAngleAxis(out float angle, out var axis);
                     Angular = (angle / Time.fixedDeltaTime) * axis;
                 }
-                prevRotation = sourceRotation.localRotation;
+                prevRotation = sourceRotation.rotation;
             }
         }
         public void Reset()

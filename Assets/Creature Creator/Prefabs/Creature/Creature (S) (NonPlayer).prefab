@@ -516,6 +516,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+--- !u!114 &6658611691490756582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977203969259661099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d45b96aae7f01ab4694ef422e395d610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paramaters:
+  - name: '%ASpeed'
+    type: 1
+  - name: '%LSpeed'
+    type: 1
+  - name: IsGrounded
+    type: 4
+  - name: HasArms
+    type: 4
+  - name: HasLegs
+    type: 4
+  - name: HasWings
+    type: 4
+  - name: HasInteractTarget
+    type: 4
+  - name: Interact
+    type: 9
+  - name: HasLookTarget
+    type: 4
+  - name: Look
+    type: 9
+  - name: Jump
+    type: 9
+  updateParameterList: 0
 --- !u!114 &7181828741562490149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,6 +613,19 @@ MonoBehaviour:
     health: 1
     energy: 1
     age: 0
+--- !u!114 &8522889847659679867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977203969259661099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a038fd18d545345933086529bbc905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scale: 1
 --- !u!114 &8677253280278896139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,19 +651,6 @@ MonoBehaviour:
   energy: {fileID: 1934204631812490726}
   age: {fileID: 5856942472726833439}
   selector: {fileID: 243313409213288965}
---- !u!114 &8522889847659679867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8977203969259661099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53a038fd18d545345933086529bbc905, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scale: 1
 --- !u!54 &4865009466516697367
 Rigidbody:
   m_ObjectHideFlags: 0

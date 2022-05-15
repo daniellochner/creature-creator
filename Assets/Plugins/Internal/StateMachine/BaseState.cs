@@ -1,20 +1,41 @@
 // State Machine
 // Copyright (c) Daniel Lochner
 
+using System;
+using UnityEngine;
+
 namespace DanielLochner.Assets
 {
-    public abstract class BaseState<T> where T : StateMachine<T>
+    [Serializable]
+    public abstract class BaseState
     {
+        #region Fields
+        [SerializeField] private string id;
+        [SerializeField, HideInInspector] private StateMachine sm;
+        #endregion
+
         #region Properties
-        public virtual string Name { get; private set; }
-        public T StateMachine { get; private set; }
+        public string ID
+        {
+            get => id;
+            set => id = value;
+        }
+        public StateMachine StateMachine
+        {
+            get => sm;
+            set => sm = value;
+        }
         #endregion
 
         #region Methods
-        public BaseState(string name, T stateMachine)
+        public BaseState(StateMachine sm)
         {
-            Name = name;
-            StateMachine = stateMachine;
+            StateMachine = sm;
+        }
+        public BaseState(string id, StateMachine sm)
+        {
+            ID = id;
+            StateMachine = sm;
         }
 
         public virtual void Enter() { }

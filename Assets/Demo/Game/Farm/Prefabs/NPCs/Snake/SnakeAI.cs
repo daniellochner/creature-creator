@@ -1,18 +1,33 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SnakeAI : FarmAnimalAI<SnakeAI>
+    public class SnakeAI : AnimalAI
     {
-        protected override void Initialize()
+        public override void Reset()
         {
-            States.Add("WAN", new Wandering(this));
-            States.Add("REP", new Repositioning(this));
+            base.Reset();
+            AddState(new Striking(this));
+        }
+
+        public void Strike(Collider other)
+        {
+            Debug.Log("STRIKE");
+        }
+
+        [Serializable]
+        public class Striking : BaseState
+        {
+            public Striking(SnakeAI snakeAI) : base(snakeAI) { }
+
+            public override void UpdateLogic()
+            {
+
+            }
         }
     }
 }

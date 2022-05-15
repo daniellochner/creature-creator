@@ -65,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.LateUpdate();
             if (LegConstructor.ConnectedFoot != null)
             {
-                LegConstructor.ConnectedFoot.transform.forward = CreatureAnimator.transform.forward;
+                LegConstructor.ConnectedFoot.transform.forward = CreatureAnimator.Constructor.Body.forward;
             }
         }
 
@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Anchor = new GameObject("Anchor").transform;
             Anchor.SetParent(LimbConstructor.Extremity, false);
-        }
+        }  
 
         public override void Restructure(bool isAnimated)
         {
@@ -116,6 +116,11 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void HandleTarget()
         {
             target.SetPositionAndRotation(Anchor.position, Anchor.rotation);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireSphere(Anchor.position, 0.1f);
         }
 
         public IEnumerator MoveFootRoutine(Vector3 targetPosition, Quaternion targetRotation, float timeToMove, float liftHeight)

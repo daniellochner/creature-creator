@@ -1,130 +1,97 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class BirdAI : AnimalAI<BirdAI>
+    public class BirdAI : AnimalAI
     {
-        #region Fields
-        [Header("Bird")]
-        [SerializeField] private Transform perchPoints;
-        [SerializeField] private float flightSpeed;
-        [SerializeField] private float flightHeight;
-        [SerializeField] private AnimationCurve flightPath;
-        [SerializeField] private float frightDistance;
+        #region Methods
+        public void Frighten(Collider collider)
+        {
+            CreatureBase other = collider.GetComponent<CreatureBase>();
+            if (other != null && other != creature)
+            {
+                ChangeState("FLY");
+            }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            AddState(new Flying(this));
+        }
         #endregion
 
-        #region Properties
-        public Transform PerchPoints => perchPoints;
-
-        public float FlightSpeed => flightSpeed;
-        public float FlightHeight => flightHeight;
-        public AnimationCurve FlightPath => flightPath;
-        public float FrightDistance => frightDistance;
-
-        public Transform CurrentPerchPoint
+        #region States
+        [Serializable]
+        public class Flying : BaseState
         {
-            get;
-            set;
-        }
-        public Transform RandomPerchPoint
-        {
-            get
+            [SerializeField] private Transform perchPoints;
+            [SerializeField] private float flightSpeed;
+            [SerializeField] private float flightHeight;
+            [SerializeField] private AnimationCurve flightPath;
+            [SerializeField] private float minDistanceFromPlayer;
+
+            public BirdAI BirdAI => StateMachine as BirdAI;
+
+            public Flying(BirdAI birdAI) : base(birdAI) { }
+
+            public Transform RandomPerchPoint
             {
-                List<Transform> points = new List<Transform>();
-                foreach (Transform point in perchPoints)
+                get
                 {
-                    bool isFarEnough = true;
-                    foreach (CreatureBase creature in FindObjectsOfType<CreatureBase>())
+                    List<Transform> points = new List<Transform>();
+                    foreach (Transform point in perchPoints)
                     {
-                        if (Vector3.Distance(creature.transform.position, point.position) < frightDistance)
+                        bool isFarEnough = true;
+                        foreach (CreatureBase creature in FindObjectsOfType<CreatureBase>())
                         {
-                            isFarEnough = false;
-                            break;
+                            if (Vector3.Distance(creature.transform.position, point.position) < minDistanceFromPlayer)
+                            {
+                                isFarEnough = false;
+                                break;
+                            }
+                        }
+                        if (isFarEnough)
+                        {
+                            points.Add(point);
                         }
                     }
-                    if (isFarEnough)
-                    {
-                        points.Add(point);
-                    }
-                }
 
-                return points[Random.Range(0, points.Count)];
-            }
-        }
-
-        protected override string StartState => "PER";
-        #endregion
-
-        #region Methods
-        public override void Start()
-        {
-            transform.position = (CurrentPerchPoint = RandomPerchPoint).position;
-            base.Start();
-        }
-
-        protected override void Initialize()
-        {
-            States.Add("PER", new Perching(this));
-            States.Add("FLY", new Flying(this));
-        }
-        #endregion
-
-        #region Inner Classes
-        public class Perching : Idling
-        {
-            public Perching(BirdAI sm) : base("Perching", sm) { }
-
-            public override void UpdateLogic()
-            {
-                base.UpdateLogic();
-                if (Vector3.Distance(Player.Instance.Creature.transform.position, StateMachine.transform.position) < StateMachine.FrightDistance)
-                {
-                    StateMachine.ChangeState("FLY");
+                    return points[UnityEngine.Random.Range(0, points.Count)];
                 }
             }
-        }
-        public class Flying : BaseState<BirdAI>
-        {
-            public Flying(BirdAI sm) : base("Flying", sm) { }
 
             public override void Enter()
             {
-                StateMachine.StartCoroutine(FlyToPerchPointRoutine(StateMachine.RandomPerchPoint));
+                BirdAI.StartCoroutine(FlyToPositionRoutine(RandomPerchPoint.position));
             }
 
-            private IEnumerator FlyToPerchPointRoutine(Transform perchPoint)
+            private IEnumerator FlyToPositionRoutine(Vector3 to)
             {
-                Quaternion cur = StateMachine.transform.rotation;
-                Quaternion tar = Quaternion.LookRotation(Vector3.ProjectOnPlane(perchPoint.position - StateMachine.transform.position, Vector3.up));
-
-                foreach (LegAnimator leg in StateMachine.creature.Animator.Legs)
-                {
-                    leg.Anchor.SetParent(StateMachine.transform);
-                }
-                yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
-                {
-                    StateMachine.transform.rotation = Quaternion.Slerp(cur, tar, progress);
-                }, 0.5f);
-                foreach (LegAnimator leg in StateMachine.creature.Animator.Legs)
-                {
-                    leg.Anchor.SetParent(Dynamic.Transform);
-                }
-
-                float flightDistance = Vector3.Distance(StateMachine.CurrentPerchPoint.position, perchPoint.position);
-                float flightTime = flightDistance / StateMachine.FlightSpeed;
+                Quaternion cur = BirdAI.transform.rotation;
+                Quaternion tar = Quaternion.LookRotation(Vector3.ProjectOnPlane(to - BirdAI.transform.position, Vector3.up));
 
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
-                    StateMachine.transform.position = Vector3.Lerp(StateMachine.CurrentPerchPoint.position, perchPoint.position, progress) + (Vector3.up * (StateMachine.FlightHeight * StateMachine.FlightPath.Evaluate(progress)));
+                    BirdAI.transform.rotation = Quaternion.Slerp(cur, tar, progress);
+                }, 1f);
+
+                Vector3 from = BirdAI.transform.position;
+                float flightDistance = Vector3.Distance(from, to);
+                float flightTime = flightDistance / flightSpeed;
+
+                yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
+                {
+                    BirdAI.transform.position = Vector3.Lerp(from, to, progress) + (Vector3.up * (flightHeight * flightPath.Evaluate(progress)));
                 }, flightTime);
 
-                StateMachine.CurrentPerchPoint = perchPoint;
-                StateMachine.ChangeState("PER");
+                BirdAI.ChangeState("IDL");
             }
         }
         #endregion

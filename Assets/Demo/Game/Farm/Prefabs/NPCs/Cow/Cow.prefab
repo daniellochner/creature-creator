@@ -248,20 +248,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f94484a22c4d314e977468d08ae9540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 4900000, guid: 3f24ff9feb19df74fba212168454f7f1, type: 3}
-  ambientNoises:
-    noises:
-    - Moo1
-    - Moo2
-    - Moo3
-    pitch:
-      min: 0.9
-      max: 1.1
-    cooldown:
-      min: 10
-      max: 25
-  wander:
-    bounds: {fileID: 0}
-    cooldown:
-      min: 10
-      max: 50
+  startState: 
+  states:
+  - id: 0
+  - id: 1
+  - id: 2
+  data: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: AnimalAI/Idling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: 
+        sm: {fileID: 2652412112131607991}
+        noises: []
+        noiseCooldown:
+          min: 0
+          max: 0
+        silentTimeLeft: 0
+    00000001:
+      type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: 
+        sm: {fileID: 2652412112131607991}
+        noises: []
+        noiseCooldown:
+          min: 0
+          max: 0
+        silentTimeLeft: 0
+        wanderCooldown:
+          min: 0
+          max: 0
+        wanderBounds: {fileID: 0}
+        idleTimeLeft: 0
+    00000002:
+      type: {class: CowAI/Charging, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: 
+        sm: {fileID: 2652412112131607991}

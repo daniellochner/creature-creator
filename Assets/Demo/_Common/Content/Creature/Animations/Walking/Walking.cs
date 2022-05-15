@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Walking : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
-        private float baseMovementSpeed = 0.8f;
+        private float baseMovementSpeed = 2f;
         private float baseRotationSpeed = 120f;
         private float baseTimeToMove = 0.2f;
 
@@ -37,11 +37,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void OnStart(Animator animator)
         {
-            if (!m_MonoBehaviour.IsAnimated) return;
-
             numPairs = m_MonoBehaviour.Legs.Count / 2;
             movePairs = new Coroutine[numPairs];
             moveFeet = new Coroutine[numPairs][];
+            for (int i = 0; i < numPairs; ++i)
+            {
+                moveFeet[i] = new Coroutine[2];
+            }
 
             llegs = new LegAnimator[numPairs];
             rlegs = new LegAnimator[numPairs];
@@ -58,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Determines the pair of legs with the least maneuverability (i.e., the most extended pair of legs).
+            // Determine the pair of legs with the least maneuverability (i.e., the most extended pair of legs)
             float minDistance = Mathf.Infinity;
             foreach (LegAnimator leg in llegs)
             {
@@ -70,7 +72,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Determines the number of times the most extended leg should move with respect to each leg.
+            // Determine the number of times the most extended leg should move with respect to each leg
             int[] frequencies = new int[numPairs];
             int maxFrequency = int.MinValue;
             for (int i = 0; i < numPairs; ++i)
@@ -82,7 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Determines the time to move for each leg.
+            // Determine the time to move for each leg
             maxTime = maxFrequency * baseTimeToMove;
             times = new float[numPairs];
             for (int i = 0; i < times.Length; ++i)
@@ -110,18 +112,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Legs
         private void HandleLegs()
         {
-            if (timeLeftToMove <= 0)
+            TimerUtility.OnTimer(ref timeLeftToMove, 2f * maxTime, Time.deltaTime * walkTimeScale, delegate
             {
                 for (int i = 0; i < numPairs; ++i)
                 {
                     movePairs[i] = m_MonoBehaviour.StartCoroutine(MovePairRoutine(i));
                 }
-                timeLeftToMove = 2f * maxTime;
-            }
-            else
-            {
-                timeLeftToMove -= Time.deltaTime * walkTimeScale;
-            }
+            });
 
             float angularSpeed = Mathf.Abs(m_MonoBehaviour.Velocity.Angular.y);
             float t = Mathf.InverseLerp(0f, baseRotationSpeed, angularSpeed);
@@ -194,8 +191,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
-            Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, m_MonoBehaviour.Velocity.Angular * timeToMove);
-            Vector3 worldPos = Vector3.ProjectOnPlane(m_MonoBehaviour.Constructor.Body.TransformPoint(localPos), m_MonoBehaviour.transform.up);
+            Vector3 localPos = Vector3.ProjectOnPlane(Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, m_MonoBehaviour.Velocity.Angular * timeToMove), m_MonoBehaviour.transform.up);
+            Vector3 worldPos = m_MonoBehaviour.Constructor.Body.L2WSpace(localPos);
             worldPos += m_MonoBehaviour.Velocity.Linear * timeToMove;
 
             Vector3 origin = worldPos + m_MonoBehaviour.transform.up;// * stepHeight;
@@ -203,7 +200,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, 2f/*2f * stepHeight*/, LayerMask.GetMask("Ground")))
             {
-                return hitInfo.point + (m_MonoBehaviour.transform.up * leg.LegConstructor.ConnectedFoot.Offset);
+                return hitInfo.point + (m_MonoBehaviour.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
             }
             else
             {
