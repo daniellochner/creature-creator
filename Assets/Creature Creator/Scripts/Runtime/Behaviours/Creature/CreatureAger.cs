@@ -7,32 +7,26 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [RequireComponent(typeof(CreatureAge))]
     public class CreatureAger : MonoBehaviour
     {
         #region Fields
-        [SerializeField, ReadOnly] private int age;
-
         private Coroutine agingRoutine;
         #endregion
 
         #region Properties
-        public Action<int> OnAgeChanged { get; set; }
-
-        public int Age
-        {
-            get => age;
-            private set
-            {
-                age = Mathf.Max(0, value);
-                OnAgeChanged?.Invoke(age);
-            }
-        }
+        public CreatureAge Age { get; private set; }
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            Age = GetComponent<CreatureAge>();
+        }
+
         public void Start()
         {
-            Age = 0;
+            Age.Age = 0;
 
             if (agingRoutine != null)
             {
@@ -45,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
             while (true)
             {
                 yield return new WaitForSeconds(1f);
-                Age++;
+                Age.Age++;
             }
         }
         #endregion
