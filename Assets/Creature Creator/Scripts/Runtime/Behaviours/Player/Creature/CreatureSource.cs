@@ -5,21 +5,18 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureHealth))]
-    [RequireComponent(typeof(CreatureEnergy))]
+    [RequireComponent(typeof(CreatureEnergyDepleter))]
     [RequireComponent(typeof(CreatureAger))]
     public class CreatureSource : CreatureTargetBase
     {
         #region Fields
-        [SerializeField] private CreatureHealth health;
-        [SerializeField] private CreatureEnergy energy;
-        [SerializeField] private CreatureAger age;
+        [SerializeField] private CreatureEnergyDepleter energyDepleter;
+        [SerializeField] private CreatureAger ager;
         #endregion
 
         #region Properties
-        public CreatureHealth Health => health;
-        public CreatureEnergy Energy => energy;
-        public CreatureAger Age => age;
+        public CreatureEnergyDepleter EnergyDepleter => energyDepleter;
+        public CreatureAger Ager => ager;
         #endregion
 
         #region Methods
@@ -28,9 +25,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnValidate();
 
-            health = GetComponent<CreatureHealth>();
-            energy = GetComponent<CreatureEnergy>();
-            age = GetComponent<CreatureAger>();
+            energyDepleter = GetComponent<CreatureEnergyDepleter>();
+            ager = GetComponent<CreatureAger>();
         }
 #endif
         #endregion

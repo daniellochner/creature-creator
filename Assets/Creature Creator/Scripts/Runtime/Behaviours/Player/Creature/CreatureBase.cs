@@ -13,6 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureKiller))]
     [RequireComponent(typeof(CreatureEffector))]
     [RequireComponent(typeof(CreatureScaler))]
+    [RequireComponent(typeof(CreatureHealth))]
+    [RequireComponent(typeof(CreatureEnergy))]
+    [RequireComponent(typeof(CreatureAge))]
     public class CreatureBase : MonoBehaviour
     {
         #region Fields
@@ -24,6 +27,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureKiller killer;
         [SerializeField] private CreatureEffector effector;
         [SerializeField] private CreatureScaler scaler;
+        [SerializeField] private CreatureHealth health;
+        [SerializeField] private CreatureEnergy energy;
+        [SerializeField] private CreatureAge age;
         #endregion
 
         #region Properties
@@ -35,6 +41,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureKiller Killer => killer;
         public CreatureEffector Effector => effector;
         public CreatureScaler Scaler => scaler;
+        public CreatureHealth Health => health;
+        public CreatureEnergy Energy => energy;
+        public CreatureAge Age => age;
         #endregion
 
         #region Methods
@@ -49,6 +58,9 @@ namespace DanielLochner.Assets.CreatureCreator
             killer = GetComponent<CreatureKiller>();
             effector = GetComponent<CreatureEffector>();
             scaler = GetComponent<CreatureScaler>();
+            health = GetComponent<CreatureHealth>();
+            energy = GetComponent<CreatureEnergy>();
+            age = GetComponent<CreatureAge>();
         }
 #endif
 

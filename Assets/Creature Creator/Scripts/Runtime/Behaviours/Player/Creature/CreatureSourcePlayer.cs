@@ -6,6 +6,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureEditor))]
+    [RequireComponent(typeof(CreatureHealthEditor))]
     [RequireComponent(typeof(CreatureAbilities))]
     [RequireComponent(typeof(CreatureMover))]
     [RequireComponent(typeof(CreatureInteractor))]
@@ -13,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private CreatureEditor editor;
+        [SerializeField] private CreatureHealthEditor healthEditor;
         [SerializeField] private CreatureAbilities abilities;
         [SerializeField] private CreatureMover mover;
         [SerializeField] private CreatureInteractor interactor;
@@ -20,11 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureEditor Editor => editor;
+        public CreatureHealthEditor HealthEditor => healthEditor;
         public CreatureAbilities Abilities => abilities;
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
-
-        public CreatureLife Life => Health as CreatureLife;
         #endregion
 
         #region Methods
@@ -34,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnValidate();
 
             editor = GetComponent<CreatureEditor>();
+            healthEditor = GetComponent<CreatureHealthEditor>();
             abilities = GetComponent<CreatureAbilities>();
             mover = GetComponent<CreatureMover>();
             interactor = GetComponent<CreatureInteractor>();

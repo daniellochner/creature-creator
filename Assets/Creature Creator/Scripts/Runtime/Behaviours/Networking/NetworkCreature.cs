@@ -58,12 +58,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 SourceCreature.Energy.OnEnergyChanged += (float energy) => SetInfo(energy, SetEnergyServerRpc, SetEnergy);
                 SourceCreature.Age.OnAgeChanged += (int age) => SetInfo(age, SetAgeServerRpc, SetAge);
 
-                SourceCreature.Informer.OnRespawn += delegate
-                {
-                    SourceCreature.Health.HealthPercentage = 1f;
-                    SourceCreature.Energy.Energy = 1f;
-                    SourceCreature.Age.Start();
-                };
+                //SourceCreature.Informer.OnRespawn += delegate
+                //{
+                //    SourceCreature.Health.HealthPercentage = 1f;
+                //    SourceCreature.Energy.Energy = 1f;
+                //    SourceCreature.Ager.Start();
+                //};
             }
 
             Health.OnValueChanged += InformHealth;

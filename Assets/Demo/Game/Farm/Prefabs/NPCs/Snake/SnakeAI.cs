@@ -18,18 +18,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-            creature.Tracker.OnTrack += delegate (CreatureBase other)
-            {
-                ChangeState("STR");
-            };
-            creature.Tracker.OnLoseTrackOf += delegate (CreatureBase other)
-            {
-                Debug.Log("TEST");
-                if (creature.Tracker.Tracked.Count == 0)
-                {
-                    ChangeState("WAN");
-                }
-            };
+            //creature.Tracker.OnTrack += delegate (CreatureBase other)
+            //{
+            //    ChangeState("STR");
+            //};
+            //creature.Tracker.OnLoseTrackOf += delegate (CreatureBase other)
+            //{
+            //    Debug.Log("TEST");
+            //    if (creature.Tracker.Tracked.Count == 0)
+            //    {
+            //        ChangeState("WAN");
+            //    }
+            //};
 
 
             Mouth = GetComponentInChildren<MouthAnimator>();
@@ -75,15 +75,15 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 targetedCreature = null;
                 float minDistance = Mathf.Infinity;
-                foreach (CreatureBase creature in SnakeAI.creature.Tracker.Tracked)
-                {
-                    float distance = Vector3.Distance(creature.transform.position, SnakeAI.transform.position);
-                    if (distance < minDistance)
-                    {
-                        targetedCreature = creature;
-                        minDistance = distance;
-                    }
-                }
+                //foreach (CreatureBase creature in SnakeAI.creature.Tracker.Tracked)
+                //{
+                //    float distance = Vector3.Distance(creature.transform.position, SnakeAI.transform.position);
+                //    if (distance < minDistance)
+                //    {
+                //        targetedCreature = creature;
+                //        minDistance = distance;
+                //    }
+                //}
 
                 if (targetedCreature != null)
                 {
