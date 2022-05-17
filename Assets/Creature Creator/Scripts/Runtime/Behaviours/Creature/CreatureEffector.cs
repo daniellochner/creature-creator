@@ -27,6 +27,13 @@ namespace DanielLochner.Assets.CreatureCreator
             audioSource = GetComponent<AudioSource>();
         }
 
+        public void PlaySound(string[] sounds, float volume = 1f)
+        {
+            if (sounds.Length > 0)
+            {
+                PlaySound(sounds[UnityEngine.Random.Range(0, sounds.Length)], volume);
+            }
+        }
         public void PlaySound(string sound, float volume = 1f)
         {
             audioSource.PlayOneShot(soundFX[sound], volume);

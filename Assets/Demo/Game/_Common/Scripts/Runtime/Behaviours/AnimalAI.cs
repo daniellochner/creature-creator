@@ -2,19 +2,19 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(NavMeshAgent))]
     public class AnimalAI : StateMachine
     {
         #region Fields
         [Header("Animal")]
         [SerializeField] private TextAsset data;
 
-        protected CreatureSource creature;
+        protected CreatureSourceNonPlayer creature;
         protected NavMeshAgent agent;
         #endregion
 
@@ -41,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Awake()
         {
             base.Awake();
-            creature = GetComponentInParent<CreatureSource>();
+            creature = GetComponentInParent<CreatureSourceNonPlayer>();
             agent = GetComponent<NavMeshAgent>();
         }
         public virtual void Start()
@@ -50,22 +50,21 @@ namespace DanielLochner.Assets.CreatureCreator
             creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
             creature.Animator.IsAnimated = true;
         }
-
-        public override void Reset()
-        {
-            base.Reset();
-            AddState(new Idling(this));
-            AddState(new Wandering(this));
-        }
         #endregion
 
-        #region Inner Classes
+        #region States
+        public override void Reset()
+        {
+            states.Add(new Idling(this));
+            states.Add(new Wandering(this));
+        }
+
         [Serializable]
         public class Idling : BaseState
         {
             [SerializeField] public string[] noises;
             [SerializeField] public MinMax noiseCooldown;
-            [SerializeField, ReadOnly] private float silentTimeLeft;
+            private float silentTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
@@ -77,24 +76,21 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                if (noises.Length > 0)
-                {
-                    TimerUtility.OnTimer(ref silentTimeLeft, noiseCooldown.Random, Time.deltaTime, MakeRandomAmbientNoise);
-                }
+                TimerUtility.OnTimer(ref silentTimeLeft, noiseCooldown.Random, Time.deltaTime, MakeRandomAmbientNoise);
             }
 
             private void MakeRandomAmbientNoise()
             {
-                AnimalAI.creature.Effector.PlaySound(noises[UnityEngine.Random.Range(0, noises.Length)]);
+                AnimalAI.creature.Effector.PlaySound(noises);
             }
         }
-
+        
         [Serializable]
         public class Wandering : Idling
         {
             [SerializeField] private MinMax wanderCooldown;
             [SerializeField] private Bounds wanderBounds;
-            [SerializeField, ReadOnly] private float idleTimeLeft;
+            private float idleTimeLeft;
 
             public Wandering(AnimalAI animalAI) : base(animalAI) { }
 

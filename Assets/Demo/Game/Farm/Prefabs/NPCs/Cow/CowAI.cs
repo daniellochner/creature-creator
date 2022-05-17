@@ -8,10 +8,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CowAI : AnimalAI
     {
+        #region States
         public override void Reset()
         {
             base.Reset();
-            AddState(new Charging(this));
+            states.Add(new Charging(this));
         }
 
         [Serializable]
@@ -24,5 +25,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             }
         }
+        #endregion
     }
 }

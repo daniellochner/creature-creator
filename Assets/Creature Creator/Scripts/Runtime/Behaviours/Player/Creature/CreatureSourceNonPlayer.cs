@@ -6,14 +6,17 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureSelector))]
+    [RequireComponent(typeof(CreatureTracker))]
     public class CreatureSourceNonPlayer : CreatureSource
     {
         #region Fields
         [SerializeField] private CreatureSelector selector;
+        [SerializeField] private CreatureTracker tracker;
         #endregion
 
         #region Properties
         public CreatureSelector Selector => selector;
+        public CreatureTracker Tracker => tracker;
         #endregion
 
         #region Methods
@@ -23,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnValidate();
 
             selector = GetComponent<CreatureSelector>();
+            tracker = GetComponent<CreatureTracker>();
         }
 #endif
 

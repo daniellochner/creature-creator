@@ -1,63 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6636921281333861474
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9016218994037940942}
-  - component: {fileID: 468692296859468610}
-  - component: {fileID: 1273585094304118100}
-  m_Layer: 2
-  m_Name: Attack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9016218994037940942
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6636921281333861474}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 490437196048191603}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &468692296859468610
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6636921281333861474}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1273585094304118100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6636921281333861474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerables: []
 --- !u!1001 &4353620142736014488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65,10 +7,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 403305206436125338, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: trackable.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 403305206436125338, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: trackable.Array.data[0]
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 709837870172304164, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: bc81bd1e33467b5479a173d9e3e45830, type: 2}
+    - target: {fileID: 1354592339031841341, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3050561683189804707, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -120,6 +74,10 @@ PrefabInstance:
     - target: {fileID: 3608543104270752021, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 951099334
+      objectReference: {fileID: 0}
+    - target: {fileID: 5199578027278715894, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.isExpanded
@@ -268,11 +226,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4225863522935155944, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
   m_PrefabInstance: {fileID: 4353620142736014488}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &490437196048191603 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4225863522935155947, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
-  m_PrefabInstance: {fileID: 4353620142736014488}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3476419545979403416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,6 +243,7 @@ MonoBehaviour:
   - id: 0
   - id: 1
   data: {fileID: 4900000, guid: deb618de4434d754fb99a9c4c9ee1b94, type: 3}
+  mouthCol: {fileID: 2871055159263876297, guid: 6572283f574abd541a3bd59c1a286124, type: 3}
   references:
     version: 1
     00000000:
@@ -303,17 +257,23 @@ MonoBehaviour:
         noiseCooldown:
           min: 10
           max: 25
-        silentTimeLeft: 0
         wanderCooldown:
           min: 10
           max: 25
         wanderBounds: {fileID: 0}
-        idleTimeLeft: 0
     00000001:
       type: {class: SnakeAI/Striking, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
         id: STR
         sm: {fileID: 3476419545979403416}
+        strikeNoises:
+        - Strike1
+        - Strike2
+        strikeCooldown:
+          min: 2
+          max: 3
+        maxStrikeDistance: 3
+        rotSmoothing: 5
 --- !u!195 &7588401264203120532
 NavMeshAgent:
   m_ObjectHideFlags: 0

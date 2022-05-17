@@ -133,6 +133,22 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
+
+        public void TakeDamage(float damage)
+        {
+            SourceCreature.Health.TakeDamage(damage);
+            //TakeDamageServerRpc(damage);
+        }
+
+        [ServerRpc]
+        public void TakeDamageServerRpc(float damage)
+        {
+            Debug.Log("TEST");
+            SourceCreature.Health.TakeDamage(damage);
+        }
+
+
+
         #region Information
         private void SetInfo<T>(T value, Action<T> nF, Action<T> nnF)
         {

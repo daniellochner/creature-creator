@@ -8,10 +8,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class PigAI : AnimalAI
     {
+        #region States
         public override void Reset()
         {
             base.Reset();
-            AddState(new Rolling(this));
+            states.Add(new Rolling(this));
         }
 
         [Serializable]
@@ -24,5 +25,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             }
         }
+        #endregion
     }
 }

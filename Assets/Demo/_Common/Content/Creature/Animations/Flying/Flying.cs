@@ -59,8 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 wing.Flap();
 
-                string flapSound = flapSounds[Random.Range(0, flapSounds.Length)];
-                m_MonoBehaviour.Effector.PlaySound(flapSound, 0.5f);
+                m_MonoBehaviour.Effector.PlaySound(flapSounds, 0.5f);
             }
             m_MonoBehaviour.InvokeOverTime(delegate (float progress)
             {

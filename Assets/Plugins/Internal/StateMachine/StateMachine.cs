@@ -9,10 +9,10 @@ namespace DanielLochner.Assets
     public abstract class StateMachine : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private string startState;
-        [SerializeReference] private List<BaseState> states;
+        [SerializeField] protected string startState;
+        [SerializeReference] protected List<BaseState> states;
 
-        [SerializeField, ReadOnly] private BaseState currentState;
+        [SerializeField, ReadOnly] protected BaseState currentState;
         #endregion
 
         #region Methods
@@ -33,12 +33,10 @@ namespace DanielLochner.Assets
             currentState?.UpdatePhysics();
         }
 
-        public void AddState(BaseState state)
-        {
-            states.Add(state);
-        }
         public void ChangeState(string id)
         {
+            if (currentState != null && currentState.ID == id) return;
+
             currentState?.Exit();
             currentState = states.Find(x => x.ID == id);
             currentState?.Enter();

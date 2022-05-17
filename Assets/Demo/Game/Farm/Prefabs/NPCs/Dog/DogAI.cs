@@ -8,15 +8,15 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class DogAI : AnimalAI
     {
+        #region States
         public override void Reset()
         {
             base.Reset();
-            AddState(new Barking(this));
-            AddState(new Scurrying(this));
-            AddState(new Biting(this));
+            states.Add(new Barking(this));
+            states.Add(new Scurrying(this));
+            states.Add(new Biting(this));
         }
 
-        #region States
         [Serializable]
         public class Barking : BaseState
         {

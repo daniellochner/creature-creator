@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureEffector))]
+    [RequireComponent(typeof(Animator))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
@@ -26,7 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float contactDistance = 0.01f;
 
         private Transform head, tail, limbs;
-        private Animator animator;
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
         private bool isAnimated, hasCapturedDefaults;
@@ -38,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public KinematicVelocity Velocity { get; private set; }
         public CreatureConstructor Constructor { get; private set; }
         public CreatureEffector Effector { get; private set; }
+        public Animator Animator { get; private set; }
 
         public List<LimbAnimator> Limbs { get; private set; } = new List<LimbAnimator>();
         public List<ArmAnimator> Arms { get; private set; } = new List<ArmAnimator>();
@@ -75,7 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     Rebuild();
                 }
 
-                animator.enabled = isAnimated; // Remove to temporarily disable creature animations.
+                Animator.enabled = isAnimated; // Remove to temporarily disable creature animations.
             }
         }
         #endregion
@@ -87,23 +88,23 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
-            animator.SetBool("InteractTarget", InteractTarget != null);
-            animator.SetBool("LookTarget", LookTarget != null);
+            Animator.SetBool("HasInteractTarget", InteractTarget != null);
+            Animator.SetBool("HasLookTarget", LookTarget != null);
         }
         private void FixedUpdate()
         {
             IsGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
-            animator.SetBool("IsGrounded", IsGrounded);
+            Animator.SetBool("IsGrounded", IsGrounded);
 
             float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
             float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
-            animator.SetFloat("%LSpeed", l);
-            animator.SetFloat("%ASpeed", a);
+            Animator.SetFloat("%LSpeed", l);
+            Animator.SetFloat("%ASpeed", a);
         }
 
         private void Initialize()
         {
-            animator = GetComponent<Animator>();
+            Animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
             Velocity = GetComponent<KinematicVelocity>();
             Constructor = GetComponent<CreatureConstructor>();
@@ -353,12 +354,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Rebuild()
         {
             rigBuilder.Build();
-            animator.Rebind();
-            SceneLinkedSMB<CreatureAnimator>.Initialize(animator, this);
+            Animator.Rebind();
+            SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
 
-            animator.SetBool("HasArms", Arms.Count != 0);
-            animator.SetBool("HasLegs", Legs.Count != 0);
-            animator.SetBool("HasWings", Wings.Count != 0);
+            Animator.SetBool("HasArms", Arms.Count != 0);
+            Animator.SetBool("HasLegs", Legs.Count != 0);
+            Animator.SetBool("HasWings", Wings.Count != 0);
         }
         
         private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)

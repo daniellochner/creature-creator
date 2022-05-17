@@ -11,23 +11,23 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BirdAI : AnimalAI
     {
         #region Methods
-        public void Frighten(Collider collider)
+        public void Frighten(Collider col)
         {
-            CreatureBase other = collider.GetComponent<CreatureBase>();
+            CreatureBase other = col.GetComponent<CreatureBase>();
             if (other != null && other != creature)
             {
                 ChangeState("FLY");
             }
         }
-
-        public override void Reset()
-        {
-            base.Reset();
-            AddState(new Flying(this));
-        }
         #endregion
 
         #region States
+        public override void Reset()
+        {
+            base.Reset();
+            states.Add(new Flying(this));
+        }
+
         [Serializable]
         public class Flying : BaseState
         {
