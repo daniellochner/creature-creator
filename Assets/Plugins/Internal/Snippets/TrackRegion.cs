@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets
@@ -12,10 +13,15 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private List<string> trackable;
 
-        private List<Collider> tracked = new List<Collider>();
+        public List<Collider> tracked = new List<Collider>();
         private List<Collider> toBeRemoved = new List<Collider>();
 
         private new Collider collider;
+        #endregion
+
+        #region Properties
+        public Action<Collider, Collider> OnTrack { get; set; }
+        public Action<Collider, Collider> OnLoseTrackOf { get; set; }
         #endregion
 
         #region Methods
@@ -24,14 +30,14 @@ namespace DanielLochner.Assets
             collider = GetComponent<Collider>();
             collider.isTrigger = true;
         }
-        private void OnDisable()
-        {
-            LoseTrackOfAll();
-        }
-        private void OnDestroy()
-        {
-            LoseTrackOfAll();
-        }
+        //private void OnDisable()
+        //{
+        //    LoseTrackOfAll();
+        //}
+        //private void OnDestroy()
+        //{
+        //    LoseTrackOfAll();     
+        //}
 
         private void FixedUpdate()
         {
@@ -71,10 +77,10 @@ namespace DanielLochner.Assets
 
         private void Track(Collider col)
         {
-            if (trackable.Contains(col.tag))
+            if (trackable.Count == 0 || trackable.Contains(col.tag))
             {
                 tracked.Add(col);
-                OnTrack(col);
+                OnTrack?.Invoke(collider, col);
             }
         }
         private void LoseTrackOf(Collider col)
@@ -82,7 +88,7 @@ namespace DanielLochner.Assets
             if (tracked.Contains(col))
             {
                 tracked.Remove(col);
-                OnLoseTrackOf(col);
+                OnLoseTrackOf?.Invoke(collider, col);
             }
         }
         private void LoseTrackOfAll()
@@ -92,13 +98,6 @@ namespace DanielLochner.Assets
                 LoseTrackOf(col);
             }
             tracked.Clear();
-        }
-
-        public virtual void OnTrack(Collider col)
-        {
-        }
-        public virtual void OnLoseTrackOf(Collider col)
-        {
         }
         #endregion
     }

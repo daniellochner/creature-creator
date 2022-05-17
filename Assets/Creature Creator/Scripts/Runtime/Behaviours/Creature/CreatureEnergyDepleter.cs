@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float energyDepletionRate = 1f / 1200f;
         [SerializeField] private float healthTickRate = 1f;
         [SerializeField] private float healthTickDamage = 5f;
+
+        private Coroutine energyDepletingCoroutine;
         #endregion
 
         #region Properties
@@ -31,9 +33,13 @@ namespace DanielLochner.Assets.CreatureCreator
             Health = GetComponent<CreatureHealth>();
             Energy = GetComponent<CreatureEnergy>();
 		}
-        private void Start()
+        private void OnEnable()
         {
-            StartCoroutine(EnergyDepletionRoutine(energyDepletionRate, healthTickRate, healthTickDamage));
+            if (energyDepletingCoroutine != null)
+            {
+                StopCoroutine(energyDepletingCoroutine);
+            }
+            energyDepletingCoroutine = StartCoroutine(EnergyDepletionRoutine(energyDepletionRate, healthTickRate, healthTickDamage));
         }
 
         private IEnumerator EnergyDepletionRoutine(float energyDepletionRate, float healthTickRate, float healthTickDamage)

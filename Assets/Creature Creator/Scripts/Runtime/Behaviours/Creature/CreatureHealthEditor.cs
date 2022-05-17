@@ -8,6 +8,8 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureMover))]
+    [RequireComponent(typeof(CreatureEnergyDepleter))]
+    [RequireComponent(typeof(CreatureAger))]
     public class CreatureHealthEditor : MonoBehaviour
     {
         #region Properties
@@ -36,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
             string age  = Informer.Information.FormattedAge;
-            InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", Respawn);
+            InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", Health.Respawn);
         }
         public void Respawn()
         {

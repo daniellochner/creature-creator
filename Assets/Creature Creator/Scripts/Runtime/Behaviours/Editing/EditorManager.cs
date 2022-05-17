@@ -298,7 +298,7 @@ namespace DanielLochner.Assets.CreatureCreator
             playToggle.SetIsOnWithoutNotify(true);
 
             // Player
-            player.Creature.Informer.Respawn();
+            player.Creature.Health.Respawn();
             player.Creature.Constructor.Recenter();
             player.Creature.Constructor.UpdateConfiguration();
             player.Creature.Mover.TargetPosition = player.Creature.transform.position;
@@ -399,7 +399,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsPlaying)
             {
-                player.Creature.Informer.Respawn();
+                player.Creature.Health.Respawn();
             }
 
             // Colour

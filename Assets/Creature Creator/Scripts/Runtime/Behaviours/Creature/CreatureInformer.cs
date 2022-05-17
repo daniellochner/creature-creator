@@ -1,12 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreaturePhotographer))]
+    [RequireComponent(typeof(CreatureHealth))]
+    [RequireComponent(typeof(CreatureEnergy))]
+    [RequireComponent(typeof(CreatureAge))]
     public class CreatureInformer : MonoBehaviour
     {
         #region Fields
@@ -19,10 +19,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public CreaturePhotographer Photographer { get; private set; }
         public CreatureConstructor Constructor { get; private set; }
+        public CreatureHealth Health { get; private set; }
+        public CreatureEnergy Energy { get; private set; }
+        public CreatureAge Age { get; private set; }
 
         public CreatureInformation Information => information;
-
-        public Action OnRespawn { get; set; }
         #endregion
 
         #region Methods
@@ -35,6 +36,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Constructor = GetComponent<CreatureConstructor>();
             Photographer = GetComponent<CreaturePhotographer>();
+            Health = GetComponent<CreatureHealth>();
+            Energy = GetComponent<CreatureEnergy>();
+            Age = GetComponent<CreatureAge>();
         }
 
         public void Setup(CreatureInformationMenu menu)
@@ -42,16 +46,35 @@ namespace DanielLochner.Assets.CreatureCreator
             informationMenu = menu;
             informationMenu.Setup(information);
 
+            Health.OnHealthChanged += InformHealth;
+            Energy.OnEnergyChanged += InformEnergy;
+            Age.OnAgeChanged += InformAge;
+
             Constructor.OnConstructCreature += Respawn;
+        }
+
+        private void InformHealth(float health)
+        {
+            Information.Health = Mathf.InverseLerp(Health.MinMaxHealth.min, Health.MinMaxHealth.max, health);
+        }
+        private void InformEnergy(float energy)
+        {
+            Information.Energy = energy;
+        }
+        private void InformAge(int age)
+        {
+            Information.Age = age;
         }
 
         public void Respawn()
         {
             Information.Reset();
 
-            Photographer.TakePhoto(128, (Texture2D p) => Information.Photo = p);
+            Photographer.TakePhoto(128, (Texture2D photo) =>
+            {
+                Information.Photo = photo;
+            });
             Information.Name = Constructor.Data.Name;
-            OnRespawn?.Invoke();
         }
         #endregion
     }

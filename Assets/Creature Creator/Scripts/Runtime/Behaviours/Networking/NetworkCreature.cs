@@ -54,21 +54,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (isOwner)
             {
-                SourceCreature.Health.OnHealthChanged += (float health) => SetInfo(health, SetHealthServerRpc, SetHealth);
-                SourceCreature.Energy.OnEnergyChanged += (float energy) => SetInfo(energy, SetEnergyServerRpc, SetEnergy);
-                SourceCreature.Age.OnAgeChanged += (int age) => SetInfo(age, SetAgeServerRpc, SetAge);
-
-                //SourceCreature.Informer.OnRespawn += delegate
-                //{
-                //    SourceCreature.Health.HealthPercentage = 1f;
-                //    SourceCreature.Energy.Energy = 1f;
-                //    SourceCreature.Ager.Start();
-                //};
+                SourceCreature.Health.OnHealthChanged += SetHealthServerRpc;
+                SourceCreature.Energy.OnEnergyChanged += SetEnergyServerRpc;
+                SourceCreature.Age.OnAgeChanged += SetAgeServerRpc;
             }
-
-            Health.OnValueChanged += InformHealth;
-            Energy.OnValueChanged += InformEnergy;
-            Age.OnValueChanged += InformAge;
+            else
+            {
+                Health.OnValueChanged += UpdateHealth;
+                Energy.OnValueChanged += UpdateEnergy;
+                Age.OnValueChanged += UpdateAge;
+            }
         }
 
         #region Hide
@@ -132,76 +127,36 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
         #endregion
-
-
-        public void TakeDamage(float damage)
-        {
-            SourceCreature.Health.TakeDamage(damage);
-            //TakeDamageServerRpc(damage);
-        }
-
-        [ServerRpc]
-        public void TakeDamageServerRpc(float damage)
-        {
-            Debug.Log("TEST");
-            SourceCreature.Health.TakeDamage(damage);
-        }
-
-
+        
 
         #region Information
-        private void SetInfo<T>(T value, Action<T> nF, Action<T> nnF)
-        {
-            if (SetupGame.IsNetworkedGame)
-            {
-                nF.Invoke(value);
-            }
-            else
-            {
-                nnF.Invoke(value);
-            }
-        }
-
-        private void SetHealth(float health)
-        {
-            Health.Value = Mathf.InverseLerp(SourceCreature.Health.MinMaxHealth.min, SourceCreature.Health.MinMaxHealth.max, health);
-        }
-        private void SetEnergy(float energy)
-        {
-            Energy.Value = energy;
-        }
-        private void SetAge(int age)
-        {
-            Age.Value = age;
-        }
-
         [ServerRpc]
         private void SetHealthServerRpc(float health)
         {
-            SetHealth(health);
+            Health.Value = health;
         }
         [ServerRpc]
         private void SetEnergyServerRpc(float energy)
         {
-            SetEnergy(energy);
+            Energy.Value = energy;
         }
         [ServerRpc]
         private void SetAgeServerRpc(int age)
         {
-            SetAge(age);
+            Age.Value = age;
         }
-        
-        private void InformHealth(float oldHealth, float newHealth)
+
+        private void UpdateHealth(float oldHealth, float newHealth)
         {
-            TargetCreature.Informer.Information.Health = newHealth;
+            TargetCreature.Health.Health = newHealth;
         }
-        private void InformEnergy(float oldEnergy, float newEnergy)
+        private void UpdateEnergy(float oldEnergy, float newEnergy)
         {
-            TargetCreature.Informer.Information.Energy = newEnergy;
+            TargetCreature.Energy.Energy = newEnergy;
         }
-        private void InformAge(int oldAge, int newAge)
+        private void UpdateAge(int oldAge, int newAge)
         {
-            TargetCreature.Informer.Information.Age = newAge;
+            TargetCreature.Age.Age = newAge;
         }
         #endregion
         #endregion

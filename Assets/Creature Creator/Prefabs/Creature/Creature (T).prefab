@@ -307,7 +307,10 @@ MonoBehaviour:
   photographer: {fileID: -9020272506099403498}
   killer: {fileID: 3979165202273956639}
   effector: {fileID: 247936343227655941}
-  scaler: {fileID: 0}
+  scaler: {fileID: 7457476056215507614}
+  health: {fileID: 8883115899081995584}
+  energy: {fileID: 5862341718529941009}
+  age: {fileID: 8171552665986909827}
   informer: {fileID: 5382025046379907827}
   selector: {fileID: -3588625786838544996}
 --- !u!114 &-3588625786838544996
@@ -328,6 +331,46 @@ MonoBehaviour:
     max: 50
   informationMenuPrefab: {fileID: 1257471989696206141, guid: f2f494ecd6ba5f14fb6ae8e08066afe0, type: 3}
   informationSelectCirclePrefab: {fileID: 6934024238365535033, guid: a057762bebc43be4497953e485c8f86f, type: 3}
+--- !u!114 &-1538029820508358655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d45b96aae7f01ab4694ef422e395d610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paramaters:
+  - name: '%ASpeed'
+    type: 1
+  - name: '%LSpeed'
+    type: 1
+  - name: IsGrounded
+    type: 4
+  - name: HasArms
+    type: 4
+  - name: HasLegs
+    type: 4
+  - name: HasWings
+    type: 4
+  - name: HasInteractTarget
+    type: 4
+  - name: Interact
+    type: 9
+  - name: StopInteracting
+    type: 9
+  - name: HasLookTarget
+    type: 4
+  - name: Look
+    type: 9
+  - name: StopLooking
+    type: 9
+  - name: Jump
+    type: 9
+  updateParameterList: 0
 --- !u!114 &1640302633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseCreaturePrefab: {fileID: 3002746977395476853, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
---- !u!114 &-1538029820508358655
+--- !u!114 &5862341718529941009
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -525,33 +568,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 982379299394450588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d45b96aae7f01ab4694ef422e395d610, type: 3}
+  m_Script: {fileID: 11500000, guid: 08266b5bcd7c8d1418e5bb39d1e9daa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paramaters:
-  - name: '%ASpeed'
-    type: 1
-  - name: '%LSpeed'
-    type: 1
-  - name: IsGrounded
-    type: 4
-  - name: HasArms
-    type: 4
-  - name: HasLegs
-    type: 4
-  - name: HasWings
-    type: 4
-  - name: HasInteractTarget
-    type: 4
-  - name: Interact
-    type: 9
-  - name: HasLookTarget
-    type: 4
-  - name: Look
-    type: 9
-  - name: Jump
-    type: 9
-  updateParameterList: 0
+  energy: 1
+--- !u!114 &8883115899081995584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5336ac240f49c4c429d8e7e374f7127a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minMaxHealth:
+    min: 0
+    max: 100
+  health: 100
+--- !u!114 &7457476056215507614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a038fd18d545345933086529bbc905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scale: 1
+--- !u!114 &8171552665986909827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  age: 0
 --- !u!114 &7696278918816451154
 MonoBehaviour:
   m_ObjectHideFlags: 0

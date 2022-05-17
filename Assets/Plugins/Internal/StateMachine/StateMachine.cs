@@ -9,16 +9,17 @@ namespace DanielLochner.Assets
     public abstract class StateMachine : MonoBehaviour
     {
         #region Fields
-        [SerializeField] protected string startState;
+        [SerializeField] private string startStateID;
+        [SerializeField, ReadOnly] private string currentStateID;
         [SerializeReference] protected List<BaseState> states;
 
-        [SerializeField, ReadOnly] protected BaseState currentState;
+        protected BaseState currentState;
         #endregion
 
         #region Methods
         public virtual void Awake()
         {
-            ChangeState(startState);
+            ChangeState(startStateID);
         }
         public virtual void Reset()
         {
@@ -39,6 +40,7 @@ namespace DanielLochner.Assets
 
             currentState?.Exit();
             currentState = states.Find(x => x.ID == id);
+            currentStateID = id;
             currentState?.Enter();
         }
         #endregion

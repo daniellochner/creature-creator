@@ -48,7 +48,7 @@ namespace DanielLochner.Assets
             if (IsDead) return;
 
             Health -= damage;
-            OnTakeDamage(damage);
+            OnTakeDamage?.Invoke(damage);
 
             if (Health <= minMaxHealth.min)
             {
@@ -60,13 +60,13 @@ namespace DanielLochner.Assets
             if (IsDead) return;
 
             IsDead = true;
-            OnDie();
+            OnDie?.Invoke();
         }
         public virtual void Respawn()
         {
             Health = minMaxHealth.max;
             IsDead = false;
-            OnRespawn();
+            OnRespawn?.Invoke();
         }
 
 #if UNITY_EDITOR

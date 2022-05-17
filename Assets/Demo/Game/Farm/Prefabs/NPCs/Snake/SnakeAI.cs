@@ -9,31 +9,25 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class SnakeAI : AnimalAI
     {
-        [Header("Snake")]
-        [SerializeField] private GameObject mouthCol;
 
-        public MouthAnimator Mouth { get; set; }
+        [SerializeField] private TrackRegion strikeRegion;
+
 
         public override void Start()
         {
             base.Start();
 
-            //creature.Tracker.OnTrack += delegate (CreatureBase other)
-            //{
-            //    ChangeState("STR");
-            //};
-            //creature.Tracker.OnLoseTrackOf += delegate (CreatureBase other)
-            //{
-            //    Debug.Log("TEST");
-            //    if (creature.Tracker.Tracked.Count == 0)
-            //    {
-            //        ChangeState("WAN");
-            //    }
-            //};
-
-
-            Mouth = GetComponentInChildren<MouthAnimator>();
-            Instantiate(mouthCol, Mouth.transform, false);
+            strikeRegion.OnTrack += delegate
+            {
+                ChangeState("STR");
+            };
+            strikeRegion.OnLoseTrackOf += delegate
+            {
+                if (strikeRegion.tracked.Count == 0)
+                {
+                    ChangeState("WAN");
+                }
+            };
         }
         
 
@@ -52,9 +46,6 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private MinMax strikeCooldown;
             [SerializeField] private float maxStrikeDistance;
             private float strikeTimeLeft;
-            [SerializeField] private float rotSmoothing;
-
-            private CreatureBase targetedCreature;
 
             public SnakeAI SnakeAI => StateMachine as SnakeAI;
 
@@ -63,50 +54,71 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
+                SnakeAI.creature.Animator.Animator.SetTrigger("Look");
                 SnakeAI.agent.SetDestination(SnakeAI.transform.position);
             }
             public override void UpdateLogic()
             {
-                LookAt();
-                TimerUtility.OnTimer(ref strikeTimeLeft, strikeCooldown.Random, Time.deltaTime, Strike);
+                HandleStrike();
+                HandleLookAt();
             }
-            
-            private void LookAt()
+            public override void Exit()
             {
-                targetedCreature = null;
-                float minDistance = Mathf.Infinity;
-                //foreach (CreatureBase creature in SnakeAI.creature.Tracker.Tracked)
-                //{
-                //    float distance = Vector3.Distance(creature.transform.position, SnakeAI.transform.position);
-                //    if (distance < minDistance)
-                //    {
-                //        targetedCreature = creature;
-                //        minDistance = distance;
-                //    }
-                //}
+                SnakeAI.creature.Animator.LookTarget = SnakeAI.creature.Animator.InteractTarget = null;
+            }
 
-                if (targetedCreature != null)
+            private void HandleStrike()
+            {
+                if (SnakeAI.creature.Animator.InteractTarget != null)
                 {
-                    Quaternion look = Quaternion.LookRotation(targetedCreature.transform.position - SnakeAI.transform.position);
-                    SnakeAI.transform.rotation = Quaternion.Slerp(SnakeAI.transform.rotation, look, rotSmoothing * Time.deltaTime);
+                    TimerUtility.OnTimer(ref strikeTimeLeft, strikeCooldown.Random, Time.deltaTime, Strike);
+                }
+                else
+                {
+                    strikeTimeLeft = strikeCooldown.max; // Set back to the maximum time left if the target creature is lost
                 }
             }
-            
+            private void HandleLookAt()
+            {
+                // Determine the nearest creature within this snake's maximum striking distance
+                Transform nearestCreature = null;
+                float minDistance = Mathf.Infinity;
+                foreach (Collider creature in SnakeAI.strikeRegion.tracked)
+                {
+                    float distance = Vector3.Distance(creature.transform.position, SnakeAI.transform.position);
+                    if (distance < minDistance)
+                    {
+                        nearestCreature = creature.transform;
+                        minDistance = distance;
+                    }
+                }
 
+                // Set the snake's look target to be the nearest creature, and start looking at that creature
+                if (nearestCreature != null && SnakeAI.creature.Animator.LookTarget != nearestCreature)
+                {
+                    SnakeAI.creature.Animator.LookTarget = nearestCreature;
+                }
+                else
+                if (nearestCreature == null)
+                {
+                    SnakeAI.creature.Animator.LookTarget = null;
+                }
+
+                // Set the snake's interact target to be the same creature if it is near enough
+                if (minDistance < maxStrikeDistance)
+                {
+                    SnakeAI.creature.Animator.InteractTarget = nearestCreature;
+                }
+                else
+                {
+                    SnakeAI.creature.Animator.InteractTarget = null;
+                }
+            }
 
             private void Strike()
             {
-                float distance = Vector3.Distance(targetedCreature.transform.position, SnakeAI.transform.position);
-                //if (distance < maxStrikeDistance)
-                {
-                    SnakeAI.creature.Animator.InteractTarget = targetedCreature.transform;
-
-                    SnakeAI.creature.Animator.Animator.SetTrigger("Strike");
-                    SnakeAI.creature.Effector.PlaySound(strikeNoises);
-
-
-
-                }
+                SnakeAI.creature.Animator.Animator.SetTrigger("Strike");
+                SnakeAI.creature.Effector.PlaySound(strikeNoises);
             }
         }
         #endregion

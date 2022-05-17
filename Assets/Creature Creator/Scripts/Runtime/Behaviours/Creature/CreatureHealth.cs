@@ -8,11 +8,15 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureKiller))]
+    [RequireComponent(typeof(CreatureEnergy))]
+    [RequireComponent(typeof(CreatureAge))]
     public class CreatureHealth : PlayerHealth
     {
         #region Properties
         public CreatureKiller Killer { get; private set; }
         public CreatureInformer Informer { get; private set; }
+        public CreatureEnergy Energy { get; private set; }
+        public CreatureAge Age { get; private set; }
         #endregion
 
         #region Methods
@@ -20,6 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Killer = GetComponent<CreatureKiller>();
             Informer = GetComponent<CreatureInformer>();
+            Energy = GetComponent<CreatureEnergy>();
+            Age = GetComponent<CreatureAge>();
         }
 
         public override void Die()
@@ -32,6 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Respawn();
             Killer.Respawn();
             Informer.Respawn();
+
+            Energy.Energy = 1f;
+            Age.Age = 0;
         }
         #endregion
     }
