@@ -30,6 +30,9 @@ namespace DanielLochner.Assets
         }
 
         public Action<float> OnHealthChanged { get; set; }
+        public Action<float> OnTakeDamage { get; set; }
+        public Action OnDie { get; set; }
+        public Action OnRespawn { get; set; }
 
         public bool IsDead { get; private set; }
         #endregion
@@ -40,7 +43,7 @@ namespace DanielLochner.Assets
             health = minMaxHealth.max;
         }
 
-        public void TakeDamage(float damage)
+        public virtual void TakeDamage(float damage)
         {
             if (IsDead) return;
 
@@ -52,28 +55,18 @@ namespace DanielLochner.Assets
                 Die();
             }
         }
-        public void Die()
+        public virtual void Die()
         {
             if (IsDead) return;
 
             IsDead = true;
             OnDie();
         }
-        public void Respawn()
+        public virtual void Respawn()
         {
             Health = minMaxHealth.max;
             IsDead = false;
             OnRespawn();
-        }
-
-        protected virtual void OnTakeDamage(float damage)
-        {
-        }
-        protected virtual void OnDie()
-        {
-        }
-        protected virtual void OnRespawn()
-        {
         }
 
 #if UNITY_EDITOR

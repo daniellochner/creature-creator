@@ -11,7 +11,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureHealth : PlayerHealth
     {
         #region Properties
-        public CreatureConstructor Constructor { get; private set; }
         public CreatureKiller Killer { get; private set; }
         public CreatureInformer Informer { get; private set; }
         #endregion
@@ -19,19 +18,19 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected virtual void Awake()
         {
-            Constructor = GetComponent<CreatureConstructor>();
             Killer = GetComponent<CreatureKiller>();
             Informer = GetComponent<CreatureInformer>();
         }
 
-        protected override void OnDie()
+        public override void Die()
         {
+            base.Die();
             Killer.Kill();
         }
-        protected override void OnRespawn()
+        public override void Respawn()
         {
+            base.Respawn();
             Killer.Respawn();
-
             Informer.Respawn();
         }
         #endregion
