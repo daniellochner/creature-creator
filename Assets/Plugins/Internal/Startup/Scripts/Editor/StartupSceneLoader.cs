@@ -1,42 +1,26 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+// Startup
+// Copyright (c) Daniel Lochner
 
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
-#endif
+using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets
 {
-    public class Startup : MonoBehaviour
-    {
-        [SerializeField] public string sceneToLoad;
-        private void Start()
-        {
-            SceneManager.LoadScene(sceneToLoad);
-        }
-    }
-
-#if UNITY_EDITOR
     [InitializeOnLoad]
-    public static class LoadStartupScene
+    public static class StartupSceneLoader
     {
-        private static string[] IgnoredScenes =
-        {
-            "Testing"
-        };
-
         private static string PreviousScene
         {
             get => EditorPrefs.GetString("prevScene");
             set => EditorPrefs.SetString("prevScene", value);
         }
 
-        static LoadStartupScene()
+        static StartupSceneLoader()
         {
             EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
             {
-                foreach (string ignoredScene in IgnoredScenes)
+                foreach (string ignoredScene in StartupWindow.Window.IgnoredScenes)
                 {
                     if (SceneManager.GetActiveScene().name.Equals(ignoredScene)) return;
                 }
@@ -78,5 +62,4 @@ namespace DanielLochner.Assets
             }
         }
     }
-#endif
 }
