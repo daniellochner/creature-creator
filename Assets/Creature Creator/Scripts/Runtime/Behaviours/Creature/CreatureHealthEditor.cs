@@ -36,9 +36,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             EditorManager.Instance.IsVisible = false;
 
-            string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
-            string age  = Informer.Information.FormattedAge;
-            InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", Health.Respawn);
+            EditorManager.Instance.Invoke(delegate
+            {
+                string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
+                string age = Informer.Information.FormattedAge;
+                InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Health.Respawn);
+            }, 1f);
         }
         public void Respawn()
         {

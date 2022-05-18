@@ -22,7 +22,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", UnityAction<string> submitEvent = null, UnityAction<string> cancelEvent = null)
+        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> submitEvent = null, UnityAction<string> cancelEvent = null)
         {
             Instance.titleText.text = title;
             Instance.placeholderText.text = placeholder;
@@ -30,6 +30,8 @@ namespace DanielLochner.Assets
             Instance.cancelText.text = cancel;
             Instance.titleText.text = title;
             Instance.inputFieldText.text = "";
+
+            Instance.closeButton.gameObject.SetActive(closeable);
 
             Instance.submitButton.onClick.RemoveAllListeners();
             Instance.cancelButton.onClick.RemoveAllListeners();
@@ -48,11 +50,11 @@ namespace DanielLochner.Assets
             Instance.Open();
         }
 
-        public static async Task<string> InputAsync(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", string error = "No input was provided.")
+        public static async Task<string> InputAsync(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, string error = "No input was provided.")
         {
             var promise = new TaskCompletionSource<string>();
 
-            Input(title, placeholder, submit, cancel, delegate (string text)
+            Input(title, placeholder, submit, cancel, closeable, delegate (string text)
             {
                 promise.SetResult(text);
             }, 

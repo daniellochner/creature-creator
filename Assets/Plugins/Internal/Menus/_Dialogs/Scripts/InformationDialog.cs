@@ -17,12 +17,14 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Inform(string title = "Title", string informationMessage = "Message", string okay = "Okay", UnityAction okayEvent = null)
+        public static void Inform(string title = "Title", string informationMessage = "Message", string okay = "Okay", bool closeable = true, UnityAction okayEvent = null)
         {
             Instance.titleText.text = title;
             Instance.informationMessageText.text = informationMessage;
             Instance.okayText.text = okay;
             Instance.titleText.text = title;
+
+            Instance.closeButton.gameObject.SetActive(closeable);
 
             Instance.okayButton.onClick.RemoveAllListeners();
             Instance.okayButton.onClick.AddListener(delegate
