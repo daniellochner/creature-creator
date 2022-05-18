@@ -6,6 +6,7 @@ using UnityEditor;
 using System;
 using System.IO;
 using UnityEngine.Animations;
+using System.Collections.Generic;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -83,6 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             if (GUILayout.Button("Update"))
             {
+                UpdateMissing();
                 UpdateStats();
                 UpdateComponentTypes();
             }
@@ -378,6 +380,22 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public void UpdateMissing()
+        {
+            List<string> missing = new List<string>();
+            foreach (var bodyPart in database.Objects)
+            {
+                if (bodyPart.Value == null)
+                {
+                    missing.Add(bodyPart.Key);
+                }
+            }
+
+            foreach (string id in missing)
+            {
+                database.Objects.Remove(id);
+            }
+        }
         public void UpdateStats()
         {
             MinMax minMaxVolume = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
