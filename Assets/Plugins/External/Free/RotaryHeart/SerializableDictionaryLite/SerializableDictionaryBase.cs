@@ -217,12 +217,12 @@ namespace RotaryHeart.Lib.SerializableDictionary
                 if (_keyValues != null)
                     _keyValues.Remove(key);
                 if (_keys != null)
-                {
-                    int index = _keys.IndexOf(key);
                     _keys.Remove(key);
 
-                    if (_values != null)
-                        _values.RemoveAt(index);
+                if (_values != null)
+                {
+                    TValue value = _dict[key];
+                    _values.Remove(value);
                 }
             }
 
