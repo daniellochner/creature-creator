@@ -91,7 +91,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Lobby lobby = LobbyHelper.Instance.JoinedLobby;
             if (NetworkManager.Singleton.IsHost && lobby.IsPrivate)
             {
-                InformationDialog.Inform("World Code", $"The code to your private world is \"{lobby.LobbyCode}\". \nPress {KeybindingsManager.Data.ViewPlayers} to view it again.");
+                InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{lobby.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", delegate
+                {
+                    GUIUtility.systemCopyBuffer = lobby.Id;
+                });
             }
             if (!bool.Parse(lobby.Data["npc"].Value))
             {

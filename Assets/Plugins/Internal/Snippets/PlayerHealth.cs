@@ -69,18 +69,11 @@ namespace DanielLochner.Assets
             OnRespawn?.Invoke();
         }
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            health = minMaxHealth.max;
-        }
-
         [ContextMenu("Take Damage")]
         private void TakeRandomDamage()
         {
-            TakeDamage(UnityEngine.Random.Range(minMaxHealth.min, minMaxHealth.max));
+            TakeDamage(minMaxHealth.Random);
         }
-#endif
         #endregion
     }
 }

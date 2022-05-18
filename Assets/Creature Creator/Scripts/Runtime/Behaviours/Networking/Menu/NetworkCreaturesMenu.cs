@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             StartCoroutine(UpdateConnectionRoutine(2));
 
-            lobbyCodeInputField.text = LobbyHelper.Instance.JoinedLobby.LobbyCode;
+            lobbyCodeInputField.text = LobbyHelper.Instance.JoinedLobby.Id;
             lobbyCodeInputField.onDeselect.AddListener(delegate (string input)
             {
                 if (IsOpen) Close();

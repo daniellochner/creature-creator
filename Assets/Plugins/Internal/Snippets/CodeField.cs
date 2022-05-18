@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
+    [RequireComponent(typeof(TMP_InputField))]
     public class CodeField : MonoBehaviour
     {
         private void Awake()

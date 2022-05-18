@@ -1,12 +1,8 @@
-// Creature Creator - https://github.com/daniellochner/Creature-Creator
-// Copyright (c) Daniel Lochner
-
 using UnityEngine;
 using UnityEditor;
-using System;
 using Unity.Netcode;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets
 {
     public class NetworkPrefabFixWindow : EditorWindow
     {
@@ -59,25 +55,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public static void ShowWindow()
         {
             Window.Show();
-        }
-        #endregion
-
-        #region Enums
-        [Serializable]
-        public enum SaveType
-        {
-            Detail,
-            Tail,
-            Weapon,
-            Wing,
-            Foot,
-            Hand,
-            Ear,
-            Eye,
-            Mouth,
-            Nose,
-            Arm,
-            Leg
         }
         #endregion
     }

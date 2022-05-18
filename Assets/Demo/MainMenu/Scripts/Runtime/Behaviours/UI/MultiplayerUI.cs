@@ -20,6 +20,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
 using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
+using System.Linq;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -156,11 +157,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
 
-            // Map
             mapOS.SetupUsingEnum<MapType>();
             mapOS.Select(MapType.Farm);
 
-            // Visibility
             visibilityOS.SetupUsingEnum<VisibilityType>();
             visibilityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -202,7 +201,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SceneManager.LoadScene("Island");
         }
-        public async void Join(string joinCode, JoinType joinType, string password = "")
+        public async void Join(string id)
         {
             if (!IsConnectedToInternet || !IsValidPlayer)
             {
@@ -212,53 +211,54 @@ namespace DanielLochner.Assets.CreatureCreator
 
             try
             {
+                // Authenticate
                 await Authenticate();
 
+                // Confirm Password
+                Lobby lobby = await Lobbies.Instance.GetLobbyAsync(id);
+                string passwordHash = lobby.Data["passwordHash"].Value;
+                string password = "";
+                if (!string.IsNullOrEmpty(passwordHash))
+                {
+                    password = await InputDialog.InputAsync("Password Required", "Enter the password...", error: "No password was provided.");
+                    bool isValidPasswordHash = string.IsNullOrEmpty(passwordHash) || sha256.VerifyHash(password, passwordHash);
+                    if (!isValidPasswordHash)
+                    {
+                        throw new Exception("Invalid password.");
+                    }
+                }
+
+                // Set Up Connection Data
+                string username = onlineUsernameInputField.text;
+                SetConnectionData(username, password);
+
+                // Join Lobby
                 UpdateNetworkStatus("Joining Lobby...", Color.yellow, -1);
-
                 LobbyPlayer player = new LobbyPlayer(AuthenticationService.Instance.PlayerId);
-                Lobby lobby = null;
-                switch (joinType)
+                JoinLobbyByIdOptions options = new JoinLobbyByIdOptions()
                 {
-                    case JoinType.LobbyCode:
-                        JoinLobbyByCodeOptions optionsLobbyCode = new JoinLobbyByCodeOptions()
-                        {
-                            Player = player
-                        };
-                        lobby = await LobbyHelper.Instance.JoinLobbyByCodeAsync(joinCode, optionsLobbyCode);
-                        break;
+                    Player = player
+                };
+                lobby = await LobbyHelper.Instance.JoinLobbyByIdAsync(id, options);
 
-                    case JoinType.LobbyId:
-                        JoinLobbyByIdOptions optionsLobbyId = new JoinLobbyByIdOptions()
-                        {
-                            Player = player
-                        };
-                        lobby = await LobbyHelper.Instance.JoinLobbyByIdAsync(joinCode, optionsLobbyId);
-                        break;
-                }
-                string lobbyPasswordHash = lobby.Data["passwordHash"].Value;
-                bool isValidPasswordHash = string.IsNullOrEmpty(lobbyPasswordHash) || sha256.VerifyHash(password, lobbyPasswordHash);
-                if (!isValidPasswordHash)
-                {
-                    throw new Exception("Invalid password.");
-                }
-
+                // Join Relay
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
-                string relayJoinCode = lobby.Data["joinCode"].Value;
-                JoinAllocation join = await Relay.Instance.JoinAllocationAsync(relayJoinCode);
+                string joinCode = lobby.Data["joinCode"].Value;
+                JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
                 await Lobbies.Instance.UpdatePlayerAsync(lobby.Id, player.Id, new UpdatePlayerOptions()
                 {
                     AllocationId = join.AllocationId.ToString(),
-                    ConnectionInfo = relayJoinCode
+                    ConnectionInfo = joinCode
                 });
-                relayTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData, true);
-                SetConnectionData(onlineUsernameInputField.text, password);
+                relayTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
 
+                // Start Client
                 UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
                 NetworkManager.Singleton.StartClient();
             }
             catch (Exception e)
             {
+                Debug.Log(e);
                 UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
             }
@@ -273,28 +273,37 @@ namespace DanielLochner.Assets.CreatureCreator
 
             try
             {
-                await Authenticate();
-
-                bool isPrivate = ((VisibilityType)visibilityOS.Selected) == VisibilityType.Private;
+                // Set Up World
+                bool isPrivate = (VisibilityType)visibilityOS.Selected == VisibilityType.Private;
                 bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
+                string worldName = worldNameInputField.text;
+                string mapName = ((MapType)mapOS.Selected).ToString();
+                string version = Application.version;
+                int maxPlayers = (int)maxPlayersSlider.value;
+                bool allowPVP = pvpToggle.isOn;
+                bool spawnNPC = npcToggle.isOn;
+                bool allowPVE = pveToggle.isOn;
 
-                UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
-                Allocation allocation = await Relay.Instance.CreateAllocationAsync(10);
-                relayTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, true);
+                // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
+                string passwordHash = usePassword ? sha256.GetHash(password) : "";
                 SetConnectionData(username, password);
 
+                // Authenticate
+                await Authenticate();
+
+                // Allocate Relay
+                UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
+                Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
+                relayTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
+
+                // Generate Join Code
                 UpdateNetworkStatus("Generating Join Code...", Color.yellow, -1);
                 string joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
+                // Create Lobby
                 UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
-                string version = Application.version;
-                string mapName = ((MapType)mapOS.Selected).ToString();
-                string passwordHash = usePassword ? sha256.GetHash(password) : "";
-                string pvp = pvpToggle.isOn.ToString();
-                string pve = pveToggle.isOn.ToString();
-                string npc = npcToggle.isOn.ToString();
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = isPrivate,
@@ -304,14 +313,15 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
                         { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
-                        { "pvp", new DataObject(DataObject.VisibilityOptions.Public, pvp) },
-                        { "pve", new DataObject(DataObject.VisibilityOptions.Public, pve) },
-                        { "npc", new DataObject(DataObject.VisibilityOptions.Public, npc) }
+                        { "pvp", new DataObject(DataObject.VisibilityOptions.Public, allowPVP.ToString()) },
+                        { "pve", new DataObject(DataObject.VisibilityOptions.Public, allowPVE.ToString()) },
+                        { "npc", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) }
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
-                Lobby lobby = await LobbyHelper.Instance.CreateLobbyAsync(worldNameInputField.text, (int)maxPlayersSlider.value, options);
+                await LobbyHelper.Instance.CreateLobbyAsync(worldName, maxPlayers, options);
 
+                // Start Host
                 UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
                 NetworkManager.Singleton.StartHost();
             }
@@ -369,7 +379,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Join()
         {
-            Join(lobbyCodeInputField.text, JoinType.LobbyCode);
+            Join(lobbyCodeInputField.text);
         }
 
         private async Task Authenticate()
@@ -426,11 +436,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Public,
             Private
-        }
-        public enum JoinType
-        {
-            LobbyCode,
-            LobbyId
         }
         #endregion
     }

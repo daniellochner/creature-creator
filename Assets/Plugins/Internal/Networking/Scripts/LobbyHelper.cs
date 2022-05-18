@@ -54,7 +54,7 @@ namespace DanielLochner.Assets
             return (JoinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, options));
         }
 
-        private void DeleteActiveLobbies()
+        public void DeleteActiveLobbies()
         {
             while (createdLobbyIds.TryDequeue(out var lobbyId))
             {
