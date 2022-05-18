@@ -258,7 +258,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (Exception e)
             {
-                Debug.Log(e);
                 UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
             }
@@ -306,9 +305,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateNetworkStatus("Creating Lobby...", Color.yellow, -1);
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
-                    IsPrivate = isPrivate,
+                    IsPrivate = false,
                     Data = new Dictionary<string, DataObject>()
                     {
+                        { "isPrivate", new DataObject(DataObject.VisibilityOptions.Public, isPrivate.ToString())},
                         { "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode) },
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
@@ -346,9 +346,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
-                    Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
+                    bool isPrivate = bool.Parse(lobby.Data["isPrivate"].Value);
+                    if (!isPrivate)
+                    {
+                        Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
+                    }
                 }
-                noneGO.SetActive(lobbies.Count == 0);
+                noneGO.SetActive(worldsRT.childCount == 0);
             }
             catch (LobbyServiceException e)
             {
