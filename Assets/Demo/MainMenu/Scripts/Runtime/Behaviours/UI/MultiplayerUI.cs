@@ -313,9 +313,9 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
                         { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
-                        { "pvp", new DataObject(DataObject.VisibilityOptions.Public, allowPVP.ToString()) },
-                        { "pve", new DataObject(DataObject.VisibilityOptions.Public, allowPVE.ToString()) },
-                        { "npc", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) }
+                        { "allowPVP", new DataObject(DataObject.VisibilityOptions.Public, allowPVP.ToString()) },
+                        { "allowPVE", new DataObject(DataObject.VisibilityOptions.Public, allowPVE.ToString()) },
+                        { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) }
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
@@ -346,8 +346,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
-                    bool isPrivate = bool.Parse(lobby.Data["isPrivate"].Value);
-                    if (!isPrivate)
+                    World world = new World(lobby);
+                    if (!world.IsPrivate)
                     {
                         Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
                     }

@@ -22,25 +22,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(MultiplayerUI multiplayerUI, Lobby lobby)
         {
-            string id = lobby.Id;
-            int players = lobby.Players.Count;
-            int maxPlayers = lobby.MaxPlayers;
-            string mapName = lobby.Data["mapName"].Value;
-            string version = lobby.Data["version"].Value;
-            string joinCode = lobby.Data["joinCode"].Value;
-            bool isPasswordProtected = !string.IsNullOrEmpty(lobby.Data["passwordHash"].Value);
-            bool pvp = bool.Parse(lobby.Data["pvp"].Value);
-            bool pve = bool.Parse(lobby.Data["pve"].Value);
-            bool npc = bool.Parse(lobby.Data["npc"].Value);
-
-            playersText.text = $"{players}/{maxPlayers}";
+            playersText.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
             nameText.text = lobby.Name;
-            descriptionText.text = $"{mapName} ({version}) | {FormatTag("PVP", pvp)}, {FormatTag("PVE", pve)}, {FormatTag("NPCs", npc)}";
-            padlockIcon.SetActive(isPasswordProtected);
             joinButton.onClick.AddListener(delegate 
             {
-                multiplayerUI.Join(id);
+                multiplayerUI.Join(lobby.Id);
             });
+
+            World world = new World(lobby);
+            descriptionText.text = $"{world.MapName} ({world.Version}) | {FormatTag("PVP", world.AllowPVP)}, {FormatTag("PVE", world.AllowPVE)}, {FormatTag("NPCs", world.SpawnNPC)}";
+            padlockIcon.SetActive(world.IsPasswordProtected);
         }
 
         private string FormatTag(string tag, bool enabled)
