@@ -118,11 +118,6 @@ namespace DanielLochner.Assets.CreatureCreator
             target.SetPositionAndRotation(Anchor.position, Anchor.rotation);
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawWireSphere(Anchor.position, 0.1f);
-        }
-
         public IEnumerator MoveFootRoutine(Vector3 targetPosition, Quaternion targetRotation, float timeToMove, float liftHeight)
         {
             IsMovingFoot = true;
