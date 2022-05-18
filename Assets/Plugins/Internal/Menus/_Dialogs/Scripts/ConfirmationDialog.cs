@@ -39,7 +39,7 @@ namespace DanielLochner.Assets
                 Instance.Close();
                 noEvent?.Invoke();
             });
-            Instance.ignoreButton.onClick = Instance.noButton.onClick;
+            Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.noButton.onClick;
 
             Instance.Open();
         }

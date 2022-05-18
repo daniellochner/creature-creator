@@ -1,6 +1,8 @@
 // Menus
 // Copyright (c) Daniel Lochner
 
+using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,9 +43,25 @@ namespace DanielLochner.Assets
                 Instance.Close();
                 cancelEvent?.Invoke(Instance.inputFieldText.text);
             });
-            Instance.ignoreButton.onClick = Instance.cancelButton.onClick;
+            Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.cancelButton.onClick;
 
             Instance.Open();
+        }
+
+        public static async Task<string> InputAsync(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", string error = "No input was provided.")
+        {
+            var promise = new TaskCompletionSource<string>();
+
+            Input(title, placeholder, submit, cancel, delegate (string text)
+            {
+                promise.SetResult(text);
+            }, 
+            delegate
+            {
+                promise.SetException(new Exception(error));
+            });
+
+            return await promise.Task;
         }
         #endregion
     }

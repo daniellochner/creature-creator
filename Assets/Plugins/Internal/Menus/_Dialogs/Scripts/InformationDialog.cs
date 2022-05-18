@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
                 Instance.Close();
                 okayEvent?.Invoke();
             });
-            Instance.ignoreButton.onClick = Instance.okayButton.onClick;
+            Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.okayButton.onClick;
 
             Instance.Open();
         }

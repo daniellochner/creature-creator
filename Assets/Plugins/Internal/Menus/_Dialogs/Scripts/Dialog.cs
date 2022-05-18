@@ -9,6 +9,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] protected TextMeshProUGUI titleText;
         [SerializeField] protected Button ignoreButton;
+        [SerializeField] protected Button closeButton;
         #endregion
     }
 }
