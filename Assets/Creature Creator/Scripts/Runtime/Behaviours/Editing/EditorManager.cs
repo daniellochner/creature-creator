@@ -740,7 +740,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         main.transform.parent = Dynamic.Transform;
 
                         main.SetAttached(new AttachedBodyPart(bodyPartID));
-                        main.UpdateDefaultColours();
 
                         main.Flipped.gameObject.SetActive(false);
                         BodyPartEditor bpe = main.GetComponent<BodyPartEditor>();
@@ -830,20 +829,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetColoursUI(Color primaryColour, Color secondaryColour)
         {
             primaryColourPicker.SetColour(primaryColour);
-            secondaryColourPicker.SetColour(secondaryColour);
+            primaryColourPicker.gameObject.SetActive(primaryColour.a != 0);
 
-            BodyPartEditor bpe = player.Creature.Editor.PaintedBodyPart;
-            if (bpe)
-            {
-                BodyPartDefaultColours colours = bpe.BodyPartConstructor.BodyPart.DefaultColours;
-                primaryColourPicker.gameObject.SetActive(colours.primary.a != 0);
-                secondaryColourPicker.gameObject.SetActive(colours.secondary.a != 0);
-            }
-            else
-            {
-                primaryColourPicker.gameObject.SetActive(true);
-                secondaryColourPicker.gameObject.SetActive(true);
-            }
+            secondaryColourPicker.SetColour(secondaryColour);
+            secondaryColourPicker.gameObject.SetActive(secondaryColour.a != 0);
         }
 
         public void UpdateBodyPartTotals()
@@ -856,21 +845,30 @@ namespace DanielLochner.Assets.CreatureCreator
                 title.gameObject.SetActive(count > 0);
             }
         }
-        public void UpdateColours()
+        public void UpdatePrimaryColour()
         {
-            Color primaryColour = primaryColourPicker.Colour;
-            Color secondaryColour = secondaryColourPicker.Colour;
-
+            Color colour = primaryColourPicker.Colour;
             if (player.Creature.Editor.PaintedBodyPart)
             {
-                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetColours(primaryColour, secondaryColour);
+                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetPrimaryColour(colour);
             }
             else
             {
-                player.Creature.Constructor.SetColours(primaryColourPicker.Colour, secondaryColourPicker.Colour);
-
-                patternMaterial.SetColor("_PrimaryCol", primaryColour);
-                patternMaterial.SetColor("_SecondaryCol", secondaryColour);
+                player.Creature.Constructor.SetPrimaryColour(primaryColourPicker.Colour);
+                patternMaterial.SetColor("_PrimaryCol", colour);
+            }
+        }
+        public void UpdateSecondaryColour()
+        {
+            Color colour = secondaryColourPicker.Colour;
+            if (player.Creature.Editor.PaintedBodyPart)
+            {
+                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetSecondaryColour(colour);
+            }
+            else
+            {
+                player.Creature.Constructor.SetSecondaryColour(secondaryColourPicker.Colour);
+                patternMaterial.SetColor("_SecondaryCol", colour);
             }
         }
         public void UpdateStatistics()

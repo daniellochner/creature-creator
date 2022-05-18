@@ -68,7 +68,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action<GameObject, GameObject> OnAddBodyPartPrefab { get; set; }
         public Action<BodyPart> OnAddBodyPartData { get; set; }
         public Action<BodyPart> OnRemoveBodyPartData { get; set; }
-        public Action<Color, Color> OnSetColours { get; set; }
+        public Action<Color> OnSetPrimaryColour { get; set; }
+        public Action<Color> OnSetSecondaryColour { get; set; }
         public Action<string> OnSetPattern { get; set; }
         public Func<BodyPart, GameObject> OnBodyPartPrefabOverride { get; set; }
 
@@ -101,7 +102,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Mesh.name = "Body";
 
             BodyPrimaryMat = new Material(bodyPartMaterial);
+            BodyPrimaryMat.name = "Body_Primary";
             BodySecondaryMat = new Material(bodyPartMaterial);
+            BodySecondaryMat.name = "Body_Secondary";
         }
 
         public void Construct(CreatureData data, bool debug = false)
@@ -122,7 +125,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 main.Attach(attachedBodyPart);
                 main.Flip();
             }
-            SetColours(data.PrimaryColour, data.SecondaryColour);
+            SetPrimaryColour(data.PrimaryColour);
+            SetSecondaryColour(data.SecondaryColour);
             SetPattern(data.PatternID);
             OnConstructCreature?.Invoke();
 
@@ -552,19 +556,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.Name = creatureName;
         }
-        public void SetColours(Color primaryColour, Color secondaryColour)
+        public void SetPrimaryColour(Color colour)
         {
-            // Primary
-            data.PrimaryColour = primaryColour;
-            BodyMat.SetColor("_PrimaryCol", primaryColour);
-            BodyPrimaryMat.color = primaryColour;
+            data.PrimaryColour = colour;
+            BodyMat.SetColor("_PrimaryCol", colour);
+            BodyPrimaryMat.color = colour;
 
-            // Secondary
-            data.SecondaryColour = secondaryColour;
-            BodyMat.SetColor("_SecondaryCol", secondaryColour);
-            BodySecondaryMat.color = secondaryColour;
+            OnSetPrimaryColour?.Invoke(colour);
+        }
+        public void SetSecondaryColour(Color colour)
+        {
+            data.SecondaryColour = colour;
+            BodyMat.SetColor("_SecondaryCol", colour);
+            BodySecondaryMat.color = colour;
 
-            OnSetColours?.Invoke(primaryColour, secondaryColour);
+            OnSetSecondaryColour?.Invoke(colour);
         }
         public void SetPattern(string patternID)
         {

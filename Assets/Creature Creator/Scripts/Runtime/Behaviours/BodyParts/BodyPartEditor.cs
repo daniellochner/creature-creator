@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -244,6 +245,15 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.UpdateStatistics();
             };
+
+            BodyPartConstructor.OnPreOverrideMaterials += delegate (Renderer renderer)
+            {
+                renderer.GetComponent<Outline>().enabled = false; // QuickOutline breaks if you modify the material while it is enabled
+            };
+            BodyPartConstructor.OnOverrideMaterials += delegate (Renderer renderer)
+            {
+                renderer.GetComponent<Outline>().enabled = true;
+            };
         }
 
         public virtual BodyPartEditor Copy()
@@ -253,7 +263,8 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartConstructor main = CreatureEditor.CreatureConstructor.AddBodyPart(bodyPartID);
             main.SetAttached(new AttachedBodyPart(bodyPartID));
 
-            main.SetColours(BodyPartConstructor.AttachedBodyPart.primaryColour, BodyPartConstructor.AttachedBodyPart.secondaryColour);
+            main.SetPrimaryColour(BodyPartConstructor.AttachedBodyPart.primaryColour);
+            main.SetSecondaryColour(BodyPartConstructor.AttachedBodyPart.secondaryColour);
             main.SetStretch(BodyPartConstructor.AttachedBodyPart.stretch, Vector3Int.one);
             main.transform.SetPositionAndRotation(transform.position, transform.rotation);
             main.transform.localScale = transform.localScale;

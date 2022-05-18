@@ -40,7 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private Outline tempModelOutline;
         private GameObject tempModel;
 
-        private BodyPartEditor selectedBodyPart;
+        private BodyPartEditor paintedBodyPart;
         #endregion
 
         #region Properties
@@ -58,16 +58,27 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public BodyPartEditor PaintedBodyPart
         {
-            get => selectedBodyPart;
+            get => paintedBodyPart;
             set
             {
-                selectedBodyPart = value;
+                paintedBodyPart = value;
 
                 Color pColour = default, sColour = default;
-                if (selectedBodyPart)
+                if (paintedBodyPart)
                 {
-                    pColour = selectedBodyPart.BodyPartConstructor.AttachedBodyPart.primaryColour;
-                    sColour = selectedBodyPart.BodyPartConstructor.AttachedBodyPart.secondaryColour;
+                    BodyPartConstructor bpc = paintedBodyPart.BodyPartConstructor;
+
+                    pColour = bpc.AttachedBodyPart.primaryColour;
+                    if (bpc.HasBodyPrimary && !bpc.HasBodyPartPrimary && pColour.a == 0f)
+                    {
+                        pColour = CreatureConstructor.Data.PrimaryColour;
+                    }
+
+                    sColour = bpc.AttachedBodyPart.secondaryColour;
+                    if (bpc.HasBodySecondary && !bpc.HasBodyPartSecondary && sColour.a == 0f)
+                    {
+                        sColour = CreatureConstructor.Data.SecondaryColour;
+                    }
                 }
                 else
                 {
@@ -76,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 EditorManager.Instance.SetColoursUI(pColour, sColour);
 
-                if (UseTemporaryOutline) tempModelOutline.enabled = !selectedBodyPart;
+                if (UseTemporaryOutline) tempModelOutline.enabled = !paintedBodyPart;
             }
         }
         public string LoadedCreature
@@ -514,7 +525,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 IsDirty = true;
             };
-            CreatureConstructor.OnSetColours += delegate (Color primaryColor, Color secondaryColor)
+            CreatureConstructor.OnSetPrimaryColour += delegate (Color colour)
+            {
+                IsDirty = true;
+            };
+            CreatureConstructor.OnSetSecondaryColour += delegate (Color colour)
             {
                 IsDirty = true;
             };
@@ -543,6 +558,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return bodyPart.GetPrefab(BodyPart.PrefabType.Editable);
             };
+            CreatureConstructor.OnConstructCreature += delegate
+            {
+                if (EditorManager.Instance.IsPainting)
+                {
+                    UseTemporaryOutline = false;
+                    UseTemporaryOutline = true;
+                }
+            };
         }
         
         public void Load(CreatureData creatureData)
@@ -561,7 +584,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureConstructor.AddBone(0, Vector3.up * 1.5f, Quaternion.identity, 0f);
                 CreatureConstructor.AddBoneToBack();
                 CreatureConstructor.Body.localPosition = new Vector3(0, CreatureConstructor.Body.localPosition.y, 0); // Added bones aren't initially center-aligned.
-                CreatureConstructor.SetColours(Color.white, Color.black);
+                CreatureConstructor.SetPrimaryColour(Color.white);
+                CreatureConstructor.SetSecondaryColour(Color.black);
                 CreatureConstructor.SetPattern("");
 
                 LoadedCreature = null;
