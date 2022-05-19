@@ -11,6 +11,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         // Movement
+        public int mouseButton = 0;
         public MousePlaneAlignment mousePlaneAlignment = MousePlaneAlignment.ToLocalDirection;
         public Vector3 localDirection = new Vector3(1, 0, 0);
         public Vector3 worldDirection = new Vector3(1, 0, 0);
@@ -79,7 +80,7 @@ namespace DanielLochner.Assets
         }
         private void Update()
         {
-            if (Input.GetMouseButtonUp(0) && IsPressing) // "OnMouseUp()" is unreliable.
+            if (Input.GetMouseButtonUp(mouseButton) && IsPressing) // "OnMouseUp()" is unreliable.
             {
                 if (resetOnRelease)
                 {
@@ -146,7 +147,15 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void OnMouseDown()
+        // The built-in OnMouseDown on works for the left mouse button.
+        public void OnMouseOver()
+        {
+            if (Input.GetMouseButtonDown(mouseButton))
+            {
+                OnMouseButtonDown();
+            }
+        }
+        public void OnMouseButtonDown()
         {
             if (CanvasUtility.IsPointerOverUI) return;
 
@@ -169,6 +178,7 @@ namespace DanielLochner.Assets
 
             IsPressing = true;
         }
+
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR

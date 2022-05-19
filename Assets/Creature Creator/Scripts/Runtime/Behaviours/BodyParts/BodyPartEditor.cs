@@ -1,7 +1,6 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -14,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected MeshCollider meshCollider;
 
         private bool isInteractable;
+        private Transform connectionPoint;
         #endregion
 
         #region Properties
@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Scroll Scroll { get; private set; }
         public Click Click { get; private set; }
         public Drag Drag { get; private set; }
+        public Drag RDrag { get; private set; }
         public Select Select { get; private set; }
 
         public bool IsFlipped
@@ -81,9 +82,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Hover = GetComponent<Hover>();
             Scroll = GetComponent<Scroll>();
-            Drag = GetComponent<Drag>();
             Click = GetComponent<Click>();
             Select = GetComponent<Select>();
+
+            Drag[] drags = GetComponents<Drag>();
+            Drag = drags[0];
+            RDrag = drags[1];
+
+            connectionPoint = new GameObject("Connection.Point").transform;
+            connectionPoint.SetParent(Dynamic.Transform);
 
             meshCollider = BodyPartConstructor.Model.GetComponentInChildren<MeshCollider>();
             colliderMesh = new Mesh();
@@ -160,7 +167,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
-                        transform.parent = Flipped.transform.parent = Dynamic.Transform;
+                        connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent = Flipped.transform.parent = Dynamic.Transform;
                         IsInteractable = false;
                     }
 
@@ -177,6 +184,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         BodyPartConstructor.transform.SetPositionAndRotation(aPosition, aRotation);
                         BodyPartConstructor.Flip();
+
+                        connectionPoint.position = aPosition;
+                        Flipped.connectionPoint.position = Flipped.transform.position;
                     }
                     else
                     {
@@ -192,7 +202,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (CanAttach(out Vector3 aPosition, out Quaternion aRotation))
                     {
-                        transform.parent = Flipped.transform.parent = BodyPartConstructor.CreatureConstructor.Bones[BodyPartConstructor.NearestBone];
+                        connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent = Flipped.transform.parent = BodyPartConstructor.CreatureConstructor.Bones[BodyPartConstructor.NearestBone];
                         BodyPartConstructor.UpdateAttachmentConfiguration();
 
                         if (IsSelected)
@@ -211,6 +221,15 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     CreatureEditor.IsDirty = true;
+                }
+            });
+
+            RDrag.world = connectionPoint;
+            RDrag.OnDrag.AddListener(delegate
+            {
+                if (EditorManager.Instance.IsBuilding)
+                {
+                    BodyPartConstructor.Flip();
                 }
             });
 
@@ -274,7 +293,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartEditor copiedBPE = main.GetComponent<BodyPartEditor>();
             if (copiedBPE != null)
             {
-                copiedBPE.Drag.OnMouseDown();
+                copiedBPE.Drag.OnMouseButtonDown();
                 copiedBPE.Drag.Plane = Drag.Plane;
                 copiedBPE.IsCopied = true;
             }

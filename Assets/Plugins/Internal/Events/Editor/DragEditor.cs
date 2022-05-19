@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         private Drag drag;
-        private SerializedProperty customCollider, draggable, controlDrag, mousePlaneAlignment, localDirection, worldDirection, isBounded, world, boundsShape, boxSize, sphereRadius, cylinderRadius, cylinderHeight, boundsOffset, smoothing, maxDistance, localMovement, resetOnRelease, useOffsetPosition, updatePlaneOnPress, onPress, onRelease, onDrag, onBeginDrag, onEndDrag, dragThreshold;
+        private SerializedProperty customCollider, draggable, controlDrag, mouseButton, mousePlaneAlignment, localDirection, worldDirection, isBounded, world, boundsShape, boxSize, sphereRadius, cylinderRadius, cylinderHeight, boundsOffset, smoothing, maxDistance, localMovement, resetOnRelease, useOffsetPosition, updatePlaneOnPress, onPress, onRelease, onDrag, onBeginDrag, onEndDrag, dragThreshold;
         private bool showMovement = true, showBounds = true, showOther = true, showEvents = false;
         #endregion
 
@@ -23,6 +23,7 @@ namespace DanielLochner.Assets
             // Serialized Properties
             draggable = serializedObject.FindProperty("draggable");
             controlDrag = serializedObject.FindProperty("controlDrag");
+            mouseButton = serializedObject.FindProperty("mouseButton");
             mousePlaneAlignment = serializedObject.FindProperty("mousePlaneAlignment");
             localDirection = serializedObject.FindProperty("localDirection");
             worldDirection = serializedObject.FindProperty("worldDirection");
@@ -71,6 +72,8 @@ namespace DanielLochner.Assets
 
             if (showMovement)
             {
+                EditorGUILayout.PropertyField(mouseButton, new GUIContent("Mouse Button", ""));
+
                 EditorGUILayout.PropertyField(mousePlaneAlignment, new GUIContent("Mouse Plane Alignment", "The plane along which the dragged object is aligned."));
 
                 switch (drag.mousePlaneAlignment)
