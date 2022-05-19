@@ -138,7 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
-            Drag.OnRelease.AddListener(delegate
+            LDrag.OnRelease.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -146,7 +146,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     FlippedLimb.UpdateMeshCollider();
                 }
             });
-            Drag.OnEndDrag.AddListener(delegate
+            LDrag.OnEndDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -219,7 +219,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     });
 
                     Drag boneDrag = bone.gameObject.GetComponent<Drag>();
-                    boneDrag.world = Drag.world;
+                    boneDrag.world = LDrag.world;
                     boneDrag.cylinderRadius = CreatureEditor.CreatureConstructor.MaxRadius;
                     if (index < LimbConstructor.Bones.Length - 1 || LimbConstructor.Limb is Arm)
                     {
@@ -307,7 +307,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ExtremityEditor copiedEE = connectedExtremity.GetComponent<ExtremityEditor>().Copy() as ExtremityEditor;
 
-                copiedEE.Drag.IsDragging = copiedEE.Drag.IsPressing = false;
+                copiedEE.LDrag.IsDragging = copiedEE.LDrag.IsPressing = false;
                 copiedEE.IsSelected = false;
 
                 copiedEE.ExtremityConstructor.ConnectToLimb(copiedLE.LimbConstructor);

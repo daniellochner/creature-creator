@@ -767,8 +767,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         BodyPartEditor bpe = main.GetComponent<BodyPartEditor>();
                         if (bpe != null)
                         {
-                            bpe.Drag.OnMouseButtonDown();
-                            bpe.Drag.Plane = plane;
+                            bpe.LDrag.OnMouseButtonDown();
+                            bpe.LDrag.Plane = plane;
                         }
                     }
                 }

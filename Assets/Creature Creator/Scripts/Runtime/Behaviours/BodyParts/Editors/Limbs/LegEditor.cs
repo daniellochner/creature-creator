@@ -54,7 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupInteraction()
         {
-            Drag.OnPress.AddListener(delegate
+            LDrag.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     footBoneDrag.cylinderRadius = Mathf.Infinity;
                 }
             });
-            Drag.OnRelease.AddListener(delegate
+            LDrag.OnRelease.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -77,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 FootConstructor constructor = extremity as FootConstructor;
                 FootEditor editor = constructor.GetComponent<FootEditor>();
 
-                if (editor.Drag.IsPressing)
+                if (editor.LDrag.IsPressing)
                 {
                     shadowCollider.sharedMesh = Instantiate(colliderMesh);
                     UseShadow = FlippedLeg.UseShadow = true;

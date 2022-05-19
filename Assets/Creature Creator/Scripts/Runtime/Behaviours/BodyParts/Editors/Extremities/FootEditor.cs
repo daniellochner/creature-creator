@@ -24,14 +24,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 ConnectedLeg.FlippedLeg.SetFootOffset(FootConstructor.Offset);
             };
 
-            Drag.OnPress.AddListener(delegate
+            LDrag.OnPress.AddListener(delegate
             {
                 if (ConnectedLeg != null)
                 {
                     ConnectedLeg.UseShadow = ConnectedLeg.FlippedLeg.UseShadow = true;
                 }
             });
-            Drag.OnRelease.AddListener(delegate
+            LDrag.OnRelease.AddListener(delegate
             {
                 if (ConnectedLeg != null)
                 {

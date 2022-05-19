@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Hover Hover { get; private set; }
         public Scroll Scroll { get; private set; }
         public Click Click { get; private set; }
-        public Drag Drag { get; private set; }
+        public Drag LDrag { get; private set; }
         public Drag RDrag { get; private set; }
         public Select Select { get; private set; }
 
@@ -86,7 +86,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Select = GetComponent<Select>();
 
             Drag[] drags = GetComponents<Drag>();
-            Drag = drags[0];
+            LDrag = drags[0];
             RDrag = drags[1];
 
             connectionPoint = new GameObject("Connection.Point").transform;
@@ -137,28 +137,28 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
-            Drag.world = CreatureEditor.transform;
-            Drag.OnPress.AddListener(delegate
+            LDrag.world = CreatureEditor.transform;
+            LDrag.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
                     CreatureEditor.CameraOrbit.Freeze();
                 }
             });
-            Drag.OnRelease.AddListener(delegate
+            LDrag.OnRelease.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0) && !Hover.IsOver)
                 {
                     CreatureEditor.CameraOrbit.Unfreeze();
                 }
             });
-            Drag.OnBeginDrag.AddListener(delegate
+            LDrag.OnBeginDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
                     if (Input.GetKey(KeyCode.LeftAlt) && !IsCopied && BodyPartConstructor.AttachedBodyPart.boneIndex != -1)
                     {
-                        Drag.IsDragging = Drag.IsPressing = false;
+                        LDrag.IsDragging = LDrag.IsPressing = false;
 
                         if (CanCopy)
                         {
@@ -174,7 +174,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     IsSelected = false;
                 }
             });
-            Drag.OnDrag.AddListener(delegate
+            LDrag.OnDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -193,10 +193,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         Flipped.gameObject.SetActive(false); // Hide flipped body part.
                     }
 
-                    Drag.controlDrag = Flipped.Drag.controlDrag = !isAttachable;
+                    LDrag.controlDrag = Flipped.LDrag.controlDrag = !isAttachable;
                 }
             });
-            Drag.OnEndDrag.AddListener(delegate
+            LDrag.OnEndDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -293,8 +293,8 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartEditor copiedBPE = main.GetComponent<BodyPartEditor>();
             if (copiedBPE != null)
             {
-                copiedBPE.Drag.OnMouseButtonDown();
-                copiedBPE.Drag.Plane = Drag.Plane;
+                copiedBPE.LDrag.OnMouseButtonDown();
+                copiedBPE.LDrag.Plane = LDrag.Plane;
                 copiedBPE.IsCopied = true;
             }
 

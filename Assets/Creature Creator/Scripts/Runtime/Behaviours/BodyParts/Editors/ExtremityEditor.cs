@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ExtremityConstructor.DisconnectFromLimb();
             }
-            aPosition = Drag.TargetPosition;
+            aPosition = LDrag.TargetPosition;
             aRotation = transform.rotation;
             return false;
         }
