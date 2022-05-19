@@ -75,6 +75,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
+        private void OnDestroy()
+        {
+            Destroy(connectionPoint.gameObject);
+        }
 
         protected virtual void Initialize()
         {
@@ -260,9 +264,15 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateMeshCollider();
             };
-            BodyPartConstructor.OnAttach += delegate
+            BodyPartConstructor.OnSetAttached += delegate
             {
                 EditorManager.Instance.UpdateStatistics();
+            };
+            BodyPartConstructor.OnAttach += delegate
+            {
+                connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent;
+                connectionPoint.position = transform.position;
+                Flipped.connectionPoint.position = Flipped.transform.position;
             };
 
             BodyPartConstructor.OnPreOverrideMaterials += delegate (Renderer renderer)

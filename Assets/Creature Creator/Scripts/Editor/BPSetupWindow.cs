@@ -229,13 +229,13 @@ namespace DanielLochner.Assets.CreatureCreator
             constructor.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Body Parts"));
             constructor.Model.tag = "Body Part";
 
-            Rigidbody rb = constructor.gameObject.GetOrAddComponent<Rigidbody>();
+            Rigidbody rb = constructor.gameObject.AddComponent<Rigidbody>();
             rb.useGravity = false;
             rb.isKinematic = true;
 
             foreach (Renderer renderer in constructor.Model.GetComponentsInChildren<Renderer>())
             {
-                MeshCollider collider = renderer.gameObject.GetOrAddComponent<MeshCollider>();
+                MeshCollider collider = renderer.gameObject.AddComponent<MeshCollider>();
                 if (renderer is MeshRenderer)
                 {
                     collider.sharedMesh = renderer.GetComponent<MeshFilter>().sharedMesh;
@@ -246,18 +246,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            constructor.gameObject.GetOrAddComponent<Hover>();
-            constructor.gameObject.GetOrAddComponent<Scroll>();
+            constructor.gameObject.AddComponent<Hover>();
+            constructor.gameObject.AddComponent<Scroll>();
 
-            Drag drag = constructor.gameObject.GetOrAddComponent<Drag>();
-            drag.mousePlaneAlignment = Drag.MousePlaneAlignment.ToWorldDirection;
-            drag.updatePlaneOnPress = true;
-            drag.isBounded = false;
-            drag.controlDrag = false;
-            drag.useOffsetPosition = false;
+            Drag lDrag = constructor.gameObject.AddComponent<Drag>();
+            lDrag.mousePlaneAlignment = Drag.MousePlaneAlignment.ToWorldDirection;
+            lDrag.updatePlaneOnPress = true;
+            lDrag.isBounded = false;
+            lDrag.controlDrag = false;
+            lDrag.useOffsetPosition = false;
 
-            constructor.gameObject.GetOrAddComponent<Click>();
-            Select select = constructor.gameObject.GetOrAddComponent<Select>();
+            Drag rDrag = constructor.gameObject.AddComponent<Drag>();
+            rDrag.mouseButton = 1;
+            rDrag.mousePlaneAlignment = Drag.MousePlaneAlignment.WithCamera;
+            rDrag.boundsShape = Drag.BoundsShape.Sphere;
+            rDrag.sphereRadius = 0.1f;
+            rDrag.updatePlaneOnPress = true;
+
+            constructor.gameObject.AddComponent<Click>();
+            Select select = constructor.gameObject.AddComponent<Select>();
             select.IgnoredTags = new string[] { "Tool" };
 
             Outline outline = constructor.Model.gameObject.AddComponent<Outline>();

@@ -4,9 +4,41 @@ using DanielLochner.Assets.CreatureCreator;
 using DanielLochner.Assets;
 using System.Collections.Generic;
 using UnityEditor;
+using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 
 public class Testing : MonoBehaviour
 {
+
+
+
+
+    //public Database bps;
+
+    //[ContextMenu("UPDATE")]
+    //public void UpdateEditorDrag()
+    //{
+    //    foreach (object obj in bps.Objects.Values)
+    //    {
+    //        BodyPart bp = obj as BodyPart;
+
+    //        GameObject editor = bp.GetPrefab(BodyPart.PrefabType.Editable);
+
+    //        Drag rDrag = editor.gameObject.AddComponent<Drag>();
+    //        rDrag.mouseButton = 1;
+    //        rDrag.mousePlaneAlignment = Drag.MousePlaneAlignment.WithCamera;
+    //        rDrag.boundsShape = Drag.BoundsShape.Sphere;
+    //        rDrag.sphereRadius = 0.1f;
+    //        rDrag.updatePlaneOnPress = true;
+
+    //        Debug.Log(editor.name);
+    //    }
+
+
+    //}
+
+
+
+
     //public Database db;
 
     //[ContextMenu("Print")]

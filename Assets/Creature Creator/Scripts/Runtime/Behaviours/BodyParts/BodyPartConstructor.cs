@@ -53,6 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnStretch { get; set; }
         public Action OnAttach { get; set; }
         public Action OnDetach { get; set; }
+        public Action OnSetAttached { get; set; }
         public Action<Vector3> OnScale { get; set; }
         public Action<Color> OnSetPrimaryColour { get; set; }
         public Action<Color> OnSetSecondaryColour { get; set; }
@@ -203,6 +204,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetSecondaryColour(secondary);
             }
+
+            OnAttach?.Invoke();
         }
         public virtual void Detach()
         {
@@ -350,7 +353,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetSecondaryColour(bodyPart.DefaultColours.secondary);
             }
 
-            OnAttach?.Invoke();
+            OnSetAttached?.Invoke();
         }
 
         public virtual void UpdateAttachmentConfiguration()

@@ -72,7 +72,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 limbIK.data.tipRotationWeight = 0;
             }
 
-            LimbConstructor.OnAttach += delegate
+            LimbConstructor.OnSetAttached += delegate
             {
                 limb.name = name;
                 FlippedLimb.limb.name = FlippedLimb.name;
