@@ -11,6 +11,7 @@ namespace DanielLochner.Assets
         [SerializeField] private Color[] colours;
         [SerializeField] private ColourUI colourUIPrefab;
         [SerializeField] private Image preview;
+        [SerializeField] private ClickUI clickUI;
         [SerializeField] private RectTransform coloursRT;
         [SerializeField] private TextMeshProUGUI foregroundText;
         [Space]
@@ -21,6 +22,10 @@ namespace DanielLochner.Assets
 
         #region Properties
         public Color Colour { get; private set; }
+
+        public ClickUI ClickUI => clickUI;
+
+        public TextMeshProUGUI Name => foregroundText;
         #endregion
 
         #region Methods

@@ -222,6 +222,28 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
             }
+            primaryColourPicker.ClickUI.OnRightClick.AddListener(delegate
+            {
+                if (primaryColourPicker.Name.text.Contains("Override"))
+                {
+                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", yesEvent: delegate
+                    {
+                        player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
+                        SetPrimaryColourUI(player.Creature.Constructor.Data.PrimaryColour, false);
+                    });
+                }
+            });
+            secondaryColourPicker.ClickUI.OnRightClick.AddListener(delegate
+            {
+                if (secondaryColourPicker.Name.text.Contains("Override"))
+                {
+                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", yesEvent: delegate
+                    {
+                        player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
+                        SetSecondaryColourUI(player.Creature.Constructor.Data.SecondaryColour, false);
+                    });
+                }
+            });
 
             // Options
             creaturesDirectory = Path.Combine(Application.persistentDataPath, Application.version, "Creatures");
@@ -826,13 +848,29 @@ namespace DanielLochner.Assets.CreatureCreator
             Destroy(patternUI.gameObject);
         }
 
-        public void SetColoursUI(Color primaryColour, Color secondaryColour)
+        public void SetPrimaryColourUI(Color colour, bool isOverride)
         {
-            primaryColourPicker.SetColour(primaryColour);
-            primaryColourPicker.gameObject.SetActive(primaryColour.a != 0);
-
-            secondaryColourPicker.SetColour(secondaryColour);
-            secondaryColourPicker.gameObject.SetActive(secondaryColour.a != 0);
+            primaryColourPicker.SetColour(colour);
+            primaryColourPicker.gameObject.SetActive(colour.a != 0);
+            SetPrimaryColourOverrideUI(isOverride);
+        }
+        public void SetPrimaryColourOverrideUI(bool isOverride)
+        {
+            SetColourOverrideUI(primaryColourPicker, "Primary", isOverride);
+        }
+        public void SetSecondaryColourUI(Color colour, bool isOverride)
+        {
+            secondaryColourPicker.SetColour(colour);
+            secondaryColourPicker.gameObject.SetActive(colour.a != 0);
+            SetSecondaryColourOverrideUI(isOverride);
+        }
+        public void SetSecondaryColourOverrideUI(bool isOverride)
+        {
+            SetColourOverrideUI(secondaryColourPicker, "Secondary", isOverride);
+        }
+        private void SetColourOverrideUI(ColourPicker colourPicker, string name, bool isOverride)
+        {
+            colourPicker.Name.text = isOverride ? $"{name}\n<size=20>(Override)</size>" : name;
         }
 
         public void UpdateBodyPartTotals()
@@ -848,27 +886,33 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdatePrimaryColour()
         {
             Color colour = primaryColourPicker.Colour;
-            if (player.Creature.Editor.PaintedBodyPart)
+            BodyPartEditor bodyPart = player.Creature.Editor.PaintedBodyPart;
+            if (bodyPart)
             {
-                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetPrimaryColour(colour);
+                bodyPart.BodyPartConstructor.SetPrimaryColour(colour);
+                SetPrimaryColourOverrideUI(bodyPart.BodyPartConstructor.IsPrimaryOverridden);
             }
             else
             {
                 player.Creature.Constructor.SetPrimaryColour(primaryColourPicker.Colour);
                 patternMaterial.SetColor("_PrimaryCol", colour);
+                SetPrimaryColourOverrideUI(false);
             }
         }
         public void UpdateSecondaryColour()
         {
             Color colour = secondaryColourPicker.Colour;
-            if (player.Creature.Editor.PaintedBodyPart)
+            BodyPartEditor bodyPart = player.Creature.Editor.PaintedBodyPart;
+            if (bodyPart)
             {
-                player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.SetSecondaryColour(colour);
+                bodyPart.BodyPartConstructor.SetSecondaryColour(colour);
+                SetSecondaryColourOverrideUI(bodyPart.BodyPartConstructor.IsSecondaryOverridden);
             }
             else
             {
                 player.Creature.Constructor.SetSecondaryColour(secondaryColourPicker.Colour);
                 patternMaterial.SetColor("_SecondaryCol", colour);
+                SetSecondaryColourOverrideUI(false);
             }
         }
         public void UpdateStatistics()
@@ -1078,7 +1122,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void ConfirmUnsavedChanges(UnityAction operation, string operationPCN)
         {
-            ConfirmOperation(operation, player.Creature.Editor.IsDirty && !string.IsNullOrEmpty(player.Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{player.Creature.Editor.LoadedCreature}\" without saving. Are you sure you wish to continue {operationPCN}?");
+            ConfirmOperation(operation, player.Creature.Editor.IsDirty && !string.IsNullOrEmpty(player.Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{player.Creature.Editor.LoadedCreature}\" without saving. Are you sure you want to continue {operationPCN}?");
         }
         #endregion
         #endregion

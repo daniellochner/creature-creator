@@ -16,6 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Body Part")]
         [SerializeField] private Transform model;
         [SerializeField] private SerializableDictionaryBase<StretchAxis, StretchIndices> stretchMap = new SerializableDictionaryBase<StretchAxis, StretchIndices>();
+
+        private bool hasBodyPrimary, hasBodySecondary, hasBodyPartPrimary, hasBodyPartSecondary, isPrimaryOverridden, isSecondaryOverridden;
         #endregion
 
         #region Properties
@@ -64,10 +66,57 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool IsFlipped { get; set; }
 
-        public bool HasBodyPrimary { get; private set; }
-        public bool HasBodySecondary { get; private set; }
-        public bool HasBodyPartPrimary { get; private set; }
-        public bool HasBodyPartSecondary { get; private set; }
+        public bool CanOverridePrimary
+        {
+            get => hasBodyPrimary && !hasBodyPartPrimary;
+        }
+        public bool CanOverrideSecondary
+        {
+            get => hasBodySecondary && !hasBodyPartSecondary;
+        }
+
+        public bool IsPrimaryOverridden
+        {
+            get => isPrimaryOverridden;
+            set
+            {
+                isPrimaryOverridden = value;
+
+                if (isPrimaryOverridden)
+                {
+                    OverrideMat("Body_Primary", BodyPartPrimaryMat, true);
+                    Flipped.OverrideMat("Body_Primary", BodyPartPrimaryMat, true);
+                }
+                else
+                {
+                    OverrideMat("BodyPart_Primary", CreatureConstructor.BodyPrimaryMat, true);
+                    Flipped.OverrideMat("BodyPart_Primary", CreatureConstructor.BodyPrimaryMat, true);
+
+                    AttachedBodyPart.primaryColour = default;
+                }
+            }
+        }
+        public bool IsSecondaryOverridden
+        {
+            get => isSecondaryOverridden;
+            set
+            {
+                isSecondaryOverridden = value;
+
+                if (isSecondaryOverridden)
+                {
+                    OverrideMat("Body_Secondary", BodyPartSecondaryMat, true);
+                    Flipped.OverrideMat("Body_Secondary", BodyPartSecondaryMat, true);
+                }
+                else
+                {
+                    OverrideMat("BodyPart_Secondary", CreatureConstructor.BodySecondaryMat, true);
+                    Flipped.OverrideMat("BodyPart_Secondary", CreatureConstructor.BodySecondaryMat, true);
+
+                    AttachedBodyPart.secondaryColour = default;
+                }
+            }
+        }
 
         public int NearestBone
         {
@@ -113,10 +162,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor = creatureConstructor;
 
-            BodyPartPrimaryMat = new Material(CreatureConstructor.BodyPartMaterial);
+            BodyPartPrimaryMat = IsFlipped ? Flipped.BodyPartPrimaryMat : new Material(CreatureConstructor.BodyPartMaterial);
             BodyPartPrimaryMat.name = "BodyPart_Primary";
 
-            BodyPartSecondaryMat = new Material(CreatureConstructor.BodyPartMaterial);
+            BodyPartSecondaryMat = IsFlipped ? Flipped.BodyPartSecondaryMat : new Material(CreatureConstructor.BodyPartMaterial);
             BodyPartSecondaryMat.name = "BodyPart_Secondary";
 
             OverrideMat(null, null, false);
@@ -143,8 +192,17 @@ namespace DanielLochner.Assets.CreatureCreator
             SetStretch(attachedBodyPart.stretch, Vector3Int.one);
 
             // Colours
-            SetPrimaryColour(attachedBodyPart.primaryColour);
-            SetSecondaryColour(attachedBodyPart.secondaryColour);
+            Color primary = attachedBodyPart.primaryColour;
+            if (primary.a != 0f)
+            {
+                SetPrimaryColour(primary);
+            }
+
+            Color secondary = attachedBodyPart.secondaryColour;
+            if (secondary.a != 0f)
+            {
+                SetSecondaryColour(secondary);
+            }
         }
         public virtual void Detach()
         {
@@ -194,34 +252,24 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SetPrimaryColour(Color colour)
         {
-            if (colour.a == 0f) return;
-
-            if (HasBodyPrimary && !HasBodyPartPrimary)
+            if (CanOverridePrimary && !IsPrimaryOverridden)
             {
-                OverrideMat("Body_Primary", BodyPartPrimaryMat, true);
-                Flipped.OverrideMat("Body_Primary", Flipped.BodyPartPrimaryMat, true);
+                IsPrimaryOverridden = true;
             }
 
             BodyPartPrimaryMat.SetColor("_Color", colour);
-            Flipped.BodyPartPrimaryMat.SetColor("_Color", colour);
-
             AttachedBodyPart.primaryColour = colour;
 
             OnSetPrimaryColour?.Invoke(colour);
         }
         public void SetSecondaryColour(Color colour)
         {
-            if (colour.a == 0f) return;
-
-            if (HasBodySecondary && !HasBodyPartSecondary)
+            if (CanOverrideSecondary && !IsSecondaryOverridden)
             {
-                OverrideMat("Body_Secondary", BodyPartSecondaryMat, true);
-                Flipped.OverrideMat("Body_Secondary", Flipped.BodyPartSecondaryMat, true);
+                IsSecondaryOverridden = true;
             }
 
             BodyPartSecondaryMat.SetColor("_Color", colour);
-            Flipped.BodyPartSecondaryMat.SetColor("_Color", colour);
-
             AttachedBodyPart.secondaryColour = colour;
 
             OnSetSecondaryColour?.Invoke(colour);
@@ -312,8 +360,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         #region Helper
-        private void OverrideMat(string matToOverride, Material overrideMat, bool notifyRenderer)
+        public void OverrideMat(string matToOverride, Material overrideMat, bool notifyRenderer)
         {
+            hasBodyPrimary = hasBodySecondary = hasBodyPartPrimary = hasBodyPartSecondary = false;
+
             if (notifyRenderer) OnPreOverrideMaterials?.Invoke(Renderer);
 
             Material[] materials = Renderer.materials;
@@ -330,25 +380,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (name == "Body_Primary")
                 {
                     materials[j] = CreatureConstructor.BodyPrimaryMat;
-                    HasBodyPrimary = true;
+                    hasBodyPrimary = true;
                 }
                 else 
                 if (name == "Body_Secondary")
                 {
                     materials[j] = CreatureConstructor.BodySecondaryMat;
-                    HasBodySecondary = true;
+                    hasBodySecondary = true;
                 }
                 else 
                 if (name == "BodyPart_Primary")
                 {
                     materials[j] = BodyPartPrimaryMat;
-                    HasBodyPartPrimary = true;
+                    hasBodyPartPrimary = true;
                 }
                 else 
                 if (name == "BodyPart_Secondary")
                 {
                     materials[j] = BodyPartSecondaryMat;
-                    HasBodyPartSecondary = true;
+                    hasBodyPartSecondary = true;
                 }
             }
             Renderer.materials = materials;
