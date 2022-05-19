@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private PlayerNameUI playerNameUIPrefab;
         [SerializeField] private TextMeshProUGUI connectionText;
-        [SerializeField] private TMP_InputField lobbyCodeInputField;
+        [SerializeField] private CodeField worldCodeField;
 
         private Dictionary<ulong, PlayerNameUI> playerNames = new Dictionary<ulong, PlayerNameUI>();
         #endregion
@@ -29,8 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             StartCoroutine(UpdateConnectionRoutine(2));
 
-            lobbyCodeInputField.text = LobbyHelper.Instance.JoinedLobby.Id;
-            lobbyCodeInputField.onDeselect.AddListener(delegate (string input)
+            worldCodeField.Setup(LobbyHelper.Instance.JoinedLobby.Id, onDeselect: delegate (string input)
             {
                 if (IsOpen) Close();
             });
@@ -61,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Open();
             }
-            else if (Input.GetKeyUp(KeyCode.Tab) && !lobbyCodeInputField.isFocused)
+            else if (Input.GetKeyUp(KeyCode.Tab) && !worldCodeField.IsVisible)
             {
                 Close();
             }

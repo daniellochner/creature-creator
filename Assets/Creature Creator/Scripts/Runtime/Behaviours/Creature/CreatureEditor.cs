@@ -63,20 +63,20 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 paintedBodyPart = value;
 
-                Color pColour = default, sColour = default;
-                bool isPOverride = false, isSOverride = false;
+                Color primaryColour = default, sColour = default;
+                bool isPrimaryOverridden = false, isSOverride = false;
                 if (paintedBodyPart)
                 {
                     BodyPartConstructor bpc = paintedBodyPart.BodyPartConstructor;
 
-                    pColour = bpc.AttachedBodyPart.primaryColour;
+                    primaryColour = bpc.AttachedBodyPart.primaryColour;
                     if (bpc.IsPrimaryOverridden)
                     {
-                        isPOverride = true;
+                        isPrimaryOverridden = true;
                     }
                     else if (bpc.CanOverridePrimary)
                     {
-                        pColour = CreatureConstructor.Data.PrimaryColour;
+                        primaryColour = CreatureConstructor.Data.PrimaryColour;
                     }
 
                     sColour = bpc.AttachedBodyPart.secondaryColour;
@@ -91,10 +91,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 else
                 {
-                    pColour = CreatureConstructor.Data.PrimaryColour;
+                    primaryColour = CreatureConstructor.Data.PrimaryColour;
                     sColour = CreatureConstructor.Data.SecondaryColour;
                 }
-                EditorManager.Instance.SetPrimaryColourUI(pColour, isPOverride);
+                EditorManager.Instance.SetPrimaryColourUI(primaryColour, isPrimaryOverridden);
                 EditorManager.Instance.SetSecondaryColourUI(sColour, isSOverride);
 
                 if (UseTemporaryOutline) tempModelOutline.enabled = !paintedBodyPart;

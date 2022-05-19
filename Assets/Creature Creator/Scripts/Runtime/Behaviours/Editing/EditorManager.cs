@@ -13,7 +13,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using UnityFBXExporter;
 using ProfanityDetector;
 using SimpleFileBrowser;
-using static DanielLochner.Assets.CreatureCreator.BodyPart;
+using UnityEngine.EventSystems;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -1022,15 +1022,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 TrySave();
             }
             else
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                TryClear();
-            }
-            else
             if (Input.GetKeyDown(KeyCode.E))
             {
                 TryExport();
-            }            
+            }      
+            else
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                TryImport();
+            }
+            else
+            if (Input.GetKeyDown(KeyCode.C) && EventSystem.current.currentSelectedGameObject == null) // Must still allow for copying of UI text (e.g., World ID)
+            {
+                TryClear();
+            }
         }
         #endregion
 
