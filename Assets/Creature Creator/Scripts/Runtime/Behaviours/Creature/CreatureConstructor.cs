@@ -29,6 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Debug")]
         [SerializeField, ReadOnly] private CreatureData data;
         [SerializeField, ReadOnly] private CreatureStatistics statistics;
+        [SerializeField, ReadOnly] private CreatureDimensions dimensions;
 
         private bool isTextured;
         #endregion
@@ -149,6 +150,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void ConstructBody()
         {
+            UpdateDimensions();
+
             // Mesh Generation
             Mesh.Clear();
             Mesh.ClearBlendShapes();
@@ -281,14 +284,29 @@ namespace DanielLochner.Assets.CreatureCreator
             #region UVs
             List<Vector2> uv = new List<Vector2>();
 
+            float vScale = 1f;
+            float uScale = 1f;
+
+            float length = dimensions.length;
+            float circumference = 2 * Mathf.PI * dimensions.radius;
+
+            if (length > circumference)
+            {
+                vScale = Mathf.FloorToInt(length / circumference);
+            }
+            else
+            {
+                uScale = Mathf.FloorToInt(circumference / length);
+            }
+
             int totalRings = midRings + 2;
             for (int ringIndex = 0; ringIndex < totalRings; ringIndex++)
             {
-                float v = (ringIndex / (float)totalRings) * (data.Bones.Count + 1);
+                float v = (ringIndex / (float)totalRings);
                 for (int i = 0; i < boneSettings.Segments + 1; i++)
                 {
                     float u = i / (float)(boneSettings.Segments);
-                    uv.Add(new Vector2(u, v));
+                    uv.Add(new Vector2(u * uScale, v * vScale));
                 }
             }
 
@@ -494,6 +512,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SkinnedMeshRenderer.SetBlendShapeWeight(index, weight);
 
             UpdateOrigin();
+            UpdateDimensions();
 
             OnSetWeight?.Invoke(index, weight);
         }
@@ -628,6 +647,28 @@ namespace DanielLochner.Assets.CreatureCreator
                 bone.position -= displacement;
             }
             Body.position = mean;
+        }
+        public void UpdateDimensions()
+        {
+            dimensions.length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
+
+            float avgWeight = 0f;
+            float maxHeight = 0f;
+
+            foreach (Bone bone in Data.Bones)
+            {
+                avgWeight += bone.weight;
+
+                float height = transform.InverseTransformPoint(bone.position).y;
+                if (height > maxHeight)
+                {
+                    maxHeight = height;
+                }
+            }
+            avgWeight /= Data.Bones.Count;
+
+            dimensions.radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
+            dimensions.height = maxHeight;
         }
         #endregion
     }
