@@ -7,6 +7,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class RotateTool : Tool
     {
+        #region Fields
+        [SerializeField] private float fixedScaleZ = 2f;
+        #endregion
+
         #region Properties
         public override bool CanShow => BodyPartEditor.BodyPartConstructor.CanMirror;
         public override float ScaleFactor => base.ScaleFactor * BodyPartEditor.BodyPartConstructor.BodyPart.RotateScaleFactor;
@@ -16,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void Setup()
         {
             base.Setup();
+
+            model.localScale = new Vector3(model.localScale.x, model.localScale.y, fixedScaleZ);
 
             Quaternion initialRotation = Quaternion.identity;
             Vector3 initialDirection = Vector3.zero;

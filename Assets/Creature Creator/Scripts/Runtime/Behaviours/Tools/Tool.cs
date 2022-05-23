@@ -56,6 +56,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPartEditor = bpe;
 
+            model.localScale = initialScale * ScaleFactor;
+
             Setup();
 
             hover.OnEnter.AddListener(delegate
@@ -77,8 +79,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 BodyPartEditor.BodyPartConstructor.Flip();
             });
-
-            model.localScale = initialScale * ScaleFactor;
         }
         protected virtual void Setup()
         {

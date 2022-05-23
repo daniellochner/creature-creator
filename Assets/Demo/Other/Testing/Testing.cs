@@ -8,11 +8,18 @@ using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 
 public class Testing : MonoBehaviour
 {
+    public Database bps;
 
+    [ContextMenu("UPDATE")]
+    public void UpdateScale()
+    {
+        foreach (object obj in bps.Objects.Values)
+        {
+            BodyPart bp = obj as BodyPart;
+            EditorUtility.SetDirty(bp);
+        }
+    }
 
-
-
-    //public Database bps;
 
     //[ContextMenu("UPDATE")]
     //public void UpdateEditorDrag()
