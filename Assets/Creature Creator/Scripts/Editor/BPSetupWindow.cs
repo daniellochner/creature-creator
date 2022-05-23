@@ -402,6 +402,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 database.Objects.Remove(id);
             }
+
+            EditorUtility.SetDirty(database);
         }
         public void UpdateStats()
         {
@@ -460,6 +462,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 int functionalValue = bodyPart.Health + bodyPart.Complexity;
 
                 bodyPart.Price = (int)(0.6f * functionalValue + 0.4f * nonFunctionalValue) * 5;
+
+                EditorUtility.SetDirty(bodyPart);
             }
         }
         public void UpdateComponentTypes()
@@ -485,6 +489,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 CheckTypeMismatch(editable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
                 CheckTypeMismatch(animatable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
                 CheckTypeMismatch(constructible.GetComponent<BodyPartConstructor>(), expectedConstructorType);
+
+                EditorUtility.SetDirty(bodyPart);
             }
         }
         public void CheckTypeMismatch(Component component, Type expectedType)
