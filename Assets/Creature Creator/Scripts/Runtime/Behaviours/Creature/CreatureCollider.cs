@@ -46,12 +46,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             foreach (Transform bone in CreatureConstructor.Bones)
             {
-                float height = transform.InverseTransformPoint(bone.position).y;
-                if (height > maxHeight)
-                {
-                    maxHeight = height;
-                }
-
                 float radius = Mathf.Abs(CreatureConstructor.Body.InverseTransformPoint(bone.position).z);
                 if (radius > maxRadius)
                 {
@@ -60,7 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             //capsuleCollider.radius = maxRadius;
-            capsuleCollider.height = maxHeight;
+            capsuleCollider.height = CreatureConstructor.Dimensions.height;
             capsuleCollider.center = Vector3.up * maxHeight / 2f;
         }
         #endregion

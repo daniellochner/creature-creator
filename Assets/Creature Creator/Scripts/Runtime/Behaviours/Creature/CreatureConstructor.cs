@@ -48,6 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public MinMax MinMaxBones => minMaxBones;
         public CreatureData Data => data;
         public CreatureStatistics Statistics => statistics;
+        public CreatureDimensions Dimensions => dimensions;
 
         public Mesh Mesh { get; private set; }
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
