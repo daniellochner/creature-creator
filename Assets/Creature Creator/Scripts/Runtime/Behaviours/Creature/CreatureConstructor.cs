@@ -78,6 +78,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<Transform> Bones { get; set; } = new List<Transform>();
         public List<BodyPartConstructor> BodyParts { get; set; } = new List<BodyPartConstructor>();
         public List<LimbConstructor> Limbs { get; set; } = new List<LimbConstructor>();
+        public List<LegConstructor> Legs { get; set; } = new List<LegConstructor>();
 
         public bool IsTextured
         {
@@ -114,6 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (debug) Timer.Start("Creature");
 
             OnPreConstructCreature?.Invoke();
+
             SetName(data.Name);
             for (int i = 0; i < data.Bones.Count; i++)
             {
@@ -130,6 +132,8 @@ namespace DanielLochner.Assets.CreatureCreator
             SetPrimaryColour(data.PrimaryColour);
             SetSecondaryColour(data.SecondaryColour);
             SetPattern(data.PatternID);
+            UpdateDimensions();
+
             OnConstructCreature?.Invoke();
 
             if (debug) Timer.Stop("Creature");
@@ -151,7 +155,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void ConstructBody()
         {
-            UpdateDimensions();
+            UpdateBodyDimensions();
 
             // Mesh Generation
             Mesh.Clear();
@@ -288,8 +292,8 @@ namespace DanielLochner.Assets.CreatureCreator
             float vScale = 1f;
             float uScale = 1f;
 
-            float length = dimensions.length;
-            float circumference = 2 * Mathf.PI * dimensions.radius;
+            float length = dimensions.body.length;
+            float circumference = 2f * Mathf.PI * dimensions.body.width;
 
             if (length > circumference)
             {
@@ -513,7 +517,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SkinnedMeshRenderer.SetBlendShapeWeight(index, weight);
 
             UpdateOrigin();
-            UpdateDimensions();
+            UpdateBodyDimensions();
 
             OnSetWeight?.Invoke(index, weight);
         }
@@ -649,27 +653,44 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Body.position = mean;
         }
-        public void UpdateDimensions()
+        public void UpdateBodyDimensions()
         {
-            dimensions.length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
+            dimensions.body.length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
 
             float avgWeight = 0f;
-            float maxHeight = 0f;
-
             foreach (Bone bone in Data.Bones)
             {
                 avgWeight += bone.weight;
+            }
+            avgWeight /= Data.Bones.Count;
+            dimensions.body.width = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
+        }
+        public void UpdateDimensions()
+        {
+            float maxHeight = 0f, maxRadius = 0f;
+            float minHeight = Mathf.Infinity;
 
-                float height = transform.InverseTransformPoint(bone.position).y;
+            foreach (Bone bone in Data.Bones)
+            {
+                float radius = Mathf.Abs(bone.position.z);
+                if (radius > maxRadius)
+                {
+                    maxRadius = radius;
+                }
+
+                float height = bone.position.y;
                 if (height > maxHeight)
                 {
                     maxHeight = height;
                 }
+                else if (height < minHeight)
+                {
+                    minHeight = height;
+                }
             }
-            avgWeight /= Data.Bones.Count;
 
-            dimensions.radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
-            dimensions.height = maxHeight;
+            dimensions.height = ((Legs.Count == 0) ? (maxHeight - minHeight) : maxHeight) + dimensions.body.width;
+            dimensions.radius = maxRadius;
         }
         #endregion
     }

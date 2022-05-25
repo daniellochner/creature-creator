@@ -36,6 +36,17 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
+        public override void Add()
+        {
+            base.Add();
+            CreatureConstructor.Legs.Add(this);
+        }
+        public override void Remove()
+        {
+            base.Remove();
+            CreatureConstructor.Legs.Remove(this);
+        }
+
         public void SetFootOffset(float offset)
         {
             Transform foot = Bones[Bones.Length - 1];

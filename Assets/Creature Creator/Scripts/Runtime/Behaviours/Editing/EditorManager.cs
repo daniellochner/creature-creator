@@ -323,6 +323,8 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Health.Respawn();
             player.Creature.Constructor.Recenter();
             player.Creature.Constructor.UpdateConfiguration();
+            player.Creature.Constructor.UpdateDimensions();
+            player.Creature.Collider.UpdateCollider();
             player.Creature.Mover.TargetPosition = player.Creature.transform.position;
             player.Creature.Mover.IsMovable = true;
             player.Creature.Constructor.IsTextured = true;

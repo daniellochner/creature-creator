@@ -9,14 +9,14 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureCollider : MonoBehaviour
     {
         #region Fields
-        private CapsuleCollider capsuleCollider;
+        private CapsuleCollider capsule;
         #endregion
 
         #region Properties
-        public CreatureConstructor CreatureConstructor { get; private set; }
+        public CreatureConstructor Constructor { get; private set; }
 
-        public float Radius => capsuleCollider.radius;
-        public float Height => capsuleCollider.height;
+        public float Radius => capsule.radius;
+        public float Height => capsule.height;
         #endregion
 
         #region Methods
@@ -28,34 +28,23 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Initialize()
         {
-            capsuleCollider = GetComponent<CapsuleCollider>();
+            capsule = GetComponent<CapsuleCollider>();
 
-            CreatureConstructor = GetComponent<CreatureConstructor>();
+            Constructor = GetComponent<CreatureConstructor>();
         }
         private void Setup()
         {
-            CreatureConstructor.OnConstructBody += delegate ()
+            Constructor.OnConstructCreature += delegate ()
             {
-                UpdateDimensions();
+                UpdateCollider();
             };
         }
 
-        public void UpdateDimensions()
+        public void UpdateCollider()
         {
-            float maxRadius = 0, maxHeight = 0;
-
-            foreach (Transform bone in CreatureConstructor.Bones)
-            {
-                float radius = Mathf.Abs(CreatureConstructor.Body.InverseTransformPoint(bone.position).z);
-                if (radius > maxRadius)
-                {
-                    maxRadius = radius;
-                }
-            }
-
-            //capsuleCollider.radius = maxRadius;
-            capsuleCollider.height = CreatureConstructor.Dimensions.height;
-            capsuleCollider.center = Vector3.up * maxHeight / 2f;
+            capsule.radius = Constructor.Dimensions.radius;
+            capsule.height = Constructor.Dimensions.height;
+            capsule.center = Vector3.up * (Mathf.Max(capsule.height, capsule.radius) / 2f);
         }
         #endregion
     }
