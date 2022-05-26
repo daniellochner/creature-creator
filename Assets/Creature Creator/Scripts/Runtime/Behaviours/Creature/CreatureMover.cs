@@ -227,7 +227,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Move(Vector3 direction)
         {
-            Vector3 displacement = direction * moveSpeed * Time.deltaTime;
+            Vector3 displacement = direction * moveSpeed * Time.fixedDeltaTime;
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
             transform.position += moveDisplacement;
         }
