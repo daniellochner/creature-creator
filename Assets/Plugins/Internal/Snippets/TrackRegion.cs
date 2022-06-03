@@ -30,14 +30,19 @@ namespace DanielLochner.Assets
             collider = GetComponent<Collider>();
             collider.isTrigger = true;
         }
-        //private void OnDisable()
-        //{
-        //    LoseTrackOfAll();
-        //}
-        //private void OnDestroy()
-        //{
-        //    LoseTrackOfAll();     
-        //}
+        private void OnEnable()
+        {
+            collider.enabled = true;
+        }
+        private void OnDisable()
+        {
+            collider.enabled = false;
+            //LoseTrackOfAll();
+        }
+        private void OnDestroy()
+        {
+            //LoseTrackOfAll();
+        }
 
         private void FixedUpdate()
         {

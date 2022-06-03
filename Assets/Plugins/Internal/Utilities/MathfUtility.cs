@@ -9,11 +9,6 @@ namespace DanielLochner.Assets
             return (-b + d * Mathf.Sqrt(Mathf.Pow(b, 2) - 4 * a * c)) / (2 * a);
         }
 
-        public static float Clamp(float value, MinMax minMax)
-        {
-            return Mathf.Clamp(value, minMax.min, minMax.max);
-        }
-
         public static Plane FitPlaneThroughPoints(Vector3[] points)
         {
             int n = points.Length;

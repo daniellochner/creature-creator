@@ -100,6 +100,18 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 HandlePlatform();
             }
+
+            //if (!IsMovable)
+            //{
+            //    HandlePlatform();
+            //}
+        }
+        private void FixedUpdate()
+        {
+            //if (IsMovable)
+            //{
+            //    HandleMovement();
+            //}
         }
 
         private void Initialize()

@@ -9,8 +9,8 @@ namespace DanielLochner.Assets
     public abstract class StateMachine : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private string startStateID;
-        [SerializeField, ReadOnly] private string currentStateID;
+        [SerializeField] protected string startStateID;
+        [SerializeField, ReadOnly] protected string currentStateID;
         [SerializeReference] protected List<BaseState> states;
 
         protected BaseState currentState;

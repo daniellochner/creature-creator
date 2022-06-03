@@ -59,6 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trackable:
   - Player
+  - Creature
   tracked: []
 --- !u!1001 &4353620142736014488
 PrefabInstance:
@@ -303,11 +304,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd2e6f5f170e754f8e0fc6aec94ec8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateID: 
+  startStateID: WAN
   currentStateID: 
   states:
   - id: 0
   - id: 1
+  - id: 2
   data: {fileID: 4900000, guid: deb618de4434d754fb99a9c4c9ee1b94, type: 3}
   strikeRegion: {fileID: 4252049302095609863}
   references:
@@ -339,6 +341,12 @@ MonoBehaviour:
           min: 2
           max: 3
         maxStrikeDistance: 4
+    00000002:
+      type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: FOL
+        sm: {fileID: 3476419545979403416}
+        baseFollowOffset: 2
 --- !u!195 &7588401264203120532
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -50,6 +49,22 @@ namespace DanielLochner.Assets.CreatureCreator
             creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
             creature.Animator.IsAnimated = true;
         }
+
+        public virtual void Follow(Transform target)
+        {
+            creature.Animator.InteractTarget = target;
+            ChangeState("FOL");
+        }
+        public virtual void StopFollowing()
+        {
+            ChangeState(startStateID);
+        }
+
+        [ContextMenu("Debug/FollowPlayer")]
+        public void FollowPlayer()
+        {
+            Follow(Player.Instance.Creature.transform);
+        }
         #endregion
 
         #region States
@@ -57,6 +72,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             states.Add(new Idling(this));
             states.Add(new Wandering(this));
+            states.Add(new Following(this));
         }
 
         [Serializable]
@@ -118,6 +134,33 @@ namespace DanielLochner.Assets.CreatureCreator
                     position = hit.position;
                 }
                 AnimalAI.agent.SetDestination(position);
+            }
+        }
+
+        [Serializable]
+        public class Following : BaseState
+        {
+            [SerializeField] private float baseFollowOffset;
+
+            public AnimalAI AnimalAI => StateMachine as AnimalAI;
+
+            private float FollowOffset => AnimalAI.creature.Constructor.Dimensions.radius + baseFollowOffset;
+
+            public Following(AnimalAI animalAI) : base(animalAI) { }
+
+            public override void UpdateLogic()
+            {
+                Vector3 displacement = AnimalAI.creature.Animator.InteractTarget.position - AnimalAI.transform.position;
+                if (displacement.magnitude > FollowOffset)
+                {
+                    Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target
+                    Vector3 target = AnimalAI.transform.position + (displacement - offset);
+                    AnimalAI.agent.SetDestination(target);
+                }
+            }
+            public override void Exit()
+            {
+                AnimalAI.creature.Animator.InteractTarget = null;
             }
         }
         #endregion

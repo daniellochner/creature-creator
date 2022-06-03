@@ -18,7 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioSource spawnerAudioSource;
         [SerializeField] private AudioClip prepareAudioClip;
         [SerializeField] private AudioClip spawnAudioClip;
-        [SerializeField] private TraumaInducer traumaInducer;
         [SerializeField] private bool checkYouTube;
         [Space]
         [SerializeField] private TextAsset[] creatureTextAssets;
@@ -104,7 +103,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Quaternion rotation = boxCreaturesRoot.rotation * Quaternion.Euler(Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset));
             BoxCreature boxCreature = Instantiate(boxCreaturePrefab, boxCreaturesRoot.position, rotation, boxCreaturesRoot);
-            boxCreature.Spawn(JsonUtility.FromJson<CreatureData>(creatures[index++ % creatures.Count]));
+
+            CreatureData creature = JsonUtility.FromJson<CreatureData>(creatures[index++ % creatures.Count]);
+            boxCreature.Spawn(creature);
         }
         #endregion
     }

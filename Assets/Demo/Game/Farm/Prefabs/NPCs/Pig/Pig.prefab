@@ -202,11 +202,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a8b7d78ac15024691adbfa1a60046b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startState: 
+  startStateID: 
+  currentStateID: 
   states:
   - id: 0
   - id: 1
   - id: 2
+  - id: 3
   data: {fileID: 0}
   references:
     version: 1
@@ -219,7 +221,6 @@ MonoBehaviour:
         noiseCooldown:
           min: 0
           max: 0
-        silentTimeLeft: 0
     00000001:
       type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
@@ -229,13 +230,17 @@ MonoBehaviour:
         noiseCooldown:
           min: 0
           max: 0
-        silentTimeLeft: 0
         wanderCooldown:
           min: 0
           max: 0
         wanderBounds: {fileID: 0}
-        idleTimeLeft: 0
     00000002:
+      type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: 
+        sm: {fileID: 1099495229331248676}
+        followDistance: 0
+    00000003:
       type: {class: PigAI/Rolling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
         id: 

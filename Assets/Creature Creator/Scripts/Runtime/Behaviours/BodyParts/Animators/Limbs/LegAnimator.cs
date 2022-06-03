@@ -117,7 +117,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             target.SetPositionAndRotation(Anchor.position, Anchor.rotation);
         }
-
+        
         public IEnumerator MoveFootRoutine(Vector3 targetPosition, Quaternion targetRotation, float timeToMove, float liftHeight)
         {
             IsMovingFoot = true;

@@ -344,7 +344,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad64c9af735199449e5eeeb689c1ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startState: 
+  startStateID: 
+  currentStateID: 
   states:
   - id: 0
   - id: 1
@@ -355,42 +356,60 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: AnimalAI/Idling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
-      data:
-        id: 
-        sm: {fileID: 8890761587950701179}
-        noises: []
-        noiseCooldown:
-          min: 0
-          max: 0
-        silentTimeLeft: 0
-    00000001:
       type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: WAN
         sm: {fileID: 8890761587950701179}
         noises: []
         noiseCooldown:
           min: 0
           max: 0
-        silentTimeLeft: 0
         wanderCooldown:
-          min: 0
-          max: 0
-        wanderBounds: {fileID: 0}
-        idleTimeLeft: 0
-    00000002:
+          min: 10
+          max: 20
+        wanderBounds: {fileID: 9133423879671155402}
+    00000001:
       type: {class: DogAI/Barking, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: BAR
         sm: {fileID: 8890761587950701179}
-    00000003:
+        barkCooldown:
+          min: 3
+          max: 6
+        barkCount:
+          min: 0
+          max: 0
+        barkSounds: []
+        barkDelay:
+          min: 0
+          max: 0
+    00000002:
       type: {class: DogAI/Scurrying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
         id: 
         sm: {fileID: 8890761587950701179}
-    00000004:
+        doghouse: {fileID: 0}
+    00000003:
       type: {class: DogAI/Biting, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
         id: 
         sm: {fileID: 8890761587950701179}
+    00000004:
+      type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: FOL
+        sm: {fileID: 8890761587950701179}
+        followDistance: 1
+--- !u!114 &9133423879671155402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490437196048191600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96dfb7815e669e444911e0caa75ee13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 4.78

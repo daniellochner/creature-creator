@@ -367,6 +367,19 @@ MonoBehaviour:
   defaultCursorIcon: {fileID: 2800000, guid: e777c9a3326976f46abbfe02cff75ae2, type: 3}
   highlighted: {fileID: 0}
   targeted: {fileID: 0}
+--- !u!114 &371647309717233520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977203969259661099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  age: 0
 --- !u!114 &833576708680107062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,6 +613,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4180399214759634693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977203969259661099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1520f526054cee34c8c9548b84e1abb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyDepletionRate: 0.00083333335
+  healthTickRate: 1
+  healthTickDamage: 5
 --- !u!114 &4905878334825052165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,6 +749,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6331468b6e73c6e4e9d9905b2bc66a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minMaxRadius:
+    min: 0.1
+    max: 0.5
+  minMaxHeight:
+    min: 0.5
+    max: 2
 --- !u!114 &7638398942783256727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -737,34 +771,6 @@ MonoBehaviour:
     min: 0
     max: 100
   health: 100
---- !u!114 &4180399214759634693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8977203969259661099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1520f526054cee34c8c9548b84e1abb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyDepletionRate: 0.00083333335
-  healthTickRate: 1
-  healthTickDamage: 5
---- !u!114 &371647309717233520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8977203969259661099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  age: 0
 --- !u!54 &4865009466516697367
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -793,6 +799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b214715c83905046a4d7e6ac545e11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseButton: 0
   mousePlaneAlignment: 0
   localDirection: {x: 1, y: 0, z: 0}
   worldDirection: {x: 1, y: 0, z: 0}

@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace DanielLochner.Assets
 {
@@ -17,6 +18,11 @@ namespace DanielLochner.Assets
         public float Random
         {
             get => UnityEngine.Random.Range(min, max);
+        }
+
+        public float Clamp(float value)
+        {
+            return Mathf.Clamp(value, min, max);
         }
     }
 }

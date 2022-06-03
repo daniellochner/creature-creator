@@ -9,10 +9,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class SnakeAI : AnimalAI
     {
-
+        #region Fields
         [SerializeField] private TrackRegion strikeRegion;
+        #endregion
 
-
+        #region Methods
         public override void Start()
         {
             base.Start();
@@ -29,7 +30,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             };
         }
-        
+
+        public override void Follow(Transform target)
+        {
+            base.Follow(target);
+            strikeRegion.enabled = false;
+        }
+        public override void StopFollowing()
+        {
+            base.StopFollowing();
+            strikeRegion.enabled = true;
+        }
+        #endregion
 
         #region States
         public override void Reset()
@@ -37,7 +49,6 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Reset();
             states.Add(new Striking(this));
         }
-
 
         [Serializable]
         public class Striking : BaseState
@@ -51,11 +62,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public Striking(SnakeAI snakeAI) : base(snakeAI) { }
 
-
             public override void Enter()
             {
                 SnakeAI.creature.Animator.Animator.SetTrigger("Look");
                 SnakeAI.agent.SetDestination(SnakeAI.transform.position);
+
+                strikeTimeLeft = 0f;
             }
             public override void UpdateLogic()
             {
@@ -72,10 +84,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (SnakeAI.creature.Animator.InteractTarget != null)
                 {
                     TimerUtility.OnTimer(ref strikeTimeLeft, strikeCooldown.Random, Time.deltaTime, Strike);
-                }
-                else
-                {
-                    strikeTimeLeft = strikeCooldown.max; // Set back to the maximum time left if the target creature is lost
                 }
             }
             private void HandleLookAt()
@@ -109,9 +117,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     SnakeAI.creature.Animator.InteractTarget = nearestCreature;
                 }
-                else
+                else if (SnakeAI.creature.Animator.InteractTarget != null)
                 {
                     SnakeAI.creature.Animator.InteractTarget = null;
+                    strikeTimeLeft = strikeCooldown.Random; // Set back to the maximum time left if the target creature is lost
                 }
             }
 

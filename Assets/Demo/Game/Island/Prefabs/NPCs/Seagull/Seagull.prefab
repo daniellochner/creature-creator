@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1143549701790451560}
   - component: {fileID: 4305151892285214690}
-  - component: {fileID: 8886715025248519167}
+  - component: {fileID: 6960617711128320574}
   m_Layer: 2
   m_Name: Fright
   m_TagString: Untagged
@@ -45,7 +45,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8886715025248519167
+--- !u!114 &6960617711128320574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,30 +54,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 8319544268625613288}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
+  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerables:
-  - tag: Player
-    onEnter:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1430134677}
-          m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.BirdAI,
-            Assembly-CSharp
-          m_MethodName: Frighten
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    onExit:
-      m_PersistentCalls:
-        m_Calls: []
+  triggerable:
+  - Player
+  - Creature
+  onEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1430134677}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.BirdAI, Assembly-CSharp
+        m_MethodName: Frighten
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &4353620142736014488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -529,10 +529,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 566c6f79fbbcb974c844adebc6a881c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startState: IDL
+  startStateID: IDL
+  currentStateID: 
   states:
   - id: 0
   - id: 1
+  - id: 2
   data: {fileID: 4900000, guid: 6e25172785bb4b545a9a6f024375e2a7, type: 3}
   references:
     version: 1
@@ -548,7 +550,6 @@ MonoBehaviour:
         noiseCooldown:
           min: 10
           max: 25
-        silentTimeLeft: 0
     00000001:
       type: {class: BirdAI/Flying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
@@ -600,3 +601,9 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         minDistanceFromPlayer: 5
+    00000002:
+      type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: FOL
+        sm: {fileID: 1430134677}
+        baseFollowOffset: 2

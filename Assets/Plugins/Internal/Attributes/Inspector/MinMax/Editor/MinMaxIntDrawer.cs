@@ -27,8 +27,8 @@ namespace DanielLochner.Assets
             EditorGUI.LabelField(mid, " → ");
             maxValue = EditorGUI.IntField(right, maxValue);
 
-            minProperty.floatValue = minValue;
-            maxProperty.floatValue = maxValue;
+            minProperty.intValue = minValue;
+            maxProperty.intValue = maxValue;
 
             EditorGUI.EndProperty();
         }
