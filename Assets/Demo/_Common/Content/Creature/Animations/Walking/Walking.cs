@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private float bodySmoothing = 2.5f;
         private float maxRoll = 10f;
         private float maxPitch = 30f;
-        private float stepHeight = 0.2f;
+        private float stepHeight = 0.5f;
         private float liftHeight = 0.2f;
 
         private LegAnimator[] llegs, rlegs;
@@ -195,16 +195,16 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 worldPos = m_MonoBehaviour.Constructor.Body.L2WSpace(localPos);
             worldPos += m_MonoBehaviour.Velocity.Linear * timeToMove;
 
-            Vector3 origin = worldPos + m_MonoBehaviour.transform.up;// * stepHeight;
+            Vector3 origin = worldPos + m_MonoBehaviour.transform.up * stepHeight;
             Vector3 dir = -m_MonoBehaviour.transform.up;
 
-            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, 2f/*2f * stepHeight*/, LayerMask.GetMask("Ground")))
+            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, m_MonoBehaviour.Constructor.MaxHeight, LayerMask.GetMask("Ground")))
             {
                 return hitInfo.point + (m_MonoBehaviour.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
             }
             else
             {
-                return leg.Anchor.position;
+                return worldPos;
             }
         }
         #endregion
