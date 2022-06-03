@@ -9,6 +9,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureCollider : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private MinMax minMaxRadius;
+        [SerializeField] private MinMax minMaxHeight;
+
         private CapsuleCollider capsule;
         #endregion
 
@@ -42,9 +45,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void UpdateCollider()
         {
-            capsule.radius = Constructor.Dimensions.radius;
-            capsule.height = Constructor.Dimensions.height;
-            capsule.center = Vector3.up * (Mathf.Max(capsule.height, capsule.radius) / 2f);
+            capsule.height = minMaxHeight.Clamp(Constructor.Dimensions.height);
+            capsule.radius = minMaxRadius.Clamp(Constructor.Dimensions.radius);
+            capsule.center = Vector3.up * Mathf.Max(capsule.radius, capsule.height / 2f);
         }
         #endregion
     }
