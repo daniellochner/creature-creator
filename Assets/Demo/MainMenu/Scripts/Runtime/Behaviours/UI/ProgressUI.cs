@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Texture2D pattern = Patterns.GetEntry<Texture2D>(patternID);
                 PatternUI patternUI = Instantiate(patternUIPrefab, patternsGrid.transform);
-                patternUI.Setup(pattern);
+                patternUI.Setup(pattern, null);
                 patternUI.name = patternID;
 
                 patternUI.SelectToggle.enabled = false;

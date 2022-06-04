@@ -68,6 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ColourPicker secondaryColourPicker;
         [SerializeField] private ToggleGroup patternsToggleGroup;
         [SerializeField] private RectTransform patternsRT;
+        [SerializeField] private TextMeshProUGUI noColoursText;
 
         [Header("Options")]
         [SerializeField] private SimpleSideMenu optionsSideMenu;
@@ -799,7 +800,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT.transform);
             patternsUI.Add(patternUI);
-            patternUI.Setup(pattern);
+            patternUI.Setup(pattern, patternMaterial);
             patternUI.name = patternID;
 
             patternUI.SelectToggle.group = patternsToggleGroup;
@@ -855,6 +856,8 @@ namespace DanielLochner.Assets.CreatureCreator
             primaryColourPicker.SetColour(colour);
             primaryColourPicker.gameObject.SetActive(colour.a != 0);
             SetPrimaryColourOverrideUI(isOverride);
+
+            UpdateNoColours();
         }
         public void SetPrimaryColourOverrideUI(bool isOverride)
         {
@@ -865,6 +868,8 @@ namespace DanielLochner.Assets.CreatureCreator
             secondaryColourPicker.SetColour(colour);
             secondaryColourPicker.gameObject.SetActive(colour.a != 0);
             SetSecondaryColourOverrideUI(isOverride);
+
+            UpdateNoColours();
         }
         public void SetSecondaryColourOverrideUI(bool isOverride)
         {
@@ -916,6 +921,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 patternMaterial.SetColor("_SecondaryCol", colour);
                 SetSecondaryColourOverrideUI(false);
             }
+        }
+        public void UpdateNoColours()
+        {
+            noColoursText.gameObject.SetActive(!primaryColourPicker.gameObject.activeSelf && !secondaryColourPicker.gameObject.activeSelf);
         }
         public void UpdateStatistics()
         {

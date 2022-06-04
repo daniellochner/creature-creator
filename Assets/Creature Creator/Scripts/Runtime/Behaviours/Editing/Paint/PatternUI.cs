@@ -22,12 +22,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(Texture pattern)
+        public void Setup(Texture pattern, Material material)
         {
             Image graphic = selectToggle.graphic as Image;
             Image targetGraphic = selectToggle.targetGraphic as Image;
 
             graphic.sprite = targetGraphic.sprite = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
+            graphic.material = targetGraphic.material = material;
         }
         #endregion
     }
