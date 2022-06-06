@@ -16,6 +16,10 @@ namespace DanielLochner.Assets
         protected BaseState currentState;
         #endregion
 
+        #region Properties
+        public List<BaseState> States => states;
+        #endregion
+
         #region Methods
         public virtual void Awake()
         {

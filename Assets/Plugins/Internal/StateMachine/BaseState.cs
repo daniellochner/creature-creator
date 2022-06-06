@@ -28,6 +28,10 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        public BaseState()
+        {
+
+        }
         public BaseState(StateMachine sm)
         {
             StateMachine = sm;
