@@ -22,6 +22,27 @@ namespace DanielLochner.Assets
         #region Properties
         public Action<Collider, Collider> OnTrack { get; set; }
         public Action<Collider, Collider> OnLoseTrackOf { get; set; }
+
+        public Collider Nearest
+        {
+            get
+            {
+                Collider nearest = null;
+                float minDistance = Mathf.Infinity;
+
+                foreach (Collider collider in tracked)
+                {
+                    float distance = Vector3.Distance(collider.transform.position, transform.position);
+                    if (distance < minDistance)
+                    {
+                        nearest = collider;
+                        minDistance = distance;
+                    }
+                }
+
+                return nearest;
+            }
+        }
         #endregion
 
         #region Methods
