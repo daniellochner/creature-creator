@@ -10,6 +10,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class BirdAI : AnimalAI
     {
+        #region Fields
+        [SerializeField] private SphereCollider frightRegion;
+        #endregion
+
         #region Methods
         public void Frighten(Collider col)
         {
@@ -26,6 +30,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Reset();
             states.Add(new Flying(this));
+        }
+
+        public override void Follow(Transform target)
+        {
+            base.Follow(target);
+            agent.enabled = true;
+            frightRegion.enabled = false;
+        }
+        public override void StopFollowing()
+        {
+            base.StopFollowing();
+            agent.enabled = false;
+            frightRegion.enabled = true;
         }
 
         [Serializable]
@@ -70,6 +87,11 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 BirdAI.StartCoroutine(FlyToPositionRoutine(RandomPerchPoint.position));
+                BirdAI.creature.Animator.Animator.SetBool("IsFlying", true);
+            }
+            public override void Exit()
+            {
+                BirdAI.creature.Animator.Animator.SetBool("IsFlying", false);
             }
 
             private IEnumerator FlyToPositionRoutine(Vector3 to)

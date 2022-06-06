@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4305151892285214690}
   - component: {fileID: 6960617711128320574}
   m_Layer: 2
-  m_Name: Fright
+  m_Name: FrightRegion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -536,6 +536,7 @@ MonoBehaviour:
   - id: 1
   - id: 2
   data: {fileID: 4900000, guid: 6e25172785bb4b545a9a6f024375e2a7, type: 3}
+  frightRegion: {fileID: 4305151892285214690}
   references:
     version: 1
     00000000:
@@ -607,3 +608,25 @@ MonoBehaviour:
         id: FOL
         sm: {fileID: 1430134677}
         baseFollowOffset: 2
+--- !u!195 &3285991539398645621
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490437196048191600}
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 1
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

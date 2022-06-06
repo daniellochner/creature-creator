@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [RequireComponent(typeof(NavMeshAgent))]
     public class AnimalAI : StateMachine
     {
         #region Fields
