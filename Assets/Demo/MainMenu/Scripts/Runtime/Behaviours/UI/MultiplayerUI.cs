@@ -197,10 +197,6 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
 
-        public void Play()
-        {
-            SceneManager.LoadScene("Island");
-        }
         public async void Join(string id)
         {
             if (!IsConnectedToInternet || !IsValidPlayer)
