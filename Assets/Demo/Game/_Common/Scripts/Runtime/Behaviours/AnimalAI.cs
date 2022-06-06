@@ -61,21 +61,14 @@ namespace DanielLochner.Assets.CreatureCreator
             ChangeState(startStateID);
         }
 
-        [ContextMenu("Debug/FollowPlayer")]
+        [ContextMenu("Debug/Follow/Player")]
         public void FollowPlayer()
         {
             Follow(Player.Instance.Creature.transform);
         }
         #endregion
 
-        #region States
-        public override void Reset()
-        {
-            states.Add(new Idling(this));
-            states.Add(new Wandering(this));
-            states.Add(new Following(this));
-        }
-
+        #region Inner Classes
         [Serializable]
         public class Idling : BaseState
         {
@@ -93,7 +86,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                TimerUtility.OnTimer(ref silentTimeLeft, noiseCooldown.Random, Time.deltaTime, MakeRandomAmbientNoise);
+                if (noises.Length > 0)
+                {
+                    TimerUtility.OnTimer(ref silentTimeLeft, noiseCooldown.Random, Time.deltaTime, MakeRandomAmbientNoise);
+                }
             }
 
             private void MakeRandomAmbientNoise()
@@ -101,7 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 AnimalAI.creature.Effector.PlaySound(noises);
             }
         }
-        
+
         [Serializable]
         public class Wandering : Idling
         {

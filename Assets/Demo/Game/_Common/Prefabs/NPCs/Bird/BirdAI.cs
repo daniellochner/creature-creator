@@ -25,13 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region States
-        public override void Reset()
-        {
-            base.Reset();
-            states.Add(new Flying(this));
-        }
-
+        #region Inner Classes
         public override void Follow(Transform target)
         {
             base.Follow(target);

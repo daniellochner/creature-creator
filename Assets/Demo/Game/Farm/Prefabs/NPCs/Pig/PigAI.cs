@@ -8,13 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class PigAI : AnimalAI
     {
-        #region States
-        public override void Reset()
-        {
-            base.Reset();
-            states.Add(new Rolling(this));
-        }
-
+        #region Inner Classes
         [Serializable]
         public class Rolling : BaseState
         {

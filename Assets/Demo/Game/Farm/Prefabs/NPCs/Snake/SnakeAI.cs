@@ -43,13 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region States
-        public override void Reset()
-        {
-            base.Reset();
-            states.Add(new Striking(this));
-        }
-
+        #region Inner Classes
         [Serializable]
         public class Striking : BaseState
         {

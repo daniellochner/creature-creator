@@ -202,49 +202,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a8b7d78ac15024691adbfa1a60046b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateID: 
+  startStateID: WAN
   currentStateID: 
   states:
   - id: 0
   - id: 1
   - id: 2
-  - id: 3
-  data: {fileID: 0}
+  data: {fileID: 4900000, guid: 0d24b51a6bf661342af73a832a701bbb, type: 3}
   references:
     version: 1
     00000000:
-      type: {class: AnimalAI/Idling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
-      data:
-        id: 
-        sm: {fileID: 1099495229331248676}
-        noises: []
-        noiseCooldown:
-          min: 0
-          max: 0
-    00000001:
       type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: WAN
         sm: {fileID: 1099495229331248676}
-        noises: []
+        noises:
+        - Oink1
+        - Oink2
         noiseCooldown:
-          min: 0
-          max: 0
+          min: 10
+          max: 25
         wanderCooldown:
-          min: 0
-          max: 0
+          min: 10
+          max: 25
         wanderBounds: {fileID: 0}
+    00000001:
+      type: {class: PigAI/Rolling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: ROL
+        sm: {fileID: 1099495229331248676}
     00000002:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: FOL
         sm: {fileID: 1099495229331248676}
-        followDistance: 0
-    00000003:
-      type: {class: PigAI/Rolling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
-      data:
-        id: 
-        sm: {fileID: 1099495229331248676}
+        baseFollowOffset: 2
 --- !u!195 &4193514218190465177
 NavMeshAgent:
   m_ObjectHideFlags: 0

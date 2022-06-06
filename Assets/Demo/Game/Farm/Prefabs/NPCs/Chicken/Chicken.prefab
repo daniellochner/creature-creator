@@ -274,43 +274,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c74d1a7bbacc8ac40a441307a789269e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateID: 
+  startStateID: WAN
   currentStateID: 
   states:
   - id: 0
   - id: 1
-  - id: 2
-  data: {fileID: 0}
+  data: {fileID: 4900000, guid: e0e42a49874902642a6a004641770fd5, type: 3}
   references:
     version: 1
     00000000:
-      type: {class: AnimalAI/Idling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
-      data:
-        id: 
-        sm: {fileID: 7290922985996933607}
-        noises: []
-        noiseCooldown:
-          min: 0
-          max: 0
-    00000001:
       type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: WAN
         sm: {fileID: 7290922985996933607}
-        noises: []
+        noises:
+        - Cluck1
+        - Cluck2
         noiseCooldown:
-          min: 0
-          max: 0
+          min: 10
+          max: 25
         wanderCooldown:
-          min: 0
-          max: 0
+          min: 10
+          max: 25
         wanderBounds: {fileID: 0}
-    00000002:
+    00000001:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: FOL
         sm: {fileID: 7290922985996933607}
-        followDistance: 0
+        baseFollowOffset: 2
 --- !u!195 &8413413212947053484
 NavMeshAgent:
   m_ObjectHideFlags: 0

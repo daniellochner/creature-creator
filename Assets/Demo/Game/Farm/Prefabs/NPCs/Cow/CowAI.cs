@@ -2,19 +2,12 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class CowAI : AnimalAI
     {
-        #region States
-        public override void Reset()
-        {
-            base.Reset();
-            states.Add(new Charging(this));
-        }
-
+        #region Inner Classes
         [Serializable]
         public class Charging : BaseState
         {

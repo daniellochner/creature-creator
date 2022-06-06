@@ -193,11 +193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keys.Array.size
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._values.Array.size
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keys.Array.data[0]
@@ -232,8 +232,16 @@ PrefabInstance:
       value: Bark8
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[8]
+      value: Pant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[9]
+      value: Whimper
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.size
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._values.Array.data[0]
@@ -268,6 +276,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 4eee01fd02dca7649883089841725f4a, type: 3}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[8]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1e41cd92aed3dcf4aa29aeb48a2b38a2, type: 3}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[9]
+      value: 
+      objectReference: {fileID: 8300000, guid: 2adb282c72bc8f649b7b60823a98f571, type: 3}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.data[0]
       value: Bark1
       objectReference: {fileID: 0}
@@ -298,6 +314,14 @@ PrefabInstance:
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.data[7]
       value: Bark8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[8]
+      value: Pant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[9]
+      value: Whimper
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.reorderableList.isExpanded
@@ -344,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad64c9af735199449e5eeeb689c1ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateID: 
+  startStateID: WAN
   currentStateID: 
   states:
   - id: 0
@@ -352,7 +376,7 @@ MonoBehaviour:
   - id: 2
   - id: 3
   - id: 4
-  data: {fileID: 0}
+  data: {fileID: 4900000, guid: ed8fba822f388034eb2051a30201ed4d, type: 3}
   references:
     version: 1
     00000000:
@@ -360,14 +384,15 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 8890761587950701179}
-        noises: []
+        noises:
+        - Pant
         noiseCooldown:
-          min: 0
-          max: 0
+          min: 10
+          max: 25
         wanderCooldown:
           min: 10
-          max: 20
-        wanderBounds: {fileID: 9133423879671155402}
+          max: 15
+        wanderBounds: {fileID: 0}
     00000001:
       type: {class: DogAI/Barking, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
@@ -377,39 +402,34 @@ MonoBehaviour:
           min: 3
           max: 6
         barkCount:
-          min: 0
-          max: 0
-        barkSounds: []
+          min: 1
+          max: 4
+        barkSounds:
+        - Bark1
+        - Bark2
+        - Bark3
+        - Bark4
+        - Bark5
+        - Bark6
+        - Bark7
+        - Bark8
         barkDelay:
-          min: 0
-          max: 0
+          min: 0.25
+          max: 2
     00000002:
       type: {class: DogAI/Scurrying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: SCU
         sm: {fileID: 8890761587950701179}
         doghouse: {fileID: 0}
     00000003:
       type: {class: DogAI/Biting, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: HID
         sm: {fileID: 8890761587950701179}
     00000004:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
         id: FOL
         sm: {fileID: 8890761587950701179}
-        followDistance: 1
---- !u!114 &9133423879671155402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 490437196048191600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96dfb7815e669e444911e0caa75ee13a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 4.78
+        baseFollowOffset: 2

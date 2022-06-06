@@ -292,35 +292,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c0df69c43f0b3743a88b8eb020b22c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startState: 
+  startStateID: WAN
+  currentStateID: 
   states:
   - id: 0
   - id: 1
-  data: {fileID: 0}
+  data: {fileID: 4900000, guid: 4bff601703c8085439bf5596bedd5625, type: 3}
   references:
     version: 1
     00000000:
-      type: {class: AnimalAI/Idling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
-      data:
-        id: 
-        sm: {fileID: 5933320528199852746}
-        noises: []
-        noiseCooldown:
-          min: 0
-          max: 0
-        silentTimeLeft: 0
-    00000001:
       type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: 
+        id: WAN
         sm: {fileID: 5933320528199852746}
-        noises: []
+        noises:
+        - Bleat1
+        - Bleat2
+        - Bleat3
+        - Bleat4
+        - Bleat5
+        - Bleat6
         noiseCooldown:
-          min: 0
-          max: 0
-        silentTimeLeft: 0
+          min: 10
+          max: 25
         wanderCooldown:
-          min: 0
-          max: 0
+          min: 10
+          max: 25
         wanderBounds: {fileID: 0}
-        idleTimeLeft: 0
+    00000001:
+      type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: FOL
+        sm: {fileID: 5933320528199852746}
+        baseFollowOffset: 2
