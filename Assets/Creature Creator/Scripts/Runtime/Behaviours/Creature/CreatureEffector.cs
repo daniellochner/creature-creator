@@ -19,6 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public Action<string> OnPlaySound { get; set; }
+        public Action<string, Vector3> OnSpawnParticle { get; set; }
         #endregion
 
         #region Methods
@@ -36,8 +37,18 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void PlaySound(string sound, float volume = 1f)
         {
+            if (!soundFX.ContainsKey(sound)) return;
+
             audioSource.PlayOneShot(soundFX[sound], volume);
             OnPlaySound?.Invoke(sound);
+        }
+
+        public void SpawnParticle(string particle, Vector3 position)
+        {
+            if (!particleFX.ContainsKey(particle)) return;
+
+            Instantiate(particleFX[particle], position, Quaternion.identity, Dynamic.Transform);
+            OnSpawnParticle?.Invoke(particle, position);
         }
         #endregion
     }

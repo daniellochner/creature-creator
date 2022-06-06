@@ -83,17 +83,7 @@ namespace DanielLochner.Assets.CreatureCreator
             private void HandleLookAt()
             {
                 // Determine the nearest creature within this snake's maximum striking distance
-                Transform nearestCreature = null;
-                float minDistance = Mathf.Infinity;
-                foreach (Collider creature in SnakeAI.strikeRegion.tracked)
-                {
-                    float distance = Vector3.Distance(creature.transform.position, SnakeAI.transform.position);
-                    if (distance < minDistance)
-                    {
-                        nearestCreature = creature.transform;
-                        minDistance = distance;
-                    }
-                }
+                Transform nearestCreature = SnakeAI.strikeRegion.Nearest.transform;
 
                 // Set the snake's look target to be the nearest creature, and start looking at that creature
                 if (nearestCreature != null && SnakeAI.creature.Animator.LookTarget != nearestCreature)
@@ -107,7 +97,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Set the snake's interact target to be the same creature if it is near enough
-                if (minDistance < maxStrikeDistance)
+                float distance = Vector3.Distance(nearestCreature.position, SnakeAI.transform.position);
+                if (distance < maxStrikeDistance)
                 {
                     SnakeAI.creature.Animator.InteractTarget = nearestCreature;
                 }

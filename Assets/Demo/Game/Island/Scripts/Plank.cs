@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnCollisionEnter(Collision other)
         {
-            if (isGap && other.collider.CompareTag("Player") && (other.collider as CapsuleCollider).radius * 2f < gapWidth)
+            if (isGap && other.collider.CompareTag("Player") && (other.collider.GetComponent<CreatureConstructor>()).Dimensions.radius * 2f < gapWidth)
             {
                 StartCoroutine(DisableRoutine());
             }
