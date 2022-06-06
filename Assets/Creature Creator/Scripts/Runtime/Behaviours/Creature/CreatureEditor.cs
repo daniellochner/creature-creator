@@ -547,6 +547,26 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 IsDirty = true;
             };
+            CreatureConstructor.OnSetTiling += delegate (Vector2 tiling)
+            {
+                IsDirty = true;
+                EditorManager.Instance.SetTilingUI(tiling);
+            };
+            CreatureConstructor.OnSetOffset += delegate (Vector2 offset)
+            {
+                IsDirty = true;
+                EditorManager.Instance.SetOffsetUI(offset);
+            };
+            CreatureConstructor.OnSetShine += delegate (float shine)
+            {
+                IsDirty = true;
+                EditorManager.Instance.SetShineUI(shine);
+            };
+            CreatureConstructor.OnSetMetallic += delegate (float metallic)
+            {
+                IsDirty = true;
+                EditorManager.Instance.SetMetallicUI(metallic);
+            };
             CreatureConstructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
             {
                 BodyPartEditor mainBPE = main.GetComponent<BodyPartEditor>();
@@ -597,6 +617,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureConstructor.SetPrimaryColour(Color.white);
                 CreatureConstructor.SetSecondaryColour(Color.black);
                 CreatureConstructor.SetPattern("");
+                CreatureConstructor.SetTiling(Vector2.one);
+                CreatureConstructor.SetOffset(Vector2.zero);
+                CreatureConstructor.SetShine(0f);
+                CreatureConstructor.SetMetallic(0f);
 
                 LoadedCreature = null;
             }

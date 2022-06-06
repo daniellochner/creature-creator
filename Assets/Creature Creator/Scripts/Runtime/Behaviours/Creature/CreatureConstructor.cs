@@ -73,6 +73,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action<Color> OnSetPrimaryColour { get; set; }
         public Action<Color> OnSetSecondaryColour { get; set; }
         public Action<string> OnSetPattern { get; set; }
+        public Action<Vector2> OnSetTiling { get; set; }
+        public Action<Vector2> OnSetOffset { get; set; }
+        public Action<float> OnSetShine { get; set; }
+        public Action<float> OnSetMetallic { get; set; }
         public Func<BodyPart, GameObject> OnBodyPartPrefabOverride { get; set; }
 
         public List<Transform> Bones { get; set; } = new List<Transform>();
@@ -132,6 +136,10 @@ namespace DanielLochner.Assets.CreatureCreator
             SetPrimaryColour(data.PrimaryColour);
             SetSecondaryColour(data.SecondaryColour);
             SetPattern(data.PatternID);
+            SetTiling(data.Tiling);
+            SetOffset(data.Offset);
+            SetShine(data.Shine);
+            SetMetallic(data.Metallic);
             UpdateDimensions();
 
             OnConstructCreature?.Invoke();
@@ -603,6 +611,38 @@ namespace DanielLochner.Assets.CreatureCreator
             SkinnedMeshRenderer.sharedMaterial.SetTexture("_PatternTex", DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID));
 
             OnSetPattern?.Invoke(patternID);
+        }
+        public void SetTiling(Vector2 tiling)
+        {
+            data.Tiling = tiling;
+
+            SkinnedMeshRenderer.sharedMaterial.SetTextureScale("_PatternTex", tiling);
+
+            OnSetTiling?.Invoke(tiling);
+        }
+        public void SetOffset(Vector2 offset)
+        {
+            data.Offset = offset;
+
+            SkinnedMeshRenderer.sharedMaterial.SetTextureOffset("_PatternTex", offset);
+
+            OnSetOffset?.Invoke(offset);
+        }
+        public void SetShine(float shine)
+        {
+            data.Shine = shine;
+
+            SkinnedMeshRenderer.sharedMaterial.SetFloat("_Glossiness", shine);
+
+            OnSetShine?.Invoke(shine);
+        }
+        public void SetMetallic(float metallic)
+        {
+            data.Metallic = metallic;
+
+            SkinnedMeshRenderer.sharedMaterial.SetFloat("_Metallic", metallic);
+
+            OnSetMetallic?.Invoke(metallic);
         }
 
         public void Recenter()

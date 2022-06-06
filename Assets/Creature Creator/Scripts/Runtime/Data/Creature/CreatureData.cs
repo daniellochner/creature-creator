@@ -16,8 +16,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeReference] private List<AttachedBodyPart> attachedBodyParts = new List<AttachedBodyPart>();
         [Space]
         [SerializeField] private string patternID = "";
+        [SerializeField] private Vector2 scale = Vector2.one;
+        [SerializeField] private Vector2 offset = new Vector2(0.25f, 0f);
         [SerializeField] private Color primaryColour = Color.white;
         [SerializeField] private Color secondaryColour = Color.black;
+        [SerializeField] private float shine = 0f;
+        [SerializeField] private float metallic = 0f;
         #endregion
 
         #region Properties
@@ -39,6 +43,16 @@ namespace DanielLochner.Assets.CreatureCreator
             get => patternID;
             set => patternID = value;
         }
+        public Vector2 Tiling
+        {
+            get => scale;
+            set => scale = value;
+        }
+        public Vector2 Offset
+        {
+            get => offset;
+            set => offset = value;
+        }
         public Color PrimaryColour
         {
             get => primaryColour;
@@ -48,6 +62,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => secondaryColour;
             set => secondaryColour = value;
+        }
+        public float Shine
+        {
+            get => shine;
+            set => shine = value;
+        }
+        public float Metallic
+        {
+            get => metallic;
+            set => metallic = value;
         }
         #endregion
     }

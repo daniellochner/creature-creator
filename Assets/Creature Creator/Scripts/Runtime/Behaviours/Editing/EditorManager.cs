@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Build")]
         [SerializeField] private Menu buildMenu;
-        [SerializeField] private Toggle buildToggle;
+        [SerializeField] private BodyPartSettingsMenu bodyPartSettingsMenu;
         [SerializeField] private BodyPartUI bodyPartUIPrefab;
         [SerializeField] private TextMeshProUGUI cashText;
         [SerializeField] private TextMeshProUGUI complexityText;
@@ -57,11 +57,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
-        [SerializeField] private Toggle playToggle;
 
         [Header("Paint")]
         [SerializeField] private Menu paintMenu;
-        [SerializeField] private Toggle paintToggle;
+        [SerializeField] private PatternSettingsMenu patternSettingsMenu;
+        [SerializeField] private ColourSettingsMenu colourSettingsMenu;
         [SerializeField] private PatternUI patternUIPrefab;
         [SerializeField] private Material patternMaterial;
         [SerializeField] private ColourPicker primaryColourPicker;
@@ -291,9 +291,7 @@ namespace DanielLochner.Assets.CreatureCreator
             buildMenu.Open();
             playMenu.Close();
             paintMenu.Close();
-
-            editorAudioSource.PlayOneShot(whooshAudioClip);
-            buildToggle.SetIsOnWithoutNotify(true);
+            SetMode();
 
             // Player
             player.Creature.Mover.IsMovable = false;
@@ -316,9 +314,7 @@ namespace DanielLochner.Assets.CreatureCreator
             buildMenu.Close();
             playMenu.Open();
             paintMenu.Close();
-
-            editorAudioSource.PlayOneShot(whooshAudioClip);
-            playToggle.SetIsOnWithoutNotify(true);
+            SetMode();
 
             // Player
             player.Creature.Health.Respawn();
@@ -348,9 +344,7 @@ namespace DanielLochner.Assets.CreatureCreator
             buildMenu.Close();
             playMenu.Close();
             paintMenu.Open();
-
-            editorAudioSource.PlayOneShot(whooshAudioClip);
-            paintToggle.SetIsOnWithoutNotify(true);
+            SetMode();
 
             // Player
             player.Creature.Mover.IsMovable = false;
@@ -369,6 +363,14 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetCameraOffset(float x)
         {
             player.Camera.OffsetPosition = new Vector3(x, 2f, player.Camera.OffsetPosition.z);
+        }
+        private void SetMode()
+        {
+            editorAudioSource.PlayOneShot(whooshAudioClip);
+
+            bodyPartSettingsMenu.Close();
+            patternSettingsMenu.Close();
+            colourSettingsMenu.Close();
         }
         #endregion
 
@@ -851,13 +853,34 @@ namespace DanielLochner.Assets.CreatureCreator
             Destroy(patternUI.gameObject);
         }
 
+        public void SetTilingUI(Vector2 tiling)
+        {
+            patternMaterial.SetTextureScale("_MainTex", tiling);
+            patternSettingsMenu.TilingX.SetTextWithoutNotify(tiling.x.ToString());
+            patternSettingsMenu.TilingY.SetTextWithoutNotify(tiling.y.ToString());
+        }
+        public void SetOffsetUI(Vector2 offset)
+        {
+            patternMaterial.SetTextureOffset("_MainTex", offset);
+            patternSettingsMenu.OffsetX.SetTextWithoutNotify(offset.x.ToString());
+            patternSettingsMenu.OffsetY.SetTextWithoutNotify(offset.y.ToString());
+        }
+        public void SetShineUI(float shine)
+        {
+            colourSettingsMenu.ShineSlider.SetValueWithoutNotify(shine);
+        }
+        public void SetMetallicUI(float metallic)
+        {
+            colourSettingsMenu.MetallicSlider.SetValueWithoutNotify(metallic);
+        }
+
         public void SetPrimaryColourUI(Color colour, bool isOverride)
         {
             primaryColourPicker.SetColour(colour);
             primaryColourPicker.gameObject.SetActive(colour.a != 0);
             SetPrimaryColourOverrideUI(isOverride);
 
-            UpdateNoColours();
+            SetColourNoneUI();
         }
         public void SetPrimaryColourOverrideUI(bool isOverride)
         {
@@ -869,7 +892,7 @@ namespace DanielLochner.Assets.CreatureCreator
             secondaryColourPicker.gameObject.SetActive(colour.a != 0);
             SetSecondaryColourOverrideUI(isOverride);
 
-            UpdateNoColours();
+            SetColourNoneUI();
         }
         public void SetSecondaryColourOverrideUI(bool isOverride)
         {
@@ -878,6 +901,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetColourOverrideUI(ColourPicker colourPicker, string name, bool isOverride)
         {
             colourPicker.Name.text = isOverride ? $"{name}\n<size=20>(Override)</size>" : name;
+        }
+        private void SetColourNoneUI()
+        {
+            noColoursText.gameObject.SetActive(!primaryColourPicker.gameObject.activeSelf && !secondaryColourPicker.gameObject.activeSelf);
         }
 
         public void UpdateBodyPartTotals()
@@ -921,10 +948,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 patternMaterial.SetColor("_SecondaryCol", colour);
                 SetSecondaryColourOverrideUI(false);
             }
-        }
-        public void UpdateNoColours()
-        {
-            noColoursText.gameObject.SetActive(!primaryColourPicker.gameObject.activeSelf && !secondaryColourPicker.gameObject.activeSelf);
         }
         public void UpdateStatistics()
         {
