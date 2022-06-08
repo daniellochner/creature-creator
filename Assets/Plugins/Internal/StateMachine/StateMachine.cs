@@ -10,7 +10,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] protected string startStateID;
-        [SerializeField, ReadOnly] protected string currentStateID;
+        [SerializeField, ReadOnly] protected string currentStateId;
         [SerializeReference] protected List<BaseState> states;
 
         protected BaseState currentState;
@@ -44,7 +44,7 @@ namespace DanielLochner.Assets
 
             currentState?.Exit();
             currentState = states.Find(x => x.ID == id);
-            currentStateID = id;
+            currentStateId = id;
             currentState?.Enter();
         }
         #endregion

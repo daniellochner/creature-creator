@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -68,6 +69,24 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
+
+        public List<Lol<AnimalAI>> huh;
+
+
+
+        [Serializable]
+        public class Lol<T>
+        {
+
+        }
+
+        [Serializable]
+        public class Test : Lol<AnimalAI>
+        {
+
+        }
+
+
         #region Inner Classes
         [Serializable]
         public class Idling : BaseState
@@ -77,8 +96,6 @@ namespace DanielLochner.Assets.CreatureCreator
             private float silentTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
-
-            public Idling(AnimalAI animalAI) : base(animalAI) { }
 
             public override void Enter()
             {
@@ -104,8 +121,6 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private MinMax wanderCooldown;
             [SerializeField] private Bounds wanderBounds;
             private float idleTimeLeft;
-
-            public Wandering(AnimalAI animalAI) : base(animalAI) { }
 
             public override void Enter()
             {
@@ -142,8 +157,6 @@ namespace DanielLochner.Assets.CreatureCreator
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
             private float FollowOffset => AnimalAI.creature.Constructor.Dimensions.radius + baseFollowOffset;
-
-            public Following(AnimalAI animalAI) : base(animalAI) { }
 
             public override void UpdateLogic()
             {

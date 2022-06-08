@@ -1,5 +1,125 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2961844281569742283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1116398718412234890}
+  - component: {fileID: 6044946791440296566}
+  - component: {fileID: 3682491547763641748}
+  m_Layer: 2
+  m_Name: AttackRegion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1116398718412234890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961844281569742283}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 490437196048191603}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &6044946791440296566
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961844281569742283}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3682491547763641748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961844281569742283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackable:
+  - Player
+  tracked: []
+--- !u!1 &5273447184903898125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5201288063618893231}
+  - component: {fileID: 7850256771927010902}
+  - component: {fileID: 2782984428950577463}
+  m_Layer: 2
+  m_Name: BarkRegion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5201288063618893231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5273447184903898125}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 490437196048191603}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7850256771927010902
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5273447184903898125}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 10
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2782984428950577463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5273447184903898125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackable:
+  - Player
+  tracked: []
 --- !u!1001 &4353620142736014488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73,11 +193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keys.Array.size
-      value: 8
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._values.Array.size
-      value: 8
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keys.Array.data[0]
@@ -112,8 +232,32 @@ PrefabInstance:
       value: Bark8
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[8]
+      value: Pant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[9]
+      value: Whimper
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[10]
+      value: Bite1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[11]
+      value: Bite2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[12]
+      value: Bite3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[13]
+      value: Growl
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.size
-      value: 8
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._values.Array.data[0]
@@ -148,6 +292,30 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 4eee01fd02dca7649883089841725f4a, type: 3}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[8]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1e41cd92aed3dcf4aa29aeb48a2b38a2, type: 3}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[9]
+      value: 
+      objectReference: {fileID: 8300000, guid: 2adb282c72bc8f649b7b60823a98f571, type: 3}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[10]
+      value: 
+      objectReference: {fileID: 8300000, guid: a4485fb0b8aa53f438d3a58fa74f72a8, type: 3}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[11]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5e717bfb6c535894da061e0e3a40ee99, type: 3}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[12]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1538fb204de213a428ae6b7f603a798e, type: 3}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[13]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4fcb4b59bea0a2940b5789b591e79f28, type: 3}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.data[0]
       value: Bark1
       objectReference: {fileID: 0}
@@ -180,6 +348,30 @@ PrefabInstance:
       value: Bark8
       objectReference: {fileID: 0}
     - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[8]
+      value: Pant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[9]
+      value: Whimper
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[10]
+      value: Bite1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[11]
+      value: Bite2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[12]
+      value: Bite3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[13]
+      value: Growl
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027574710266153006, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.reorderableList.isExpanded
       value: 1
       objectReference: {fileID: 0}
@@ -189,15 +381,15 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 1d68a78cc1d392b43ab33120ab81c9df, type: 2}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.isExpanded
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keys.Array.size
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._values.Array.size
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keys.Array.data[0]
@@ -240,8 +432,24 @@ PrefabInstance:
       value: Whimper
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[10]
+      value: Bite1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[11]
+      value: Bite2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[12]
+      value: Bite3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keys.Array.data[13]
+      value: Growl
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.size
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._values.Array.data[0]
@@ -284,6 +492,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 2adb282c72bc8f649b7b60823a98f571, type: 3}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[10]
+      value: 
+      objectReference: {fileID: 8300000, guid: a4485fb0b8aa53f438d3a58fa74f72a8, type: 3}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[11]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5e717bfb6c535894da061e0e3a40ee99, type: 3}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[12]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1538fb204de213a428ae6b7f603a798e, type: 3}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._values.Array.data[13]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4fcb4b59bea0a2940b5789b591e79f28, type: 3}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX._keyValues.Array.data[0]
       value: Bark1
       objectReference: {fileID: 0}
@@ -324,14 +548,35 @@ PrefabInstance:
       value: Whimper
       objectReference: {fileID: 0}
     - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[10]
+      value: Bite1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[11]
+      value: Bite2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[12]
+      value: Bite3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: soundFX._keyValues.Array.data[13]
+      value: Growl
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720273507398211982, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: soundFX.reorderableList.isExpanded
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
 --- !u!1 &490437196048191600 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4225863522935155944, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+  m_PrefabInstance: {fileID: 4353620142736014488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &490437196048191603 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4225863522935155947, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
   m_PrefabInstance: {fileID: 4353620142736014488}
   m_PrefabAsset: {fileID: 0}
 --- !u!195 &4068943051313975568
@@ -377,6 +622,7 @@ MonoBehaviour:
   - id: 3
   - id: 4
   data: {fileID: 4900000, guid: ed8fba822f388034eb2051a30201ed4d, type: 3}
+  barkRegion: {fileID: 2782984428950577463}
   references:
     version: 1
     00000000:
@@ -398,12 +644,18 @@ MonoBehaviour:
       data:
         id: BAR
         sm: {fileID: 8890761587950701179}
-        barkCooldown:
-          min: 3
-          max: 6
+        growlTime: 2.5
+        growlSounds:
+        - Growl
+        barkDelayBetween:
+          min: 1
+          max: 2
+        barkDelayWithin:
+          min: 0.25
+          max: 0.75
         barkCount:
           min: 1
-          max: 4
+          max: 5
         barkSounds:
         - Bark1
         - Bark2
@@ -413,9 +665,6 @@ MonoBehaviour:
         - Bark6
         - Bark7
         - Bark8
-        barkDelay:
-          min: 0.25
-          max: 2
     00000002:
       type: {class: DogAI/Scurrying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

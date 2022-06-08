@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureEnergy))]
     [RequireComponent(typeof(CreatureAge))]
+    [RequireComponent(typeof(CreatureHider))]
     public class CreatureBase : MonoBehaviour
     {
         #region Fields
@@ -30,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureHealth health;
         [SerializeField] private CreatureEnergy energy;
         [SerializeField] private CreatureAge age;
+        [SerializeField] private CreatureHider hider;
         #endregion
 
         #region Properties
@@ -44,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureHealth Health => health;
         public CreatureEnergy Energy => energy;
         public CreatureAge Age => age;
+        public CreatureHider Hider => hider;
         #endregion
 
         #region Methods
@@ -61,6 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
             health = GetComponent<CreatureHealth>();
             energy = GetComponent<CreatureEnergy>();
             age = GetComponent<CreatureAge>();
+            hider = GetComponent<CreatureHider>();
         }
 #endif
 
