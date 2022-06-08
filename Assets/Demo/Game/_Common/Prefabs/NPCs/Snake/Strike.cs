@@ -9,12 +9,10 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Strike : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
+        [SerializeField] private string strikeAction;
         [SerializeField] private float strikeTime;
-        [SerializeField] private float strikeRadius;
-        [SerializeField] private float strikeDamage;
-        [SerializeField] private CreatureEffector.Sound[] strikeSounds;
-        [Space]
         [SerializeField] private float returnTime;
+        [SerializeField] private float headOffset;
         #endregion
 
         #region Properties
@@ -28,36 +26,30 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             Vector3 displacement = Vector3.ProjectOnPlane(m_MonoBehaviour.InteractTarget.position - Head.position, m_MonoBehaviour.transform.up);
-            m_MonoBehaviour.StartCoroutine(StrikeRoutine(displacement));
-
-            m_MonoBehaviour.Effector.PlaySound(strikeSounds);
+            Vector3 offset = headOffset * m_MonoBehaviour.transform.forward;
+            m_MonoBehaviour.StartCoroutine(StrikeRoutine(displacement - offset));
+        }
+        public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
         }
 
         private IEnumerator StrikeRoutine(Vector3 displacement)
         {
-            Vector3 startPosition  = m_MonoBehaviour.transform.position;
-            Vector3 targetPosition = startPosition + displacement;
+            Vector3 localDisplacement = m_MonoBehaviour.Constructor.Root.InverseTransformVector(displacement);
 
-            m_MonoBehaviour.Animator.SetTrigger("Bite");
+            m_MonoBehaviour.Animator.SetTrigger(strikeAction);
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float t)
             {
-                m_MonoBehaviour.Constructor.Body.position = Vector3.Lerp(startPosition, targetPosition, EasingFunction.EaseOutExpo(0f, 1f, t));
+                m_MonoBehaviour.Constructor.Root.localRotation = Quaternion.Slerp(Quaternion.identity, Quaternion.LookRotation(localDisplacement), t);
+                m_MonoBehaviour.Constructor.Root.localPosition = Vector3.Lerp(Vector3.zero, localDisplacement, EasingFunction.EaseOutExpo(0f, 1f, t));
             },
             strikeTime);
 
-            Collider[] colliders = Physics.OverlapSphere(Head.position, strikeRadius);
-            foreach (Collider collider in colliders)
-            {
-                CreatureBase creature = collider.GetComponent<CreatureBase>();
-                if (creature != null && creature.Animator != m_MonoBehaviour) // striking creature shouldn't damage itself
-                {
-                    creature.Health.TakeDamage(strikeDamage);
-                }
-            }
-
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float t)
             {
-                m_MonoBehaviour.Constructor.Body.position = Vector3.Lerp(targetPosition, startPosition, t);
+                m_MonoBehaviour.Constructor.Root.localRotation = Quaternion.Slerp(Quaternion.LookRotation(localDisplacement), Quaternion.identity, t);
+                m_MonoBehaviour.Constructor.Root.localPosition = Vector3.Lerp(localDisplacement, Vector3.zero, t);
             }, 
             returnTime);
         }
