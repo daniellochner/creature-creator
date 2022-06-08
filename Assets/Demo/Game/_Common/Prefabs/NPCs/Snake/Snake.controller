@@ -40,6 +40,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b91c9f4b77142d14794fd92d42f03a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  biteRadius: 0.5
+  biteDamage:
+    min: 10
+    max: 15
+  biteSounds:
+  - name: Strike1
+    volume: 1
+  - name: Strike2
+    volume: 1
   timeR2O: 0.2
   timeO2C: 0.1
   timeC2R: 0.2
@@ -514,7 +523,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0.75
+  m_ExitTime: 1.25
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -548,12 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24125b489a5de79499e502dfc40a7146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strikeAction: Bite
   strikeTime: 0.25
-  strikeRadius: 0.25
-  strikeDamage: 10
-  strikeSounds:
-  - name: Strike1
-    volume: 1
-  - name: Strike2
-    volume: 1
   returnTime: 1
+  headOffset: 0.5

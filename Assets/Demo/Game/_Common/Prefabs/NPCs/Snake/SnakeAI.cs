@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SnakeAI : AnimalAI
     {
         #region Fields
-        [SerializeField] private TrackRegion strikeRegion;
+        [SerializeField] private TrackRegion trackRegion;
         #endregion
 
         #region Methods
@@ -18,16 +18,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-            strikeRegion.OnTrack += delegate
+            trackRegion.OnTrack += delegate
             {
                 if (currentStateId == "WAN")
                 {
                     ChangeState("STR");
                 }
             };
-            strikeRegion.OnLoseTrackOf += delegate
+            trackRegion.OnLoseTrackOf += delegate
             {
-                if (strikeRegion.tracked.Count == 0)
+                if (trackRegion.tracked.Count == 0)
                 {
                     ChangeState("WAN");
                 }
@@ -37,12 +37,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Follow(Transform target)
         {
             base.Follow(target);
-            strikeRegion.enabled = false;
+            trackRegion.enabled = false;
         }
         public override void StopFollowing()
         {
             base.StopFollowing();
-            strikeRegion.enabled = true;
+            trackRegion.enabled = true;
         }
         #endregion
 
@@ -50,27 +50,51 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Striking : BaseState
         {
-            [SerializeField] private float rotSmoothing;
+            [SerializeField] private float lookAtSmoothing;
             [SerializeField] private float maxStrikeDistance;
             [SerializeField] private float minStrikeAngle;
             [SerializeField] private MinMax strikeCooldown;
             private Coroutine strikeCoroutine;
+            private CreatureBase target;
+            private Vector3 lookDir;
 
             public SnakeAI SnakeAI => StateMachine as SnakeAI;
 
             public override void Enter()
             {
-                strikeCoroutine = SnakeAI.StartCoroutine(StrikeRoutine());
-                SnakeAI.agent.updateRotation = false;
+                strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
+            }
+            public override void UpdateLogic()
+            {
+                if (!SnakeAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
+                {
+                    UpdateLookDir();
+                    HandleLookAt();
+                }
             }
             public override void Exit()
             {
                 SnakeAI.StopCoroutine(strikeCoroutine);
-                SnakeAI.creature.Animator.InteractTarget = null;
-                SnakeAI.agent.updateRotation = true;
             }
 
-            private IEnumerator StrikeRoutine()
+            private void UpdateTarget()
+            {
+                Transform nearest = SnakeAI.creature.Animator.InteractTarget = SnakeAI.trackRegion.Nearest.transform;
+                if (target == null || target.transform != nearest)
+                {
+                    target = nearest.GetComponent<CreatureBase>();
+                }
+            }
+            private void HandleLookAt()
+            {
+                SnakeAI.transform.rotation = Quaternion.Slerp(SnakeAI.transform.rotation, Quaternion.LookRotation(lookDir), lookAtSmoothing * Time.deltaTime);
+            }
+            private void UpdateLookDir()
+            {
+                lookDir = Vector3.ProjectOnPlane(target.transform.position - SnakeAI.transform.position, SnakeAI.transform.up).normalized;
+            }
+
+            private IEnumerator StrikingRoutine()
             {
                 while (IsActive)
                 {
@@ -78,14 +102,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     float angle = Mathf.Infinity, distance = Mathf.Infinity;
                     while (angle > minStrikeAngle || distance > maxStrikeDistance)
                     {
-                        Transform target = SnakeAI.creature.Animator.InteractTarget = SnakeAI.strikeRegion.Nearest.transform;
-
-                        Vector3 dir = Vector3.ProjectOnPlane(target.position - SnakeAI.transform.position, SnakeAI.transform.up);
-                        SnakeAI.transform.rotation = Quaternion.Slerp(SnakeAI.transform.rotation, Quaternion.LookRotation(dir), rotSmoothing * Time.deltaTime);
-
-                        angle = Vector3.Angle(SnakeAI.transform.forward, dir);
-                        distance = Vector3.Distance(target.position, SnakeAI.transform.position);
-
+                        UpdateTarget();
+                        angle = Vector3.Angle(SnakeAI.transform.forward, lookDir);
+                        distance = Vector3.Distance(target.transform.position, SnakeAI.transform.position);
                         yield return null;
                     }
 
