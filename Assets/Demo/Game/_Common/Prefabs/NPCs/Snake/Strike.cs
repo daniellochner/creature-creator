@@ -38,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 startPosition  = m_MonoBehaviour.transform.position;
             Vector3 targetPosition = startPosition + displacement;
 
+            m_MonoBehaviour.Animator.SetTrigger("Bite");
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float t)
             {
                 m_MonoBehaviour.Constructor.Body.position = Vector3.Lerp(startPosition, targetPosition, EasingFunction.EaseOutExpo(0f, 1f, t));
