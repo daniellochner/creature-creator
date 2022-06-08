@@ -28,11 +28,12 @@ namespace DanielLochner.Assets.CreatureCreator
             audioSource = GetComponent<AudioSource>();
         }
 
-        public void PlaySound(string[] sounds, float volume = 1f)
+        public void PlaySound(Sound[] sounds)
         {
             if (sounds.Length > 0)
             {
-                PlaySound(sounds[UnityEngine.Random.Range(0, sounds.Length)], volume);
+                Sound sound = sounds[UnityEngine.Random.Range(0, sounds.Length)];
+                PlaySound(sound.name, sound.volume);
             }
         }
         public void PlaySound(string sound, float volume = 1f)
@@ -49,6 +50,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Instantiate(particleFX[particle], position, Quaternion.identity, Dynamic.Transform);
             OnSpawnParticle?.Invoke(particle, position);
+        }
+        #endregion
+
+        #region Inner Classes
+        [Serializable]
+        public class Sound
+        {
+            public string name;
+            [Range(0f, 1f)] public float volume = 1f;
         }
         #endregion
     }
