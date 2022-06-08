@@ -9,6 +9,10 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Bite : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
+        [SerializeField] private float biteRadius;
+        [SerializeField] private MinMax biteDamage;
+        [SerializeField] private CreatureEffector.Sound[] biteSounds;
+        [Space]
         [SerializeField] private float timeR2O;
         [SerializeField] private float timeO2C;
         [SerializeField] private float timeC2R;
@@ -31,6 +35,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 mouth.SetOpen(0.5f + (p * 0.5f));
             },
             timeR2O);
+
+            // Bite
+            Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
+            foreach (Collider collider in colliders)
+            {
+                CreatureBase creature = collider.GetComponent<CreatureBase>();
+                if (creature != null && creature.Animator != m_MonoBehaviour) // biting creature shouldn't damage itself
+                {
+                    creature.Health.TakeDamage(biteDamage.Random);
+                }
+            }
+            m_MonoBehaviour.Effector.PlaySound(biteSounds);
 
             // Open -> Close
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)
