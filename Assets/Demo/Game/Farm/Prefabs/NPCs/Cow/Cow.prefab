@@ -342,7 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
@@ -356,13 +356,16 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 2652412112131607991}
-        noises:
-        - Moo1
-        - Moo2
-        - Moo3
-        noiseCooldown:
+        ambientCooldown:
           min: 10
           max: 25
+        ambientSounds:
+        - name: Moo1
+          volume: 1
+        - name: Moo2
+          volume: 1
+        - name: Moo3
+          volume: 1
         wanderCooldown:
           min: 10
           max: 25
@@ -373,20 +376,22 @@ MonoBehaviour:
         id: CHA
         sm: {fileID: 2652412112131607991}
         chargeSpeedMultiplier: 3
-        chargeNoises:
-        - Charge
-        chargeRegion: {fileID: 424732787945882713}
-        restTime: 7.5
         chargeUpTime: 2
-        restNoises:
-        - Rest
+        chargeSounds:
+        - name: Charge
+          volume: 1
+        restTime: 7.5
+        restSounds:
+        - name: Rest
+          volume: 0.25
+        hornDistance: 0.5
         chargeForce: {x: 0, y: 5, z: 5}
         chargeDamage:
           min: 25
           max: 50
-        hornDistance: 0.5
-        impactNoises:
-        - Impact
+        impactSounds:
+        - name: Impact
+          volume: 1
     00000002:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

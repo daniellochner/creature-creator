@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -12,12 +11,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Rolling : BaseState
         {
-            public Rolling(PigAI pigAI) : base(pigAI) { }
-
-            public override void UpdateLogic()
-            {
-
-            }
         }
         #endregion
     }

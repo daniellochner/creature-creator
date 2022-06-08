@@ -614,7 +614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
@@ -622,7 +622,7 @@ MonoBehaviour:
   - id: 3
   - id: 4
   data: {fileID: 4900000, guid: ed8fba822f388034eb2051a30201ed4d, type: 3}
-  barkRegion: {fileID: 2782984428950577463}
+  attackRegion: {fileID: 0}
   references:
     version: 1
     00000000:
@@ -630,11 +630,12 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 8890761587950701179}
-        noises:
-        - Pant
-        noiseCooldown:
+        ambientCooldown:
           min: 10
           max: 25
+        ambientSounds:
+        - name: Pant
+          volume: 0.5
         wanderCooldown:
           min: 10
           max: 15
@@ -646,7 +647,8 @@ MonoBehaviour:
         sm: {fileID: 8890761587950701179}
         growlTime: 2.5
         growlSounds:
-        - Growl
+        - name: Growl
+          volume: 1
         barkDelayBetween:
           min: 1
           max: 2
@@ -657,25 +659,39 @@ MonoBehaviour:
           min: 1
           max: 5
         barkSounds:
-        - Bark1
-        - Bark2
-        - Bark3
-        - Bark4
-        - Bark5
-        - Bark6
-        - Bark7
-        - Bark8
+        - name: Bark1
+          volume: 1
+        - name: Bark2
+          volume: 1
+        - name: Bark3
+          volume: 1
+        - name: Bark4
+          volume: 1
+        - name: Bark5
+          volume: 1
+        - name: Bark6
+          volume: 1
+        - name: Bark7
+          volume: 1
+        - name: Bark8
+          volume: 1
     00000002:
       type: {class: DogAI/Scurrying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
         id: SCU
         sm: {fileID: 8890761587950701179}
         doghouse: {fileID: 0}
+        whimperSounds:
+        - name: Whimper
+          volume: 0.5
     00000003:
       type: {class: DogAI/Biting, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: HID
+        id: BIT
         sm: {fileID: 8890761587950701179}
+        biteDelay:
+          min: 0
+          max: 0
     00000004:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

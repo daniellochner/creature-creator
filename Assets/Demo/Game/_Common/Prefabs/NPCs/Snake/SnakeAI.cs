@@ -2,7 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -20,7 +20,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             strikeRegion.OnTrack += delegate
             {
-                ChangeState("STR");
+                if (currentStateId == "WAN")
+                {
+                    ChangeState("STR");
+                }
             };
             strikeRegion.OnLoseTrackOf += delegate
             {
@@ -47,71 +50,51 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Striking : BaseState
         {
-            [SerializeField] private string[] strikeNoises;
-            [SerializeField] private MinMax strikeCooldown;
+            [SerializeField] private float rotSmoothing;
             [SerializeField] private float maxStrikeDistance;
-            private float strikeTimeLeft;
+            [SerializeField] private float minStrikeAngle;
+            [SerializeField] private MinMax strikeCooldown;
+            private Coroutine strikeCoroutine;
 
             public SnakeAI SnakeAI => StateMachine as SnakeAI;
 
-            public Striking(SnakeAI snakeAI) : base(snakeAI) { }
-
             public override void Enter()
             {
-                SnakeAI.creature.Animator.Animator.SetTrigger("Look");
-                SnakeAI.agent.SetDestination(SnakeAI.transform.position);
-
-                strikeTimeLeft = 0f;
-            }
-            public override void UpdateLogic()
-            {
-                HandleStrike();
-                HandleLookAt();
+                strikeCoroutine = SnakeAI.StartCoroutine(StrikeRoutine());
+                SnakeAI.agent.updateRotation = false;
             }
             public override void Exit()
             {
-                SnakeAI.creature.Animator.LookTarget = SnakeAI.creature.Animator.InteractTarget = null;
+                SnakeAI.StopCoroutine(strikeCoroutine);
+                SnakeAI.creature.Animator.InteractTarget = null;
+                SnakeAI.agent.updateRotation = true;
             }
 
-            private void HandleStrike()
+            private IEnumerator StrikeRoutine()
             {
-                if (SnakeAI.creature.Animator.InteractTarget != null)
+                while (IsActive)
                 {
-                    TimerUtility.OnTimer(ref strikeTimeLeft, strikeCooldown.Random, Time.deltaTime, Strike);
-                }
-            }
-            private void HandleLookAt()
-            {
-                // Determine the nearest creature within this snake's maximum striking distance
-                Transform nearestCreature = SnakeAI.strikeRegion.Nearest.transform;
+                    // Sit-And-Wait...
+                    float angle = Mathf.Infinity, distance = Mathf.Infinity;
+                    while (angle > minStrikeAngle || distance > maxStrikeDistance)
+                    {
+                        Transform target = SnakeAI.creature.Animator.InteractTarget = SnakeAI.strikeRegion.Nearest.transform;
 
-                // Set the snake's look target to be the nearest creature, and start looking at that creature
-                if (nearestCreature != null && SnakeAI.creature.Animator.LookTarget != nearestCreature)
-                {
-                    SnakeAI.creature.Animator.LookTarget = nearestCreature;
-                }
-                else
-                if (nearestCreature == null)
-                {
-                    SnakeAI.creature.Animator.LookTarget = null;
-                }
+                        Vector3 dir = Vector3.ProjectOnPlane(target.position - SnakeAI.transform.position, SnakeAI.transform.up);
+                        SnakeAI.transform.rotation = Quaternion.Slerp(SnakeAI.transform.rotation, Quaternion.LookRotation(dir), rotSmoothing * Time.deltaTime);
 
-                // Set the snake's interact target to be the same creature if it is near enough
-                float distance = Vector3.Distance(nearestCreature.position, SnakeAI.transform.position);
-                if (distance < maxStrikeDistance)
-                {
-                    SnakeAI.creature.Animator.InteractTarget = nearestCreature;
-                }
-                else if (SnakeAI.creature.Animator.InteractTarget != null)
-                {
-                    SnakeAI.creature.Animator.InteractTarget = null;
-                    strikeTimeLeft = strikeCooldown.Random; // Set back to the maximum time left if the target creature is lost
-                }
-            }
+                        angle = Vector3.Angle(SnakeAI.transform.forward, dir);
+                        distance = Vector3.Distance(target.position, SnakeAI.transform.position);
 
-            private void Strike()
-            {
-                SnakeAI.creature.Animator.Animator.SetTrigger("Strike");
+                        yield return null;
+                    }
+
+                    // Strike!
+                    SnakeAI.Animator.SetTrigger("Strike");
+
+                    // Rest...
+                    yield return new WaitForSeconds(strikeCooldown.Random);
+                }
             }
         }
         #endregion

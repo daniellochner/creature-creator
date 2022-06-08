@@ -39,15 +39,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             [SerializeField] private float chargeSpeedMultiplier;
             [SerializeField] private float chargeUpTime;
-            [SerializeField] private string[] chargeNoises;
+            [SerializeField] private CreatureEffector.Sound[] chargeSounds;
             [Space]
             [SerializeField] private float restTime;
-            [SerializeField] private string[] restNoises;
+            [SerializeField] private CreatureEffector.Sound[] restSounds;
             [Space]
             [SerializeField] private float hornDistance;
             [SerializeField] private Vector3 chargeForce;
             [SerializeField] private MinMax chargeDamage;
-            [SerializeField] private string[] impactNoises;
+            [SerializeField] private CreatureEffector.Sound[] impactSounds;
 
             private CowAI CowAI => StateMachine as CowAI;
 
@@ -81,7 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 CowAI.agent.updateRotation = true;
 
                 // Charge!
-                CowAI.creature.Effector.PlaySound(chargeNoises);
+                CowAI.creature.Effector.PlaySound(chargeSounds);
                 yield return new WaitForSeconds(chargeUpTime);
                 CowAI.agent.SetDestination(charged.position);
                 List<Collider> hit = new List<Collider>();
@@ -106,7 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
                             {
                                 creature.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
                             }
-                            CowAI.creature.Effector.PlaySound(impactNoises);
+                            CowAI.creature.Effector.PlaySound(impactSounds);
                         }
                     }
 
@@ -114,7 +114,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Rest...
-                CowAI.creature.Effector.PlaySound(restNoises);
+                CowAI.creature.Effector.PlaySound(restSounds);
                 yield return new WaitForSeconds(restTime);
 
                 // Charge again?

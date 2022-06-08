@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private float flapCooldown;
         [SerializeField] private float flapHeight;
-        [SerializeField] private string[] flapSounds;
+        [SerializeField] private CreatureEffector.Sound[] flapSounds;
 
         private WingAnimator[] wings;
         private float timeLeft;
@@ -59,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 wing.Flap();
 
-                m_MonoBehaviour.Effector.PlaySound(flapSounds, 0.5f);
+                m_MonoBehaviour.Effector.PlaySound(flapSounds);
             }
             m_MonoBehaviour.InvokeOverTime(delegate (float progress)
             {

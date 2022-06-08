@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
@@ -287,12 +287,14 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 7290922985996933607}
-        noises:
-        - Cluck1
-        - Cluck2
-        noiseCooldown:
+        ambientCooldown:
           min: 10
           max: 25
+        ambientSounds:
+        - name: Cluck1
+          volume: 0.5
+        - name: Cluck2
+          volume: 0.5
         wanderCooldown:
           min: 10
           max: 25

@@ -17,9 +17,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         protected CreatureSourceNonPlayer creature;
         protected NavMeshAgent agent;
+        protected Transform followTarget;
         #endregion
 
         #region Properties
+        public Animator Animator => creature.Animator.Animator;
+
         public bool IsMovingToPosition
         {
             get
@@ -42,7 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Awake()
         {
             base.Awake();
-            creature = GetComponentInParent<CreatureSourceNonPlayer>();
+            creature = GetComponent<CreatureSourceNonPlayer>();
             agent = GetComponent<NavMeshAgent>();
         }
         public virtual void Start()
@@ -54,64 +57,49 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Follow(Transform target)
         {
-            creature.Animator.InteractTarget = target;
+            followTarget = target;
             ChangeState("FOL");
         }
         public virtual void StopFollowing()
         {
             ChangeState(startStateID);
+            followTarget = null;
         }
 
+        #region Debug
         [ContextMenu("Debug/Follow/Player")]
         public void FollowPlayer()
         {
             Follow(Player.Instance.Creature.transform);
         }
         #endregion
-
-
-        public List<Lol<AnimalAI>> huh;
-
-
-
-        [Serializable]
-        public class Lol<T>
-        {
-
-        }
-
-        [Serializable]
-        public class Test : Lol<AnimalAI>
-        {
-
-        }
-
+        #endregion
 
         #region Inner Classes
         [Serializable]
         public class Idling : BaseState
         {
-            [SerializeField] public string[] noises;
-            [SerializeField] public MinMax noiseCooldown;
+            [SerializeField] public MinMax ambientCooldown;
+            [SerializeField] public CreatureEffector.Sound[] ambientSounds;
             private float silentTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
             public override void Enter()
             {
-                silentTimeLeft = noiseCooldown.Random;
+                silentTimeLeft = ambientCooldown.Random;
             }
             public override void UpdateLogic()
             {
-                if (noises.Length > 0)
+                if (ambientSounds.Length > 0)
                 {
-                    TimerUtility.OnTimer(ref silentTimeLeft, noiseCooldown.Random, Time.deltaTime, MakeRandomAmbientNoise);
+                    TimerUtility.OnTimer(ref silentTimeLeft, ambientCooldown.Random, Time.deltaTime, MakeRandomAmbientSound);
                 }
             }
 
-            private void MakeRandomAmbientNoise()
+            private void MakeRandomAmbientSound()
             {
-                AnimalAI.creature.Effector.PlaySound(noises);
+                AnimalAI.creature.Effector.PlaySound(ambientSounds);
             }
         }
 
@@ -138,6 +126,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     });
                 }
             }
+            public override void Exit()
+            {
+                AnimalAI.agent.SetDestination(AnimalAI.transform.position);
+            }
 
             private void WanderToPosition(Vector3 position)
             {
@@ -160,17 +152,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void UpdateLogic()
             {
-                Vector3 displacement = AnimalAI.creature.Animator.InteractTarget.position - AnimalAI.transform.position;
+                Vector3 displacement = AnimalAI.followTarget.position - AnimalAI.transform.position;
                 if (displacement.magnitude > FollowOffset)
                 {
                     Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target
                     Vector3 target = AnimalAI.transform.position + (displacement - offset);
                     AnimalAI.agent.SetDestination(target);
                 }
-            }
-            public override void Exit()
-            {
-                AnimalAI.creature.Animator.InteractTarget = null;
             }
         }
         #endregion

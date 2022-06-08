@@ -48,12 +48,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Barking : BaseState
         {
             [SerializeField] private float growlTime;
-            [SerializeField] private string[] growlSounds;
+            [SerializeField] private CreatureEffector.Sound[] growlSounds;
             [Space]
             [SerializeField] private MinMax barkDelayBetween;
             [SerializeField] private MinMax barkDelayWithin;
             [SerializeField] private MinMaxInt barkCount;
-            [SerializeField] private string[] barkSounds;
+            [SerializeField] private CreatureEffector.Sound[] barkSounds;
 
             private Coroutine barkingCoroutine;
 
@@ -77,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private IEnumerator BarkingRoutine()
             {
-                DogAI.creature.Effector.PlaySound(growlSounds, 0.5f);
+                DogAI.creature.Effector.PlaySound(growlSounds);
                 yield return new WaitForSeconds(growlTime);
 
                 while (true)
@@ -104,7 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             private void Bark()
             {
-                DogAI.creature.Effector.PlaySound(barkSounds, 0.5f);
+                DogAI.creature.Effector.PlaySound(barkSounds);
                 DogAI.creature.Animator.Animator.SetTrigger("Bark");
             }
         }
@@ -119,7 +119,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Scurrying : BaseState
         {
             [SerializeField] private Transform doghouse;
-            [SerializeField] private string[] whimperSounds;
+            [SerializeField] private CreatureEffector.Sound[] whimperSounds;
 
             public DogAI DogAI => StateMachine as DogAI;
 

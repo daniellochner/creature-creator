@@ -305,7 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
@@ -319,12 +319,14 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 3476419545979403416}
-        noises:
-        - Hiss1
-        - Hiss2
-        noiseCooldown:
+        ambientCooldown:
           min: 10
           max: 25
+        ambientSounds:
+        - name: Hiss1
+          volume: 0.25
+        - name: Hiss2
+          volume: 0.25
         wanderCooldown:
           min: 10
           max: 25
@@ -334,13 +336,12 @@ MonoBehaviour:
       data:
         id: STR
         sm: {fileID: 3476419545979403416}
-        strikeNoises:
-        - Strike1
-        - Strike2
+        rotSmoothing: 5
+        maxStrikeDistance: 4
+        minStrikeAngle: 5
         strikeCooldown:
           min: 2
           max: 3
-        maxStrikeDistance: 4
     00000002:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

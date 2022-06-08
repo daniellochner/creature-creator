@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float strikeTime;
         [SerializeField] private float strikeRadius;
         [SerializeField] private float strikeDamage;
-        [SerializeField] private string[] strikeSounds;
+        [SerializeField] private CreatureEffector.Sound[] strikeSounds;
         [Space]
         [SerializeField] private float returnTime;
         #endregion

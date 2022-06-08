@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
@@ -216,12 +216,14 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 1099495229331248676}
-        noises:
-        - Oink1
-        - Oink2
-        noiseCooldown:
-          min: 10
-          max: 25
+        ambientCooldown:
+          min: 0
+          max: 0
+        ambientSounds:
+        - name: Oink1
+          volume: 0.75
+        - name: Oink2
+          volume: 0.75
         wanderCooldown:
           min: 10
           max: 25

@@ -293,7 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
@@ -305,16 +305,22 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 5933320528199852746}
-        noises:
-        - Bleat1
-        - Bleat2
-        - Bleat3
-        - Bleat4
-        - Bleat5
-        - Bleat6
-        noiseCooldown:
+        ambientCooldown:
           min: 10
           max: 25
+        ambientSounds:
+        - name: Bleat1
+          volume: 1
+        - name: Bleat2
+          volume: 1
+        - name: Bleat3
+          volume: 1
+        - name: Bleat4
+          volume: 1
+        - name: Bleat5
+          volume: 1
+        - name: Bleat6
+          volume: 1
         wanderCooldown:
           min: 10
           max: 25
