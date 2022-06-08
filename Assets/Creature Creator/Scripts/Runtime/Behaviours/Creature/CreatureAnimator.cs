@@ -44,6 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<ArmAnimator> Arms { get; private set; } = new List<ArmAnimator>();
         public List<LegAnimator> Legs { get; private set; } = new List<LegAnimator>();
         public List<WingAnimator> Wings { get; private set; } = new List<WingAnimator>();
+        public List<MouthAnimator> Mouths { get; private set; } = new List<MouthAnimator>();
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
 
@@ -343,8 +344,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            Wings.Clear();
-            Wings = new List<WingAnimator>(Constructor.GetComponentsInChildren<WingAnimator>());
+            Wings = new List<WingAnimator>(Constructor.Body.GetComponentsInChildren<WingAnimator>());
+            Mouths = new List<MouthAnimator>(Constructor.Body.GetComponentsInChildren<MouthAnimator>());
+
 
             foreach (LegAnimator leg in Legs)
             {
