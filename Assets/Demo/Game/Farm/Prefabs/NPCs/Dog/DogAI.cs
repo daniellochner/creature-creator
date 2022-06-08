@@ -10,7 +10,10 @@ namespace DanielLochner.Assets.CreatureCreator
     public class DogAI : AnimalAI
     {
         #region Fields
-        [SerializeField] protected TrackRegion attackRegion;
+        [SerializeField] protected TrackRegion trackRegion;
+        [SerializeField] private float lookAtSmoothing;
+        protected CreatureBase target;
+        protected Vector3 lookDir;
         #endregion
 
         #region Methods
@@ -18,16 +21,24 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-            attackRegion.OnTrack += delegate
+            trackRegion.OnTrack += delegate (Collider col1, Collider col2)
             {
-                if (currentStateId != "BIT")
+                CreatureBase creature = col2.GetComponent<CreatureBase>();
+                if (HasWeapon(creature) || trackRegion.tracked.Count >= 3)
                 {
-                    ChangeState("BAR");
+                    ChangeState("SCU");
+                }
+                else if (currentStateId != "HID")
+                {
+                    if (currentStateId == "WAN")
+                    {
+                        ChangeState("BAR");
+                    }
                 }
             };
-            attackRegion.OnLoseTrackOf += delegate
+            trackRegion.OnLoseTrackOf += delegate
             {
-                if (attackRegion.tracked.Count == 0)
+                if (currentStateId != "HID" && currentStateId != "SCU" && trackRegion.tracked.Count == 0)
                 {
                     ChangeState("WAN");
                 }
@@ -40,6 +51,35 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ChangeState("BIT");
             }
+        }
+
+        private void UpdateTarget()
+        {
+            Transform nearest = creature.Animator.InteractTarget = trackRegion.Nearest.transform;
+            if (target == null || target.transform != nearest)
+            {
+                target = nearest.GetComponent<CreatureBase>();
+            }
+        }
+        private void HandleLookAt()
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), lookAtSmoothing * Time.deltaTime);
+        }
+        private void UpdateLookDir()
+        {
+            lookDir = Vector3.ProjectOnPlane(target.transform.position - transform.position, transform.up).normalized;
+        }
+
+        private bool HasWeapon(CreatureBase creature)
+        {
+            foreach (BodyPartConstructor bpc in creature.Constructor.BodyParts)
+            {
+                if (bpc.BodyPart is Weapon)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
 
@@ -54,25 +94,23 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private MinMax barkDelayWithin;
             [SerializeField] private MinMaxInt barkCount;
             [SerializeField] private CreatureEffector.Sound[] barkSounds;
-
             private Coroutine barkingCoroutine;
 
             public DogAI DogAI => StateMachine as DogAI;
 
             public override void Enter()
             {
-                DogAI.creature.Animator.Animator.SetTrigger("Look");
+                DogAI.UpdateTarget();
                 barkingCoroutine = DogAI.StartCoroutine(BarkingRoutine());
-                TargetNearest();
             }
             public override void UpdateLogic()
             {
-
+                DogAI.UpdateLookDir();
+                DogAI.HandleLookAt();
             }
             public override void Exit()
             {
                 DogAI.StopCoroutine(barkingCoroutine);
-                DogAI.creature.Animator.LookTarget = DogAI.creature.Animator.InteractTarget = null;
             }
 
             private IEnumerator BarkingRoutine()
@@ -80,12 +118,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 DogAI.creature.Effector.PlaySound(growlSounds);
                 yield return new WaitForSeconds(growlTime);
 
-                while (true)
+                while (IsActive)
                 {
                     yield return DogAI.StartCoroutine(BarkRoutine());
                     yield return new WaitForSeconds(barkDelayBetween.Random);
 
-                    TargetNearest();
+                    DogAI.UpdateTarget();
                 }
             }
             private IEnumerator BarkRoutine()
@@ -93,39 +131,24 @@ namespace DanielLochner.Assets.CreatureCreator
                 int barks = barkCount.Random;
                 for (int i = 0; i < barks; i++)
                 {
-                    Bark();
+                    DogAI.creature.Effector.PlaySound(barkSounds);
+                    DogAI.Animator.SetTrigger("Bark");
                     yield return new WaitForSeconds(barkDelayWithin.Random);
                 }
             }
-
-            private void TargetNearest()
-            {
-                DogAI.creature.Animator.LookTarget = DogAI.attackRegion.Nearest.transform;
-            }
-            private void Bark()
-            {
-                DogAI.creature.Effector.PlaySound(barkSounds);
-                DogAI.creature.Animator.Animator.SetTrigger("Bark");
-            }
-        }
-
-        [Serializable]
-        public class Guarding : BaseState
-        {
-
         }
 
         [Serializable]
         public class Scurrying : BaseState
         {
-            [SerializeField] private Transform doghouse;
+            [SerializeField] public GameObject doghouse;
             [SerializeField] private CreatureEffector.Sound[] whimperSounds;
 
             public DogAI DogAI => StateMachine as DogAI;
 
             public override void Enter()
             {
-                DogAI.agent.SetDestination(doghouse.position);
+                DogAI.agent.SetDestination(doghouse.transform.position);
                 DogAI.creature.Effector.PlaySound(whimperSounds);
             }
             public override void UpdateLogic()
@@ -148,10 +171,17 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 DogAI.creature.Hider.Hide();
+                hideTimeLeft = hideTime.Random;
             }
             public override void UpdateLogic()
             {
-                //TimerUtility.OnTimer(ref hideTimeLeft, hideTime.Random, )
+                if (DogAI.trackRegion.tracked.Count == 0)
+                {
+                    TimerUtility.OnTimer(ref hideTimeLeft, hideTime.Random, Time.deltaTime, delegate
+                    {
+                        DogAI.ChangeState("WAN");
+                    });
+                }
             }
             public override void Exit()
             {
@@ -161,46 +191,60 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [Serializable]
-        public class Attacking : BaseState
-        {
-
-        }
-
-        [Serializable]
         public class Biting : BaseState
         {
+            [SerializeField] private float biteOffset;
+            [SerializeField] private float minBiteAngle;
             [SerializeField] private MinMax biteDelay;
-            private float biteTimeLeft;
-
-            private Transform target;
+            private Coroutine bitingCoroutine;
 
             public DogAI DogAI => StateMachine as DogAI;
 
-            public Biting(DogAI dogAI) : base(dogAI) { }
+            private float TargetDistance => DogAI.creature.Constructor.Dimensions.radius + DogAI.target.Constructor.Dimensions.radius;
 
+            public override void Enter()
+            {
+                bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
+            }
             public override void UpdateLogic()
             {
-                TimerUtility.OnTimer(ref biteTimeLeft, biteDelay.Random, Time.deltaTime, Bite);
+                if (!DogAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
+                {
+                    DogAI.UpdateLookDir();
 
-                Vector3 offset = (target.position - DogAI.transform.position).normalized * DogAI.creature.Constructor.Dimensions.radius;
-                DogAI.agent.SetDestination(target.position - offset);
+                    Vector3 offset = DogAI.lookDir * TargetDistance;
+                    DogAI.agent.SetDestination(DogAI.target.transform.position - offset);
+
+                    if (!DogAI.IsMovingToPosition)
+                    {
+                        DogAI.HandleLookAt();
+                    }
+                }
             }
-            private void Bite()
+            public override void Exit()
             {
-                DogAI.agent.updatePosition = false;
-                DogAI.creature.Animator.Animator.SetTrigger("Bite");
+                DogAI.StopCoroutine(bitingCoroutine);
             }
 
             private IEnumerator BitingRoutine()
             {
-                while (true)
+                while (IsActive)
                 {
-                    while (DogAI.IsMovingToPosition)
+                    // Move Closer.
+                    float angle = Mathf.Infinity, distance = Mathf.Infinity;
+                    while (angle > minBiteAngle || distance > (TargetDistance + biteOffset))
                     {
-
+                        DogAI.UpdateTarget();
+                        angle = Vector3.Angle(DogAI.transform.forward, DogAI.lookDir);
+                        distance = Vector3.Distance(DogAI.target.transform.position, DogAI.transform.position);
+                        yield return null;
                     }
 
+                    // Strike (and Bite)!
+                    DogAI.Animator.SetTrigger("Strike");
 
+                    // Wait...
+                    yield return new WaitForSeconds(biteDelay.Random);
                 }
             }
         }
