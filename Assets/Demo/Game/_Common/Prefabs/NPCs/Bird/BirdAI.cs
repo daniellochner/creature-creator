@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BirdAI : AnimalAI
     {
         #region Fields
-        [SerializeField] private SphereCollider frightRegion;
+        [SerializeField] private SphereCollider frightenTrigger;
         #endregion
 
         #region Methods
@@ -23,22 +23,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 ChangeState("FLY");
             }
         }
-        #endregion
 
-        #region Inner Classes
         public override void Follow(Transform target)
         {
             base.Follow(target);
             agent.enabled = true;
-            frightRegion.enabled = false;
+            frightenTrigger.enabled = false;
         }
         public override void StopFollowing()
         {
             base.StopFollowing();
             agent.enabled = false;
-            frightRegion.enabled = true;
+            frightenTrigger.enabled = true;
         }
+        #endregion
 
+        #region Nested
         [Serializable]
         public class Flying : BaseState
         {
@@ -46,11 +46,9 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private float flightSpeed;
             [SerializeField] private float flightHeight;
             [SerializeField] private AnimationCurve flightPath;
-            [SerializeField] private float minDistanceFromPlayer;
+            [SerializeField] private float minDistanceFromCreature;
 
             public BirdAI BirdAI => StateMachine as BirdAI;
-
-            public Flying(BirdAI birdAI) : base(birdAI) { }
 
             public Transform RandomPerchPoint
             {
@@ -62,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         bool isFarEnough = true;
                         foreach (CreatureBase creature in FindObjectsOfType<CreatureBase>())
                         {
-                            if (Vector3.Distance(creature.transform.position, point.position) < minDistanceFromPlayer)
+                            if (Vector3.Distance(creature.transform.position, point.position) < minDistanceFromCreature)
                             {
                                 isFarEnough = false;
                                 break;

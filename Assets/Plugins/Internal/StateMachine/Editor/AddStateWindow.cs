@@ -57,7 +57,8 @@ namespace DanielLochner.Assets
             if (GUILayout.Button("Add"))
             {
                 Type stateType = Type.GetType(qualifiedTypes[selected]);
-                BaseState state = (BaseState)Activator.CreateInstance(stateType, args:TargetStateMachine);
+                BaseState state = (BaseState)Activator.CreateInstance(stateType);
+                state.StateMachine = TargetStateMachine;
                 state.ID = id;
 
                 TargetStateMachine.States.Add(state);

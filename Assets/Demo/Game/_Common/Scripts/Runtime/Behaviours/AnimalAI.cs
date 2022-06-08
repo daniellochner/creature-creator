@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable]
         public class Idling : BaseState
         {

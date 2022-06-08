@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CowAI : AnimalAI
     {
         #region Fields
-        [SerializeField] protected TrackRegion chargeRegion;
+        [SerializeField] protected TrackRegion trackRegion;
         #endregion
 
         #region Methods
@@ -19,13 +19,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-            chargeRegion.OnTrack += delegate
+            trackRegion.OnTrack += delegate
             {
-                ChangeState("CHA");
+                if (currentStateId == "WAN")
+                {
+                    ChangeState("CHA");
+                }
             };
-            chargeRegion.OnLoseTrackOf += delegate
+            trackRegion.OnLoseTrackOf += delegate
             {
-                if (chargeRegion.tracked.Count == 0)
+                if (trackRegion.tracked.Count == 0)
                 {
                     ChangeState("WAN");
                 }
@@ -51,13 +54,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private CowAI CowAI => StateMachine as CowAI;
 
-            public Charging(CowAI cowAI) : base(cowAI) { }
-
             public override void Enter()
             {
                 CowAI.agent.speed *= chargeSpeedMultiplier;
 
-                Charge(CowAI.chargeRegion.Nearest.transform);
+                Charge(CowAI.trackRegion.Nearest.transform);
             }
             public override void Exit()
             {
@@ -118,9 +119,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitForSeconds(restTime);
 
                 // Charge again?
-                if (CowAI.chargeRegion.tracked.Count != 0)
+                if (CowAI.trackRegion.tracked.Count != 0)
                 {
-                    Charge(CowAI.chargeRegion.Nearest.transform);
+                    Charge(CowAI.trackRegion.Nearest.transform);
                 }
                 else
                 {

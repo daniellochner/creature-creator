@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8169719929061792192}
   - component: {fileID: 7865477886885410044}
   m_Layer: 2
-  m_Name: FrightRegion
+  m_Name: FrightenTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -494,13 +494,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStateID: WAN
-  currentStateID: 
+  currentStateId: 
   states:
   - id: 0
   - id: 1
   - id: 2
   data: {fileID: 4900000, guid: d7ba8106e39ffe84a88d84c0c7e376f5, type: 3}
-  frightRegion: {fileID: 8169719929061792192}
+  frightenTrigger: {fileID: 8169719929061792192}
   references:
     version: 1
     00000000:
@@ -508,10 +508,10 @@ MonoBehaviour:
       data:
         id: WAN
         sm: {fileID: 1430134677}
-        noises: []
-        noiseCooldown:
+        ambientCooldown:
           min: 0
           max: 0
+        ambientSounds: []
         wanderCooldown:
           min: 10
           max: 25
@@ -566,7 +566,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        minDistanceFromPlayer: 5
+        minDistanceFromCreature: 10
     00000002:
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
@@ -587,7 +587,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.25
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

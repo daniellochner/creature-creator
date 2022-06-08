@@ -28,12 +28,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     ChangeState("SCU");
                 }
-                else if (currentStateId != "HID")
+                else if (currentStateId == "WAN")
                 {
-                    if (currentStateId == "WAN")
-                    {
-                        ChangeState("BAR");
-                    }
+                    ChangeState("BAR");
                 }
             };
             trackRegion.OnLoseTrackOf += delegate
@@ -83,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable]
         public class Barking : BaseState
         {
