@@ -42,10 +42,10 @@ namespace DanielLochner.Assets
         {
             if (currentState != null && currentState.ID == id) return;
 
-            currentState?.Exit();
+            currentState?.InternalExit();
             currentState = states.Find(x => x.ID == id);
             currentStateId = id;
-            currentState?.Enter();
+            currentState?.InternalEnter();
         }
         #endregion
     }

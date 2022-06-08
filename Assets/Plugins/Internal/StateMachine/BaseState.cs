@@ -25,6 +25,12 @@ namespace DanielLochner.Assets
             get => sm;
             set => sm = value;
         }
+
+        public bool IsActive
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Methods
@@ -46,6 +52,17 @@ namespace DanielLochner.Assets
         public virtual void UpdateLogic() { }
         public virtual void UpdatePhysics() { }
         public virtual void Exit() { }
+
+        internal void InternalEnter()
+        {
+            IsActive = true;
+            Enter();
+        }
+        internal void InternalExit()
+        {
+            IsActive = false;
+            Exit();
+        }
         #endregion
     }
 }
