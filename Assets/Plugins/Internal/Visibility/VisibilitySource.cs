@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,39 +6,35 @@ namespace DanielLochner.Assets
 {
     public class VisibilitySource : MonoBehaviourSingleton<VisibilitySource>
     {
+        #region Fields
+        [SerializeField] private int tps = 1;
+        private Coroutine checkCoroutine;
+        #endregion
+
         #region Properties
-        public List<VisibilityTrigger> Triggers { get; set; } = new List<VisibilityTrigger>();
+        public static List<VisibilityObject> Objects { get; set; } = new List<VisibilityObject>();
         #endregion
 
         #region Methods
-        private void Start()
+        private void OnEnable()
         {
-            // Source
-            GameObject source = new GameObject("Source");
-            source.transform.parent = transform;
-            source.transform.localPosition = Vector3.zero;
-            source.layer = LayerMask.NameToLayer("Visibility");
-
-            Rigidbody rb = source.AddComponent<Rigidbody>();
-            rb.isKinematic = true;
-
-            SphereCollider col = source.AddComponent<SphereCollider>();
-            col.isTrigger = true;
-            col.radius = 0.5f;
-
-            // Triggers
-            foreach (VisibilityTrigger trigger in FindObjectsOfType<VisibilityTrigger>())
-            {
-                Triggers.Add(trigger);
-                trigger.Setup();
-            }
+            checkCoroutine = StartCoroutine(CheckRoutine());
+        }
+        private void OnDisable()
+        {
+            StopCoroutine(checkCoroutine);
         }
 
-        public void Validate()
+        private IEnumerator CheckRoutine()
         {
-            foreach (VisibilityTrigger trigger in Triggers)
+            while (true)
             {
-                trigger.Validate();
+                foreach (VisibilityObject obj in Objects)
+                {
+                    obj.CheckVisibility(transform.position);
+                }
+
+                yield return new WaitForSeconds(1f / tps);
             }
         }
         #endregion

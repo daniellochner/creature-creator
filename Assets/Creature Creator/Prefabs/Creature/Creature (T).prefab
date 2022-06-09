@@ -102,11 +102,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
---- !u!1 &982379299394450588 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3002746977395476858, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
-  m_PrefabInstance: {fileID: 2596882310839369190}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &982379299394450591 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3002746977395476857, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
@@ -123,14 +118,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cab6e35ad7d1c94fa24c87a10b9abe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &982379299444430553 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3002746977344973631, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
-  m_PrefabInstance: {fileID: 2596882310839369190}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &982379299962381797 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3002746976789272579, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+  m_PrefabInstance: {fileID: 2596882310839369190}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &982379299394450588 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3002746977395476858, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
+  m_PrefabInstance: {fileID: 2596882310839369190}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &982379299444430553 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3002746977344973631, guid: 3bff1cb6bec4cd14abfd858e4a9a9422, type: 3}
   m_PrefabInstance: {fileID: 2596882310839369190}
   m_PrefabAsset: {fileID: 0}
 --- !u!136 &4446615689792136542
@@ -311,6 +311,7 @@ MonoBehaviour:
   health: {fileID: 8883115899081995584}
   energy: {fileID: 5862341718529941009}
   age: {fileID: 8171552665986909827}
+  hider: {fileID: 4438640303029816636}
   informer: {fileID: 5382025046379907827}
   selector: {fileID: -3588625786838544996}
 --- !u!114 &-3588625786838544996
@@ -620,6 +621,63 @@ MonoBehaviour:
     min: 0
     max: 100
   health: 100
+--- !u!114 &4438640303029816636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 970ffca359a2f054e915d710ef410561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5970317974628631054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982379299394450588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 931e3efde70bd5943a5a2013cd9c7aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 50
+  onShow:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1640302633}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CreatureAnimator,
+          Assembly-CSharp
+        m_MethodName: set_IsAnimated
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHide:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1640302633}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CreatureAnimator,
+          Assembly-CSharp
+        m_MethodName: set_IsAnimated
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &7696278918816451154
 MonoBehaviour:
   m_ObjectHideFlags: 0
