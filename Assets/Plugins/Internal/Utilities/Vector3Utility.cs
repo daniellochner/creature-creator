@@ -20,5 +20,13 @@ namespace DanielLochner.Assets
         {
             return Quaternion.Euler(angles) * (point - pivot) + pivot;
         }
+
+        /// <summary>
+        /// Checks if the distance between p1 and p2 is greater (dir = 1) or less (dir = -1) than d.
+        /// </summary>
+        public static bool SqrDistanceComp(Vector3 p1, Vector3 p2, float d, int dir = 1)
+        {
+            return (p1 - p2).sqrMagnitude > dir * (d * d);
+        }
     }
 }
