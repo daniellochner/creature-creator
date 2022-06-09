@@ -51,17 +51,16 @@ namespace DanielLochner.Assets
         public UnityEvent onBeginDrag = new UnityEvent();
         public UnityEvent onEndDrag = new UnityEvent();
 
-        private Camera mainCamera;
         private Vector3 startWorldPosition, offsetPosition;
         private Vector2 initialMousePosition;
         #endregion
 
         #region Properties
-        public UnityEvent OnPress { get { return onPress; } }
-        public UnityEvent OnRelease { get { return onRelease; } }
-        public UnityEvent OnDrag { get { return onDrag; } }
-        public UnityEvent OnBeginDrag { get { return onBeginDrag; } }
-        public UnityEvent OnEndDrag { get { return onEndDrag; } }
+        public UnityEvent OnPress => onPress;
+        public UnityEvent OnRelease => onRelease;
+        public UnityEvent OnDrag => onDrag;
+        public UnityEvent OnBeginDrag => onBeginDrag;
+        public UnityEvent OnEndDrag => onEndDrag;
 
         public Vector3 TargetPosition { get; private set; }
         public Vector3 ClampFromPosition { get; set; }
@@ -74,8 +73,6 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            mainCamera = Camera.main;
-
             UpdatePlane();
         }
         private void Update()
@@ -101,7 +98,7 @@ namespace DanielLochner.Assets
         {
             if (IsPressing && draggable)
             {
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 Vector3? targetWorldPosition = null;
                 if (customCollider != null)
@@ -147,7 +144,6 @@ namespace DanielLochner.Assets
             }
         }
 
-        // The built-in OnMouseDown on works for the left mouse button.
         public void OnMouseOver()
         {
             if (Input.GetMouseButtonDown(mouseButton))
@@ -164,7 +160,7 @@ namespace DanielLochner.Assets
                 UpdatePlane();
             }
 
-            Ray ray = mainCamera.ScreenPointToRay(initialMousePosition = Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(initialMousePosition = Input.mousePosition);
             if (Plane.Raycast(ray, out float distance))
             {
                 ClampFromPosition = startWorldPosition = transform.position;
@@ -250,7 +246,7 @@ namespace DanielLochner.Assets
         {
             if (mousePlaneAlignment == MousePlaneAlignment.WithCamera)
             {
-                Plane = new Plane(mainCamera.transform.forward, transform.position);
+                Plane = new Plane(Camera.main.transform.forward, transform.position);
             }
             else if (mousePlaneAlignment == MousePlaneAlignment.ToLocalDirection)
             {

@@ -21,8 +21,10 @@ namespace DanielLochner.Assets
             get => threshold;
             set => threshold = value;
         }
-
-        public UnityEvent OnClick { get { return onClick; } }
+        public UnityEvent OnClick
+        {
+            get => onClick;
+        }
         #endregion
 
         #region Methods

@@ -14,8 +14,8 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        public UnityEvent OnScrollUp { get { return onScrollUp; } }
-        public UnityEvent OnScrollDown { get { return onScrollDown; } }
+        public UnityEvent OnScrollUp => onScrollUp;
+        public UnityEvent OnScrollDown => onScrollDown;
         #endregion
 
         #region Methods
@@ -25,7 +25,8 @@ namespace DanielLochner.Assets
             {
                 OnScrollUp.Invoke();
             }
-            else if (Input.mouseScrollDelta.y < 0)
+            else 
+            if (Input.mouseScrollDelta.y < 0)
             {
                 OnScrollDown.Invoke();
             }

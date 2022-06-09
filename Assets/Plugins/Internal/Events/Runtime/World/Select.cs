@@ -14,29 +14,41 @@ namespace DanielLochner.Assets
         [SerializeField] private float outlineWidth = 5f;
         [SerializeField] private float threshold = 0f;
         [SerializeField] private string[] ignoredTags;
-
-        private Outline outline;
-        private Hover hover;
-        private Click click;
-        private Camera mainCamera;
+        [SerializeField] private bool useOutline = true;
 
         private bool isSelected;
         private Vector2 initialMousePosition;
         #endregion
 
         #region Properties
-
+        public UnityEvent OnSelect
+        {
+            get => onSelect;
+        }
+        public float OutlineWidth
+        {
+            get => outlineWidth;
+            set => outlineWidth = value;
+        }
+        public float Threshold
+        {
+            get => threshold;
+            set => threshold = value;
+        }
         public string[] IgnoredTags
         {
             get => ignoredTags;
             set => ignoredTags = value;
         }
+        public bool UseOutline
+        {
+            get => useOutline;
+            set => useOutline = value;
+        }
 
-        public bool useOutline = true;
-
-        public UnityEvent OnSelect => onSelect;
-
-        public Outline Outline => outline;
+        public Outline Outline { get; private set; }
+        public Hover Hover { get; private set; }
+        public Click Click { get; private set; }
 
         public bool IsSelected
         {
@@ -45,7 +57,7 @@ namespace DanielLochner.Assets
             {
                 isSelected = value;
 
-                if (useOutline) outline.enabled = isSelected;
+                if (useOutline) Outline.enabled = isSelected;
 
                 onSelect?.Invoke();
             }
@@ -57,19 +69,17 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            mainCamera = Camera.main;
+            Hover = GetComponent<Hover>();
+            Click = GetComponent<Click>();
+            Click.Threshold = threshold;
 
-            hover = GetComponent<Hover>();
-            click = GetComponent<Click>();
-            click.Threshold = threshold;
-
-            outline = GetComponentInChildren<Outline>();
-            outline.OutlineWidth = outlineWidth;
-            outline.enabled = false;
+            Outline = GetComponentInChildren<Outline>();
+            Outline.OutlineWidth = outlineWidth;
+            Outline.enabled = false;
         }
         private void Start()
         {
-            click.OnClick.AddListener(delegate
+            Click.OnClick.AddListener(delegate
             {
                 this.InvokeAtEndOfFrame(delegate
                 {
@@ -90,7 +100,7 @@ namespace DanielLochner.Assets
                 }
                 else if (Input.GetMouseButtonUp(0) && Vector2.Distance(initialMousePosition, Input.mousePosition) <= threshold && !CanvasUtility.IsPointerOverUI)
                 {
-                    if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(mainCamera, Input.mousePosition), out RaycastHit hitInfo))
+                    if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.main, Input.mousePosition), out RaycastHit hitInfo))
                     {
                         Select select = hitInfo.collider.GetComponentInParent<Select>();
 
@@ -113,10 +123,6 @@ namespace DanielLochner.Assets
                 }
             }
         }
-        #endregion
-
-        #region Delegates
-        public delegate void SelectEvent(bool selected);
         #endregion
     }
 }

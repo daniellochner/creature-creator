@@ -38,14 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected override void OnUnlock()
         {
-            StartCoroutine(UnlockRoutine());
-        }
-        protected override void OnSpawn()
-        {
-        }
+            NotificationsManager.Notify($"You received ${cash}!");
+            ProgressManager.Data.Cash += cash;
 
-        private IEnumerator UnlockRoutine()
-        {
             foreach (Item item in items)
             {
                 if (item.itemType == UnlockableItemType.BodyPart)
@@ -57,16 +52,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     EditorManager.Instance.UnlockPattern(item.itemID);
                 }
-
-                yield return new WaitForSeconds(0.2f);
             }
-
-            ProgressManager.Data.Cash += cash;
-            NotificationsManager.Notify($"You received ${cash}!");
-
-            ProgressManager.Instance.Save();
-
-            gameObject.SetActive(false);
+        }
+        protected override void OnSpawn()
+        {
         }
         #endregion
 

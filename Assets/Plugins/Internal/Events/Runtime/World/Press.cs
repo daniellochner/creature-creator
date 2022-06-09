@@ -15,9 +15,9 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        public UnityEvent OnPress { get { return onPress; } }
-        public UnityEvent OnRelease { get { return onRelease; } }
-        public UnityEvent OnHold { get { return onHold; } }
+        public UnityEvent OnPress => onPress;
+        public UnityEvent OnRelease => onRelease;
+        public UnityEvent OnHold => onHold;
 
         public bool IsPressing { get; private set; }
         #endregion

@@ -14,8 +14,8 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        public UnityEvent OnEnter { get { return onEnter; } }
-        public UnityEvent OnExit { get { return onExit; } }
+        public UnityEvent OnEnter => onEnter;
+        public UnityEvent OnExit => onExit;
 
         public bool IsOver { get; private set; }
         #endregion

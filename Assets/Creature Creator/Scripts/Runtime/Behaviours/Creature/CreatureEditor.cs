@@ -184,7 +184,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     tempModelOutline = tempModel.AddComponent<Outline>();
                     tempModelOutline.OutlineWidth = select.Outline.OutlineWidth;
-                    tempModelOutline.enabled = select.useOutline = false;
+                    tempModelOutline.enabled = select.UseOutline = false;
                 }
                 else
                 {
@@ -192,7 +192,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         Destroy(tempModel);
                     }
-                    select.useOutline = true;
+                    select.UseOutline = true;
                 }
             }
         }
@@ -458,6 +458,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
+                        foreach (Transform bone in CreatureConstructor.Bones)
+                        {
+                            bone.GetComponentInChildren<Collider>().isTrigger = true;
+                        }
+
                         cameraOrbit.Freeze();
                     }
                 });
@@ -465,6 +470,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
+                        foreach (Transform bone in CreatureConstructor.Bones)
+                        {
+                            bone.GetComponentInChildren<Collider>().isTrigger = false;
+                        }
+
                         if (!hover.IsOver)
                         {
                             cameraOrbit.Unfreeze();

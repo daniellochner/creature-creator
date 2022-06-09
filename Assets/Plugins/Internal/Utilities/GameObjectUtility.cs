@@ -33,6 +33,15 @@ namespace DanielLochner.Assets
             }
         }
 
+        public static bool IsOver(this GameObject gameObject)
+        {
+            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.main, Input.mousePosition), out RaycastHit hitInfo, Mathf.Infinity, 1 << gameObject.layer))
+            {
+                return hitInfo.collider.gameObject == gameObject;
+            }
+            return false;
+        }
+
         public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
         {
             T component = gameObject.GetComponent<T>();

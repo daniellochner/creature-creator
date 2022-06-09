@@ -1,32 +1,76 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DanielLochner.Assets
 {
+    [RequireComponent(typeof(SphereCollider))]
     public class TriggerRegion : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private List<string> triggerable;
+        [SerializeField] private List<string> triggerable = new List<string>();
         [Space]
-        [SerializeField] private UnityEvent<Collider> onEnter;
-        [SerializeField] private UnityEvent<Collider> onExit;
+        [SerializeField] private UnityEvent<Collider> onEnter = new UnityEvent<Collider>();
+        [SerializeField] private UnityEvent<Collider> onExit = new UnityEvent<Collider>();
+        [Header("Debug")]
+        [SerializeField, ReadOnly] private List<Collider> entered = new List<Collider>();
+
+        private SphereCollider region;
+        #endregion
+
+        #region Properties
+        public UnityEvent<Collider> OnEnter => onEnter;
+        public UnityEvent<Collider> OnExit => onExit;
+
+        public Func<Collider, bool> OnCanEnter { get; set; }
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            region = GetComponent<SphereCollider>();
+        }
         private void OnTriggerEnter(Collider other)
         {
-            if (triggerable.Contains(other.tag))
+            if (CanEnter(other) && !entered.Contains(other))
             {
                 onEnter.Invoke(other);
+                entered.Add(other);
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if (triggerable.Contains(other.tag))
+            if (entered.Contains(other))
             {
                 onExit.Invoke(other);
+                entered.Remove(other);
             }
+        }
+
+        public void Validate()
+        {
+            List<Collider> tmp = new List<Collider>(entered);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, region.radius);
+            foreach (Collider collider in colliders)
+            {
+                if (tmp.Contains(collider))
+                {
+                    tmp.Remove(collider);
+                }
+                else
+                {
+                    OnTriggerEnter(collider);
+                }
+            }
+            foreach (Collider collider in tmp)
+            {
+                OnTriggerExit(collider);
+            }
+        }
+        public bool CanEnter(Collider other)
+        {
+            return (triggerable.Count == 0 || triggerable.Contains(other.tag)) && (OnCanEnter == null || (OnCanEnter != null && OnCanEnter(other)));
         }
         #endregion
     }

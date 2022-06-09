@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -9,7 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private bool isUnlockable = true;
-        [SerializeField] private GameObject item;
         #endregion
 
         #region Properties
@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsUnlocked)
             {
-                item.SetActive(false);
+                Destroy(gameObject);
             }
             else
             {
@@ -34,8 +34,8 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Player") && isUnlockable)
             {
                 OnUnlock();
-                item.SetActive(false);
                 ProgressManager.Instance.Save();
+                Destroy(gameObject);
             }
         }
 

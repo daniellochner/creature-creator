@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1608053537145503235}
   - component: {fileID: 5389951018602656675}
   - component: {fileID: 1108207726232459547}
+  - component: {fileID: 6531354078303331066}
   m_Layer: 2
   m_Name: Item
   m_TagString: Untagged
@@ -163,6 +164,25 @@ MonoBehaviour:
   cooldown: 0
   stressReceiver: {fileID: 0}
   stress: 0
+--- !u!114 &6531354078303331066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608053537145503233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54e934373cd1ab840ab57828262c0913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 40
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1608053537796109906
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,6 +282,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4680134953506087296, guid: e2b012dd4d23d394b80ed48337b6fe03, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4681600946400234204, guid: e2b012dd4d23d394b80ed48337b6fe03, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -331,6 +355,10 @@ PrefabInstance:
     - target: {fileID: 5566821285935830450, guid: 05b0c11f884f70249a0c7a0e700f230d, type: 3}
       propertyPath: m_Layer
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5566821285935830450, guid: 05b0c11f884f70249a0c7a0e700f230d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5569628747498933904, guid: 05b0c11f884f70249a0c7a0e700f230d, type: 3}
       propertyPath: m_RootOrder
@@ -453,6 +481,10 @@ PrefabInstance:
     - target: {fileID: 7115548364982278243, guid: 3acfc03345158ab4ea62850d3cac131c, type: 3}
       propertyPath: m_Layer
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115548364982278243, guid: 3acfc03345158ab4ea62850d3cac131c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3acfc03345158ab4ea62850d3cac131c, type: 3}
