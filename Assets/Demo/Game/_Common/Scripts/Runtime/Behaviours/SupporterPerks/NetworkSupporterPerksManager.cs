@@ -8,8 +8,6 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class NetworkSupporterPerksManager : NetworkSingleton<NetworkSupporterPerksManager>
     {
-        [SerializeField] private TextAsset goodestBoy;
-
 
     }
 }
