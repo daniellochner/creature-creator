@@ -60,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         bool isFarEnough = true;
                         foreach (CreatureBase creature in FindObjectsOfType<CreatureBase>())
                         {
-                            if (Vector3.Distance(creature.transform.position, point.position) < minDistanceFromCreature)
+                            if (!Vector3Utility.SqrDistanceComp(creature.transform.position, point.position, minDistanceFromCreature))
                             {
                                 isFarEnough = false;
                                 break;

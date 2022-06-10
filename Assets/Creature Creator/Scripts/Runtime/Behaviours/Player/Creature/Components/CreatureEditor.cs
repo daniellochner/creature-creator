@@ -713,7 +713,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 Vector3 initialPointerPos = tool.TransformPoint((Vector3)pointerPosOffset);
-                bool isFarEnough = Vector3.Distance(pointerPos, initialPointerPos) > CreatureConstructor.BoneSettings.Length;
+                bool isFarEnough = Vector3Utility.SqrDistanceComp(pointerPos, initialPointerPos, CreatureConstructor.BoneSettings.Length);
                 bool hasCooledDown = Time.time > addedOrRemovedTime + AddOrRemoveCooldown;
 
                 if (isFarEnough && hasCooledDown)

@@ -9,7 +9,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private Texture2D cursorIcon;
-        [SerializeField] private MinMax minMaxInteractionRange = new MinMax(0f, Mathf.Infinity);
+        [SerializeField] private float interactionRange = Mathf.Infinity;
         #endregion
 
         #region Properties
@@ -21,10 +21,7 @@ namespace DanielLochner.Assets
         #region Methods
         public virtual bool CanInteract(Interactor interactor)
         {
-            float distance = Vector3.Distance(transform.position, interactor.transform.position);
-            bool isWithinRange = (distance > minMaxInteractionRange.min) && (distance < minMaxInteractionRange.max);
-
-            return isWithinRange;
+            return !Vector3Utility.SqrDistanceComp(transform.position, interactor.transform.position, interactionRange);
         }
         public virtual bool CanHighlight(Interactor interactor) => CanInteract(interactor);
 

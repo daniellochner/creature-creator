@@ -46,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable]
         public class Striking : BaseState
         {

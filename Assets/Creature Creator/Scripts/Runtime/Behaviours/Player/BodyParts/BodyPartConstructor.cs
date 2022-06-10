@@ -124,15 +124,15 @@ namespace DanielLochner.Assets.CreatureCreator
             get
             {
                 int nearestBoneIndex = -1;
-                float minDistance = float.PositiveInfinity;
+                float min = Mathf.Infinity;
 
                 for (int boneIndex = 0; boneIndex < CreatureConstructor.Bones.Count; boneIndex++)
                 {
-                    float distance = Vector3.Distance(CreatureConstructor.Bones[boneIndex].position, transform.position);
-                    if (distance < minDistance)
+                    float sqr = Vector3.SqrMagnitude(CreatureConstructor.Bones[boneIndex].position - transform.position);
+                    if (sqr < min)
                     {
-                        minDistance = distance;
                         nearestBoneIndex = boneIndex;
+                        min = sqr;
                     }
                 }
 
@@ -425,7 +425,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable] public class StretchIndices
         {
             public int negative = -1;

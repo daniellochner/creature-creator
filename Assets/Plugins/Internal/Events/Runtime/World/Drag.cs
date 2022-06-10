@@ -274,7 +274,7 @@ namespace DanielLochner.Assets
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable]
         public class EnabledAxes
         {

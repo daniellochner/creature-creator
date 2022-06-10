@@ -28,15 +28,15 @@ namespace DanielLochner.Assets
             get
             {
                 Collider nearest = null;
-                float minDistance = Mathf.Infinity;
+                float min = Mathf.Infinity;
 
                 foreach (Collider collider in tracked)
                 {
-                    float distance = Vector3.Distance(collider.transform.position, transform.position);
-                    if (distance < minDistance)
+                    float sqr = Vector3.SqrMagnitude(collider.transform.position - transform.position);
+                    if (sqr < min)
                     {
                         nearest = collider;
-                        minDistance = distance;
+                        min = sqr;
                     }
                 }
 
