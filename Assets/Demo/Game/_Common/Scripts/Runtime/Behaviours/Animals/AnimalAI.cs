@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,28 +16,29 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Animal")]
         [SerializeField] private TextAsset data;
 
-        protected CreatureSourceNonPlayer creature;
-        protected NavMeshAgent agent;
         protected Transform followTarget;
         #endregion
 
         #region Properties
-        public Animator Animator => creature.Animator.Animator;
+        public Animator Animator => Creature.Animator.Animator;
+
+        protected CreatureSourceNonPlayer Creature { get; set; }
+        protected NavMeshAgent Agent { get; set; }
 
         public bool IsMovingToPosition
         {
             get
             {
-                if (agent.isPathStale || agent.isStopped)
+                if (Agent.isPathStale || Agent.isStopped)
                 {
                     return false;
                 }
-                else if (agent.pathPending)
+                else if (Agent.pathPending)
                 {
                     return true;
                 }
 
-                return (agent.remainingDistance > agent.stoppingDistance);
+                return (Agent.remainingDistance > Agent.stoppingDistance);
             }
         }
         #endregion
@@ -45,14 +47,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Awake()
         {
             base.Awake();
-            creature = GetComponent<CreatureSourceNonPlayer>();
-            agent = GetComponent<NavMeshAgent>();
+            Creature = GetComponent<CreatureSourceNonPlayer>();
+            Agent = GetComponent<NavMeshAgent>();
         }
         public virtual void Start()
         {
-            creature.Setup();
-            creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
-            creature.Animator.IsAnimated = true;
+            Creature.Setup();
+            Creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
+            Creature.Animator.IsAnimated = true;
         }
 
         public virtual void Follow(Transform target)
@@ -79,8 +81,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Idling : BaseState
         {
-            [SerializeField] public MinMax ambientCooldown;
-            [SerializeField] public CreatureEffector.Sound[] ambientSounds;
+            [SerializeField] private MinMax ambientCooldown;
+            [SerializeField] private CreatureEffector.Sound[] ambientSounds;
             private float silentTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
@@ -93,13 +95,27 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (ambientSounds.Length > 0)
                 {
-                    TimerUtility.OnTimer(ref silentTimeLeft, ambientCooldown.Random, Time.deltaTime, MakeRandomAmbientSound);
+                    TimerUtility.OnTimer(ref silentTimeLeft, ambientCooldown.Random, Time.deltaTime, MakeSound);
                 }
             }
 
-            private void MakeRandomAmbientSound()
+            private void MakeSound()
             {
-                AnimalAI.creature.Effector.PlaySound(ambientSounds);
+                AnimalAI.StartCoroutine(MakeSoundRoutine());
+            }
+            private IEnumerator MakeSoundRoutine()
+            {
+                CreatureEffector.Sound sound = ambientSounds[UnityEngine.Random.Range(0, ambientSounds.Length)];
+
+                // Open
+                AnimalAI.Animator.SetTrigger("Mouth_Open");
+                AnimalAI.Creature.Effector.PlaySound(sound.name, sound.volume);
+
+                // Hold (to make the sound)...
+                yield return new WaitForSeconds(AnimalAI.Creature.Effector.SoundFX[sound.name].length);
+
+                // Close
+                AnimalAI.Animator.SetTrigger("Mouth_Close");
             }
         }
 
@@ -128,7 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
-                AnimalAI.agent.SetDestination(AnimalAI.transform.position);
+                AnimalAI.Agent.SetDestination(AnimalAI.transform.position);
             }
 
             private void WanderToPosition(Vector3 position)
@@ -137,7 +153,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     position = hit.position;
                 }
-                AnimalAI.agent.SetDestination(position);
+                AnimalAI.Agent.SetDestination(position);
             }
         }
 
@@ -148,7 +164,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
-            private float FollowOffset => AnimalAI.creature.Constructor.Dimensions.radius + baseFollowOffset;
+            private float FollowOffset => AnimalAI.Creature.Constructor.Dimensions.radius + baseFollowOffset;
 
             public override void UpdateLogic()
             {
@@ -157,7 +173,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target
                     Vector3 target = AnimalAI.transform.position + (displacement - offset);
-                    AnimalAI.agent.SetDestination(target);
+                    AnimalAI.Agent.SetDestination(target);
                 }
             }
         }

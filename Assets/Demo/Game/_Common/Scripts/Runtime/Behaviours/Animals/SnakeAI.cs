@@ -66,7 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                if (!SnakeAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
+                if (!SnakeAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Body_Strike"))
                 {
                     UpdateLookDir();
                     HandleLookAt();
@@ -79,7 +79,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void UpdateTarget()
             {
-                Transform nearest = SnakeAI.creature.Animator.InteractTarget = SnakeAI.trackRegion.Nearest.transform;
+                Transform nearest = SnakeAI.Creature.Animator.InteractTarget = SnakeAI.trackRegion.Nearest.transform;
                 if (target == null || target.transform != nearest)
                 {
                     target = nearest.GetComponent<CreatureBase>();
@@ -109,7 +109,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     // Strike!
-                    SnakeAI.Animator.SetTrigger("Strike");
+                    SnakeAI.Animator.SetTrigger("Body_Strike");
 
                     // Rest...
                     yield return new WaitForSeconds(strikeCooldown.Random);

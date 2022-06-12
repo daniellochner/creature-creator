@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<LegAnimator> Legs { get; private set; } = new List<LegAnimator>();
         public List<WingAnimator> Wings { get; private set; } = new List<WingAnimator>();
         public List<MouthAnimator> Mouths { get; private set; } = new List<MouthAnimator>();
+        public List<EyeAnimator> Eyes { get; private set; } = new List<EyeAnimator>();
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
 
@@ -86,11 +87,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Initialize();
-        }
-        private void Update()
-        {
-            Animator.SetBool("HasInteractTarget", InteractTarget != null);
-            Animator.SetBool("HasLookTarget", LookTarget != null);
         }
         private void FixedUpdate()
         {
@@ -283,15 +279,15 @@ namespace DanielLochner.Assets.CreatureCreator
                     bone.SetParent(tail, false);
                     bone.SetAsFirstSibling();
 
-                    //DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                    //damping.data = new DampedTransformData()
-                    //{
-                    //    constrainedObject = Constructor.Bones[i],
-                    //    sourceObject = Constructor.Bones[i + 1],
-                    //    dampPosition = 0f,
-                    //    dampRotation = 0.75f,
-                    //    maintainAim = true
-                    //};
+                    DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                    damping.data = new DampedTransformData()
+                    {
+                        constrainedObject = Constructor.Bones[i],
+                        sourceObject = Constructor.Bones[i + 1],
+                        dampPosition = 0f,
+                        dampRotation = 0.75f,
+                        maintainAim = true
+                    };
                 }
             }
             else
@@ -323,7 +319,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 float posB = bodyPartB.CreatureConstructor.Body.W2LSpace(bodyPartB.transform.position).z;
 
                 return posB.CompareTo(posA);
-            });            
+            });
             foreach (LimbConstructor constructor in sorted)
             {
                 LimbAnimator animator = constructor.GetComponent<LimbAnimator>();
@@ -346,7 +342,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Wings = new List<WingAnimator>(Constructor.Body.GetComponentsInChildren<WingAnimator>());
             Mouths = new List<MouthAnimator>(Constructor.Body.GetComponentsInChildren<MouthAnimator>());
-
+            Eyes = new List<EyeAnimator>(Constructor.Body.GetComponentsInChildren<EyeAnimator>());
 
             foreach (LegAnimator leg in Legs)
             {
@@ -358,10 +354,6 @@ namespace DanielLochner.Assets.CreatureCreator
             rigBuilder.Build();
             Animator.Rebind();
             SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
-
-            Animator.SetBool("HasArms", Arms.Count != 0);
-            Animator.SetBool("HasLegs", Legs.Count != 0);
-            Animator.SetBool("HasWings", Wings.Count != 0);
         }
         
         private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)

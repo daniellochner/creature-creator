@@ -15,13 +15,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void SetOpen(float amount)
         {
-            if (oIndex == -1 || cIndex == -1) return;
-
-            float oWeight = (amount > 0.5f) ? Mathf.InverseLerp(0.5f, 1.0f, amount) * 100f : 0f;
-            float cWeight = (amount < 0.5f) ? Mathf.InverseLerp(0.0f, 0.5f, 0.5f - amount) * 100f : 0f;
-
-            BodyPartConstructor.SkinnedMeshRenderer.SetBlendShapeWeight(oIndex, oWeight);
-            BodyPartConstructor.SkinnedMeshRenderer.SetBlendShapeWeight(cIndex, cWeight);
+            if (oIndex != -1)
+            {
+                float oWeight = (amount > 0.5f) ? Mathf.InverseLerp(0.5f, 1.0f, amount) * 100f : 0f;
+                BodyPartConstructor.SkinnedMeshRenderer.SetBlendShapeWeight(oIndex, oWeight);
+            }
+            if (cIndex != -1)
+            {
+                float cWeight = (amount < 0.5f) ? Mathf.InverseLerp(0.0f, 0.5f, 0.5f - amount) * 100f : 0f;
+                BodyPartConstructor.SkinnedMeshRenderer.SetBlendShapeWeight(cIndex, cWeight);
+            }
         }
         #endregion
     }

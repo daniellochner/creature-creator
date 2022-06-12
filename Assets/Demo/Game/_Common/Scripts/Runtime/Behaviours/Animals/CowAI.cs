@@ -56,13 +56,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                CowAI.agent.speed *= chargeSpeedMultiplier;
+                CowAI.Agent.speed *= chargeSpeedMultiplier;
 
                 Charge(CowAI.trackRegion.Nearest.transform);
             }
             public override void Exit()
             {
-                CowAI.agent.speed /= chargeSpeedMultiplier;
+                CowAI.Agent.speed /= chargeSpeedMultiplier;
             }
 
             private void Charge(Transform charged)
@@ -74,17 +74,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Rotate to charged.
                 Quaternion cur = CowAI.transform.rotation;
                 Quaternion tar = Quaternion.LookRotation(Vector3.ProjectOnPlane(charged.position - CowAI.transform.position, CowAI.transform.up));
-                CowAI.agent.updateRotation = false;
+                CowAI.Agent.updateRotation = false;
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
                     CowAI.transform.rotation = Quaternion.Slerp(cur, tar, progress);
                 }, 1f);
-                CowAI.agent.updateRotation = true;
+                CowAI.Agent.updateRotation = true;
 
                 // Charge!
-                CowAI.creature.Effector.PlaySound(chargeSounds);
+                CowAI.Creature.Effector.PlaySound(chargeSounds);
                 yield return new WaitForSeconds(chargeUpTime);
-                CowAI.agent.SetDestination(charged.position);
+                CowAI.Agent.SetDestination(charged.position);
                 List<Collider> hit = new List<Collider>();
                 while (CowAI.IsMovingToPosition)
                 {
@@ -97,7 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         hit.Add(collider);
 
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature != CowAI.creature)
+                        if (creature != null && creature != CowAI.Creature)
                         {
                             Vector3 dir = (creature.transform.position - CowAI.transform.position).normalized;
                             Vector3 force = dir * chargeForce.z + creature.transform.up * chargeForce.y;
@@ -107,7 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
                             {
                                 creature.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
                             }
-                            CowAI.creature.Effector.PlaySound(impactSounds);
+                            CowAI.Creature.Effector.PlaySound(impactSounds);
                         }
                     }
 
@@ -115,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Rest...
-                CowAI.creature.Effector.PlaySound(restSounds);
+                CowAI.Creature.Effector.PlaySound(restSounds);
                 yield return new WaitForSeconds(restTime);
 
                 // Charge again?

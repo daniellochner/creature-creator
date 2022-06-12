@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                PigAI.creature.Effector.PlaySound(squealSounds);
+                PigAI.Creature.Effector.PlaySound(squealSounds);
                 PigAI.Animator.SetTrigger("Roll");
             }
             public override void UpdateLogic()

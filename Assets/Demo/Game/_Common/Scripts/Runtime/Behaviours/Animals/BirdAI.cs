@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Frighten(Collider col)
         {
             CreatureBase other = col.GetComponent<CreatureBase>();
-            if (other != null && other != creature)
+            if (other != null && other != Creature)
             {
                 ChangeState("FLY");
             }
@@ -27,13 +27,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Follow(Transform target)
         {
             base.Follow(target);
-            agent.enabled = true;
+            Agent.enabled = true;
             frightenTrigger.enabled = false;
         }
         public override void StopFollowing()
         {
             base.StopFollowing();
-            agent.enabled = false;
+            Agent.enabled = false;
             frightenTrigger.enabled = true;
         }
         #endregion
@@ -46,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private float flightSpeed;
             [SerializeField] private float flightHeight;
             [SerializeField] private AnimationCurve flightPath;
+            [SerializeField] private float shockTime;
             [SerializeField] private float minDistanceFromCreature;
 
             public BirdAI BirdAI => StateMachine as BirdAI;
@@ -79,32 +80,38 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 BirdAI.StartCoroutine(FlyToPositionRoutine(RandomPerchPoint.position));
-                BirdAI.creature.Animator.Animator.SetBool("IsFlying", true);
+                BirdAI.Animator.SetBool("Body_IsFlying", true);
             }
             public override void Exit()
             {
-                BirdAI.creature.Animator.Animator.SetBool("IsFlying", false);
+                BirdAI.Animator.SetBool("Body_IsFlying", false);
             }
 
             private IEnumerator FlyToPositionRoutine(Vector3 to)
-            {
+            {     
+                // Shock
+                BirdAI.Animator.SetTrigger("Eye_Dilate");
+                yield return new WaitForSeconds(shockTime);
+
+                // Turn away
                 Quaternion cur = BirdAI.transform.rotation;
                 Quaternion tar = Quaternion.LookRotation(Vector3.ProjectOnPlane(to - BirdAI.transform.position, Vector3.up));
-
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
                     BirdAI.transform.rotation = Quaternion.Slerp(cur, tar, progress);
                 }, 1f);
 
+                // Fly away
                 Vector3 from = BirdAI.transform.position;
                 float flightDistance = Vector3.Distance(from, to);
                 float flightTime = flightDistance / flightSpeed;
-
                 yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
                 {
                     BirdAI.transform.position = Vector3.Lerp(from, to, progress) + (Vector3.up * (flightHeight * flightPath.Evaluate(progress)));
                 }, flightTime);
 
+                // Perch
+                BirdAI.Animator.SetTrigger("Eye_Contract");
                 BirdAI.ChangeState("IDL");
             }
         }

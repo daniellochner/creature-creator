@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateTarget()
         {
-            Transform nearest = creature.Animator.InteractTarget = trackRegion.Nearest.transform;
+            Transform nearest = Creature.Animator.InteractTarget = trackRegion.Nearest.transform;
             if (target == null || target.transform != nearest)
             {
                 target = nearest.GetComponent<CreatureBase>();
@@ -112,7 +112,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private IEnumerator BarkingRoutine()
             {
-                DogAI.creature.Effector.PlaySound(growlSounds);
+                DogAI.Creature.Effector.PlaySound(growlSounds);
                 yield return new WaitForSeconds(growlTime);
 
                 while (IsActive)
@@ -128,7 +128,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 int barks = barkCount.Random;
                 for (int i = 0; i < barks; i++)
                 {
-                    DogAI.creature.Effector.PlaySound(barkSounds);
+                    DogAI.Creature.Effector.PlaySound(barkSounds);
                     DogAI.Animator.SetTrigger("Bark");
                     yield return new WaitForSeconds(barkDelayWithin.Random);
                 }
@@ -145,8 +145,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                DogAI.agent.SetDestination(doghouse.transform.position);
-                DogAI.creature.Effector.PlaySound(whimperSounds);
+                DogAI.Agent.SetDestination(doghouse.transform.position);
+                DogAI.Creature.Effector.PlaySound(whimperSounds);
             }
             public override void UpdateLogic()
             {
@@ -167,7 +167,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                DogAI.creature.Hider.Hide();
+                DogAI.Creature.Hider.Hide();
                 hideTimeLeft = hideTime.Random;
             }
             public override void UpdateLogic()
@@ -182,8 +182,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
-                DogAI.creature.Hider.Show();
-                DogAI.agent.SetDestination(DogAI.creature.transform.position);
+                DogAI.Creature.Hider.Show();
+                DogAI.Agent.SetDestination(DogAI.Creature.transform.position);
             }
         }
 
@@ -197,7 +197,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public DogAI DogAI => StateMachine as DogAI;
 
-            private float TargetDistance => DogAI.creature.Constructor.Dimensions.radius + DogAI.target.Constructor.Dimensions.radius;
+            private float TargetDistance => DogAI.Creature.Constructor.Dimensions.radius + DogAI.target.Constructor.Dimensions.radius;
 
             public override void Enter()
             {
@@ -210,7 +210,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     DogAI.UpdateLookDir();
 
                     Vector3 offset = DogAI.lookDir * TargetDistance;
-                    DogAI.agent.SetDestination(DogAI.target.transform.position - offset);
+                    DogAI.Agent.SetDestination(DogAI.target.transform.position - offset);
 
                     if (!DogAI.IsMovingToPosition)
                     {

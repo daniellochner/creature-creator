@@ -12,12 +12,15 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private SerializableDictionaryBase<string, AudioClip> soundFX;
-        [SerializeField] private SerializableDictionaryBase<string, AudioClip> particleFX;
+        [SerializeField] private SerializableDictionaryBase<string, GameObject> particleFX;
 
         private AudioSource audioSource;
         #endregion
 
         #region Properties
+        public SerializableDictionaryBase<string, AudioClip> SoundFX => soundFX;
+        public SerializableDictionaryBase<string, GameObject> ParticleFX => particleFX;
+
         public Action<string> OnPlaySound { get; set; }
         public Action<string, Vector3> OnSpawnParticle { get; set; }
         #endregion
