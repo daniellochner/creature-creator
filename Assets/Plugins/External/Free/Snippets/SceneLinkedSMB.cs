@@ -30,44 +30,62 @@ public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : M
     {
         m_FirstFrameHappened = false;
 
-        OnSLStateEnter(animator, stateInfo, layerIndex);
-        OnSLStateEnter(animator, stateInfo, layerIndex, controller);
+        if (animator.GetLayerWeight(layerIndex) != 0f)
+        {
+            OnSLStateEnter(animator, stateInfo, layerIndex);
+            OnSLStateEnter(animator, stateInfo, layerIndex, controller);
+        }
     }
 
     public sealed override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
         if (animator.IsInTransition(layerIndex) && animator.GetNextAnimatorStateInfo(layerIndex).fullPathHash == stateInfo.fullPathHash)
         {
-            OnSLTransitionToStateUpdate(animator, stateInfo, layerIndex);
-            OnSLTransitionToStateUpdate(animator, stateInfo, layerIndex, controller);
+            if (animator.GetLayerWeight(layerIndex) != 0f)
+            {
+                OnSLTransitionToStateUpdate(animator, stateInfo, layerIndex);
+                OnSLTransitionToStateUpdate(animator, stateInfo, layerIndex, controller);
+            } 
         }
 
         if (!animator.IsInTransition(layerIndex) && !m_FirstFrameHappened)
         {
             m_FirstFrameHappened = true;
 
-            OnSLStatePostEnter(animator, stateInfo, layerIndex);
-            OnSLStatePostEnter(animator, stateInfo, layerIndex, controller);
+            if (animator.GetLayerWeight(layerIndex) != 0f)
+            {
+                OnSLStatePostEnter(animator, stateInfo, layerIndex);
+                OnSLStatePostEnter(animator, stateInfo, layerIndex, controller);
+            }
         }
 
         if (!animator.IsInTransition(layerIndex))
         {
-            OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex);
-            OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex, controller);
+            if (animator.GetLayerWeight(layerIndex) != 0f)
+            {
+                OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex);
+                OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex, controller);
+            }
         }
 
         if (animator.IsInTransition(layerIndex) && !m_LastFrameHappened && m_FirstFrameHappened)
         {
             m_LastFrameHappened = true;
 
-            OnSLStatePreExit(animator, stateInfo, layerIndex);
-            OnSLStatePreExit(animator, stateInfo, layerIndex, controller);
+            if (animator.GetLayerWeight(layerIndex) != 0f)
+            {
+                OnSLStatePreExit(animator, stateInfo, layerIndex);
+                OnSLStatePreExit(animator, stateInfo, layerIndex, controller);
+            }
         }
 
         if (animator.IsInTransition(layerIndex) && animator.GetCurrentAnimatorStateInfo(layerIndex).fullPathHash == stateInfo.fullPathHash)
         {
-            OnSLTransitionFromStateUpdate(animator, stateInfo, layerIndex);
-            OnSLTransitionFromStateUpdate(animator, stateInfo, layerIndex, controller);
+            if (animator.GetLayerWeight(layerIndex) != 0f)
+            {
+                OnSLTransitionFromStateUpdate(animator, stateInfo, layerIndex);
+                OnSLTransitionFromStateUpdate(animator, stateInfo, layerIndex, controller);
+            }
         }
     }
 
@@ -75,8 +93,11 @@ public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : M
     {
         m_LastFrameHappened = false;
 
-        OnSLStateExit(animator, stateInfo, layerIndex);
-        OnSLStateExit(animator, stateInfo, layerIndex, controller);
+        if (animator.GetLayerWeight(layerIndex) != 0f)
+        {
+            OnSLStateExit(animator, stateInfo, layerIndex);
+            OnSLStateExit(animator, stateInfo, layerIndex, controller);
+        }
     }
 
     /// <summary>
