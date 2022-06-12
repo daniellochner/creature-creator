@@ -131,7 +131,6 @@ GameObject:
   m_Component:
   - component: {fileID: 866490080788813534}
   - component: {fileID: 3265899378186323565}
-  - component: {fileID: -9207964001357918428}
   - component: {fileID: 7741502682224577529}
   - component: {fileID: 7071317023469005593}
   - component: {fileID: 2254349869183662672}
@@ -140,6 +139,7 @@ GameObject:
   - component: {fileID: 6755428300608931097}
   - component: {fileID: 3119271742746948559}
   - component: {fileID: 1546105166286286851}
+  - component: {fileID: -851672076648448496}
   m_Layer: 9
   m_Name: Cyclorb (E)
   m_TagString: Untagged
@@ -204,18 +204,6 @@ MonoBehaviour:
     _values:
     - negative: 0
       positive: 1
---- !u!114 &-9207964001357918428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5587634400210964984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7741502682224577529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,3 +410,16 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-851672076648448496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5587634400210964984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc56f1c59885fed4c887f1f34fd38e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: -1

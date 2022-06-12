@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
     {
         #region Fields
         [SerializeField] private float duration;
+        [SerializeField] private bool reverse;
         #endregion
 
         #region Methods
@@ -16,11 +17,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         {
             m_MonoBehaviour.InvokeOverTime(delegate (float p)
             {
-                float t = (stateInfo.speed > 0) ? p : (1f - p);
-                foreach (EyeAnimator eye in m_MonoBehaviour.Eyes)
-                {
-                    eye.BodyPartConstructor.SkinnedMeshRenderer.SetBlendShapeWeight(1, t * 100f);
-                }
             },
             duration);
         }

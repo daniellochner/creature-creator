@@ -91,6 +91,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {     
                 // Shock
                 BirdAI.Animator.SetTrigger("Eye_Dilate");
+                BirdAI.Animator.SetBool("Eye_IsDilated", true);
+
                 yield return new WaitForSeconds(shockTime);
 
                 // Turn away
@@ -111,7 +113,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }, flightTime);
 
                 // Perch
-                BirdAI.Animator.SetTrigger("Eye_Contract");
+                BirdAI.Animator.SetBool("Eye_IsDilated", false);
                 BirdAI.ChangeState("IDL");
             }
         }

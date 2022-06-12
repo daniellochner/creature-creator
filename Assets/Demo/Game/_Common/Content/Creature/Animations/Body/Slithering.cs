@@ -8,37 +8,41 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
     public class Slithering : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
-        [SerializeField] private float width = 0.2f;
-        [SerializeField] private float maxK = 3;
-        [SerializeField, ReadOnly] private float slitherTime;
-        [SerializeField] private float movementSpeed = 0.8f;
+        [SerializeField] private float slitherAngle;
+        [SerializeField] private float slitherWidth;
+        [SerializeField] private float slitherRate;
+        private float x;
+        #endregion
 
-        private Vector3 headPos;
+        #region Properties
+        private Transform Head
+        {
+            get => m_MonoBehaviour.Constructor.Bones[m_MonoBehaviour.Constructor.Bones.Count - 1];
+        }
         #endregion
 
         #region Methods
-        public override void OnStart(Animator animator)
+        public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (m_MonoBehaviour.IsAnimated)
-            {
-                headPos = m_MonoBehaviour.Constructor.Body.W2LSpace(m_MonoBehaviour.Constructor.Bones[m_MonoBehaviour.Constructor.Bones.Count - 1].position);
-                slitherTime = 0f;
-            }
+            x = 0f;
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //float t = animator.GetFloat("%LSpeed");
-            //float x = t * width * Mathf.Sin(slitherTime);
+            float t = animator.GetFloat("%LSpeed");
+            float f = x * Mathf.PI * slitherRate;
 
-            //m_MonoBehaviour.CreatureConstructor.Root.localPosition = new Vector3(x, 0, 0);
-            //slitherTime += Time.deltaTime;
+            float rot = -t * slitherAngle * Mathf.Sin(f);
+            float pos =  t * slitherWidth * Mathf.Cos(f);
+            
+            Head.localRotation = Quaternion.Euler(0, rot, 0);
+            Head.localPosition = Vector3.right * pos;
 
-            //Vector3 pos = m_MonoBehaviour.CreatureConstructor.Body.L2WSpace(headPos) + m_MonoBehaviour.CreatureConstructor.Body.forward * movementSpeed;
-            //m_MonoBehaviour.CreatureConstructor.Bones[m_MonoBehaviour.CreatureConstructor.Bones.Count - 1].LookAt(pos, m_MonoBehaviour.CreatureConstructor.Body.up);
+            x += Time.deltaTime;
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
+            Head.localPosition = Vector3.zero;
+            Head.localRotation = Quaternion.identity;
         }
         #endregion
     }

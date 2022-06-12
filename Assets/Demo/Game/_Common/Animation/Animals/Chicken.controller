@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 0.5
+  reverse: 1
 --- !u!1101 &-8785354691063720197
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -21,8 +22,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: Mouth_Open
+  - m_ConditionMode: 2
+    m_ConditionEvent: Mouth_IsOpened
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6938446122042885173}
@@ -198,7 +199,6 @@ MonoBehaviour:
   breatheBody: 0.025
   breatheMouth: 0.05
   breatheTime: 2
-  x: 0
 --- !u!1101 &-1814336941395294437
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -209,6 +209,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Mouth_Open
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Mouth_IsOpened
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6324497636753001581}
@@ -307,6 +310,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: Eye_IsDilated
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: Mouth_Breathe
     m_Type: 1
     m_DefaultFloat: 0.5
@@ -315,6 +324,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: Mouth_Open
     m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: Mouth_IsOpened
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -340,7 +355,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -352,7 +367,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -502,7 +517,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Open1
-  m_Speed: -1
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7536838207832502063}
@@ -535,6 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 0.5
+  reverse: 0
 --- !u!1101 &7536838207832502063
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

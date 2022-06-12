@@ -285,7 +285,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         constrainedObject = Constructor.Bones[i],
                         sourceObject = Constructor.Bones[i + 1],
                         dampPosition = 0f,
-                        dampRotation = 0.75f,
+                        dampRotation = 1f,
                         maintainAim = true
                     };
                 }

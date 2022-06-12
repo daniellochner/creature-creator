@@ -44,14 +44,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             Creature = GetComponent<CreatureSourceNonPlayer>();
             Agent = GetComponent<NavMeshAgent>();
         }
-        public virtual void Start()
+        public override void Start()
         {
+            base.Start();
             Creature.Setup();
             Creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
             Creature.Animator.IsAnimated = true;
@@ -83,7 +83,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             [SerializeField] private MinMax ambientCooldown;
             [SerializeField] private CreatureEffector.Sound[] ambientSounds;
-            private float silentTimeLeft;
+            protected float silentTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
@@ -109,13 +109,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Open
                 AnimalAI.Animator.SetTrigger("Mouth_Open");
+                AnimalAI.Animator.SetBool("Mouth_IsOpened", true);
                 AnimalAI.Creature.Effector.PlaySound(sound.name, sound.volume);
 
                 // Hold (to make the sound)...
                 yield return new WaitForSeconds(AnimalAI.Creature.Effector.SoundFX[sound.name].length);
 
                 // Close
-                AnimalAI.Animator.SetTrigger("Mouth_Close");
+                AnimalAI.Animator.SetBool("Mouth_IsOpened", false);
             }
         }
 
@@ -130,6 +131,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.Enter();
                 idleTimeLeft = wanderCooldown.Random;
+                AnimalAI.Agent.SetDestination(AnimalAI.transform.position);
             }
             public override void UpdateLogic()
             {

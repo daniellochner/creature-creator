@@ -8,12 +8,12 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dilate1
-  m_Speed: -1
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -416742378658233039}
   m_StateMachineBehaviours:
-  - {fileID: 5931456681551538874}
+  - {fileID: 7972038134154039634}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -38,6 +38,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Eye_Dilate
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Eye_IsDilated
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1325006086107215177}
@@ -73,12 +76,12 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Open1
-  m_Speed: -1
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2663974820683057109}
   m_StateMachineBehaviours:
-  - {fileID: -1270793016556813950}
+  - {fileID: 7120137279451014565}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -106,7 +109,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 942669742102137316}
   m_StateMachineBehaviours:
-  - {fileID: 8227654404539747432}
+  - {fileID: 6777852489223692849}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -199,8 +202,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: Eye_Dilate
+  - m_ConditionMode: 2
+    m_ConditionEvent: Eye_IsDilated
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -9112564512319625731}
@@ -282,6 +285,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Mouth_Open
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Mouth_IsOpened
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7947072765160177990}
   m_Solo: 0
@@ -362,19 +368,6 @@ MonoBehaviour:
     min: 2
     max: 10
   blinkTime: 0.5
---- !u!114 &-1270793016556813950
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dd2dd3bcf2d03d41a2cd5e58fc5e713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  duration: 0.5
 --- !u!1107 &-565183295184188927
 AnimatorStateMachine:
   serializedVersion: 6
@@ -431,7 +424,6 @@ MonoBehaviour:
   breatheBody: 0.025
   breatheMouth: 0.05
   breatheTime: 2
-  x: 0
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -471,6 +463,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: Eye_IsDilated
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: Mouth_Breathe
     m_Type: 1
     m_DefaultFloat: 0.5
@@ -479,6 +477,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: Mouth_Open
     m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: Mouth_IsOpened
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -504,7 +508,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -516,7 +520,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -600,8 +604,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: Mouth_Open
+  - m_ConditionMode: 2
+    m_ConditionEvent: Mouth_IsOpened
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8129929027585909468}
@@ -652,7 +656,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -5209336412166950496}
   m_StateMachineBehaviours:
-  - {fileID: 7871388154936317668}
+  - {fileID: 8114428506029463802}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -807,6 +811,23 @@ AnimatorTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 1
+--- !u!114 &4512063874566384344
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 447694e8918b4c34588cd4da56091df6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeTime: 3
+  shakeCooldown:
+    min: 25
+    max: 50
+  shakeAmplitude: 15
 --- !u!1102 &5176462119552888890
 AnimatorState:
   serializedVersion: 6
@@ -823,6 +844,7 @@ AnimatorState:
   - {fileID: -4546211866043259440}
   m_StateMachineBehaviours:
   - {fileID: -242473268247049836}
+  - {fileID: 4512063874566384344}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 0
@@ -849,7 +871,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83ff1b8fcac78841b77adc21da75181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MonoBehaviour: {fileID: 0}
+  m_FirstFrameHappened: 0
+  m_LastFrameHappened: 0
+  index: 0
   duration: 0.5
+  reverse: 1
 --- !u!1101 &6396211533377454388
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -878,6 +905,34 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &6777852489223692849
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd2dd3bcf2d03d41a2cd5e58fc5e713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  reverse: 0
+--- !u!114 &7120137279451014565
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd2dd3bcf2d03d41a2cd5e58fc5e713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.5
+  reverse: 1
 --- !u!1102 &7687846737413805666
 AnimatorState:
   serializedVersion: 6
@@ -918,7 +973,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83ff1b8fcac78841b77adc21da75181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MonoBehaviour: {fileID: 0}
+  m_FirstFrameHappened: 0
+  m_LastFrameHappened: 0
+  index: 0
   duration: 0.5
+  reverse: 0
 --- !u!114 &7896362123770432247
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -931,7 +991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897c14bcb36dd5840855296119aa9337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8227654404539747432
+--- !u!114 &7972038134154039634
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -940,10 +1000,73 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dd2dd3bcf2d03d41a2cd5e58fc5e713, type: 3}
+  m_Script: {fileID: 11500000, guid: 80029acffeb5c3941b5da856a1f20b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 1
   duration: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8114428506029463802
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80029acffeb5c3941b5da856a1f20b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 1
+  duration: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1107 &8686403984214462559
 AnimatorStateMachine:
   serializedVersion: 6

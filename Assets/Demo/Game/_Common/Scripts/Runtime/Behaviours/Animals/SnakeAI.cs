@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -32,6 +33,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     ChangeState("WAN");
                 }
             };
+
+            foreach (DampedTransform dt in GetComponentsInChildren<DampedTransform>())
+            {
+                dt.weight = 0.1f;
+            }
         }
 
         public override void Follow(Transform target)

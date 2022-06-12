@@ -9,7 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
     public class Open : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
-        [SerializeField] private float duration = 0.5f;
+        [SerializeField] private float duration;
+        [SerializeField] private bool reverse;
         #endregion
 
         #region Methods
@@ -17,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         {
             m_MonoBehaviour.InvokeOverTime(delegate (float p)
             {
-                float t = 0.5f * (1f + ((stateInfo.speed > 0) ? p : (1f - p)));
+                float t = 0.5f * (1f + (reverse ? (1f - p) : p));
                 foreach (MouthAnimator mouth in m_MonoBehaviour.Mouths)
                 {
                     mouth.SetOpen(t);

@@ -79,12 +79,19 @@ SkinnedMeshRenderer:
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 8078678183938662787, guid: f7d38df8bd810a448a240dbd2d707c15, type: 3}
   m_Bones: []
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 1
+    m_Center: {x: 0, y: 0.010403149, z: 0.1584629}
+    m_Extent: {x: 0.25541618, y: 0.24577436, z: 0.16384958}
+  m_DirtyAABB: 0
 --- !u!1 &4487250288764703132
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7420070461032248918}
   - component: {fileID: 8589534121630401165}
-  - component: {fileID: 1486786279320663162}
+  - component: {fileID: 7515231101803048469}
   m_Layer: 0
   m_Name: Nautileye (A)
   m_TagString: Untagged
@@ -164,7 +171,7 @@ MonoBehaviour:
       positive: 3
     - negative: 4
       positive: 5
---- !u!114 &1486786279320663162
+--- !u!114 &7515231101803048469
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -173,6 +180,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4487250288764703132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc56f1c59885fed4c887f1f34fd38e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 6

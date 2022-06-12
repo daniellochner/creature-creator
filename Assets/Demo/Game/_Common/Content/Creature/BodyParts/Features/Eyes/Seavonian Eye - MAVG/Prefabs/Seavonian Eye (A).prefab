@@ -79,12 +79,16 @@ SkinnedMeshRenderer:
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 8004060297311290978, guid: a0407ea7cf4c2614a8808d4a0186b641, type: 3}
   m_Bones: []
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
+  - 0
+  - 0
+  - 0
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 1
+    m_Center: {x: -0.027510881, y: 0.00982251, z: 0.03806469}
+    m_Extent: {x: 0.15458575, y: 0.13948953, z: 0.057993315}
+  m_DirtyAABB: 0
 --- !u!1 &2234619151163394627
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +99,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8746723173842343682}
   - component: {fileID: 7292634266243336653}
-  - component: {fileID: 5267723571566042187}
+  - component: {fileID: -3448459906737073970}
   m_Layer: 0
   m_Name: Seavonian Eye (A)
   m_TagString: Untagged
@@ -162,7 +166,7 @@ MonoBehaviour:
       positive: 1
     - negative: 2
       positive: 3
---- !u!114 &5267723571566042187
+--- !u!114 &-3448459906737073970
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,6 +175,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2234619151163394627}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc56f1c59885fed4c887f1f34fd38e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: -1

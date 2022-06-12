@@ -16,11 +16,14 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         [SerializeField] private float timeR2O;
         [SerializeField] private float timeO2C;
         [SerializeField] private float timeC2R;
+
+        private bool hasDealtDamage;
         #endregion
 
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            hasDealtDamage = false;
             foreach (MouthAnimator mouth in m_MonoBehaviour.Mouths)
             {
                 m_MonoBehaviour.StartCoroutine(BiteRoutine(mouth));
@@ -37,13 +40,17 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             timeR2O);
 
             // Bite
-            Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
-            foreach (Collider collider in colliders)
+            if (!hasDealtDamage)
             {
-                CreatureBase creature = collider.GetComponent<CreatureBase>();
-                if (creature != null && creature.Animator != m_MonoBehaviour) // biting creature shouldn't damage itself
+                Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
+                foreach (Collider collider in colliders)
                 {
-                    creature.Health.TakeDamage(biteDamage.Random);
+                    CreatureBase creature = collider.GetComponent<CreatureBase>();
+                    if (creature != null && creature.Animator != m_MonoBehaviour) // biting creature shouldn't damage itself
+                    {
+                        creature.Health.TakeDamage(biteDamage.Random);
+                        hasDealtDamage = true;
+                    }
                 }
             }
             m_MonoBehaviour.Effector.PlaySound(biteSounds);

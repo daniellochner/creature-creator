@@ -9,25 +9,20 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
     public class Bark : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
-        [SerializeField] private float barkTime = 0.5f;
+        [SerializeField] private float duration;
         #endregion
 
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            foreach (MouthAnimator mouth in m_MonoBehaviour.Mouths)
+            m_MonoBehaviour.InvokeOverTime(delegate (float p)
             {
-                m_MonoBehaviour.StartCoroutine(BarkRoutine(mouth));
-            }
-        }
-
-        private IEnumerator BarkRoutine(MouthAnimator mouth)
-        {
-            yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)
-            {
-                mouth.SetOpen(0.5f + 0.5f * Mathf.Sin(p * Mathf.PI));
+                foreach (MouthAnimator mouth in m_MonoBehaviour.Mouths)
+                {
+                    mouth.SetOpen(0.5f + 0.5f * Mathf.Sin(p * Mathf.PI));
+                }
             },
-            barkTime);
+            duration);
         }
         #endregion
     }

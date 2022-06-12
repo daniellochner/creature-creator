@@ -21,7 +21,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public virtual void Awake()
+        public virtual void Start()
         {
             ChangeState(startStateID);
         }

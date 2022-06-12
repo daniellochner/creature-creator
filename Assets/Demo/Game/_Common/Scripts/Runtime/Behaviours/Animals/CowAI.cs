@@ -36,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable]
         public class Charging : BaseState
         {
@@ -82,6 +82,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 CowAI.Agent.updateRotation = true;
 
                 // Charge!
+                CowAI.Animator.SetTrigger("Head_Tilt");
+                CowAI.Animator.SetBool("Head_IsTilted", true);
                 CowAI.Creature.Effector.PlaySound(chargeSounds);
                 yield return new WaitForSeconds(chargeUpTime);
                 CowAI.Agent.SetDestination(charged.position);
@@ -115,6 +117,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Rest...
+                CowAI.Animator.SetBool("Head_IsTilted", false);
                 CowAI.Creature.Effector.PlaySound(restSounds);
                 yield return new WaitForSeconds(restTime);
 

@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
     public class Walking : SceneLinkedSMB<CreatureAnimator>
     {
         #region Fields
-        private float baseMovementSpeed = 2f;
+        private float baseMovementSpeed = 1f;
         private float baseRotationSpeed = 120f;
         private float baseTimeToMove = 0.2f;
 

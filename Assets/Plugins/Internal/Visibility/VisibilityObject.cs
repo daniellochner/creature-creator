@@ -15,11 +15,7 @@ namespace DanielLochner.Assets
         public UnityEvent OnShow => onShow;
         public UnityEvent OnHide => onHide;
 
-        public bool IsVisible
-        {
-            get => gameObject.activeSelf;
-            set => gameObject.SetActive(value);
-        }
+        public bool IsVisible { get; private set; } = true;
         #endregion
 
         #region Methods
