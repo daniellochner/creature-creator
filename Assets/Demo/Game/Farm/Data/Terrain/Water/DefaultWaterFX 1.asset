@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1198c0a6311ad44408a8d6bd3161243c, type: 3}
+  m_Name: DefaultWaterFX 1
+  m_EditorClassIdentifier: 
+  enableUnderwater: 1
+  underwaterMaxDepth: 20
+  underwaterSurfaceColorBoost: 1
+  underwaterShallowFogColor: {r: 0.051397298, g: 0.1981132, b: 0.18204646, a: 0.8235294}
+  underwaterDeepFogColor: {r: 0.056870773, g: 0.16981131, b: 0.1429207, a: 1}
+  underwaterViewDistance: 50
+  underwaterEnableCaustic: 1
+  underwaterCausticTexture: {fileID: 2800000, guid: eeacbffe8eb46d343b0d7a9189130772, type: 3}
+  underwaterCausticSize: 10
+  underwaterCausticStrength: 1
+  underwaterEnableDistortion: 1
+  underwaterDistortionTexture: {fileID: 2800000, guid: 968a24349aa82914f94ad8a145a1e8af, type: 3}
+  underwaterDistortionStrength: 0.3
+  underwaterWaterFlowSpeed: 1
+  enableWetLens: 1
+  wetLensNormalMap: {fileID: 2800000, guid: 27ce701af99abe7419b750e6c8b3a6ab, type: 3}
+  wetLensStrength: 1
+  wetLensDuration: 3
+  wetLensFadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.2142868
+      value: 1
+      inSlope: -0.01192383
+      outSlope: -0.01192383
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.2445055
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18956041
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &3281594385897843248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
+  m_Name: Water Post Process Profile
+  m_EditorClassIdentifier: 
+  settings: []

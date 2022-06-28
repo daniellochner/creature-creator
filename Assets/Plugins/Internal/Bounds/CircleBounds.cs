@@ -19,7 +19,9 @@ namespace DanielLochner.Assets
 
         protected override void DrawBounds()
         {
+#if UNITY_EDITOR
             UnityEditor.Handles.DrawWireDisc(transform.position, transform.up, radius);
+#endif
         }
     }
 }
