@@ -72,7 +72,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                if (!SnakeAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Body_Strike"))
+                if (!SnakeAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
                 {
                     UpdateLookDir();
                     HandleLookAt();

@@ -35,6 +35,14 @@ namespace DanielLochner.Assets
                 transform.localScale = new Vector3(x, y, z);
             }
         }
+		
+		public static void SetZeroParent(this Transform transform, Transform parent)
+		{
+			transform.parent = parent;
+			transform.localPosition = Vector3.zero;
+			transform.localRotation = Quaternion.identity;
+			transform.localScale = Vector3.one;
+		}
 
         public static void LerpTo(this Transform transform, Vector3 position, float smoothing)
         {
