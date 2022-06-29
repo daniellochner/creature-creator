@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureConstructor Constructor { get; private set; }
         public CreatureEffector Effector { get; private set; }
         public Animator Animator { get; private set; }
+
+        public Action<string> OnSetTrigger { get; set; }
+        public Action<string, bool> OnSetBool { get; set; }
 
         public List<LimbAnimator> Limbs { get; private set; } = new List<LimbAnimator>();
         public List<ArmAnimator> Arms { get; private set; } = new List<ArmAnimator>();
@@ -356,6 +360,17 @@ namespace DanielLochner.Assets.CreatureCreator
             SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
         }
         
+        public void SetTrigger(string param)
+        {
+            Animator.SetTrigger(param);
+            OnSetTrigger?.Invoke(param);
+        }
+        public void SetBool(string param, bool value)
+        {
+            Animator.SetBool(param, value);
+            OnSetBool?.Invoke(param, value);
+        }
+
         private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;

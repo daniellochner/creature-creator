@@ -57,6 +57,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 SourceCreature.Health.OnHealthChanged += SetHealthServerRpc;
                 SourceCreature.Energy.OnEnergyChanged += SetEnergyServerRpc;
                 SourceCreature.Age.OnAgeChanged += SetAgeServerRpc;
+
+                SourceCreature.Animator.OnSetTrigger += SetTriggerServerRpc;
+                SourceCreature.Animator.OnSetBool += SetBoolServerRpc;
             }
             else
             {
@@ -65,6 +68,36 @@ namespace DanielLochner.Assets.CreatureCreator
                 Age.OnValueChanged += UpdateAge;
             }
         }
+
+        #region Animations
+        [ServerRpc]
+        private void SetTriggerServerRpc(string param)
+        {
+            SetTriggerClientRpc(param);
+        }
+        [ClientRpc]
+        private void SetTriggerClientRpc(string param)
+        {
+            if (!IsOWNER)
+            {
+                TargetCreature.Animator.Animator.SetTrigger(param);
+            }
+        }
+
+        [ServerRpc]
+        private void SetBoolServerRpc(string param, bool value)
+        {
+            SetBoolClientRpc(param, value);
+        }
+        [ClientRpc]
+        private void SetBoolClientRpc(string param, bool value)
+        {
+            if (!IsOWNER)
+            {
+                TargetCreature.Animator.Animator.SetBool(param, value);
+            }
+        }
+        #endregion
 
         #region Hide
         [ServerRpc]
