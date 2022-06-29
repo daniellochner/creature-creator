@@ -544,6 +544,9 @@ MonoBehaviour:
         ambientCooldown:
           min: 10
           max: 25
+        actionCooldown:
+          min: 10
+          max: 25
         ambientSounds:
         - name: Cackle1
           volume: 0.5
@@ -551,6 +554,8 @@ MonoBehaviour:
           volume: 0.5
         - name: Caw
           volume: 0.5
+        actions:
+        - Body_Shake
     00000001:
       type: {class: BirdAI/Flying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

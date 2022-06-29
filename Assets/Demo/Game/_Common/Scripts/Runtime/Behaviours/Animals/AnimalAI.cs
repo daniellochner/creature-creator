@@ -85,14 +85,14 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private MinMax actionCooldown;
             [SerializeField] private CreatureEffector.Sound[] ambientSounds;
             [SerializeField] private string[] actions;
-            protected float silentTimeLeft;
-            protected float actionTimeLeft;
+            protected float silentTimeLeft, actionTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
             public override void Enter()
             {
                 silentTimeLeft = ambientCooldown.Random;
+                actionTimeLeft = actionCooldown.Random;
             }
             public override void UpdateLogic()
             {
@@ -100,9 +100,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     TimerUtility.OnTimer(ref silentTimeLeft, ambientCooldown.Random, Time.deltaTime, MakeSound);
                 }
-                if (actionTimeLeft > 0)
+                if (actions.Length > 0)
                 {
-                    TimerUtility.OnTimer(ref silentTimeLeft, actionCooldown.Random, Time.deltaTime, PerformAction);
+                    TimerUtility.OnTimer(ref actionTimeLeft, actionCooldown.Random, Time.deltaTime, PerformAction);
                 }
             }
 
@@ -115,7 +115,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureEffector.Sound sound = ambientSounds[UnityEngine.Random.Range(0, ambientSounds.Length)];
 
                 // Open
-                AnimalAI.Animator.SetTrigger("Mouth_Open");
                 AnimalAI.Animator.SetBool("Mouth_IsOpened", true);
                 AnimalAI.Creature.Effector.PlaySound(sound.name, sound.volume);
 

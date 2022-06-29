@@ -39,9 +39,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     player.Creature.Mover.OnMoveRequest += RequestToMove;
                 }
 
-                ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
-                Username = connectionData.username;
-                SetPlayerNameServerRpc(Username);
+                //ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
+                //Username = connectionData.username;
+                //SetPlayerNameServerRpc(Username);
             }
         }
         
