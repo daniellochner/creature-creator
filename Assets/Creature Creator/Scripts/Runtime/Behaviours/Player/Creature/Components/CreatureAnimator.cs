@@ -41,6 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureEffector Effector { get; private set; }
         public Animator Animator { get; private set; }
 
+        public Action OnBuild { get; set; }
         public Action<string> OnSetTrigger { get; set; }
         public Action<string, bool> OnSetBool { get; set; }
 
@@ -358,8 +359,10 @@ namespace DanielLochner.Assets.CreatureCreator
             rigBuilder.Build();
             Animator.Rebind();
             SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
+
+            OnBuild?.Invoke();
         }
-        
+
         public void SetTrigger(string param)
         {
             Animator.SetTrigger(param);

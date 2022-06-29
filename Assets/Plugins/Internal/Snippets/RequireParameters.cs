@@ -23,7 +23,7 @@ namespace DanielLochner.Assets
 
         public void UpdateParameterList()
         {
-            animator = animator ?? GetComponent<Animator>();
+            animator = GetComponent<Animator>();
 
             if (animator.runtimeAnimatorController != null)
             {
