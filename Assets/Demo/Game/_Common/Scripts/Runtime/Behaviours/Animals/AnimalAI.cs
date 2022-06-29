@@ -82,8 +82,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Idling : BaseState
         {
             [SerializeField] private MinMax ambientCooldown;
+            [SerializeField] private MinMax actionCooldown;
             [SerializeField] private CreatureEffector.Sound[] ambientSounds;
+            [SerializeField] private string[] actions;
             protected float silentTimeLeft;
+            protected float actionTimeLeft;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
@@ -96,6 +99,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (ambientSounds.Length > 0)
                 {
                     TimerUtility.OnTimer(ref silentTimeLeft, ambientCooldown.Random, Time.deltaTime, MakeSound);
+                }
+                if (actionTimeLeft > 0)
+                {
+                    TimerUtility.OnTimer(ref silentTimeLeft, actionCooldown.Random, Time.deltaTime, PerformAction);
                 }
             }
 
@@ -117,6 +124,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Close
                 AnimalAI.Animator.SetBool("Mouth_IsOpened", false);
+            }
+
+            private void PerformAction()
+            {
+                string action = actions[UnityEngine.Random.Range(0, actions.Length)];
+                AnimalAI.Animator.SetTrigger(action);
             }
         }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public abstract class Animate<T> : SceneLinkedSMB<CreatureAnimator> where T : BodyPartAnimator
+    public abstract class Animate<T> : CreatureAnimation where T : BodyPartAnimator
     {
         #region Fields
         [SerializeField] private int index;
