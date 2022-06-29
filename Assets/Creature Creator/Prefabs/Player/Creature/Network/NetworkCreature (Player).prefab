@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 183.56, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4333338484812624769
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <font="Comfortaa"><mark=#000000AA padding="20, 20, 10, 10">Player</mark></font>
+  m_text: <font="Comfortaa"><mark=#000000AA padding="20, 20, 10, 10">{name}</mark></font>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -167,7 +167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4846818861566257672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -185,7 +185,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3189215794763173971
@@ -261,7 +261,6 @@ GameObject:
   - component: {fileID: 3730290955321933879}
   - component: {fileID: 4920215729766067257}
   - component: {fileID: -8599088390540799259}
-  - component: {fileID: 5534804869188253107}
   m_Layer: 0
   m_Name: NetworkCreature (Player)
   m_TagString: Untagged
@@ -316,6 +315,7 @@ MonoBehaviour:
   source: {fileID: 4302507398828423014}
   target: {fileID: 5083122388094044327}
   player: {fileID: 8671780991438000383}
+  nameText: {fileID: 1253431437008731262}
 --- !u!114 &-8599088390540799259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,20 +341,6 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   rotation:
     m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5534804869188253107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3136049851853010831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 229263edefb2db545a4da4c665bb70b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerNameT: {fileID: 4846818861566257672}
-  nameText: {fileID: 1253431437008731262}
 --- !u!1001 &4198260127198858135
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -478,7 +464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 982379299394450588, guid: 3315703770bcf6140a36f134380b52a6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 982379299394450591, guid: 3315703770bcf6140a36f134380b52a6, type: 3}
       propertyPath: m_RootOrder

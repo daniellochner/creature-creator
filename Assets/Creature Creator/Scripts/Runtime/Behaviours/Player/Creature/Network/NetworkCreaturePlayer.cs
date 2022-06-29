@@ -1,6 +1,9 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Text;
+using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,6 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Player player;
+        [Space]
+        [SerializeField] private TextMeshProUGUI nameText;
         #endregion
 
         #region Properties
@@ -17,6 +22,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureSourcePlayer SourcePlayerCreature => SourceCreature as CreatureSourcePlayer;
 
         public override CreatureTargetBase TargetCreature => IsOWNER ? SourcePlayerCreature : base.TargetCreature;
+
+        public string Username { get; set; }
         #endregion
 
         #region Methods
@@ -24,12 +31,47 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup(isOwner);
 
-            if (isOwner && player.Creature.Mover.RequestToMove)
+            if (isOwner)
             {
-                player.Creature.Mover.OnTurnRequest += RequestToTurn;
-                player.Creature.Mover.OnMoveRequest += RequestToMove;
+                if (player.Creature.Mover.RequestToMove)
+                {
+                    player.Creature.Mover.OnTurnRequest += RequestToTurn;
+                    player.Creature.Mover.OnMoveRequest += RequestToMove;
+                }
+
+                ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
+                Username = connectionData.username;
+                SetPlayerNameServerRpc(Username);
             }
         }
+        
+        private void LateUpdate()
+        {
+            HandlePlayerName();
+        }
+
+        #region Player Name
+        [ServerRpc]
+        private void SetPlayerNameServerRpc(string name)
+        {
+            SetPlayerNameClientRpc(name);
+        }
+        [ClientRpc]
+        private void SetPlayerNameClientRpc(string name)
+        {
+            nameText.text = nameText.text.Replace("{name}", name);
+        }
+
+        private void HandlePlayerName()
+        {
+            if (Player.Instance == null) return;
+            nameText.transform.parent.gameObject.SetActive(!IsHidden.Value);
+            if (!IsHidden.Value)
+            {
+                nameText.transform.parent.LookAt(Player.Instance.Camera.Camera.transform);
+            }
+        }
+        #endregion
 
         #region Load Player
         [ClientRpc]
