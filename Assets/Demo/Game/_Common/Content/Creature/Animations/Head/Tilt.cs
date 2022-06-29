@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Tilt : SceneLinkedSMB<CreatureAnimator>
+    public class Tilt : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float duration;
@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.InvokeOverTime(delegate (float p)
+            Creature.InvokeOverTime(delegate (float p)
             {
             },
             duration);

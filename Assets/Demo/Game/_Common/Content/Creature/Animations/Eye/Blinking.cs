@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Blinking : SceneLinkedSMB<CreatureAnimator>
+    public class Blinking : CreatureAnimation
     {
         #region Fields
         [SerializeField] private MinMax blinkCooldown;
@@ -25,9 +25,9 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 
         private void Blink()
         {
-            m_MonoBehaviour.InvokeOverTime(delegate (float t)
+            Creature.InvokeOverTime(delegate (float t)
             {
-                foreach (EyeAnimator eye in m_MonoBehaviour.Eyes)
+                foreach (EyeAnimator eye in Creature.Eyes)
                 {
                     eye.SetClose(Mathf.Sin(t * Mathf.PI));
                 }

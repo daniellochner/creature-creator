@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Bark : SceneLinkedSMB<CreatureAnimator>
+    public class Bark : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float duration;
@@ -15,9 +15,9 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.InvokeOverTime(delegate (float p)
+            Creature.InvokeOverTime(delegate (float p)
             {
-                foreach (MouthAnimator mouth in m_MonoBehaviour.Mouths)
+                foreach (MouthAnimator mouth in Creature.Mouths)
                 {
                     mouth.SetOpen(0.5f + 0.5f * Mathf.Sin(p * Mathf.PI));
                 }

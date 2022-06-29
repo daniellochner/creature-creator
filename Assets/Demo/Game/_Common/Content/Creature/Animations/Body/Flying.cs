@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Flying : SceneLinkedSMB<CreatureAnimator>
+    public class Flying : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float flapCooldown;
@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         public override void OnStart(Animator animator)
         {
             base.OnStart(animator);
-            wings = m_MonoBehaviour.GetComponentsInChildren<WingAnimator>();
+            wings = Creature.GetComponentsInChildren<WingAnimator>();
         }
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -28,10 +28,10 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 wing.IsPrepared = true;
             }
 
-            foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+            foreach (LegAnimator leg in Creature.Legs)
             {
-                leg.Anchor.SetParent(m_MonoBehaviour.Constructor.Root);
-                leg.Anchor.SetPositionAndRotation(m_MonoBehaviour.Constructor.Body.L2WSpace(leg.DefaultFootPosition), Quaternion.identity);
+                leg.Anchor.SetParent(Creature.Constructor.Root);
+                leg.Anchor.SetPositionAndRotation(Creature.Constructor.Body.L2WSpace(leg.DefaultFootPosition), Quaternion.identity);
             }
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -44,9 +44,9 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 wing.IsPrepared = false;
             }
-            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
+            Creature.Constructor.Root.localPosition = Vector3.zero;
 
-            foreach (LegAnimator leg in m_MonoBehaviour.Legs)
+            foreach (LegAnimator leg in Creature.Legs)
             {
                 leg.Anchor.SetParent(Dynamic.Transform);
             }
@@ -58,10 +58,10 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 wing.Flap();
             }
-            m_MonoBehaviour.InvokeOverTime(delegate (float progress)
+            Creature.InvokeOverTime(delegate (float progress)
             {
                 float y = flapHeight * Mathf.Sin(progress * Mathf.PI);
-                m_MonoBehaviour.Constructor.Root.localPosition = Vector3.up * y;
+                Creature.Constructor.Root.localPosition = Vector3.up * y;
             }, 
             flapCooldown / 2f);
         }

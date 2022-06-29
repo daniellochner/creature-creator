@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Slithering : SceneLinkedSMB<CreatureAnimator>
+    public class Slithering : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float slitherAngle;
@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Properties
         private Transform Head
         {
-            get => m_MonoBehaviour.Constructor.Bones[m_MonoBehaviour.Constructor.Bones.Count - 1];
+            get => Creature.Constructor.Bones[Creature.Constructor.Bones.Count - 1];
         }
         #endregion
 

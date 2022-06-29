@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Wagging : SceneLinkedSMB<CreatureAnimator>
+    public class Wagging : CreatureAnimation
     {
         #region Fields
         #endregion

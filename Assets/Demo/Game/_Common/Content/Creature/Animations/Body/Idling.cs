@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Idling : SceneLinkedSMB<CreatureAnimator>
+    public class Idling : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float breatheBody;
@@ -27,11 +27,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             float b = (breatheBody / 2f) * (Mathf.Cos(t) - 1f);
             float m = 0.5f + Mathf.Lerp(-breatheMouth, breatheMouth, Mathf.InverseLerp(-breatheBody, 0f, b));
 
-            if (m_MonoBehaviour.Legs.Count > 0)
+            if (Creature.Legs.Count > 0)
             {
-                m_MonoBehaviour.Constructor.Root.localPosition = Vector3.up * b;
+                Creature.Constructor.Root.localPosition = Vector3.up * b;
             }
-            if (m_MonoBehaviour.Mouths.Count > 0)
+            if (Creature.Mouths.Count > 0)
             {
                 animator.SetFloat("Mouth_Breathe", m);
             }
@@ -40,7 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.Constructor.Root.localPosition = Vector3.zero;
+            Creature.Constructor.Root.localPosition = Vector3.zero;
             animator.SetFloat("Mouth_Breathe", 0.5f);
         }
         #endregion

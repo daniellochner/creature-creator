@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Bite : SceneLinkedSMB<CreatureAnimator>
+    public class Bite : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float biteRadius;
@@ -24,9 +24,9 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             hasDealtDamage = false;
-            foreach (MouthAnimator mouth in m_MonoBehaviour.Mouths)
+            foreach (MouthAnimator mouth in Creature.Mouths)
             {
-                m_MonoBehaviour.StartCoroutine(BiteRoutine(mouth));
+                Creature.StartCoroutine(BiteRoutine(mouth));
             }
         }
 
@@ -46,14 +46,14 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 foreach (Collider collider in colliders)
                 {
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null && creature.Animator != m_MonoBehaviour) // biting creature shouldn't damage itself
+                    if (creature != null && creature.Animator != Creature) // biting creature shouldn't damage itself
                     {
                         creature.Health.TakeDamage(biteDamage.Random);
                         hasDealtDamage = true;
                     }
                 }
             }
-            m_MonoBehaviour.Effector.PlaySound(biteSounds);
+            Creature.Effector.PlaySound(biteSounds);
 
             // Open -> Close
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)

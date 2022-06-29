@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Shake : SceneLinkedSMB<CreatureAnimator>
+    public class Shake : CreatureAnimation
     {
         #region Fields
         [SerializeField] private float shakeTime;
@@ -17,11 +17,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.StartCoroutine(ShakeRoutine());
+            Creature.StartCoroutine(ShakeRoutine());
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.Constructor.Root.localRotation = Quaternion.identity;
+            Creature.Constructor.Root.localRotation = Quaternion.identity;
         }
 
         private IEnumerator ShakeRoutine()
@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 float x = p * 5f;
                 float z = shakeAmplitude * Mathf.Exp(-x) * Mathf.Sin(2 * Mathf.PI * x);
-                m_MonoBehaviour.Constructor.Root.localRotation = Quaternion.Euler(0f, 0f, z);
+                Creature.Constructor.Root.localRotation = Quaternion.Euler(0f, 0f, z);
             },
             shakeTime);
         }

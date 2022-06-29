@@ -358,7 +358,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             rigBuilder.Build();
             Animator.Rebind();
-            SceneLinkedSMB<CreatureAnimator>.Initialize(Animator, this);
+            CreatureAnimation.Initialize(Animator, this);
 
             OnBuild?.Invoke();
         }

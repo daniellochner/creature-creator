@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
-    public class Falling : SceneLinkedSMB<CreatureAnimator>
+    public class Falling : CreatureAnimation
     {
     }
 }
