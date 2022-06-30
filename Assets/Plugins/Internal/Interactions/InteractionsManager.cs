@@ -16,13 +16,13 @@ namespace DanielLochner.Assets
         [SerializeField] private GridLayoutGroup grid;
         [SerializeField] private ToggleGroup toggleGroup;
         [Header("Debug")]
+        [SerializeField, ReadOnly] private GameObject targeted;
         [SerializeField, ReadOnly] private Interactable highlighted;
 
         private List<InteractionUI> interactions = new List<InteractionUI>();
         private Collider prevHitCollider;
         private int highlightedIndex;
 
-        private GameObject targeted;
         #endregion
 
         #region Properties
@@ -59,9 +59,9 @@ namespace DanielLochner.Assets
             {
                 if (highlighted == value) return;
 
-                highlighted?.Highlight(false);
+                highlighted?.Highlight(Interactor, false);
                 highlighted = value;
-                highlighted?.Highlight(true);
+                highlighted?.Highlight(Interactor, true);
 
                 if (highlighted == null) prevHitCollider = null;
 
@@ -127,14 +127,14 @@ namespace DanielLochner.Assets
                 {
                     if (Input.GetMouseButtonDown(0) && Highlighted != null && Highlighted.CanInteract(Interactor))
                     {
-                        Highlighted.Interact();
+                        Highlighted.Interact(Interactor);
                     }
                     return; // Returns to prevent having to recheck the same highlighted interactable every frame.
                 }
                 prevHitCollider = hitInfo.collider;
 
                 Interactable interactable = prevHitCollider.GetComponent<Interactable>();
-                if (interactable != null && interactable.CanHighlight(Interactor))
+                if (interactable != null)
                 {
                     Targeted = prevHitCollider.gameObject;
                 }
@@ -155,15 +155,18 @@ namespace DanielLochner.Assets
         {
             foreach (Interactable interactable in obj.GetComponents<Interactable>())
             {
-                InteractionUI interaction = Instantiate(interactionPrefab, grid.transform);
-                interaction.Setup(interactable, toggleGroup);
-
                 if (interactable.CanHighlight(Interactor))
                 {
+                    InteractionUI interaction = Instantiate(interactionPrefab, grid.transform);
+                    interaction.Setup(interactable, toggleGroup);
+
                     interactions.Add(interaction);
                 }
             }
-            HighlightedIndex = 0;
+            if (interactions.Count > 0)
+            {
+                HighlightedIndex = 0;
+            }
 
             grid.gameObject.SetActive(interactions.Count > 1);
         }

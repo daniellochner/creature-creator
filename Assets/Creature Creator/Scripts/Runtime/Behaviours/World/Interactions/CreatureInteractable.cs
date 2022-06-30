@@ -12,18 +12,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public override bool CanHighlight(Interactor interactor)
+        public override bool CanInteract(Interactor interactor)
         {
             bool hasReqAbility = (reqAbility == null);
             if (reqAbility != null)
             {
                 hasReqAbility = (interactor as CreatureInteractor).Creature.Abilities.Abilities.Contains(reqAbility);
             }
-            return base.CanHighlight(interactor) && hasReqAbility;
-        }
-        public override bool CanInteract(Interactor interactor)
-        {
-            return base.CanInteract(interactor) && EditorManager.Instance.IsPlaying;
+            return base.CanInteract(interactor) && EditorManager.Instance.IsPlaying && hasReqAbility;
         }
         #endregion
     }

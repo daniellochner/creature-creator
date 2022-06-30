@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        protected override void OnHighlight(bool isHighlighted)
+        protected override void OnHighlight(Interactor interactor, bool isHighlighted)
         {
             if (isHighlighted)
             {
@@ -101,7 +101,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 informationMenu.Close();
             }
         }
-        protected override void OnInteract()
+        protected override void OnInteract(Interactor interactor)
         {
             SetSelected(!IsSelected);
         }

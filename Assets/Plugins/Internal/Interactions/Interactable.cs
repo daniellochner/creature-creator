@@ -27,20 +27,20 @@ namespace DanielLochner.Assets
         }
         public virtual bool CanHighlight(Interactor interactor) => CanInteract(interactor);
 
-        public void Interact()
+        public void Interact(Interactor interactor)
         {
-            OnInteract();
+            OnInteract(interactor);
         }
-        public void Highlight(bool isHighlighted)
+        public void Highlight(Interactor interactor, bool isHighlighted)
         {
-            OnHighlight(IsHighlighted = isHighlighted);
+            OnHighlight(interactor, IsHighlighted = isHighlighted);
         }
 
-        protected virtual void OnInteract()
+        protected virtual void OnInteract(Interactor interactor)
         {
 
         }
-        protected virtual void OnHighlight(bool isHighlighted)
+        protected virtual void OnHighlight(Interactor interactor, bool isHighlighted)
         {
 
         }
