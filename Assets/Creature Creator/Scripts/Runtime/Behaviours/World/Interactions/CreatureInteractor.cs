@@ -17,6 +17,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature = GetComponent<CreatureSourcePlayer>();
         }
+
+        private void Start()
+        {
+            InteractionsManager.Instance.OnTarget += delegate (GameObject targeted)
+            {
+                Creature.CameraOrbit.SetFrozen(targeted != null);
+            };
+        }
         #endregion
     }
 }

@@ -4,7 +4,7 @@ namespace DanielLochner.Assets
 {
     public class FollowCursor : MonoBehaviour
     {
-        private void Update()
+        private void LateUpdate()
         {
             transform.position = Input.mousePosition;
         }

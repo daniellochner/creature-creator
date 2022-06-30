@@ -8,11 +8,13 @@ namespace DanielLochner.Assets
     public abstract class Interactable : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private Sprite icon;
         [SerializeField] private Texture2D cursorIcon;
         [SerializeField] private float interactionRange = Mathf.Infinity;
         #endregion
 
         #region Properties
+        public Sprite Icon => icon;
         public Texture2D CursorIcon => cursorIcon;
 
         public virtual bool IsHighlighted { get; set; }

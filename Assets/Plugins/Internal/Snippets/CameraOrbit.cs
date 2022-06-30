@@ -107,7 +107,7 @@ namespace DanielLochner.Assets
             }
         }
 
-        private void SetFrozen(bool isFrozen)
+        public void SetFrozen(bool isFrozen)
         {
             IsFrozen = isFrozen;
         }

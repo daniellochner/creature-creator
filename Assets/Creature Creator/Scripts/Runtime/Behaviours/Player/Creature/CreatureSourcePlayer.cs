@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureAbilities abilities;
         [SerializeField] private CreatureMover mover;
         [SerializeField] private CreatureInteractor interactor;
+        [Space]
+        [SerializeField] private CameraOrbit cameraOrbit;
         #endregion
 
         #region Properties
@@ -26,6 +28,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAbilities Abilities => abilities;
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
+
+        public CameraOrbit CameraOrbit => cameraOrbit;
         #endregion
 
         #region Methods
