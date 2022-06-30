@@ -56,6 +56,7 @@ namespace DanielLochner.Assets
                 else if (Input.GetMouseButtonUp(0))
                 {
                     Unfreeze();
+                    HasInteractedWithUI = false;
                 }
             }
             else if ((Input.GetMouseButtonUp(0) || Input.mouseScrollDelta.magnitude > 0) && HasInteractedWithUI)

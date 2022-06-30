@@ -65,7 +65,23 @@ namespace DanielLochner.Assets
 
                 if (highlighted == null) prevHitCollider = null;
 
-                Cursor.SetCursor((highlighted != null) ? highlighted.CursorIcon : defaultCursorIcon, Vector2.zero, CursorMode.Auto);
+                if (highlighted == null)
+                {
+                    CursorManager.Instance.SetSubIcon(null);
+                    CursorManager.Instance.SetScale(1f);
+                }
+                else
+                {
+                    if (interactions.Count == 1)
+                    {
+                        CursorManager.Instance.SetSubIcon(highlighted.Icon);
+                    }
+                    else
+                    {
+                        CursorManager.Instance.SetSubIcon(null);
+                    }
+                    CursorManager.Instance.SetScale(0.75f);
+                }
 
                 OnHighlight?.Invoke(highlighted);
             }
