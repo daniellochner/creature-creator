@@ -1044,6 +1044,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 IsVisible = !IsVisible;
             }
+            else
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                player.Creature.Health.Die();
+            }
         }
         private void HandlePaintShortcuts()
         {

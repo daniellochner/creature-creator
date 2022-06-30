@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup(isOwner);
 
-            if (isOwner)
+            if (IsOWNER)
             {
                 if (player.Creature.Mover.RequestToMove)
                 {
@@ -39,9 +39,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     player.Creature.Mover.OnMoveRequest += RequestToMove;
                 }
 
-                //ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
-                //Username = connectionData.username;
-                //SetPlayerNameServerRpc(Username);
+                player.Creature.Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
+
+                if (SetupGame.IsNetworkedGame)
+                {
+                    ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
+                    Username = connectionData.username;
+                    SetPlayerNameServerRpc(Username);
+                }
             }
         }
         
@@ -49,6 +54,40 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             HandlePlayerName();
         }
+
+        #region Death Messages
+        private readonly string[] DEATH_MESSAGES = new string[]
+        {
+            "{username} died.",
+            "{username} kicked the bucket.",
+            "{username} passed on.",
+            "{username} expired.",
+            "{username} left the building.",
+            "{username} checked out.",
+            "{username} bit the dust.",
+            "{username} no longer exists.",
+            "{username} rode off into the sunset.",
+            "{username} left to buy milk.",
+            "{username} withered away.",
+            "{username} perished.",
+            "{username} cashed in.",
+            "{username} departed.",
+            "{username} found everlasting peace.",
+            "{username} is no longer with us."
+        };
+
+        [ServerRpc]
+        private void SendDeathMsgServerRpc(ulong clientId)
+        {
+            SendDeathMsgClientRpc(NetworkHostManager.Instance.Players[clientId].username);
+        }
+        [ClientRpc]
+        private void SendDeathMsgClientRpc(string username)
+        {
+            string message = DEATH_MESSAGES[Random.Range(0, DEATH_MESSAGES.Length)];
+            NotificationsManager.Notify(message.Replace("{username}", username));
+        }
+        #endregion
 
         #region Player Name
         [ServerRpc]
