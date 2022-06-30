@@ -13,9 +13,20 @@ namespace DanielLochner.Assets.CreatureCreator
             animalAI = GetComponent<AnimalAI>();
         }
 
+        public override bool CanInteract(Interactor interactor)
+        {
+            return base.CanInteract(interactor) && animalAI.CanFollow;
+        }
         protected override void OnInteract(Interactor interactor)
         {
-            animalAI.Follow(interactor.transform);
+            if (animalAI.followTarget == null)
+            {
+                animalAI.Follow(interactor.transform);
+            }
+            else
+            {
+                animalAI.StopFollowing();
+            }
         }
     }
 }

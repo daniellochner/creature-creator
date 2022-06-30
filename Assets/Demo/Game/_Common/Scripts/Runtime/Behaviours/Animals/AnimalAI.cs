@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Animal")]
         [SerializeField] private TextAsset data;
 
-        protected Transform followTarget;
+        public Transform followTarget;
         #endregion
 
         #region Properties
@@ -25,6 +25,10 @@ namespace DanielLochner.Assets.CreatureCreator
         protected CreatureSourceNonPlayer Creature { get; set; }
         protected NavMeshAgent Agent { get; set; }
 
+        public bool CanFollow
+        {
+            get => currentState is Idling || currentState is Following;
+        }
         public bool IsMovingToPosition
         {
             get
