@@ -191,14 +191,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
-            Vector3 localPos = Vector3.ProjectOnPlane(Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove), Creature.transform.up);
+            Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove);
             Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
-            worldPos += Creature.Velocity.Linear * timeToMove;
-
-            Vector3 origin = worldPos + Creature.transform.up * stepHeight;
-            Vector3 dir = -Creature.transform.up;
-
-            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, Creature.Constructor.MaxHeight, LayerMask.GetMask("Ground")))
+            worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
+            
+            if (Physics.Raycast(worldPos, -Creature.transform.up, out RaycastHit hitInfo/*, Creature.Constructor.MaxHeight*/))
             {
                 return hitInfo.point + (Creature.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
             }

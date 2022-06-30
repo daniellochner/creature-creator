@@ -205,7 +205,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
                         float targetHeight = b;
 
-                        Vector3 offset = Constructor.Body.localPosition + Vector3.up * (targetHeight - currentHeight);
+                        Vector3 offset = Vector3.up * (targetHeight - currentHeight);
                         moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
                     }
                 }
@@ -374,15 +374,16 @@ namespace DanielLochner.Assets.CreatureCreator
             OnSetBool?.Invoke(param, value);
         }
 
-        private IEnumerator MoveBodyRoutine(Vector3 targetPosition, float timeToMove, EasingFunction.Function easingFunction)
+        private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;
 
-            Vector3 initialPosition = Constructor.Body.localPosition;
+            Vector3 pos1 = Constructor.Body.localPosition;
+            Vector3 pos2 = Constructor.Body.W2LSpace(Constructor.Body.position + offset);
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
             {
                 float t = 1f - easingFunction(1f, 0f, progress);
-                Vector3 position = Vector3.Lerp(initialPosition, targetPosition, t);
+                Vector3 position = Vector3.Lerp(pos1, pos2, t);
                 Constructor.Body.localPosition = position;
             }, 
             timeToMove);

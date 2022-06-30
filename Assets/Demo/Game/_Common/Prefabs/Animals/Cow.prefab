@@ -67,6 +67,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 398687087964224949, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: scale
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 709837870172304164, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Controller
       value: 
@@ -122,6 +126,10 @@ PrefabInstance:
     - target: {fileID: 3050561683189804717, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: m_Name
       value: Cow
+      objectReference: {fileID: 0}
+    - target: {fileID: 3492334971747539896, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
+      propertyPath: scale
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3608543104270752021, guid: c73844fe00fc4e645b5b6fb9256d078e, type: 3}
       propertyPath: GlobalObjectIdHash
@@ -359,6 +367,9 @@ MonoBehaviour:
         ambientCooldown:
           min: 10
           max: 25
+        actionCooldown:
+          min: 0
+          max: 0
         ambientSounds:
         - name: Moo1
           volume: 1
@@ -366,6 +377,7 @@ MonoBehaviour:
           volume: 1
         - name: Moo3
           volume: 1
+        actions: []
         wanderCooldown:
           min: 10
           max: 25

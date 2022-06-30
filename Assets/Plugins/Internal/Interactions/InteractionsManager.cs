@@ -119,6 +119,8 @@ namespace DanielLochner.Assets
         }
         private void HandleInteractions()
         {
+            if (Interactor == null) return;
+
             if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(Interactor.InteractionCamera, Input.mousePosition), out RaycastHit hitInfo))
             {
                 if (hitInfo.collider == prevHitCollider)
