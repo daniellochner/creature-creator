@@ -13,18 +13,19 @@ namespace DanielLochner.Assets
         [SerializeField] private Image cursorIcon;
         [SerializeField] private Image cursorSubIcon;
 
-        private void Update()
-        {
-            cursorIcon.gameObject.SetActive(!Cursor.visible);
-        }
+        [SerializeField] private bool useCustomCursor;
 
         private void OnEnable()
         {
-            Cursor.visible = false;
+            if (useCustomCursor) Cursor.visible = false;
         }
         private void OnDisable()
         {
-            Cursor.visible = true;
+            if (useCustomCursor) Cursor.visible = true;
+        }
+        private void Update()
+        {
+            if (useCustomCursor) cursorIcon.gameObject.SetActive(!Cursor.visible);
         }
 
         public void SetIcon(Sprite icon)

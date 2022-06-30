@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Setup();
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             if (IsNetworkedGame)
             {
@@ -54,7 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
             networkMenu.gameObject.SetActive(false);
         }
 
-        private void Setup()
+        public void Setup()
         {
             EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
             EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;

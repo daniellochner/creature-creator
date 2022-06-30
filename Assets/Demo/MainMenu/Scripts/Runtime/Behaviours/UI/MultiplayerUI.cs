@@ -180,7 +180,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnServerStarted()
         {
-            OnMultiplayerSuccess("Created.");
+            OnMultiplayerSuccess("Created. Loading World...");
         }
         private void OnClientDisconnect(ulong clientID)
         {
@@ -189,12 +189,39 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnClientConnect(ulong clientID)
         {
-            OnMultiplayerSuccess("Connected.");
+            OnMultiplayerSuccess("Connected. Loading World...");
         }
         private void OnMultiplayerSuccess(string message)
         {
             UpdateNetworkStatus(message, Color.green);
             NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
+
+            
+            //var current = SceneManager.GetActiveScene();
+
+            //var selected = mapOS.Options[mapOS.Selected].Name;
+
+            //var t = NetworkManager.Singleton.SceneManager.LoadScene(selected, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            
+            //Destroy(StatisticsMenu.Instance.gameObject);
+
+            //NetworkManager.Singleton.SceneManager.OnLoadComplete += delegate
+            //{
+            //    var target = SceneManager.GetSceneByName(selected);
+            //    foreach (NetworkObject obj in FindObjectsOfType<NetworkObject>())
+            //    {
+            //        if (obj.transform.parent == null)
+            //            SceneManager.MoveGameObjectToScene(obj.gameObject, target);
+            //    }
+            //    SceneManager.UnloadSceneAsync(current);
+
+
+            //    SetupGame.Instance.Initialize();
+            //    //SetupGame.Instance.Invoke(delegate
+            //    //{
+            //    //    SetupGame.Instance.Setup();
+            //    //}, 2f);
+            //};
         }
 
         public async void Join(string id)

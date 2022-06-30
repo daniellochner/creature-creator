@@ -218,6 +218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cursor
       objectReference: {fileID: 0}
+    - target: {fileID: 3536615544956113965, guid: 5e29da89175aa4e45a133186e4d1b84e, type: 3}
+      propertyPath: useCustomCursor
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e29da89175aa4e45a133186e4d1b84e, type: 3}
 --- !u!1 &182049363
@@ -233,6 +237,7 @@ GameObject:
   - component: {fileID: 182049366}
   - component: {fileID: 182049369}
   - component: {fileID: 182049367}
+  - component: {fileID: 182049370}
   - component: {fileID: 182049368}
   m_Layer: 0
   m_Name: Other
@@ -340,6 +345,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &182049370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182049363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713d776787b31f34e950d1714b444dc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingBar: {fileID: 0}
 --- !u!1001 &231216500
 PrefabInstance:
   m_ObjectHideFlags: 0
