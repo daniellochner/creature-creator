@@ -16,7 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureEffector))]
-    [RequireComponent(typeof(Animator))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
@@ -267,15 +266,15 @@ namespace DanielLochner.Assets.CreatureCreator
                         bone.SetParent(head, false);
                         bone.SetAsFirstSibling();
 
-                        //DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                        //damping.data = new DampedTransformData()
-                        //{
-                        //    constrainedObject = Constructor.Bones[i],
-                        //    sourceObject = Constructor.Bones[i - 1],
-                        //    dampPosition = 0f,
-                        //    dampRotation = 0f,
-                        //    maintainAim = true
-                        //};
+                        DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                        damping.data = new DampedTransformData()
+                        {
+                            constrainedObject = Constructor.Bones[i],
+                            sourceObject = Constructor.Bones[i - 1],
+                            dampPosition = 0.1f,
+                            dampRotation = 0.1f,
+                            maintainAim = true
+                        };
                     }
                 }
                 for (int i = 0; i < t; ++i)
@@ -289,8 +288,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         constrainedObject = Constructor.Bones[i],
                         sourceObject = Constructor.Bones[i + 1],
-                        dampPosition = 0f,
-                        dampRotation = 1f,
+                        dampPosition = 0.1f,
+                        dampRotation = 0.1f,
                         maintainAim = true
                     };
                 }
