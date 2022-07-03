@@ -9,6 +9,8 @@ namespace DanielLochner.Assets
         [SerializeField, DrawIf("useThisTransform", false)] private Transform source;
         [SerializeField, DrawIf("source", null)] private Transform sourcePosition;
         [SerializeField, DrawIf("source", null)] private Transform sourceRotation;
+        [SerializeField] private float posThreshold;
+        [SerializeField] private float rotThreshold;
 
         private Vector3? prevPosition = null;
         private Quaternion? prevRotation = null;
@@ -41,7 +43,14 @@ namespace DanielLochner.Assets
                 if (prevPosition != null)
                 {
                     Vector3 deltaPosition = sourcePosition.position - (Vector3)prevPosition;
-                    Linear = deltaPosition / Time.fixedDeltaTime;
+                    if (deltaPosition.sqrMagnitude > posThreshold * posThreshold)
+                    {
+                        Linear = deltaPosition / Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        Linear = Vector3.zero;
+                    }
                 }
                 prevPosition = sourcePosition.position;
             }
@@ -50,8 +59,15 @@ namespace DanielLochner.Assets
                 if (prevRotation != null)
                 {
                     Quaternion deltaRotation = sourceRotation.rotation * Quaternion.Inverse((Quaternion)prevRotation);
-                    deltaRotation.ToAngleAxis(out float angle, out var axis);
-                    Angular = (angle / Time.fixedDeltaTime) * axis;
+                    deltaRotation.ToAngleAxis(out float deltaAngle, out var axis);
+                    if (deltaAngle > rotThreshold)
+                    {
+                        Angular = (deltaAngle / Time.fixedDeltaTime) * axis;
+                    }
+                    else
+                    {
+                        Angular = Vector3.zero;
+                    }
                 }
                 prevRotation = sourceRotation.rotation;
             }
