@@ -335,7 +335,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &2990587161278505044
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -456,7 +456,7 @@ Animator:
   m_GameObject: {fileID: 8977203969259661099}
   m_Enabled: 0
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 384d44ff0abeec6409eddf6a94b5cc13, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -510,12 +510,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8770fcb7cf26e8742841b7c4f515aafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floatingPoints: []
+  floatingPower: 50
   underwaterAngularDrag: 3
   underwaterDrag: 1
   airAngularDrag: 0
   airDrag: 0.05
-  floatingPower: 50
-  waterHeight: 3.5
+  isUnderwater: 0
+  pointsUnderwater: 0
 --- !u!114 &-6550778269257917541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,6 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3246ff9d87874db49acae8f61f928583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSlitherLength: 2
 --- !u!114 &1353037788698087313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,10 +843,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e70812401d0c2d04aae196f776a16d36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useThisTransform: 0
-  source: {fileID: 0}
+  useThisTransform: 1
+  source: {fileID: 8977203969259661096}
   sourcePosition: {fileID: 8977203969259661096}
-  sourceRotation: {fileID: 8977203969042253166}
+  sourceRotation: {fileID: 8977203969259661096}
+  posThreshold: 0.001
+  rotThreshold: 0.01
 --- !u!114 &5758413726631540965
 MonoBehaviour:
   m_ObjectHideFlags: 0

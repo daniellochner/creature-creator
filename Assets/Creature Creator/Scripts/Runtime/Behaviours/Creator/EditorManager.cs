@@ -330,9 +330,9 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Editor.IsDraggable = false;
             player.Creature.Editor.UseTemporaryOutline = false;
             player.Creature.Editor.Deselect();
+            player.Creature.EnergyDepleter.DepleteEnergy = true;
             player.Creature.Animator.Velocity.Reset();
             player.Creature.Animator.IsAnimated = true;
-            player.Creature.EnergyDepleter.DepleteEnergy = true;
 
             SetCameraOffset(0f);
         }

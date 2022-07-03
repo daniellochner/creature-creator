@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        private void LateUpdate()
+        private void Update()
         {
             if (IsMovable)
             {
@@ -100,18 +100,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 HandlePlatform();
             }
-
-            //if (!IsMovable)
-            //{
-            //    HandlePlatform();
-            //}
-        }
-        private void FixedUpdate()
-        {
-            //if (IsMovable)
-            //{
-            //    HandleMovement();
-            //}
         }
 
         private void Initialize()
@@ -163,7 +151,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     canMove = kInput && !Input.GetKey(KeyCode.LeftControl);
 
                     break;
-                    #endregion
+                #endregion
                 
                 #region Pointer
                 case InputMode.Pointer:
@@ -205,14 +193,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     RequestTurn(angle);
                 }
-                canMove &= Vector3.Angle(CreatureConstructor.Body.forward, direction) < angleToMove;
+                canMove &= Mathf.Abs(angle) < angleToMove;
             }
             RequestMove(canMove ? direction : Vector3.zero);
         }
         private void HandlePlatform()
         {
             transform.LerpTo(Platform.transform.position, positionSmoothing);
-            CreatureConstructor.Body.SlerpTo(transform.rotation, rotationSmoothing);
         }
 
         public void RequestMove(Vector3 direction)
@@ -245,22 +232,21 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Turn(float angle)
         {
-            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
-            CreatureConstructor.Body.localRotation = QuaternionUtility.SmoothDamp(CreatureConstructor.Body.localRotation, rotation, ref angularVelocity, turnSmoothTime, turnSpeed, Time.deltaTime);
+            Quaternion rotation = Quaternion.Euler(0f, angle * turnSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 0f);
+            transform.rotation *= rotation;
         }
 
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             transform.position = TargetPosition = position;
             transform.rotation = rotation;
-            CreatureConstructor.Body.localRotation = Quaternion.identity;
 
             moveDisplacement = Vector3.zero;
         }
         public void Teleport(Platform platform)
         {
             Platform = platform;
-            Teleport(Platform.transform.position, Platform.transform.rotation);
+            Teleport(Platform.transform.position, transform.rotation);
         }
         #endregion
 

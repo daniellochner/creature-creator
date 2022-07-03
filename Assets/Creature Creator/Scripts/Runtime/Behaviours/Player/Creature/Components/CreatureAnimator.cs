@@ -94,7 +94,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            IsGrounded = Physics.Raycast(transform.position + Vector3.up * contactDistance, -transform.up, 2f * contactDistance);
+            if (!IsAnimated) return;
+
+            IsGrounded = Physics.Raycast(transform.position + transform.up, -transform.up, 1f + contactDistance);
             Animator.SetBool("IsGrounded", IsGrounded);
 
             float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
@@ -271,8 +273,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             constrainedObject = Constructor.Bones[i],
                             sourceObject = Constructor.Bones[i - 1],
-                            dampPosition = 0.1f,
-                            dampRotation = 0.1f,
+                            dampPosition = 0f,
+                            dampRotation = 0f,
                             maintainAim = true
                         };
                     }
@@ -288,8 +290,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         constrainedObject = Constructor.Bones[i],
                         sourceObject = Constructor.Bones[i + 1],
-                        dampPosition = 0.1f,
-                        dampRotation = 0.1f,
+                        dampPosition = 0f,
+                        dampRotation = 0f,
                         maintainAim = true
                     };
                 }
@@ -384,7 +386,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 float t = 1f - easingFunction(1f, 0f, progress);
                 Vector3 position = Vector3.Lerp(pos1, pos2, t);
                 Constructor.Body.localPosition = position;
-            }, 
+            },
             timeToMove);
 
             IsMovingBody = false;
