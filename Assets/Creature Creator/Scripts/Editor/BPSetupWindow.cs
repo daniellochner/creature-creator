@@ -407,20 +407,20 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateStats()
         {
-            MinMax minMaxVolume = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            MinMax minMaxWeight = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
             foreach (var obj in database.Objects.Values)
             {
                 BodyPart bodyPart = obj as BodyPart;
 
-                float volume = bodyPart.Volume;
-                if (volume > minMaxVolume.max)
+                float weight = bodyPart.Weight;
+                if (weight > minMaxWeight.max)
                 {
-                    minMaxVolume.max = volume;
+                    minMaxWeight.max = weight;
                 }
                 else
-                if (volume < minMaxVolume.min)
+                if (weight < minMaxWeight.min)
                 {
-                    minMaxVolume.min = volume;
+                    minMaxWeight.min = weight;
                 }
             }
 
@@ -447,7 +447,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bodyPart.Complexity = Math.Min(bodyPart.BaseComplexity + bodyPart.Abilities.Count, maxComplexity);
 
                 // Health
-                float t = Mathf.InverseLerp(minMaxVolume.min, minMaxVolume.max, bodyPart.Volume);
+                float t = Mathf.InverseLerp(minMaxWeight.min, minMaxWeight.max, bodyPart.Weight);
                 bodyPart.Health = (int)Mathf.Lerp(minMaxHealth.min, minMaxHealth.max, t);
 
                 // Price

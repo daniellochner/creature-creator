@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public class BodyDimensions
         {
             public float length;
-            public float width;
+            public float radius;
         }
     }
 }

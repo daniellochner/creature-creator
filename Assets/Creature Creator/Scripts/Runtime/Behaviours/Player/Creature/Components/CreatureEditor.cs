@@ -543,6 +543,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 float z = 1f;
                 model.localScale = new Vector3(x, y, z);
 
+                EditorManager.Instance.UpdateStatistics();
                 IsDirty = true;
             };
             CreatureConstructor.OnSetPrimaryColour += delegate (Color colour)

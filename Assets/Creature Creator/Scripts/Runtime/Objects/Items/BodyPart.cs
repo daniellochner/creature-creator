@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int price;
         [SerializeField] private int complexity;
         [SerializeField] private int health;
+        [SerializeField] private float weight;
         [SerializeField, Range(1, 5)] private int appeal = 1;
 
         [SerializeField] private Transformation transformations;
@@ -53,6 +54,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => health;
             set => health = value;
         }
+        public float Weight
+        {
+            get => weight;
+            set => weight = value;
+        }
 
         public int Appeal => appeal;
         public float PivotOffset => pivotOffset;
@@ -62,33 +68,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public float StretchDistance => stretchDistance;
         public float ToolsScaleFactor => toolsScaleFactor;
         public List<Ability> Abilities => abilities;
-
-        public float Volume
-        {
-            get
-            {
-                BodyPartConstructor bpc = prefab.constructible.GetComponent<BodyPartConstructor>();
-                Mesh mesh = null;
-
-                Renderer renderer = bpc.Model.GetComponentInChildren<Renderer>();
-                if (renderer is SkinnedMeshRenderer)
-                {
-                    mesh = (renderer as SkinnedMeshRenderer).sharedMesh;
-                }
-                else
-                {
-                    mesh = bpc.Model.GetComponentInChildren<MeshFilter>().sharedMesh;
-                }
-
-                float scaleFactor = 25f * 25f * 25f;
-                if (Icon.name.Equals("Duo-Limbus") || Icon.name.Equals("Tri-Limbus"))
-                {
-                    scaleFactor = 1f / 100f;
-                }
-
-                return MeshVolume.VolumeOfMesh(mesh) * scaleFactor;
-            }
-        }
 
         public abstract string PluralForm { get; }
         public virtual int BaseComplexity { get; }

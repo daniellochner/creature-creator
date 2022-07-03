@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float mergeThreshold = 0.04f;
         [SerializeField] private BoneSettings boneSettings;
         [SerializeField] private MinMax minMaxBones = new MinMax(2, 20);
+        [SerializeField] private float bodyDensity = 985f;
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private CreatureData data;
@@ -301,7 +302,7 @@ namespace DanielLochner.Assets.CreatureCreator
             float uScale = 1f;
 
             float length = dimensions.body.length;
-            float circumference = 2f * Mathf.PI * dimensions.body.width;
+            float circumference = 2f * Mathf.PI * dimensions.body.radius;
 
             if (length > circumference)
             {
@@ -703,7 +704,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 avgWeight += bone.weight;
             }
             avgWeight /= Data.Bones.Count;
-            dimensions.body.width = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
+            dimensions.body.radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
         }
         public void UpdateDimensions()
         {
@@ -729,7 +730,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            dimensions.height = ((Legs.Count == 0) ? (maxHeight - minHeight) : maxHeight) + dimensions.body.width;
+            dimensions.height = ((Legs.Count == 0) ? (maxHeight - minHeight) : maxHeight) + dimensions.body.radius;
             dimensions.radius = maxRadius;
         }
         #endregion

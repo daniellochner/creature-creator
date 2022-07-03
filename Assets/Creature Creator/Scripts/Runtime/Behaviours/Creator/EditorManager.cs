@@ -39,6 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private BodyPartUI bodyPartUIPrefab;
         [SerializeField] private TextMeshProUGUI cashText;
         [SerializeField] private TextMeshProUGUI complexityText;
+        [SerializeField] private TextMeshProUGUI sizeText;
+        [SerializeField] private TextMeshProUGUI massText;
         [SerializeField] private TextMeshProUGUI dietText;
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI speedText;
@@ -951,10 +953,21 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateStatistics()
         {
-            complexityText.text = $"<b>Complexity:</b> {player.Creature.Constructor.Statistics.complexity}/{player.Creature.Constructor.MaxComplexity}";
-            dietText.text = $"<b>Diet:</b> {player.Creature.Constructor.Statistics.Diet}";
-            healthText.text = $"<b>Health:</b> {player.Creature.Constructor.Statistics.health}";
-            speedText.text = $"<b>Speed:</b> {player.Creature.Constructor.Statistics.speed}";
+            CreatureStatistics statistics = player.Creature.Constructor.Statistics;
+            CreatureDimensions dimensions = player.Creature.Constructor.Dimensions;
+
+            float weight = Mathf.PI * Mathf.Pow(dimensions.body.radius, 2) * dimensions.body.length;
+            foreach (BodyPartConstructor bpc in player.Creature.Constructor.BodyParts)
+            {
+                weight += bpc.BodyPart.Weight * (bpc.Flipped.gameObject.activeSelf ? 2f : 1f);
+            }
+
+            complexityText.text = $"<b>Complexity:</b> {statistics.complexity}/{player.Creature.Constructor.MaxComplexity}";
+            sizeText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
+            massText.text = $"<b>Weight:</b> {Math.Round(weight, 2)}kg";
+            dietText.text = $"<b>Diet:</b> {statistics.Diet}";
+            healthText.text = $"<b>Health:</b> {statistics.health}";
+            speedText.text = $"<b>Speed:</b> {statistics.speed}";
             bonesText.text = $"<b>Bones:</b> {player.Creature.Constructor.Bones.Count}";
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);

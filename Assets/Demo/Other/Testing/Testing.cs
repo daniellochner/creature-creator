@@ -8,6 +8,32 @@ using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 
 public class Testing : MonoBehaviour
 {
+
+    public GameObject[] bp;
+
+    [ContextMenu("VOLUME")]
+    public void GETVOLUME()
+    {
+        for (int i = 0; i<2; i++)
+        {
+            BodyPartConstructor bpc = bp[i].GetComponent<BodyPartConstructor>();
+            Mesh mesh;
+
+            Renderer renderer = bpc.Model.GetComponentInChildren<Renderer>();
+            if (renderer is SkinnedMeshRenderer)
+            {
+                mesh = (renderer as SkinnedMeshRenderer).sharedMesh;
+            }
+            else
+            {
+                mesh = bpc.Model.GetComponentInChildren<MeshFilter>().sharedMesh;
+            }
+
+            Debug.Log(MeshVolume.VolumeOfMesh(mesh));
+        }
+
+    }
+
     //public Database bps;
 
     //[ContextMenu("UPDATE")]
@@ -16,6 +42,8 @@ public class Testing : MonoBehaviour
     //    foreach (object obj in bps.Objects.Values)
     //    {
     //        BodyPart bp = obj as BodyPart;
+
+    //        bp.Density = 985f;
     //        EditorUtility.SetDirty(bp);
     //    }
     //}
