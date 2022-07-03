@@ -39,8 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private BodyPartUI bodyPartUIPrefab;
         [SerializeField] private TextMeshProUGUI cashText;
         [SerializeField] private TextMeshProUGUI complexityText;
-        [SerializeField] private TextMeshProUGUI sizeText;
-        [SerializeField] private TextMeshProUGUI massText;
+        [SerializeField] private TextMeshProUGUI heightText;
+        [SerializeField] private TextMeshProUGUI weightText;
         [SerializeField] private TextMeshProUGUI dietText;
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI speedText;
@@ -322,7 +322,6 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Health.Respawn();
             player.Creature.Constructor.Recenter();
             player.Creature.Constructor.UpdateConfiguration();
-            player.Creature.Constructor.UpdateDimensions();
             player.Creature.Collider.UpdateCollider();
             player.Creature.Mover.TargetPosition = player.Creature.transform.position;
             player.Creature.Mover.IsMovable = true;
@@ -956,15 +955,9 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = player.Creature.Constructor.Statistics;
             CreatureDimensions dimensions = player.Creature.Constructor.Dimensions;
 
-            float weight = Mathf.PI * Mathf.Pow(dimensions.body.radius, 2) * dimensions.body.length;
-            foreach (BodyPartConstructor bpc in player.Creature.Constructor.BodyParts)
-            {
-                weight += bpc.BodyPart.Weight * (bpc.Flipped.gameObject.activeSelf ? 2f : 1f);
-            }
-
             complexityText.text = $"<b>Complexity:</b> {statistics.complexity}/{player.Creature.Constructor.MaxComplexity}";
-            sizeText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
-            massText.text = $"<b>Weight:</b> {Math.Round(weight, 2)}kg";
+            heightText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
+            weightText.text = $"<b>Weight:</b> {Math.Round(statistics.weight, 2)}kg";
             dietText.text = $"<b>Diet:</b> {statistics.Diet}";
             healthText.text = $"<b>Health:</b> {statistics.health}";
             speedText.text = $"<b>Speed:</b> {statistics.speed}";

@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float mergeThreshold = 0.04f;
         [SerializeField] private BoneSettings boneSettings;
         [SerializeField] private MinMax minMaxBones = new MinMax(2, 20);
-        [SerializeField] private float bodyDensity = 985f;
+        [SerializeField] private float density = 500f;
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private CreatureData data;
@@ -50,6 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureData Data => data;
         public CreatureStatistics Statistics => statistics;
         public CreatureDimensions Dimensions => dimensions;
+        public float Density => density;
 
         public Mesh Mesh { get; private set; }
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
@@ -402,6 +403,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 boneTransforms[boneIndex].rotation = transform.rotation * data.Bones[boneIndex].rotation;
                 SetWeight(boneIndex, data.Bones[boneIndex].weight);
             }
+            UpdateDimensions();
 
             OnConstructBody?.Invoke();
         }
@@ -527,6 +529,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             UpdateOrigin();
             UpdateBodyDimensions();
+            UpdateDimensions();
 
             OnSetWeight?.Invoke(index, weight);
         }
@@ -569,6 +572,8 @@ namespace DanielLochner.Assets.CreatureCreator
             OnAddBodyPartPrefab?.Invoke(main.gameObject, main.Flipped.gameObject);
             OnAddBodyPartData?.Invoke(bodyPart);
 
+            UpdateWeight();
+
             return main;
         }
         public void RemoveBodyPart(BodyPartConstructor main)
@@ -578,6 +583,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             main.Remove();
             Data.AttachedBodyParts.Remove(main.AttachedBodyPart);
+            UpdateWeight();
 
             OnRemoveBodyPartData?.Invoke(bodyPart);
 
@@ -705,10 +711,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             avgWeight /= Data.Bones.Count;
             dimensions.body.radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
+
+            UpdateWeight();
         }
         public void UpdateDimensions()
         {
-            float maxHeight = 0f, maxRadius = 0f;
+            float maxHeight = Mathf.NegativeInfinity, maxRadius = Mathf.NegativeInfinity;
             float minHeight = Mathf.Infinity;
 
             foreach (Bone bone in Data.Bones)
@@ -724,7 +732,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     maxHeight = height;
                 }
-                else if (height < minHeight)
+                if (height < minHeight)
                 {
                     minHeight = height;
                 }
@@ -732,6 +740,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
             dimensions.height = ((Legs.Count == 0) ? (maxHeight - minHeight) : maxHeight) + dimensions.body.radius;
             dimensions.radius = maxRadius;
+        }
+        public void UpdateWeight()
+        {
+            float volume = Mathf.PI * Mathf.Pow(dimensions.body.radius, 2) * dimensions.body.length;
+            float weight = volume * density;
+            foreach (BodyPartConstructor bpc in BodyParts)
+            {
+                weight += bpc.BodyPart.Weight;
+            }
+            statistics.weight = weight;
         }
         #endregion
     }

@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<Diet> diets = new List<Diet>();
         public int health = 0;
         public int speed = 0;
+        public float weight = 0f;
 
         public Diet Diet
         {

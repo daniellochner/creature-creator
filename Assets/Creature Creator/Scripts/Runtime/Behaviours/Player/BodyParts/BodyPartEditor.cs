@@ -224,6 +224,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         CreatureEditor.CameraOrbit.Unfreeze(); // Since the body part is destroyed immediately, the OnRelease() method is not invoked.
                     }
 
+                    EditorManager.Instance.UpdateStatistics();
                     CreatureEditor.IsDirty = true;
                 }
             });

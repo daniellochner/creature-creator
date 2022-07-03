@@ -263,12 +263,14 @@ namespace DanielLochner.Assets.CreatureCreator
                         cameraOrbit.Unfreeze();
                     }
 
+                    CreatureConstructor.UpdateDimensions();
                     CreatureConstructor.UpdateConfiguration();
                     foreach (LimbEditor limb in CreatureConstructor.Root.GetComponentsInChildren<LimbEditor>())
                     {
                         limb.UpdateMeshCollider();
                     }
 
+                    EditorManager.Instance.UpdateStatistics();
                     IsDirty = true;
                 }
             });
@@ -356,6 +358,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             CreatureConstructor.OnConstructBody += delegate ()
             {
+                EditorManager.Instance.UpdateStatistics();
                 UpdateMeshCollider();
                 CreatureConstructor.IsTextured = CreatureConstructor.IsTextured;
             };
@@ -482,6 +485,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         CreatureConstructor.UpdateOrigin();
                         CreatureConstructor.UpdateConfiguration();
+                        CreatureConstructor.UpdateDimensions();
 
                         UpdateMeshCollider();
                         foreach (LimbEditor limb in CreatureConstructor.Root.GetComponentsInChildren<LimbEditor>(true))
@@ -489,6 +493,7 @@ namespace DanielLochner.Assets.CreatureCreator
                             limb.UpdateMeshCollider();
                         }
 
+                        EditorManager.Instance.UpdateStatistics();
                         IsDirty = true;
                     }
                 });
@@ -516,7 +521,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 backTool.localRotation = Quaternion.identity;
 
                 // Editor
-                EditorManager.Instance.UpdateStatistics();
                 IsDirty = true;
             };
             CreatureConstructor.OnPreRemoveBone += delegate (int index)
@@ -527,7 +531,6 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             CreatureConstructor.OnRemoveBone += delegate (int index)
             {
-                EditorManager.Instance.UpdateStatistics();
                 IsDirty = true;
             };
             CreatureConstructor.OnSetWeight += delegate (int index, float weight)

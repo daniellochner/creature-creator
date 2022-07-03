@@ -40,11 +40,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Add();
             CreatureConstructor.Legs.Add(this);
+            CreatureConstructor.UpdateDimensions();
         }
         public override void Remove()
         {
             base.Remove();
             CreatureConstructor.Legs.Remove(this);
+            CreatureConstructor.UpdateDimensions();
         }
 
         public void SetFootOffset(float offset)
