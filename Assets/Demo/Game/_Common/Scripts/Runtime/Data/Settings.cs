@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 1)] private float masterVolume;
         [SerializeField, Range(0, 1)] private float musicVolume;
         [SerializeField, Range(0, 1)] private float soundEffectsVolume;
+        [SerializeField] private BackgroundMusicType backgroundMusic;
 
         [Header("Gameplay")]
         [SerializeField] private string onlineUsername;
@@ -149,6 +150,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => soundEffectsVolume;
             set => soundEffectsVolume = Mathf.Clamp01(value);
         }
+        public BackgroundMusicType BackgroundMusic
+        {
+            get => backgroundMusic;
+            set => backgroundMusic = value;
+        }
 
         public string OnlineUsername
         {
@@ -241,6 +247,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MasterVolume = 1f;
             MusicVolume = 0.75f;
             SoundEffectsVolume = 0.75f;
+            BackgroundMusic = BackgroundMusicType.WistfulHarp;
 
             OnlineUsername = "";
             CreaturePresets.Clear();
@@ -314,6 +321,12 @@ namespace DanielLochner.Assets.CreatureCreator
             Low,
             Medium,
             High
+        }
+        public enum BackgroundMusicType
+        {
+            None,
+            WistfulHarp,
+            Being
         }
         #endregion
     }

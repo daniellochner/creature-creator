@@ -42,6 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMasterVolume(Data.MasterVolume);
             SetMusicVolume(Data.MusicVolume);
             SetSoundEffectsVolume(Data.SoundEffectsVolume);
+            SetBackgroundMusic(Data.BackgroundMusic);
 
             SetOnlineUsername(Data.OnlineUsername);
             SetCameraShake(Data.CameraShake);
@@ -164,6 +165,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             masterAudioMixer.SetFloat("SoundEffectsVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, volume));
             Data.SoundEffectsVolume = volume;
+        }
+        public void SetBackgroundMusic(BackgroundMusicType type)
+        {
+            Data.BackgroundMusic = type;
         }
         #endregion
 

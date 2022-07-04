@@ -3,6 +3,7 @@
 
 using SimpleFileBrowser;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +35,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider masterVolumeSlider;
         [SerializeField] private Slider musicVolumeSlider;
         [SerializeField] private Slider soundEffectsVolumeSlider;
-        
+        [SerializeField] private OptionSelector backgroundMusicOS;
+
         [Header("Gameplay")]
         [SerializeField] private TMP_InputField onlineUsernameTextField;
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
@@ -53,6 +55,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider sensitivityVerticalSlider;
         [SerializeField] private Toggle invertHorizontalToggle;
         [SerializeField] private Toggle invertVerticalToggle;
+
+        private Coroutine previewMusicCoroutine;
         #endregion
 
         #region Methods
@@ -281,6 +285,27 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SettingsManager.Instance.SetSoundEffectsVolume(value / 100f);
             });
+
+            // Background Music
+            backgroundMusicOS.SetupUsingEnum<BackgroundMusicType>();
+            backgroundMusicOS.Select(SettingsManager.Data.BackgroundMusic, false);
+            backgroundMusicOS.OnSelected.AddListener(delegate (int option)
+            {
+                BackgroundMusicType type = (BackgroundMusicType)option;
+                SettingsManager.Instance.SetBackgroundMusic(type);
+
+                string music = type.ToString();
+                if (type == BackgroundMusicType.None)
+                {
+                    music = null;
+                }
+
+                if (previewMusicCoroutine != null)
+                {
+                    StopCoroutine(previewMusicCoroutine);
+                }
+                previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(music));
+            });
             #endregion
 
             #region Gameplay
@@ -402,6 +427,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ProgressManager.Instance.Revert();
             progressUI.UpdateInfo();
+        }
+
+        private IEnumerator PreviewMusicRoutine(string music)
+        {
+            MusicManager.Instance.FadeTo(music);
+            yield return new WaitForSeconds(5f);
+            MusicManager.Instance.FadeTo(null);
         }
         #endregion
     }

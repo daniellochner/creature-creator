@@ -33,14 +33,14 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void FadeTo(string m)
+        public void FadeTo(string m, float time = 1f)
         {
             int next = (current + 1) % 2;
-            sources[next].clip = music[m];
+            sources[next].clip = (m != null) ? music[m] : null;
             sources[next].Play();
 
-            StartCoroutine(FadeRoutine(sources[current], 2.5f, 0f));
-            StartCoroutine(FadeRoutine(sources[next], 2.5f, 1f));
+            StartCoroutine(FadeRoutine(sources[current], time, 0f));
+            StartCoroutine(FadeRoutine(sources[next], time, 1f));
 
             current = next;
         }
