@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetAmbientOcclusion(Data.AmbientOcclusion);
             SetAntialiasing(Data.Antialiasing);
             SetScreenSpaceReflections(Data.ScreenSpaceReflections);
+            SetFoliage(Data.Foliage);
             SetBloom(Data.Bloom);
             SetDebugMode(Data.DebugMode);
             SetDepthOfField(Data.DepthOfField);
@@ -123,6 +124,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetScreenSpaceReflections(ScreenSpaceReflectionsType type)
         {
             Data.ScreenSpaceReflections = type;
+        }
+        public void SetFoliage(FoliageType type)
+        {
+            Data.Foliage = type;
+
+            // rendering of grass and trees
+            // low-poly wind shader
         }
         public void SetAnisotropicFiltering(bool anisotropicFiltering)
         {
