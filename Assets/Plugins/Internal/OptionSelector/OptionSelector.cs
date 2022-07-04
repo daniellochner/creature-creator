@@ -11,6 +11,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private TextMeshProUGUI selectedOptionText;
         [Space]
+        [SerializeField] private int startOption = -1;
         [SerializeField] private List<Option> options;
         [SerializeField] private UnityEvent<int> onSelected;
 
@@ -27,6 +28,14 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        private void Start()
+        {
+            if (startOption != -1)
+            {
+                Select(startOption);
+            }
+        }
+
         public void SetupUsingEnum<T>()
         {
             foreach (var type in Enum.GetValues(typeof(T)))

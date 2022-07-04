@@ -24,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector ambientOcclusionOS;
         [SerializeField] private OptionSelector antialiasingOS;
         [SerializeField] private OptionSelector screenSpaceReflectionsOS;
+        [SerializeField] private OptionSelector foliageOS;
         [SerializeField] private Toggle anisotropicFilteringToggle;
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Toggle depthOfFieldToggle;
@@ -109,6 +110,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         ambientOcclusionOS.Select(AmbientOcclusionType.None);
                         antialiasingOS.Select(AntialiasingType.None);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
+                        foliageOS.Select(FoliageType.None);
                         anisotropicFilteringToggle.isOn = false;
                         bloomToggle.isOn = false;
                         depthOfFieldToggle.isOn = false;
@@ -122,6 +124,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         ambientOcclusionOS.Select(AmbientOcclusionType.None);
                         antialiasingOS.Select(AntialiasingType.None);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
+                        foliageOS.Select(FoliageType.Low);
                         anisotropicFilteringToggle.isOn = false;
                         bloomToggle.isOn = false;
                         depthOfFieldToggle.isOn = false;
@@ -135,6 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         ambientOcclusionOS.Select(AmbientOcclusionType.SAO);
                         antialiasingOS.Select(AntialiasingType.FXAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Medium);
+                        foliageOS.Select(FoliageType.Medium);
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
                         depthOfFieldToggle.isOn = false;
@@ -148,6 +152,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         ambientOcclusionOS.Select(AmbientOcclusionType.MSVO);
                         antialiasingOS.Select(AntialiasingType.HighSMAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.High);
+                        foliageOS.Select(FoliageType.High);
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
                         depthOfFieldToggle.isOn = true;
@@ -161,6 +166,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         ambientOcclusionOS.Select(AmbientOcclusionType.MSVO);
                         antialiasingOS.Select(AntialiasingType.HighSMAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.High);
+                        foliageOS.Select(FoliageType.High);
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
                         depthOfFieldToggle.isOn = true;
@@ -215,6 +221,14 @@ namespace DanielLochner.Assets.CreatureCreator
             screenSpaceReflectionsOS.OnSelected.AddListener(delegate (int option)
             {
                 SettingsManager.Instance.SetScreenSpaceReflections((ScreenSpaceReflectionsType)option);
+            });
+
+            // Foliage
+            foliageOS.SetupUsingEnum<FoliageType>();
+            foliageOS.Select(SettingsManager.Data.Foliage, false);
+            foliageOS.OnSelected.AddListener(delegate (int option)
+            {
+                SettingsManager.Instance.SetFoliage((FoliageType)option);
             });
 
             // Anisotropic Filtering
