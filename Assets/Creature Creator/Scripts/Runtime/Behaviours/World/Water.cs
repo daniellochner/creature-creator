@@ -13,9 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnTriggerEnter(Collider other)
         {
             CreatureSourcePlayer player = other.GetComponent<CreatureSourcePlayer>();
-            if (!allowSwimming || (player != null && !player.Abilities.Abilities.Contains(swimAbility)))
+            if (player != null && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
             {
-                this.InvokeAtEndOfFrame(player.Health.Die); // Can't set IsAnimated to false in physics frame?
+                player.Health.Die();
             }
         }
     }
