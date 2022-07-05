@@ -11,12 +11,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private Animator animator;
 
-        public bool IsPrepared
-        {
-            get => animator.GetBool("IsPrepared");
-            set => animator.SetBool("IsPrepared", value);
-        }
-
         protected override void Initialize()
         {
             base.Initialize();

@@ -3,7 +3,7 @@ using UnityEngine;
 using DanielLochner.Assets.CreatureCreator;
 using DanielLochner.Assets;
 using System.Collections.Generic;
-using UnityEditor;
+//using UnityEditor;
 using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 
 public class Testing : MonoBehaviour
@@ -36,16 +36,16 @@ public class Testing : MonoBehaviour
 
     //public Database bps;
 
-    [ContextMenu("UPDATE")]
-    public void UpdateScale()
-    {
-        foreach (object obj in bps.Objects.Values)
-        {
-            BodyPart bp = obj as BodyPart;
-            bp.Weight = 1;
-            EditorUtility.SetDirty(bp);
-        }
-    }
+    //[ContextMenu("UPDATE")]
+    //public void UpdateScale()
+    //{
+    //    foreach (object obj in bps.Objects.Values)
+    //    {
+    //        BodyPart bp = obj as BodyPart;
+    //        bp.Weight = 1;
+    //        EditorUtility.SetDirty(bp);
+    //    }
+    //}
 
 
     //[ContextMenu("UPDATE")]

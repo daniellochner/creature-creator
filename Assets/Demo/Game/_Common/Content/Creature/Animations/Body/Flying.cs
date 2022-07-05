@@ -23,11 +23,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            foreach (WingAnimator wing in wings)
-            {
-                wing.IsPrepared = true;
-            }
-
             foreach (LegAnimator leg in Creature.Legs)
             {
                 leg.Anchor.SetParent(Creature.Constructor.Root);
@@ -40,10 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            foreach (WingAnimator wing in wings)
-            {
-                wing.IsPrepared = false;
-            }
             Creature.Constructor.Root.localPosition = Vector3.zero;
 
             foreach (LegAnimator leg in Creature.Legs)
