@@ -17,12 +17,15 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
+
             sources[0] = gameObject.AddComponent<AudioSource>();
             sources[1] = gameObject.AddComponent<AudioSource>();
 
             sources[0].playOnAwake = sources[1].playOnAwake = false;
+            sources[0].loop = sources[1].loop = true;
             sources[0].outputAudioMixerGroup = sources[1].outputAudioMixerGroup = audioMixer;
         }
         private void Update()
@@ -33,10 +36,11 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void FadeTo(string m, float time = 1f)
+        public void FadeTo(string m, float time = 1f, float volume = 1f)
         {
             int next = (current + 1) % 2;
             sources[next].clip = (m != null) ? music[m] : null;
+            sources[next].volume = volume;
             sources[next].Play();
 
             StartCoroutine(FadeRoutine(sources[current], time, 0f));

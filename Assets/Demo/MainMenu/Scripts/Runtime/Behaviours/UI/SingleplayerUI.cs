@@ -9,20 +9,23 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SingleplayerUI : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private OptionSelector mapOS;
+        [SerializeField] private string map;
         #endregion
 
         #region Methods
-        public void Play()
+        public void PlayDefault()
         {
-            string map = mapOS.Options[mapOS.Selected].Name;
-            if (map.Equals("Sandbox") && !ProgressManager.Instance.IsComplete)
+            SceneManager.LoadScene(map);
+        }
+        public void PlaySandbox()
+        {
+            if (!ProgressManager.Instance.IsComplete)
             {
                 InformationDialog.Inform("Sandbox Locked", "You must collect all parts and patterns before you may access the sandbox!");
             }
             else
             {
-                SceneManager.LoadScene(map);
+                SceneManager.LoadScene("Sandbox");
             }
         }
         #endregion
