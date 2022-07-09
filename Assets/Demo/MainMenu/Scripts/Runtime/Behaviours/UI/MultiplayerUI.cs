@@ -21,6 +21,7 @@ using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
 using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
 using System.Linq;
+using System.Collections;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -167,15 +168,21 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             visibilityOS.Select(VisibilityType.Public);
 
+            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
         }
         private void Shutdown()
         {
+            NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
         }
 
+        private void OnServerStarted()
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, LoadSceneMode.Single);
+        }
         private void OnClientDisconnect(ulong clientID)
         {
             UpdateNetworkStatus("Connection failed.", Color.red);
@@ -183,38 +190,31 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnClientConnect(ulong clientID)
         {
-            string map = "";
-            if (NetworkManager.Singleton.IsHost)
-            {
-                map = mapOS.Options[mapOS.Selected].Name;
-            }
-            else
-            {
-                map = LobbyHelper.Instance.JoinedLobby.Data["Map"].ToString();
-            }
-            OnMultiplayerSuccess("Connected.", map);
+            NetworkManager.Singleton.SceneManager.OnSceneEvent += OnSceneEvent;
+            UpdateNetworkStatus("Connected.", Color.green);
         }
-        private void OnMultiplayerSuccess(string message, string map)
+        private void OnSceneEvent(SceneEvent sceneEvent)
         {
-            UpdateNetworkStatus(message, Color.green);
+            switch (sceneEvent.SceneEventType)
+            {
+                case SceneEventType.Load:
+                    LoadingManager.Instance.StartCoroutine(LoadRoutine(sceneEvent));
+                    LoadingManager.Instance.FadeCanvasGroup.Fade(true, 1f);
+                    break;
 
-            Scene current = SceneManager.GetActiveScene();
-            LoadingManager.Instance.LoadScene(map, onLoad: delegate 
+                case SceneEventType.LoadEventCompleted:
+                    NetworkManager.Singleton.SceneManager.OnSceneEvent -= OnSceneEvent;
+                    LoadingManager.Instance.FadeCanvasGroup.Fade(false, 1f);
+                    break;
+            }
+        }
+        private IEnumerator LoadRoutine(SceneEvent sceneEvent)
+        {
+            while (!sceneEvent.AsyncOperation.isDone)
             {
-                foreach (NetworkObject obj in FindObjectsOfType<NetworkObject>())
-                {
-                    if (obj.transform.parent == null)
-                        SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(map));
-                }
-                SetupGame.Instance.Setup();
-            }, 
-            onPreLoad: delegate
-            {
-                foreach (NetworkObject obj in FindObjectsOfType<NetworkObject>())
-                {
-                    DontDestroyOnLoad(obj.gameObject);
-                }
-            });
+                LoadingManager.Instance.Progress = sceneEvent.AsyncOperation.progress;
+                yield return null;
+            }
         }
 
         public async void Join(string id)

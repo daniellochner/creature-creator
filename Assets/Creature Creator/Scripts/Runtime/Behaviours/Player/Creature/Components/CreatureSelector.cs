@@ -58,18 +58,17 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Collider = GetComponent<CreatureCollider>();
             Informer = GetComponent<CreatureInformer>();
-
-            informationMenu = Instantiate(informationMenuPrefab, Dynamic.OverlayCanvas);
         }
 
         public void Setup()
         {
+            informationMenu = Instantiate(informationMenuPrefab, Dynamic.OverlayCanvas);
             Informer.Setup(informationMenu);
         }
 
         private void HandlePosition()
         {
-            if (informationMenu.IsVisible)
+            if (informationMenu != null && informationMenu.IsVisible)
             {
                 Vector3 position = transform.position + transform.up * Collider.Height;
                 informationMenu.transform.position = RectTransformUtility.WorldToScreenPoint(Player.Instance.Creature.Interactor.InteractionCamera, position);
@@ -77,7 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandleVisibility()
         {
-            if (IsSelected)
+            if (informationMenu != null && IsSelected)
             {
                 if (informationMenu.IsOpen && IsBehindPlayer)
                 {

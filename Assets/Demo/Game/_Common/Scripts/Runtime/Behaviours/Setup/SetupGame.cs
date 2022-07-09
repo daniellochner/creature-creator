@@ -27,10 +27,10 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Awake();
             Initialize();
         }
-        //private void Start()
-        //{
-        //    Setup();
-        //}
+        private void Start()
+        {
+            Setup();
+        }
 
         public void Initialize()
         {
@@ -71,7 +71,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetupSP();
             }
 
-
             player.SourcePlayerCreature.Informer.Setup(informationMenu);
             player.SourcePlayerCreature.Mover.Platform = platform;
             player.transform.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
@@ -90,18 +89,22 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Lobby lobby = LobbyHelper.Instance.JoinedLobby;
             World world = new World(lobby);
-            if (NetworkManager.Singleton.IsHost && world.IsPrivate)
+            if (NetworkManager.Singleton.IsHost)
             {
-                InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{lobby.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
+                if (world.IsPrivate)
                 {
-                    GUIUtility.systemCopyBuffer = lobby.Id;
-                });
-            }
-            if (world.SpawnNPC)
-            {
-                foreach (NetworkCreatureNonPlayer creature in FindObjectsOfType<NetworkCreatureNonPlayer>())
+                    InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{lobby.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
+                    {
+                        GUIUtility.systemCopyBuffer = lobby.Id;
+                    });
+                }
+
+                if (!world.SpawnNPC)
                 {
-                    creature.Despawn();
+                    foreach (NetworkCreatureNonPlayer creature in FindObjectsOfType<NetworkCreatureNonPlayer>())
+                    {
+                        creature.Despawn();
+                    }
                 }
             }
         }
@@ -109,9 +112,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             player.Player.gameObject.SetActive(true);
 
-            foreach (NetworkCreature creature in FindObjectsOfType<NetworkCreature>())
+            foreach (NetworkCreatureNonPlayer npc in FindObjectsOfType<NetworkCreatureNonPlayer>())
             {
-                creature.Setup(true);
+                npc.SourceCreature.gameObject.SetActive(true);
+                npc.SourceCreature.Setup();
             }
         }
         #endregion

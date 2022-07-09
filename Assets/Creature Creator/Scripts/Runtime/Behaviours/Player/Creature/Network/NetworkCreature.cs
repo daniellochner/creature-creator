@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        public override void OnNetworkSpawn()
+        private void Start()
         {
             Setup(IsOwner);
         }
