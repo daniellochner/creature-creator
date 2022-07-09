@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
     public class InteractionsManager : MonoBehaviourSingleton<InteractionsManager>
     {
         #region Fields
-        [SerializeField] private Texture2D defaultCursorIcon;
+        [SerializeField] private Texture2D defaultCursor;
         [SerializeField] private InteractionUI interactionPrefab;
         [SerializeField] private GridLayoutGroup grid;
         [SerializeField] private ToggleGroup toggleGroup;
@@ -67,20 +67,20 @@ namespace DanielLochner.Assets
 
                 if (highlighted == null)
                 {
-                    CursorManager.Instance.SetSubIcon(null);
-                    CursorManager.Instance.SetScale(1f);
+                    Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+                    Cursor.visible = true;
                 }
                 else
                 {
                     if (interactions.Count == 1)
                     {
-                        CursorManager.Instance.SetSubIcon(highlighted.Icon);
+                        Cursor.SetCursor(highlighted.Cursor, Vector2.zero, CursorMode.Auto);
+                        Cursor.visible = true;
                     }
                     else
                     {
-                        CursorManager.Instance.SetSubIcon(null);
+                        Cursor.visible = false;
                     }
-                    CursorManager.Instance.SetScale(0.75f);
                 }
 
                 OnHighlight?.Invoke(highlighted);

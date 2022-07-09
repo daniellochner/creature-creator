@@ -23,7 +23,7 @@ namespace DanielLochner.Assets
             Interactable = interactable;
 
             toggle.group = group;
-            icon.sprite = interactable.Icon;
+            icon.sprite = Sprite.Create(interactable.Cursor, new Rect(Vector2.zero, new Vector2(interactable.Cursor.width, interactable.Cursor.height)), Vector2.one / 2f);
         }
         public void Select()
         {
