@@ -27,10 +27,10 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Awake();
             Initialize();
         }
-        private void Start()
-        {
-            Setup();
-        }
+        //private void Start()
+        //{
+        //    Setup();
+        //}
 
         public void Initialize()
         {

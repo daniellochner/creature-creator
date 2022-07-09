@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -15,7 +14,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void PlayDefault()
         {
-            LoadingManager.Instance.LoadScene(map);
+            LoadingManager.Instance.LoadScene(map, delegate 
+            {
+                SetupGame.Instance.Setup();
+            });
         }
         public void PlaySandbox()
         {
@@ -25,7 +27,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                LoadingManager.Instance.LoadScene("Sandbox");
+                LoadingManager.Instance.LoadScene("Sandbox", delegate
+                {
+                    SetupGame.Instance.Setup();
+                });
             }
         }
         #endregion

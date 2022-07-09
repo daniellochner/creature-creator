@@ -167,21 +167,15 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             visibilityOS.Select(VisibilityType.Public);
 
-            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
         }
         private void Shutdown()
         {
-            NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
         }
 
-        private void OnServerStarted()
-        {
-            OnMultiplayerSuccess("Created.");
-        }
         private void OnClientDisconnect(ulong clientID)
         {
             UpdateNetworkStatus("Connection failed.", Color.red);
@@ -194,7 +188,26 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnMultiplayerSuccess(string message)
         {
             UpdateNetworkStatus(message, Color.green);
-            LoadingManager.Instance.LoadScene(mapOS.Options[mapOS.Selected].Name);
+
+            Scene current = SceneManager.GetActiveScene();
+            string target = mapOS.Options[mapOS.Selected].Name;
+
+            LoadingManager.Instance.LoadScene(target, onLoad: delegate 
+            {
+                foreach (NetworkObject obj in FindObjectsOfType<NetworkObject>())
+                {
+                    if (obj.transform.parent == null)
+                        SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(target));
+                }
+                SetupGame.Instance.Setup();
+            }, 
+            onPreLoad: delegate
+            {
+                foreach (NetworkObject obj in FindObjectsOfType<NetworkObject>())
+                {
+                    DontDestroyOnLoad(obj.gameObject);
+                }
+            });
         }
 
         public async void Join(string id)

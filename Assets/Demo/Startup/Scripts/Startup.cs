@@ -6,10 +6,11 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Startup : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private Animator logoAnimator;
         [SerializeField] private Material gridMat;
         [SerializeField] private float scale;
         [SerializeField] private float speed;
+        [SerializeField] private Animator logoAnimator;
+        [SerializeField] private AudioSource enterAudioSource;
 
         private bool isKeyPressed;
         #endregion
@@ -32,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 MusicManager.Instance.FadeTo(null);
                 logoAnimator.SetTrigger("Hide");
+                enterAudioSource.Play();
             }
         }
         #endregion
