@@ -13,16 +13,19 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private Image logo;
 
-        private CanvasGroup fadeCanvasGroup;
+        private CanvasGroup canvasGroup;
+        private float progress;
         #endregion
 
         #region Properties
-        public CanvasGroup FadeCanvasGroup => fadeCanvasGroup;
-
         public float Progress
         {
-            get => logo.fillAmount;
-            set => logo.fillAmount = value;
+            get => progress;
+            set
+            {
+                progress = value;
+                logo.fillAmount = progress;
+            }
         }
         #endregion
 
@@ -30,28 +33,29 @@ namespace DanielLochner.Assets
         protected override void Awake()
         {
             base.Awake();
-            fadeCanvasGroup = GetComponent<CanvasGroup>();
+            canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void LoadScene(string scene, Action onLoad = null, Action onPreLoad = null)
+        public void Load(string sceneName, Action onLoad = null)
         {
-            StartCoroutine(LoadSceneRoutine(scene, onLoad, onPreLoad));
+            StartCoroutine(LoadRoutine(SceneManager.LoadSceneAsync(sceneName), onLoad));
         }
-        private IEnumerator LoadSceneRoutine(string scene, Action onLoad, Action onPreLoad)
+        public IEnumerator LoadRoutine(AsyncOperation operation, Action onLoad)
         {
-            logo.fillAmount = 0f;
-            yield return StartCoroutine(fadeCanvasGroup.Fade(true, 1f));
+            Coroutine fadeIn = StartCoroutine(canvasGroup.Fade(true, 1f));
 
-            AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
-            onPreLoad?.Invoke();
+            Progress = 0f;
             while (!operation.isDone)
             {
                 Progress = operation.progress;
                 yield return null;
             }
+            Progress = 1f;
+
             onLoad?.Invoke();
 
-            yield return StartCoroutine(fadeCanvasGroup.Fade(false, 1f));
+            StopCoroutine(fadeIn);
+            yield return StartCoroutine(canvasGroup.Fade(false, 1f));
         }
         #endregion
     }

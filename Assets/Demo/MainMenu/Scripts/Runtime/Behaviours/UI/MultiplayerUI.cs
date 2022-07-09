@@ -190,31 +190,15 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnClientConnect(ulong clientID)
         {
-            NetworkManager.Singleton.SceneManager.OnSceneEvent += OnSceneEvent;
             UpdateNetworkStatus("Connected.", Color.green);
+            NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
         }
-        private void OnSceneEvent(SceneEvent sceneEvent)
+        private void OnLoad(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
-            switch (sceneEvent.SceneEventType)
+            LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate 
             {
-                case SceneEventType.Load:
-                    LoadingManager.Instance.StartCoroutine(LoadRoutine(sceneEvent));
-                    LoadingManager.Instance.FadeCanvasGroup.Fade(true, 1f);
-                    break;
-
-                case SceneEventType.LoadEventCompleted:
-                    NetworkManager.Singleton.SceneManager.OnSceneEvent -= OnSceneEvent;
-                    LoadingManager.Instance.FadeCanvasGroup.Fade(false, 1f);
-                    break;
-            }
-        }
-        private IEnumerator LoadRoutine(SceneEvent sceneEvent)
-        {
-            while (!sceneEvent.AsyncOperation.isDone)
-            {
-                LoadingManager.Instance.Progress = sceneEvent.AsyncOperation.progress;
-                yield return null;
-            }
+                NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
+            }));
         }
 
         public async void Join(string id)

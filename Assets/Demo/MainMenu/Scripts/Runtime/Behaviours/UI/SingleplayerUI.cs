@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void PlayDefault()
         {
-            LoadingManager.Instance.LoadScene(map, SetupGame.Instance.Setup);
+            LoadingManager.Instance.Load(map);
         }
         public void PlaySandbox()
         {
@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                LoadingManager.Instance.LoadScene("Sandbox", SetupGame.Instance.Setup);
+                LoadingManager.Instance.Load("Sandbox");
             }
         }
         #endregion

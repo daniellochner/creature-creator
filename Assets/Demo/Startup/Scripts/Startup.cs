@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (Input.anyKeyDown && !isKeyPressed)
             {
-                LoadingManager.Instance.LoadScene("MainMenu");
+                LoadingManager.Instance.Load("MainMenu");
                 isKeyPressed = true;
 
                 MusicManager.Instance.FadeTo(null);

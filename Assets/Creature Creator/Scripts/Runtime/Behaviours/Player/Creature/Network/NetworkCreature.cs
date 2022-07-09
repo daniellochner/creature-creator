@@ -35,10 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        private void Start()
-        {
-            Setup(IsOwner);
-        }
 
         private void Initialize()
         {

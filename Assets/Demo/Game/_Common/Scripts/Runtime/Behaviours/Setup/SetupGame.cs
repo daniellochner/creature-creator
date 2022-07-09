@@ -112,11 +112,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             player.Player.gameObject.SetActive(true);
 
-            foreach (NetworkCreatureNonPlayer npc in FindObjectsOfType<NetworkCreatureNonPlayer>())
-            {
-                npc.SourceCreature.gameObject.SetActive(true);
-                npc.SourceCreature.Setup();
-            }
+            //foreach (NetworkCreatureNonPlayer npc in FindObjectsOfType<NetworkCreatureNonPlayer>())
+            //{
+            //    npc.SourceCreature.gameObject.SetActive(true);
+            //    npc.SourceCreature.Setup();
+            //}
         }
         #endregion
     }
