@@ -41,12 +41,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 player.Creature.Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
 
-                if (SetupGame.IsNetworkedGame)
-                {
-                    ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
-                    Username = connectionData.username;
-                    SetPlayerNameServerRpc(Username);
-                }
+                //if (SetupGame.IsNetworkedGame)
+                //{
+                //    ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
+                //    Username = connectionData.username;
+                //    SetPlayerNameServerRpc(Username);
+                //}
             }
         }
         

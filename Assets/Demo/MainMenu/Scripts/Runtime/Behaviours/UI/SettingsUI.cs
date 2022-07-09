@@ -80,10 +80,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     resolutionOS.Select(i, false);
                 }
             }
-            resolutionOS.OnSelected.AddListener(delegate (int option)
-            {
-                SettingsManager.Instance.SetResolution(Screen.resolutions[option]);
-            });
 
             // Fullscreen
             fullscreenToggle.SetIsOnWithoutNotify(SettingsManager.Data.Fullscreen);
@@ -423,6 +419,10 @@ namespace DanielLochner.Assets.CreatureCreator
             #endregion
         }
 
+        public void ApplyResolution()
+        {
+            SettingsManager.Instance.SetResolution(Screen.resolutions[resolutionOS.Selected]);
+        }
         public void ResetProgress()
         {
             ProgressManager.Instance.Revert();

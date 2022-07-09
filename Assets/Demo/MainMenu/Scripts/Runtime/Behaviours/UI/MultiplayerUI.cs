@@ -183,21 +183,28 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnClientConnect(ulong clientID)
         {
-            OnMultiplayerSuccess("Connected.");
+            string map = "";
+            if (NetworkManager.Singleton.IsHost)
+            {
+                map = mapOS.Options[mapOS.Selected].Name;
+            }
+            else
+            {
+                map = LobbyHelper.Instance.JoinedLobby.Data["Map"].ToString();
+            }
+            OnMultiplayerSuccess("Connected.", map);
         }
-        private void OnMultiplayerSuccess(string message)
+        private void OnMultiplayerSuccess(string message, string map)
         {
             UpdateNetworkStatus(message, Color.green);
 
             Scene current = SceneManager.GetActiveScene();
-            string target = mapOS.Options[mapOS.Selected].Name;
-
-            LoadingManager.Instance.LoadScene(target, onLoad: delegate 
+            LoadingManager.Instance.LoadScene(map, onLoad: delegate 
             {
                 foreach (NetworkObject obj in FindObjectsOfType<NetworkObject>())
                 {
                     if (obj.transform.parent == null)
-                        SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(target));
+                        SceneManager.MoveGameObjectToScene(obj.gameObject, SceneManager.GetSceneByName(map));
                 }
                 SetupGame.Instance.Setup();
             }, 
