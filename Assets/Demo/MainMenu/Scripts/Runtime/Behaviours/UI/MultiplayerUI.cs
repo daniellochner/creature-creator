@@ -180,7 +180,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnServerStarted()
         {
-            OnMultiplayerSuccess("Created. Loading World...");
+            OnMultiplayerSuccess("Created.");
         }
         private void OnClientDisconnect(ulong clientID)
         {
@@ -189,7 +189,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnClientConnect(ulong clientID)
         {
-            OnMultiplayerSuccess("Connected. Loading World...");
+            OnMultiplayerSuccess("Connected.");
         }
         private void OnMultiplayerSuccess(string message)
         {
