@@ -6,13 +6,12 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Startup : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private string sceneToLoad;
-        [SerializeField] private bool waitForKeyPress;
-        [Space]
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private Material gridMat;
         [SerializeField] private float scale;
         [SerializeField] private float speed;
+
+        private bool isKeyPressed;
         #endregion
 
         #region Methods
@@ -26,14 +25,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             gridMat.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
 
-            if (waitForKeyPress && Input.anyKeyDown)
+            if (Input.anyKeyDown && !isKeyPressed)
             {
-                Fader.Fade(true, 1f, delegate
-                {
-                    SceneManager.LoadScene(sceneToLoad);
-                    Fader.Fade(false, 1f);
-                });
-                waitForKeyPress = false;
+                LoadingManager.Instance.LoadScene("MainMenu");
+                isKeyPressed = true;
 
                 MusicManager.Instance.FadeTo(null);
                 logoAnimator.SetTrigger("Hide");

@@ -194,7 +194,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnMultiplayerSuccess(string message)
         {
             UpdateNetworkStatus(message, Color.green);
-            NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, UnityEngine.SceneManagement.LoadSceneMode.Single);
+            LoadingManager.Instance.LoadScene(mapOS.Options[mapOS.Selected].Name);
         }
 
         public async void Join(string id)
