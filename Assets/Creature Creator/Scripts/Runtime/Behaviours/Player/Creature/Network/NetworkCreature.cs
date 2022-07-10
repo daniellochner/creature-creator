@@ -26,14 +26,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public CreatureSource SourceCreature => source;
         public virtual CreatureTargetBase TargetCreature => target;
-
-        public bool IsOWNER { get; set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
             Initialize();
+        }
+        private void Start()
+        {
+            Setup(IsOwner);
         }
 
         private void Initialize()
@@ -43,8 +45,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public virtual void Setup(bool isOwner)
         {
-            IsOWNER = isOwner;
-
             source.gameObject.SetActive(isOwner);
             target.gameObject.SetActive(!isOwner);
 
@@ -62,6 +62,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 Health.OnValueChanged += UpdateHealth;
                 Energy.OnValueChanged += UpdateEnergy;
                 Age.OnValueChanged += UpdateAge;
+
+                TargetCreature.Setup();
+                TargetCreature.Animator.IsAnimated = true;
             }
         }
 
@@ -74,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void SetTriggerClientRpc(string param)
         {
-            if (!IsOWNER)
+            if (!IsOwner)
             {
                 TargetCreature.Animator.Animator.SetTrigger(param);
             }
@@ -88,7 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void SetBoolClientRpc(string param, bool value)
         {
-            if (!IsOWNER)
+            if (!IsOwner)
             {
                 TargetCreature.Animator.Animator.SetBool(param, value);
             }
@@ -105,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void HideClientRpc()
         {
-            if (!IsOWNER)
+            if (!IsOwner)
             {
                 TargetCreature.gameObject.SetActive(false);
             }
@@ -127,7 +130,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected void ReconstructAndShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
         {
             CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
-            if (!IsOWNER)
+            if (!IsOwner)
             {
                 TargetCreature.Constructor.Demolish();
                 TargetCreature.gameObject.SetActive(true);
@@ -150,7 +153,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void RespawnClientRpc()
         {
-            if (!IsOWNER)
+            if (!IsOwner)
             {
                 Destroy(TargetCreature.Killer.Corpse);
             }

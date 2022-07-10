@@ -20,8 +20,6 @@ using System.Text;
 using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
 using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
-using System.Linq;
-using System.Collections;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -195,7 +193,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnLoad(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
-            LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate 
+            LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate
             {
                 NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
             }));

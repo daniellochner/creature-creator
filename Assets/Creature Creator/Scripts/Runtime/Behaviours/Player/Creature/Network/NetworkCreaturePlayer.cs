@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Player Player => player;
         public CreatureSourcePlayer SourcePlayerCreature => SourceCreature as CreatureSourcePlayer;
 
-        public override CreatureTargetBase TargetCreature => IsOWNER ? SourcePlayerCreature : base.TargetCreature;
+        public override CreatureTargetBase TargetCreature => IsOwner ? SourcePlayerCreature : base.TargetCreature;
 
         public string Username { get; set; }
         #endregion
@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup(isOwner);
 
-            if (IsOWNER)
+            if (IsOwner)
             {
                 if (player.Creature.Mover.RequestToMove)
                 {
@@ -41,12 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 player.Creature.Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
 
-                //if (SetupGame.IsNetworkedGame)
-                //{
-                //    ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
-                //    Username = connectionData.username;
-                //    SetPlayerNameServerRpc(Username);
-                //}
+                SetupPlayerName();
             }
         }
         
@@ -90,6 +85,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Player Name
+        private void SetupPlayerName()
+        {
+            ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
+            Username = connectionData.username;
+            SetPlayerNameServerRpc(Username);
+        }
+
         [ServerRpc]
         private void SetPlayerNameServerRpc(string name)
         {

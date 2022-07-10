@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -55,6 +53,7 @@ namespace DanielLochner.Assets
             onLoad?.Invoke();
 
             StopCoroutine(fadeIn);
+            canvasGroup.alpha = 1f;
             yield return StartCoroutine(canvasGroup.Fade(false, 1f));
         }
         #endregion
