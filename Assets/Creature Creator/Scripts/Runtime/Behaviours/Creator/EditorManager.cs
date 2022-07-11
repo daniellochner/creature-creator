@@ -28,6 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int startingCash = 1000;
 
         [Header("General")]
+        [SerializeField] private Platform platform;
         [SerializeField] private Player player;
         [SerializeField] private AudioSource editorAudioSource;
         [SerializeField] private CanvasGroup editorCanvasGroup;
@@ -59,6 +60,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
+        [SerializeField] private CreatureInformationMenu informationMenu;
+        [SerializeField] private NetworkCreaturesMenu networkMenu;
 
         [Header("Paint")]
         [SerializeField] private Menu paintMenu;
@@ -263,9 +266,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             UpdateLoadableCreatures();
+
+            // Play
+            networkMenu.gameObject.SetActive(NetworkConnectionManager.IsConnected);
         }
         public void SetupCreature()
         {
+            player.Creature.Mover.Teleport(platform);
+            player.gameObject.SetActive(true);
+
             // Setup components (in correct order).
             player.Creature.Setup();
 
@@ -281,6 +290,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Editor.IsInteractable = true;
             player.Creature.Editor.IsEditing = true;
             player.Creature.Editor.Cash = BaseCash;
+            player.Creature.Informer.Setup(informationMenu);
         }
         #endregion
 

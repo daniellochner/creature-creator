@@ -238,15 +238,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Teleport(Vector3 position, Quaternion rotation)
         {
-            transform.position = TargetPosition = position;
-            transform.rotation = rotation;
+            transform.position = cameraFollower.transform.position = TargetPosition = position;
+            transform.rotation = cameraFollower.transform.rotation = rotation;
 
             moveDisplacement = Vector3.zero;
         }
         public void Teleport(Platform platform)
         {
             Platform = platform;
-            Teleport(Platform.transform.position, transform.rotation);
+            Teleport(Platform.transform.position, Platform.transform.rotation);
         }
         #endregion
 

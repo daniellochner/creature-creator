@@ -11,13 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         private bool despawn;
         #endregion
-
-        #region Properties
-        public CreatureSourceNonPlayer SourceNonPlayerCreature => SourceCreature as CreatureSourceNonPlayer;
-
-        public override CreatureTargetBase TargetCreature => IsOwner ? SourceNonPlayerCreature : base.TargetCreature;
-        #endregion
-
+        
         #region Methods
         public override void OnNetworkSpawn()
         {

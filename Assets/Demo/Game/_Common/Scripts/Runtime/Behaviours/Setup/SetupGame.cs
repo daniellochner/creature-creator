@@ -11,50 +11,15 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private NetworkCreaturePlayer player;
-        [SerializeField] private Platform platform;
-
-        [SerializeField] private NetworkCreaturesMenu networkMenu;
-        [SerializeField] private CreatureInformationMenu informationMenu;
-        #endregion
-
-        #region Properties
-        public static bool IsNetworkedGame => NetworkManager.Singleton.IsListening;
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-            Initialize();
-        }
         private void Start()
         {
             Setup();
         }
 
-        public void Initialize()
-        {
-            if (IsNetworkedGame)
-            {
-                InitializeMP();
-            }
-            else
-            {
-                InitializeSP();
-            }
-        }
-        private void InitializeMP()
-        {
-            player.gameObject.SetActive(false);
-            networkMenu.gameObject.SetActive(true);
-        }
-        private void InitializeSP()
-        {
-            player.gameObject.SetActive(true);
-            networkMenu.gameObject.SetActive(false);
-        }
-
-        public void Setup()
+        private void Setup()
         {
             EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
             EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
@@ -62,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
             EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
             EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
 
-            if (IsNetworkedGame)
+            if (NetworkConnectionManager.IsConnected)
             {
                 SetupMP();
             }
@@ -70,19 +35,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetupSP();
             }
-
-            player.SourcePlayerCreature.Informer.Setup(informationMenu);
-            player.SourcePlayerCreature.Mover.Platform = platform;
-            player.transform.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
-
-            EditorManager.Instance.Setup();
         }
         private void SetupMP()
         {
             player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreaturePlayer>();
             EditorManager.Instance.Player = player.Player;
-            
-            player.Player.gameObject.SetActive(true);
+            EditorManager.Instance.Setup();
 
             NetworkCreaturesManager.Instance.Setup();
             NetworkCreaturesMenu.Instance.Setup();
@@ -98,7 +56,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         GUIUtility.systemCopyBuffer = lobby.Id;
                     });
                 }
-
                 if (!world.SpawnNPC)
                 {
                     foreach (NetworkCreatureNonPlayer creature in FindObjectsOfType<NetworkCreatureNonPlayer>())
@@ -110,7 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupSP()
         {
-            player.Player.gameObject.SetActive(true);
+            EditorManager.Instance.Setup();
         }
         #endregion
     }

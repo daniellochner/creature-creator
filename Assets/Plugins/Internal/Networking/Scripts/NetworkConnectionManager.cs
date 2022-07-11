@@ -10,6 +10,10 @@ namespace DanielLochner.Assets
     [RequireComponent(typeof(NetworkObject))]
     public class NetworkConnectionManager : NetworkSingleton<NetworkConnectionManager>
     {
+        #region Properties
+        public static bool IsConnected => NetworkManager.Singleton.IsListening;
+        #endregion
+
         #region Methods
         [ClientRpc]
         private void ForceDisconnectClientRpc(string reason, ClientRpcParams clientRpcParams)

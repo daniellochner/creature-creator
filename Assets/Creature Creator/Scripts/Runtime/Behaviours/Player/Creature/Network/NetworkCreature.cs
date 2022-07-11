@@ -23,9 +23,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<float> Energy { get; private set; } = new NetworkVariable<float>();
         public NetworkVariable<int> Age { get; private set; } = new NetworkVariable<int>();
         public NetworkVariable<bool> IsHidden { get; private set; } = new NetworkVariable<bool>();
-
-        public CreatureSource SourceCreature => source;
-        public virtual CreatureTargetBase TargetCreature => target;
         #endregion
 
         #region Methods
@@ -35,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            Setup(IsOwner);
+            Setup();
         }
 
         private void Initialize()
@@ -43,29 +40,37 @@ namespace DanielLochner.Assets.CreatureCreator
             networkObject = GetComponent<NetworkObject>();
             networkTransform = GetComponent<NetworkTransform>();
         }
-        public virtual void Setup(bool isOwner)
+        public virtual void Setup()
         {
-            source.gameObject.SetActive(isOwner);
-            target.gameObject.SetActive(!isOwner);
+            bool isSource = false;
 
-            if (isOwner)
+            if (NetworkConnectionManager.IsConnected)
             {
-                SourceCreature.Health.OnHealthChanged += SetHealthServerRpc;
-                SourceCreature.Energy.OnEnergyChanged += SetEnergyServerRpc;
-                SourceCreature.Age.OnAgeChanged += SetAgeServerRpc;
+                isSource = IsOwner;
 
-                SourceCreature.Animator.OnSetTrigger += SetTriggerServerRpc;
-                SourceCreature.Animator.OnSetBool += SetBoolServerRpc;
+                if (isSource)
+                {
+                    source.Health.OnHealthChanged += SetHealthServerRpc;
+                    source.Energy.OnEnergyChanged += SetEnergyServerRpc;
+                    source.Age.OnAgeChanged += SetAgeServerRpc;
+
+                    source.Animator.OnSetTrigger += SetTriggerServerRpc;
+                    source.Animator.OnSetBool += SetBoolServerRpc;
+                }
+                else
+                {
+                    Health.OnValueChanged += UpdateHealth;
+                    Energy.OnValueChanged += UpdateEnergy;
+                    Age.OnValueChanged += UpdateAge;
+                }
             }
             else
             {
-                Health.OnValueChanged += UpdateHealth;
-                Energy.OnValueChanged += UpdateEnergy;
-                Age.OnValueChanged += UpdateAge;
-
-                TargetCreature.Setup();
-                TargetCreature.Animator.IsAnimated = true;
+                isSource = true;
             }
+
+            source.gameObject.SetActive(isSource);
+            target.gameObject.SetActive(!isSource);
         }
 
         #region Animations
@@ -79,7 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                TargetCreature.Animator.Animator.SetTrigger(param);
+                target.Animator.Animator.SetTrigger(param);
             }
         }
 
@@ -93,7 +98,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                TargetCreature.Animator.Animator.SetBool(param, value);
+                target.Animator.Animator.SetBool(param, value);
             }
         }
         #endregion
@@ -110,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                TargetCreature.gameObject.SetActive(false);
+                target.gameObject.SetActive(false);
             }
         }
         public void Hide()
@@ -132,15 +137,15 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
             if (!IsOwner)
             {
-                TargetCreature.Constructor.Demolish();
-                TargetCreature.gameObject.SetActive(true);
-                TargetCreature.Constructor.Construct(data);
+                target.Constructor.Demolish();
+                target.gameObject.SetActive(true);
+                target.Constructor.Construct(data);
             }
             NetworkCreaturesMenu.Instance.SetName(OwnerClientId, data.Name);
         }
         public void ReconstructAndShow()
         {
-            ReconstructAndShowServerRpc(JsonUtility.ToJson(SourceCreature.Constructor.Data));
+            ReconstructAndShowServerRpc(JsonUtility.ToJson(source.Constructor.Data));
         }
         #endregion
 
@@ -155,7 +160,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                Destroy(TargetCreature.Killer.Corpse);
+                Destroy(target.Killer.Corpse);
             }
         }
         #endregion
@@ -180,15 +185,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateHealth(float oldHealth, float newHealth)
         {
-            TargetCreature.Health.Health = newHealth;
+            target.Health.Health = newHealth;
         }
         private void UpdateEnergy(float oldEnergy, float newEnergy)
         {
-            TargetCreature.Energy.Energy = newEnergy;
+            target.Energy.Energy = newEnergy;
         }
         private void UpdateAge(int oldAge, int newAge)
         {
-            TargetCreature.Age.Age = newAge;
+            target.Age.Age = newAge;
         }
         #endregion
         #endregion

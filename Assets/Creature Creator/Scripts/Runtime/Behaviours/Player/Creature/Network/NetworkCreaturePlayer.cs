@@ -19,18 +19,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public Player Player => player;
-        public CreatureSourcePlayer SourcePlayerCreature => SourceCreature as CreatureSourcePlayer;
-
-        public override CreatureTargetBase TargetCreature => IsOwner ? SourcePlayerCreature : base.TargetCreature;
 
         public string Username { get; set; }
         #endregion
 
         #region Methods
-        public override void Setup(bool isOwner)
+        public override void Setup()
         {
-            base.Setup(isOwner);
-
             if (IsOwner)
             {
                 if (player.Creature.Mover.RequestToMove)

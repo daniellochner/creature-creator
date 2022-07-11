@@ -56,9 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Start()
         {
             base.Start();
-            Creature.Setup();
             Creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
-            Creature.Animator.IsAnimated = true;
         }
 
         public virtual void Follow(Transform target)

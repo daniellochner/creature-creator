@@ -9,9 +9,6 @@ using UnityEngine.Animations.Rigging;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    /// <summary>
-    /// Provides useful interface for creature animations.
-    /// </summary>
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(CreatureConstructor))]
@@ -19,6 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private bool isAnimated;
+
         [Header("Setup")]
         [SerializeField] private Transform rig;
         [SerializeField] private float extensionThreshold = 0.95f;
@@ -29,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private Transform head, tail, limbs;
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
-        private bool isAnimated, hasCapturedDefaults;
+        private bool hasCapturedDefaults;
         #endregion
 
         #region Properties
@@ -146,7 +145,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             Constructor.OnConstructCreature += delegate
             {
-                Reinitialize();
+                IsAnimated = IsAnimated; // Reanimate
             };
         }
 
