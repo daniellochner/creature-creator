@@ -11,8 +11,30 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         private bool despawn;
         #endregion
-        
+
         #region Methods
+
+        public override void Setup()
+        {
+            base.Setup();
+            
+            if (NetworkConnectionManager.IsConnected)
+            {
+                if (IsOwner)
+                {
+                    source.Setup();
+                }
+                else
+                {
+                    target.Setup();
+                }
+            }
+            else
+            {
+                source.Setup();
+            }
+        }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

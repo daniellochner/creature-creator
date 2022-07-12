@@ -2,8 +2,10 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -23,6 +25,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<float> Energy { get; private set; } = new NetworkVariable<float>();
         public NetworkVariable<int> Age { get; private set; } = new NetworkVariable<int>();
         public NetworkVariable<bool> IsHidden { get; private set; } = new NetworkVariable<bool>();
+
+        public CreatureSource Source => source;
+        public CreatureTargetBase Target => target;
         #endregion
 
         #region Methods
@@ -42,13 +47,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public virtual void Setup()
         {
-            bool isSource = false;
-
             if (NetworkConnectionManager.IsConnected)
             {
-                isSource = IsOwner;
-
-                if (isSource)
+                if (IsOwner)
                 {
                     source.Health.OnHealthChanged += SetHealthServerRpc;
                     source.Energy.OnEnergyChanged += SetEnergyServerRpc;
@@ -64,13 +65,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     Age.OnValueChanged += UpdateAge;
                 }
             }
-            else
-            {
-                isSource = true;
-            }
-
-            source.gameObject.SetActive(isSource);
-            target.gameObject.SetActive(!isSource);
         }
 
         #region Animations
@@ -126,13 +120,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Reconstruct And Show
         [ServerRpc]
-        protected void ReconstructAndShowServerRpc(string creatureData)
+        public void ReconstructAndShowServerRpc(string creatureData)
         {
             ReconstructAndShowClientRpc(creatureData);
             IsHidden.Value = false;
         }
         [ClientRpc]
-        protected void ReconstructAndShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
+        public void ReconstructAndShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
         {
             CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
             if (!IsOwner)

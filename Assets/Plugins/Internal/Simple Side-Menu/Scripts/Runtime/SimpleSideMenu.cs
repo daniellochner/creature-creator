@@ -213,7 +213,7 @@ namespace DanielLochner.Assets
                     openPosition = new Vector2(rectTransform.localPosition.x, rectTransform.rect.height);
                     break;
             }
-            rectTransform.sizeDelta = rectTransform.rect.size;
+            //rectTransform.sizeDelta = rectTransform.rect.size;
             rectTransform.anchorMin = anchorMin;
             rectTransform.anchorMax = anchorMax;
             rectTransform.pivot = pivot;

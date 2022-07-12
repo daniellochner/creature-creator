@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -26,20 +27,29 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void Setup()
         {
-            if (IsOwner)
+            base.Setup();
+
+            if (NetworkConnectionManager.IsConnected)
             {
-                if (player.Creature.Mover.RequestToMove)
+                if (IsOwner)
                 {
-                    player.Creature.Mover.OnTurnRequest += RequestToTurn;
-                    player.Creature.Mover.OnMoveRequest += RequestToMove;
+                    if (player.Creature.Mover.RequestToMove)
+                    {
+                        player.Creature.Mover.OnTurnRequest += RequestToTurn;
+                        player.Creature.Mover.OnMoveRequest += RequestToMove;
+                    }
+
+                    player.Creature.Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
+
+                    SetupPlayerName();
                 }
-
-                player.Creature.Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
-
-                SetupPlayerName();
+                else
+                {
+                    target.Setup();
+                }
             }
         }
-        
+
         private void LateUpdate()
         {
             HandlePlayerName();
@@ -50,32 +60,22 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             "{username} died.",
             "{username} kicked the bucket.",
-            "{username} passed on.",
+            "{username} passed away.",
             "{username} expired.",
-            "{username} left the building.",
-            "{username} checked out.",
             "{username} bit the dust.",
-            "{username} no longer exists.",
-            "{username} rode off into the sunset.",
-            "{username} left to buy milk.",
-            "{username} withered away.",
             "{username} perished.",
-            "{username} cashed in.",
-            "{username} departed.",
-            "{username} found everlasting peace.",
-            "{username} is no longer with us."
         };
 
         [ServerRpc]
         private void SendDeathMsgServerRpc(ulong clientId)
         {
-            SendDeathMsgClientRpc(NetworkHostManager.Instance.Players[clientId].username);
+            string message = DEATH_MESSAGES[Random.Range(0, DEATH_MESSAGES.Length)];
+            SendDeathMsgClientRpc(message.Replace("{username}", NetworkHostManager.Instance.Players[clientId].username));
         }
         [ClientRpc]
-        private void SendDeathMsgClientRpc(string username)
+        private void SendDeathMsgClientRpc(string message)
         {
-            string message = DEATH_MESSAGES[Random.Range(0, DEATH_MESSAGES.Length)];
-            NotificationsManager.Notify(message.Replace("{username}", username));
+            NotificationsManager.Notify(message);
         }
         #endregion
 

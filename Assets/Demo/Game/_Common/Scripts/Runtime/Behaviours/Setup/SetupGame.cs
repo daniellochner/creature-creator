@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SetupGame : MonoBehaviourSingleton<SetupGame>
+    public class SetupGame : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private NetworkCreaturePlayer player;
+        [SerializeField] private NetworkCreaturePlayer playerPrefab;
         #endregion
 
         #region Methods
@@ -36,12 +36,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetupSP();
             }
         }
-        private void SetupMP()
-        {
-            player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreaturePlayer>();
-            EditorManager.Instance.Player = player.Player;
-            EditorManager.Instance.Setup();
 
+        public void SetupMP()
+        {
+            NetworkCreaturePlayer player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreaturePlayer>();
+            EditorManager.Instance.Setup(player.Player);
             NetworkCreaturesManager.Instance.Setup();
             NetworkCreaturesMenu.Instance.Setup();
 
@@ -67,7 +66,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupSP()
         {
-            EditorManager.Instance.Setup();
+            NetworkCreaturePlayer player = Instantiate(playerPrefab);
+            EditorManager.Instance.Setup(player.Player);
         }
         #endregion
     }

@@ -24,7 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool unlockAllBodyParts;
         [SerializeField] private bool unlockAllPatterns;
         [SerializeField] private SecretKey creatureEncryptionKey;
-        [SerializeField] private bool setupOnStart;
         [SerializeField] private int startingCash = 1000;
 
         [Header("General")]
@@ -144,20 +143,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
-        {
-            if (setupOnStart) Setup();
-        }
         private void Update()
         {
             HandleKeyboardShortcuts();
         }
 
         #region Setup
-        public void Setup()
+        public void Setup(Player player)
         {
+            SetupPlayer(player);
             SetupEditor();
-            SetupCreature();
         }
         public void SetupEditor()
         {
@@ -218,6 +213,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 abilitiesText.text = $"<b>Abilities:</b> [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
             });
 
+            // Play
+            networkMenu.gameObject.SetActive(NetworkConnectionManager.IsConnected);
+
             // Paint
             patternMaterial = new Material(patternMaterial);
             if (unlockAllPatterns)
@@ -266,18 +264,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             UpdateLoadableCreatures();
-
-            // Play
-            networkMenu.gameObject.SetActive(NetworkConnectionManager.IsConnected);
         }
-        public void SetupCreature()
+        public void SetupPlayer(Player player)
         {
-            player.Creature.Mover.Teleport(platform);
+            Player = player;
             player.gameObject.SetActive(true);
 
-            // Setup components (in correct order).
             player.Creature.Setup();
-
+            
             // Load preset/null creature (and defaults).
             if (creaturePresets.Length > 0)
             {
@@ -291,6 +285,7 @@ namespace DanielLochner.Assets.CreatureCreator
             player.Creature.Editor.IsEditing = true;
             player.Creature.Editor.Cash = BaseCash;
             player.Creature.Informer.Setup(informationMenu);
+            player.Creature.Mover.Teleport(platform, true);
         }
         #endregion
 

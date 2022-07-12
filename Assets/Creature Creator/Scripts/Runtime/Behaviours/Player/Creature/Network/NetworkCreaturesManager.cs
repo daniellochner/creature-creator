@@ -58,10 +58,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PlayerData playerData in NetworkHostManager.Instance.Players.Values)
             {
-                //NetworkCreaturePlayer creature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreaturePlayer>();
-                //string creatureData = JsonUtility.ToJson(creature.SourceCreature.Constructor.Data);
+                NetworkCreaturePlayer creature = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreaturePlayer>();
+                string creatureData = JsonUtility.ToJson(creature.Source.Constructor.Data);
+                creature.LoadPlayerClientRpc(playerData, creatureData, NetworkUtils.SendTo(clientId));
+            }
 
-                //creature.LoadPlayerClientRpc(playerData, creatureData, NetworkUtils.SendTo(clientId));
+            NetworkCreatureNonPlayer[] npcs = FindObjectsOfType<NetworkCreatureNonPlayer>();
+            foreach (NetworkCreatureNonPlayer npc in npcs)
+            {
+                npc.ReconstructAndShowClientRpc(JsonUtility.ToJson(npc.Source.Constructor.Data), NetworkUtils.SendTo(clientId));
             }
         }
         public void HandleExistingPlayers()
