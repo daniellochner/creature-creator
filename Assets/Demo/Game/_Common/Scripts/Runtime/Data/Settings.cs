@@ -230,7 +230,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Revert()
         {
             Resolution = Screen.currentResolution;
-            Fullscreen = Screen.fullScreen;
+            Fullscreen = true;
             VSync = false;
 
             CreatureMeshQuality = CreatureMeshQualityType.Medium;

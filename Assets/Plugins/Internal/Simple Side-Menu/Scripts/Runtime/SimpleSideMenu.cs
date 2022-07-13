@@ -47,6 +47,8 @@ namespace DanielLochner.Assets
         public State TargetState { get; set; }
 
         public float StateProgress { get { return ((rectTransform.anchoredPosition - closedPosition).magnitude / ((placement == Placement.Left || placement == Placement.Right) ? rectTransform.rect.width : rectTransform.rect.height)); } }
+
+        public RectTransform RectTransform => rectTransform;
         #endregion
 
         #region Enumerators
@@ -166,7 +168,7 @@ namespace DanielLochner.Assets
 
             return valid;
         }
-        private void Setup()
+        public void Setup()
         {
             //Canvas & Camera
             if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
@@ -213,7 +215,7 @@ namespace DanielLochner.Assets
                     openPosition = new Vector2(rectTransform.localPosition.x, rectTransform.rect.height);
                     break;
             }
-            //rectTransform.sizeDelta = rectTransform.rect.size;
+            rectTransform.sizeDelta = rectTransform.rect.size;
             rectTransform.anchorMin = anchorMin;
             rectTransform.anchorMax = anchorMax;
             rectTransform.pivot = pivot;
@@ -228,7 +230,9 @@ namespace DanielLochner.Assets
                 //Toggle State on Pressed
                 if (handleToggleStateOnPressed)
                 {
-                    handle.GetComponent<Button>().onClick.AddListener(delegate { ToggleState(); });
+                    Button button = handle.GetComponent<Button>();
+                    button.onClick.RemoveAllListeners();
+                    button.onClick.AddListener(delegate { ToggleState(); });
                 }
                 foreach (Text text in handle.GetComponentsInChildren<Text>())
                 {

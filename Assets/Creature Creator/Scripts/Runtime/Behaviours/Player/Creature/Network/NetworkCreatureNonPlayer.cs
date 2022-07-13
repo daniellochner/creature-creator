@@ -13,7 +13,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-
         public override void Setup()
         {
             base.Setup();
