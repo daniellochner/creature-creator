@@ -5,11 +5,11 @@ using DanielLochner.Assets;
 using System.Collections.Generic;
 //using UnityEditor;
 using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
+using Unity.Netcode;
 
 public class Testing : MonoBehaviour
 {
-
-    public Database bps;
+    //public Database bps;
 
     //[ContextMenu("VOLUME")]
     //public void GETVOLUME()

@@ -64,6 +64,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
+        private void OnDestroy()
+        {
+            SettingsManager.Instance.Save();
+        }
+
         private void Setup()
         {
             #region Video
