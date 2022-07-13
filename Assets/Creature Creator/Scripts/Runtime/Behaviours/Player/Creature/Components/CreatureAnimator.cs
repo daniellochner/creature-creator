@@ -267,15 +267,15 @@ namespace DanielLochner.Assets.CreatureCreator
                         bone.SetParent(head, false);
                         bone.SetAsFirstSibling();
 
-                        DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                        damping.data = new DampedTransformData()
-                        {
-                            constrainedObject = Constructor.Bones[i],
-                            sourceObject = Constructor.Bones[i - 1],
-                            dampPosition = 0f,
-                            dampRotation = 0f,
-                            maintainAim = true
-                        };
+                        //DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                        //damping.data = new DampedTransformData()
+                        //{
+                        //    constrainedObject = Constructor.Bones[i],
+                        //    sourceObject = Constructor.Bones[i - 1],
+                        //    dampPosition = 0f,
+                        //    dampRotation = 0f,
+                        //    maintainAim = true
+                        //};
                     }
                 }
                 for (int i = 0; i < t; ++i)
