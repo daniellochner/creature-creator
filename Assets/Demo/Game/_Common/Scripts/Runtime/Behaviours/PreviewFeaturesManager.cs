@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class PreviewFeaturesManager : MonoBehaviourSingleton<PreviewFeaturesManager>
     {
         #region Fields
-        [SerializeField] private RectTransform optionsRT;
+        [SerializeField] private SimpleSideMenu optionsSSM;
         [SerializeField] private GameObject importGO;
         [SerializeField] private GameObject exportGO;
         #endregion
@@ -18,7 +18,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (SettingsManager.Data.PreviewFeatures)
             {
-                optionsRT.sizeDelta = new Vector2(0f, 325f);
+                optionsSSM.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 325f);
+                optionsSSM.Setup();
+
                 importGO.SetActive(true);
                 exportGO.SetActive(true);
             }
