@@ -92,13 +92,16 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
+            if (!IsMovable)
+            {
+                HandlePlatform();
+            }
+        }
+        private void FixedUpdate()
+        {
             if (IsMovable)
             {
                 HandleMovement();
-            }
-            else
-            {
-                HandlePlatform();
             }
         }
 
