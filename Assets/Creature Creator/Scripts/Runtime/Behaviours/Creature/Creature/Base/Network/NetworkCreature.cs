@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(NetworkObject), typeof(NetworkTransform))]
+    [RequireComponent(typeof(NetworkObject))]
     public class NetworkCreature : NetworkBehaviour
     {
         #region Fields

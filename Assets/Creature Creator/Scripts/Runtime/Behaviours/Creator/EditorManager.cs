@@ -28,7 +28,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("General")]
         [SerializeField] private Platform platform;
-        [SerializeField] private Player player;
         [SerializeField] private AudioSource editorAudioSource;
         [SerializeField] private CanvasGroup editorCanvasGroup;
         [SerializeField] private CanvasGroup paginationCanvasGroup;
@@ -90,6 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private List<PatternUI> patternsUI = new List<PatternUI>();
         private string creaturesDirectory = null; // null because Application.persistentDataPath cannot be called during serialization.
         private bool isVisible = true, isEditing = true;
+        private Player player;
         #endregion
 
         #region Properties
@@ -151,8 +151,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Setup
         public void Setup()
         {
-            SetupEditor();
             SetupPlayer();
+            SetupEditor();
         }
         public void SetupEditor()
         {
