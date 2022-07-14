@@ -13,7 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class NetworkCreature : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] protected CreatureBase creature;
+        [SerializeField] protected CreatureBase local;
+        [SerializeField] protected CreatureBase remote;
 
         protected NetworkObject networkObject;
         protected NetworkTransform networkTransform;
@@ -25,7 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<int> Age { get; private set; } = new NetworkVariable<int>();
         public NetworkVariable<bool> IsHidden { get; private set; } = new NetworkVariable<bool>();
 
-        public CreatureBase Creature => creature;
+        public virtual CreatureBase Creature => local;
         #endregion
 
         #region Methods
@@ -49,12 +50,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (IsOwner)
                 {
-                    creature.Health.OnHealthChanged += SetHealthServerRpc;
-                    creature.Energy.OnEnergyChanged += SetEnergyServerRpc;
-                    creature.Age.OnAgeChanged += SetAgeServerRpc;
+                    Creature.Health.OnHealthChanged += SetHealthServerRpc;
+                    Creature.Energy.OnEnergyChanged += SetEnergyServerRpc;
+                    Creature.Age.OnAgeChanged += SetAgeServerRpc;
 
-                    creature.Animator.OnSetTrigger += SetTriggerServerRpc;
-                    creature.Animator.OnSetBool += SetBoolServerRpc;
+                    Creature.Animator.OnSetTrigger += SetTriggerServerRpc;
+                    Creature.Animator.OnSetBool += SetBoolServerRpc;
                 }
                 else
                 {
@@ -76,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                creature.Animator.Animator.SetTrigger(param);
+                Creature.Animator.Animator.SetTrigger(param);
             }
         }
 
@@ -90,7 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                creature.Animator.Animator.SetBool(param, value);
+                Creature.Animator.Animator.SetBool(param, value);
             }
         }
         #endregion
@@ -107,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                creature.gameObject.SetActive(false);
+                Creature.gameObject.SetActive(false);
             }
         }
         public void Hide()
@@ -129,15 +130,15 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
             if (!IsOwner)
             {
-                creature.Constructor.Demolish();
-                creature.gameObject.SetActive(true);
-                creature.Constructor.Construct(data);
+                Creature.Constructor.Demolish();
+                Creature.gameObject.SetActive(true);
+                Creature.Constructor.Construct(data);
             }
             NetworkCreaturesMenu.Instance.SetName(OwnerClientId, data.Name);
         }
         public void ReconstructAndShow()
         {
-            ReconstructAndShowServerRpc(JsonUtility.ToJson(creature.Constructor.Data));
+            ReconstructAndShowServerRpc(JsonUtility.ToJson(Creature.Constructor.Data));
         }
         #endregion
 
@@ -152,7 +153,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                Destroy(creature.Killer.Corpse);
+                Destroy(Creature.Killer.Corpse);
             }
         }
         #endregion
@@ -177,15 +178,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateHealth(float oldHealth, float newHealth)
         {
-            creature.Health.Health = newHealth;
+            Creature.Health.Health = newHealth;
         }
         private void UpdateEnergy(float oldEnergy, float newEnergy)
         {
-            creature.Energy.Energy = newEnergy;
+            Creature.Energy.Energy = newEnergy;
         }
         private void UpdateAge(int oldAge, int newAge)
         {
-            creature.Age.Age = newAge;
+            Creature.Age.Age = newAge;
         }
         #endregion
         #endregion

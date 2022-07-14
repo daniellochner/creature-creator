@@ -267,6 +267,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetupPlayer()
         {
+            player.gameObject.SetActive(true);
             player.Creature.Setup();
             
             // Load preset/null creature (and defaults).
