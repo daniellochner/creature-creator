@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bool hasReqAbility = (reqAbility == null);
             if (reqAbility != null)
             {
-                hasReqAbility = (interactor as CreatureInteractor).Creature.Abilities.Abilities.Contains(reqAbility);
+                hasReqAbility = interactor.GetComponent<CreatureAbilities>().Abilities.Contains(reqAbility);
             }
             return base.CanInteract(interactor) && EditorManager.Instance.IsPlaying && hasReqAbility;
         }

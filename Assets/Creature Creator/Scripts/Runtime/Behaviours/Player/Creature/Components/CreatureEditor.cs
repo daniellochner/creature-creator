@@ -220,6 +220,11 @@ namespace DanielLochner.Assets.CreatureCreator
             meshCollider = CreatureConstructor.Model.GetComponent<MeshCollider>();
             colliderMesh = new Mesh(); // Separate mesh used to contain a snapshot of the body for the collider.
 
+            tag = "Player";
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            CreatureConstructor.Model.tag = "Body";
+            CreatureConstructor.Body.gameObject.layer = CreatureConstructor.Model.gameObject.layer = LayerMask.NameToLayer("Body");
+
             // Interact
             toolsAudioSource = gameObject.AddComponent<AudioSource>();
             toolsAudioSource.volume = 0.25f;

@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureSelector))]
+    [RequireComponent(typeof(CreatureSelectable))]
     public class CreatureTarget : CreatureTargetBase
     {
         #region Fields
-        [SerializeField] private CreatureSelector selector;
+        [SerializeField] private CreatureSelectable selector;
         #endregion
 
         #region Properties
-        public CreatureSelector Selector => selector;
+        public CreatureSelectable Selector => selector;
         #endregion
 
         #region Methods
@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnValidate();
 
-            selector = GetComponent<CreatureSelector>();
+            selector = GetComponent<CreatureSelectable>();
         }
 #endif
 

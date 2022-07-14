@@ -2255,6 +2255,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5382483745399707348}
   - component: {fileID: 5382483745399707356}
+  - component: {fileID: 5382483745399707357}
   m_Layer: 0
   m_Name: Network
   m_TagString: Untagged
@@ -2279,7 +2280,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 533690186}
-    PlayerPrefab: {fileID: 3136049851853010831, guid: 53925d6e49d197e4fb48b5f5567373ef, type: 3}
+    PlayerPrefab: {fileID: 669187416008104165, guid: 4e092af9977560542b3f5805035b48e5, type: 3}
     NetworkPrefabs:
     - Override: 0
       Prefab: {fileID: 7328919672290106455, guid: f904356ac4dc69f40b3292ea85bc5982, type: 3}
@@ -2311,6 +2312,16 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 669187416008104165, guid: 4e092af9977560542b3f5805035b48e5, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 669187416008104165, guid: 59d46f0283a3c0d4897ff689d30e3c4e, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
     TickRate: 20
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -2326,6 +2337,20 @@ MonoBehaviour:
     LoadSceneTimeOut: 120
     MessageBufferTimeout: 20
     EnableNetworkLogs: 1
+--- !u!114 &5382483745399707357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5382483745399707355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfade4c1a05c2d44e995d4b3c3d88897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LocalPlayerPrefab: {fileID: 669187416008104165, guid: 4e092af9977560542b3f5805035b48e5, type: 3}
+  RemotePlayerPrefab: {fileID: 669187416008104165, guid: 59d46f0283a3c0d4897ff689d30e3c4e, type: 3}
 --- !u!1001 &5560976020738981252
 PrefabInstance:
   m_ObjectHideFlags: 0

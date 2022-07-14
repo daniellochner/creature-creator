@@ -7,7 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureInformer))]
-    public class CreatureSelector : CreatureInteractable
+    public class CreatureSelectable : CreatureInteractable
     {
         #region Fields
         [SerializeField] private CreatureInformationMenu informationMenuPrefab;
