@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4659165410360989413
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522153, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193793692207522154, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+      propertyPath: m_Name
+      value: Creature (NonPlayer)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+--- !u!1 &2557432704910178191 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7193793692207522154, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+  m_PrefabInstance: {fileID: 4659165410360989413}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6883644967267128843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557432704910178191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursor: {fileID: 2800000, guid: b3cfd74ad301bd34a85e9421d744057a, type: 3}
+  interactionRange: Infinity
+  reqAbility: {fileID: 11400000, guid: 96d2191b659761846805a7cf38933ce2, type: 2}
+  informationMenuPrefab: {fileID: 1257471989696206141, guid: f2f494ecd6ba5f14fb6ae8e08066afe0, type: 3}
+  selectCirclePrefab: {fileID: 6934024238365535033, guid: a057762bebc43be4497953e485c8f86f, type: 3}
+--- !u!114 &7401799805682701220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557432704910178191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursor: {fileID: 2800000, guid: 70ecfbad4fb149f4f93f360da4c05c9d, type: 3}
+  interactionRange: Infinity
+  reqAbility: {fileID: 11400000, guid: a41e30eb4f457874e91b1ceff53fa85c, type: 2}

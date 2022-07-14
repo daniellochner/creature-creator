@@ -232,7 +232,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5382483745399707348}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &182049365
 MonoBehaviour:
@@ -331,6 +331,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 713d776787b31f34e950d1714b444dc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &216325422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 216325423}
+  - component: {fileID: 216325425}
+  - component: {fileID: 216325424}
+  m_Layer: 0
+  m_Name: Prefabs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &216325423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216325422}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5382483745399707348}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &216325424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216325422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfade4c1a05c2d44e995d4b3c3d88897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localPrefab: {fileID: 0}
+  remotePrefab: {fileID: 0}
+--- !u!114 &216325425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216325422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfade4c1a05c2d44e995d4b3c3d88897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localPrefab: {fileID: 0}
+  remotePrefab: {fileID: 0}
 --- !u!1001 &231216500
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -594,7 +654,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5382483745399707348}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &533690186
 MonoBehaviour:
@@ -2240,6 +2300,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 216325423}
   - {fileID: 533690185}
   - {fileID: 182049364}
   m_Father: {fileID: 0}
@@ -2255,7 +2316,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5382483745399707348}
   - component: {fileID: 5382483745399707356}
-  - component: {fileID: 5382483745399707357}
   m_Layer: 0
   m_Name: Network
   m_TagString: Untagged
@@ -2280,7 +2340,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 533690186}
-    PlayerPrefab: {fileID: 669187416008104165, guid: 4e092af9977560542b3f5805035b48e5, type: 3}
+    PlayerPrefab: {fileID: 0}
     NetworkPrefabs:
     - Override: 0
       Prefab: {fileID: 7328919672290106455, guid: f904356ac4dc69f40b3292ea85bc5982, type: 3}
@@ -2312,16 +2372,6 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 669187416008104165, guid: 4e092af9977560542b3f5805035b48e5, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 669187416008104165, guid: 59d46f0283a3c0d4897ff689d30e3c4e, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
     TickRate: 20
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -2337,20 +2387,6 @@ MonoBehaviour:
     LoadSceneTimeOut: 120
     MessageBufferTimeout: 20
     EnableNetworkLogs: 1
---- !u!114 &5382483745399707357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5382483745399707355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfade4c1a05c2d44e995d4b3c3d88897, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LocalPlayerPrefab: {fileID: 669187416008104165, guid: 4e092af9977560542b3f5805035b48e5, type: 3}
-  RemotePlayerPrefab: {fileID: 669187416008104165, guid: 59d46f0283a3c0d4897ff689d30e3c4e, type: 3}
 --- !u!1001 &5560976020738981252
 PrefabInstance:
   m_ObjectHideFlags: 0
