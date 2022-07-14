@@ -36,13 +36,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetupSP();
             }
         }
-
+        
         public void SetupMP()
         {
-            NetworkCreaturePlayer player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreaturePlayer>();
-            EditorManager.Instance.Setup(player.Player);
+            EditorManager.Instance.Player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<NetworkCreaturePlayer>().Player;
+            EditorManager.Instance.Setup();
+
             NetworkCreaturesManager.Instance.Setup();
-            NetworkCreaturesMenu.Instance.Setup();
 
             Lobby lobby = LobbyHelper.Instance.JoinedLobby;
             World world = new World(lobby);
@@ -66,8 +66,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupSP()
         {
-            NetworkCreaturePlayer player = Instantiate(playerPrefab);
-            EditorManager.Instance.Setup(player.Player);
+            EditorManager.Instance.Player = Instantiate(playerPrefab).Player;
+            EditorManager.Instance.Setup();
         }
         #endregion
     }

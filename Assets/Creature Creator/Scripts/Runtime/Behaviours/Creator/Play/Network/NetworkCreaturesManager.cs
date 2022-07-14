@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
             }
             HandleExistingPlayers();
+
+            NetworkCreaturesMenu.Instance.Setup();
         }
         public override void OnDestroy()
         {

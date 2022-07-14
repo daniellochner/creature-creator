@@ -12,34 +12,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -284,7 +256,7 @@ MonoBehaviour:
   healthEditor: {fileID: 667933821813835342}
   abilities: {fileID: 5156050959897936169}
   mover: {fileID: 1571468587715315016}
-  interactor: {fileID: 5582762336500270205}
+  interactor: {fileID: 6455319599120189937}
   cameraOrbit: {fileID: 0}
 --- !u!114 &1571468587715315016
 MonoBehaviour:
@@ -334,6 +306,20 @@ MonoBehaviour:
   resizeAudioClip: {fileID: 8300000, guid: ae20ed479c5a1434187633fecb940edc, type: 3}
   addOrRemoveCooldown: 0.02
   angleLimit: 30
+--- !u!114 &1940078392038767911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eab5586d65d7414aa57bfed32a69230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creature: {fileID: 1459709562168760725}
+  camera: {fileID: 0}
 --- !u!114 &4113667082849644428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,20 +367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98fe840f969f2ff46b00b819eb4ed288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5582762336500270205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4173930074114902742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e8b21c6211597643b60666d8e3cff91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionCamera: {fileID: 0}
-  cameraOrbit: {fileID: 0}
 --- !u!114 &6159253968807651590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,17 +409,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionCamera: {fileID: 0}
   cameraOrbit: {fileID: 0}
---- !u!114 &1940078392038767911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4173930074114902742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eab5586d65d7414aa57bfed32a69230, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  creature: {fileID: 0}
-  camera: {fileID: 0}

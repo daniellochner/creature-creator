@@ -8,12 +8,12 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Player : MonoBehaviourSingleton<Player>
     {
         #region Fields
-        [SerializeField] private CreatureSourcePlayer creature;
+        [SerializeField] private CreaturePlayerLocal creature;
         [SerializeField] private new CameraOrbit camera;
         #endregion
 
         #region Properties
-        public CreatureSourcePlayer Creature => creature;
+        public CreaturePlayerLocal Creature => creature;
         public CameraOrbit Camera => camera;
         #endregion
     }

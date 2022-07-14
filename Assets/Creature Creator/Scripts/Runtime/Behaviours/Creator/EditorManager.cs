@@ -149,10 +149,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         #region Setup
-        public void Setup(Player player)
+        public void Setup()
         {
-            SetupPlayer(player);
             SetupEditor();
+            SetupPlayer();
         }
         public void SetupEditor()
         {
@@ -265,11 +265,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             UpdateLoadableCreatures();
         }
-        public void SetupPlayer(Player player)
+        public void SetupPlayer()
         {
-            Player = player;
-            player.gameObject.SetActive(true);
-
             player.Creature.Setup();
             
             // Load preset/null creature (and defaults).

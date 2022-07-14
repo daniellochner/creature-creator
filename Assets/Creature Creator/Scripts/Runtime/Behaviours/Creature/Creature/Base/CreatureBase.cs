@@ -49,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureEnergy Energy => energy;
         public CreatureAge Age => age;
         public CreatureHider Hider => hider;
+        public CreatureInformer Informer => informer;
         #endregion
 
         #region Methods
@@ -73,6 +74,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Setup()
         {
+            gameObject.SetActive(true);
+
             Scaler.Setup();
             Animator.Setup();
         }
