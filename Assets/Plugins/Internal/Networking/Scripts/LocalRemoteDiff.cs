@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets
 {
@@ -7,8 +8,11 @@ namespace DanielLochner.Assets
     public class LocalRemoteDiff : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private Object[] destroyOnLocal;
-        [SerializeField] private Object[] destroyOnRemote;
+        [SerializeField] private UnityEvent onLocal;
+        [SerializeField] private UnityEvent onRemote;
+
+        [SerializeField] public Object[] destroyOnLocal;
+        [SerializeField] public Object[] destroyOnRemote;
         #endregion
 
         #region Properties
@@ -24,6 +28,7 @@ namespace DanielLochner.Assets
                 {
                     Destroy(obj);
                 }
+                onLocal.Invoke();
             }
             else
             {
@@ -31,6 +36,7 @@ namespace DanielLochner.Assets
                 {
                     Destroy(obj);
                 }
+                onRemote.Invoke();
             }
         }
         #endregion
