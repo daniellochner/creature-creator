@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public Animator Animator => Creature.Animator.Animator;
 
-        protected CreatureSourceNonPlayer Creature { get; set; }
+        protected CreatureNonPlayerLocal Creature { get; set; }
         protected NavMeshAgent Agent { get; set; }
 
         public bool CanFollow
@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Awake()
         {
-            Creature = GetComponent<CreatureSourceNonPlayer>();
+            Creature = GetComponent<CreatureNonPlayerLocal>();
             Agent = GetComponent<NavMeshAgent>();
         }
         public override void Start()

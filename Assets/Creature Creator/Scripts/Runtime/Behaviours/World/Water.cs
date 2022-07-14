@@ -14,14 +14,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTriggerEnter(Collider other)
         {
-            CreatureSourcePlayer player = other.GetComponent<CreatureSourcePlayer>();
-            if (player != null)
+            CreatureBase creature = other.GetComponent<CreatureBase>();
+            if (creature != null)
             {
-                if (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming)
+                Instantiate(splashPrefab, creature.Constructor.Body.position, Quaternion.identity);
+
+                CreaturePlayerLocal player = creature as CreaturePlayerLocal;
+                if (player != null && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
                 {
                     player.Health.Die();
                 }
-                Instantiate(splashPrefab, player.Constructor.Body.position, Quaternion.identity);
             }
         }
     }

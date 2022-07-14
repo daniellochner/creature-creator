@@ -17,21 +17,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
             
-            if (NetworkConnectionManager.IsConnected)
-            {
-                if (IsOwner)
-                {
-                    source.Setup();
-                }
-                else
-                {
-                    target.Setup();
-                }
-            }
-            else
-            {
-                source.Setup();
-            }
+            //if (NetworkConnectionManager.IsConnected)
+            //{
+            //    if (IsOwner)
+            //    {
+            //        source.Setup();
+            //    }
+            //    else
+            //    {
+            //        target.Setup();
+            //    }
+            //}
+            //else
+            //{
+            //    source.Setup();
+            //}
         }
 
         public override void OnNetworkSpawn()

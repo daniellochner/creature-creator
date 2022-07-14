@@ -45,7 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 else
                 {
-                    target.Setup();
+                    //target.Setup();
                 }
             }
         }
