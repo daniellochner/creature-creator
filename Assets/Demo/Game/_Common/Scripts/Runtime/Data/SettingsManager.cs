@@ -156,8 +156,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetAmbientOcclusion(AmbientOcclusionType type)
         {
-            Data.AmbientOcclusion = type;
-
             foreach (PostProcessProfile profile in profiles)
             {
                 AmbientOcclusion ao = profile.GetSetting<AmbientOcclusion>();
@@ -169,6 +167,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
+                        ao.active = true;
                         switch (type)
                         {
                             case AmbientOcclusionType.SAO:
@@ -178,10 +177,10 @@ namespace DanielLochner.Assets.CreatureCreator
                                 ao.mode = new AmbientOcclusionModeParameter() { value = AmbientOcclusionMode.MultiScaleVolumetricObscurance };
                                 break;
                         }
-                        ao.active = true;
                     }
                 }
             }
+            Data.AmbientOcclusion = type;
         }
         public void SetAntialiasing(AntialiasingType type, bool find = false)
         {
@@ -226,6 +225,36 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetScreenSpaceReflections(ScreenSpaceReflectionsType type)
         {
+            foreach (PostProcessProfile profile in profiles)
+            {
+                ScreenSpaceReflections ssr = profile.GetSetting<ScreenSpaceReflections>();
+                if (ssr != null)
+                {
+                    if (type == ScreenSpaceReflectionsType.None)
+                    {
+                        ssr.active = false;
+                    }
+                    else
+                    {
+                        ssr.active = true;
+                        switch (type)
+                        {
+                            case ScreenSpaceReflectionsType.Low:
+                                ssr.preset = new ScreenSpaceReflectionPresetParameter() { value = ScreenSpaceReflectionPreset.Low };
+                                break;
+                            case ScreenSpaceReflectionsType.Medium:
+                                ssr.preset = new ScreenSpaceReflectionPresetParameter() { value = ScreenSpaceReflectionPreset.Medium };
+                                break;
+                            case ScreenSpaceReflectionsType.High:
+                                ssr.preset = new ScreenSpaceReflectionPresetParameter() { value = ScreenSpaceReflectionPreset.High };
+                                break;
+                            case ScreenSpaceReflectionsType.VeryHigh:
+                                ssr.preset = new ScreenSpaceReflectionPresetParameter() { value = ScreenSpaceReflectionPreset.Higher };
+                                break;
+                        }
+                    }
+                }
+            }
             Data.ScreenSpaceReflections = type;
         }
         public void SetFoliage(FoliageType type)

@@ -115,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         textureQualityOS.Select(TextureQualityType.Low);
                         ambientOcclusionOS.Select(AmbientOcclusionType.None);
                         antialiasingOS.Select(AntialiasingType.None);
-                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.None);
                         foliageOS.Select(FoliageType.None);
                         reflectionsToggle.isOn = false;
                         anisotropicFilteringToggle.isOn = false;
@@ -129,7 +129,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         shadowQualityOS.Select(ShadowQualityType.Low);
                         textureQualityOS.Select(TextureQualityType.Low);
                         ambientOcclusionOS.Select(AmbientOcclusionType.None);
-                        antialiasingOS.Select(AntialiasingType.None);
+                        antialiasingOS.Select(AntialiasingType.FXAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
                         foliageOS.Select(FoliageType.Low);
                         anisotropicFilteringToggle.isOn = false;
@@ -144,7 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         shadowQualityOS.Select(ShadowQualityType.Medium);
                         textureQualityOS.Select(TextureQualityType.Medium);
                         ambientOcclusionOS.Select(AmbientOcclusionType.SAO);
-                        antialiasingOS.Select(AntialiasingType.FXAA);
+                        antialiasingOS.Select(AntialiasingType.MediumSMAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Medium);
                         foliageOS.Select(FoliageType.Medium);
                         reflectionsToggle.isOn = true;
@@ -174,8 +174,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         shadowQualityOS.Select(ShadowQualityType.High);
                         textureQualityOS.Select(TextureQualityType.High);
                         ambientOcclusionOS.Select(AmbientOcclusionType.MSVO);
-                        antialiasingOS.Select(AntialiasingType.HighSMAA);
-                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.High);
+                        antialiasingOS.Select(AntialiasingType.Temporal);
+                        screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.VeryHigh);
                         foliageOS.Select(FoliageType.High);
                         reflectionsToggle.isOn = true;
                         anisotropicFilteringToggle.isOn = true;

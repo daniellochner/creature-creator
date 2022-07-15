@@ -325,7 +325,8 @@ namespace DanielLochner.Assets.CreatureCreator
             None,
             Low,
             Medium,
-            High
+            High,
+            VeryHigh
         }
         public enum FoliageType
         {
