@@ -329,6 +329,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetBloom(bool bloom)
         {
+            foreach (PostProcessProfile profile in profiles)
+            {
+                Bloom b = profile.GetSetting<Bloom>();
+                if (b != null)
+                {
+                    b.active = bloom;
+                }
+            }
             Data.Bloom = bloom;
         }
         public void SetDepthOfField(bool depthOfField)
