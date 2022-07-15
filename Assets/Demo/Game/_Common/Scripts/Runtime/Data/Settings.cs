@@ -330,10 +330,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public enum FoliageType
         {
-            None,
+            VeryLow,
             Low,
             Medium,
-            High
+            High,
+            VeryHigh
         }
         public enum BackgroundMusicType
         {

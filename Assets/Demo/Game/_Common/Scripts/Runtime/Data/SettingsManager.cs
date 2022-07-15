@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using IngameDebugConsole;
+using Pinwheel.Griffin;
 using Pinwheel.Poseidon;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PostProcessProfile[] profiles;
         [SerializeField] private GameObject[] cameras;
         [SerializeField] private PWaterProfile[] waterProfiles;
+        [SerializeField] private GRendering[] terrainProfiles;
+        [SerializeField] private Material[] windMaterials;
         #endregion
 
         #region Methods
@@ -259,10 +262,57 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetFoliage(FoliageType type)
         {
+            foreach (GRendering terrainProfile in terrainProfiles)
+            {
+                switch (type)
+                {
+                    case FoliageType.VeryLow:
+                        terrainProfile.DrawGrasses = false;
+                        terrainProfile.TreeDistance = 100;
+                        foreach (Material material in windMaterials)
+                        {
+                            material.shader = Shader.Find("Standard");
+                        }
+                        break;
+                    case FoliageType.Low:
+                        terrainProfile.DrawGrasses = true;
+                        terrainProfile.GrassDistance = 50;
+                        terrainProfile.TreeDistance = 150;
+                        foreach (Material material in windMaterials)
+                        {
+                            material.shader = Shader.Find("Standard");
+                        }
+                        break;
+                    case FoliageType.Medium:
+                        terrainProfile.DrawGrasses = true;
+                        terrainProfile.GrassDistance = 100;
+                        terrainProfile.TreeDistance = 200;
+                        foreach (Material material in windMaterials)
+                        {
+                            material.shader = Shader.Find("Nicrom/LPW/ASE/Low Poly Vegetation");
+                        }
+                        break;
+                    case FoliageType.High:
+                        terrainProfile.DrawGrasses = true;
+                        terrainProfile.GrassDistance = 150;
+                        terrainProfile.TreeDistance = 250;
+                        foreach (Material material in windMaterials)
+                        {
+                            material.shader = Shader.Find("Nicrom/LPW/ASE/Low Poly Vegetation");
+                        }
+                        break;
+                    case FoliageType.VeryHigh:
+                        terrainProfile.DrawGrasses = true;
+                        terrainProfile.GrassDistance = 200;
+                        terrainProfile.TreeDistance = 300;
+                        foreach (Material material in windMaterials)
+                        {
+                            material.shader = Shader.Find("Nicrom/LPW/ASE/Low Poly Vegetation");
+                        }
+                        break;
+                }
+            }
             Data.Foliage = type;
-
-            // rendering of grass and trees
-            // low-poly wind shader
         }
         public void SetReflections(bool reflections)
         {

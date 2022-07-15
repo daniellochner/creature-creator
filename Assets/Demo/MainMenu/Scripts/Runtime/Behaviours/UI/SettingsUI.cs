@@ -116,7 +116,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         ambientOcclusionOS.Select(AmbientOcclusionType.None);
                         antialiasingOS.Select(AntialiasingType.None);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.None);
-                        foliageOS.Select(FoliageType.None);
+                        foliageOS.Select(FoliageType.VeryLow);
                         reflectionsToggle.isOn = false;
                         anisotropicFilteringToggle.isOn = false;
                         bloomToggle.isOn = false;
