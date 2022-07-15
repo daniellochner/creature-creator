@@ -24,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PWaterProfile[] waterProfiles;
         [SerializeField] private GRendering[] terrainProfiles;
         [SerializeField] private Material[] windMaterials;
+        [SerializeField] private NetworkStatsManager statsManagerPrefab;
         #endregion
 
         #region Methods
@@ -446,6 +447,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetNetworkStats(bool networkStats)
         {
+            statsManagerPrefab.UseStats = networkStats;
             Data.NetworkStats = networkStats;
         }
         public void SetTutorial(bool tutorial)

@@ -11,6 +11,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private float m_PingIntervalSeconds = 0.25f;
+        [SerializeField] private bool m_UseStats = true;
 
         private float m_LastPingTime;
         private int m_CurrentRTTPingId;
@@ -22,6 +23,12 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
+        public bool UseStats
+        {
+            get => m_UseStats;
+            set => m_UseStats = value;
+        }
+
         public float LastRTT { get; private set; }
 
         private float m_MaxWindowSize => k_MaxWindowSizeSeconds / m_PingIntervalSeconds;
@@ -30,7 +37,7 @@ namespace DanielLochner.Assets
         #region Methods
         private void FixedUpdate()
         {
-            if (!IsServer && Time.realtimeSinceStartup - m_LastPingTime > m_PingIntervalSeconds) RequestRTT();
+            if (UseStats && !IsServer && Time.realtimeSinceStartup - m_LastPingTime > m_PingIntervalSeconds) RequestRTT();
         }
 
         private void RequestRTT()
