@@ -82,7 +82,7 @@ namespace DanielLochner.Assets
             };
             Add(playerData);
 
-            connectionApproved(true, null, true, null, null);
+            connectionApproved(NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null, null, true, null, null);
         }
         #endregion
     }
