@@ -24,7 +24,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 audioSource = gameObject.GetOrAddComponent<AudioSource>();
             }
         }
-        public void OnCollisionEnter(Collision collision)
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Collide(transform.position);
+        }
+        private void OnCollisionEnter(Collision collision)
+        {
+            Collide(collision.contacts[0].point);
+        }
+
+        private void Collide(Vector3 point)
         {
             if (Time.time - timeOfLast > cooldown)
             {
@@ -35,7 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 if (particleFX != null)
                 {
-                    Instantiate(particleFX, collision.contacts[0].point, Quaternion.identity);
+                    Instantiate(particleFX, point, Quaternion.identity);
                 }
                 if (stressReceiver != null)
                 {
