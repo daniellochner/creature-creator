@@ -18,8 +18,10 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureCamera = GetComponent<CreatureCamera>();
         }
 
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
+
             interactionCamera = CreatureCamera.Camera;
 
             InteractionsManager.Instance.OnTarget += delegate (GameObject targeted)

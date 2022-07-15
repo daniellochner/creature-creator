@@ -12,14 +12,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup()
         {
-            if (IsHost)
-            {
-                NetworkHostManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
-                NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
-            }
-            HandleExistingPlayers();
+            //if (IsHost)
+            //{
+            //    NetworkHostManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
+            //    NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
+            //}
+            //HandleExistingPlayers();
 
-            NetworkCreaturesMenu.Instance.Setup();
+            //NetworkCreaturesMenu.Instance.Setup();
         }
         public override void OnDestroy()
         {

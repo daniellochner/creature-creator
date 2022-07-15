@@ -9,20 +9,10 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private CreaturePlayerLocal creature;
-        [SerializeField] private new CameraOrbit camera;
         #endregion
 
         #region Properties
-        public CreaturePlayerLocal Creature
-        {
-            get => creature;
-            set => creature = value;
-        }
-        public CameraOrbit Camera
-        {
-            get => camera;
-            set => camera = value;
-        }
+        public CreaturePlayerLocal Creature => creature;
         #endregion
     }
 }

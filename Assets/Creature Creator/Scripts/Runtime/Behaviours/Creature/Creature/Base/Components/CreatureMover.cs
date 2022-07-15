@@ -113,7 +113,7 @@ namespace DanielLochner.Assets.CreatureCreator
             rigidbody = GetComponent<Rigidbody>();
             mainCamera = Camera.main;
         }
-
+        
         private void HandleMovement()
         {
             bool kInput = Input.GetButton("Vertical") || Input.GetButton("Horizontal");
@@ -201,7 +201,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandlePlatform()
         {
-            transform.LerpTo(Platform.transform.position, positionSmoothing);
+            if (Platform != null) transform.LerpTo(Platform.transform.position, positionSmoothing);
         }
 
         public void RequestMove(Vector3 direction)

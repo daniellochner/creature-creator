@@ -138,7 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Wandering : Idling
         {
             [SerializeField] private MinMax wanderCooldown;
-            [SerializeField] private Bounds wanderBounds;
+            [SerializeField] public Bounds wanderBounds;
             private float idleTimeLeft;
 
             public override void Enter()

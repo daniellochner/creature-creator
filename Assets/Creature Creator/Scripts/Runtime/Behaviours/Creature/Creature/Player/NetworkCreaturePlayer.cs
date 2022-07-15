@@ -104,7 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
             nameText.transform.parent.gameObject.SetActive(!IsHidden.Value);
             if (!IsHidden.Value)
             {
-                nameText.transform.parent.LookAt(Player.Instance.Camera.Camera.transform);
+                nameText.transform.parent.LookAt(Player.Instance.Creature.Camera.Camera.transform);
             }
         }
         #endregion

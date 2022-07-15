@@ -16,11 +16,11 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void OnEnable()
+        public virtual void Setup()
         {
             InteractionsManager.Instance.Interactor = this;
         }
-        private void OnDisable()
+        private void Destroy()
         {
             if (InteractionsManager.Instance.Interactor == this) { InteractionsManager.Instance.Interactor = null; }
         }

@@ -267,7 +267,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetupPlayer()
         {
-            player.gameObject.SetActive(true);
             player.Creature.Setup();
             
             // Load preset/null creature (and defaults).
@@ -366,7 +365,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void SetCameraOffset(float x)
         {
-            player.Camera.OffsetPosition = new Vector3(x, 2f, player.Camera.OffsetPosition.z);
+            player.Creature.Camera.CameraOrbit.OffsetPosition = new Vector3(x, 2f, player.Creature.Camera.CameraOrbit.OffsetPosition.z);
         }
         private void SetMode()
         {
@@ -760,8 +759,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPartUI.DragUI.OnPointerUp(null);
                     editorAudioSource.PlayOneShot(createAudioClip);
 
-                    Ray ray = player.Camera.Camera.ScreenPointToRay(Input.mousePosition);
-                    Plane plane = new Plane(player.Camera.Camera.transform.forward, player.Creature.Mover.Platform.transform.position);
+                    Ray ray = player.Creature.Camera.Camera.ScreenPointToRay(Input.mousePosition);
+                    Plane plane = new Plane(player.Creature.Camera.Camera.transform.forward, player.Creature.Mover.Platform.transform.position);
 
                     if (plane.Raycast(ray, out float distance))
                     {
