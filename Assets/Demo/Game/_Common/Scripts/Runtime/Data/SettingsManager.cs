@@ -353,6 +353,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetMotionBlur(bool motionBlur)
         {
+            foreach (PostProcessProfile profile in profiles)
+            {
+                MotionBlur mb = profile.GetSetting<MotionBlur>();
+                if (mb != null)
+                {
+                    mb.active = motionBlur;
+                }
+            }
             Data.MotionBlur = motionBlur;
         }
         #endregion
