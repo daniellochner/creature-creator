@@ -15,11 +15,14 @@ namespace DanielLochner.Assets
         #region Methods
         public void Start()
         {
-            NetworkManager.Singleton.PrefabHandler.AddHandler(remotePrefab, this);
+            NetworkManager.Singleton.PrefabHandler.AddHandler(localPrefab, this);
         }
         public void OnDestroy()
         {
-            NetworkManager.Singleton.PrefabHandler.RemoveHandler(localPrefab);
+            if (NetworkManager.Singleton)
+            {
+                NetworkManager.Singleton.PrefabHandler.RemoveHandler(localPrefab);
+            }
         }
 
         public NetworkObject Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
