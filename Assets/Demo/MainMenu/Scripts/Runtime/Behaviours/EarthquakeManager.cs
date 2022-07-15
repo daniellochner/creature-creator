@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 rumbleCount++;
-                if (rumbleCount >= targetRumbleCount && creatures.childCount == 0 && !nest.activeSelf)
+                if (rumbleCount >= targetRumbleCount && creatures.childCount == 0 && nest != null && !nest.activeSelf)
                 {
                     nest.SetActive(true);
                 }
