@@ -152,22 +152,26 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Audio
-        public void SetMasterVolume(float volume)
+        public void SetMasterVolume(float t)
         {
-            Data.MasterVolume = volume;
+            Data.MasterVolume = t;
+            SetMusicVolume(Data.MusicVolume);
+            SetSoundEffectsVolume(Data.SoundEffectsVolume);
         }
         public void SetMusicVolume(float t)
         {
-            SetVolume("MusicVolume", t);
             Data.MusicVolume = t;
+            SetVolume("MusicVolume", t);
         }
         public void SetSoundEffectsVolume(float t)
         {
-            SetVolume("SoundEffectsVolume", t);
             Data.SoundEffectsVolume = t;
+            SetVolume("SoundEffectsVolume", t);
         }
         private void SetVolume(string param, float t)
         {
+            t *= Data.MasterVolume;
+
             float volume = 0f;
             if (t == 0f)
             {
