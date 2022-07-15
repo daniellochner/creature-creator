@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Flying : BaseState
         {
-            [SerializeField] private Transform perchPoints;
+            [SerializeField] public Transform perchPoints;
             [SerializeField] private float flightSpeed;
             [SerializeField] private float flightHeight;
             [SerializeField] private AnimationCurve flightPath;

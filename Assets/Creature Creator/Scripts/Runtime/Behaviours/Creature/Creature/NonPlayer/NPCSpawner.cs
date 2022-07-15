@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class NPCSpawner : MonoBehaviour
+    public abstract class NPCSpawner : MonoBehaviour
     {
         public NetworkObject npcPrefab;
 
         private void Start()
         {
-            if (NetworkManager.Singleton.IsServer)
+            if (NetworkManager.Singleton.IsServer || !NetworkConnectionManager.IsConnected)
             {
                 NetworkObject npc = Instantiate(npcPrefab, transform.position, transform.rotation);
                 npc.Spawn();
