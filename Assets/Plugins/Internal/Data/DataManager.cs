@@ -10,6 +10,10 @@ namespace DanielLochner.Assets
         [SerializeField] private string fileName;
         [SerializeField] private SecretKey encryptionKey;
         [SerializeField, ReadOnly] private M data;
+
+        [SerializeField, Button("Save")] private bool save;
+        [SerializeField, Button("Load")] private bool load;
+        [SerializeField, Button("Revert")] private bool revert;
         #endregion
 
         #region Properties
@@ -42,7 +46,7 @@ namespace DanielLochner.Assets
         [ContextMenu("Revert")]
         public void Revert()
         {
-            Data.Revert();
+            data.Revert();
             Save();
         }
         #endregion

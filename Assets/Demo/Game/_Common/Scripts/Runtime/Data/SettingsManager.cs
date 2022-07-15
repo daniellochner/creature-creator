@@ -156,15 +156,36 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.MasterVolume = volume;
         }
-        public void SetMusicVolume(float volume)
+        public void SetMusicVolume(float t)
         {
-            masterAudioMixer.SetFloat("MusicVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, volume));
-            Data.MusicVolume = volume;
+            SetVolume("MusicVolume", t);
+            Data.MusicVolume = t;
         }
-        public void SetSoundEffectsVolume(float volume)
+        public void SetSoundEffectsVolume(float t)
         {
-            masterAudioMixer.SetFloat("SoundEffectsVolume", Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, volume));
-            Data.SoundEffectsVolume = volume;
+            SetVolume("SoundEffectsVolume", t);
+            Data.SoundEffectsVolume = t;
+        }
+        private void SetVolume(string param, float t)
+        {
+            float volume = 0f;
+            if (t == 0f)
+            {
+                volume = -80f;
+            }
+            else
+            {
+                volume = Mathf.Lerp(minMaxVolumeDB.min, minMaxVolumeDB.max, t);
+            }
+            masterAudioMixer.SetFloat(param, volume);
+        }
+        private float GetVolume(string param)
+        {
+            if (masterAudioMixer.GetFloat("param", out float value))
+            {
+                return Mathf.InverseLerp(minMaxVolumeDB.min, minMaxVolumeDB.max, value);
+            }
+            return 0f;
         }
         public void SetBackgroundMusic(BackgroundMusicType type)
         {
