@@ -56,4 +56,10 @@ public class StressReceiver : MonoBehaviour
     {
         _trauma = Mathf.Clamp01(_trauma + Stress);
     }
+
+    public void Reset()
+    {
+        _trauma = 0;
+        Update();
+    }
 }

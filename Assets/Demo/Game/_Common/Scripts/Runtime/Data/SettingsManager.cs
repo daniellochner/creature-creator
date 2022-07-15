@@ -416,8 +416,23 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.OnlineUsername = username;
         }
-        public void SetCameraShake(bool cameraShake)
+        public void SetCameraShake(bool cameraShake, bool find = false)
         {
+            List<StressReceiver> receivers = new List<StressReceiver>();
+            foreach (GameObject camera in cameras)
+            {
+                receivers.AddRange(camera.GetComponents<StressReceiver>());
+            }
+            if (find)
+            {
+                receivers.AddRange(FindObjectsOfType<StressReceiver>(true));
+            }
+
+            foreach (StressReceiver receiver in receivers)
+            {
+                receiver.enabled = cameraShake;
+                receiver.Reset();
+            }
             Data.CameraShake = cameraShake;
         }
         public void SetDebugMode(bool debugMode)

@@ -361,7 +361,7 @@ namespace DanielLochner.Assets.CreatureCreator
             cameraShakeToggle.SetIsOnWithoutNotify(SettingsManager.Data.CameraShake);
             cameraShakeToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                SettingsManager.Instance.SetCameraShake(isOn);
+                SettingsManager.Instance.SetCameraShake(isOn, true);
             });
 
             // Debug Mode
