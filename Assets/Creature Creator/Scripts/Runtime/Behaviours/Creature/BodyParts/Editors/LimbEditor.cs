@@ -201,7 +201,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                         {
-                            CreatureEditor.CameraOrbit.Freeze();
+                            CreatureEditor.CreatureCamera.CameraOrbit.Freeze();
                             SetBonesVisibility(true);
                         }
                     });
@@ -209,7 +209,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                         {
-                            CreatureEditor.CameraOrbit.Unfreeze();
+                            CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze();
 
                             if (!IsSelected)
                             {
@@ -229,7 +229,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         if (EditorManager.Instance.IsBuilding)
                         {
-                            CreatureEditor.CameraOrbit.Freeze();
+                            CreatureEditor.CreatureCamera.CameraOrbit.Freeze();
 
                             //if (index < LimbConstructor.Bones.Length - 1)
                             //{
@@ -258,7 +258,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             if (!boneHover.IsOver && !Hover.IsOver)
                             {
-                                CreatureEditor.CameraOrbit.Unfreeze();
+                                CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze();
                             }
 
                             UpdateMeshCollider();

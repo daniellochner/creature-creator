@@ -8,7 +8,7 @@ namespace DanielLochner.Assets
     public class Interactor : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private Camera interactionCamera;
+        [SerializeField] protected Camera interactionCamera;
         #endregion
 
         #region Properties

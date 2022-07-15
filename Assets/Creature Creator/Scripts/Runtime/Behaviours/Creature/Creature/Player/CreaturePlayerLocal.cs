@@ -7,6 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureEnergyDepleter))]
     [RequireComponent(typeof(CreatureAger))]
+    [RequireComponent(typeof(CreatureCamera))]
     public class CreaturePlayerLocal : CreaturePlayer
     {
         #region Fields
@@ -18,8 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureAbilities abilities;
         [SerializeField] private CreatureMover mover;
         [SerializeField] private CreatureInteractor interactor;
-        [Space]
-        [SerializeField] private CameraOrbit cameraOrbit;
+        [SerializeField] private new CreatureCamera camera;
         #endregion
 
         #region Properties
@@ -31,8 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAbilities Abilities => abilities;
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
-
-        public CameraOrbit CameraOrbit => cameraOrbit;
+        public CreatureCamera Camera => camera;
         #endregion
 
         #region Methods
@@ -49,13 +48,16 @@ namespace DanielLochner.Assets.CreatureCreator
             abilities = GetComponent<CreatureAbilities>();
             mover = GetComponent<CreatureMover>();
             interactor = GetComponent<CreatureInteractor>();
+            camera = GetComponent<CreatureCamera>();
         }
 #endif
 
         public override void Setup()
         {
+            Camera.Setup();
             base.Setup();
             Editor.Setup();
+            Interactor.Setup();
         }
         #endregion
     }

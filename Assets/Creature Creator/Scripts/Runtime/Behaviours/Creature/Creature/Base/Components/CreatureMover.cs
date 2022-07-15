@@ -8,12 +8,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureAnimator))]
     [RequireComponent(typeof(CreatureConstructor))]
+    [RequireComponent(typeof(CreatureCamera))]
     public class CreatureMover : MonoBehaviour
     {
         #region Fields
         [Header("Setup")]
-        [SerializeField] private Follower cameraFollower;
-        [SerializeField] private CameraOrbit cameraOrbit;
         [SerializeField] private GameObject targetPrefab;
 
         [Header("Physical")]
@@ -50,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         
         public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureAnimator CreatureAnimator { get; private set; }
+        public CreatureCamera CreatureCamera { get; private set; }
 
         public Platform Platform
         {
@@ -67,8 +67,6 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 isMovable = value;
-
-                //cameraFollower.useFixedUpdate = isMovable; // Used to fix camera jittering issue.
 
                 if (!isMovable)
                 {
@@ -109,6 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor = GetComponent<CreatureConstructor>();
             CreatureAnimator = GetComponent<CreatureAnimator>();
+            CreatureCamera = GetComponent<CreatureCamera>();
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
@@ -142,8 +141,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (!Input.GetKey(KeyCode.LeftAlt) || !kInput) // Free-look when holding ALT.
                     {
-                        keyboardForward = Vector3.ProjectOnPlane(cameraOrbit.Camera.transform.forward, transform.up);
-                        keyboardRight = Vector3.ProjectOnPlane(cameraOrbit.Camera.transform.right, transform.up);
+                        keyboardForward = Vector3.ProjectOnPlane(CreatureCamera.Camera.transform.forward, transform.up);
+                        keyboardRight = Vector3.ProjectOnPlane(CreatureCamera.Camera.transform.right, transform.up);
                     }
 
                     Vector3 vertical = keyboardForward * Input.GetAxisRaw("Vertical");
@@ -253,7 +252,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (start)
             {
                 transform.rotation = platform.transform.rotation;
-                cameraFollower.transform.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
+                CreatureCamera.Root.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
             }
         }
         #endregion

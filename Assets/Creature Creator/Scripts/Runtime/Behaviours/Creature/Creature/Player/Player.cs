@@ -13,8 +13,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public CreaturePlayerLocal Creature => creature;
-        public CameraOrbit Camera => camera;
+        public CreaturePlayerLocal Creature
+        {
+            get => creature;
+            set => creature = value;
+        }
+        public CameraOrbit Camera
+        {
+            get => camera;
+            set => camera = value;
+        }
         #endregion
     }
 }

@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [RequireComponent(typeof(CreatureCamera))]
     [RequireComponent(typeof(CreatureConstructor), typeof(CreatureMover))]
     public class CreatureEditor : MonoBehaviour
     {
         #region Fields
         [Header("Setup")]
-        [SerializeField] private CameraOrbit cameraOrbit;
-        [Space]
         [SerializeField] private GameObject boneToolPrefab;
         [SerializeField] private GameObject stretchToolPrefab;
         [SerializeField] private GameObject transformationToolsPrefab;
@@ -44,7 +43,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public CameraOrbit CameraOrbit => cameraOrbit;
         public float AddOrRemoveCooldown => addOrRemoveCooldown;
         public AudioClip StretchAudioClip => stretchAudioClip;
         public AudioClip ResizeAudioClip => resizeAudioClip;
@@ -53,6 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureMover CreatureMover { get; private set; }
+        public CreatureCamera CreatureCamera { get; private set; }
 
         public TransformationTools TransformationTools { get; private set; }
 
@@ -208,6 +207,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor = GetComponent<CreatureConstructor>();
             CreatureMover = GetComponent<CreatureMover>();
+            CreatureCamera = GetComponent<CreatureCamera>();
         }
 
         public void Setup()
@@ -229,7 +229,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                 {
-                    cameraOrbit.Freeze();
+                    CreatureCamera.CameraOrbit.Freeze();
                     SetBonesVisibility(true);
                 }
             });
@@ -237,7 +237,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                 {
-                    cameraOrbit.Unfreeze();
+                    CreatureCamera.CameraOrbit.Unfreeze();
 
                     if (!IsSelected)
                     {
@@ -251,7 +251,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    cameraOrbit.Freeze();
+                    CreatureCamera.CameraOrbit.Freeze();
                 }
             });
             drag.OnRelease.AddListener(delegate
@@ -260,7 +260,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (!hover.IsOver)
                     {
-                        cameraOrbit.Unfreeze();
+                        CreatureCamera.CameraOrbit.Unfreeze();
                     }
 
                     CreatureConstructor.UpdateDimensions();
@@ -302,7 +302,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    cameraOrbit.Freeze();
+                    CreatureCamera.CameraOrbit.Freeze();
                     pointerPosOffset = null;
                 }
             });
@@ -310,7 +310,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    cameraOrbit.Unfreeze();
+                    CreatureCamera.CameraOrbit.Unfreeze();
                 }
             });
             frontToolPress.OnHold.AddListener(delegate
@@ -327,7 +327,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    cameraOrbit.Freeze();
+                    CreatureCamera.CameraOrbit.Freeze();
                     pointerPosOffset = null;
                 }
             });
@@ -335,7 +335,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    cameraOrbit.Unfreeze();
+                    CreatureCamera.CameraOrbit.Unfreeze();
                 }
             });
             backToolPress.OnHold.AddListener(delegate
@@ -439,7 +439,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                     {
-                        cameraOrbit.Freeze();
+                        CreatureCamera.CameraOrbit.Freeze();
                         SetBonesVisibility(true);
                     }
                 });
@@ -447,7 +447,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                     {
-                        cameraOrbit.Unfreeze();
+                        CreatureCamera.CameraOrbit.Unfreeze();
 
                         if (!IsSelected)
                         {
@@ -466,7 +466,7 @@ namespace DanielLochner.Assets.CreatureCreator
                             bone.GetComponentInChildren<Collider>().isTrigger = true;
                         }
 
-                        cameraOrbit.Freeze();
+                        CreatureCamera.CameraOrbit.Freeze();
                     }
                 });
                 drag.OnRelease.AddListener(delegate
@@ -480,7 +480,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         if (!hover.IsOver)
                         {
-                            cameraOrbit.Unfreeze();
+                            CreatureCamera.CameraOrbit.Unfreeze();
                         }
 
                         CreatureConstructor.UpdateOrigin();
@@ -706,7 +706,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Plane stretchPlane = new Plane(transform.right, CreatureMover.Platform.transform.position);
 
-            Ray ray = cameraOrbit.Camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = CreatureCamera.Camera.ScreenPointToRay(Input.mousePosition);
             if (stretchPlane.Raycast(ray, out float distance))
             {
                 Vector3 pointerPos = ray.GetPoint(distance);
