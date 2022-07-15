@@ -341,6 +341,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetDepthOfField(bool depthOfField)
         {
+            foreach (PostProcessProfile profile in profiles)
+            {
+                DepthOfField dof = profile.GetSetting<DepthOfField>();
+                if (dof != null)
+                {
+                    dof.active = depthOfField;
+                }
+            }
             Data.DepthOfField = depthOfField;
         }
         public void SetMotionBlur(bool motionBlur)
