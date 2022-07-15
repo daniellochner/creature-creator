@@ -31,7 +31,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 LoadingManager.Instance.Load("MainMenu");
                 isKeyPressed = true;
 
-                MusicManager.Instance.FadeTo(null);
                 logoAnimator.SetTrigger("Hide");
                 enterAudioSource.Play();
             }
