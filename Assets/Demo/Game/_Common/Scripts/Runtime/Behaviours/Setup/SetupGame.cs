@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SetupGame : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private NetworkObject playerPrefab;
+        [SerializeField] private Player playerPrefab;
         #endregion
 
         #region Methods
@@ -66,7 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupSP()
         {
-            EditorManager.Instance.Player = Instantiate(playerPrefab).GetComponent<Player>();
+            EditorManager.Instance.Player = Instantiate(playerPrefab);
             EditorManager.Instance.Setup();
         }
         #endregion

@@ -235,6 +235,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             CreatureMeshQuality = CreatureMeshQualityType.Medium;
             ShadowQuality = ShadowQualityType.Medium;
+            AmbientOcclusion = AmbientOcclusionType.MSVO;
             TextureQuality = TextureQualityType.Medium;
             Antialiasing = AntialiasingType.FXAA;
             ScreenSpaceReflections = ScreenSpaceReflectionsType.Medium;

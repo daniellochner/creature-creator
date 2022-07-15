@@ -4,6 +4,7 @@
 using IngameDebugConsole;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering.PostProcessing;
 using static DanielLochner.Assets.CreatureCreator.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -15,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureConstructor baseCreaturePrefab;
         [SerializeField] private AudioMixer masterAudioMixer;
         [SerializeField] private MinMax minMaxVolumeDB = new MinMax(-20, 1);
+        [SerializeField] private PostProcessProfile[] profiles;
         #endregion
 
         #region Methods
@@ -117,6 +119,31 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetAmbientOcclusion(AmbientOcclusionType type)
         {
             Data.AmbientOcclusion = type;
+
+            foreach (PostProcessProfile profile in profiles)
+            {
+                AmbientOcclusion ao = profile.GetSetting<AmbientOcclusion>();
+                if (ao != null)
+                {
+                    if (type == AmbientOcclusionType.None)
+                    {
+                        ao.active = false;
+                    }
+                    else
+                    {
+                        switch (type)
+                        {
+                            case AmbientOcclusionType.SAO:
+                                ao.mode = new AmbientOcclusionModeParameter() { value = AmbientOcclusionMode.ScalableAmbientObscurance };
+                                break;
+                            case AmbientOcclusionType.MSVO:
+                                ao.mode = new AmbientOcclusionModeParameter() { value = AmbientOcclusionMode.MultiScaleVolumetricObscurance };
+                                break;
+                        }
+                        ao.active = true;
+                    }
+                }
+            }
         }
         public void SetAntialiasing(AntialiasingType type)
         {
