@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using IngameDebugConsole;
+using Pinwheel.Poseidon;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -19,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MinMax minMaxVolumeDB = new MinMax(-20, 1);
         [SerializeField] private PostProcessProfile[] profiles;
         [SerializeField] private GameObject[] cameras;
+        [SerializeField] private PWaterProfile[] waterProfiles;
         #endregion
 
         #region Methods
@@ -38,6 +40,8 @@ namespace DanielLochner.Assets.CreatureCreator
             SetAntialiasing(Data.Antialiasing);
             SetScreenSpaceReflections(Data.ScreenSpaceReflections);
             SetFoliage(Data.Foliage);
+            SetReflections(Data.Reflections);
+            SetAnisotropicFiltering(Data.AnisotropicFiltering);
             SetBloom(Data.Bloom);
             SetDebugMode(Data.DebugMode);
             SetDepthOfField(Data.DepthOfField);
@@ -230,6 +234,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // rendering of grass and trees
             // low-poly wind shader
+        }
+        public void SetReflections(bool reflections)
+        {
+            foreach (PWaterProfile waterProfile in waterProfiles)
+            {
+                waterProfile.EnableReflection = reflections;
+            }
+            Data.Reflections = reflections;
         }
         public void SetAnisotropicFiltering(bool anisotropicFiltering)
         {

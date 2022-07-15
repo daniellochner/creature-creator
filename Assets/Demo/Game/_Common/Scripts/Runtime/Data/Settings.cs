@@ -24,7 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AntialiasingType antialiasing;
         [SerializeField] private ScreenSpaceReflectionsType screenSpaceReflections;
         [SerializeField] private FoliageType foliage;
-        [SerializeField] private bool anisotropicFiltering ;
+        [SerializeField] private bool reflections;
+        [SerializeField] private bool anisotropicFiltering;
         [SerializeField] private bool bloom;
         [SerializeField] private bool depthOfField;
         [SerializeField] private bool motionBlur;
@@ -113,6 +114,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => foliage;
             set => foliage = value;
+        }
+        public bool Reflections
+        {
+            get => reflections;
+            set => reflections = value;
         }
         public bool AnisotropicFiltering
         {
@@ -240,6 +246,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Antialiasing = AntialiasingType.FXAA;
             ScreenSpaceReflections = ScreenSpaceReflectionsType.Medium;
             Foliage = FoliageType.Medium;
+            Reflections = true;
             AnisotropicFiltering = true;
             Bloom = true;
             DepthOfField = false;
