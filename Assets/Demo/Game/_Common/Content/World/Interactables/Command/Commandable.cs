@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         protected override void OnInteract(Interactor interactor)
         {
-            if (animalAI.followTarget == null)
+            if (animalAI.FollowTarget == null)
             {
                 animalAI.Follow(interactor.transform);
             }

@@ -12,7 +12,11 @@ namespace DanielLochner.Assets
             if (NetworkManager.Singleton.IsServer || !NetworkConnectionManager.IsConnected)
             {
                 NetworkObject npc = Instantiate(npcPrefab, transform.position, transform.rotation);
-                npc.Spawn();
+
+                if (NetworkConnectionManager.IsConnected)
+                {
+                    npc.Spawn();
+                }
                 Setup(npc);
             }
         }

@@ -284,18 +284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2304548901012607125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7476322862451386335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98fe840f969f2ff46b00b819eb4ed288, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2304548901012607124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +299,7 @@ MonoBehaviour:
   energyDepletionRate: 0.00083333335
   healthTickRate: 1
   healthTickDamage: 5
---- !u!114 &2304548901012607123
+--- !u!114 &2304548901012607125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -320,47 +308,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7476322862451386335}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8da59aca5027af41b3c51d3088a5d74, type: 3}
+  m_Script: {fileID: 11500000, guid: 98fe840f969f2ff46b00b819eb4ed288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  constructor: {fileID: 7476322862451386320}
-  animator: {fileID: 6106227692764542993}
-  collider: {fileID: 9074562672392469967}
-  cloner: {fileID: 5699210762730819004}
-  photographer: {fileID: 8718590968309013969}
-  killer: {fileID: 3932189056534488153}
-  effector: {fileID: 450029449961799635}
-  scaler: {fileID: 312566580317639819}
-  health: {fileID: 8166530411756370019}
-  energy: {fileID: 109211908835394834}
-  age: {fileID: 2196639755667890052}
-  hider: {fileID: 7355554444003876393}
-  informer: {fileID: 689798176256724837}
-  selectable: {fileID: 1962287229178218075}
-  energyDepleter: {fileID: 2304548901012607124}
-  ager: {fileID: 2304548901012607125}
---- !u!195 &2304548901012607127
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7476322862451386335}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &2304548901012607126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +330,6 @@ MonoBehaviour:
   - id: 1
   - id: 2
   data: {fileID: 4900000, guid: deb618de4434d754fb99a9c4c9ee1b94, type: 3}
-  followTarget: {fileID: 0}
   trackRegion: {fileID: 464128767}
   references:
     version: 1
@@ -422,3 +371,54 @@ MonoBehaviour:
         id: FOL
         sm: {fileID: 2304548901012607126}
         baseFollowOffset: 2
+--- !u!195 &2304548901012607127
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &-2523701525369187450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 088c20e16dabbc1458a921742d5b6049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constructor: {fileID: 7476322862451386320}
+  animator: {fileID: 6106227692764542993}
+  collider: {fileID: 9074562672392469967}
+  cloner: {fileID: 5699210762730819004}
+  photographer: {fileID: 8718590968309013969}
+  killer: {fileID: 3932189056534488153}
+  effector: {fileID: 450029449961799635}
+  scaler: {fileID: 312566580317639819}
+  health: {fileID: 8166530411756370019}
+  energy: {fileID: 109211908835394834}
+  age: {fileID: 2196639755667890052}
+  hider: {fileID: 7355554444003876393}
+  informer: {fileID: 689798176256724837}
+  selectable: {fileID: 1962287229178218075}
+  energyDepleter: {fileID: 2304548901012607124}
+  ager: {fileID: 2304548901012607125}
+  ai: {fileID: 2304548901012607126}

@@ -5,36 +5,29 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureSelectable))]
-    public class CreatureNonPlayer : CreatureBase
+    public class AnimalLocal : CreatureNonPlayerLocal
     {
         #region Fields
-        [SerializeField] private CreatureSelectable selectable;
+        [SerializeField] private AnimalAI ai;
         #endregion
 
         #region Properties
-        public CreatureSelectable Selectable => selectable;
+        public AnimalAI AI => ai;
         #endregion
 
-        #region Methods
 #if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
 
-            selectable = GetComponent<CreatureSelectable>();
+            ai = GetComponent<AnimalAI>();
         }
 #endif
-        private void Start()
-        {
-            Setup();
-        }
 
         public override void Setup()
         {
             base.Setup();
-            Selectable.Setup();
+            AI.Setup();
         }
-        #endregion
     }
 }

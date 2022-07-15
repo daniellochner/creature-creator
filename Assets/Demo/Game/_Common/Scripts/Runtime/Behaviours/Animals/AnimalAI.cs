@@ -15,8 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Animal")]
         [SerializeField] private TextAsset data;
-
-        public Transform followTarget;
         #endregion
 
         #region Properties
@@ -24,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         protected CreatureNonPlayerLocal Creature { get; set; }
         protected NavMeshAgent Agent { get; set; }
+        public Transform FollowTarget { get; set; }
 
         public bool CanFollow
         {
@@ -53,21 +52,21 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature = GetComponent<CreatureNonPlayerLocal>();
             Agent = GetComponent<NavMeshAgent>();
         }
-        public override void Start()
+
+        public void Setup()
         {
-            base.Start();
             Creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
         }
 
         public virtual void Follow(Transform target)
         {
-            followTarget = target;
+            FollowTarget = target;
             ChangeState("FOL");
         }
         public virtual void StopFollowing()
         {
             ChangeState(startStateID);
-            followTarget = null;
+            FollowTarget = null;
         }
 
         #region Debug
@@ -184,7 +183,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void UpdateLogic()
             {
-                Vector3 displacement = AnimalAI.followTarget.position - AnimalAI.transform.position;
+                Vector3 displacement = AnimalAI.FollowTarget.position - AnimalAI.transform.position;
                 if (displacement.magnitude > FollowOffset)
                 {
                     Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target

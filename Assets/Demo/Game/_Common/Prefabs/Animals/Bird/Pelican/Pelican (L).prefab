@@ -302,18 +302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7993902849842800067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4954534582043061380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98fe840f969f2ff46b00b819eb4ed288, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7993902849842800066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +317,7 @@ MonoBehaviour:
   energyDepletionRate: 0.00083333335
   healthTickRate: 1
   healthTickDamage: 5
---- !u!114 &7993902849842800065
+--- !u!114 &7993902849842800067
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,47 +326,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4954534582043061380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8da59aca5027af41b3c51d3088a5d74, type: 3}
+  m_Script: {fileID: 11500000, guid: 98fe840f969f2ff46b00b819eb4ed288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  constructor: {fileID: 4954534582043061387}
-  animator: {fileID: 8628504667555984202}
-  collider: {fileID: 6839952230563690132}
-  cloner: {fileID: 7788024502410807015}
-  photographer: {fileID: 6628628711273371274}
-  killer: {fileID: 1554524614283095810}
-  effector: {fileID: 2683553419682428040}
-  scaler: {fileID: 2834245609641648080}
-  health: {fileID: 5933051466195596088}
-  energy: {fileID: 2486208393496956489}
-  age: {fileID: 4431329568624645343}
-  hider: {fileID: 4978477806666044786}
-  informer: {fileID: 3067392468822901822}
-  selectable: {fileID: 4051066123937860864}
-  energyDepleter: {fileID: 7993902849842800066}
-  ager: {fileID: 7993902849842800067}
---- !u!195 &7993902849842800069
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4954534582043061380}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &7993902849842800068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,21 +341,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 566c6f79fbbcb974c844adebc6a881c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateID: WAN
+  startStateID: IDL
   currentStateId: 
   states:
   - id: 0
   - id: 1
   - id: 2
   data: {fileID: 4900000, guid: d7ba8106e39ffe84a88d84c0c7e376f5, type: 3}
-  followTarget: {fileID: 0}
   frightenTrigger: {fileID: 2140910829910161468}
   references:
     version: 1
     00000000:
-      type: {class: AnimalAI/Wandering, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      type: {class: AnimalAI/Idling, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
-        id: WAN
+        id: IDL
         sm: {fileID: 7993902849842800068}
         ambientCooldown:
           min: 0
@@ -415,10 +364,6 @@ MonoBehaviour:
           max: 0
         ambientSounds: []
         actions: []
-        wanderCooldown:
-          min: 10
-          max: 25
-        wanderBounds: {fileID: 1414323958, guid: 0cf192ed3a253a94fb541b4d0e1610ce, type: 3}
     00000001:
       type: {class: BirdAI/Flying, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:
@@ -477,3 +422,54 @@ MonoBehaviour:
         id: FOL
         sm: {fileID: 7993902849842800068}
         baseFollowOffset: 2
+--- !u!195 &7993902849842800069
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4954534582043061380}
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &3310089883378744379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4954534582043061380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 088c20e16dabbc1458a921742d5b6049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constructor: {fileID: 4954534582043061387}
+  animator: {fileID: 8628504667555984202}
+  collider: {fileID: 6839952230563690132}
+  cloner: {fileID: 7788024502410807015}
+  photographer: {fileID: 6628628711273371274}
+  killer: {fileID: 1554524614283095810}
+  effector: {fileID: 2683553419682428040}
+  scaler: {fileID: 2834245609641648080}
+  health: {fileID: 5933051466195596088}
+  energy: {fileID: 2486208393496956489}
+  age: {fileID: 4431329568624645343}
+  hider: {fileID: 4978477806666044786}
+  informer: {fileID: 3067392468822901822}
+  selectable: {fileID: 4051066123937860864}
+  energyDepleter: {fileID: 7993902849842800066}
+  ager: {fileID: 7993902849842800067}
+  ai: {fileID: 7993902849842800068}

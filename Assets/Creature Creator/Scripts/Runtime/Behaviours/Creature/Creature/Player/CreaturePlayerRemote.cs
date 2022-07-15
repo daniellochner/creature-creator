@@ -25,6 +25,10 @@ namespace DanielLochner.Assets.CreatureCreator
             selectable = GetComponent<CreatureSelectable>();
         }
 #endif
+        private void Start()
+        {
+            Setup();
+        }
 
         public override void Setup()
         {

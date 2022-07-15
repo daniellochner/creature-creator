@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -34,6 +33,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 logoAnimator.SetTrigger("Hide");
                 enterAudioSource.Play();
             }
+        }
+        private void OnDestroy()
+        {
+            gridMat.mainTextureScale = Vector2.one;
+            gridMat.mainTextureOffset = Vector2.zero;
         }
         #endregion
     }
