@@ -54,12 +54,16 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle pvpToggle;
         [SerializeField] private Toggle pveToggle;
         [SerializeField] private Toggle npcToggle;
+        [SerializeField] private Image sortByImage;
+        [SerializeField] private Sprite sortByIcons;
 
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
         private bool isConnecting, isRefreshing;
         private UnityTransport relayTransport;
         private Coroutine updateNetStatusCoroutine;
+        private string filterWorldsText;
+        private int sortByIndex;
         #endregion
 
         #region Properties
@@ -382,6 +386,40 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Join()
         {
             Join(lobbyCodeInputField.text);
+        }
+
+        public void SortBy()
+        {
+
+        }
+        public void Filter()
+        {
+            InputDialog.Input("Filter Worlds", submitEvent: delegate (string text)
+            {
+                UpdateList();
+            });
+        }
+        public void UpdateList()
+        {
+
+
+            if (!string.IsNullOrEmpty(filterWorldsText))
+            {
+                foreach (Transform world in worldsRT)
+                {
+                    bool filtered = true;
+                    foreach (TextMeshProUGUI tmp in world.GetComponentsInChildren<TextMeshProUGUI>())
+                    {
+                        string text = tmp.text.ToLower();
+                        if (text.Contains(filterWorldsText.ToLower()))
+                        {
+                            filtered = false;
+                            break;
+                        }
+                    }
+                    world.gameObject.SetActive(!filtered);
+                }
+            }
         }
 
         private async Task Authenticate()
