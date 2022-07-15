@@ -17,12 +17,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public Button JoinButton => joinButton;
+
+        public int Players { get; private set; }
         #endregion
 
         #region Methods
         public void Setup(MultiplayerUI multiplayerUI, Lobby lobby)
         {
-            playersText.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
+            Players = lobby.Players.Count;
+
+            playersText.text = $"{Players}/{lobby.MaxPlayers}";
             nameText.text = lobby.Name;
             joinButton.onClick.AddListener(delegate 
             {

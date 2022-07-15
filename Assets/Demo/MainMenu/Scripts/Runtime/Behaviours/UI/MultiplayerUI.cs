@@ -54,16 +54,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle pvpToggle;
         [SerializeField] private Toggle pveToggle;
         [SerializeField] private Toggle npcToggle;
-        [SerializeField] private Image sortByImage;
-        [SerializeField] private Sprite sortByIcons;
+        [SerializeField] private Image sortByIcon;
 
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
-        private bool isConnecting, isRefreshing;
+        private bool isConnecting, isRefreshing, isSortedByAscending = true;
         private UnityTransport relayTransport;
         private Coroutine updateNetStatusCoroutine;
-        private string filterWorldsText;
-        private int sortByIndex;
         #endregion
 
         #region Properties
@@ -390,36 +387,43 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SortBy()
         {
+            isSortedByAscending = !isSortedByAscending;
 
+            List<WorldUI> worlds = new List<WorldUI>(worldsRT.GetComponentsInChildren<WorldUI>());
+            worlds.Sort((x, y) => x.Players.CompareTo(y.Players));
+
+            for (int i = 0; i < worlds.Count; ++i)
+            {
+                int siblingIndex = isSortedByAscending ? i : (worlds.Count - 1) - i;
+                worlds[i].transform.SetSiblingIndex(siblingIndex);
+            }
+            sortByIcon.transform.localScale = new Vector3(1f, isSortedByAscending ? -1f : 1f, 1f);
         }
         public void Filter()
         {
-            InputDialog.Input("Filter Worlds", submitEvent: delegate (string text)
+            InputDialog.Input("Filter Worlds", "Enter text to filter by...", submitEvent: delegate (string filterText)
             {
-                UpdateList();
-            });
-        }
-        public void UpdateList()
-        {
+                filterText = filterText.ToLower();
 
-
-            if (!string.IsNullOrEmpty(filterWorldsText))
-            {
                 foreach (Transform world in worldsRT)
                 {
-                    bool filtered = true;
-                    foreach (TextMeshProUGUI tmp in world.GetComponentsInChildren<TextMeshProUGUI>())
+                    bool filtered = false;
+                    if (!string.IsNullOrEmpty(filterText))
                     {
-                        string text = tmp.text.ToLower();
-                        if (text.Contains(filterWorldsText.ToLower()))
+                        filtered = true;
+                        foreach (TextMeshProUGUI tmp in world.GetComponentsInChildren<TextMeshProUGUI>())
                         {
-                            filtered = false;
-                            break;
+                            string text = tmp.text.ToLower();
+                            if (text.Contains(filterText.ToLower()))
+                            {
+                                filtered = false;
+                                break;
+                            }
                         }
                     }
                     world.gameObject.SetActive(!filtered);
                 }
-            }
+            });
         }
 
         private async Task Authenticate()
