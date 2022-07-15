@@ -47,6 +47,10 @@ namespace DanielLochner.Assets
             currentStateId = id;
             currentState?.InternalEnter();
         }
+        public BaseState GetState(string id)
+        {
+            return States.Find(x => x.ID == id);
+        }
         #endregion
     }
 }
