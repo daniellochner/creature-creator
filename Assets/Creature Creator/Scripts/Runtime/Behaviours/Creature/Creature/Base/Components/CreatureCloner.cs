@@ -9,7 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureCloner : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private CreatureConstructor baseCreaturePrefab;
+        [SerializeField] private CreatureConstructor skeletonPrefab;
         #endregion
 
         #region Properties
@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (rotation == null) rotation = transform.rotation;
             if (position == null) parent = transform;
 
-            CreatureConstructor clone = Instantiate(baseCreaturePrefab, (Vector3)position, (Quaternion)rotation, parent);
+            CreatureConstructor clone = Instantiate(skeletonPrefab, (Vector3)position, (Quaternion)rotation, parent);
             clone.Construct(creatureData);
 
             return clone;

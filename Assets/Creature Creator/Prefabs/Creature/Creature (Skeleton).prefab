@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 3002746977395476857}
   - component: {fileID: 3002746977395476853}
   m_Layer: 0
-  m_Name: Creature (Clone)
+  m_Name: Creature (Skeleton)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,11 +115,7 @@ MonoBehaviour:
   maxRadius: 2
   maxComplexity: 100
   mergeThreshold: 0.05
-  boneSettings:
-    radius: 0.1
-    length: 0.2
-    segments: 20
-    rings: 8
+  boneSettings: {fileID: 11400000, guid: 04a9205d1b89bf843bab99a0c9900737, type: 2}
   minMaxBones:
     min: 2
     max: 20
@@ -140,6 +136,7 @@ MonoBehaviour:
     diets: 
     health: 0
     speed: 0
+    weight: 0
   dimensions:
     height: 0
     radius: 0

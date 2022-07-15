@@ -292,9 +292,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public enum TextureQualityType
         {
+            VeryLow,
             Low,
             Medium,
-            High
+            High,
+            VeryHigh
         }
         public enum AmbientOcclusionType
         {

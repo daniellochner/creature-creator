@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Settings")]
-        [SerializeField] private CreatureConstructor baseCreaturePrefab;
+        [SerializeField] private BoneSettings boneSettings;
         [SerializeField] private AudioMixer masterAudioMixer;
         [SerializeField] private MinMax minMaxVolumeDB = new MinMax(-20, 1);
         [SerializeField] private PostProcessProfile[] profiles;
@@ -78,7 +78,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SetCreatureMeshQuality(CreatureMeshQualityType type)
         {
-            BoneSettings boneSettings = baseCreaturePrefab.BoneSettings;
             switch (type)
             {
                 case CreatureMeshQualityType.Low:
@@ -129,7 +128,24 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetTextureQuality(TextureQualityType type)
         {
-
+            switch (type)
+            {
+                case TextureQualityType.VeryLow:
+                    QualitySettings.masterTextureLimit = 4;
+                    break;
+                case TextureQualityType.Low:
+                    QualitySettings.masterTextureLimit = 3;
+                    break;
+                case TextureQualityType.Medium:
+                    QualitySettings.masterTextureLimit = 2;
+                    break;
+                case TextureQualityType.High:
+                    QualitySettings.masterTextureLimit = 1;
+                    break;
+                case TextureQualityType.VeryHigh:
+                    QualitySettings.masterTextureLimit = 0;
+                    break;
+            }
             Data.TextureQuality = type;
         }
         public void SetAmbientOcclusion(AmbientOcclusionType type)
