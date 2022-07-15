@@ -98,16 +98,32 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetShadowQuality(ShadowQualityType type)
         {
-            switch (type)
+            if (type == ShadowQualityType.None)
             {
-                case ShadowQualityType.None:
-                    break;
-                case ShadowQualityType.Low:
-                    break;
-                case ShadowQualityType.Medium:
-                    break;
-                case ShadowQualityType.High:
-                    break;
+                QualitySettings.shadows = ShadowQuality.Disable;
+            }
+            else
+            {
+                QualitySettings.shadows = ShadowQuality.All;
+                switch (type)
+                {
+                    case ShadowQualityType.Low:
+                        QualitySettings.shadowResolution = ShadowResolution.Low;
+                        QualitySettings.shadowDistance = 50;
+                        break;
+                    case ShadowQualityType.Medium:
+                        QualitySettings.shadowResolution = ShadowResolution.Medium;
+                        QualitySettings.shadowDistance = 100;
+                        break;
+                    case ShadowQualityType.High:
+                        QualitySettings.shadowResolution = ShadowResolution.High;
+                        QualitySettings.shadowDistance = 150;
+                        break;
+                    case ShadowQualityType.VeryHigh:
+                        QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
+                        QualitySettings.shadowDistance = 200;
+                        break;
+                }
             }
             Data.ShadowQuality = type;
         }

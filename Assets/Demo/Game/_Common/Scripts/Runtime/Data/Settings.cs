@@ -234,7 +234,7 @@ namespace DanielLochner.Assets.CreatureCreator
             VSync = false;
 
             CreatureMeshQuality = CreatureMeshQualityType.Medium;
-            ShadowQuality = ShadowQualityType.Medium;
+            ShadowQuality = ShadowQualityType.High;
             AmbientOcclusion = AmbientOcclusionType.MSVO;
             TextureQuality = TextureQualityType.Medium;
             Antialiasing = AntialiasingType.FXAA;
@@ -287,7 +287,8 @@ namespace DanielLochner.Assets.CreatureCreator
             None,
             Low,
             Medium,
-            High
+            High,
+            VeryHigh
         }
         public enum TextureQualityType
         {
