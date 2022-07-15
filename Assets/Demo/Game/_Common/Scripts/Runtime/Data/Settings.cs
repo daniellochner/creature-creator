@@ -310,7 +310,8 @@ namespace DanielLochner.Assets.CreatureCreator
             FXAA,
             LowSMAA,
             MediumSMAA,
-            HighSMAA
+            HighSMAA,
+            Temporal
         }
         public enum ScreenSpaceReflectionsType
         {

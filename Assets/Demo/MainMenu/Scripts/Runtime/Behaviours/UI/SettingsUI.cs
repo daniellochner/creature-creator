@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Toggle depthOfFieldToggle;
         [SerializeField] private Toggle motionBlurToggle;
-        
+
         [Header("Audio")]
         [SerializeField] private Slider masterVolumeSlider;
         [SerializeField] private Slider musicVolumeSlider;
@@ -217,7 +217,7 @@ namespace DanielLochner.Assets.CreatureCreator
             antialiasingOS.Select(SettingsManager.Data.Antialiasing, false);
             antialiasingOS.OnSelected.AddListener(delegate (int option)
             {
-                SettingsManager.Instance.SetAntialiasing((AntialiasingType)option);
+                SettingsManager.Instance.SetAntialiasing((AntialiasingType)option, true);
             });
 
             // Screen Space Reflections

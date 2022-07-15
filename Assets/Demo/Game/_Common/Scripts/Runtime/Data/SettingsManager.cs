@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using IngameDebugConsole;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering.PostProcessing;
@@ -17,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioMixer masterAudioMixer;
         [SerializeField] private MinMax minMaxVolumeDB = new MinMax(-20, 1);
         [SerializeField] private PostProcessProfile[] profiles;
+        [SerializeField] private GameObject[] cameras;
         #endregion
 
         #region Methods
@@ -177,8 +179,45 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-        public void SetAntialiasing(AntialiasingType type)
+        public void SetAntialiasing(AntialiasingType type, bool find = false)
         {
+            List<PostProcessLayer> layers = new List<PostProcessLayer>();
+            foreach (GameObject camera in cameras)
+            {
+                layers.AddRange(camera.GetComponentsInChildren<PostProcessLayer>(true));
+            }
+            if (find)
+            {
+                layers.AddRange(FindObjectsOfType<PostProcessLayer>(true));
+            }
+
+            foreach (PostProcessLayer layer in layers)
+            {
+                switch (type)
+                {
+                    case AntialiasingType.None:
+                        layer.antialiasingMode = PostProcessLayer.Antialiasing.None;
+                        break;
+                    case AntialiasingType.FXAA:
+                        layer.antialiasingMode = PostProcessLayer.Antialiasing.FastApproximateAntialiasing;
+                        break;
+                    case AntialiasingType.LowSMAA:
+                        layer.antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+                        layer.subpixelMorphologicalAntialiasing.quality = SubpixelMorphologicalAntialiasing.Quality.Low;
+                        break;
+                    case AntialiasingType.MediumSMAA:
+                        layer.antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+                        layer.subpixelMorphologicalAntialiasing.quality = SubpixelMorphologicalAntialiasing.Quality.Medium;
+                        break;
+                    case AntialiasingType.HighSMAA:
+                        layer.antialiasingMode = PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing;
+                        layer.subpixelMorphologicalAntialiasing.quality = SubpixelMorphologicalAntialiasing.Quality.High;
+                        break;
+                    case AntialiasingType.Temporal:
+                        layer.antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
+                        break;
+                }
+            }
             Data.Antialiasing = type;
         }
         public void SetScreenSpaceReflections(ScreenSpaceReflectionsType type)
