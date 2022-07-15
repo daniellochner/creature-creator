@@ -324,6 +324,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetAnisotropicFiltering(bool anisotropicFiltering)
         {
+            QualitySettings.anisotropicFiltering = anisotropicFiltering ? AnisotropicFiltering.Enable : AnisotropicFiltering.Disable;
             Data.AnisotropicFiltering = anisotropicFiltering;
         }
         public void SetBloom(bool bloom)
