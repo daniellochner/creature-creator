@@ -7,18 +7,18 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class OptionMenu : Menu
     {
-        private AudioSource openAS;
+        private AudioSource source;
 
         protected override void Awake()
         {
             base.Awake();
-            openAS = GetComponent<AudioSource>();
+            source = GetComponent<AudioSource>();
         }
 
         public override void Open(bool instant = false)
         {
             base.Open(instant);
-            openAS.Play();
+            source.Play();
         }
     }
 }

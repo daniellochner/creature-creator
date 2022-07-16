@@ -12,10 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureMover : MonoBehaviour
     {
         #region Fields
-        [Header("Setup")]
-        [SerializeField] private GameObject targetPrefab;
-
-        [Header("Physical")]
+        [Header("Movement")]
         [SerializeField] private bool requestToMove;
         [SerializeField] private float moveSpeed;
         [SerializeField] private float turnSpeed;
@@ -23,8 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float turnSmoothTime;
         [SerializeField] private float angleToMove;
         [SerializeField] private float thresholdWalkSpeed;
+        [SerializeField] private GameObject targetPrefab;
         
-        [Header("Non-Physical")]
+        [Header("Platform")]
         [SerializeField] private Platform platform;
         [SerializeField] private float positionSmoothing;
         [SerializeField] private float rotationSmoothing;
@@ -33,14 +31,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, ReadOnly] private Vector3 velocity;
         [SerializeField, ReadOnly] private Vector3 angularVelocity;
 
-        private Camera mainCamera;
         private Animator targetAnimator;
         private CapsuleCollider capsuleCollider;
         private GameObject targetGO;
         private new Rigidbody rigidbody;
 
-        private bool isMovable;
-        private Vector3 keyboardForward, keyboardRight, moveDisplacement;
+        private bool isMovable, canMove, canTurn;
+        private Vector3 keyboardForward, keyboardRight, moveDisplacement, direction;
         private InputMode inputMode;
         #endregion
 
@@ -61,6 +58,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
 
+        public bool CanInput
+        {
+            get
+            {
+                return EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen;
+            }
+        }
         public bool IsMovable
         {
             get => isMovable;
@@ -94,6 +98,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 HandlePlatform();
             }
+            else if (CanInput)
+            {
+                HandleInput();
+            }
         }
         private void FixedUpdate()
         {
@@ -111,10 +119,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
-            mainCamera = Camera.main;
         }
-        
-        private void HandleMovement()
+
+        private void HandleInput()
         {
             bool kInput = Input.GetButton("Vertical") || Input.GetButton("Horizontal");
             bool pInput = Input.GetMouseButton(1);
@@ -131,8 +138,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 inputMode = InputMode.Pointer;
             }
 
-            Vector3 direction = Vector3.zero;
-            bool canTurn = false, canMove = false;
+            direction = Vector3.zero;
+            canTurn = false;
+            canMove = false;
 
             switch (inputMode)
             {
@@ -154,11 +162,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     break;
                 #endregion
-                
+
                 #region Pointer
                 case InputMode.Pointer:
 
-                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(mainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureCamera.Camera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
                     {
                         Vector3 position = raycastHit.point;
                         Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
@@ -187,7 +195,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 targetAnimator.SetBool("IsHolding", pInput && !kInput);
             }
-
+        }
+        private void HandleMovement()
+        {
             if (direction != Vector3.zero)
             {
                 float angle = Vector3.SignedAngle(transform.forward, direction, transform.up);
