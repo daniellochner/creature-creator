@@ -1,6 +1,7 @@
 ﻿// Menus
 // Copyright (c) Daniel Lochner
 
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +29,9 @@ namespace DanielLochner.Assets
                 }
             }
         }
+
+        public Action OnOpen { get; set; }
+        public Action OnClose { get; set; }
         #endregion
 
         #region Methods
@@ -50,6 +54,7 @@ namespace DanielLochner.Assets
             }
 
             IsOpen = true;
+            OnOpen?.Invoke();
         }
         public virtual void Close(bool instant = false)
         {
@@ -59,6 +64,7 @@ namespace DanielLochner.Assets
             }
 
             IsOpen = false;
+            OnClose?.Invoke();
         }
         public void Toggle()
         {
