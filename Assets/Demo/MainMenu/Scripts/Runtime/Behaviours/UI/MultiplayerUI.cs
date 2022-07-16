@@ -397,7 +397,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 int siblingIndex = isSortedByAscending ? i : (worlds.Count - 1) - i;
                 worlds[i].transform.SetSiblingIndex(siblingIndex);
             }
-            sortByIcon.transform.localScale = new Vector3(1f, isSortedByAscending ? -1f : 1f, 1f);
+            sortByIcon.transform.localScale = new Vector3(1f, isSortedByAscending ? 1f : -1f, 1f);
         }
         public void Filter()
         {
