@@ -20,9 +20,9 @@ namespace DanielLochner.Assets
         {
             Instantiate(Instance.notificationTextOnlyPrefab, Instance.notificationsRT).Setup(message);
         }
-        public static void Notify(Sprite icon, string title, string description)
+        public static void Notify(Sprite icon, string title, string description, float iconScale = 1f, float textScale = 1f)
         {
-            Instantiate(Instance.notificationPrefab, Instance.notificationsRT).Setup(icon, title, description);
+            Instantiate(Instance.notificationPrefab, Instance.notificationsRT).Setup(icon, title, description, iconScale, textScale);
         }
 
 #if UNITY_EDITOR
@@ -41,6 +41,6 @@ namespace DanielLochner.Assets
             }
         }
 #endif
-#endregion
+        #endregion
     }
 }
