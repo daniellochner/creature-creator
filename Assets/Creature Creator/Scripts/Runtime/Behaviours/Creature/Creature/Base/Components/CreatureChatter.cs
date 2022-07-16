@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void Update()
         {
             base.Update();
-            height = Constructor.Dimensions.height + 0.5f;
+            height = Constructor.Dimensions.height + 0.75f;
         }
         #endregion
     }

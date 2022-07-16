@@ -2,6 +2,7 @@ using ProfanityDetector;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace DanielLochner.Assets
 {
@@ -61,7 +62,7 @@ namespace DanielLochner.Assets
         }
 
         [ClientRpc]
-        public void SendChatMessageClientRpc(string message)
+        public virtual void SendChatMessageClientRpc(string message)
         {
             if (messageGO != null)
             {
@@ -71,7 +72,9 @@ namespace DanielLochner.Assets
             messageGO = Instantiate(messagePrefab, transform, false);
             messageGO.transform.localPosition = Vector3.up * height;
 
-            messageGO.GetComponent<TextMeshProUGUI>().text = message;
+            messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
+            messageGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+            messageGO.GetComponent<SizeMatcher>().Match();
         }
         #endregion
     }
