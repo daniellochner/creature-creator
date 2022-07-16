@@ -17,7 +17,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Inform(string title = "Title", string informationMessage = "Message", string okay = "Okay", bool closeable = true, UnityAction okayEvent = null)
+        public static void Inform(string title = "Title", string informationMessage = "Message", string okay = "Okay", bool closeable = true, UnityAction onOkay = null)
         {
             Instance.titleText.text = title;
             Instance.informationMessageText.text = informationMessage;
@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
             Instance.okayButton.onClick.AddListener(delegate
             {
                 Instance.Close();
-                okayEvent?.Invoke();
+                onOkay?.Invoke();
             });
             Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.okayButton.onClick;
 

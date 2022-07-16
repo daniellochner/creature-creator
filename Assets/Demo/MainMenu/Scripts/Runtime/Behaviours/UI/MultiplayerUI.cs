@@ -401,7 +401,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Filter()
         {
-            InputDialog.Input("Filter Worlds", "Enter text to filter by...", submitEvent: delegate (string filterText)
+            InputDialog.Input("Filter Worlds", "Enter text to filter by...", onSubmit: delegate (string filterText)
             {
                 filterText = filterText.ToLower();
 

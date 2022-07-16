@@ -19,7 +19,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Confirm(string title = "Title", string confirmationMessage = "Message", string yes = "Yes", string no = "No", bool closeable = true, UnityAction yesEvent = null, UnityAction noEvent = null)
+        public static void Confirm(string title = "Title", string confirmationMessage = "Message", string yes = "Yes", string no = "No", bool closeable = true, UnityAction onYes = null, UnityAction onNo = null)
         {
             Instance.titleText.text = title;
             Instance.confirmationMessageText.text = confirmationMessage;
@@ -34,12 +34,12 @@ namespace DanielLochner.Assets
             Instance.yesButton.onClick.AddListener(delegate
             {
                 Instance.Close();
-                yesEvent?.Invoke();
+                onYes?.Invoke();
             });
             Instance.noButton.onClick.AddListener(delegate
             {
                 Instance.Close();
-                noEvent?.Invoke();
+                onNo?.Invoke();
             });
             Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.noButton.onClick;
 

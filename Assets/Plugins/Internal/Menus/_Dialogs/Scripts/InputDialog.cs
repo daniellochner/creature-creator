@@ -22,7 +22,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> submitEvent = null, UnityAction<string> cancelEvent = null)
+        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null)
         {
             Instance.titleText.text = title;
             Instance.placeholderText.text = placeholder;
@@ -38,12 +38,12 @@ namespace DanielLochner.Assets
             Instance.submitButton.onClick.AddListener(delegate
             {
                 Instance.Close();
-                submitEvent?.Invoke(Instance.inputFieldText.text);
+                onSubmit?.Invoke(Instance.inputFieldText.text);
             });
             Instance.cancelButton.onClick.AddListener(delegate
             {
                 Instance.Close();
-                cancelEvent?.Invoke(Instance.inputFieldText.text);
+                onCancel?.Invoke(Instance.inputFieldText.text);
             });
             Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.cancelButton.onClick;
 

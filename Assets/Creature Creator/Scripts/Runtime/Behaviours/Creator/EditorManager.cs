@@ -230,7 +230,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (primaryColourPicker.Name.text.Contains("Override"))
                 {
-                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", yesEvent: delegate
+                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", onYes: delegate
                     {
                         player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
                         SetPrimaryColourUI(player.Creature.Constructor.Data.PrimaryColour, false);
@@ -241,7 +241,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (secondaryColourPicker.Name.text.Contains("Override"))
                 {
-                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", yesEvent: delegate
+                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", onYes: delegate
                     {
                         player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
                         SetSecondaryColourUI(player.Creature.Constructor.Data.SecondaryColour, false);
@@ -693,7 +693,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             creatureUI.RemoveButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Remove Creature?", $"Are you sure you want to permanently remove \"{creatureName}\"?", yesEvent: delegate
+                ConfirmationDialog.Confirm("Remove Creature?", $"Are you sure you want to permanently remove \"{creatureName}\"?", onYes: delegate
                 {
                     creaturesUI.Remove(creatureUI);
                     Destroy(creatureUI.gameObject);
@@ -784,7 +784,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Hide Body Part?", $"Are you sure you want to hide \"{bodyPart.name}\" from the editor?", yesEvent: delegate 
+                ConfirmationDialog.Confirm("Hide Body Part?", $"Are you sure you want to hide \"{bodyPart.name}\" from the editor?", onYes: delegate 
                 {
                     RemoveBodyPartUI(bodyPartUI);
                     HiddenBodyParts.Add(bodyPartID);
@@ -823,7 +823,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             patternUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Hide Pattern?", $"Are you sure you want to hide \"{pattern.name}\" from the editor?", yesEvent: delegate
+                ConfirmationDialog.Confirm("Hide Pattern?", $"Are you sure you want to hide \"{pattern.name}\" from the editor?", onYes: delegate
                 {
                     RemovePatternUI(patternUI);
                     HiddenPatterns.Add(patternID);
@@ -1165,7 +1165,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (confirm)
             {
-                ConfirmationDialog.Confirm(title, message, yesEvent: operation);
+                ConfirmationDialog.Confirm(title, message, onYes: operation);
             }
             else
             {

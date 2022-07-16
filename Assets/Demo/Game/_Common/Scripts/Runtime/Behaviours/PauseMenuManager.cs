@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                ConfirmationDialog.Confirm("Quit?", "Are you sure you want to leave the current game, and return to the main menu?", yesEvent: Leave);
+                ConfirmationDialog.Confirm("Quit?", "Are you sure you want to leave the current game, and return to the main menu?", onYes: Leave);
             }
         }
 

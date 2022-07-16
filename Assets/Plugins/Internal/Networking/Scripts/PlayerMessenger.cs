@@ -6,17 +6,19 @@ using UnityEngine.Animations;
 
 namespace DanielLochner.Assets
 {
-    public class WorldChatter : NetworkBehaviour
+    public class PlayerMessenger : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private GameObject messagePrefab;
         [Space]
-        [SerializeField] private float cooldown;
+        [SerializeField] private bool checkForProfanity;
         [SerializeField] private int characterLimit;
+        [SerializeField] private float sendCooldown;
+        [SerializeField] private float height;
 
         private ProfanityFilter filter = new ProfanityFilter();
-        private GameObject messageGO;
-        protected float cooldownTimeLeft, height;
+        private float cooldownTimeLeft;
+        protected GameObject messageGO;
         #endregion
 
         #region Properties
@@ -24,57 +26,66 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        protected virtual void Update()
+        private void Update()
         {
             if (IsOwner) HandleInput();
+        }
+        private void OnDisable()
+        {
+            if (messageGO != null)
+            {
+                Destroy(messageGO);
+            }
         }
 
         private void HandleInput()
         {
             if (CanChat && Input.GetKey(KeyCode.T))
             {
-                InputDialog.Input("World Chat", submitEvent: SendChatMessage);
+                InputDialog.Input("World Chat", onSubmit: SendMessage);
             }
             cooldownTimeLeft -= Time.deltaTime;
         }
 
-        public void SendChatMessage(string message)
+        public new void SendMessage(string message)
         {
             if (message.Length > characterLimit)
             {
                 InformationDialog.Inform("Too Long", $"Messages cannot be longer than {characterLimit} characters!");
                 return;
             }
-            if (filter.ContainsProfanity(message))
+            if (checkForProfanity && filter.ContainsProfanity(message))
             {
                 InformationDialog.Inform("Profanity Detected", "Please do not send messages that contain profanity!");
                 return;
             }
+            cooldownTimeLeft = sendCooldown;
 
-            SendChatMessageServerRpc(message);
-            cooldownTimeLeft = cooldown;
+            SendMessageServerRpc(message);
         }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void SendChatMessageServerRpc(string message)
-        {
-            SendChatMessageClientRpc(message);
-        }
-
-        [ClientRpc]
-        public virtual void SendChatMessageClientRpc(string message)
+        protected virtual void ReceiveMessage(string message)
         {
             if (messageGO != null)
             {
                 Destroy(messageGO);
             }
-            
-            messageGO = Instantiate(messagePrefab, transform, false);
-            messageGO.transform.localPosition = Vector3.up * height;
+            messageGO = Instantiate(messagePrefab, transform.position + transform.up * height, transform.rotation, transform);
 
             messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
             messageGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
             messageGO.GetComponent<SizeMatcher>().Match();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SendMessageServerRpc(string message)
+        {
+            SendMessageClientRpc(message);
+        }
+
+        [ClientRpc]
+        public void SendMessageClientRpc(string message)
+        {
+            ReceiveMessage(message);
         }
         #endregion
     }

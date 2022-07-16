@@ -14,14 +14,11 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Player player;
-        [Space]
-        [SerializeField] private TextMeshProUGUI nameText;
         #endregion
 
         #region Properties
         public Player Player => player;
 
-        public string Username { get; set; }
         #endregion
 
         #region Methods
@@ -41,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     player.Creature.Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
 
-                    SetupPlayerName();
+                    
                 }
                 else
                 {
@@ -49,12 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
-        private void LateUpdate()
-        {
-            HandlePlayerName();
-        }
-
+        
         #region Death Messages
         private readonly string[] DEATH_MESSAGES = new string[]
         {
@@ -78,37 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
             NotificationsManager.Notify(message);
         }
         #endregion
-
-        #region Player Name
-        private void SetupPlayerName()
-        {
-            ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(NetworkManager.Singleton.NetworkConfig.ConnectionData));
-            Username = connectionData.username;
-            SetPlayerNameServerRpc(Username);
-        }
-
-        [ServerRpc]
-        private void SetPlayerNameServerRpc(string name)
-        {
-            SetPlayerNameClientRpc(name);
-        }
-        [ClientRpc]
-        private void SetPlayerNameClientRpc(string name)
-        {
-            nameText.text = nameText.text.Replace("{name}", name);
-        }
-
-        private void HandlePlayerName()
-        {
-            if (Player.Instance == null) return;
-            nameText.transform.parent.gameObject.SetActive(!IsHidden.Value);
-            if (!IsHidden.Value)
-            {
-                nameText.transform.parent.LookAt(Player.Instance.Creature.Camera.Camera.transform);
-            }
-        }
-        #endregion
-
+        
         #region Load Player
         [ClientRpc]
         public void LoadPlayerClientRpc(PlayerData playerData, string creatureData, ClientRpcParams clientRpcParams)

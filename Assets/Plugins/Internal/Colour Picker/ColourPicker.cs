@@ -60,7 +60,7 @@ namespace DanielLochner.Assets
                     });
                     colourUI.ClickUI.OnRightClick.AddListener(delegate
                     {
-                        InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", submitEvent: delegate (string colourHEX)
+                        InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", onSubmit: delegate (string colourHEX)
                         {
                             if (!colourHEX.StartsWith("#"))
                             {

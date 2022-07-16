@@ -1,9 +1,12 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using UnityEngine;
+
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CreatureChatter : WorldChatter
+    [RequireComponent(typeof(CreatureConstructor))]
+    public class CreatureMessenger : PlayerMessenger
     {
         #region Properties
         public CreatureConstructor Constructor { get; set; }
@@ -17,10 +20,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
         }
 
-        protected override void Update()
+        protected override void ReceiveMessage(string message)
         {
-            base.Update();
-            height = Constructor.Dimensions.height + 0.75f;
+            base.ReceiveMessage(message);
+            messageGO.transform.localPosition = Vector3.up * (Constructor.Dimensions.height + 0.75f);
         }
         #endregion
     }
