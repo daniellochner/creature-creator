@@ -73,7 +73,6 @@ namespace DanielLochner.Assets
 
             messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
             messageGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
-            messageGO.GetComponent<SizeMatcher>().Match();
         }
 
         [ServerRpc(RequireOwnership = false)]

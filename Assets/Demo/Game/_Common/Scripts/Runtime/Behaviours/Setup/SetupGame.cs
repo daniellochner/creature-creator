@@ -7,8 +7,19 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SetupGame : MonoBehaviour
+    public class SetupGame : MonoBehaviourSingleton<SetupGame>
     {
+        public void Setup()
+        {
+            EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
+            EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
+            EditorManager.Instance.BaseCash = ProgressManager.Data.Cash;
+            EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
+            EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
 
+
+
+            EditorManager.Instance.Setup();
+        }
     }
 }

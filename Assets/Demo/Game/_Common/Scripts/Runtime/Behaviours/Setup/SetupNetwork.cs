@@ -9,61 +9,15 @@ using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SetupNetwork : NetworkSingleton<SetupNetwork>
+    public class SetupNetwork : MonoBehaviour
     {
-        [SerializeField] private NetworkObject playerLPrefab;
-        [SerializeField] private NetworkObject playerRPrefab;
-        [SerializeField] private Platform platform;
-        [SerializeField] private NetworkObject[] helpers;
-
-
-        private IEnumerator Start()
+        private void OnDestroy()
         {
-            if (!IsServer)
-            {
-                yield return new WaitWhile(() => !Player.Instance);
-            }
-
-            Setup();
-        }
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
             Shutdown();
         }
-        
+
         public void Setup()
         {
-            EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
-            EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
-            EditorManager.Instance.BaseCash = ProgressManager.Data.Cash;
-            EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
-            EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
-
-            if (NetworkConnectionManager.IsConnected)
-            {
-                SetupMP();
-            }
-            else
-            {
-                SetupSP();
-            }
-
-            EditorManager.Instance.Setup();
-        }
-        
-        public void SetupMP()
-        {
-            if (IsServer)
-            {
-                foreach (NetworkObject helper in helpers)
-                {
-                    Instantiate(helper).Spawn();
-                }
-                NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-                OnClientConnected(OwnerClientId);
-            }
-
             NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
@@ -75,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             
             Lobby lobby = LobbyHelper.Instance.JoinedLobby;
             World world = new World(lobby);
-            if (IsServer)
+            if (NetworkManager.Singleton.IsHost)
             {
                 if (world.IsPrivate == true)
                 {
@@ -93,18 +47,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-        public void SetupSP()
-        {
-            Instantiate(playerLPrefab);
-        }
 
         public void Shutdown()
         {
-            if (IsServer)
-            {
-                NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-            }
-
             NetworkShutdownManager.Instance.OnUncontrolledShutdown -= OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown -= OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown -= OnUncontrolledHostShutdown;
@@ -112,12 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkInactivityManager.Instance.OnInactivityKick -= OnInactivityKick;
             NetworkInactivityManager.Instance.OnInactivityWarn -= OnInactivityWarn;
         }
-        
 
-        private void OnClientConnected(ulong clientId)
-        {
-            Instantiate((NetworkManager.Singleton.LocalClientId == clientId) ? playerLPrefab : playerRPrefab, platform.transform.position, platform.transform.rotation).SpawnAsPlayerObject(clientId);
-        }
         private void OnUncontrolledShutdown()
         {
             SceneManager.LoadScene("MainMenu");

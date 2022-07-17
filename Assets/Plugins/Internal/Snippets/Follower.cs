@@ -70,7 +70,7 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void SetFollow(Transform follow)
+        public void SetFollow(Transform follow, bool instant = false)
         {
             if (!follow) return;
 
@@ -78,6 +78,17 @@ namespace DanielLochner.Assets
 
             if (useOffsetPosition) offsetPosition = follow.position - transform.position;
             if (useOffsetRotation) offsetRotation = Quaternion.Euler(follow.rotation.eulerAngles - transform.rotation.eulerAngles);
+
+            if (instant)
+            {
+                float tmpPositionSmoothing = positionSmoothing;
+                float tmpRotationSmoothing = rotationSmoothing;
+                positionSmoothing = -1;
+                rotationSmoothing = -1;
+                Follow();
+                positionSmoothing = tmpPositionSmoothing;
+                rotationSmoothing = tmpRotationSmoothing;
+            }
         }
         #endregion
     }

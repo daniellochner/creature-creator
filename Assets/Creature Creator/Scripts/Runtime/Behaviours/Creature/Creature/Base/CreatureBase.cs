@@ -76,8 +76,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Setup()
         {
-            gameObject.SetActive(true);
-
             Scaler.Setup();
             Animator.Setup();
         }

@@ -1,18 +1,16 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Player : NetworkSingleton<Player>
+    public class Player : MonoBehaviourSingleton<CreaturePlayerLocal>
     {
-        #region Fields
-        [SerializeField] private CreaturePlayerLocal creature;
-        #endregion
-
-        #region Properties
-        public CreaturePlayerLocal Creature => creature;
-        #endregion
+        protected override void Awake()
+        {
+            SetSingleton(GetComponent<CreaturePlayerLocal>());
+        }
     }
 }

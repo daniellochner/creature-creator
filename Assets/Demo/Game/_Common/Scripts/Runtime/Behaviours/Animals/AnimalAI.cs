@@ -73,7 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ContextMenu("Debug/Follow/Player")]
         public void FollowPlayer()
         {
-            Follow(Player.Instance.Creature.transform);
+            Follow(Player.Instance.transform);
         }
         #endregion
         #endregion

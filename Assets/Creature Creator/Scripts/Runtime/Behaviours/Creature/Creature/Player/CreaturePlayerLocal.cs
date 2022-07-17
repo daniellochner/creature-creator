@@ -32,6 +32,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
         public CreatureCamera Camera => camera;
+
+        public bool IsSetup { get; private set; }
         #endregion
 
         #region Methods
@@ -58,6 +60,8 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
             Editor.Setup();
             Interactor.Setup();
+
+            IsSetup = true;
         }
         #endregion
     }

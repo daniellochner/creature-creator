@@ -51,11 +51,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateTiling(string input)
         {
-            EditorManager.Instance.Player.Creature.Constructor.SetTiling(new Vector2(float.Parse(tilingX.text), float.Parse(tilingY.text)));
+            EditorManager.Instance.Creature.Constructor.SetTiling(new Vector2(float.Parse(tilingX.text), float.Parse(tilingY.text)));
         }
         private void UpdateOffset(string input)
         {
-            EditorManager.Instance.Player.Creature.Constructor.SetOffset(new Vector2(float.Parse(offsetX.text), float.Parse(offsetY.text)));
+            EditorManager.Instance.Creature.Constructor.SetOffset(new Vector2(float.Parse(offsetX.text), float.Parse(offsetY.text)));
         }
         #endregion
     }

@@ -56,7 +56,6 @@ namespace DanielLochner.Assets
 
                 nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name;
                 nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
-                nameGO.GetComponent<SizeMatcher>().Match();
             }
         }
         #endregion

@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool IsBehindPlayer
         {
-            get => Player.Instance.Creature.Interactor.InteractionCamera.WorldToViewportPoint(transform.position).z <= 0;
+            get => Player.Instance.Interactor.InteractionCamera.WorldToViewportPoint(transform.position).z <= 0;
         }
         public bool IsSelected
         {
@@ -39,11 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void LateUpdate()
         {
-            if (Player.Instance)
-            {
-                HandlePosition();
-                HandleVisibility();
-            }
+            HandlePosition();
+            HandleVisibility();
         }
         private void OnDisable()
         {
@@ -71,7 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (informationMenu != null && informationMenu.IsVisible)
             {
                 Vector3 position = transform.position + transform.up * Collider.Height;
-                informationMenu.transform.position = RectTransformUtility.WorldToScreenPoint(Player.Instance.Creature.Interactor.InteractionCamera, position);
+                informationMenu.transform.position = RectTransformUtility.WorldToScreenPoint(Player.Instance.Camera.Camera, position);
             }
         }
         private void HandleVisibility()

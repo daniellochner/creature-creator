@@ -128,7 +128,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsPainting => paintMenu.IsOpen;
         public bool IsPlaying => playMenu.IsOpen;
 
-        public Player Player => Player.Instance;
+        public CreaturePlayerLocal Creature => Player.Instance;
 
         public int BaseCash
         {
@@ -165,7 +165,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 // Create a dictionary of distinct body parts with their respective counts.
                 Dictionary<string, int> distinctBodyParts = new Dictionary<string, int>();
-                foreach (AttachedBodyPart attachedBodyPart in this.Player.Creature.Constructor.Data.AttachedBodyParts)
+                foreach (AttachedBodyPart attachedBodyPart in Creature.Constructor.Data.AttachedBodyParts)
                 {
                     string bodyPartID = attachedBodyPart.bodyPartID;
                     if (distinctBodyParts.ContainsKey(bodyPartID))
@@ -195,15 +195,15 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                int count = this.Player.Creature.Constructor.Data.AttachedBodyParts.Count;
+                int count = Creature.Constructor.Data.AttachedBodyParts.Count;
                 string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : "None";
 
                 bodyPartsText.text = $"<b>Body Parts:</b> [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
             });
             abilitiesToggle.onValueChanged.AddListener((UnityAction<bool>)delegate
             {
-                int count = this.Player.Creature.Abilities.Abilities.Count;
-                string abilities = (count > 0) ? string.Join(", ", (IEnumerable<Ability>)this.Player.Creature.Abilities.Abilities) : "None";
+                int count = Creature.Abilities.Abilities.Count;
+                string abilities = (count > 0) ? string.Join(", ", (IEnumerable<Ability>)Creature.Abilities.Abilities) : "None";
 
                 abilitiesText.text = $"<b>Abilities:</b> [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
             });
@@ -224,8 +224,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", onYes: (UnityAction)delegate
                     {
-                        this.Player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
-                        SetPrimaryColourUI((Color)this.Player.Creature.Constructor.Data.PrimaryColour, false);
+                        Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
+                        SetPrimaryColourUI((Color)Creature.Constructor.Data.PrimaryColour, false);
                     });
                 }
             });
@@ -235,8 +235,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", onYes: (UnityAction)delegate
                     {
-                        this.Player.Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
-                        SetSecondaryColourUI((Color)this.Player.Creature.Constructor.Data.SecondaryColour, false);
+                        Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
+                        SetSecondaryColourUI((Color)Creature.Constructor.Data.SecondaryColour, false);
                     });
                 }
             });
@@ -259,22 +259,20 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetupPlayer()
         {
-            Player.Creature.Setup();
-
             // Load preset/null creature (and defaults).
             if (creaturePresets.Length > 0)
             {
-                Player.Creature.Editor.Load(JsonUtility.FromJson<CreatureData>(creaturePresets[UnityEngine.Random.Range(0, creaturePresets.Length)].text));
+                Creature.Editor.Load(JsonUtility.FromJson<CreatureData>(creaturePresets[UnityEngine.Random.Range(0, creaturePresets.Length)].text));
             }
             else
             {
-                Player.Creature.Editor.Load(null);
+                Creature.Editor.Load(null);
             }
-            Player.Creature.Editor.IsInteractable = true;
-            Player.Creature.Editor.IsEditing = true;
-            Player.Creature.Editor.Cash = BaseCash;
-            Player.Creature.Informer.Setup(informationMenu);
-            Player.Creature.Mover.Teleport(platform, true);
+            Creature.Editor.IsInteractable = true;
+            Creature.Editor.IsEditing = true;
+            Creature.Editor.Cash = BaseCash;
+            Creature.Informer.Setup(informationMenu);
+            Creature.Mover.Teleport(platform, true);
         }
         #endregion
 
@@ -290,15 +288,15 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMode();
 
             // Player
-            Player.Creature.Mover.IsMovable = false;
-            Player.Creature.Constructor.IsTextured = false;
-            Player.Creature.Editor.IsInteractable = true;
-            Player.Creature.Editor.IsEditing = true;
-            Player.Creature.Editor.IsDraggable = true;
-            Player.Creature.Editor.UseTemporaryOutline = false;
-            Player.Creature.Editor.Deselect();
-            Player.Creature.Animator.IsAnimated = false;
-            Player.Creature.EnergyDepleter.DepleteEnergy = false;
+            Creature.Mover.IsMovable = false;
+            Creature.Constructor.IsTextured = false;
+            Creature.Editor.IsInteractable = true;
+            Creature.Editor.IsEditing = true;
+            Creature.Editor.IsDraggable = true;
+            Creature.Editor.UseTemporaryOutline = false;
+            Creature.Editor.Deselect();
+            Creature.Animator.IsAnimated = false;
+            Creature.EnergyDepleter.DepleteEnergy = false;
 
             SetCameraOffset(-1.5f);
         }
@@ -313,21 +311,21 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMode();
 
             // Player
-            Player.Creature.Health.Respawn();
-            Player.Creature.Constructor.Recenter();
-            Player.Creature.Constructor.UpdateConfiguration();
-            Player.Creature.Collider.UpdateCollider();
-            Player.Creature.Mover.TargetPosition = Player.Creature.transform.position;
-            Player.Creature.Mover.IsMovable = true;
-            Player.Creature.Constructor.IsTextured = true;
-            Player.Creature.Editor.IsInteractable = false;
-            Player.Creature.Editor.IsEditing = false;
-            Player.Creature.Editor.IsDraggable = false;
-            Player.Creature.Editor.UseTemporaryOutline = false;
-            Player.Creature.Editor.Deselect();
-            Player.Creature.EnergyDepleter.DepleteEnergy = true;
-            Player.Creature.Animator.Velocity.Reset();
-            Player.Creature.Animator.IsAnimated = true;
+            Creature.Health.Respawn();
+            Creature.Constructor.Recenter();
+            Creature.Constructor.UpdateConfiguration();
+            Creature.Collider.UpdateCollider();
+            Creature.Mover.TargetPosition = Creature.transform.position;
+            Creature.Mover.IsMovable = true;
+            Creature.Constructor.IsTextured = true;
+            Creature.Editor.IsInteractable = false;
+            Creature.Editor.IsEditing = false;
+            Creature.Editor.IsDraggable = false;
+            Creature.Editor.UseTemporaryOutline = false;
+            Creature.Editor.Deselect();
+            Creature.EnergyDepleter.DepleteEnergy = true;
+            Creature.Animator.Velocity.Reset();
+            Creature.Animator.IsAnimated = true;
 
             SetCameraOffset(0f);
         }
@@ -342,22 +340,22 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMode();
 
             // Player
-            Player.Creature.Mover.IsMovable = false;
-            Player.Creature.Constructor.IsTextured = true;
-            Player.Creature.Editor.IsInteractable = true;
-            Player.Creature.Editor.IsEditing = true;
-            Player.Creature.Editor.IsDraggable = false;
-            Player.Creature.Editor.UseTemporaryOutline = true;
-            Player.Creature.Editor.Deselect();
-            Player.Creature.Animator.IsAnimated = false;
-            Player.Creature.EnergyDepleter.DepleteEnergy = false;
+            Creature.Mover.IsMovable = false;
+            Creature.Constructor.IsTextured = true;
+            Creature.Editor.IsInteractable = true;
+            Creature.Editor.IsEditing = true;
+            Creature.Editor.IsDraggable = false;
+            Creature.Editor.UseTemporaryOutline = true;
+            Creature.Editor.Deselect();
+            Creature.Animator.IsAnimated = false;
+            Creature.EnergyDepleter.DepleteEnergy = false;
 
             SetCameraOffset(1.5f);
         }
 
         private void SetCameraOffset(float x)
         {
-            Player.Creature.Camera.CameraOrbit.OffsetPosition = new Vector3(x, 2f, Player.Creature.Camera.CameraOrbit.OffsetPosition.z);
+            Creature.Camera.CameraOrbit.OffsetPosition = new Vector3(x, 2f, Creature.Camera.CameraOrbit.OffsetPosition.z);
         }
         private void SetMode()
         {
@@ -375,15 +373,15 @@ namespace DanielLochner.Assets.CreatureCreator
             string savedCreatureName = creatureNameText.text;
             if (IsValidName(savedCreatureName))
             {
-                Player.Creature.Constructor.SetName(savedCreatureName);
+                Creature.Constructor.SetName(savedCreatureName);
                 if (!IsPlaying){ // Update only when the configuration could have changed (i.e., when building or painting).
-                    Player.Creature.Constructor.UpdateConfiguration();
+                    Creature.Constructor.UpdateConfiguration();
                 }
 
                 bool exists = creaturesUI.Find(x => x.name == savedCreatureName) != null;
-                bool isLoaded = savedCreatureName == Player.Creature.Editor.LoadedCreature;
+                bool isLoaded = savedCreatureName == Creature.Editor.LoadedCreature;
 
-                ConfirmOperation(() => Save(Player.Creature.Constructor.Data), exists && !isLoaded, "Overwrite creature?", $"Are you sure you want to overwrite \"{savedCreatureName}\"?");
+                ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, "Overwrite creature?", $"Are you sure you want to overwrite \"{savedCreatureName}\"?");
             }
         }
         public void Save(CreatureData creatureData)
@@ -398,8 +396,8 @@ namespace DanielLochner.Assets.CreatureCreator
             string path = Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat");
             SaveUtility.Save(path, creatureData, creatureEncryptionKey.Value);
 
-            Player.Creature.Editor.LoadedCreature = creatureData.Name;
-            Player.Creature.Editor.IsDirty = false;
+            Creature.Editor.LoadedCreature = creatureData.Name;
+            Creature.Editor.IsDirty = false;
         }
         public void TryLoad()
         {
@@ -417,22 +415,22 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Load(CreatureData creatureData)
         {
-            PerformOperation(() => Player.Creature.Editor.Load(creatureData));
+            PerformOperation(() => Creature.Editor.Load(creatureData));
 
             if (IsPlaying)
             {
-                Player.Creature.Health.Respawn();
+                Creature.Health.Respawn();
             }
 
             // Colour
-            primaryColourPicker.SetColour(Player.Creature.Constructor.Data.PrimaryColour, false);
-            secondaryColourPicker.SetColour(Player.Creature.Constructor.Data.SecondaryColour, false);
+            primaryColourPicker.SetColour(Creature.Constructor.Data.PrimaryColour, false);
+            secondaryColourPicker.SetColour(Creature.Constructor.Data.SecondaryColour, false);
 
             // Pattern
             patternsToggleGroup.SetAllTogglesOff(false);
-            if (!string.IsNullOrEmpty(Player.Creature.Constructor.Data.PatternID))
+            if (!string.IsNullOrEmpty(Creature.Constructor.Data.PatternID))
             {
-                patternsUI.Find(x => x.name.Equals(Player.Creature.Constructor.Data.PatternID)).SelectToggle.SetIsOnWithoutNotify(true);
+                patternsUI.Find(x => x.name.Equals(Creature.Constructor.Data.PatternID)).SelectToggle.SetIsOnWithoutNotify(true);
             }
             patternMaterial.SetColor("_PrimaryCol", primaryColourPicker.Colour);
             patternMaterial.SetColor("_SecondaryCol", secondaryColourPicker.Colour);
@@ -486,13 +484,13 @@ namespace DanielLochner.Assets.CreatureCreator
             string exportedCreatureName = creatureNameText.text;
             if (IsValidName(exportedCreatureName))
             {
-                Player.Creature.Constructor.SetName(exportedCreatureName);
+                Creature.Constructor.SetName(exportedCreatureName);
                 if (!IsPlaying){
-                    Player.Creature.Constructor.UpdateConfiguration();
+                    Creature.Constructor.UpdateConfiguration();
                 }
 
                 FileBrowser.ShowSaveDialog(
-                    onSuccess: (path) => Export(Player.Creature.Constructor.Data),
+                    onSuccess: (path) => Export(Creature.Constructor.Data),
                     onCancel: null,
                     pickMode: FileBrowser.PickMode.Folders,
                     initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
@@ -512,7 +510,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), creatureData);
 
             // Screenshot
-            Player.Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)
+            Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)
             {
                 File.WriteAllBytes(Path.Combine(creaturePath, $"{creatureData.Name}.png"), photo.EncodeToPNG());
             });
@@ -532,7 +530,7 @@ namespace DanielLochner.Assets.CreatureCreator
             //    }
             //}, true);
             
-            GameObject export = Player.Creature.Cloner.Clone(creatureData).gameObject;
+            GameObject export = Creature.Cloner.Clone(creatureData).gameObject;
             export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
 
             foreach (GameObject tool in export.FindChildrenWithTag("Tool"))
@@ -570,14 +568,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             totalComplexity += creatureData.Bones.Count;
 
-            bool creatureIsTooComplicated = totalComplexity > Player.Creature.Constructor.MaxComplexity;
+            bool creatureIsTooComplicated = totalComplexity > Creature.Constructor.MaxComplexity;
             bool creatureIsTooExpensive = totalCost > BaseCash;
 
             // Error Message
             List<string> errors = new List<string>();
             if (creatureIsTooComplicated)
             {
-                errors.Add($"is too complicated. ({totalComplexity}/{Player.Creature.Constructor.MaxComplexity})");
+                errors.Add($"is too complicated. ({totalComplexity}/{Creature.Constructor.MaxComplexity})");
             }
             if (creatureIsTooExpensive)
             {
@@ -607,8 +605,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
-            bool tooComplicated = Player.Creature.Constructor.Statistics.complexity + bodyPart.Complexity > Player.Creature.Constructor.MaxComplexity;
-            bool notEnoughCash = Player.Creature.Editor.Cash < bodyPart.Price;
+            bool tooComplicated = Creature.Constructor.Statistics.complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity;
+            bool notEnoughCash = Creature.Editor.Cash < bodyPart.Price;
 
             if (notEnoughCash || tooComplicated)
             {
@@ -691,10 +689,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     Destroy(creatureUI.gameObject);
                     File.Delete(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
 
-                    if (creatureName.Equals((string)this.Player.Creature.Editor.LoadedCreature))
+                    if (creatureName.Equals((string)Creature.Editor.LoadedCreature))
                     {
-                        this.Player.Creature.Editor.LoadedCreature = "";
-                        this.Player.Creature.Editor.IsDirty = false;
+                        Creature.Editor.LoadedCreature = "";
+                        Creature.Editor.IsDirty = false;
                     }
                     creatureNameText.text = "";
                 });
@@ -751,14 +749,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPartUI.DragUI.OnPointerUp(null);
                     editorAudioSource.PlayOneShot(createAudioClip);
 
-                    Ray ray = this.Player.Creature.Camera.Camera.ScreenPointToRay(Input.mousePosition);
-                    Plane plane = new Plane((Vector3)this.Player.Creature.Camera.Camera.transform.forward, (Vector3)this.Player.Creature.Mover.Platform.transform.position);
+                    Ray ray = Creature.Camera.Camera.ScreenPointToRay(Input.mousePosition);
+                    Plane plane = new Plane((Vector3)Creature.Camera.Camera.transform.forward, (Vector3)Creature.Mover.Platform.transform.position);
 
                     if (plane.Raycast(ray, out float distance))
                     {
-                        BodyPartConstructor main = this.Player.Creature.Constructor.AddBodyPart(bodyPartID);
+                        BodyPartConstructor main = Creature.Constructor.AddBodyPart(bodyPartID);
                         main.transform.position = ray.GetPoint(distance);
-                        main.transform.rotation = Quaternion.LookRotation(-plane.normal, (Vector3)this.Player.Creature.Constructor.transform.up);
+                        main.transform.rotation = Quaternion.LookRotation(-plane.normal, (Vector3)Creature.Constructor.transform.up);
                         main.transform.parent = Dynamic.Transform;
 
                         main.SetAttached(new AttachedBodyPart(bodyPartID));
@@ -805,11 +803,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (isSelected)
                 {
-                    this.Player.Creature.Constructor.SetPattern(patternID);
+                    Creature.Constructor.SetPattern(patternID);
                 }
                 else
                 {
-                    this.Player.Creature.Constructor.SetPattern("");
+                    Creature.Constructor.SetPattern("");
                 }
             });
 
@@ -915,7 +913,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdatePrimaryColour()
         {
             Color colour = primaryColourPicker.Colour;
-            BodyPartEditor bodyPart = Player.Creature.Editor.PaintedBodyPart;
+            BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
             if (bodyPart)
             {
                 bodyPart.BodyPartConstructor.SetPrimaryColour(colour);
@@ -923,7 +921,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                Player.Creature.Constructor.SetPrimaryColour(primaryColourPicker.Colour);
+                Creature.Constructor.SetPrimaryColour(primaryColourPicker.Colour);
                 patternMaterial.SetColor("_PrimaryCol", colour);
                 SetPrimaryColourOverrideUI(false);
             }
@@ -931,7 +929,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateSecondaryColour()
         {
             Color colour = secondaryColourPicker.Colour;
-            BodyPartEditor bodyPart = Player.Creature.Editor.PaintedBodyPart;
+            BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
             if (bodyPart)
             {
                 bodyPart.BodyPartConstructor.SetSecondaryColour(colour);
@@ -939,28 +937,28 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                Player.Creature.Constructor.SetSecondaryColour(secondaryColourPicker.Colour);
+                Creature.Constructor.SetSecondaryColour(secondaryColourPicker.Colour);
                 patternMaterial.SetColor("_SecondaryCol", colour);
                 SetSecondaryColourOverrideUI(false);
             }
         }
         public void UpdateStatistics()
         {
-            CreatureStatistics statistics = Player.Creature.Constructor.Statistics;
-            CreatureDimensions dimensions = Player.Creature.Constructor.Dimensions;
+            CreatureStatistics statistics = Creature.Constructor.Statistics;
+            CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            complexityText.text = $"<b>Complexity:</b> {statistics.complexity}/{Player.Creature.Constructor.MaxComplexity}";
+            complexityText.text = $"<b>Complexity:</b> {statistics.complexity}/{Creature.Constructor.MaxComplexity}";
             heightText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
             weightText.text = $"<b>Weight:</b> {Math.Round(statistics.weight, 2)}kg";
             dietText.text = $"<b>Diet:</b> {statistics.Diet}";
             healthText.text = $"<b>Health:</b> {statistics.health}";
             speedText.text = $"<b>Speed:</b> {statistics.speed}";
-            bonesText.text = $"<b>Bones:</b> {Player.Creature.Constructor.Bones.Count}";
+            bonesText.text = $"<b>Bones:</b> {Creature.Constructor.Bones.Count}";
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
 
-            cashText.text = $"${Player.Creature.Editor.Cash}";
+            cashText.text = $"${Creature.Editor.Cash}";
         }
         public void UpdateCreaturesFormatting()
         {
@@ -968,10 +966,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 creatureUI.NameText.text = creatureUI.NameText.text.Replace("<u>", "").Replace("</u>", "").Replace("*", ""); // Clear all formatting.
 
-                if (!string.IsNullOrEmpty(Player.Creature.Editor.LoadedCreature) && creatureUI.NameText.text.Equals(Player.Creature.Editor.LoadedCreature))
+                if (!string.IsNullOrEmpty(Creature.Editor.LoadedCreature) && creatureUI.NameText.text.Equals(Creature.Editor.LoadedCreature))
                 {
                     creatureUI.NameText.text = $"<u>{creatureUI.NameText.text}</u>";
-                    if (Player.Creature.Editor.IsDirty)
+                    if (Creature.Editor.IsDirty)
                     {
                         creatureUI.NameText.text += "*";
                     }
@@ -1009,7 +1007,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Keyboard Shortcuts
         private void HandleKeyboardShortcuts()
         {
-            if (!Player || Player.Creature.Health.IsDead) return;
+            if (!Creature || Creature.Health.IsDead) return;
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -1047,7 +1045,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             if (Input.GetKeyDown(KeyCode.D))
             {
-                Player.Creature.Health.Die();
+                Creature.Health.Die();
             }
         }
         private void HandlePaintShortcuts()
@@ -1123,13 +1121,13 @@ namespace DanielLochner.Assets.CreatureCreator
         private void PerformOperation(UnityAction operation, bool restructure = false)
         {
             // Record current state.
-            float yRotation = Player.Creature.Constructor.Body.localEulerAngles.y;
-            bool isMovable = Player.Creature.Mover.IsMovable;
-            bool isAnimated = Player.Creature.Animator.IsAnimated;
+            float yRotation = Creature.Constructor.Body.localEulerAngles.y;
+            bool isMovable = Creature.Mover.IsMovable;
+            bool isAnimated = Creature.Animator.IsAnimated;
 
             // Reset to default state.
-            Player.Creature.Constructor.Body.localRotation = Quaternion.identity;
-            Player.Creature.Constructor.Root.localPosition = Vector3.zero;
+            Creature.Constructor.Body.localRotation = Quaternion.identity;
+            Creature.Constructor.Root.localPosition = Vector3.zero;
             //if (restructure) // No longer necessary. Use CreatureCloner instead.
             //{
             //    player.Creature.Mover.IsMovable = player.Creature.Animator.IsAnimated = false;
@@ -1139,11 +1137,11 @@ namespace DanielLochner.Assets.CreatureCreator
             operation();
 
             // Restore to previous state.
-            Player.Creature.Constructor.Body.localRotation = Quaternion.Euler(0, yRotation, 0);
-            Player.Creature.Constructor.IsTextured = Player.Creature.Constructor.IsTextured;
-            Player.Creature.Editor.IsEditing = Player.Creature.Editor.IsEditing;
-            Player.Creature.Mover.IsMovable = isMovable;
-            Player.Creature.Animator.IsAnimated = isAnimated;
+            Creature.Constructor.Body.localRotation = Quaternion.Euler(0, yRotation, 0);
+            Creature.Constructor.IsTextured = Creature.Constructor.IsTextured;
+            Creature.Editor.IsEditing = Creature.Editor.IsEditing;
+            Creature.Mover.IsMovable = isMovable;
+            Creature.Animator.IsAnimated = isAnimated;
         }
 
         /// <summary>
@@ -1166,7 +1164,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void ConfirmUnsavedChanges(UnityAction operation, string operationPCN)
         {
-            ConfirmOperation(operation, Player.Creature.Editor.IsDirty && !string.IsNullOrEmpty(Player.Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{Player.Creature.Editor.LoadedCreature}\" without saving. Are you sure you want to continue {operationPCN}?");
+            ConfirmOperation(operation, Creature.Editor.IsDirty && !string.IsNullOrEmpty(Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{Creature.Editor.LoadedCreature}\" without saving. Are you sure you want to continue {operationPCN}?");
         }
         #endregion
         #endregion

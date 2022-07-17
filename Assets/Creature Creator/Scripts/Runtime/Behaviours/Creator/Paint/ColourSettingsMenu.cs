@@ -32,11 +32,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateShine(float shine)
         {
-            EditorManager.Instance.Player.Creature.Constructor.SetShine(shine);
+            EditorManager.Instance.Creature.Constructor.SetShine(shine);
         }
         private void UpdateMetallic(float metallic)
         {
-            EditorManager.Instance.Player.Creature.Constructor.SetMetallic(metallic);
+            EditorManager.Instance.Creature.Constructor.SetMetallic(metallic);
         }
         #endregion
     }
