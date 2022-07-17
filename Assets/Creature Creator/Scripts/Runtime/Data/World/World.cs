@@ -18,11 +18,15 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool AllowPVP { get; private set; }
         public bool AllowPVE { get; private set; }
         public bool SpawnNPC { get; private set; }
+
+        public Lobby Lobby { get; private set; }
         #endregion
 
         #region Methods
         public World(Lobby lobby)
         {
+            Lobby = lobby;
+
             IsPrivate = bool.Parse(lobby.Data["isPrivate"].Value);
             JoinCode = lobby.Data["joinCode"].Value;
             PasswordHash = lobby.Data["passwordHash"].Value;

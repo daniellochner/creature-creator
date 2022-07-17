@@ -9262,9 +9262,9 @@ GameObject:
   m_Component:
   - component: {fileID: 532916502}
   - component: {fileID: 532916504}
-  - component: {fileID: 532916506}
   - component: {fileID: 532916505}
   - component: {fileID: 532916503}
+  - component: {fileID: 532916506}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -17094,7 +17094,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 532916506}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.MultiplayerUI,
           Assembly-CSharp
         m_MethodName: Join
@@ -17782,7 +17782,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1135858547}
+      - m_Target: {fileID: 1135858546}
         m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.SingleplayerUI,
           Assembly-CSharp
         m_MethodName: PlayDefault
@@ -20856,7 +20856,7 @@ GameObject:
   - component: {fileID: 1135858544}
   - component: {fileID: 1135858548}
   - component: {fileID: 1135858545}
-  - component: {fileID: 1135858547}
+  - component: {fileID: 1135858546}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -20920,7 +20920,7 @@ MonoBehaviour:
   brightness: 0
   flatten: 0.15
   m_spriteBlending: 0.65
---- !u!114 &1135858547
+--- !u!114 &1135858546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20932,7 +20932,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4df416cc1cce9744b12ac847e28cdc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: Island
+  usernameInputField: {fileID: 1970315788}
+  defaultMap: Island
 --- !u!222 &1135858548
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23834,7 +23835,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 532916506}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.MultiplayerUI,
           Assembly-CSharp
         m_MethodName: Cancel
@@ -24709,6 +24710,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2120776565}
+  - {fileID: 1918157221}
   - {fileID: 1402667348}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -25988,7 +25990,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1314837234}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1402667349
 MonoBehaviour:
@@ -27558,7 +27560,7 @@ PrefabInstance:
     - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1135858547}
+      objectReference: {fileID: 0}
     - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -33371,7 +33373,7 @@ MonoBehaviour:
       - m_Target: {fileID: 532916506}
         m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.MultiplayerUI,
           Assembly-CSharp
-        m_MethodName: Refresh
+        m_MethodName: TryRefresh
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -35785,6 +35787,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1913201790}
   m_CullTransparentMesh: 1
+--- !u!1 &1918157220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1918157221}
+  - component: {fileID: 1918157222}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1918157221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918157220}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1314837234}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1918157222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918157220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 441e86832afaf724c9eb06955f122355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1921311088
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +12,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private NetworkObject[] helpers;
+        #endregion
+
+        #region Properties
+        public static bool IsMultiplayer { get; set; }
         #endregion
 
         #region Methods
@@ -35,32 +38,34 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 Instantiate(playerPrefab).SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
             }
-
-            NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
-            NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
-            NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
-
-            NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
-            NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
-
-            NetworkCreaturesManager.Instance.Setup();
-
-            Lobby lobby = LobbyHelper.Instance.JoinedLobby;
-            World world = new World(lobby);
-            if (NetworkManager.Singleton.IsHost)
+            
+            if (IsMultiplayer)
             {
-                if (world.IsPrivate == true)
+                NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
+                NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
+                NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
+
+                NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
+                NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
+
+                NetworkCreaturesManager.Instance.Setup();
+
+                World world = new World(LobbyHelper.Instance.JoinedLobby);
+                if (NetworkManager.Singleton.IsHost)
                 {
-                    InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{lobby.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
+                    if (world.IsPrivate)
                     {
-                        GUIUtility.systemCopyBuffer = lobby.Id;
-                    });
-                }
-                if (world.SpawnNPC == false)
-                {
-                    foreach (NetworkCreatureNonPlayer creature in FindObjectsOfType<NetworkCreatureNonPlayer>())
+                        InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{world.Lobby.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
+                        {
+                            GUIUtility.systemCopyBuffer = world.Lobby.Id;
+                        });
+                    }
+                    if (world.SpawnNPC)
                     {
-                        creature.Despawn();
+                        foreach (NPCSpawner npc in FindObjectsOfType<NPCSpawner>())
+                        {
+                            npc.Spawn();
+                        }
                     }
                 }
             }
@@ -82,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkInactivityManager.Instance.OnInactivityKick -= OnInactivityKick;
             NetworkInactivityManager.Instance.OnInactivityWarn -= OnInactivityWarn;
         }
-        
+
         private void OnUncontrolledShutdown()
         {
             SceneManager.LoadScene("MainMenu");

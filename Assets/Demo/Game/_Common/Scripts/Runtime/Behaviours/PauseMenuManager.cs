@@ -20,14 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Leave()
         {
-            if (NetworkConnectionManager.IsConnected)
-            {
-                NetworkConnectionManager.Instance.Leave();
-            }
-            else
-            {
-                SceneManager.LoadScene("MainMenu");
-            }
+            NetworkConnectionManager.Instance.Leave();
         }
         #endregion
     }

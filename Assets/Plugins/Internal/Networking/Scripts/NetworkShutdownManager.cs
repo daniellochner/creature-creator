@@ -10,7 +10,7 @@ namespace DanielLochner.Assets
     public class NetworkShutdownManager : MonoBehaviourSingleton<NetworkShutdownManager>
     {
         #region Fields        
-        private bool isConnected, isControlledShutdown;
+        private bool isInternalConnected, isControlledShutdown;
         #endregion
 
         #region Properties
@@ -30,14 +30,14 @@ namespace DanielLochner.Assets
 
         private void HandleConnection()
         {
-            if (NetworkManager.Singleton.IsListening && !isConnected)
+            if (NetworkConnectionManager.IsConnected && !isInternalConnected)
             {
-                isConnected = true;
+                isInternalConnected = true;
             }
             else
-            if (!NetworkManager.Singleton.IsListening && isConnected)
+            if (!NetworkConnectionManager.IsConnected && isInternalConnected)
             {
-                isConnected = false;
+                isInternalConnected = false;
                 if (!isControlledShutdown)
                 {
                     HandleUncontrolledShutdown();

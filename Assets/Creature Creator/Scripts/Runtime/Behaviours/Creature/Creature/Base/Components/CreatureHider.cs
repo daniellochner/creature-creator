@@ -20,30 +20,51 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
         }
 
-        public void Hide()
-        {
-            SetHidden(true);
-        }
         public void Show()
         {
-            SetHidden(false);
+            ShowServerRpc(JsonUtility.ToJson(Constructor.Data));
         }
-        private void SetHidden(bool isHidden)
-        {
-            gameObject.SetActive(isHidden);
-        }
-
         [ServerRpc(RequireOwnership = false)]
-        private void SetHiddenServerRpc(bool isHidden)
+        private void ShowServerRpc(string creatureData)
         {
-            SetHiddenClientRpc(isHidden);
+            ShowClientRpc(creatureData);
         }
-
         [ClientRpc]
-        private void SetHiddenClientRpc(bool isHidden)
+        private void ShowClientRpc(string creatureData)
         {
             if (IsOwner) return;
-            SetHidden(isHidden);
+
+            Constructor.Demolish();
+            gameObject.SetActive(true);
+            CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
+            Constructor.Construct(data);
+
+            if (NetworkCreaturesMenu.Instance)
+            {
+                NetworkCreaturesMenu.Instance.SetName(OwnerClientId, data.Name);
+            }
+        }
+
+        public void Hide()
+        {
+            HideServerRpc();
+        }
+        [ServerRpc(RequireOwnership = false)]
+        private void HideServerRpc()
+        {
+            HideClientRpc();
+        }
+        [ClientRpc]
+        private void HideClientRpc()
+        {
+            if (IsOwner) return;
+
+            gameObject.SetActive(false);
+
+            if (NetworkCreaturesMenu.Instance)
+            {
+                NetworkCreaturesMenu.Instance.SetName(OwnerClientId, "...");
+            }
         }
         #endregion
     }

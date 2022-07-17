@@ -7,19 +7,13 @@ namespace DanielLochner.Assets
     {
         public NetworkObject npcPrefab;
 
-        private void Start()
+        public void Spawn()
         {
-            if (NetworkManager.Singleton.IsServer || !NetworkConnectionManager.IsConnected)
-            {
-                NetworkObject npc = Instantiate(npcPrefab, transform.position, transform.rotation);
-
-                if (NetworkConnectionManager.IsConnected)
-                {
-                    npc.Spawn();
-                }
-                Setup(npc);
-            }
+            NetworkObject npc = Instantiate(npcPrefab, transform.position, transform.rotation);
+            npc.Spawn();
+            Setup(npc);
         }
+
         public virtual void Setup(NetworkObject npc) { }
     }
 }

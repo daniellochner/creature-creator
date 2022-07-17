@@ -148,14 +148,24 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
-        private void OnDestroy()
+
+        private void OnEnable()
         {
-            if (NetworkManager.Singleton) Shutdown();
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
+        }
+        private void OnDisable()
+        {
+            if (NetworkManager.Singleton)
+            {
+                NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+                NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
+            }
         }
 
         private void Setup()
         {
-            relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("Relay");
+            relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
 
             mapOS.SetupUsingEnum<MapType>();
             mapOS.Select(MapType.Farm);
@@ -166,22 +176,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 passwordGO.gameObject.SetActive((VisibilityType)option == VisibilityType.Public);
             });
             visibilityOS.Select(VisibilityType.Public);
-
-            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
-        }
-        private void Shutdown()
-        {
-            NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
         }
 
-        private void OnServerStarted()
-        {
-            NetworkManager.Singleton.SceneManager.LoadScene(mapOS.Options[mapOS.Selected].Name, LoadSceneMode.Single);
-        }
         private void OnClientDisconnect(ulong clientID)
         {
             UpdateNetworkStatus("Connection failed.", Color.red);
@@ -190,14 +186,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnClientConnect(ulong clientID)
         {
             UpdateNetworkStatus("Connected.", Color.green);
-            NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
-        }
-        private void OnLoad(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation operation)
-        {
-            LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate
-            {
-                NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
-            }));
         }
 
         public async void Join(string id)
@@ -242,6 +230,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Join Relay
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = relayTransport;
                 string joinCode = lobby.Data["joinCode"].Value;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
                 await Lobbies.Instance.UpdatePlayerAsync(lobby.Id, player.Id, new UpdatePlayerOptions()
@@ -253,6 +242,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Start Client
                 UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
+                Play();
                 NetworkManager.Singleton.StartClient();
             }
             catch (Exception e)
@@ -293,6 +283,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Allocate Relay
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = relayTransport;
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
                 relayTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
 
@@ -322,6 +313,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Start Host
                 UpdateNetworkStatus("Starting Host...", Color.yellow, -1);
+                Play();
                 NetworkManager.Singleton.StartHost();
             }
             catch (Exception e)
@@ -383,6 +375,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Join()
         {
             Join(lobbyCodeInputField.text);
+        }
+        public void Play()
+        {
+            MapManager.Instance.Map = mapOS.Options[mapOS.Selected].Name;
+            SetupGame.IsMultiplayer = true;
         }
 
         public void SortBy()
