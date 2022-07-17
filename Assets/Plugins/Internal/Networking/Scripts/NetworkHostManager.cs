@@ -27,6 +27,8 @@ namespace DanielLochner.Assets
             get => password;
             set => password = value;
         }
+
+        public Action<ulong> OnApproveConnection { get; set; }
         #endregion
 
         #region Methods
@@ -82,7 +84,8 @@ namespace DanielLochner.Assets
             };
             Add(playerData);
 
-            connectionApproved(!NetworkManager.Singleton.IsHost && NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null, null, true, null, null);
+            connectionApproved(NetworkManager.Singleton.LocalClientId != clientId && NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null, null, true, null, null);
+            OnApproveConnection?.Invoke(clientId);
         }
         #endregion
     }

@@ -259,6 +259,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetupPlayer()
         {
+            Creature.Setup();
+
             // Load preset/null creature (and defaults).
             if (creaturePresets.Length > 0)
             {
