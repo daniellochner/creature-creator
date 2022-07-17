@@ -22,7 +22,8 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        public virtual bool CanChat => !InputDialog.Instance.IsOpen && cooldownTimeLeft < 0;
+        public virtual bool CanSend => !InputDialog.Instance.IsOpen && cooldownTimeLeft < 0;
+        public virtual bool CanReceive => true;
         #endregion
 
         #region Methods
@@ -40,15 +41,17 @@ namespace DanielLochner.Assets
 
         private void HandleInput()
         {
-            if (CanChat && Input.GetKey(KeyCode.T))
+            if (CanSend && Input.GetKey(KeyCode.T))
             {
                 InputDialog.Input("World Chat", onSubmit: SendMessage);
             }
             cooldownTimeLeft -= Time.deltaTime;
         }
-
+        
         public new void SendMessage(string message)
         {
+            if (!CanSend) return;
+
             if (message.Length > characterLimit)
             {
                 InformationDialog.Inform("Too Long", $"Messages cannot be longer than {characterLimit} characters!");
@@ -65,6 +68,8 @@ namespace DanielLochner.Assets
         }
         protected virtual void ReceiveMessage(string message)
         {
+            if (!CanReceive) return;
+
             if (messageGO != null)
             {
                 Destroy(messageGO);
