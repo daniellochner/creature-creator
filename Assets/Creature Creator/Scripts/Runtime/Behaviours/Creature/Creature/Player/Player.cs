@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Player : MonoBehaviourSingleton<Player>
+    public class Player : NetworkSingleton<Player>
     {
         #region Fields
         [SerializeField] private CreaturePlayerLocal creature;

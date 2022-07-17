@@ -2,18 +2,16 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor))]
-    public class CreatureHider : MonoBehaviour
+    public class CreatureHider : NetworkBehaviour
     {
         #region Properties
         private CreatureConstructor Constructor { get; set; }
-
-        public Action OnHide { get; set; }
-        public Action OnShow { get; set; }
         #endregion
 
         #region Methods
@@ -25,19 +23,27 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Hide()
         {
             SetHidden(true);
-            OnHide?.Invoke();
         }
         public void Show()
         {
             SetHidden(false);
-            OnShow?.Invoke();
         }
         private void SetHidden(bool isHidden)
         {
-            foreach (Renderer renderer in Constructor.Body.GetComponentsInChildren<Renderer>())
-            {
-                renderer.enabled = !isHidden;
-            }
+            gameObject.SetActive(isHidden);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetHiddenServerRpc(bool isHidden)
+        {
+            SetHiddenClientRpc(isHidden);
+        }
+
+        [ClientRpc]
+        private void SetHiddenClientRpc(bool isHidden)
+        {
+            if (IsOwner) return;
+            SetHidden(isHidden);
         }
         #endregion
     }

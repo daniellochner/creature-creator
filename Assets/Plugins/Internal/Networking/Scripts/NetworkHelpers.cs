@@ -14,12 +14,7 @@ namespace DanielLochner.Assets
         #region Methods
         private void Start()
         {
-            NetworkManager.Singleton.OnClientConnectedCallback += Spawn;
-        }
-
-        public void Spawn(ulong clientId)
-        {
-            if (NetworkManager.Singleton.IsHost && clientId == NetworkManager.Singleton.LocalClientId)
+            if (NetworkManager.Singleton.IsServer)
             {
                 foreach (NetworkObject helper in helpers)
                 {

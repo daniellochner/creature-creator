@@ -16,12 +16,14 @@ namespace DanielLochner.Assets
         public void Start()
         {
             NetworkManager.Singleton.PrefabHandler.AddHandler(localPrefab, this);
+            NetworkManager.Singleton.PrefabHandler.AddHandler(remotePrefab, this);
         }
         public void OnDestroy()
         {
             if (NetworkManager.Singleton)
             {
                 NetworkManager.Singleton.PrefabHandler.RemoveHandler(localPrefab);
+                NetworkManager.Singleton.PrefabHandler.RemoveHandler(remotePrefab);
             }
         }
 

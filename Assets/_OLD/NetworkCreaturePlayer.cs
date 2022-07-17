@@ -72,15 +72,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
         
         #region Load Player
-        [ClientRpc]
-        public void LoadPlayerClientRpc(PlayerData playerData, string creatureData, ClientRpcParams clientRpcParams)
-        {
-            NetworkCreaturesMenu.Instance.AddPlayer(playerData);
-            if (!IsHidden.Value)
-            {
-                ReconstructAndShowClientRpc(creatureData);
-            }
-        }
+        //[ClientRpc]
+        //public void LoadPlayerClientRpc(PlayerData playerData, string creatureData, ClientRpcParams clientRpcParams)
+        //{
+        //    NetworkCreaturesMenu.Instance.AddPlayer(playerData);
+        //    if (!IsHidden.Value)
+        //    {
+        //        ReconstructAndShowClientRpc(creatureData);
+        //    }
+        //}
         #endregion
 
         #region Move

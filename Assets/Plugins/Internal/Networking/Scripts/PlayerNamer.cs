@@ -50,13 +50,14 @@ namespace DanielLochner.Assets
         {
             Name = name;
 
-            if (IsOwner) return; // players shouldn't have a name above their own head
+            if (!IsOwner)
+            {
+                nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
 
-            nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
-
-            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name;
-            nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
-            nameGO.GetComponent<SizeMatcher>().Match();
+                nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name;
+                nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+                nameGO.GetComponent<SizeMatcher>().Match();
+            }
         }
         #endregion
     }

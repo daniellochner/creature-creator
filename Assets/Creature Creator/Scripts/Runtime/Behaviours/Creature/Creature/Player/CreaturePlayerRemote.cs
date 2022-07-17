@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -25,8 +26,9 @@ namespace DanielLochner.Assets.CreatureCreator
             selectable = GetComponent<CreatureSelectable>();
         }
 #endif
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitWhile(() => !Player.Instance);
             Setup();
         }
 

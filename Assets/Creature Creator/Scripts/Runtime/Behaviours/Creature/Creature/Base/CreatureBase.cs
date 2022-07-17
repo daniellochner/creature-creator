@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureAge))]
     [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureInformer))]
-    public class CreatureBase : MonoBehaviour
+    public class CreatureBase : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private CreatureConstructor constructor;

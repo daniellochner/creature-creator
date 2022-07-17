@@ -9,17 +9,21 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(NetworkObject))]
     public class NetworkCreaturesManager : NetworkSingleton<NetworkCreaturesManager>
     {
+        #region Fields
+        [SerializeField] private NetworkCreaturesMenu networkMenuPrefab;
+        #endregion
+
         #region Methods
         public void Setup()
         {
-            //if (IsHost)
-            //{
-            //    NetworkHostManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
-            //    NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
-            //}
-            //HandleExistingPlayers();
-
-            //NetworkCreaturesMenu.Instance.Setup();
+            if (IsServer)
+            {
+                NetworkHostManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
+                NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
+            }
+            
+            Instantiate(networkMenuPrefab, Dynamic.OverlayCanvas).Setup();
+            HandleExistingPlayers();
         }
         public override void OnDestroy()
         {
@@ -58,18 +62,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         public void HandleExistingPlayersServerRpc(ulong clientId)
         {
-            foreach (PlayerData playerData in NetworkHostManager.Instance.Players.Values)
+            foreach (PlayerData data in NetworkHostManager.Instance.Players.Values)
             {
-                NetworkCreaturePlayer player = NetworkManager.Singleton.ConnectedClients[playerData.clientId].PlayerObject.GetComponent<NetworkCreaturePlayer>();
-                string creatureData = JsonUtility.ToJson(player.Creature.Constructor.Data);
-                player.LoadPlayerClientRpc(playerData, creatureData, NetworkUtils.SendTo(clientId));
+                HandleExistingPlayersClientRpc(data, NetworkUtils.SendTo(clientId));
             }
-
-            NetworkCreatureNonPlayer[] npcs = FindObjectsOfType<NetworkCreatureNonPlayer>();
-            foreach (NetworkCreatureNonPlayer npc in npcs)
-            {
-                npc.ReconstructAndShowClientRpc(JsonUtility.ToJson(npc.Creature.Constructor.Data), NetworkUtils.SendTo(clientId));
-            }
+        }
+        [ClientRpc]
+        public void HandleExistingPlayersClientRpc(PlayerData data, ClientRpcParams clientRpcParams)
+        {
+            NetworkCreaturesMenu.Instance.AddPlayer(data);
         }
         public void HandleExistingPlayers()
         {
