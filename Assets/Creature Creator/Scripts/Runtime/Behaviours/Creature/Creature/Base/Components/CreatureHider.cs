@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureHider : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>(true);
+        [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
         #endregion
 
         #region Properties

@@ -8,10 +8,12 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureRagdoll))]
     [RequireComponent(typeof(CreatureAnimator))]
+    [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureKiller : MonoBehaviour
     {
         #region Properties
         public CreatureAnimator CreatureAnimator { get; private set; }
+        public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureRagdoll CreatureRagdoll { get; private set; }
 
         public GameObject Corpse { get; private set; }
@@ -23,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Awake()
         {
+            CreatureConstructor = GetComponent<CreatureConstructor>();
             CreatureAnimator = GetComponent<CreatureAnimator>();
             CreatureRagdoll = GetComponent<CreatureRagdoll>();
         }
@@ -43,6 +46,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             OnRespawn?.Invoke();
         }
+
+
         #endregion
     }
 }
