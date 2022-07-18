@@ -36,6 +36,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
             Selectable.Setup();
+
+            Namer.Setup();
+
+            Hider.Setup();
         }
         #endregion
     }

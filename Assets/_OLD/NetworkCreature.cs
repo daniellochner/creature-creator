@@ -12,19 +12,11 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(NetworkObject))]
     public class NetworkCreature : NetworkBehaviour
     {
-        //#region Fields
-        //[SerializeField] protected CreatureBase local;
-        //[SerializeField] protected CreatureBase remote;
-
-        //protected NetworkObject networkObject;
-        //protected NetworkTransform networkTransform;
-        //#endregion
-
         //#region Properties
         //public NetworkVariable<float> Health { get; private set; } = new NetworkVariable<float>();
         //public NetworkVariable<float> Energy { get; private set; } = new NetworkVariable<float>();
         //public NetworkVariable<int> Age { get; private set; } = new NetworkVariable<int>();
-        //public NetworkVariable<bool> IsHidden { get; private set; } = new NetworkVariable<bool>();
+        //
 
         //public virtual CreatureBase Creature => local;
         //#endregion
@@ -96,51 +88,8 @@ namespace DanielLochner.Assets.CreatureCreator
         //}
         //#endregion
 
-        //#region Hide
-        //[ServerRpc]
-        //private void HideServerRpc()
-        //{
-        //    HideClientRpc();
-        //    IsHidden.Value = true;
-        //}
-        //[ClientRpc]
-        //private void HideClientRpc()
-        //{
-        //    if (!IsOwner)
-        //    {
-        //        Creature.gameObject.SetActive(false);
-        //    }
-        //}
-        //public void Hide()
-        //{
-        //    HideServerRpc();
-        //}
-        //#endregion
 
-        //#region Reconstruct And Show
-        //[ServerRpc]
-        //public void ReconstructAndShowServerRpc(string creatureData)
-        //{
-        //    ReconstructAndShowClientRpc(creatureData);
-        //    IsHidden.Value = false;
-        //}
-        //[ClientRpc]
-        //public void ReconstructAndShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
-        //{
-        //    CreatureData data = JsonUtility.FromJson<CreatureData>(creatureData);
-        //    if (!IsOwner)
-        //    {
-        //        Creature.Constructor.Demolish();
-        //        Creature.gameObject.SetActive(true);
-        //        Creature.Constructor.Construct(data);
-        //    }
-        //    NetworkCreaturesMenu.Instance.SetName(OwnerClientId, data.Name);
-        //}
-        //public void ReconstructAndShow()
-        //{
-        //    ReconstructAndShowServerRpc(JsonUtility.ToJson(Creature.Constructor.Data));
-        //}
-        //#endregion
+
 
         //#region Respawn
         //[ServerRpc]

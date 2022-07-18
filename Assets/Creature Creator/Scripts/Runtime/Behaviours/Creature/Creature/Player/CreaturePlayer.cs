@@ -18,11 +18,5 @@ namespace DanielLochner.Assets.CreatureCreator
             namer = GetComponent<CreatureNamer>();
         }
 #endif
-
-        public override void Setup()
-        {
-            base.Setup();
-            namer.Setup();
-        }
     }
 }

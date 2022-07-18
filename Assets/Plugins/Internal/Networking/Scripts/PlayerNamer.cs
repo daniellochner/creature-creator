@@ -14,10 +14,6 @@ namespace DanielLochner.Assets
         protected GameObject nameGO;
         #endregion
 
-        #region Properties
-        public string Name { get; private set; }
-        #endregion
-
         #region Methods
         private void OnEnable()
         {
@@ -34,29 +30,22 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void Setup()
+        public virtual void Setup()
         {
-            SetNameServerRpc(OwnerClientId);
+            nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
+            SetNameServerRpc(OwnerClientId, NetworkManager.Singleton.LocalClientId);
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void SetNameServerRpc(ulong clientId)
+        private void SetNameServerRpc(ulong clientId, ulong sendToClientId)
         {
-            SetNameClientRpc(NetworkHostManager.Instance.Players[clientId].username);
+            SetNameClientRpc(NetworkHostManager.Instance.Players[clientId].username, NetworkUtils.SendTo(sendToClientId));
         }
-
         [ClientRpc]
-        private void SetNameClientRpc(string name)
+        private void SetNameClientRpc(string name, ClientRpcParams clientRpc = default)
         {
-            Name = name;
-
-            if (!IsOwner)
-            {
-                nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
-
-                nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name;
-                nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
-            }
+            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name;
+            nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
         }
         #endregion
     }

@@ -7,5 +7,12 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CreatureNonPlayerRemote : CreatureNonPlayer
     {
+
+        public override void Setup()
+        {
+            base.Setup();
+            
+            Hider.Setup();
+        }
     }
 }
