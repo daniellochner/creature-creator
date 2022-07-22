@@ -61,6 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isConnecting, isRefreshing, isSortedByAscending = true;
         private UnityTransport relayTransport;
         private Coroutine updateNetStatusCoroutine;
+        private int refreshCount;
         #endregion
 
         #region Properties
@@ -322,11 +323,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 IsConnecting = false;
             }
         }
-        public async void Refresh()
+        public async Task<int> Refresh()
         {
             await Authenticate();
 
             IsRefreshing = true;
+            refreshCount++;
 
             worldsRT.transform.DestroyChildren();
             noneGO.SetActive(false);
@@ -356,12 +358,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 refreshButton.interactable = true;
             }, 1f);
             IsRefreshing = false;
+
+            return worldsRT.childCount;
         }
-        public void TryRefresh()
+        public async void TryRefresh()
         {
             if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.SelectedPanel == 0)
             {
-                Refresh();
+                int numWorlds = await Refresh();
+                if (numWorlds == 0 && refreshCount == 3)
+                {
+                    multiplayerHintMenu.Open();
+                }
             }
         }
         public void Cancel()

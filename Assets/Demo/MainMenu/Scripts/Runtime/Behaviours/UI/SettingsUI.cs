@@ -14,6 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SettingsUI : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private bool inGame;
+
         [Header("Video")]
         [SerializeField] private OptionSelector resolutionOS;
         [SerializeField] private Toggle fullscreenToggle;
@@ -120,8 +122,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         reflectionsToggle.isOn = false;
                         anisotropicFilteringToggle.isOn = false;
                         bloomToggle.isOn = false;
-                        depthOfFieldToggle.isOn = false;
-                        motionBlurToggle.isOn = false;
                         break;
 
                     case PresetType.Low:
@@ -132,11 +132,9 @@ namespace DanielLochner.Assets.CreatureCreator
                         antialiasingOS.Select(AntialiasingType.FXAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Low);
                         foliageOS.Select(FoliageType.Low);
-                        anisotropicFilteringToggle.isOn = false;
                         reflectionsToggle.isOn = false;
+                        anisotropicFilteringToggle.isOn = false;
                         bloomToggle.isOn = false;
-                        depthOfFieldToggle.isOn = false;
-                        motionBlurToggle.isOn = false;
                         break;
 
                     case PresetType.Medium:
@@ -150,8 +148,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         reflectionsToggle.isOn = true;
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
-                        depthOfFieldToggle.isOn = false;
-                        motionBlurToggle.isOn = false;
                         break;
 
                     case PresetType.High:
@@ -165,8 +161,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         reflectionsToggle.isOn = true;
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
-                        depthOfFieldToggle.isOn = true;
-                        motionBlurToggle.isOn = true;
                         break;
 
                     case PresetType.VeryHigh:
@@ -180,8 +174,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         reflectionsToggle.isOn = true;
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
-                        depthOfFieldToggle.isOn = true;
-                        motionBlurToggle.isOn = true;
                         break;
                 }
             });
@@ -314,11 +306,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     music = null;
                 }
 
-                if (previewMusicCoroutine != null)
+                if (inGame)
                 {
-                    StopCoroutine(previewMusicCoroutine);
+                    MusicManager.Instance.FadeTo(music);
                 }
-                previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(music));
+                else
+                {
+                    if (previewMusicCoroutine != null)
+                    {
+                        StopCoroutine(previewMusicCoroutine);
+                    }
+                    previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(music));
+                }
             });
             #endregion
 

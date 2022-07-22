@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class PauseMenuManager : MonoBehaviourSingleton<PauseMenuManager>
+    public class PauseMenu : MenuSingleton<PauseMenu>
     {
 
         #region Properties
