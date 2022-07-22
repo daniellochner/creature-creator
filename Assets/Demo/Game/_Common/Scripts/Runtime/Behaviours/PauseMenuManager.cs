@@ -9,18 +9,26 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class PauseMenuManager : MonoBehaviourSingleton<PauseMenuManager>
     {
+
+        #region Properties
+        private bool CanPause => !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !InputDialog.Instance.IsOpen;
+        #endregion
+
         #region Methods
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && CanPause)
             {
-                ConfirmationDialog.Confirm("Quit?", "Are you sure you want to leave the current game, and return to the main menu?", onYes: Leave);
+
             }
         }
 
         public void Leave()
         {
-            NetworkConnectionManager.Instance.Leave();
+            ConfirmationDialog.Confirm("Leave?", "Are you sure you want to leave the current game, and return to the main menu?", onYes: delegate
+            {
+                NetworkConnectionManager.Instance.Leave();
+            });
         }
         #endregion
     }

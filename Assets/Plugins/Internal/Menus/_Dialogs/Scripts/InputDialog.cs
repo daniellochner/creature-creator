@@ -2,10 +2,12 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace DanielLochner.Assets
@@ -22,6 +24,19 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        protected override void LateUpdate()
+        {
+            base.LateUpdate();
+
+            if (IsOpen)
+            {
+                if (UnityEngine.Input.GetKeyDown(KeyCode.Return))
+                {
+                    submitButton.onClick.Invoke();
+                }
+            }
+        }
+
         public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null)
         {
             Instance.titleText.text = title;
@@ -64,6 +79,24 @@ namespace DanielLochner.Assets
             });
 
             return await promise.Task;
+        }
+        
+        public override void Open(bool instant = false)
+        {
+            base.Open(instant);
+            Instance.StartCoroutine(SelectAndActivateRoutine());
+        }
+
+        /// <summary>
+        /// Select and activate the input field (after two frames).
+        /// </summary>
+        private IEnumerator SelectAndActivateRoutine()
+        {
+            yield return null;
+            yield return null;
+
+            Instance.inputFieldText.Select();
+            Instance.inputFieldText.ActivateInputField();
         }
         #endregion
     }

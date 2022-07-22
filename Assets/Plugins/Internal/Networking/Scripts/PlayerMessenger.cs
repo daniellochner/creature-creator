@@ -52,6 +52,10 @@ namespace DanielLochner.Assets
         {
             if (!CanSend) return;
 
+            if (message.Length == 0)
+            {
+                return;
+            }
             if (message.Length > characterLimit)
             {
                 InformationDialog.Inform("Too Long", $"Messages cannot be longer than {characterLimit} characters!");

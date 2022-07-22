@@ -11,5 +11,18 @@ namespace DanielLochner.Assets
         [SerializeField] protected Button ignoreButton;
         [SerializeField] protected Button closeButton;
         #endregion
+
+        #region Methods
+        protected virtual void LateUpdate()
+        {
+            if (IsOpen)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    ignoreButton.onClick.Invoke();
+                }
+            }
+        }
+        #endregion
     }
 }
