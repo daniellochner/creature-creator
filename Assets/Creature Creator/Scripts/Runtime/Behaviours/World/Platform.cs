@@ -14,11 +14,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") && !hasEntered)
+            CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
+            if (player != null && !hasEntered)
             {
                 EditorManager.Instance.IsEditing = true;
 
-                CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
                 player.Mover.Platform = this;
                 player.Hider.Hide();
 
@@ -27,11 +27,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player") && hasEntered)
+            CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
+            if (player != null && hasEntered)
             {
                 EditorManager.Instance.IsEditing = false;
 
-                CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
                 player.Hider.Show();
 
                 hasEntered = false;

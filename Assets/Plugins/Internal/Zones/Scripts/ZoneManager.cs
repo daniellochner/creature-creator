@@ -8,6 +8,7 @@ namespace DanielLochner.Assets
     public class ZoneManager : MonoBehaviourSingleton<ZoneManager>
     {
         #region Fields
+        [SerializeField] private string playerTag;
         [SerializeField] private Zone currentZone;
 
         private Zone previousZone;
@@ -19,6 +20,8 @@ namespace DanielLochner.Assets
             get => currentZone;
             set => currentZone = value;
         }
+
+        public string PlayerTag => playerTag;
         #endregion
 
         #region Methods

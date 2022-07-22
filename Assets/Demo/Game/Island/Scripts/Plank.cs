@@ -2,37 +2,55 @@
 // Copyright (c) Daniel Lochner
 
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Plank : MonoBehaviour
+    public class Plank : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private bool isGap;
-        [SerializeField, DrawIf("isGap", true)] private float gapWidth;
-
-        private Collider plank;
+        [SerializeField] private GameObject breakFX;
+        [SerializeField] private float weightThreshold;
+        [SerializeField] private float fixTime;
         #endregion
 
         #region Methods
-        private void Awake()
-        {
-            plank = GetComponent<Collider>();
-        }
         private void OnCollisionEnter(Collision other)
         {
-            if (isGap && other.collider.CompareTag("Player") && (other.collider.GetComponent<CreatureConstructor>()).Dimensions.radius * 2f < gapWidth)
+            CreatureBase creature = other.gameObject.GetComponent<CreatureBase>();
+            if (creature != null && creature.Constructor.Statistics.weight > weightThreshold)
             {
-                StartCoroutine(DisableRoutine());
+                Break();
             }
         }
-
-        private IEnumerator DisableRoutine()
+        
+        public void Break()
         {
-            plank.enabled = false;
-            yield return new WaitForSeconds(1f);
-            plank.enabled = true;
+            BreakServerRpc();
+        }
+        [ServerRpc]
+        private void BreakServerRpc()
+        {
+            StartCoroutine(BreakRoutine());
+        }
+        [ClientRpc]
+        private void BreakClientRpc()
+        {
+            gameObject.SetActive(false);
+            Instantiate(breakFX, transform.position, transform.rotation);
+        }
+        [ClientRpc]
+        private void FixClientRpc()
+        {
+            gameObject.SetActive(true);
+        }
+
+        private IEnumerator BreakRoutine()
+        {
+            BreakClientRpc();
+            yield return new WaitForSeconds(fixTime);
+            FixClientRpc();
         }
         #endregion
     }
