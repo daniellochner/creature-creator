@@ -39,6 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 Instantiate(playerPrefab).SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
             }
             
+
+
             if (IsMultiplayer)
             {
                 NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
@@ -62,11 +64,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     if (world.SpawnNPC)
                     {
-                        foreach (NPCSpawner npc in FindObjectsOfType<NPCSpawner>())
+                        foreach (NPCSpawner npc in NPCSpawner.Spawners)
                         {
                             npc.Spawn();
                         }
                     }
+                }
+            }
+            else
+            {
+                foreach (NPCSpawner npc in NPCSpawner.Spawners)
+                {
+                    npc.Spawn();
                 }
             }
 
