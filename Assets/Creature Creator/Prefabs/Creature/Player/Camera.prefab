@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4041236049360367945}
   - component: {fileID: 7513459605932812084}
   - component: {fileID: 2862971131670024434}
+  - component: {fileID: 5596256857564944000}
   m_Layer: 13
   m_Name: Zoom
   m_TagString: MainCamera
@@ -166,6 +167,14 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!81 &5596256857564944000
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041236049360367948}
+  m_Enabled: 1
 --- !u!1 &4041236049601487436
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +186,6 @@ GameObject:
   - component: {fileID: 4041236049601487435}
   - component: {fileID: 4041236049601487434}
   - component: {fileID: 4041236049601487433}
-  - component: {fileID: 8664697293273274669}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -245,14 +253,6 @@ MonoBehaviour:
   zoomSmoothing: 6.1
   minMaxZoom: {x: 0.5, y: 1.5}
   handleClipping: 0
---- !u!81 &8664697293273274669
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4041236049601487436}
-  m_Enabled: 1
 --- !u!1 &4041236050074530310
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,10 +263,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4041236050074530309}
   - component: {fileID: 4041236050074530308}
-  - component: {fileID: 4041236050074530307}
   - component: {fileID: 4379939900963799764}
   - component: {fileID: 4257491879984323580}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Tools/UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -330,72 +329,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &4041236050074530307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4041236050074530310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volumeTrigger: {fileID: 4041236050074530309}
-  volumeLayer:
-    serializedVersion: 2
-    m_Bits: 8192
-  stopNaNPropagation: 1
-  finalBlitToCameraTarget: 0
-  antialiasingMode: 1
-  temporalAntialiasing:
-    jitterSpread: 0.75
-    sharpness: 0.25
-    stationaryBlending: 0.95
-    motionBlending: 0.85
-  subpixelMorphologicalAntialiasing:
-    quality: 2
-  fastApproximateAntialiasing:
-    fastMode: 0
-    keepAlpha: 0
-  fog:
-    enabled: 1
-    excludeSkybox: 1
-  debugLayer:
-    lightMeter:
-      width: 512
-      height: 256
-      showCurves: 1
-    histogram:
-      width: 512
-      height: 256
-      channel: 3
-    waveform:
-      exposure: 0.12
-      height: 256
-    vectorscope:
-      size: 256
-      exposure: 0.12
-    overlaySettings:
-      linearDepth: 0
-      motionColorIntensity: 4
-      motionGridSize: 64
-      colorBlindnessType: 0
-      colorBlindnessStrength: 1
-  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
-  breakBeforeColorGrading: 0
-  m_BeforeTransparentBundles: []
-  m_BeforeStackBundles:
-  - assemblyQualifiedName: Pinwheel.Poseidon.FX.PostProcessing.PUnderwater, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: Pinwheel.Poseidon.FX.PostProcessing.PWetLens, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_AfterStackBundles:
-  - assemblyQualifiedName: UnityEngine.Rendering.PostProcessing.Blur, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &4379939900963799764
 MonoBehaviour:
   m_ObjectHideFlags: 0

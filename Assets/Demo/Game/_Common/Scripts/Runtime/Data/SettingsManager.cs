@@ -186,16 +186,16 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.AmbientOcclusion = type;
         }
-        public void SetAntialiasing(AntialiasingType type, bool find = false)
+        public void SetAntialiasing(AntialiasingType type, bool checkActive = false)
         {
             List<PostProcessLayer> layers = new List<PostProcessLayer>();
             foreach (GameObject camera in cameras)
             {
                 layers.AddRange(camera.GetComponentsInChildren<PostProcessLayer>(true));
             }
-            if (find)
+            if (checkActive)
             {
-                layers.AddRange(FindObjectsOfType<PostProcessLayer>(true));
+                layers.AddRange(Camera.main.GetComponents<PostProcessLayer>());
             }
 
             foreach (PostProcessLayer layer in layers)
@@ -417,16 +417,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.OnlineUsername = username;
         }
-        public void SetCameraShake(bool cameraShake, bool find = false)
+        public void SetCameraShake(bool cameraShake, bool checkActive = false)
         {
             List<StressReceiver> receivers = new List<StressReceiver>();
             foreach (GameObject camera in cameras)
             {
                 receivers.AddRange(camera.GetComponents<StressReceiver>());
             }
-            if (find)
+            if (checkActive)
             {
-                receivers.AddRange(FindObjectsOfType<StressReceiver>(true));
+                receivers.AddRange(Camera.main.GetComponents<StressReceiver>());
             }
 
             foreach (StressReceiver receiver in receivers)
