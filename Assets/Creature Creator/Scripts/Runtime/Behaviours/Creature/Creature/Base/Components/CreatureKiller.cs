@@ -33,14 +33,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Kill()
         {
             Corpse = CreatureRagdoll.Generate().gameObject;
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
 
             OnKill?.Invoke();
         }
         public void Respawn()
         {
             Destroy(Corpse);
-            gameObject.SetActive(true);
+            //gameObject.SetActive(true);
 
             CreatureAnimator.Rebuild();
 
