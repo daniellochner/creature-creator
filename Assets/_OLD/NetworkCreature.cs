@@ -12,51 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(NetworkObject))]
     public class NetworkCreature : NetworkBehaviour
     {
-        //#region Properties
-        //public NetworkVariable<float> Health { get; private set; } = new NetworkVariable<float>();
-        //public NetworkVariable<float> Energy { get; private set; } = new NetworkVariable<float>();
-        //public NetworkVariable<int> Age { get; private set; } = new NetworkVariable<int>();
-        //
 
-        //public virtual CreatureBase Creature => local;
-        //#endregion
-
-        //#region Methods
-        //private void Awake()
-        //{
-        //    Initialize();
-        //}
-        //private void Start()
-        //{
-        //    //Setup();
-        //}
-
-        //private void Initialize()
-        //{
-        //    networkObject = GetComponent<NetworkObject>();
-        //    networkTransform = GetComponent<NetworkTransform>();
-        //}
-        //public virtual void Setup()
-        //{
-        //    if (NetworkConnectionManager.IsConnected)
-        //    {
-        //        if (IsOwner)
-        //        {
-        //            Creature.Health.OnHealthChanged += SetHealthServerRpc;
-        //            Creature.Energy.OnEnergyChanged += SetEnergyServerRpc;
-        //            Creature.Age.OnAgeChanged += SetAgeServerRpc;
-
-        //            Creature.Animator.OnSetTrigger += SetTriggerServerRpc;
-        //            Creature.Animator.OnSetBool += SetBoolServerRpc;
-        //        }
-        //        else
-        //        {
-        //            Health.OnValueChanged += UpdateHealth;
-        //            Energy.OnValueChanged += UpdateEnergy;
-        //            Age.OnValueChanged += UpdateAge;
-        //        }
-        //    }
-        //}
 
         //#region Animations
         //[ServerRpc]
@@ -102,42 +58,9 @@ namespace DanielLochner.Assets.CreatureCreator
         //{
         //    if (!IsOwner)
         //    {
-        //        Destroy(Creature.Killer.Corpse);
+        //        Destroy(Creature.Killer.Corpse);//
         //    }
         //}
-        //#endregion
-        
-
-        //#region Information
-        //[ServerRpc]
-        //private void SetHealthServerRpc(float health)
-        //{
-        //    Health.Value = health;
-        //}
-        //[ServerRpc]
-        //private void SetEnergyServerRpc(float energy)
-        //{
-        //    Energy.Value = energy;
-        //}
-        //[ServerRpc]
-        //private void SetAgeServerRpc(int age)
-        //{
-        //    Age.Value = age;
-        //}
-
-        //private void UpdateHealth(float oldHealth, float newHealth)
-        //{
-        //    Creature.Health.Health = newHealth;
-        //}
-        //private void UpdateEnergy(float oldEnergy, float newEnergy)
-        //{
-        //    Creature.Energy.Energy = newEnergy;
-        //}
-        //private void UpdateAge(int oldAge, int newAge)
-        //{
-        //    Creature.Age.Age = newAge;
-        //}
-        //#endregion
         //#endregion
     }
 }
