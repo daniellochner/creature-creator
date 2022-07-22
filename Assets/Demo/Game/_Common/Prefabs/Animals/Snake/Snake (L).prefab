@@ -57,7 +57,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackable: []
+  trackable:
+  - Player/Local
+  - Player/Remote
   tracked: []
 --- !u!1001 &6577375817211508975
 PrefabInstance:
@@ -284,6 +286,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2523701525369187450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 088c20e16dabbc1458a921742d5b6049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constructor: {fileID: 7476322862451386320}
+  animator: {fileID: 6106227692764542993}
+  collider: {fileID: 9074562672392469967}
+  cloner: {fileID: 5699210762730819004}
+  photographer: {fileID: 8718590968309013969}
+  killer: {fileID: 3932189056534488153}
+  effector: {fileID: 450029449961799635}
+  scaler: {fileID: 312566580317639819}
+  health: {fileID: 8166530411756370019}
+  energy: {fileID: 109211908835394834}
+  age: {fileID: 2196639755667890052}
+  hider: {fileID: 7355554444003876393}
+  informer: {fileID: 689798176256724837}
+  selectable: {fileID: 1962287229178218075}
+  energyDepleter: {fileID: 2304548901012607124}
+  ager: {fileID: 2304548901012607125}
+  ai: {fileID: 2304548901012607126}
 --- !u!114 &2304548901012607124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,32 +424,3 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &-2523701525369187450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7476322862451386335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 088c20e16dabbc1458a921742d5b6049, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  constructor: {fileID: 7476322862451386320}
-  animator: {fileID: 6106227692764542993}
-  collider: {fileID: 9074562672392469967}
-  cloner: {fileID: 5699210762730819004}
-  photographer: {fileID: 8718590968309013969}
-  killer: {fileID: 3932189056534488153}
-  effector: {fileID: 450029449961799635}
-  scaler: {fileID: 312566580317639819}
-  health: {fileID: 8166530411756370019}
-  energy: {fileID: 109211908835394834}
-  age: {fileID: 2196639755667890052}
-  hider: {fileID: 7355554444003876393}
-  informer: {fileID: 689798176256724837}
-  selectable: {fileID: 1962287229178218075}
-  energyDepleter: {fileID: 2304548901012607124}
-  ager: {fileID: 2304548901012607125}
-  ai: {fileID: 2304548901012607126}

@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") && isUnlockable)
+            if (other.CompareTag("Player/Local") && isUnlockable)
             {
                 OnUnlock();
                 ProgressManager.Instance.Save();
