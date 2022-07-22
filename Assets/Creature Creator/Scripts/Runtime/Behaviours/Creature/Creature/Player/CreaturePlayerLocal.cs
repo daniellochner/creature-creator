@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureEnergyDepleter))]
     [RequireComponent(typeof(CreatureAger))]
     [RequireComponent(typeof(CreatureCamera))]
-    public class CreaturePlayerLocal : CreaturePlayer
+    public class CreaturePlayerLocal : CreaturePlayer, ISetupable
     {
         #region Fields
         [SerializeField] private CreatureEnergyDepleter energyDepleter;
@@ -33,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureInteractor Interactor => interactor;
         public CreatureCamera Camera => camera;
 
-        public bool IsSetup { get; private set; }
+        public bool IsSetup { get; set; }
         #endregion
 
         #region Methods

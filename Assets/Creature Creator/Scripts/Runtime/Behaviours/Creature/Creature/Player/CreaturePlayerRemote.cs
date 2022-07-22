@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #endif
         private IEnumerator Start()
         {
-            yield return new WaitWhile(() => !Player.Instance.IsSetup);
+            yield return new WaitUntilSetup(Player.Instance);
             Setup();
         }
 
