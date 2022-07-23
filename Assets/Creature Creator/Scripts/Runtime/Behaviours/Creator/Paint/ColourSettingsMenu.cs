@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Start()
+        private void Start()
         {
             shineSlider.onValueChanged.AddListener(UpdateShine);
             metallicSlider.onValueChanged.AddListener(UpdateMetallic);

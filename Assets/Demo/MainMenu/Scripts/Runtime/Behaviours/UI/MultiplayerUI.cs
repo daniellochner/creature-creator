@@ -333,7 +333,7 @@ namespace DanielLochner.Assets.CreatureCreator
             worldsRT.transform.DestroyChildren();
             noneGO.SetActive(false);
             refreshButton.interactable = false;
-            
+
             try
             {
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;

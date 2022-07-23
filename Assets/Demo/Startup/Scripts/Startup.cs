@@ -5,9 +5,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Startup : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private Material gridMat;
         [SerializeField] private float scale;
         [SerializeField] private float speed;
+        [SerializeField] private Material gridMaterial;
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
 
@@ -17,13 +17,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            gridMat.mainTextureScale = (1f / scale) * new Vector2(Screen.width, Screen.height);
+            gridMaterial.mainTextureScale = (1f / scale) * new Vector2(Screen.width, Screen.height);
 
             MusicManager.Instance.FadeTo("Fun", 0f, 0.5f);
         }
         private void Update()
         {
-            gridMat.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
+            gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
 
             if (Input.anyKeyDown && !isKeyPressed)
             {
@@ -36,8 +36,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            gridMat.mainTextureScale = Vector2.one;
-            gridMat.mainTextureOffset = Vector2.zero;
+            gridMaterial.mainTextureScale = Vector2.one;
+            gridMaterial.mainTextureOffset = Vector2.zero;
         }
         #endregion
     }

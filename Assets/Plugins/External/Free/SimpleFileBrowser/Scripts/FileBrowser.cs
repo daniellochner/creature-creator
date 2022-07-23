@@ -1654,8 +1654,8 @@ namespace SimpleFileBrowser
 			Success = false;
 			Result = null;
 
+			gameObject.SetActive( true );
             GetComponent<Menu>().Open();
-			//gameObject.SetActive( true );
 
 			CurrentPath = GetInitialPath( initialPath );
 

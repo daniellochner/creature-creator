@@ -3,7 +3,6 @@
 
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DanielLochner.Assets
 {
@@ -12,7 +11,6 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private bool isOpen;
-        [SerializeField] private bool deactivateOnClose;
 
         private Animator animator;
         #endregion
@@ -43,11 +41,6 @@ namespace DanielLochner.Assets
 
         public virtual void Open(bool instant = false)
         {
-            if (deactivateOnClose)
-            {
-                gameObject.SetActive(true);
-            }
-
             if (instant)
             {
                 animator.Play("Open", 0, 1);
@@ -112,10 +105,6 @@ namespace DanielLochner.Assets
         }
         public virtual void OnEndClose()
         {
-            if (deactivateOnClose)
-            {
-                gameObject.SetActive(false);
-            }
         }
         #endregion
     }

@@ -23,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Start()
+        private void Start()
         {
             tilingX.onEndEdit.AddListener(UpdateTiling);
             tilingY.onEndEdit.AddListener(UpdateTiling);

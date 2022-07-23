@@ -52,6 +52,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle worldChatToggle;
         [SerializeField] private Button resetProgressButton;
         [SerializeField] private ProgressUI progressUI;
+        [SerializeField] private UnlockableBodyPartsMenu bodyPartsMenu;
+        [SerializeField] private UnlockablePatternsMenu patternsMenu;
 
         [Header("Controls")]
         [SerializeField] private Slider sensitivityHorizontalSlider;
@@ -443,7 +445,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ResetProgress()
         {
             ProgressManager.Instance.Revert();
+
             progressUI.UpdateInfo();
+            bodyPartsMenu.UpdateInfo();
+            patternsMenu.UpdateInfo();
         }
 
         private IEnumerator PreviewMusicRoutine(string music)

@@ -3,24 +3,25 @@
 
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class PauseMenu : MenuSingleton<PauseMenu>
+    public class PauseMenu : Dialog<PauseMenu>
     {
-
         #region Properties
-        private bool CanPause => !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !InputDialog.Instance.IsOpen;
+        private bool CanToggle => !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !InputDialog.Instance.IsOpen && !UnlockableBodyPartsMenu.Instance.IsOpen && !UnlockablePatternsMenu.Instance.IsOpen && !KeybindingsDialog.Instance.IsOpen;
         #endregion
 
         #region Methods
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && CanPause)
+            if (Input.GetKeyDown(KeyCode.Escape) && CanToggle)
             {
-
+                Toggle();
             }
+        }
+        protected override void LateUpdate()
+        {
         }
 
         public void Leave()
