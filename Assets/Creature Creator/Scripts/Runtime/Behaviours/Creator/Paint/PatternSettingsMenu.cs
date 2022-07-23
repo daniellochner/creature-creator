@@ -41,12 +41,13 @@ namespace DanielLochner.Assets.CreatureCreator
             offsetY.text = (0f).ToString();
             UpdateOffset(null);
 
-            foreach (string patternId in EditorManager.Instance.HiddenPatterns)
+            foreach (string patternId in SettingsManager.Data.HiddenPatterns)
             {
                 EditorManager.Instance.AddPatternUI(patternId);
             }
+            SettingsManager.Data.HiddenPatterns.Clear();
+
             EditorManager.Instance.UpdateLoadableCreatures();
-            EditorManager.Instance.HiddenPatterns.Clear();
         }
 
         private void UpdateTiling(string input)

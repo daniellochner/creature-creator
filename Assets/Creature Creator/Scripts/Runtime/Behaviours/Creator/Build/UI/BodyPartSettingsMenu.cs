@@ -8,13 +8,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Reset()
         {
-            foreach (string bodyPartId in EditorManager.Instance.HiddenBodyParts)
+            foreach (string bodyPartId in SettingsManager.Data.HiddenBodyParts)
             {
                 EditorManager.Instance.AddBodyPartUI(bodyPartId);
             }
+            SettingsManager.Data.HiddenBodyParts.Clear();
+
             EditorManager.Instance.UpdateBodyPartTotals();
             EditorManager.Instance.UpdateLoadableCreatures();
-            EditorManager.Instance.HiddenBodyParts.Clear();
         }
         #endregion
     }

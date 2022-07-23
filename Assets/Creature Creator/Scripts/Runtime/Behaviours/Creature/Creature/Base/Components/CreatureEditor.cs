@@ -616,7 +616,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor.Demolish();
 
-            Cash = EditorManager.Instance.BaseCash;
+            Cash = ProgressManager.Data.Cash;
             if (creatureData != null)
             {
                 CreatureConstructor.Construct(creatureData);

@@ -20,11 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class EditorManager : MonoBehaviourSingleton<EditorManager>
     {
         #region Fields
-        [SerializeField] private TextAsset[] creaturePresets;
         [SerializeField] private bool unlockAllBodyParts;
         [SerializeField] private bool unlockAllPatterns;
         [SerializeField] private SecretKey creatureEncryptionKey;
-        [SerializeField] private int startingCash = 1000;
 
         [Header("General")]
         [SerializeField] private Platform platform;
@@ -91,11 +89,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public List<string> UnlockedBodyParts { get; set; } = new List<string>();
-        public List<string> UnlockedPatterns { get; set; } = new List<string>();
-        public List<string> HiddenPatterns { get; set; } = new List<string>();
-        public List<string> HiddenBodyParts { get; set; } = new List<string>();
-
         public bool IsVisible
         {
             get => isVisible;
@@ -129,12 +122,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsPlaying => playMenu.IsOpen;
 
         public CreaturePlayerLocal Creature => Player.Instance;
-
-        public int BaseCash
-        {
-            get => startingCash;
-            set => startingCash = value;
-        }
         #endregion
 
         #region Methods
@@ -152,16 +139,21 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetupEditor()
         {
             // Build
+            List<string> unlockedBodyParts = null;
             if (unlockAllBodyParts)
             {
-                UnlockedBodyParts = DatabaseManager.GetDatabase("Body Parts").Objects.Keys.ToList();
+                unlockedBodyParts = DatabaseManager.GetDatabase("Body Parts").Objects.Keys.ToList();
             }
-            foreach (string bodyPartID in UnlockedBodyParts)
+            else
             {
-                if (!HiddenBodyParts.Contains(bodyPartID)) AddBodyPartUI(bodyPartID);
+                unlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
+            }
+            foreach (string bodyPartID in unlockedBodyParts)
+            {
+                if (!SettingsManager.Data.HiddenBodyParts.Contains(bodyPartID)) AddBodyPartUI(bodyPartID);
             }
             UpdateBodyPartTotals();
-            bodyPartsToggle.onValueChanged.AddListener((UnityAction<bool>)delegate
+            bodyPartsToggle.onValueChanged.AddListener(delegate
             {
                 // Create a dictionary of distinct body parts with their respective counts.
                 Dictionary<string, int> distinctBodyParts = new Dictionary<string, int>();
@@ -200,7 +192,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 bodyPartsText.text = $"<b>Body Parts:</b> [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
             });
-            abilitiesToggle.onValueChanged.AddListener((UnityAction<bool>)delegate
+            abilitiesToggle.onValueChanged.AddListener(delegate
             {
                 int count = Creature.Abilities.Abilities.Count;
                 string abilities = (count > 0) ? string.Join(", ", (IEnumerable<Ability>)Creature.Abilities.Abilities) : "None";
@@ -210,15 +202,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Paint
             patternMaterial = new Material(patternMaterial);
+            List<string> unlockedPatterns = null;
             if (unlockAllPatterns)
             {
-                UnlockedPatterns = DatabaseManager.GetDatabase("Patterns").Objects.Keys.ToList();
+                unlockedPatterns = DatabaseManager.GetDatabase("Patterns").Objects.Keys.ToList();
             }
-            foreach (string patternID in UnlockedPatterns)
+            else
             {
-                if (!HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
+                unlockedPatterns = ProgressManager.Data.UnlockedPatterns;
             }
-            primaryColourPicker.ClickUI.OnRightClick.AddListener((UnityAction)delegate
+            foreach (string patternID in unlockedPatterns)
+            {
+                if (!SettingsManager.Data.HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
+            }
+            primaryColourPicker.ClickUI.OnRightClick.AddListener(delegate
             {
                 if (primaryColourPicker.Name.text.Contains("Override"))
                 {
@@ -229,7 +226,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     });
                 }
             });
-            secondaryColourPicker.ClickUI.OnRightClick.AddListener((UnityAction)delegate
+            secondaryColourPicker.ClickUI.OnRightClick.AddListener(delegate
             {
                 if (secondaryColourPicker.Name.text.Contains("Override"))
                 {
@@ -262,9 +259,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Setup();
 
             // Load preset/null creature (and defaults).
-            if (creaturePresets.Length > 0)
+            List<CreatureData> presets = SettingsManager.Data.CreaturePresets;
+            if (presets.Count > 0)
             {
-                Creature.Editor.Load(JsonUtility.FromJson<CreatureData>(creaturePresets[UnityEngine.Random.Range(0, creaturePresets.Length)].text));
+                Creature.Editor.Load(presets[UnityEngine.Random.Range(0, presets.Count)]);
             }
             else
             {
@@ -272,7 +270,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Creature.Editor.IsInteractable = true;
             Creature.Editor.IsEditing = true;
-            Creature.Editor.Cash = BaseCash;
+            Creature.Editor.Cash = ProgressManager.Data.Cash;
             Creature.Informer.Setup(informationMenu);
             Creature.Mover.Teleport(platform, true);
         }
@@ -546,7 +544,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
         {
             // Load Conditions
-            bool patternIsUnlocked = UnlockedPatterns.Contains(creatureData.PatternID) || string.IsNullOrEmpty(creatureData.PatternID);
+            bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || string.IsNullOrEmpty(creatureData.PatternID);
 
             bool bodyPartsAreUnlocked = true;
             int totalCost = 0, totalComplexity = 0;
@@ -563,7 +561,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPartsAreUnlocked = false;
                 }
 
-                if (!UnlockedBodyParts.Contains(attachedBodyPart.bodyPartID))
+                if (!ProgressManager.Data.UnlockedBodyParts.Contains(attachedBodyPart.bodyPartID))
                 {
                     bodyPartsAreUnlocked = false;
                 }
@@ -571,7 +569,7 @@ namespace DanielLochner.Assets.CreatureCreator
             totalComplexity += creatureData.Bones.Count;
 
             bool creatureIsTooComplicated = totalComplexity > Creature.Constructor.MaxComplexity;
-            bool creatureIsTooExpensive = totalCost > BaseCash;
+            bool creatureIsTooExpensive = totalCost > ProgressManager.Data.Cash;
 
             // Error Message
             List<string> errors = new List<string>();
@@ -581,7 +579,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             if (creatureIsTooExpensive)
             {
-                errors.Add($"is too expensive. ({totalCost}/{BaseCash})");
+                errors.Add($"is too expensive. ({totalCost}/{ProgressManager.Data.Cash})");
             }
             if (!patternIsUnlocked)
             {
@@ -633,14 +631,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Unlocks
         public void UnlockPattern(string patternID)
         {
-            if (UnlockedPatterns.Contains(patternID)) return;
+            if (ProgressManager.Data.UnlockedPatterns.Contains(patternID)) return;
 
-            UnlockedPatterns.Add(patternID);
+            ProgressManager.Data.UnlockedPatterns.Add(patternID);
 
             Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
             Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
             string title = pattern.name;
-            string description = $"You unlocked a new pattern! Click to view all. ({UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
+            string description = $"You unlocked a new pattern! Click to view all. ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
             UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
             float iconScale = 0.8f;
             NotificationsManager.Notify(icon, title, description, onClose, iconScale);
@@ -649,14 +647,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UnlockBodyPart(string bodyPartID)
         {
-            if (UnlockedBodyParts.Contains(bodyPartID)) return;
+            if (ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID)) return;
 
-            UnlockedBodyParts.Add(bodyPartID);
+            ProgressManager.Data.UnlockedBodyParts.Add(bodyPartID);
 
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
             Sprite icon = bodyPart.Icon;
             string title = bodyPart.name;
-            string description = $"You unlocked a new body part! Click to view all. ({UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
+            string description = $"You unlocked a new body part! Click to view all. ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
             UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
             NotificationsManager.Notify(icon, title, description, onClose);
 
@@ -790,7 +788,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ConfirmationDialog.Confirm("Hide Body Part?", $"Are you sure you want to hide \"{bodyPart.name}\" from the editor?", onYes: delegate 
                 {
                     RemoveBodyPartUI(bodyPartUI);
-                    HiddenBodyParts.Add(bodyPartID);
+                    SettingsManager.Data.HiddenBodyParts.Add(bodyPartID);
                 });
             });
 
@@ -829,7 +827,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ConfirmationDialog.Confirm("Hide Pattern?", $"Are you sure you want to hide \"{pattern.name}\" from the editor?", onYes: delegate
                 {
                     RemovePatternUI(patternUI);
-                    HiddenPatterns.Add(patternID);
+                    SettingsManager.Data.HiddenPatterns.Add(patternID);
                 });
             });
 

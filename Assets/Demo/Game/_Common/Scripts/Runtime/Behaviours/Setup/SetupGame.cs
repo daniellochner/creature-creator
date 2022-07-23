@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
                 NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
 
-                NetworkPlayersManager.Instance.Setup();
+                NetworkPlayersManager.Instance.Setup(LobbyHelper.Instance.JoinedLobby.Id);
 
                 World world = new World(LobbyHelper.Instance.JoinedLobby);
                 if (NetworkManager.Singleton.IsHost)
@@ -78,12 +78,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     npc.Spawn();
                 }
             }
-
-            EditorManager.Instance.UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
-            EditorManager.Instance.UnlockedPatterns = ProgressManager.Data.UnlockedPatterns;
-            EditorManager.Instance.BaseCash = ProgressManager.Data.Cash;
-            EditorManager.Instance.HiddenBodyParts = SettingsManager.Data.HiddenBodyParts;
-            EditorManager.Instance.HiddenPatterns = SettingsManager.Data.HiddenPatterns;
 
             EditorManager.Instance.Setup();
         }

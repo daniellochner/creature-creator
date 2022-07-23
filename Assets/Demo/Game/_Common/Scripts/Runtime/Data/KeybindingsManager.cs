@@ -6,6 +6,5 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class KeybindingsManager : DataManager<KeybindingsManager, Keybindings>
     {
-
     }
 }

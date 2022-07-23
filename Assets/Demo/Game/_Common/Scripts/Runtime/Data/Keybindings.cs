@@ -7,89 +7,83 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Keybindings : Data
     {
         #region Fields
-        [SerializeField] private KeyCode walkForwards;
-        [SerializeField] private KeyCode walkBackwards;
-        [SerializeField] private KeyCode walkLeft;
-        [SerializeField] private KeyCode walkRight;
-        [SerializeField] private KeyCode jump;
-        [SerializeField] private KeyCode sprint;
-        [SerializeField] private KeyCode interact;
-        [SerializeField] private KeyCode drop;
-        [SerializeField] private KeyCode talk;
-        [SerializeField] private KeyCode viewPlayers;
-        [SerializeField] private KeyCode copy;
-        [SerializeField] private KeyCode viewMap;
-        [SerializeField] private KeyCode freeLook;
-        [SerializeField] private KeyCode respawn;
+        [SerializeField] private Keybinding walkForwards;
+        [SerializeField] private Keybinding walkBackwards;
+        [SerializeField] private Keybinding walkLeft;
+        [SerializeField] private Keybinding walkRight;
+        [SerializeField] private Keybinding jump;
+        [SerializeField] private Keybinding sprint;
+        [SerializeField] private Keybinding interact;
+        [SerializeField] private Keybinding drop;
+        [SerializeField] private Keybinding talk;
+        [SerializeField] private Keybinding viewPlayers;
+        [SerializeField] private Keybinding copy;
+        [SerializeField] private Keybinding freeLook;
+        [SerializeField] private Keybinding respawn;
         #endregion
 
         #region Properties
-        public KeyCode WalkForwards
+        public Keybinding WalkForwards
         {
             get => walkForwards;
             set => walkForwards = value;
         }
-        public KeyCode WalkBackwards
+        public Keybinding WalkBackwards
         {
             get => walkBackwards;
             set => walkBackwards = value;
         }
-        public KeyCode WalkLeft
+        public Keybinding WalkLeft
         {
             get => walkLeft;
             set => walkLeft = value;
         }
-        public KeyCode WalkRight
+        public Keybinding WalkRight
         {
             get => walkRight;
             set => walkRight = value;
         }
-        public KeyCode Jump
+        public Keybinding Jump
         {
             get => jump;
             set => jump = value;
         }
-        public KeyCode Sprint
+        public Keybinding Sprint
         {
             get => sprint;
             set => sprint = value;
         }
-        public KeyCode Interact
+        public Keybinding Interact
         {
             get => interact;
             set => interact = value;
         }
-        public KeyCode Drop
+        public Keybinding Drop
         {
             get => drop;
             set => drop = value;
         }
-        public KeyCode Talk
+        public Keybinding Talk
         {
             get => talk;
             set => talk = value;
         }
-        public KeyCode ViewPlayers
+        public Keybinding ViewPlayers
         {
             get => viewPlayers;
             set => viewPlayers = value;
         }
-        public KeyCode Copy
+        public Keybinding Copy
         {
             get => copy;
             set => copy = value;
         }
-        public KeyCode ViewMap
-        {
-            get => viewMap;
-            set => viewMap = value;
-        }
-        public KeyCode FreeLook
+        public Keybinding FreeLook
         {
             get => freeLook;
             set => freeLook = value;
         }
-        public KeyCode Respawn
+        public Keybinding Respawn
         {
             get => respawn;
             set => respawn = value;
@@ -99,20 +93,19 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void Revert()
         {
-            WalkForwards = KeyCode.W;
-            WalkBackwards = KeyCode.S;
-            WalkLeft = KeyCode.A;
-            WalkRight = KeyCode.D;
-            Jump = KeyCode.Space;
-            Sprint = KeyCode.LeftShift;
-            Interact = KeyCode.E;
-            Drop = KeyCode.Q;
-            Talk = KeyCode.T;
-            ViewPlayers = KeyCode.Tab;
-            Copy = KeyCode.LeftAlt;
-            ViewMap = KeyCode.M;
-            FreeLook = KeyCode.LeftAlt;
-            Respawn = KeyCode.R;
+            WalkForwards = new Keybinding(KeyCode.W);
+            WalkBackwards = new Keybinding(KeyCode.S);
+            WalkLeft = new Keybinding(KeyCode.A);
+            WalkRight = new Keybinding(KeyCode.D);
+            Jump = new Keybinding(KeyCode.Space);
+            Sprint = new Keybinding(KeyCode.LeftShift);
+            Interact = new Keybinding(KeyCode.E);
+            Drop = new Keybinding(KeyCode.Q);
+            Talk = new Keybinding(KeyCode.T);
+            ViewPlayers = new Keybinding(KeyCode.Tab);
+            Copy = new Keybinding(KeyCode.LeftAlt);
+            FreeLook = new Keybinding(KeyCode.LeftAlt);
+            Respawn = new Keybinding(KeyCode.R, KeyCode.LeftControl);
         }
         #endregion
     }

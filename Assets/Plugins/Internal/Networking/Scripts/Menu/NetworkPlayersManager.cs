@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void Setup()
+        public void Setup(string code)
         {
             if (IsServer)
             {
@@ -19,7 +19,7 @@ namespace DanielLochner.Assets
                 NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
             }
             
-            Instantiate(networkMenuPrefab, Dynamic.OverlayCanvas).Setup();
+            Instantiate(networkMenuPrefab).Setup(code);
             HandleExistingPlayers();
         }
         public override void OnDestroy()

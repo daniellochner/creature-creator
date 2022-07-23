@@ -12,39 +12,37 @@ namespace DanielLochner.Assets
         [SerializeField] private TextMeshProUGUI keyText;
         [SerializeField] private Button rebindButton;
         [SerializeField] private GameObject resetGO;
-        [SerializeField] private UnityEvent<KeyCode> onRebind;
+        [SerializeField] private UnityEvent<Keybinding> onRebind;
         [Space]
-        [SerializeField] private KeyCode defaultKey;
+        [SerializeField] private Keybinding defaultKeybind;
 
         [Header("Debug")]
-        [SerializeField, ReadOnly] private KeyCode currentKey;
+        [SerializeField, ReadOnly] private Keybinding currentKeybind;
         #endregion
 
         #region Properties
         public string Action => actionText.text;
-        public UnityEvent<KeyCode> OnRebind => onRebind;
-        public KeyCode Selected => currentKey;
+        public UnityEvent<Keybinding> OnRebind => onRebind;
+        public Keybinding Selected => currentKeybind;
         #endregion
 
         #region Methods
         private void Start()
         {
-            keyText.text = defaultKey.ToString();
+            keyText.text = defaultKeybind.ToString();
             rebindButton.onClick.AddListener(() => KeybindingsDialog.Rebind(this));
         }
         public void Reset()
         {
-            Rebind(defaultKey);
+            Rebind(defaultKeybind);
             resetGO.SetActive(false);
         }
 
-        public void Rebind(KeyCode key, bool notify = true)
+        public void Rebind(Keybinding key, bool notify = true)
         {
-            keyText.text = (currentKey = key).ToString();
-            if (currentKey != defaultKey)
-            {
-                resetGO.SetActive(true);
-            }
+            keyText.text = (currentKeybind = key).ToString();
+
+            resetGO.SetActive(!currentKeybind.Equals(defaultKeybind));
             if (notify)
             {
                 onRebind.Invoke(key);

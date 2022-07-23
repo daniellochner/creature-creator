@@ -12,35 +12,68 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI messageText;
+
+        private readonly KeyCode[] MODIFIER_KEYS = new KeyCode[]
+        {
+            KeyCode.LeftShift,
+            KeyCode.LeftControl,
+            KeyCode.LeftCommand,
+            KeyCode.LeftAlt,
+            KeyCode.RightShift,
+            KeyCode.RightControl,
+            KeyCode.RightCommand,
+            KeyCode.RightAlt
+        };
         #endregion
 
         #region Methods
         public static void Rebind(KeybindUI keybindUI)
         {
-            Instance.messageText.text = $"Press any key to rebind to \"{keybindUI.Action}\"\n.Press ESC to cancel.";
+            Instance.messageText.text = $"Press any key(s) to rebind to \"{keybindUI.Action}\"\n.Press ESC to cancel.";
             Instance.StartCoroutine(Instance.RebindRoutine(keybindUI));
         }
         private IEnumerator RebindRoutine(KeybindUI keybindUI)
         {
             Open();
 
+            KeyCode modifierKey = KeyCode.None;
+
             while (IsOpen)
             {
-                if (Input.anyKeyDown)
+                if (Input.anyKey)
                 {
                     if (!Input.GetKeyDown(KeyCode.Escape))
                     {
-                        foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                        foreach (KeyCode key in MODIFIER_KEYS)
                         {
                             if (Input.GetKeyDown(key))
                             {
-                                keybindUI.Rebind(key);
+                                modifierKey = key;
+                                break;
+                            }
+                        }
+
+                        foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                        {
+                            if (Input.GetKeyDown(key) && key != modifierKey)
+                            {
+                                keybindUI.Rebind(new Keybinding(key, modifierKey));
+                                Close();
                                 break;
                             }
                         }
                     }
+                    else
+                    {
+                        Close();
+                    }
+                }
+                else if (modifierKey != KeyCode.None)
+                {
+                    keybindUI.Rebind(new Keybinding(modifierKey, KeyCode.None));
                     Close();
                 }
+
                 yield return null;
             }
         }

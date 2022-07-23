@@ -22,11 +22,11 @@ namespace DanielLochner.Assets
             HandleMenuState();
         }
 
-        public void Setup()
+        public void Setup(string code)
         {
             StartCoroutine(UpdateConnectionRoutine(2));
 
-            worldCodeField.Setup(LobbyHelper.Instance.JoinedLobby.Id, onDeselect: delegate (string input)
+            worldCodeField.Setup(code, onDeselect: delegate (string input)
             {
                 if (IsOpen) Close();
             });

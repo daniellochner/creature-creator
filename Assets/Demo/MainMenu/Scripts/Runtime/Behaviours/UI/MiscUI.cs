@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
             TimeSpan diff = releaseDate - DateTime.Now;
             if (diff > TimeSpan.Zero)
             {
-                InformationDialog.Inform("Game Source Code", $"To prevent the puzzles from being spoilt, the source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
+                InformationDialog.Inform("Source Code", $"The source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
             }
             else
             {
