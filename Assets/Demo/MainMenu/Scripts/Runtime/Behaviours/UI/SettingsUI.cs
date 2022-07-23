@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider masterVolumeSlider;
         [SerializeField] private Slider musicVolumeSlider;
         [SerializeField] private Slider soundEffectsVolumeSlider;
-        [SerializeField] private OptionSelector backgroundMusicOS;
+        [SerializeField] private OptionSelector inGameMusicOS;
 
         [Header("Gameplay")]
         [SerializeField] private TMP_InputField onlineUsernameTextField;
@@ -295,15 +295,15 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Background Music
-            backgroundMusicOS.SetupUsingEnum<BackgroundMusicType>();
-            backgroundMusicOS.Select(SettingsManager.Data.BackgroundMusic, false);
-            backgroundMusicOS.OnSelected.AddListener(delegate (int option)
+            inGameMusicOS.SetupUsingEnum<InGameMusicType>();
+            inGameMusicOS.Select(SettingsManager.Data.InGameMusic, false);
+            inGameMusicOS.OnSelected.AddListener(delegate (int option)
             {
-                BackgroundMusicType type = (BackgroundMusicType)option;
-                SettingsManager.Instance.SetBackgroundMusic(type);
+                InGameMusicType type = (InGameMusicType)option;
+                SettingsManager.Instance.SetInGameMusic(type);
 
                 string music = type.ToString();
-                if (type == BackgroundMusicType.None)
+                if (type == InGameMusicType.None)
                 {
                     music = null;
                 }

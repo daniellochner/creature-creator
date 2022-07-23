@@ -54,7 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMasterVolume(Data.MasterVolume);
             SetMusicVolume(Data.MusicVolume);
             SetSoundEffectsVolume(Data.SoundEffectsVolume);
-            SetBackgroundMusic(Data.BackgroundMusic);
+            SetInGameMusic(Data.InGameMusic);
 
             SetOnlineUsername(Data.OnlineUsername);
             SetCameraShake(Data.CameraShake);
@@ -406,9 +406,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             return 0f;
         }
-        public void SetBackgroundMusic(BackgroundMusicType type)
+        public void SetInGameMusic(InGameMusicType type)
         {
-            Data.BackgroundMusic = type;
+            Data.InGameMusic = type;
         }
         #endregion
 
