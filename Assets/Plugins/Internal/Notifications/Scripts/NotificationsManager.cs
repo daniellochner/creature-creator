@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets
 {
@@ -16,13 +17,13 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Notify(string message)
+        public static void Notify(string message, UnityAction onClose = null)
         {
-            Instantiate(Instance.notificationTextOnlyPrefab, Instance.notificationsRT).Setup(message);
+            Instantiate(Instance.notificationTextOnlyPrefab, Instance.notificationsRT).Setup(message, onClose);
         }
-        public static void Notify(Sprite icon, string title, string description, float iconScale = 1f, float textScale = 1f)
+        public static void Notify(Sprite icon, string title, string description, UnityAction onClose = null, float iconScale = 1f, float textScale = 1f)
         {
-            Instantiate(Instance.notificationPrefab, Instance.notificationsRT).Setup(icon, title, description, iconScale, textScale);
+            Instantiate(Instance.notificationPrefab, Instance.notificationsRT).Setup(icon, title, description, onClose, iconScale, textScale);
         }
 
 #if UNITY_EDITOR

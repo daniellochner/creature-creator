@@ -3,6 +3,8 @@
 
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
@@ -10,12 +12,18 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI messageText;
+        [SerializeField] private Button closeButton;
         #endregion
 
         #region Methods
-        public void Setup(string message)
+        public void Setup(string message, UnityAction onClose)
         {
             messageText.text = message;
+
+            if (onClose != null)
+            {
+                closeButton.onClick.AddListener(onClose);
+            }
         }
 
         public void Destroy()

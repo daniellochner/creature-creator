@@ -635,20 +635,31 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (UnlockedPatterns.Contains(patternID)) return;
 
-            Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
-
             UnlockedPatterns.Add(patternID);
-            NotificationsManager.Notify(Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f)), pattern.name, $"You unlocked a new pattern! ({UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})", 0.8f);
+
+            Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
+            Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
+            string title = pattern.name;
+            string description = $"You unlocked a new pattern! Click to view all. ({UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
+            UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
+            float iconScale = 0.8f;
+            NotificationsManager.Notify(icon, title, description, onClose, iconScale);
+
             AddPatternUI(patternID);
         }
         public void UnlockBodyPart(string bodyPartID)
         {
             if (UnlockedBodyParts.Contains(bodyPartID)) return;
 
-            BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
-
             UnlockedBodyParts.Add(bodyPartID);
-            NotificationsManager.Notify(bodyPart.Icon, bodyPart.name, $"You unlocked a new body part! ({UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})");
+
+            BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
+            Sprite icon = bodyPart.Icon;
+            string title = bodyPart.name;
+            string description = $"You unlocked a new body part! Click to view all. ({UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
+            UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
+            NotificationsManager.Notify(icon, title, description, onClose);
+
             AddBodyPartUI(bodyPartID, true);
         }
         public void UnlockRandomBodyPart()
