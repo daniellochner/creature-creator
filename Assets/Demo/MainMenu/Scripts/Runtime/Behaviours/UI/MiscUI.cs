@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -22,6 +23,17 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ViewGitHubSourceCode()
         {
             Application.OpenURL("https://github.com/daniellochner/Creature-Creator");
+
+            DateTime releaseDate = new DateTime(2022, 8, 7);
+            TimeSpan diff = releaseDate - DateTime.Now;
+            if (diff > TimeSpan.Zero)
+            {
+                InformationDialog.Inform("Game Source Code", $"To prevent the puzzles from being spoilt, the source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
+            }
+            else
+            {
+                Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
+            }
         }
         public void Quit()
         {
