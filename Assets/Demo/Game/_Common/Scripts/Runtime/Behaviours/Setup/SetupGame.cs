@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
                 NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
 
-                NetworkCreaturesManager.Instance.Setup();
+                NetworkPlayersManager.Instance.Setup();
 
                 World world = new World(LobbyHelper.Instance.JoinedLobby);
                 if (NetworkManager.Singleton.IsHost)

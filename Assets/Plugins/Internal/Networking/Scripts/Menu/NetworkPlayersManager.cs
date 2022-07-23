@@ -1,16 +1,13 @@
-// Creature Creator - https://github.com/daniellochner/Creature-Creator
-// Copyright (c) Daniel Lochner
-
 using Unity.Netcode;
 using UnityEngine;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class NetworkCreaturesManager : NetworkSingleton<NetworkCreaturesManager>
+    public class NetworkPlayersManager : NetworkSingleton<NetworkPlayersManager>
     {
         #region Fields
-        [SerializeField] private NetworkCreaturesMenu networkMenuPrefab;
+        [SerializeField] private NetworkPlayersMenu networkMenuPrefab;
         #endregion
 
         #region Methods
@@ -51,12 +48,12 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnPlayerJoin(PlayerData playerData)
         {
             NotificationsManager.Notify($"{playerData.username} has joined the game.");
-            NetworkCreaturesMenu.Instance.AddPlayer(playerData);
+            NetworkPlayersMenu.Instance.AddPlayer(playerData);
         }
         private void OnPlayerLeave(PlayerData playerData)
         {
             NotificationsManager.Notify($"{playerData.username} has left the game.");
-            NetworkCreaturesMenu.Instance.RemovePlayer(playerData.clientId);
+            NetworkPlayersMenu.Instance.RemovePlayer(playerData.clientId);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -70,7 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         public void HandleExistingPlayersClientRpc(PlayerData data, ClientRpcParams clientRpcParams)
         {
-            NetworkCreaturesMenu.Instance.AddPlayer(data);
+            NetworkPlayersMenu.Instance.AddPlayer(data);
         }
         public void HandleExistingPlayers()
         {

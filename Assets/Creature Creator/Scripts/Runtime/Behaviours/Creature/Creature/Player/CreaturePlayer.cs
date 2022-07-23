@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PlayerDeathMessenger deathMessenger;
 
         public CreatureNamer Namer => namer;
+        public PlayerDeathMessenger DeathMessenger => deathMessenger;
 
 #if UNITY_EDITOR
         protected override void OnValidate()
@@ -24,8 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Setup()
         {
             base.Setup();
-
-            deathMessenger.Setup();
+            DeathMessenger.Setup();
         }
     }
 }

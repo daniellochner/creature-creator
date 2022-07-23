@@ -24,8 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Hider.OnHide += OnHide;
             Hider.OnShow += OnShow;
-
-
+            
             if (Hider.IsHidden)
             {
                 OnHide();
@@ -39,22 +38,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 enabled = true;
                 nameGO.transform.localPosition = Vector3.up * (Constructor.Dimensions.height + 0.25f);
             }
-
-            if (NetworkCreaturesMenu.Instance)
-            {
-                NetworkCreaturesMenu.Instance.SetName(OwnerClientId, Constructor.Data.Name);
-            }
         }
         private void OnHide()
         {
             if (!IsOwner)
             {
                 enabled = false;
-            }
-
-            if (NetworkCreaturesMenu.Instance)
-            {
-                NetworkCreaturesMenu.Instance.SetName(OwnerClientId, "...");
             }
         }
         #endregion

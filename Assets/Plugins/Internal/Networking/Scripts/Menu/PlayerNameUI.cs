@@ -1,12 +1,9 @@
-// Creature Creator - https://github.com/daniellochner/Creature-Creator
-// Copyright (c) Daniel Lochner
-
 using Unity.Netcode;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets
 {
     public class PlayerNameUI : MonoBehaviour
     {
@@ -25,8 +22,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(PlayerData playerData)
         {
+            SetName(playerData.username);
             SetColour((NetworkManager.Singleton.LocalClientId == playerData.clientId) ? playerColour : nonPlayerColour);
-            nameText.text = playerData.username.ToString();
 
             if (NetworkManager.ServerClientId == playerData.clientId)
             {
@@ -41,9 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
             this.playerData = playerData;
         }
 
-        public void SetCreatureName(string creatureName)
+        public void SetName(string name)
         {
-            nameText.text = $"{playerData.username} ({creatureName})";
+            nameText.text = name;
         }
         public void SetColour(Color colour)
         {

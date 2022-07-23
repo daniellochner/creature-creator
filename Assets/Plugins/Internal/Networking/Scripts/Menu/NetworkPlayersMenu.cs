@@ -1,15 +1,12 @@
-// Creature Creator - https://github.com/daniellochner/Creature-Creator
-// Copyright (c) Daniel Lochner
-
 using Unity.Netcode;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets
 {
-    public class NetworkCreaturesMenu : MenuSingleton<NetworkCreaturesMenu>
+    public class NetworkPlayersMenu : MenuSingleton<NetworkPlayersMenu>
     {
         #region Fields
         [SerializeField] private PlayerNameUI playerNameUIPrefab;
@@ -47,11 +44,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Destroy(playerNames[clientId].gameObject);
             playerNames.Remove(clientId);
         }
-        public void SetName(ulong clientId, string creatureName)
+        public void SetName(ulong clientId, string name)
         {
-            if (string.IsNullOrEmpty(creatureName) || !playerNames.ContainsKey(clientId)) return;
-
-            playerNames[clientId].SetCreatureName(creatureName);
+            if (string.IsNullOrEmpty(name) || !playerNames.ContainsKey(clientId)) return;
+            playerNames[clientId].SetName(name);
         }
 
         private void HandleMenuState()

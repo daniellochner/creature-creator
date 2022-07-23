@@ -13,7 +13,7 @@ namespace DanielLochner.Assets
 
         protected GameObject nameGO;
         #endregion
-
+        
         #region Methods
         private void OnEnable()
         {
@@ -32,8 +32,11 @@ namespace DanielLochner.Assets
 
         public virtual void Setup()
         {
-            nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
-            SetNameServerRpc(OwnerClientId, NetworkManager.Singleton.LocalClientId);
+            if (!IsOwner)
+            {
+                nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
+                SetNameServerRpc(OwnerClientId, NetworkManager.Singleton.LocalClientId);
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
