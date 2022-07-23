@@ -81,20 +81,8 @@ namespace DanielLochner.Assets
             return await promise.Task;
         }
         
-        public override void Open(bool instant = false)
+        public override void OnEndOpen()
         {
-            base.Open(instant);
-            Instance.StartCoroutine(SelectAndActivateRoutine());
-        }
-
-        /// <summary>
-        /// Select and activate the input field (after two frames).
-        /// </summary>
-        private IEnumerator SelectAndActivateRoutine()
-        {
-            yield return null;
-            yield return null;
-
             Instance.inputFieldText.Select();
             Instance.inputFieldText.ActivateInputField();
         }
