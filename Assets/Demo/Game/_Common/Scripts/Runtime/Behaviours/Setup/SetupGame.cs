@@ -38,49 +38,55 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 Instantiate(playerPrefab).SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
             }
-            
-
 
             if (IsMultiplayer)
             {
-                NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
-                NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
-                NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
-
-                NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
-                NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
-
-                NetworkPlayersManager.Instance.Setup(LobbyHelper.Instance.JoinedLobby.Id);
-
-                World world = new World(LobbyHelper.Instance.JoinedLobby);
-                if (NetworkManager.Singleton.IsHost)
-                {
-                    if (world.IsPrivate)
-                    {
-                        InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{world.Lobby.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
-                        {
-                            GUIUtility.systemCopyBuffer = world.Lobby.Id;
-                        });
-                    }
-                    if (world.SpawnNPC)
-                    {
-                        foreach (NPCSpawner npc in NPCSpawner.Spawners)
-                        {
-                            npc.Spawn();
-                        }
-                    }
-                }
+                SetupMP();
             }
             else
             {
-                foreach (NPCSpawner npc in NPCSpawner.Spawners)
-                {
-                    npc.Spawn();
-                }
+                SetupSP();
             }
 
             EditorManager.Instance.Setup();
         }
+        public void SetupMP()
+        {
+            NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
+            NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
+            NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
+
+            NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
+            NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
+
+            World world = new World(LobbyHelper.Instance.JoinedLobby);
+            if (NetworkManager.Singleton.IsHost)
+            {
+                if (world.IsPrivate)
+                {
+                    InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{world.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
+                    {
+                        GUIUtility.systemCopyBuffer = world.Id;
+                    });
+                }
+                if (world.SpawnNPC)
+                {
+                    foreach (NPCSpawner npc in NPCSpawner.Spawners)
+                    {
+                        npc.Spawn();
+                    }
+                }
+            }
+            NetworkPlayersManager.Instance.Setup(world.Id);
+        }
+        public void SetupSP()
+        {
+            foreach (NPCSpawner npc in NPCSpawner.Spawners)
+            {
+                npc.Spawn();
+            }
+        }
+
         public void Shutdown()
         {
             NetworkShutdownManager.Instance.OnUncontrolledShutdown -= OnUncontrolledShutdown;

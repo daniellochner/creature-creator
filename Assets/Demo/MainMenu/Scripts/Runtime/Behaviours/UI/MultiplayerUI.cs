@@ -280,7 +280,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetConnectionData(username, password);
 
                 // Authenticate
-                await Authenticate();
+                await Authenticate();//
 
                 // Allocate Relay
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);

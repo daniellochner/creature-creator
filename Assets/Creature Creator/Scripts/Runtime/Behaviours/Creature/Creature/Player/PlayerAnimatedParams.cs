@@ -19,6 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Animator = GetComponent<Animator>();
+            CreatureAnimator = GetComponent<CreatureAnimator>();
         }
 
         private void Start()

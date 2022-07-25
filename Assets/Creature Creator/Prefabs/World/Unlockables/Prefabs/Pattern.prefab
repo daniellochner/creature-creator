@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.125, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.001}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2880658042732957187}
   m_RootOrder: 2
@@ -51,6 +52,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -91,7 +93,7 @@ PrefabInstance:
     - target: {fileID: 1108207726232459547, guid: 5fcba08b24545f2489ba580a144dd857, type: 3}
       propertyPath: particleFX
       value: 
-      objectReference: {fileID: 1624714524768532, guid: e995d6bfae81f844a90970d4f117812d, type: 3}
+      objectReference: {fileID: 1624714524768532, guid: ef2c982f960d20740aed3ed950840c16, type: 3}
     - target: {fileID: 1608053537145503233, guid: 5fcba08b24545f2489ba580a144dd857, type: 3}
       propertyPath: m_Icon
       value: 
@@ -199,11 +201,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1608053537145503233, guid: 5fcba08b24545f2489ba580a144dd857, type: 3}
   m_PrefabInstance: {fileID: 3578904945348180048}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2880658042732957187 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1608053537796109907, guid: 5fcba08b24545f2489ba580a144dd857, type: 3}
-  m_PrefabInstance: {fileID: 3578904945348180048}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &-1909660573750114920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,5 +214,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUnlockable: 1
+  unlockFX: {fileID: 1624714524768532, guid: e995d6bfae81f844a90970d4f117812d, type: 3}
   patternID: 
   texture: {fileID: 3557508356221352508}
+--- !u!4 &2880658042732957187 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1608053537796109907, guid: 5fcba08b24545f2489ba580a144dd857, type: 3}
+  m_PrefabInstance: {fileID: 3578904945348180048}
+  m_PrefabAsset: {fileID: 0}

@@ -9,7 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Properties
         public bool IsPrivate { get; private set; }
-        public string JoinCode { get; private set; }
+        public string JoinCode { get; private set; }        
+		public string Id { get; private set; }
         public string PasswordHash { get; private set; }
         public bool IsPasswordProtected { get; private set; }
         public string WorldName { get; private set; }
@@ -18,15 +19,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool AllowPVP { get; private set; }
         public bool AllowPVE { get; private set; }
         public bool SpawnNPC { get; private set; }
-
-        public Lobby Lobby { get; private set; }
         #endregion
 
         #region Methods
         public World(Lobby lobby)
         {
-            Lobby = lobby;
-
+			Id = lobby.Id;
             IsPrivate = bool.Parse(lobby.Data["isPrivate"].Value);
             JoinCode = lobby.Data["joinCode"].Value;
             PasswordHash = lobby.Data["passwordHash"].Value;

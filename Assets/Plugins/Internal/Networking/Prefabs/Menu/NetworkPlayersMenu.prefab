@@ -29,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3777590232081838341}
   m_RootOrder: 0
@@ -166,6 +167,7 @@ GameObject:
   - component: {fileID: 2438019226558733462}
   - component: {fileID: 6158595143243186090}
   - component: {fileID: 4756676621818096170}
+  - component: {fileID: 1522379133852560929}
   - component: {fileID: 2438019226558733460}
   - component: {fileID: 2438019226558733459}
   - component: {fileID: 2438019226558733458}
@@ -190,6 +192,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5136663575273492447}
   m_Father: {fileID: 0}
@@ -244,6 +247,23 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &1522379133852560929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438019226558733465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!222 &2438019226558733460
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -266,7 +286,7 @@ CanvasGroup:
   m_IgnoreParentGroups: 0
 --- !u!95 &2438019226558733458
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -279,6 +299,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -334,13 +355,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
-  playerNameUIPrefab: {fileID: 4467770907008108821, guid: 44bf9f501ddf77d4db4de66a06f438e3, type: 3}
-  connectionText: {fileID: 5136663574699593414}
-  worldCodeField: {fileID: 4803163062698963079}
-  updateRate: 0.5
   keybind:
     key: 9
     modifierKey: 0
+  playerNameUIPrefab: {fileID: 4467770907008108821, guid: 44bf9f501ddf77d4db4de66a06f438e3, type: 3}
+  connectionText: {fileID: 5136663574699593414}
+  worldCodeField: {fileID: 4803163062698963079}
 --- !u!114 &5924023546638262810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,6 +424,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3777590232081838341}
   m_RootOrder: 1
@@ -537,6 +558,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3320810187397926155}
   - {fileID: 2048183418271332115}
@@ -590,6 +612,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8568906360637949959}
   m_RootOrder: 0
@@ -725,6 +748,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8568906360637949959}
   m_Father: {fileID: 2438019226558733462}
@@ -828,6 +852,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3777590232081838341}
   m_Father: {fileID: 8568906360637949959}
@@ -1015,6 +1040,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5136663574699593415}
   - {fileID: 1753349069275312854}

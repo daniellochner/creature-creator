@@ -83,6 +83,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     bone.GetComponent<Rigidbody>().isKinematic = isMovable;
                 }
                 rigidbody.constraints = isMovable ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
+                rigidbody.useGravity = isMovable;
             }
         }
         #endregion

@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private bool isUnlockable = true;
+        [SerializeField] private GameObject unlockFX;
         #endregion
 
         #region Properties
@@ -35,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 OnUnlock();
                 ProgressManager.Instance.Save();
+                Instantiate(unlockFX, transform.position, transform.rotation);
                 Destroy(gameObject);
             }
         }

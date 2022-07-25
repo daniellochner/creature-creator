@@ -90,6 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
             rigBuilder = GetComponent<RigBuilder>();
             Constructor = GetComponent<CreatureConstructor>();
             Effector = GetComponent<CreatureEffector>();
+            Velocity = GetComponent<KinematicVelocity>();
 
             Rebuild();
         }
