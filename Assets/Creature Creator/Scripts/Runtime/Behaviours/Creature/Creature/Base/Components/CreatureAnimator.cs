@@ -10,9 +10,9 @@ using UnityEngine.Animations.Rigging;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureEffector))]
+    [RequireComponent(typeof(KinematicVelocity))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
@@ -21,9 +21,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Setup")]
         [SerializeField] private Transform rig;
         [SerializeField] private float extensionThreshold = 0.95f;
-        [SerializeField] private float baseMovementSpeed = 0.8f;
-        [SerializeField] private float baseTurnSpeed = 120;
-        [SerializeField] private float contactDistance = 0.01f;
 
         private Transform head, tail, limbs;
         private RigBuilder rigBuilder;
@@ -34,14 +31,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public Transform Rig => rig;
 
-        public KinematicVelocity Velocity { get; private set; }
         public CreatureConstructor Constructor { get; private set; }
         public CreatureEffector Effector { get; private set; }
         public Animator Animator { get; private set; }
+        public KinematicVelocity Velocity { get; private set; }
 
         public Action OnBuild { get; set; }
-        public Action<string> OnSetTrigger { get; set; }
-        public Action<string, bool> OnSetBool { get; set; }
 
         public List<LimbAnimator> Limbs { get; private set; } = new List<LimbAnimator>();
         public List<ArmAnimator> Arms { get; private set; } = new List<ArmAnimator>();
@@ -59,10 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get; private set;
         }
-        public bool IsGrounded
-        {
-            get; private set;
-        }
+
         public bool IsAnimated
         {
             get => isAnimated;
@@ -91,24 +83,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        private void FixedUpdate()
-        {
-            if (!IsAnimated) return;
-
-            IsGrounded = Physics.Raycast(transform.position + transform.up, -transform.up, 1f + contactDistance);
-            Animator.SetBool("IsGrounded", IsGrounded);
-
-            float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
-            float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
-            Animator.SetFloat("%LSpeed", l);
-            Animator.SetFloat("%ASpeed", a);
-        }
 
         private void Initialize()
         {
             Animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
-            Velocity = GetComponent<KinematicVelocity>();
             Constructor = GetComponent<CreatureConstructor>();
             Effector = GetComponent<CreatureEffector>();
 
@@ -362,18 +341,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             OnBuild?.Invoke();
         }
-
-        public void SetTrigger(string param)
-        {
-            Animator.SetTrigger(param);
-            OnSetTrigger?.Invoke(param);
-        }
-        public void SetBool(string param, bool value)
-        {
-            Animator.SetBool(param, value);
-            OnSetBool?.Invoke(param, value);
-        }
-
+        
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;
