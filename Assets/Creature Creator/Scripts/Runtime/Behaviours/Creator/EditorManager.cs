@@ -748,7 +748,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bodyPartGrids[bodyPart.PluralForm].grid.enabled = false;
                 bodyPartGrids[bodyPart.PluralForm].grid.enabled = true;
             });
-            bodyPartUI.DragUI.OnDrag.AddListener((UnityAction)delegate
+            bodyPartUI.DragUI.OnDrag.AddListener(delegate
             {
                 if (!CanAddBodyPart(bodyPartID))
                 {
@@ -761,13 +761,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     editorAudioSource.PlayOneShot(createAudioClip);
 
                     Ray ray = Creature.Camera.Camera.ScreenPointToRay(Input.mousePosition);
-                    Plane plane = new Plane((Vector3)Creature.Camera.Camera.transform.forward, (Vector3)Creature.Mover.Platform.transform.position);
+                    Plane plane = new Plane(Creature.Camera.Camera.transform.forward, Creature.Mover.Platform.transform.position);
 
                     if (plane.Raycast(ray, out float distance))
                     {
                         BodyPartConstructor main = Creature.Constructor.AddBodyPart(bodyPartID);
                         main.transform.position = ray.GetPoint(distance);
-                        main.transform.rotation = Quaternion.LookRotation(-plane.normal, (Vector3)Creature.Constructor.transform.up);
+                        main.transform.rotation = Quaternion.LookRotation(-plane.normal, Creature.Constructor.transform.up);
                         main.transform.parent = Dynamic.Transform;
 
                         main.SetAttached(new AttachedBodyPart(bodyPartID));
@@ -1020,27 +1020,24 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!Creature || Creature.Health.IsDead) return;
 
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (IsBuilding)
             {
-                if (IsBuilding)
-                {
-                    HandleBuildShortcuts();
-                }
-                else
-                if (IsPlaying)
-                {
-                    HandlePlayShortcuts();
-                }
-                else
-                if (IsPainting)
-                {
-                    HandlePaintShortcuts();
-                }
+                HandleBuildShortcuts();
+            }
+            else
+            if (IsPlaying)
+            {
+                HandlePlayShortcuts();
+            }
+            else
+            if (IsPainting)
+            {
+                HandlePaintShortcuts();
+            }
 
-                if (IsEditing)
-                {
-                    HandleEditorShortcuts();
-                }
+            if (IsEditing)
+            {
+                HandleEditorShortcuts();
             }
         }
 
@@ -1049,12 +1046,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandlePlayShortcuts()
         {
-            if (Input.GetKeyDown(KeyCode.U))
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.ToggleUI))
             {
                 IsVisible = !IsVisible;
             }
             else
-            if (Input.GetKeyDown(KeyCode.D))
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Respawn))
             {
                 Creature.Health.Die();
             }
@@ -1065,22 +1062,22 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleEditorShortcuts()
         {
-            if (Input.GetKeyDown(KeyCode.S))
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Save))
             {
                 TrySave();
             }
             else
-            if (Input.GetKeyDown(KeyCode.E))
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Export))
             {
                 TryExport();
-            }      
+            }
             else
-            if (Input.GetKeyDown(KeyCode.I))
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Import))
             {
                 TryImport();
             }
             else
-            if (Input.GetKeyDown(KeyCode.C) && EventSystem.current.currentSelectedGameObject == null) // Must still allow for copying of UI text (e.g., World ID)
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Clear) && EventSystem.current.currentSelectedGameObject == null) // Must still allow for copying of UI text (e.g., World ID)
             {
                 TryClear();
             }

@@ -123,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleInput()
         {
-            bool kInput = Input.GetButton("Vertical") || Input.GetButton("Horizontal");
+            bool kInput = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) || InputUtility.GetKey(KeybindingsManager.Data.WalkRight);
             bool pInput = Input.GetMouseButton(1);
 
             bool setK = kInput || (!pInput && inputMode == InputMode.Keyboard);
@@ -147,18 +147,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 #region Keyboard
                 case InputMode.Keyboard:
 
-                    if (!Input.GetKey(KeyCode.LeftAlt) || !kInput) // Free-look when holding ALT.
+                    if (!InputUtility.GetKey(KeybindingsManager.Data.FreeLook) || !kInput) // Free-look when holding ALT.
                     {
                         keyboardForward = Vector3.ProjectOnPlane(CreatureCamera.Camera.transform.forward, transform.up);
                         keyboardRight = Vector3.ProjectOnPlane(CreatureCamera.Camera.transform.right, transform.up);
                     }
 
-                    Vector3 vertical = keyboardForward * Input.GetAxisRaw("Vertical");
-                    Vector3 horizontal = keyboardRight * Input.GetAxisRaw("Horizontal");
+                    int vAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) ? -1 : 0);
+                    int hAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkRight) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) ? -1 : 0);
+
+                    Vector3 vertical = keyboardForward * vAxisRaw;
+                    Vector3 horizontal = keyboardRight * hAxisRaw;
 
                     direction = (vertical + horizontal).normalized;
                     canTurn = true;
-                    canMove = kInput && !Input.GetKey(KeyCode.LeftControl);
+                    canMove = kInput && !InputUtility.GetKey(KeybindingsManager.Data.StopMove);
 
                     break;
                 #endregion

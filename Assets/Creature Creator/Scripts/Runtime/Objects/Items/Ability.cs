@@ -11,13 +11,17 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Ability")]
         [SerializeField] private int priority;
-        [SerializeField] private KeyCode performKey;
+        [SerializeField] private Keybind performKeybind;
         [SerializeField] private float cooldown;
         #endregion
 
         #region Properties
         public int Priority => priority;
-        public KeyCode PerformKey => performKey;
+        public Keybind PerformKeybind
+        {
+            get => performKeybind;
+            set => performKeybind = value;
+        }
         public float Cooldown => cooldown;
 
         public CreatureAbilities CreatureAbilities { get; private set; }

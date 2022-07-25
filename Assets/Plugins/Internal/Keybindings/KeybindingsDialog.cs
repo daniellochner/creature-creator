@@ -57,7 +57,7 @@ namespace DanielLochner.Assets
                         {
                             if (Input.GetKeyDown(key) && key != modifierKey)
                             {
-                                keybindUI.Rebind(new Keybinding(key, modifierKey));
+                                keybindUI.Rebind(new Keybind(key, modifierKey));
                                 Close();
                                 break;
                             }
@@ -70,7 +70,7 @@ namespace DanielLochner.Assets
                 }
                 else if (modifierKey != KeyCode.None)
                 {
-                    keybindUI.Rebind(new Keybinding(modifierKey, KeyCode.None));
+                    keybindUI.Rebind(new Keybind(modifierKey, KeyCode.None));
                     Close();
                 }
 

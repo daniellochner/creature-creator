@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class ProgressUI : MonoBehaviour
+    public class ProgressUI : MonoBehaviourSingleton<ProgressUI>
     {
         #region Fields
         [Header("Level/Experience")]

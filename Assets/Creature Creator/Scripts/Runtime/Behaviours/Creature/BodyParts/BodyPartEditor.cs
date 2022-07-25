@@ -160,7 +160,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    if (Input.GetKey(KeyCode.LeftAlt) && !IsCopied && BodyPartConstructor.AttachedBodyPart.boneIndex != -1)
+                    if (InputUtility.GetKey(KeybindingsManager.Data.Copy) && !IsCopied && BodyPartConstructor.AttachedBodyPart.boneIndex != -1)
                     {
                         LDrag.IsDragging = LDrag.IsPressing = false;
 

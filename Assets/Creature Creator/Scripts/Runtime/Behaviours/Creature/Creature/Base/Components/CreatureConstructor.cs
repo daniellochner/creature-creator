@@ -23,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float maxRadius = 1.25f;
         [SerializeField] private int maxComplexity = 50;
         [SerializeField] private float mergeThreshold = 0.04f;
-        [SerializeField] private BoneSettings boneSettings;
+        [SerializeField] private CreatureQuality boneSettings;
         [SerializeField] private MinMax minMaxBones = new MinMax(2, 20);
         [SerializeField] private float density = 500f;
 
@@ -41,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Transform Model => model;
         public Material BodyPartMaterial => bodyPartMaterial;
 
-        public BoneSettings BoneSettings => boneSettings;
+        public CreatureQuality BoneSettings => boneSettings;
         public float MergeThreshold => mergeThreshold;
         public float MaxHeight => maxHeight;
         public float MaxRadius => maxRadius;

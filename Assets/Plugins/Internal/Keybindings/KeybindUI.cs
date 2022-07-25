@@ -12,18 +12,18 @@ namespace DanielLochner.Assets
         [SerializeField] private TextMeshProUGUI keyText;
         [SerializeField] private Button rebindButton;
         [SerializeField] private GameObject resetGO;
-        [SerializeField] private UnityEvent<Keybinding> onRebind;
+        [SerializeField] private UnityEvent<Keybind> onRebind;
         [Space]
-        [SerializeField] private Keybinding defaultKeybind;
+        [SerializeField] private Keybind defaultKeybind;
 
         [Header("Debug")]
-        [SerializeField, ReadOnly] private Keybinding currentKeybind;
+        [SerializeField, ReadOnly] private Keybind currentKeybind;
         #endregion
 
         #region Properties
         public string Action => actionText.text;
-        public UnityEvent<Keybinding> OnRebind => onRebind;
-        public Keybinding Selected => currentKeybind;
+        public UnityEvent<Keybind> OnRebind => onRebind;
+        public Keybind Selected => currentKeybind;
         #endregion
 
         #region Methods
@@ -38,7 +38,7 @@ namespace DanielLochner.Assets
             resetGO.SetActive(false);
         }
 
-        public void Rebind(Keybinding key, bool notify = true)
+        public void Rebind(Keybind key, bool notify = true)
         {
             keyText.text = (currentKeybind = key).ToString();
 

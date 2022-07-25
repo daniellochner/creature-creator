@@ -12,6 +12,8 @@ namespace DanielLochner.Assets
         [SerializeField] private Vector2 mouseSensitivity;
         [SerializeField] private float rotationSmoothing;
         [SerializeField] private Vector2 minMaxRotation;
+        [SerializeField] private bool invertMouseX;
+        [SerializeField] private bool invertMouseY;
 
         [Header("Zoom")]
         [SerializeField] private Transform zoomTransform;
@@ -29,6 +31,22 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
+        public Vector2 MouseSensitivity
+        {
+            get => mouseSensitivity;
+            set => mouseSensitivity = value;
+        }
+        public bool InvertMouseX
+        {
+            get => invertMouseX;
+            set => invertMouseX = value;
+        }
+        public bool InvertMouseY
+        {
+            get => invertMouseY;
+            set => invertMouseY = value;
+        }
+
         public bool IsFrozen { get; private set; }
         public bool HasInteractedWithUI { get; private set; }
         public Vector3 OffsetPosition { get; set; }
@@ -82,8 +100,11 @@ namespace DanielLochner.Assets
         {
             if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen)
             {
-                velocity.x += mouseSensitivity.x * Input.GetAxis("Mouse X");
-                velocity.y += mouseSensitivity.y * Input.GetAxis("Mouse Y");
+                float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
+                float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");
+
+                velocity.x += 0.25f * mouseSensitivity.x * mouseX;
+                velocity.y += 0.25f * mouseSensitivity.y * mouseY;
             }
 
             targetRotation.y += velocity.x;

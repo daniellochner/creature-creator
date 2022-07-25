@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace DanielLochner.Assets
     public class SliderValue : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI valueText;
+        [SerializeField] private int precision;
         private Slider slider;
 
         private void Awake()
@@ -18,7 +20,7 @@ namespace DanielLochner.Assets
         }
         public void SetValue(float value)
         {
-            valueText.text = value.ToString();
+            valueText.text = Math.Round(value, precision).ToString();
         }
     }
 }

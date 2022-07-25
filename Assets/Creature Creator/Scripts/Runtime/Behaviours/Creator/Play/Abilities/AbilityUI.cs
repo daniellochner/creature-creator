@@ -33,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
             this.ability = ability;
 
             iconImage.sprite = ability.Icon;
-            performKeyText.text = $"[{ability.PerformKey.ToString()}]";
+            performKeyText.text = $"[{ability.PerformKeybind.ToString()}]";
             performButton.onClick.AddListener(delegate 
             {
                 ability.OnTryPerform();

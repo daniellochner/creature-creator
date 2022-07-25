@@ -7,105 +7,170 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Keybindings : Data
     {
         #region Fields
-        [SerializeField] private Keybinding walkForwards;
-        [SerializeField] private Keybinding walkBackwards;
-        [SerializeField] private Keybinding walkLeft;
-        [SerializeField] private Keybinding walkRight;
-        [SerializeField] private Keybinding jump;
-        [SerializeField] private Keybinding sprint;
-        [SerializeField] private Keybinding interact;
-        [SerializeField] private Keybinding drop;
-        [SerializeField] private Keybinding talk;
-        [SerializeField] private Keybinding viewPlayers;
-        [SerializeField] private Keybinding copy;
-        [SerializeField] private Keybinding freeLook;
-        [SerializeField] private Keybinding respawn;
+        [Header("Play")]
+        [SerializeField] private Keybind walkForwards;
+        [SerializeField] private Keybind walkBackwards;
+        [SerializeField] private Keybind walkLeft;
+        [SerializeField] private Keybind walkRight;
+        [SerializeField] private Keybind jump;
+        [SerializeField] private Keybind flap;
+        [SerializeField] private Keybind sprint;
+        [SerializeField] private Keybind interact;
+        [SerializeField] private Keybind drop;
+        [SerializeField] private Keybind talk;
+        [SerializeField] private Keybind viewPlayers;
+        [SerializeField] private Keybind freeLook;
+        [SerializeField] private Keybind stopMove;
+        [SerializeField] private Keybind respawn;
+        [SerializeField] private Keybind toggleUI;
+
+        [Header("Build")]
+        [SerializeField] private Keybind copy;
+
+        [Header("General")]
+        [SerializeField] private Keybind save;
+        [SerializeField] private Keybind load;
+        [SerializeField] private Keybind clear;
+        [SerializeField] private Keybind import;
+        [SerializeField] private Keybind export;
         #endregion
 
         #region Properties
-        public Keybinding WalkForwards
+        public Keybind WalkForwards
         {
             get => walkForwards;
             set => walkForwards = value;
         }
-        public Keybinding WalkBackwards
+        public Keybind WalkBackwards
         {
             get => walkBackwards;
             set => walkBackwards = value;
         }
-        public Keybinding WalkLeft
+        public Keybind WalkLeft
         {
             get => walkLeft;
             set => walkLeft = value;
         }
-        public Keybinding WalkRight
+        public Keybind WalkRight
         {
             get => walkRight;
             set => walkRight = value;
         }
-        public Keybinding Jump
+        public Keybind Jump
         {
             get => jump;
             set => jump = value;
         }
-        public Keybinding Sprint
+        public Keybind Flap
+        {
+            get => flap;
+            set => flap = value;
+        }
+        public Keybind Sprint
         {
             get => sprint;
             set => sprint = value;
         }
-        public Keybinding Interact
+        public Keybind Interact
         {
             get => interact;
             set => interact = value;
         }
-        public Keybinding Drop
+        public Keybind Drop
         {
             get => drop;
             set => drop = value;
         }
-        public Keybinding Talk
+        public Keybind Talk
         {
             get => talk;
             set => talk = value;
         }
-        public Keybinding ViewPlayers
+        public Keybind ViewPlayers
         {
             get => viewPlayers;
             set => viewPlayers = value;
         }
-        public Keybinding Copy
-        {
-            get => copy;
-            set => copy = value;
-        }
-        public Keybinding FreeLook
+        public Keybind FreeLook
         {
             get => freeLook;
             set => freeLook = value;
         }
-        public Keybinding Respawn
+        public Keybind StopMove
+        {
+            get => stopMove;
+            set => stopMove = value;
+        }
+        public Keybind Respawn
         {
             get => respawn;
             set => respawn = value;
+        }
+        public Keybind ToggleUI
+        {
+            get => toggleUI;
+            set => toggleUI = value;
+        }
+
+        public Keybind Copy
+        {
+            get => copy;
+            set => copy = value;
+        }
+
+        public Keybind Save
+        {
+            get => save;
+            set => save = value;
+        }
+        public Keybind Load
+        {
+            get => load;
+            set => load = value;
+        }
+        public Keybind Clear
+        {
+            get => clear;
+            set => clear = value;
+        }
+        public Keybind Import
+        {
+            get => import;
+            set => import = value;
+        }
+        public Keybind Export
+        {
+            get => export;
+            set => export = value;
         }
         #endregion
 
         #region Methods
         public override void Revert()
         {
-            WalkForwards = new Keybinding(KeyCode.W);
-            WalkBackwards = new Keybinding(KeyCode.S);
-            WalkLeft = new Keybinding(KeyCode.A);
-            WalkRight = new Keybinding(KeyCode.D);
-            Jump = new Keybinding(KeyCode.Space);
-            Sprint = new Keybinding(KeyCode.LeftShift);
-            Interact = new Keybinding(KeyCode.E);
-            Drop = new Keybinding(KeyCode.Q);
-            Talk = new Keybinding(KeyCode.T);
-            ViewPlayers = new Keybinding(KeyCode.Tab);
-            Copy = new Keybinding(KeyCode.LeftAlt);
-            FreeLook = new Keybinding(KeyCode.LeftAlt);
-            Respawn = new Keybinding(KeyCode.R, KeyCode.LeftControl);
+            WalkForwards = new Keybind(KeyCode.W);
+            WalkBackwards = new Keybind(KeyCode.S);
+            WalkLeft = new Keybind(KeyCode.A);
+            WalkRight = new Keybind(KeyCode.D);
+            Jump = new Keybind(KeyCode.Space);
+            Flap = new Keybind(KeyCode.Space);
+            Sprint = new Keybind(KeyCode.LeftShift);
+            Interact = new Keybind(KeyCode.E);
+            Drop = new Keybind(KeyCode.Q);
+            Talk = new Keybind(KeyCode.T);
+            ViewPlayers = new Keybind(KeyCode.Tab);
+            FreeLook = new Keybind(KeyCode.LeftAlt);
+            StopMove = new Keybind(KeyCode.LeftControl);
+            Respawn = new Keybind(KeyCode.R, KeyCode.LeftControl);
+            ToggleUI = new Keybind(KeyCode.U, KeyCode.LeftControl);
+
+            Copy = new Keybind(KeyCode.LeftAlt);
+
+            Save = new Keybind(KeyCode.S, KeyCode.LeftControl);
+            Load = new Keybind(KeyCode.L, KeyCode.LeftControl);
+            Clear = new Keybind(KeyCode.C, KeyCode.LeftControl);
+            Import = new Keybind(KeyCode.I, KeyCode.LeftControl);
+            Export = new Keybind(KeyCode.E, KeyCode.LeftControl);
         }
         #endregion
     }
