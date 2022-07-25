@@ -47,10 +47,7 @@ namespace DanielLochner.Assets
                 {
                     yield return null;
                 }
-                if (LobbyHelper.Instance.JoinedLobby != null)
-                {
-                    Lobbies.Instance.DeleteLobbyAsync(LobbyHelper.Instance.JoinedLobby.Id);
-                }
+                LobbyHelper.Instance.DeleteActiveLobbies();
             }
 
             NetworkShutdownManager.Instance.Shutdown();

@@ -60,6 +60,10 @@ namespace DanielLochner.Assets
             {
                 Lobbies.Instance.DeleteLobbyAsync(lobbyId);
             }
+            if (heartbeatLobbyCoroutine != null)
+            {
+                StopCoroutine(heartbeatLobbyCoroutine);
+            }
         }
         private IEnumerator HeartbeatLobbyRoutine(string lobbyId, float waitTime)
         {

@@ -56,24 +56,27 @@ namespace DanielLochner.Assets
             Players.Clear();
         }
         
-        private void ApproveConnection(byte[] data, ulong clientId, NetworkManager.ConnectionApprovedDelegate connectionApproved)
+        private void ApproveConnection(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
+            byte[] data = request.Payload;
+            ulong clientId = request.ClientNetworkId;
+
             if (data.Length > maxPayloadSize)
             {
-                connectionApproved(false, null, false, null, null);
+                response.Approved = false;
                 return;
             }
 
             if (Players.Count >= maxPlayers)
             {
-                connectionApproved(false, null, false, null, null);
+                response.Approved = false;
                 return;
             }
 
             ConnectionData connectionData = JsonUtility.FromJson<ConnectionData>(Encoding.UTF8.GetString(data));
             if (connectionData.password != Password)
             {
-                connectionApproved(false, null, false, null, null);
+                response.Approved = false;
                 return;
             }
 
@@ -84,7 +87,8 @@ namespace DanielLochner.Assets
             };
             Add(playerData);
 
-            connectionApproved(NetworkManager.Singleton.LocalClientId != clientId && NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null, null, true, null, null);
+            response.CreatePlayerObject = NetworkManager.Singleton.LocalClientId != clientId && NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null;
+            response.Approved = true;
             OnApproveConnection?.Invoke(clientId);
         }
         #endregion
