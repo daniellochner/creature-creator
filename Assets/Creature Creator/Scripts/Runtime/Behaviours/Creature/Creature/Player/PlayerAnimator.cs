@@ -4,10 +4,8 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureAnimator))]
     [RequireComponent(typeof(Animator))]
-    public class PlayerAnimatedParams : MonoBehaviour
+    public class PlayerAnimator : MonoBehaviour
     {
-        [SerializeField] private float minSlitherLength;
-
         private CreatureAnimator CreatureAnimator { get; set; }
         private Animator Animator { get; set; }
 
@@ -26,9 +24,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureAnimator.OnBuild += delegate
             {
-                Animator.SetBool("Body_Fly", HasWings);
-                Animator.SetBool("Body_Slither", !HasLegs && !HasWings && (CreatureAnimator.Constructor.Dimensions.body.length >= minSlitherLength));
-                Animator.SetBool("Body_Walk", HasLegs && !HasWings);
+                Animator.SetBool("HasWings", HasWings);
+                //Animator.SetBool("HasWings", HasWings);
+                //Animator.SetBool("HasLegs", HasLegs && !HasWings);
             };
         }
     }

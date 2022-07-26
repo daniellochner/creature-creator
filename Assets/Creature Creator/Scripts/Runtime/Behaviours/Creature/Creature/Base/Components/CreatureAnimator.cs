@@ -20,7 +20,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Setup")]
         [SerializeField] private Transform rig;
-        [SerializeField] private float extensionThreshold = 0.95f;
+        [SerializeField] private float extensionThreshold;
+        [SerializeField] private float baseMovementSpeed;
+        [SerializeField] private float baseTurnSpeed;
+        [SerializeField] private float contactDistance;
 
         private Transform head, tail, limbs;
         private RigBuilder rigBuilder;
@@ -54,7 +57,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get; private set;
         }
-
+        public bool IsGrounded
+        {
+            get; private set;
+        }
         public bool IsAnimated
         {
             get => isAnimated;
@@ -82,6 +88,18 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Initialize();
+        }
+        private void FixedUpdate()
+        {
+            if (!IsAnimated) return;
+
+            float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
+            float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
+            Animator.SetFloat("%LSpeed", l);
+            Animator.SetFloat("%ASpeed", a);
+
+            IsGrounded = Physics.Raycast(transform.position + transform.up, -transform.up, 1f + contactDistance);
+            Animator.SetBool("IsGrounded", IsGrounded);
         }
 
         private void Initialize()

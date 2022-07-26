@@ -158,8 +158,6 @@ GameObject:
   - component: {fileID: 5405419930534611721}
   - component: {fileID: 9001263530314210148}
   - component: {fileID: 7061764046128142492}
-  - component: {fileID: 5109438430634974764}
-  - component: {fileID: -8905479805094471020}
   - component: {fileID: 7521241912421257359}
   m_Layer: 0
   m_Name: Creature (Base)
@@ -360,6 +358,9 @@ MonoBehaviour:
   isAnimated: 0
   rig: {fileID: 5812436878079772818}
   extensionThreshold: 0.95
+  baseMovementSpeed: 0.8
+  baseTurnSpeed: 120
+  contactDistance: 0.01
 --- !u!136 &3945330708831151637
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -692,6 +693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disabled: []
 --- !u!114 &5405419930534611721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,34 +735,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHidden:
     m_InternalValue: 0
---- !u!114 &5109438430634974764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36cf9c192cc233d44b462dfe058c39a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseMovementSpeed: 0.8
-  baseTurnSpeed: 120
-  contactDistance: 0.01
---- !u!114 &-8905479805094471020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 5812436878276722342}
 --- !u!114 &7521241912421257359
 MonoBehaviour:
   m_ObjectHideFlags: 0
