@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public AnimatorParams Params => Creature.Animator.Params;
         public Animator Animator => Creature.Animator.Animator;
 
         protected CreatureNonPlayerLocal Creature { get; set; }
@@ -116,20 +117,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureEffector.Sound sound = ambientSounds[UnityEngine.Random.Range(0, ambientSounds.Length)];
 
                 // Open
-                AnimalAI.Animator.SetBool("Mouth_IsOpened", true);
+                AnimalAI.Params.SetBool("Mouth_IsOpened", true);
                 AnimalAI.Creature.Effector.PlaySound(sound.name, sound.volume);
 
                 // Hold (to make the sound)...
                 yield return new WaitForSeconds(AnimalAI.Creature.Effector.SoundFX[sound.name].length);
 
                 // Close
-                AnimalAI.Animator.SetBool("Mouth_IsOpened", false);
+                AnimalAI.Params.SetBool("Mouth_IsOpened", false);
             }
 
             private void PerformAction()
             {
                 string action = actions[UnityEngine.Random.Range(0, actions.Length)];
-                AnimalAI.Animator.SetTrigger(action);
+                AnimalAI.Params.SetTrigger(action);
             }
         }
 

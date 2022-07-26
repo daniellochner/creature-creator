@@ -112,10 +112,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private IEnumerator BarkingRoutine()
             {
-                DogAI.Animator.SetBool("Eye_IsGlaring", true);
+                DogAI.Params.SetBool("Eye_IsGlaring", true);
                 DogAI.Creature.Effector.PlaySound(growlSounds);
                 yield return new WaitForSeconds(growlTime);
-                DogAI.Animator.SetBool("Eye_IsGlaring", false);
+                DogAI.Params.SetBool("Eye_IsGlaring", false);
 
                 while (IsActive)
                 {
@@ -131,7 +131,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 for (int i = 0; i < barks; i++)
                 {
                     DogAI.Creature.Effector.PlaySound(barkSounds);
-                    DogAI.Animator.SetTrigger("Mouth_Bark");
+                    DogAI.Params.SetTrigger("Mouth_Bark");
                     yield return new WaitForSeconds(barkDelayWithin.Random);
                 }
             }
@@ -240,7 +240,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     // Strike (and Bite)!
-                    DogAI.Animator.SetTrigger("Body_Strike");
+                    DogAI.Params.SetTrigger("Body_Strike");
 
                     // Wait...
                     yield return new WaitForSeconds(biteDelay.Random);

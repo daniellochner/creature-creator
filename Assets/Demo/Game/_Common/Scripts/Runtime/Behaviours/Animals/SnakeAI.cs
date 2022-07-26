@@ -115,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     // Strike!
-                    SnakeAI.Animator.SetTrigger("Body_Strike");
+                    SnakeAI.Params.SetTrigger("Body_Strike");
 
                     // Rest...
                     yield return new WaitForSeconds(strikeCooldown.Random);

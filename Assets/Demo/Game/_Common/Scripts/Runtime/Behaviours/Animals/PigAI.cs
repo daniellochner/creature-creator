@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 PigAI.Creature.Effector.PlaySound(squealSounds);
-                PigAI.Animator.SetTrigger("Body_Roll");
+                PigAI.Params.SetTrigger("Body_Roll");
             }
             public override void UpdateLogic()
             {

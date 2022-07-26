@@ -80,18 +80,17 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 BirdAI.StartCoroutine(FlyToPositionRoutine(RandomPerchPoint.position));
-                BirdAI.Animator.SetBool("Body_IsFlying", true);
+                BirdAI.Params.SetBool("Body_IsFlying", true);
             }
             public override void Exit()
             {
-                BirdAI.Animator.SetBool("Body_IsFlying", false);
+                BirdAI.Params.SetBool("Body_IsFlying", false);
             }
 
             private IEnumerator FlyToPositionRoutine(Vector3 to)
             {     
                 // Shock
-                BirdAI.Animator.SetTrigger("Eye_Dilate");
-                BirdAI.Animator.SetBool("Eye_IsDilated", true);
+                BirdAI.Params.SetBool("Eye_IsDilated", true);
 
                 yield return new WaitForSeconds(shockTime);
 
@@ -113,7 +112,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }, flightTime);
 
                 // Perch
-                BirdAI.Animator.SetBool("Eye_IsDilated", false);
+                BirdAI.Params.SetBool("Eye_IsDilated", false);
                 BirdAI.ChangeState("IDL");
             }
         }
