@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureEffector))]
     [RequireComponent(typeof(KinematicVelocity))]
+    [RequireComponent(typeof(AnimatorParams))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
@@ -38,6 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureEffector Effector { get; private set; }
         public Animator Animator { get; private set; }
         public KinematicVelocity Velocity { get; private set; }
+        public AnimatorParams Params { get; private set; }
 
         public Action OnBuild { get; set; }
 
@@ -95,11 +97,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
             float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
-            Animator.SetFloat("%LSpeed", l);
-            Animator.SetFloat("%ASpeed", a);
+            Params.SetFloat("%LSpeed", l, false);
+            Params.SetFloat("%ASpeed", a, false);
 
             IsGrounded = Physics.Raycast(transform.position + transform.up, -transform.up, 1f + contactDistance);
-            Animator.SetBool("IsGrounded", IsGrounded);
+            Params.SetBool("IsGrounded", IsGrounded, false);
         }
 
         private void Initialize()
@@ -109,6 +111,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Effector = GetComponent<CreatureEffector>();
             Velocity = GetComponent<KinematicVelocity>();
+            Params = GetComponent<AnimatorParams>();
 
             Rebuild();
         }

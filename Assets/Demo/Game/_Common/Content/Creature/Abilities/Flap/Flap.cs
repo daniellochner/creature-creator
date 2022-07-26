@@ -28,10 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         {
             rigidbody.AddForce(rigidbody.transform.up * flapForce, ForceMode.Impulse);
 
-            foreach (WingAnimator wing in creatureAnimator.Wings)
-            {
-                wing.Flap();
-            }
+            creatureAnimator.Params.SetTrigger("Wings_Flap");
 
             if (!isAirborne)
             {

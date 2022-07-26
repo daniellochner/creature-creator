@@ -12,40 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(NetworkObject))]
     public class NetworkCreature : NetworkBehaviour
     {
-
-
-        //#region Animations
-        //[ServerRpc]
-        //private void SetTriggerServerRpc(string param)
-        //{
-        //    SetTriggerClientRpc(param);
-        //}
-        //[ClientRpc]
-        //private void SetTriggerClientRpc(string param)
-        //{
-        //    if (!IsOwner)
-        //    {
-        //        Creature.Animator.Animator.SetTrigger(param);
-        //    }
-        //}
-
-        //[ServerRpc]
-        //private void SetBoolServerRpc(string param, bool value)
-        //{
-        //    SetBoolClientRpc(param, value);
-        //}
-        //[ClientRpc]
-        //private void SetBoolClientRpc(string param, bool value)
-        //{
-        //    if (!IsOwner)
-        //    {
-        //        Creature.Animator.Animator.SetBool(param, value);
-        //    }
-        //}
-        //#endregion
-
-
-
+        
 
         //#region Respawn
         //[ServerRpc]

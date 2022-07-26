@@ -25,8 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureAnimator.OnBuild += delegate
             {
                 Animator.SetBool("HasWings", HasWings);
-                //Animator.SetBool("HasWings", HasWings);
-                //Animator.SetBool("HasLegs", HasLegs && !HasWings);
+                Animator.SetBool("HasLegs", HasLegs);
             };
         }
     }
