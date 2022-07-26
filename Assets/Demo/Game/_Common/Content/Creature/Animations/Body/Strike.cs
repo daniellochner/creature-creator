@@ -25,7 +25,8 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            Vector3 displacement = Vector3.ProjectOnPlane(Creature.InteractTarget.position - Head.position, Creature.transform.up);
+            Vector3 strikePosition = Creature.transform.position + (animator.GetFloat("Body_Strike_Distance") * Creature.transform.forward);
+            Vector3 displacement = Vector3.ProjectOnPlane(strikePosition - Head.position, Creature.transform.up);
             Vector3 offset = headOffset * Creature.transform.forward;
             Creature.StartCoroutine(StrikeRoutine(displacement - offset));
         }

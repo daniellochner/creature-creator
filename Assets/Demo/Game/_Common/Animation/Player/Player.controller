@@ -321,6 +321,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c23e7a232e50cd04093629c1e1f4d5b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flapSounds:
+  - name: Flap1
+    volume: 0.5
+  - name: Flap2
+    volume: 0.5
+  - name: Flap3
+    volume: 0.5
+  - name: Flap4
+    volume: 0.5
+  - name: Flap5
+    volume: 0.5
+  - name: Flap6
+    volume: 0.5
 --- !u!1107 &-3018549544153398771
 AnimatorStateMachine:
   serializedVersion: 6
@@ -532,49 +545,49 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: '%LSpeed'
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsGrounded
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsUnderWater
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: HasWings
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: HasLegs
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Mouth_Breathe
     m_Type: 1
     m_DefaultFloat: 0.5
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Wings_Flap
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Body
@@ -971,7 +984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a26047b0d8d03842aa35904b198c144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airDrag: 5
 --- !u!1102 &5176462119552888890
 AnimatorState:
   serializedVersion: 6

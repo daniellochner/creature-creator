@@ -52,9 +52,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
 
-        public Transform InteractTarget { get; set; }
-        public Transform LookTarget { get; set; }
-
         public bool IsMovingBody
         {
             get; private set;

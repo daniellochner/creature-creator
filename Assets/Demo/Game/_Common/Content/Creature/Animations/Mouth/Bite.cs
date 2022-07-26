@@ -40,20 +40,23 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             timeR2O);
 
             // Bite
-            if (!hasDealtDamage)
+            if (PerformLogic)
             {
-                Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
-                foreach (Collider collider in colliders)
+                if (!hasDealtDamage)
                 {
-                    CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null && creature.Animator != Creature) // biting creature shouldn't damage itself
+                    Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
+                    foreach (Collider collider in colliders)
                     {
-                        creature.Health.TakeDamage(biteDamage.Random);
-                        hasDealtDamage = true;
+                        CreatureBase creature = collider.GetComponent<CreatureBase>();
+                        if (creature != null && creature.Animator != Creature) // biting creature shouldn't damage itself
+                        {
+                            creature.Health.TakeDamage(biteDamage.Random);
+                            hasDealtDamage = true;
+                        }
                     }
                 }
+                Creature.Effector.PlaySound(biteSounds);
             }
-            Creature.Effector.PlaySound(biteSounds);
 
             // Open -> Close
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)

@@ -85,7 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void UpdateTarget()
             {
-                Transform nearest = SnakeAI.Creature.Animator.InteractTarget = SnakeAI.trackRegion.Nearest.transform;
+                Transform nearest = SnakeAI.trackRegion.Nearest.transform;
                 if (target == null || target.transform != nearest)
                 {
                     target = nearest.GetComponent<CreatureBase>();
@@ -115,7 +115,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     // Strike!
-                    SnakeAI.Params.SetTrigger("Body_Strike");
+                    float d = Vector3.Distance(target.transform.position, SnakeAI.transform.position);
+                    SnakeAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Rest...
                     yield return new WaitForSeconds(strikeCooldown.Random);

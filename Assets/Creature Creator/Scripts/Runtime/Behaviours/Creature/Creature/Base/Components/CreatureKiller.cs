@@ -52,8 +52,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 behaviour.enabled = true;
             }
 
-            CreatureAnimator.Rebuild();
-
             OnRespawn?.Invoke();
         }
         #endregion

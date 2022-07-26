@@ -2,9 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
@@ -35,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #endregion
 
         #region Methods
-        public override void OnStart(Animator animator)
+        public override void Setup()
         {
             numPairs = Creature.Legs.Count / 2;
             movePairs = new Coroutine[numPairs];

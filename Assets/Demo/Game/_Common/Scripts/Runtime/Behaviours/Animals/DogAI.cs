@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateTarget()
         {
-            Transform nearest = Creature.Animator.InteractTarget = trackRegion.Nearest.transform;
+            Transform nearest = trackRegion.Nearest.transform;
             if (target == null || target.transform != nearest)
             {
                 target = nearest.GetComponent<CreatureBase>();
@@ -239,8 +239,9 @@ namespace DanielLochner.Assets.CreatureCreator
                         yield return null;
                     }
 
-                    // Strike (and Bite)!
-                    DogAI.Params.SetTrigger("Body_Strike");
+                    // Strike!
+                    float d = Vector3.Distance(DogAI.target.transform.position, DogAI.transform.position);
+                    DogAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Wait...
                     yield return new WaitForSeconds(biteDelay.Random);

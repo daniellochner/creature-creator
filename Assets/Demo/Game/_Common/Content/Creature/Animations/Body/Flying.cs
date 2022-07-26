@@ -10,15 +10,15 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Fields
         [SerializeField] private float flapCooldown;
         [SerializeField] private float flapHeight;
+        [SerializeField] private CreatureEffector.Sound[] flapSounds;
 
         private WingAnimator[] wings;
         private float timeLeft;
         #endregion
 
         #region Methods
-        public override void OnStart(Animator animator)
+        public override void Setup()
         {
-            base.OnStart(animator);
             wings = Creature.GetComponentsInChildren<WingAnimator>();
         }
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -49,6 +49,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 wing.Flap();
             }
+            if (PerformLogic)
+            {
+                Creature.Effector.PlaySound(flapSounds);
+            }
+
             Creature.InvokeOverTime(delegate (float progress)
             {
                 float y = flapHeight * Mathf.Sin(progress * Mathf.PI);

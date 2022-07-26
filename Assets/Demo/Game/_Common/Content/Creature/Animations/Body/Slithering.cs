@@ -34,15 +34,15 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             float rot = -t * slitherAngle * Mathf.Sin(f);
             float pos =  t * slitherWidth * Mathf.Cos(f);
             
-            //Head.localRotation = Quaternion.Euler(0, rot, 0);
-            //Head.localPosition = Vector3.right * pos;
+            Head.localRotation = Quaternion.Euler(0, rot, 0);
+            Head.localPosition = Vector3.right * pos;
 
             x += Time.deltaTime;
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //Head.localPosition = Vector3.zero;
-            //Head.localRotation = Quaternion.identity;
+            Head.localPosition = Vector3.zero;
+            Head.localRotation = Quaternion.identity;
         }
         #endregion
     }

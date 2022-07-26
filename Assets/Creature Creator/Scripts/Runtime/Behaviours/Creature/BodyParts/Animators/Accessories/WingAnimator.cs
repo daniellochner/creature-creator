@@ -7,8 +7,6 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class WingAnimator : BodyPartAnimator
     {
-        [SerializeField] private CreatureEffector.Sound[] flapSounds;
-
         private Animator animator;
 
         protected override void Initialize()
@@ -20,7 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Flap()
         {
             animator.SetTrigger("Flap");
-            CreatureAnimator.Effector.PlaySound(flapSounds);
         }
     }
 }
