@@ -11,11 +11,9 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         [Header("Flap")]
         [SerializeField] private float flapForce;
-        [SerializeField] private float airDrag;
 
         private CreatureAnimator creatureAnimator;
         private Rigidbody rigidbody;
-        private bool isAirborne;
 
         public override void Setup(CreatureAbilities creatureAbilities)
         {
@@ -27,32 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         public override void OnPerform()
         {
             rigidbody.AddForce(rigidbody.transform.up * flapForce, ForceMode.Impulse);
-
             creatureAnimator.Params.SetTrigger("Wings_Flap");
-
-            if (!isAirborne)
-            {
-                CreatureAbilities.StartCoroutine(AirborneRoutine());
-            }
-        }
-
-        private IEnumerator AirborneRoutine()
-        {
-            isAirborne = true;
-
-            yield return new WaitForSeconds(0.25f);
-
-            float prevDrag = rigidbody.drag;
-            rigidbody.drag = airDrag;
-
-            while (!creatureAnimator.IsGrounded)
-            {
-                yield return null;
-            }
-
-            rigidbody.drag = prevDrag;
-
-            isAirborne = false;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace DanielLochner.Assets
             if (source != null) { sourcePosition = sourceRotation = source; }
         }
 #endif
-        private void Update()
+        private void FixedUpdate()
         {
             if (sourcePosition)
             {
