@@ -1,5 +1,6 @@
 // Credit: https://www.youtube.com/watch?v=iasDPyC0QOg
 
+using Pinwheel.Poseidon;
 using UnityEngine;
 
 namespace DanielLochner.Assets
@@ -20,6 +21,7 @@ namespace DanielLochner.Assets
         [SerializeField, ReadOnly] private int pointsUnderwater;
 
         private Rigidbody rb;
+        private PWater water;
         #endregion
 
         #region Properties
@@ -41,21 +43,39 @@ namespace DanielLochner.Assets
         {
             rb = GetComponent<Rigidbody>();
         }
-        private void OnTriggerStay(Collider other)
+        private void FixedUpdate()
+        {
+            if (water != null)
+            {
+                HandleBuoyancy();
+            }
+        }
+        private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Water"))
             {
-                HandleBuoyancy(other.transform.position.y);
+                water = other.GetComponent<PWater>();
             }
         }
-
-        private void HandleBuoyancy(float waterHeight)
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Water"))
+            {
+                water = null;
+            }
+        }
+        
+        private void HandleBuoyancy()
         {
             pointsUnderwater = 0;
 
             foreach (Transform point in floatingPoints)
             {
-                float difference = point.position.y - waterHeight;
+                Vector3 localPointPos = water.transform.InverseTransformPoint(point.position);
+                localPointPos.y = 0;
+                Vector3 worldWaterPos = water.transform.TransformPoint(water.GetLocalVertexPosition(localPointPos, true));
+
+                float difference = point.position.y - worldWaterPos.y;
 
                 if (difference < 0)
                 {
