@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureHealth))]
-    [RequireComponent(typeof(CreatureHider))]
+    [RequireComponent(typeof(CreatureSpawner))]
     public class CreatureAge : NetworkBehaviour
     {
         #region Fields
@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action<int> OnAgeChanged { get; set; }
         
         public CreatureHealth Health { get; private set; }
-        public CreatureHider Hider { get; private set; }
+        public CreatureSpawner Spawner { get; private set; }
 
         public int Age
         {
@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Health = GetComponent<CreatureHealth>();
-            Hider = GetComponent<CreatureHider>();
+            Spawner = GetComponent<CreatureSpawner>();
         }
         private void Start()
         {
@@ -53,11 +53,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsServer)
             {
-                Hider.OnShow += delegate
+                Spawner.OnSpawn += delegate
                 {
                     agingRoutine = StartCoroutine(AgingRoutine());
                 };
-                Hider.OnHide += delegate
+                Spawner.OnDespawn += delegate
                 {
                     if (agingRoutine != null)
                     {

@@ -56,7 +56,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
-        [SerializeField] private CanvasGroup spawnedCanvasGroup;
         [SerializeField] private CreatureInformationMenu informationMenu;
 
         [Header("Paint")]
@@ -113,7 +112,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 StartCoroutine(paginationCanvasGroup.Fade(isEditing, 0.25f));
                 StartCoroutine(optionsCanvasGroup.Fade(isEditing, 0.25f));
-                StartCoroutine(spawnedCanvasGroup.Fade(!isEditing, 0.25f));
 
                 if (isEditing) UpdateLoadableCreatures();
             }
@@ -298,6 +296,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
             Creature.Animator.IsAnimated = false;
+            Creature.Spawner.Despawn();
 
             SetCameraOffset(-1.5f);
         }
@@ -312,7 +311,6 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMode();
 
             // Player
-            Creature.Health.Respawn();
             Creature.Constructor.Recenter();
             Creature.Constructor.UpdateConfiguration();
             Creature.Collider.UpdateCollider();
@@ -326,6 +324,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.Deselect();
             Creature.Animator.Velocity.Reset();
             Creature.Animator.IsAnimated = true;
+            Creature.Informer.Capture();
+            Creature.Collider.UpdateCollider();
+            Creature.Spawner.Spawn();
 
             SetCameraOffset(0f);
         }
@@ -348,6 +349,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.UseTemporaryOutline = true;
             Creature.Editor.Deselect();
             Creature.Animator.IsAnimated = false;
+            Creature.Spawner.Despawn();
 
             SetCameraOffset(1.5f);
         }
@@ -418,7 +420,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsPlaying)
             {
-                Creature.Health.Respawn();
+                Creature.Respawner.Respawn();
             }
 
             // Colour
@@ -440,7 +442,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Clear()
         {
-            PerformOperation(() => Load(null));
+            Load(null);
         }
         public void TryImport()
         {
@@ -1127,10 +1129,6 @@ namespace DanielLochner.Assets.CreatureCreator
         /// <param name="restructure">Whether or not the creature needs to be restructured.</param>
         private void PerformOperation(UnityAction operation, bool restructure = false)
         {
-            // Record current state.
-            bool isMovable = Creature.Mover.IsMovable;
-            bool isAnimated = Creature.Animator.IsAnimated;
-
             // Reset to default state.
             Creature.transform.position = Creature.Mover.Platform.transform.position;
             Creature.Constructor.Root.localPosition = Vector3.zero;
@@ -1141,8 +1139,8 @@ namespace DanielLochner.Assets.CreatureCreator
             // Restore to previous state.
             Creature.Constructor.IsTextured = Creature.Constructor.IsTextured;
             Creature.Editor.IsEditing = Creature.Editor.IsEditing;
-            Creature.Mover.IsMovable = isMovable;
-            Creature.Animator.IsAnimated = isAnimated;
+            Creature.Mover.IsMovable = Creature.Mover.IsMovable;
+            Creature.Animator.IsAnimated = Creature.Animator.IsAnimated;
         }
 
         /// <summary>

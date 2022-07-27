@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureMover))]
     [RequireComponent(typeof(CreatureAnimator))]
+    [RequireComponent(typeof(CreatureSpawner))]
     public class CreatureRespawner : MonoBehaviour
     {
         #region Properties
@@ -16,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureInformer Informer { get; private set; }
         public CreatureMover Mover { get; private set; }
         public CreatureAnimator Animator { get; private set; }
+        public CreatureSpawner Spawner { get; private set; }
         #endregion
 
         #region Methods
@@ -25,15 +27,15 @@ namespace DanielLochner.Assets.CreatureCreator
             Informer = GetComponent<CreatureInformer>();
             Mover = GetComponent<CreatureMover>();
             Animator = GetComponent<CreatureAnimator>();
+            Spawner = GetComponent<CreatureSpawner>();
         }
 
         private void Start()
         {
-            Health.OnDie += Die;
-            Health.OnRespawn += Respawn;
+            Health.OnDie += OnDie;
         }
 
-        public void Die()
+        public void OnDie()
         {
             EditorManager.Instance.IsVisible = false;
 
@@ -41,13 +43,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
                 string age = Informer.Information.FormattedAge;
-                InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Health.Respawn);
+                InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Respawn);
             }, 1f);
         }
         public void Respawn()
         {
             Mover.Teleport(Mover.Platform);
             Animator.IsAnimated = true;
+            Spawner.Respawn();
 
             EditorManager.Instance.IsVisible = true;
         }

@@ -37,7 +37,6 @@ namespace DanielLochner.Assets
         public Action<float> OnHealthChanged { get; set; }
         public Action<float> OnTakeDamage { get; set; }
         public Action OnDie { get; set; }
-        public Action OnRespawn { get; set; }
 
         public bool IsDead
         {
@@ -61,20 +60,10 @@ namespace DanielLochner.Assets
             
             Health -= damage;
             OnTakeDamage?.Invoke(damage);
-
-            if (Health <= 0f)
-            {
-                Die();
-            }
         }
         public virtual void Die()
         {
             OnDie?.Invoke();
-        }
-        public virtual void Respawn()
-        {
-            Health = maxHealth;
-            OnRespawn?.Invoke();
         }
 
         [ServerRpc]
@@ -86,9 +75,14 @@ namespace DanielLochner.Assets
         {
             Health = newHealth;
             OnHealthChanged?.Invoke(Health);
+
+            if (Health <= 0f)
+            {
+                Die();
+            }
         }
 
-        [ContextMenu("Take Damage")]
+        [ContextMenu("Take Random Damage")]
         private void TakeRandomDamage()
         {
             TakeDamage(UnityEngine.Random.Range(0f, maxHealth));

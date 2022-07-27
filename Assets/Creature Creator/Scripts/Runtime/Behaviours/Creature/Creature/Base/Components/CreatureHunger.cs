@@ -9,7 +9,7 @@ using System.Collections;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureHealth))]
-    [RequireComponent(typeof(CreatureHider))]
+    [RequireComponent(typeof(CreatureSpawner))]
     public class CreatureHunger : NetworkBehaviour
     {
         #region Fields
@@ -25,12 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public Action<float> OnHungerChanged { get; set; }
         public CreatureHealth Health { get; private set; }
-        public CreatureHider Hider { get; private set; }
-
-        public bool CanDepleteHunger
-        {
-            get => !Health.IsDead && !Hider.IsEditing;
-        }
+        public CreatureSpawner Spawner { get; private set; }
 
         public float Hunger
         {
@@ -53,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Health = GetComponent<CreatureHealth>();
-            Hider = GetComponent<CreatureHider>();
+            Spawner = GetComponent<CreatureSpawner>();
         }
         private void Start()
         {
@@ -62,11 +57,18 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsServer)
             {
-                if (hungerDepletingCoroutine != null)
+                Spawner.OnSpawn += delegate
                 {
-                    StopCoroutine(hungerDepletingCoroutine);
-                }
-                hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
+                    hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
+                };
+                Spawner.OnDespawn += delegate
+                {
+                    if (hungerDepletingCoroutine != null)
+                    {
+                        StopCoroutine(hungerDepletingCoroutine);
+                    }
+                    Hunger = 1f;
+                };
             }
         }
 
@@ -83,10 +85,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator HungerDepletionRoutine(float hungerDepletionRate, float healthTickRate, float healthTickDamage)
         {
-            while (true)
+            while (!Health.IsDead)
             {
-                yield return new WaitUntil(() => CanDepleteHunger);
-
                 if (Hunger <= 0)
                 {
                     Health.TakeDamage(healthTickDamage);

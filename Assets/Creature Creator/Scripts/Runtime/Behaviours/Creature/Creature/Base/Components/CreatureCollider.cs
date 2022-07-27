@@ -6,6 +6,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor), typeof(CapsuleCollider))]
+    [RequireComponent(typeof(CreatureSpawner))]
     public class CreatureCollider : MonoBehaviour
     {
         #region Fields
@@ -17,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
+        public CreatureSpawner Spawner { get; private set; }
 
         public float Radius => capsule.radius;
         public float Height => capsule.height;
@@ -34,10 +36,11 @@ namespace DanielLochner.Assets.CreatureCreator
             capsule = GetComponent<CapsuleCollider>();
 
             Constructor = GetComponent<CreatureConstructor>();
+            Spawner = GetComponent<CreatureSpawner>();
         }
         private void Setup()
         {
-            Constructor.OnConstructCreature += delegate ()
+            Constructor.OnConstructCreature += delegate
             {
                 UpdateCollider();
             };

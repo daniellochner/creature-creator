@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Hunger.OnHungerChanged += InformHunger;
             Age.OnAgeChanged += InformAge;
 
-            Constructor.OnConstructCreature += Respawn;
+            Constructor.OnConstructCreature += Capture;
         }
 
         private void InformHealth(float health)
@@ -66,7 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Information.Age = age;
         }
 
-        public void Respawn()
+        public void Capture()
         {
             Information.Reset();
 

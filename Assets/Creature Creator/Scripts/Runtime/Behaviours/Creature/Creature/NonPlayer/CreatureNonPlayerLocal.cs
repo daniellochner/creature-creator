@@ -7,5 +7,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CreatureNonPlayerLocal : CreatureNonPlayer
     {
+        public override void Setup()
+        {
+            base.Setup();
+            Spawner.Spawn();
+        }
     }
 }

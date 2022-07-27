@@ -19,6 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureAge))]
     [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureInformer))]
+    [RequireComponent(typeof(CreatureSpawner))]
     [RequireComponent(typeof(PlayerEffects))]
     public class CreatureBase : NetworkBehaviour
     {
@@ -36,6 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureAge age;
         [SerializeField] private CreatureHider hider;
         [SerializeField] private CreatureInformer informer;
+        [SerializeField] private CreatureSpawner spawner;
         #endregion
 
         #region Properties
@@ -51,6 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAge Age => age;
         public CreatureHider Hider => hider;
         public CreatureInformer Informer => informer;
+        public CreatureSpawner Spawner => spawner;
         public PlayerEffects Effects => effects;
         #endregion
 
@@ -71,6 +74,7 @@ namespace DanielLochner.Assets.CreatureCreator
             age = GetComponent<CreatureAge>();
             hider = GetComponent<CreatureHider>();
             informer = GetComponent<CreatureInformer>();
+            spawner = GetComponent<CreatureSpawner>();
         }
 #endif
 
