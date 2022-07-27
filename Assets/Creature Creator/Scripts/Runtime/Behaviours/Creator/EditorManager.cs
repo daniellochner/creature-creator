@@ -56,6 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
+        [SerializeField] private CanvasGroup spawnedCanvasGroup;
         [SerializeField] private CreatureInformationMenu informationMenu;
 
         [Header("Paint")]
@@ -109,9 +110,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 isEditing = value;
 
                 optionsSideMenu.Close();
-                
+
                 StartCoroutine(paginationCanvasGroup.Fade(isEditing, 0.25f));
                 StartCoroutine(optionsCanvasGroup.Fade(isEditing, 0.25f));
+                StartCoroutine(spawnedCanvasGroup.Fade(!isEditing, 0.25f));
 
                 if (isEditing) UpdateLoadableCreatures();
             }
@@ -1126,23 +1128,17 @@ namespace DanielLochner.Assets.CreatureCreator
         private void PerformOperation(UnityAction operation, bool restructure = false)
         {
             // Record current state.
-            float yRotation = Creature.Constructor.Body.localEulerAngles.y;
             bool isMovable = Creature.Mover.IsMovable;
             bool isAnimated = Creature.Animator.IsAnimated;
 
             // Reset to default state.
-            Creature.Constructor.Body.localRotation = Quaternion.identity;
+            Creature.transform.position = Creature.Mover.Platform.transform.position;
             Creature.Constructor.Root.localPosition = Vector3.zero;
-            //if (restructure) // No longer necessary. Use CreatureCloner instead.
-            //{
-            //    player.Creature.Mover.IsMovable = player.Creature.Animator.IsAnimated = false;
-            //}
 
             // Perform operation.
             operation();
 
             // Restore to previous state.
-            Creature.Constructor.Body.localRotation = Quaternion.Euler(0, yRotation, 0);
             Creature.Constructor.IsTextured = Creature.Constructor.IsTextured;
             Creature.Editor.IsEditing = Creature.Editor.IsEditing;
             Creature.Mover.IsMovable = isMovable;

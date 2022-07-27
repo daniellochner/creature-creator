@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(CreatureConstructor))]
-    [RequireComponent(typeof(CreatureEffector))]
+    [RequireComponent(typeof(PlayerEffects))]
     [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(AnimatorParams))]
     public class CreatureAnimator : MonoBehaviour
@@ -36,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Transform Rig => rig;
 
         public CreatureConstructor Constructor { get; private set; }
-        public CreatureEffector Effector { get; private set; }
+        public PlayerEffects Effector { get; private set; }
         public Animator Animator { get; private set; }
         public KinematicVelocity Velocity { get; private set; }
         public AnimatorParams Params { get; private set; }
@@ -106,7 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
             Constructor = GetComponent<CreatureConstructor>();
-            Effector = GetComponent<CreatureEffector>();
+            Effector = GetComponent<PlayerEffects>();
             Velocity = GetComponent<KinematicVelocity>();
             Params = GetComponent<AnimatorParams>();
 

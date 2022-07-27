@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureHider : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
+        [SerializeField] private NetworkVariable<bool> isEditing = new NetworkVariable<bool>();
         #endregion
 
         #region Properties
@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnShow { get; set; }
         public Action OnHide { get; set; }
 
-        public bool IsHidden => isHidden.Value;
+        public bool IsEditing => isEditing.Value;
         #endregion
 
         #region Methods
@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                if (!IsHidden)
+                if (!IsEditing)
                 {
                     RequestShow();
                 }
@@ -60,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void ShowServerRpc(string creatureData)
         {
             ShowClientRpc(creatureData);
-            isHidden.Value = false;
+            isEditing.Value = false;
         }
         [ClientRpc]
         private void ShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
@@ -82,7 +82,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void HideServerRpc()
         {
             HideClientRpc();
-            isHidden.Value = true;
+            isEditing.Value = true;
         }
         [ClientRpc]
         private void HideClientRpc()

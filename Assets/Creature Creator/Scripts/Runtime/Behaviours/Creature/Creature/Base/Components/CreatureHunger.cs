@@ -9,6 +9,7 @@ using System.Collections;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureHealth))]
+    [RequireComponent(typeof(CreatureHider))]
     public class CreatureHunger : NetworkBehaviour
     {
         #region Fields
@@ -23,8 +24,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public Action<float> OnHungerChanged { get; set; }
-        public bool DepleteHunger { get; set; } = true;
         public CreatureHealth Health { get; private set; }
+        public CreatureHider Hider { get; private set; }
+
+        public bool CanDepleteHunger
+        {
+            get => !Health.IsDead && !Hider.IsEditing;
+        }
 
         public float Hunger
         {
@@ -47,14 +53,13 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Health = GetComponent<CreatureHealth>();
+            Hider = GetComponent<CreatureHider>();
         }
         private void Start()
         {
             hunger.OnValueChanged += UpdateHunger;
             hunger.SetDirty(true);
-        }
-        private void OnEnable()
-        {
+
             if (IsServer)
             {
                 if (hungerDepletingCoroutine != null)
@@ -78,17 +83,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator HungerDepletionRoutine(float hungerDepletionRate, float healthTickRate, float healthTickDamage)
         {
-            while (!Health.IsDead && DepleteHunger)
+            while (true)
             {
-                yield return new WaitForSeconds(1f);
-                Hunger -= hungerDepletionRate;
+                yield return new WaitUntil(() => CanDepleteHunger);
 
                 if (Hunger <= 0)
                 {
                     Health.TakeDamage(healthTickDamage);
                     yield return new WaitForSeconds(1f / healthTickRate);
                 }
-                else yield return null;
+                else
+                {
+                    Hunger -= hungerDepletionRate;
+                    yield return new WaitForSeconds(1f);
+                }
             }
         }
         #endregion

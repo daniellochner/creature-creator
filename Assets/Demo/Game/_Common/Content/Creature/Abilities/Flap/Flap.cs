@@ -11,10 +11,10 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         [Header("Flap")]
         [SerializeField] private float flapForce;
-        [SerializeField] private CreatureEffector.Sound[] flapSounds;
+        [SerializeField] private PlayerEffects.Sound[] flapSounds;
 
         private CreatureAnimator creatureAnimator;
-        private CreatureEffector creatureEffector;
+        private PlayerEffects creatureEffector;
         private Rigidbody rigidbody;
 
         public override void Setup(CreatureAbilities creatureAbilities)
@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             base.Setup(creatureAbilities);
 
             creatureAnimator = creatureAbilities.GetComponent<CreatureAnimator>();
-            creatureEffector = creatureAbilities.GetComponent<CreatureEffector>();
+            creatureEffector = creatureAbilities.GetComponent<PlayerEffects>();
             rigidbody = creatureAbilities.GetComponent<Rigidbody>();
         }
         public override void OnPerform()

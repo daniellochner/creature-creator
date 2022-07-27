@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Hider.OnHide += OnHide;
             Hider.OnShow += OnShow;
             
-            if (Hider.IsHidden)
+            if (Hider.IsEditing)
             {
                 OnHide();
             }

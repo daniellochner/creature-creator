@@ -21,14 +21,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Rolling : BaseState
         {
             [SerializeField] private float rollTime;
-            [SerializeField] private CreatureEffector.Sound[] squealSounds;
+            [SerializeField] private PlayerEffects.Sound[] squealSounds;
             private float rollTimeLeft;
 
             private PigAI PigAI => StateMachine as PigAI;
 
             public override void Enter()
             {
-                PigAI.Creature.Effector.PlaySound(squealSounds);
+                PigAI.Creature.Effects.PlaySound(squealSounds);
                 PigAI.Params.SetTrigger("Body_Roll");
             }
             public override void UpdateLogic()

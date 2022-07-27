@@ -55,7 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void InformHealth(float health)
         {
-            Information.Health = Mathf.InverseLerp(Health.MinMaxHealth.min, Health.MinMaxHealth.max, health);
+            Information.Health = Health.HealthPercentage;
         }
         private void InformHunger(float hunger)
         {

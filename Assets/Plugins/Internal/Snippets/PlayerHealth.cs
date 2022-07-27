@@ -7,14 +7,12 @@ namespace DanielLochner.Assets
     public class PlayerHealth : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private MinMax minMaxHealth = new MinMax(0f, 100f);
+        [SerializeField] private float maxHealth = 100f;
         [Space]
         [SerializeField] private NetworkVariable<float> health = new NetworkVariable<float>(100);
         #endregion
 
         #region Properties
-        public MinMax MinMaxHealth => minMaxHealth;
-
         public float Health
         {
             get => health.Value;
@@ -22,7 +20,7 @@ namespace DanielLochner.Assets
             {
                 if (IsServer)
                 {
-                    health.Value = Mathf.Clamp(value, minMaxHealth.min, minMaxHealth.max);
+                    health.Value = Mathf.Clamp(value, 0f, maxHealth);
                 }
                 else
                 {
@@ -32,8 +30,8 @@ namespace DanielLochner.Assets
         }
         public float HealthPercentage
         {
-            get => Mathf.InverseLerp(minMaxHealth.min, minMaxHealth.max, Health);
-            set => Health = Mathf.Lerp(minMaxHealth.min, minMaxHealth.max, value);
+            get => Mathf.InverseLerp(0f, maxHealth, Health);
+            set => Health = Mathf.Lerp(0f, maxHealth, value);
         }
 
         public Action<float> OnHealthChanged { get; set; }
@@ -60,23 +58,22 @@ namespace DanielLochner.Assets
         public virtual void TakeDamage(float damage)
         {
             if (IsDead) return;
-
+            
             Health -= damage;
             OnTakeDamage?.Invoke(damage);
 
-            if (Health <= minMaxHealth.min)
+            if (Health <= 0f)
             {
                 Die();
             }
         }
         public virtual void Die()
         {
-            if (IsDead) return;
             OnDie?.Invoke();
         }
         public virtual void Respawn()
         {
-            Health = minMaxHealth.max;
+            Health = maxHealth;
             OnRespawn?.Invoke();
         }
 
@@ -94,7 +91,7 @@ namespace DanielLochner.Assets
         [ContextMenu("Take Damage")]
         private void TakeRandomDamage()
         {
-            TakeDamage(minMaxHealth.Random);
+            TakeDamage(UnityEngine.Random.Range(0f, maxHealth));
         }
         #endregion
     }

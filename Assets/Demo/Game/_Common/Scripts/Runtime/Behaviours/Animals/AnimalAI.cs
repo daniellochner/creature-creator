@@ -85,7 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             [SerializeField] private MinMax ambientCooldown;
             [SerializeField] private MinMax actionCooldown;
-            [SerializeField] private CreatureEffector.Sound[] ambientSounds;
+            [SerializeField] private PlayerEffects.Sound[] ambientSounds;
             [SerializeField] private string[] actions;
             protected float silentTimeLeft, actionTimeLeft;
 
@@ -114,14 +114,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             private IEnumerator MakeSoundRoutine()
             {
-                CreatureEffector.Sound sound = ambientSounds[UnityEngine.Random.Range(0, ambientSounds.Length)];
+                PlayerEffects.Sound sound = ambientSounds[UnityEngine.Random.Range(0, ambientSounds.Length)];
 
                 // Open
                 AnimalAI.Params.SetBool("Mouth_IsOpen", true);
-                AnimalAI.Creature.Effector.PlaySound(sound.name, sound.volume);
+                AnimalAI.Creature.Effects.PlaySound(sound.name, sound.volume);
 
                 // Hold (to make the sound)...
-                yield return new WaitForSeconds(AnimalAI.Creature.Effector.SoundFX[sound.name].length);
+                yield return new WaitForSeconds(AnimalAI.Creature.Effects.SoundFX[sound.name].length);
 
                 // Close
                 AnimalAI.Params.SetBool("Mouth_IsOpen", false);

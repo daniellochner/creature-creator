@@ -3,12 +3,13 @@
 
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(AudioSource))]
-    public class CreatureEffector : MonoBehaviour
+    public class PlayerEffects : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private SerializableDictionaryBase<string, AudioClip> soundFX;
@@ -41,16 +42,34 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void PlaySound(string sound, float volume = 1f)
         {
+            PlaySoundServerRpc(sound, volume);
+        }
+        [ServerRpc]
+        private void PlaySoundServerRpc(string sound, float volume)
+        {
             if (!soundFX.ContainsKey(sound)) return;
-
+            PlaySoundClientRpc(sound, volume);
+        }
+        [ClientRpc]
+        private void PlaySoundClientRpc(string sound, float volume)
+        {
             audioSource.PlayOneShot(soundFX[sound], volume);
             OnPlaySound?.Invoke(sound);
         }
 
         public void SpawnParticle(string particle, Vector3 position)
         {
+            SpawnParticleServerRpc(particle, position);
+        }
+        [ServerRpc]
+        private void SpawnParticleServerRpc(string particle, Vector3 position)
+        {
             if (!particleFX.ContainsKey(particle)) return;
-
+            SpawnParticleClientRpc(particle, position);
+        }
+        [ClientRpc]
+        private void SpawnParticleClientRpc(string particle, Vector3 position)
+        {
             Instantiate(particleFX[particle], position, Quaternion.identity, Dynamic.Transform);
             OnSpawnParticle?.Invoke(particle, position);
         }

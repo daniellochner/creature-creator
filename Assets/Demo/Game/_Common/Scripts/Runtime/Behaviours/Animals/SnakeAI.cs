@@ -46,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private MinMax strikeCooldown;
             [SerializeField] private float strikeRadius;
             [SerializeField] private MinMax strikeDamage;
-            [SerializeField] private CreatureEffector.Sound[] strikeSounds;
+            [SerializeField] private PlayerEffects.Sound[] strikeSounds;
             private Coroutine strikeCoroutine;
             private bool hasDealtDamage;
 
@@ -97,7 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void OnBite(MouthAnimator mouth)
             {
-                SnakeAI.Creature.Effector.PlaySound(strikeSounds);
+                SnakeAI.Creature.Effects.PlaySound(strikeSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, strikeRadius);

@@ -67,12 +67,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Barking : Targeting
         {
             [SerializeField] private float growlTime;
-            [SerializeField] private CreatureEffector.Sound[] growlSounds;
+            [SerializeField] private PlayerEffects.Sound[] growlSounds;
             [Space]
             [SerializeField] private MinMax barkDelayBetween;
             [SerializeField] private MinMax barkDelayWithin;
             [SerializeField] private MinMaxInt barkCount;
-            [SerializeField] private CreatureEffector.Sound[] barkSounds;
+            [SerializeField] private PlayerEffects.Sound[] barkSounds;
             private Coroutine barkingCoroutine;
 
             public DogAI DogAI => StateMachine as DogAI;
@@ -95,7 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
             private IEnumerator BarkingRoutine()
             {
                 DogAI.Params.SetBool("Eye_IsGlaring", true);
-                DogAI.Creature.Effector.PlaySound(growlSounds);
+                DogAI.Creature.Effects.PlaySound(growlSounds);
                 yield return new WaitForSeconds(growlTime);
                 DogAI.Params.SetBool("Eye_IsGlaring", false);
 
@@ -112,7 +112,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 int barks = barkCount.Random;
                 for (int i = 0; i < barks; i++)
                 {
-                    DogAI.Creature.Effector.PlaySound(barkSounds);
+                    DogAI.Creature.Effects.PlaySound(barkSounds);
                     DogAI.Params.SetTrigger("Mouth_Bark");
                     yield return new WaitForSeconds(barkDelayWithin.Random);
                 }
@@ -123,14 +123,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Scurrying : BaseState
         {
             [SerializeField] public GameObject doghouse;
-            [SerializeField] private CreatureEffector.Sound[] whimperSounds;
+            [SerializeField] private PlayerEffects.Sound[] whimperSounds;
 
             public DogAI DogAI => StateMachine as DogAI;
 
             public override void Enter()
             {
                 DogAI.Agent.SetDestination(doghouse.transform.position);
-                DogAI.Creature.Effector.PlaySound(whimperSounds);
+                DogAI.Creature.Effects.PlaySound(whimperSounds);
             }
             public override void UpdateLogic()
             {
@@ -179,7 +179,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private MinMax biteDelay;
             [SerializeField] private float biteRadius;
             [SerializeField] private MinMax biteDamage;
-            [SerializeField] private CreatureEffector.Sound[] biteSounds;
+            [SerializeField] private PlayerEffects.Sound[] biteSounds;
             private Coroutine bitingCoroutine;
             private bool hasDealtDamage;
 
@@ -239,7 +239,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void OnBite(MouthAnimator mouth)
             {
-                DogAI.Creature.Effector.PlaySound(biteSounds);
+                DogAI.Creature.Effects.PlaySound(biteSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);

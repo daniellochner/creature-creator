@@ -13,13 +13,13 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureCloner))]
     [RequireComponent(typeof(CreaturePhotographer))]
     [RequireComponent(typeof(CreatureKiller))]
-    [RequireComponent(typeof(CreatureEffector))]
     [RequireComponent(typeof(CreatureScaler))]
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureHunger))]
     [RequireComponent(typeof(CreatureAge))]
     [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureInformer))]
+    [RequireComponent(typeof(PlayerEffects))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureCloner cloner;
         [SerializeField] private CreaturePhotographer photographer;
         [SerializeField] private CreatureKiller killer;
-        [SerializeField] private CreatureEffector effector;
+        [SerializeField] private PlayerEffects effects;
         [SerializeField] private CreatureScaler scaler;
         [SerializeField] private CreatureHealth health;
         [SerializeField] private CreatureHunger hunger;
@@ -45,13 +45,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureCloner Cloner => cloner;
         public CreaturePhotographer Photographer => photographer;
         public CreatureKiller Killer => killer;
-        public CreatureEffector Effector => effector;
         public CreatureScaler Scaler => scaler;
         public CreatureHealth Health => health;
         public CreatureHunger Hunger => hunger;
         public CreatureAge Age => age;
         public CreatureHider Hider => hider;
         public CreatureInformer Informer => informer;
+        public PlayerEffects Effects => effects;
         #endregion
 
         #region Methods
@@ -64,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
             photographer = GetComponent<CreaturePhotographer>();
             cloner = GetComponent<CreatureCloner>();
             killer = GetComponent<CreatureKiller>();
-            effector = GetComponent<CreatureEffector>();
+            effects = GetComponent<PlayerEffects>();
             scaler = GetComponent<CreatureScaler>();
             health = GetComponent<CreatureHealth>();
             hunger = GetComponent<CreatureHunger>();

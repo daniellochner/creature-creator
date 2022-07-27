@@ -8,12 +8,14 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureMover))]
+    [RequireComponent(typeof(CreatureAnimator))]
     public class CreatureRespawner : MonoBehaviour
     {
         #region Properties
         public CreatureHealth Health { get; private set; }
         public CreatureInformer Informer { get; private set; }
         public CreatureMover Mover { get; private set; }
+        public CreatureAnimator Animator { get; private set; }
         #endregion
 
         #region Methods
@@ -22,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Health = GetComponent<CreatureHealth>();
             Informer = GetComponent<CreatureInformer>();
             Mover = GetComponent<CreatureMover>();
+            Animator = GetComponent<CreatureAnimator>();
         }
 
         private void Start()
@@ -44,6 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Respawn()
         {
             Mover.Teleport(Mover.Platform);
+            Animator.IsAnimated = true;
 
             EditorManager.Instance.IsVisible = true;
         }
