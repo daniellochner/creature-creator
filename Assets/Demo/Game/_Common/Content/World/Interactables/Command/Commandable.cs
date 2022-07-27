@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -19,13 +20,22 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         protected override void OnInteract(Interactor interactor)
         {
-            if (animalAI.FollowTarget == null)
+            CommandServerRpc(interactor.NetworkObject);
+        }
+
+        [ServerRpc]
+        private void CommandServerRpc(NetworkObjectReference commander)
+        {
+            if (commander.TryGet(out NetworkObject obj))
             {
-                animalAI.Follow(interactor.transform);
-            }
-            else
-            {
-                animalAI.StopFollowing();
+                if (animalAI.GetState<AnimalAI.Following>("FOL").Target == null)
+                {
+                    animalAI.Follow(obj.transform);
+                }
+                else
+                {
+                    animalAI.StopFollowing();
+                }
             }
         }
     }

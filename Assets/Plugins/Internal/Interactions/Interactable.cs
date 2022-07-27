@@ -1,11 +1,12 @@
 // Interactions
 // Copyright (c) Daniel Lochner
 
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public abstract class Interactable : MonoBehaviour
+    public abstract class Interactable : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private Texture2D cursor;

@@ -51,6 +51,10 @@ namespace DanielLochner.Assets
         {
             return States.Find(x => x.ID == id);
         }
+        public T GetState<T>(string id) where T : BaseState
+        {
+            return GetState(id) as T;
+        }
         #endregion
     }
 }

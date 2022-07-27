@@ -24,7 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         protected CreatureNonPlayerLocal Creature { get; set; }
         protected NavMeshAgent Agent { get; set; }
-        public Transform FollowTarget { get; set; }
 
         public bool CanFollow
         {
@@ -62,13 +61,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Follow(Transform target)
         {
-            FollowTarget = target;
+            GetState<Following>("FOL").Target = target;
             ChangeState("FOL");
         }
         public virtual void StopFollowing()
         {
             ChangeState(startStateID);
-            FollowTarget = null;
+            GetState<Following>("FOL").Target = null;
         }
 
         #region Debug
@@ -182,6 +181,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private UnityEvent onStopFollowing;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
+            public Transform Target { get; set; }
 
             private float FollowOffset => AnimalAI.Creature.Constructor.Dimensions.radius + baseFollowOffset;
 
@@ -191,7 +191,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                Vector3 displacement = AnimalAI.FollowTarget.position - AnimalAI.transform.position;
+                Vector3 displacement = Target.position - AnimalAI.transform.position;
                 if (displacement.magnitude > FollowOffset)
                 {
                     Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target

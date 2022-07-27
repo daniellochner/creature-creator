@@ -1,11 +1,12 @@
 // Interactions
 // Copyright (c) Daniel Lochner
 
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class Interactor : MonoBehaviour
+    public class Interactor : NetworkBehaviour
     {
         #region Fields
         [SerializeField] protected Camera interactionCamera;
