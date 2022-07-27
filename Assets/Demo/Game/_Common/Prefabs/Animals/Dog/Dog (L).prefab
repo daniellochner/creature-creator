@@ -358,7 +358,6 @@ MonoBehaviour:
   - rid: 5
   data: {fileID: 4900000, guid: ed8fba822f388034eb2051a30201ed4d, type: 3}
   trackRegion: {fileID: 4190061369862593315}
-  lookAtSmoothing: 5
   references:
     version: 2
     RefIds:
@@ -387,6 +386,8 @@ MonoBehaviour:
       data:
         id: BAR
         sm: {fileID: 3650349913116807016}
+        trackRegion: {fileID: 4190061369862593315}
+        lookAtSmoothing: 5
         growlTime: 2.5
         growlSounds:
         - name: Growl
@@ -422,6 +423,8 @@ MonoBehaviour:
       data:
         id: BIT
         sm: {fileID: 3650349913116807016}
+        trackRegion: {fileID: 4190061369862593315}
+        lookAtSmoothing: 5
         biteOffset: 0.25
         minBiteAngle: 5
         biteDelay:
@@ -461,6 +464,60 @@ MonoBehaviour:
         id: FOL
         sm: {fileID: 3650349913116807016}
         baseFollowOffset: 2
+        onFollow:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 6056829754851948199}
+              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+            - m_Target: {fileID: 8965460404567173139}
+              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        onStopFollowing:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 6056829754851948199}
+              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 1
+              m_CallState: 2
+            - m_Target: {fileID: 8965460404567173139}
+              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 1
+              m_CallState: 2
 --- !u!195 &3650349913116807017
 NavMeshAgent:
   m_ObjectHideFlags: 0

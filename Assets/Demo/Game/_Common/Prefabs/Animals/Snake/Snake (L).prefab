@@ -275,12 +275,12 @@ MonoBehaviour:
   effector: {fileID: 450029449961799635}
   scaler: {fileID: 312566580317639819}
   health: {fileID: 8166530411756370019}
-  energy: {fileID: 109211908835394834}
+  hunger: {fileID: 109211908835394834}
   age: {fileID: 2196639755667890052}
   hider: {fileID: 7355554444003876393}
   informer: {fileID: 689798176256724837}
   selectable: {fileID: 1962287229178218075}
-  energyDepleter: {fileID: 2304548901012607124}
+  hungerDepleter: {fileID: 2304548901012607124}
   ager: {fileID: 2304548901012607125}
   ai: {fileID: 2304548901012607126}
 --- !u!114 &2304548901012607124
@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1520f526054cee34c8c9548b84e1abb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyDepletionRate: 0.00083333335
+  hungerDepletionRate: 0.00083333335
   healthTickRate: 1
   healthTickDamage: 5
 --- !u!114 &2304548901012607125
@@ -359,6 +359,7 @@ MonoBehaviour:
       data:
         id: STR
         sm: {fileID: 2304548901012607126}
+        trackRegion: {fileID: 464128767}
         lookAtSmoothing: 5
         maxStrikeDistance: 4
         minStrikeAngle: 5
@@ -371,6 +372,36 @@ MonoBehaviour:
         id: FOL
         sm: {fileID: 2304548901012607126}
         baseFollowOffset: 2
+        onFollow:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 464128768}
+              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        onStopFollowing:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 464128768}
+              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 1
+              m_CallState: 2
 --- !u!195 &2304548901012607127
 NavMeshAgent:
   m_ObjectHideFlags: 0

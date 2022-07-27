@@ -12,9 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] protected TrackRegion trackRegion;
-        [SerializeField] private float lookAtSmoothing;
-        protected CreatureBase target;
-        protected Vector3 lookDir;
         #endregion
 
         #region Methods
@@ -51,23 +48,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private void UpdateTarget()
-        {
-            Transform nearest = trackRegion.Nearest.transform;
-            if (target == null || target.transform != nearest)
-            {
-                target = nearest.GetComponent<CreatureBase>();
-            }
-        }
-        private void HandleLookAt()
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), lookAtSmoothing * Time.deltaTime);
-        }
-        private void UpdateLookDir()
-        {
-            lookDir = Vector3.ProjectOnPlane(target.transform.position - transform.position, transform.up).normalized;
-        }
-
         private bool HasWeapon(CreatureBase creature)
         {
             foreach (BodyPartConstructor bpc in creature.Constructor.BodyParts)
@@ -84,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Nested
         [Serializable]
-        public class Barking : BaseState
+        public class Barking : Targeting
         {
             [SerializeField] private float growlTime;
             [SerializeField] private CreatureEffector.Sound[] growlSounds;
@@ -99,13 +79,13 @@ namespace DanielLochner.Assets.CreatureCreator
             
             public override void Enter()
             {
-                DogAI.UpdateTarget();
+                UpdateTarget();
                 barkingCoroutine = DogAI.StartCoroutine(BarkingRoutine());
             }
             public override void UpdateLogic()
             {
-                DogAI.UpdateLookDir();
-                DogAI.HandleLookAt();
+                UpdateLookDir();
+                HandleLookAt();
             }
             public override void Exit()
             {
@@ -124,7 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     yield return DogAI.StartCoroutine(BarkRoutine());
                     yield return new WaitForSeconds(barkDelayBetween.Random);
 
-                    DogAI.UpdateTarget();
+                    UpdateTarget();
                 }
             }
             private IEnumerator BarkRoutine()
@@ -192,7 +172,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [Serializable]
-        public class Biting : BaseState
+        public class Biting : Targeting
         {
             [SerializeField] private float biteOffset;
             [SerializeField] private float minBiteAngle;
@@ -205,7 +185,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public DogAI DogAI => StateMachine as DogAI;
 
-            private float TargetDistance => DogAI.Creature.Constructor.Dimensions.radius + DogAI.target.Constructor.Dimensions.radius;
+            private float TargetDistance => DogAI.Creature.Constructor.Dimensions.radius + target.Constructor.Dimensions.radius;
             
             public override void Enter()
             {
@@ -216,14 +196,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!DogAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
                 {
-                    DogAI.UpdateLookDir();
+                    UpdateLookDir();
 
-                    Vector3 offset = DogAI.lookDir * TargetDistance;
-                    DogAI.Agent.SetDestination(DogAI.target.transform.position - offset);
+                    Vector3 offset = lookDir * TargetDistance;
+                    DogAI.Agent.SetDestination(target.transform.position - offset);
 
                     if (!DogAI.IsMovingToPosition)
                     {
-                        DogAI.HandleLookAt();
+                        HandleLookAt();
                     }
                 }
             }
@@ -241,14 +221,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     float angle = Mathf.Infinity, distance = Mathf.Infinity;
                     while (angle > minBiteAngle || distance > (TargetDistance + biteOffset))
                     {
-                        DogAI.UpdateTarget();
-                        angle = Vector3.Angle(DogAI.transform.forward, DogAI.lookDir);
-                        distance = Vector3.Distance(DogAI.target.transform.position, DogAI.transform.position);
+                        UpdateTarget();
+                        angle = Vector3.Angle(DogAI.transform.forward, lookDir);
+                        distance = Vector3.Distance(target.transform.position, DogAI.transform.position);
                         yield return null;
                     }
 
                     // Strike!
-                    float d = Vector3.Distance(DogAI.target.transform.position, DogAI.transform.position);
+                    float d = Vector3.Distance(target.transform.position, DogAI.transform.position);
                     DogAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Wait...

@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -177,11 +178,17 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Following : BaseState
         {
             [SerializeField] private float baseFollowOffset;
+            [SerializeField] private UnityEvent onFollow;
+            [SerializeField] private UnityEvent onStopFollowing;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
             private float FollowOffset => AnimalAI.Creature.Constructor.Dimensions.radius + baseFollowOffset;
 
+            public override void Enter()
+            {
+                onFollow.Invoke();
+            }
             public override void UpdateLogic()
             {
                 Vector3 displacement = AnimalAI.FollowTarget.position - AnimalAI.transform.position;
@@ -191,6 +198,36 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 target = AnimalAI.transform.position + (displacement - offset);
                     AnimalAI.Agent.SetDestination(target);
                 }
+            }
+            public override void Exit()
+            {
+                onStopFollowing.Invoke();
+            }
+        }
+
+        public class Targeting : BaseState
+        {
+            [SerializeField] private TrackRegion trackRegion;
+            [SerializeField] private float lookAtSmoothing;
+
+            protected CreatureBase target;
+            protected Vector3 lookDir;
+
+            protected void UpdateTarget()
+            {
+                Transform nearest = trackRegion.Nearest.transform;
+                if (target == null || target.transform != nearest)
+                {
+                    target = nearest.GetComponent<CreatureBase>();
+                }
+            }
+            protected void HandleLookAt()
+            {
+                StateMachine.transform.rotation = Quaternion.Slerp(StateMachine.transform.rotation, Quaternion.LookRotation(lookDir), lookAtSmoothing * Time.deltaTime);
+            }
+            protected void UpdateLookDir()
+            {
+                lookDir = Vector3.ProjectOnPlane(target.transform.position - StateMachine.transform.position, StateMachine.transform.up).normalized;
             }
         }
         #endregion

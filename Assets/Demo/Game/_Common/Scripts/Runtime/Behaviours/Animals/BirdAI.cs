@@ -10,10 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class BirdAI : AnimalAI
     {
-        #region Fields
-        [SerializeField] private SphereCollider frightenTrigger;
-        #endregion
-
         #region Methods
         public void Frighten(Collider col)
         {
@@ -22,19 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ChangeState("FLY");
             }
-        }
-
-        public override void Follow(Transform target)
-        {
-            base.Follow(target);
-            Agent.enabled = true;
-            frightenTrigger.enabled = false;
-        }
-        public override void StopFollowing()
-        {
-            base.StopFollowing();
-            Agent.enabled = false;
-            frightenTrigger.enabled = true;
         }
         #endregion
 

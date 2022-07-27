@@ -33,36 +33,17 @@ namespace DanielLochner.Assets.CreatureCreator
                     ChangeState("WAN");
                 }
             };
-
-            foreach (DampedTransform dt in GetComponentsInChildren<DampedTransform>())
-            {
-                dt.weight = 0.1f;
-            }
-        }
-
-        public override void Follow(Transform target)
-        {
-            base.Follow(target);
-            trackRegion.enabled = false;
-        }
-        public override void StopFollowing()
-        {
-            base.StopFollowing();
-            trackRegion.enabled = true;
         }
         #endregion
 
         #region Nested
         [Serializable]
-        public class Striking : BaseState
+        public class Striking : Targeting
         {
-            [SerializeField] private float lookAtSmoothing;
             [SerializeField] private float maxStrikeDistance;
             [SerializeField] private float minStrikeAngle;
             [SerializeField] private MinMax strikeCooldown;
             private Coroutine strikeCoroutine;
-            private CreatureBase target;
-            private Vector3 lookDir;
 
             public SnakeAI SnakeAI => StateMachine as SnakeAI;
 
@@ -81,23 +62,6 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 SnakeAI.StopCoroutine(strikeCoroutine);
-            }
-
-            private void UpdateTarget()
-            {
-                Transform nearest = SnakeAI.trackRegion.Nearest.transform;
-                if (target == null || target.transform != nearest)
-                {
-                    target = nearest.GetComponent<CreatureBase>();
-                }
-            }
-            private void HandleLookAt()
-            {
-                SnakeAI.transform.rotation = Quaternion.Slerp(SnakeAI.transform.rotation, Quaternion.LookRotation(lookDir), lookAtSmoothing * Time.deltaTime);
-            }
-            private void UpdateLookDir()
-            {
-                lookDir = Vector3.ProjectOnPlane(target.transform.position - SnakeAI.transform.position, SnakeAI.transform.up).normalized;
             }
 
             private IEnumerator StrikingRoutine()

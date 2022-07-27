@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CowAI : AnimalAI
     {
         #region Fields
-        [SerializeField] protected TrackRegion trackRegion;
+        [SerializeField] private TrackRegion trackRegion;
         #endregion
 
         #region Methods
