@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string name = "Unnamed";
         [SerializeField] private Texture2D photo = null;
         [SerializeField, Range(0, 1)] private float health = 1f;
-        [SerializeField, Range(0, 1)] private float energy = 1f;
+        [SerializeField, Range(0, 1)] private float hunger = 1f;
         [SerializeField] private int age = 0; // Lifetime (in seconds) since construction.
         #endregion
 
@@ -33,10 +33,10 @@ namespace DanielLochner.Assets.CreatureCreator
             get => health;
             set => health = Mathf.Clamp01(value);
         }
-        public float Energy
+        public float Hunger
         {
-            get => energy;
-            set => energy = Mathf.Clamp01(value);
+            get => hunger;
+            set => hunger = Mathf.Clamp01(value);
         }
         public int Age
         {
@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
             name = "Unnamed";
             photo = null;
             health = 1f;
-            energy = 1f;
+            hunger = 1f;
             age = 0;
         }
         #endregion

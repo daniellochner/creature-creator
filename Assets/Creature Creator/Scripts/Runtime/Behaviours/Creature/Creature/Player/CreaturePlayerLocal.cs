@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureEnergyDepleter))]
+    [RequireComponent(typeof(CreatureHungerDepleter))]
     [RequireComponent(typeof(CreatureAger))]
     [RequireComponent(typeof(CreatureCamera))]
     public class CreaturePlayerLocal : CreaturePlayer, ISetupable
     {
         #region Fields
-        [SerializeField] private CreatureEnergyDepleter energyDepleter;
+        [SerializeField] private CreatureHungerDepleter energyDepleter;
         [SerializeField] private CreatureAger ager;
 
         [SerializeField] private CreatureEditor editor;
@@ -23,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public CreatureEnergyDepleter EnergyDepleter => energyDepleter;
+        public CreatureHungerDepleter EnergyDepleter => energyDepleter;
         public CreatureAger Ager => ager;
 
         public CreatureEditor Editor => editor;
@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnValidate();
 
-            energyDepleter = GetComponent<CreatureEnergyDepleter>();
+            energyDepleter = GetComponent<CreatureHungerDepleter>();
             ager = GetComponent<CreatureAger>();
 
             editor = GetComponent<CreatureEditor>();

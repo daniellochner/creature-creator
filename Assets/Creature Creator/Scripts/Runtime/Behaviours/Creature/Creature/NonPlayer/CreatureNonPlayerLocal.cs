@@ -5,17 +5,17 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureEnergyDepleter))]
+    [RequireComponent(typeof(CreatureHungerDepleter))]
     [RequireComponent(typeof(CreatureAger))]
     public class CreatureNonPlayerLocal : CreatureNonPlayer
     {
         #region Fields
-        [SerializeField] private CreatureEnergyDepleter energyDepleter;
+        [SerializeField] private CreatureHungerDepleter energyDepleter;
         [SerializeField] private CreatureAger ager;
         #endregion
 
         #region Properties
-        public CreatureEnergyDepleter EnergyDepleter => energyDepleter;
+        public CreatureHungerDepleter EnergyDepleter => energyDepleter;
         public CreatureAger Ager => ager;
         #endregion
 
@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnValidate();
 
-            energyDepleter = GetComponent<CreatureEnergyDepleter>();
+            energyDepleter = GetComponent<CreatureHungerDepleter>();
             ager = GetComponent<CreatureAger>();
         }
 #endif

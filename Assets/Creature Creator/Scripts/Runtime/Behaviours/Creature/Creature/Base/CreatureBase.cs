@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureEffector))]
     [RequireComponent(typeof(CreatureScaler))]
     [RequireComponent(typeof(CreatureHealth))]
-    [RequireComponent(typeof(CreatureEnergy))]
+    [RequireComponent(typeof(CreatureHunger))]
     [RequireComponent(typeof(CreatureAge))]
     [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureInformer))]
@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureEffector effector;
         [SerializeField] private CreatureScaler scaler;
         [SerializeField] private CreatureHealth health;
-        [SerializeField] private CreatureEnergy energy;
+        [SerializeField] private CreatureHunger energy;
         [SerializeField] private CreatureAge age;
         [SerializeField] private CreatureHider hider;
         [SerializeField] private CreatureInformer informer;
@@ -48,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureEffector Effector => effector;
         public CreatureScaler Scaler => scaler;
         public CreatureHealth Health => health;
-        public CreatureEnergy Energy => energy;
+        public CreatureHunger Energy => energy;
         public CreatureAge Age => age;
         public CreatureHider Hider => hider;
         public CreatureInformer Informer => informer;
@@ -67,7 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
             effector = GetComponent<CreatureEffector>();
             scaler = GetComponent<CreatureScaler>();
             health = GetComponent<CreatureHealth>();
-            energy = GetComponent<CreatureEnergy>();
+            energy = GetComponent<CreatureHunger>();
             age = GetComponent<CreatureAge>();
             hider = GetComponent<CreatureHider>();
             informer = GetComponent<CreatureInformer>();

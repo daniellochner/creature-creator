@@ -5,7 +5,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreaturePhotographer))]
     [RequireComponent(typeof(CreatureHealth))]
-    [RequireComponent(typeof(CreatureEnergy))]
+    [RequireComponent(typeof(CreatureHunger))]
     [RequireComponent(typeof(CreatureAge))]
     public class CreatureInformer : MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreaturePhotographer Photographer { get; private set; }
         public CreatureConstructor Constructor { get; private set; }
         public CreatureHealth Health { get; private set; }
-        public CreatureEnergy Energy { get; private set; }
+        public CreatureHunger Hunger { get; private set; }
         public CreatureAge Age { get; private set; }
 
         public CreatureInformation Information => information;
@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Photographer = GetComponent<CreaturePhotographer>();
             Health = GetComponent<CreatureHealth>();
-            Energy = GetComponent<CreatureEnergy>();
+            Hunger = GetComponent<CreatureHunger>();
             Age = GetComponent<CreatureAge>();
         }
 
@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
             informationMenu.Setup(information);
 
             Health.OnHealthChanged += InformHealth;
-            Energy.OnEnergyChanged += InformEnergy;
+            Hunger.OnHungerChanged += InformHunger;
             Age.OnAgeChanged += InformAge;
 
             Constructor.OnConstructCreature += Respawn;
@@ -57,9 +57,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Information.Health = Mathf.InverseLerp(Health.MinMaxHealth.min, Health.MinMaxHealth.max, health);
         }
-        private void InformEnergy(float energy)
+        private void InformHunger(float hunger)
         {
-            Information.Energy = energy;
+            Information.Hunger = hunger;
         }
         private void InformAge(int age)
         {

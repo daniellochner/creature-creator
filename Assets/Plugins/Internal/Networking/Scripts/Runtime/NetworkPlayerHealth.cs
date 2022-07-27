@@ -7,7 +7,7 @@ namespace DanielLochner.Assets
     public class NetworkPlayerHealth : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private NetworkVariable<float> health;
+        [SerializeField] private NetworkVariable<float> health = new NetworkVariable<float>(100);
         #endregion
 
         #region Properties
@@ -22,21 +22,19 @@ namespace DanielLochner.Assets
 
         private void Start()
         {
-            if (IsOwner)
+            if (IsServer)
             {
-                Health.OnHealthChanged += SetHealthServerRpc;
+                Health.OnHealthChanged += delegate (float h)
+                {
+                    health.Value = h;
+                };
             }
             else
             {
                 health.OnValueChanged += UpdateHealth;
             }
         }
-
-        [ServerRpc]
-        private void SetHealthServerRpc(float h)
-        {
-            health.Value = h;
-        }
+        
         private void UpdateHealth(float oldH, float newH)
         {
             Health.Health = newH;

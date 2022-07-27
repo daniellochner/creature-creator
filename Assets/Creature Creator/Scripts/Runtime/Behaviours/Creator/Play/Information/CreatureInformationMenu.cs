@@ -49,7 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             nameAgeText.text = $"<u>{information.Name}</u> ({information.FormattedAge})";
             healthSlider.value = information.Health;
-            energySlider.value = information.Energy;
+            energySlider.value = information.Hunger;
 
             if (information.Photo != null && photoImage.sprite.texture != information.Photo) // Prevents having to recreate the sprite every frame.
             {

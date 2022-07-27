@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureMover))]
-    [RequireComponent(typeof(CreatureEnergyDepleter))]
+    [RequireComponent(typeof(CreatureHungerDepleter))]
     [RequireComponent(typeof(CreatureAger))]
     public class CreatureHealthEditor : MonoBehaviour
     {

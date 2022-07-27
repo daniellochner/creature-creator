@@ -159,10 +159,10 @@ GameObject:
   - component: {fileID: 5405419930534611721}
   - component: {fileID: 9001263530314210148}
   - component: {fileID: 7061764046128142492}
-  - component: {fileID: 7521241912421257359}
   - component: {fileID: 88016231886973403}
   - component: {fileID: -4379882553468307030}
   - component: {fileID: 3710467496790067627}
+  - component: {fileID: 6957859576106576722}
   m_Layer: 0
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -751,31 +751,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHidden:
     m_InternalValue: 0
---- !u!114 &7521241912421257359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb4092417417a144e90c769c650b55ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sendTickRate: 20
-  useInterpolation: 1
-  useThisTransform: 1
-  source: {fileID: 7193793692207522153}
-  sourcePosition: {fileID: 7193793692207522153}
-  sourceRotation: {fileID: 7193793692207522153}
-  target: {fileID: 7193793692207522153}
-  targetPosition: {fileID: 7193793692207522153}
-  targetRotation: {fileID: 7193793692207522153}
-  position:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  rotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &88016231886973403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,6 +791,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6957859576106576722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1 &7193793692236944224
 GameObject:
   m_ObjectHideFlags: 0
