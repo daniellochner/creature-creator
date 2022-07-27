@@ -48,6 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private AnimationCurve flightPath;
             [SerializeField] private float shockTime;
             [SerializeField] private float minDistanceFromCreature;
+            [SerializeField] private CreatureEffector.Sound[] flapSounds;
 
             public BirdAI BirdAI => StateMachine as BirdAI;
 
@@ -81,10 +82,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 BirdAI.StartCoroutine(FlyToPositionRoutine(RandomPerchPoint.position));
                 BirdAI.Params.SetBool("Body_IsFlying", true);
+                BirdAI.Animator.GetBehaviour<Animations.Flying>().OnFlap += OnFlap;
             }
             public override void Exit()
             {
                 BirdAI.Params.SetBool("Body_IsFlying", false);
+                BirdAI.Animator.GetBehaviour<Animations.Flying>().OnFlap -= OnFlap;
             }
 
             private IEnumerator FlyToPositionRoutine(Vector3 to)
@@ -114,6 +117,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Perch
                 BirdAI.Params.SetBool("Eye_IsDilated", false);
                 BirdAI.ChangeState("IDL");
+            }
+
+            public void OnFlap()
+            {
+                BirdAI.Creature.Effector.PlaySound(flapSounds);
             }
         }
         #endregion

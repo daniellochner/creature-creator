@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,15 +10,15 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
     public class Bite : CreatureAnimation
     {
         #region Fields
-        [SerializeField] private float biteRadius;
-        [SerializeField] private MinMax biteDamage;
-        [SerializeField] private CreatureEffector.Sound[] biteSounds;
-        [Space]
         [SerializeField] private float timeR2O;
         [SerializeField] private float timeO2C;
         [SerializeField] private float timeC2R;
 
         private bool hasDealtDamage;
+        #endregion
+
+        #region Properties
+        public Action<MouthAnimator> OnBite { get; set; }
         #endregion
 
         #region Methods
@@ -40,24 +41,8 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             timeR2O);
 
             // Bite
-            if (PerformLogic)
-            {
-                if (!hasDealtDamage)
-                {
-                    Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
-                    foreach (Collider collider in colliders)
-                    {
-                        CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature.Animator != Creature) // biting creature shouldn't damage itself
-                        {
-                            creature.Health.TakeDamage(biteDamage.Random);
-                            hasDealtDamage = true;
-                        }
-                    }
-                }
-                Creature.Effector.PlaySound(biteSounds);
-            }
-
+            OnBite?.Invoke(mouth);
+            
             // Open -> Close
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)
             {

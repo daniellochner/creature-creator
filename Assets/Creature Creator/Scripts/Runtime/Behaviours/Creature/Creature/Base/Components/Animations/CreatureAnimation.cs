@@ -9,8 +9,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public CreatureAnimator Creature => m_MonoBehaviour;
 
-        public bool PerformLogic { get; set; } = true;
-
         public override void OnStart(Animator animator)
         {
             if (Creature.IsAnimated)

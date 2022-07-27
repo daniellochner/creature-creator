@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using DanielLochner.Assets.CreatureCreator.Animations;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -78,6 +79,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             return false;
         }
+
         #endregion
 
         #region Nested
@@ -94,7 +96,7 @@ namespace DanielLochner.Assets.CreatureCreator
             private Coroutine barkingCoroutine;
 
             public DogAI DogAI => StateMachine as DogAI;
-
+            
             public override void Enter()
             {
                 DogAI.UpdateTarget();
@@ -195,15 +197,20 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private float biteOffset;
             [SerializeField] private float minBiteAngle;
             [SerializeField] private MinMax biteDelay;
+            [SerializeField] private float biteRadius;
+            [SerializeField] private MinMax biteDamage;
+            [SerializeField] private CreatureEffector.Sound[] biteSounds;
             private Coroutine bitingCoroutine;
+            private bool hasDealtDamage;
 
             public DogAI DogAI => StateMachine as DogAI;
 
             private float TargetDistance => DogAI.Creature.Constructor.Dimensions.radius + DogAI.target.Constructor.Dimensions.radius;
-
+            
             public override void Enter()
             {
                 bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
+                DogAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
@@ -223,6 +230,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 DogAI.StopCoroutine(bitingCoroutine);
+                DogAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }
 
             private IEnumerator BitingRoutine()
@@ -246,6 +254,24 @@ namespace DanielLochner.Assets.CreatureCreator
                     // Wait...
                     yield return new WaitForSeconds(biteDelay.Random);
                 }
+            }
+
+            private void OnBite(MouthAnimator mouth)
+            {
+                if (!hasDealtDamage)
+                {
+                    Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
+                    foreach (Collider collider in colliders)
+                    {
+                        CreatureBase creature = collider.GetComponent<CreatureBase>();
+                        if (creature != null && creature.Animator != DogAI.Creature) // biting creature shouldn't damage itself
+                        {
+                            creature.Health.TakeDamage(biteDamage.Random);
+                            hasDealtDamage = true;
+                        }
+                    }
+                }
+                DogAI.Creature.Effector.PlaySound(biteSounds);
             }
         }
         #endregion

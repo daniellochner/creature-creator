@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
@@ -10,10 +11,13 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Fields
         [SerializeField] private float flapCooldown;
         [SerializeField] private float flapHeight;
-        [SerializeField] private CreatureEffector.Sound[] flapSounds;
 
         private WingAnimator[] wings;
         private float timeLeft;
+        #endregion
+
+        #region Properties
+        public Action OnFlap { get; set; }
         #endregion
 
         #region Methods
@@ -49,10 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 wing.Flap();
             }
-            if (PerformLogic)
-            {
-                Creature.Effector.PlaySound(flapSounds);
-            }
+            OnFlap?.Invoke();
 
             Creature.InvokeOverTime(delegate (float progress)
             {
