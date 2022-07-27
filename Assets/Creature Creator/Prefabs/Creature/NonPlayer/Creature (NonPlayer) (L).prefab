@@ -137,48 +137,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2557432704910178191, guid: 38a979c09239888439683bba0d04e677, type: 3}
   m_PrefabInstance: {fileID: 7222821298919489345}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-5137342902318340277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5134471683144124622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36cf9c192cc233d44b462dfe058c39a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseMovementSpeed: 0.8
-  baseTurnSpeed: 120
-  contactDistance: 0.01
---- !u!114 &1479960649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5134471683144124622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98fe840f969f2ff46b00b819eb4ed288, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1479960650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5134471683144124622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1520f526054cee34c8c9548b84e1abb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyDepletionRate: 0.00083333335
-  healthTickRate: 1
-  healthTickDamage: 5
 --- !u!114 &9149405689032952717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,13 +158,11 @@ MonoBehaviour:
   effector: {fileID: 2791846547094999234}
   scaler: {fileID: 2654317160250063770}
   health: {fileID: 5896666457759668082}
-  energy: {fileID: 2378900497188792835}
+  hunger: {fileID: 2378900497188792835}
   age: {fileID: 4538637741956903061}
   hider: {fileID: 5085794372901269816}
   informer: {fileID: 2959662151241752692}
   selectable: {fileID: 4304037255194110282}
-  energyDepleter: {fileID: 1479960650}
-  ager: {fileID: 1479960649}
 --- !u!114 &5896666457759668082 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3884837719679002675, guid: 38a979c09239888439683bba0d04e677, type: 3}

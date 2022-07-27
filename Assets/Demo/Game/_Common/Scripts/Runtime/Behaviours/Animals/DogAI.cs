@@ -228,6 +228,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     // Strike!
+                    hasDealtDamage = false;
                     float d = Vector3.Distance(target.transform.position, DogAI.transform.position);
                     DogAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
@@ -238,20 +239,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void OnBite(MouthAnimator mouth)
             {
+                DogAI.Creature.Effector.PlaySound(biteSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
                     foreach (Collider collider in colliders)
                     {
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature.Animator != DogAI.Creature) // biting creature shouldn't damage itself
+                        if (creature != null && creature.Animator != DogAI.Creature)
                         {
                             creature.Health.TakeDamage(biteDamage.Random);
                             hasDealtDamage = true;
                         }
                     }
                 }
-                DogAI.Creature.Effector.PlaySound(biteSounds);
             }
         }
         #endregion

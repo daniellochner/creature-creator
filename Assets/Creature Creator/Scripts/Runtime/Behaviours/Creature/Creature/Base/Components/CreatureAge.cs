@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,10 +12,13 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private NetworkVariable<int> age = new NetworkVariable<int>(0);
+        private Coroutine agingRoutine;
         #endregion
 
         #region Properties
         public Action<int> OnAgeChanged { get; set; }
+
+        public CreatureHealth Health { get; private set; }
 
         public int Age
         {
@@ -34,6 +38,27 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            Health = GetComponent<CreatureHealth>();
+        }
+        private void Start()
+        {
+            age.OnValueChanged += UpdateAge;
+            age.SetDirty(true);
+        }
+        private void OnEnable()
+        {
+            if (IsServer)
+            {
+                if (agingRoutine != null)
+                {
+                    StopCoroutine(agingRoutine);
+                }
+                agingRoutine = StartCoroutine(AgingRoutine());
+            }
+        }
+
         [ServerRpc]
         private void SetAgeServerRpc(int a)
         {
@@ -43,6 +68,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Age = newAge;
             OnAgeChanged?.Invoke(Age);
+        }
+
+        private IEnumerator AgingRoutine()
+        {
+            while (!Health.IsDead)
+            {
+                yield return new WaitForSeconds(1f);
+                Age++;
+            }
         }
         #endregion
     }

@@ -117,14 +117,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureEffector.Sound sound = ambientSounds[UnityEngine.Random.Range(0, ambientSounds.Length)];
 
                 // Open
-                AnimalAI.Params.SetBool("Mouth_IsOpened", true);
+                AnimalAI.Params.SetBool("Mouth_IsOpen", true);
                 AnimalAI.Creature.Effector.PlaySound(sound.name, sound.volume);
 
                 // Hold (to make the sound)...
                 yield return new WaitForSeconds(AnimalAI.Creature.Effector.SoundFX[sound.name].length);
 
                 // Close
-                AnimalAI.Params.SetBool("Mouth_IsOpened", false);
+                AnimalAI.Params.SetBool("Mouth_IsOpen", false);
             }
 
             private void PerformAction()

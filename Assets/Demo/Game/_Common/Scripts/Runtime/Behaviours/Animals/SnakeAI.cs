@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using DanielLochner.Assets.CreatureCreator.Animations;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -43,13 +44,18 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private float maxStrikeDistance;
             [SerializeField] private float minStrikeAngle;
             [SerializeField] private MinMax strikeCooldown;
+            [SerializeField] private float strikeRadius;
+            [SerializeField] private MinMax strikeDamage;
+            [SerializeField] private CreatureEffector.Sound[] strikeSounds;
             private Coroutine strikeCoroutine;
+            private bool hasDealtDamage;
 
             public SnakeAI SnakeAI => StateMachine as SnakeAI;
 
             public override void Enter()
             {
                 strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
+                SnakeAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
@@ -62,6 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 SnakeAI.StopCoroutine(strikeCoroutine);
+                SnakeAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }
 
             private IEnumerator StrikingRoutine()
@@ -79,11 +86,30 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     // Strike!
+                    hasDealtDamage = false;
                     float d = Vector3.Distance(target.transform.position, SnakeAI.transform.position);
                     SnakeAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Rest...
                     yield return new WaitForSeconds(strikeCooldown.Random);
+                }
+            }
+
+            private void OnBite(MouthAnimator mouth)
+            {
+                SnakeAI.Creature.Effector.PlaySound(strikeSounds);
+                if (!hasDealtDamage)
+                {
+                    Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, strikeRadius);
+                    foreach (Collider collider in colliders)
+                    {
+                        CreatureBase creature = collider.GetComponent<CreatureBase>();
+                        if (creature != null && creature.Animator != SnakeAI.Creature)
+                        {
+                            creature.Health.TakeDamage(strikeDamage.Random);
+                            hasDealtDamage = true;
+                        }
+                    }
                 }
             }
         }

@@ -159,6 +159,7 @@ GameObject:
   - component: {fileID: -4379882553468307030}
   - component: {fileID: 3710467496790067627}
   - component: {fileID: 6957859576106576722}
+  - component: {fileID: -6302162848538571873}
   m_Layer: 0
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -754,14 +755,26 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!114 &-6302162848538571873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7193793692236944224
 GameObject:
   m_ObjectHideFlags: 0

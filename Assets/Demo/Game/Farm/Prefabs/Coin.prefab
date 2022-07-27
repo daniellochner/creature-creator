@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6928350099785290807}
   - component: {fileID: 2768833749341070857}
   - component: {fileID: 3958858010224202342}
-  - component: {fileID: 49427734809467156}
   - component: {fileID: 49427734809467157}
-  - component: {fileID: 7920973681128782670}
+  - component: {fileID: 901323299181725688}
+  - component: {fileID: 1089023579892995426}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -86,7 +86,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &49427734809467156
+--- !u!65 &49427734809467157
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49427734809467154}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4935, y: 0.49349993, z: 0.07244415}
+  m_Center: {x: -0.000000014901161, y: 0, z: 0}
+--- !u!114 &901323299181725688
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,20 +114,7 @@ MonoBehaviour:
   cursor: {fileID: 2800000, guid: f30d83630c20b964594daf46734a99a8, type: 3}
   interactionRange: 2
   reqAbility: {fileID: 11400000, guid: 8908108a863934a4cbefe7500c4f10a6, type: 2}
---- !u!65 &49427734809467157
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 49427734809467154}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4935, y: 0.49349993, z: 0.07244415}
-  m_Center: {x: -0.000000014901161, y: 0, z: 0}
---- !u!114 &7920973681128782670
+--- !u!114 &1089023579892995426
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

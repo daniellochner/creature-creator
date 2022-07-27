@@ -117,6 +117,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6735514856688781116, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+      propertyPath: soundFX.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735514856688781116, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+      propertyPath: soundFX.reorderableList.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6947954297739432504, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 951099334
@@ -366,6 +374,15 @@ MonoBehaviour:
         strikeCooldown:
           min: 6
           max: 8
+        strikeRadius: 0.5
+        strikeDamage:
+          min: 10
+          max: 20
+        strikeSounds:
+        - name: Strike1
+          volume: 1
+        - name: Strike2
+          volume: 1
     - rid: 2
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

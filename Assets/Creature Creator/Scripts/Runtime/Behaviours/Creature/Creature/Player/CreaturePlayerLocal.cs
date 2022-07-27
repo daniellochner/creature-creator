@@ -5,17 +5,12 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureHungerDepleter))]
-    [RequireComponent(typeof(CreatureAger))]
     [RequireComponent(typeof(CreatureCamera))]
     public class CreaturePlayerLocal : CreaturePlayer, ISetupable
     {
         #region Fields
-        [SerializeField] private CreatureHungerDepleter hungerDepleter;
-        [SerializeField] private CreatureAger ager;
-
         [SerializeField] private CreatureEditor editor;
-        [SerializeField] private CreatureHealthEditor healthEditor;
+        [SerializeField] private CreatureRespawner respawner;
         [SerializeField] private CreatureAbilities abilities;
         [SerializeField] private CreatureMover mover;
         [SerializeField] private CreatureInteractor interactor;
@@ -23,11 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public CreatureHungerDepleter HungerDepleter => hungerDepleter;
-        public CreatureAger Ager => ager;
-
         public CreatureEditor Editor => editor;
-        public CreatureHealthEditor HealthEditor => healthEditor;
+        public CreatureRespawner Respawner => respawner;
         public CreatureAbilities Abilities => abilities;
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
@@ -42,11 +34,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnValidate();
 
-            hungerDepleter = GetComponent<CreatureHungerDepleter>();
-            ager = GetComponent<CreatureAger>();
-
             editor = GetComponent<CreatureEditor>();
-            healthEditor = GetComponent<CreatureHealthEditor>();
+            respawner = GetComponent<CreatureRespawner>();
             abilities = GetComponent<CreatureAbilities>();
             mover = GetComponent<CreatureMover>();
             interactor = GetComponent<CreatureInteractor>();

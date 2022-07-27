@@ -44,11 +44,11 @@ namespace DanielLochner.Assets.CreatureCreator
             IsTakingPhoto = true;
 
             // Clone creature (to world origin).
-            CreatureConstructor tempCreature = CreatureCloner.Clone(parent: Dynamic.Transform);
-            tempCreature.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Photography"));
+            CreatureConstructor tmpCreature = CreatureCloner.Clone(parent: Dynamic.Transform);
+            tmpCreature.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Photography"));
 
             GameObject photoCamGO = new GameObject("Camera");
-            photoCamGO.transform.SetParent(tempCreature.Body);
+            photoCamGO.transform.SetParent(tmpCreature.Body);
             photoCamGO.transform.localPosition = cameraPosition;
             photoCamGO.transform.localRotation = Quaternion.Euler(cameraRotation);
 
@@ -67,7 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
             onPhotoTaken(photoCam.targetTexture.ToTexture2D(resolution));
 
             // Destroy temporary creature.
-            Destroy(tempCreature.gameObject);
+            Destroy(tmpCreature.gameObject);
 
             IsTakingPhoto = false;
         }

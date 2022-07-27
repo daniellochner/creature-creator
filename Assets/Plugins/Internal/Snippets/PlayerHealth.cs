@@ -41,14 +41,20 @@ namespace DanielLochner.Assets
         public Action OnDie { get; set; }
         public Action OnRespawn { get; set; }
 
-        public bool IsDead { get; private set; }
+        public bool IsDead
+        {
+            get
+            {
+                return Health <= 0;
+            }
+        }
         #endregion
 
         #region Methods
-        private void Awake()
+        private void Start()
         {
             health.OnValueChanged += UpdateHealth;
-            health.Value = minMaxHealth.max;
+            health.SetDirty(true);
         }
 
         public virtual void TakeDamage(float damage)
@@ -66,14 +72,11 @@ namespace DanielLochner.Assets
         public virtual void Die()
         {
             if (IsDead) return;
-
-            IsDead = true;
             OnDie?.Invoke();
         }
         public virtual void Respawn()
         {
             Health = minMaxHealth.max;
-            IsDead = false;
             OnRespawn?.Invoke();
         }
 
