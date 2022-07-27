@@ -147,11 +147,8 @@ GameObject:
   - component: {fileID: 2177206371310096007}
   - component: {fileID: 156098017691023718}
   - component: {fileID: 8449061948034383574}
-  - component: {fileID: 5287096594538433860}
   - component: {fileID: 1902851174053681457}
-  - component: {fileID: 8476915998975173226}
   - component: {fileID: 403000219883668391}
-  - component: {fileID: 7375937161540153224}
   - component: {fileID: 974720351450483152}
   - component: {fileID: 18635148078584382}
   - component: {fileID: 4203801920038755802}
@@ -585,20 +582,6 @@ MonoBehaviour:
     min: 0
     max: 100
   health: 100
---- !u!114 &5287096594538433860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 351aa478e77826d4c8919d7c442d157e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health:
-    m_InternalValue: 0
 --- !u!114 &1902851174053681457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,20 +595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   age: 0
---- !u!114 &8476915998975173226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c682158d0e4258344a75bf30349fd19e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  age:
-    m_InternalValue: 0
 --- !u!114 &403000219883668391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -638,21 +607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08266b5bcd7c8d1418e5bb39d1e9daa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 1
---- !u!114 &7375937161540153224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58320776ac81bc3489807b9e1542521d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energy:
-    m_InternalValue: 0
+  hunger: 1
 --- !u!114 &974720351450483152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,7 +625,7 @@ MonoBehaviour:
     name: Unnamed
     photo: {fileID: 0}
     health: 1
-    energy: 1
+    hunger: 1
     age: 0
 --- !u!114 &18635148078584382
 MonoBehaviour:

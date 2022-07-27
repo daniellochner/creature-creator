@@ -12,19 +12,18 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureHungerDepleter : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private float energyDepletionRate = 1f / 1200f;
+        [SerializeField] private float hungerDepletionRate = 1f / 1200f;
         [SerializeField] private float healthTickRate = 1f;
         [SerializeField] private float healthTickDamage = 5f;
 
-        private Coroutine energyDepletingCoroutine;
+        private Coroutine hungerDepletingCoroutine;
         #endregion
 
         #region Properties
         public CreatureHealth Health { get; private set; }
         public CreatureHunger Hunger { get; private set; }
 
-        public Action<float> OnEnergyChanged { get; set; }
-        public bool DepleteEnergy { get; set; } = true;
+        public bool DepleteHunger { get; set; } = true;
         #endregion
 
         #region Methods
@@ -35,19 +34,19 @@ namespace DanielLochner.Assets.CreatureCreator
 		}
         private void OnEnable()
         {
-            if (energyDepletingCoroutine != null)
+            if (hungerDepletingCoroutine != null)
             {
-                StopCoroutine(energyDepletingCoroutine);
+                StopCoroutine(hungerDepletingCoroutine);
             }
-            energyDepletingCoroutine = StartCoroutine(EnergyDepletionRoutine(energyDepletionRate, healthTickRate, healthTickDamage));
+            hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
         }
 
-        private IEnumerator EnergyDepletionRoutine(float energyDepletionRate, float healthTickRate, float healthTickDamage)
+        private IEnumerator HungerDepletionRoutine(float hungerDepletionRate, float healthTickRate, float healthTickDamage)
         {
-            while (!Health.IsDead && DepleteEnergy)
+            while (!Health.IsDead && DepleteHunger)
             {
                 yield return new WaitForSeconds(1f);
-                Hunger.Hunger -= energyDepletionRate;
+                Hunger.Hunger -= hungerDepletionRate;
 
                 if (Hunger.Hunger <= 0)
                 {

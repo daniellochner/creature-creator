@@ -2,15 +2,15 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CreatureAge : MonoBehaviour
+    public class CreatureAge : NetworkBehaviour
     {
         #region Fields
-        [SerializeField, ReadOnly] private int age = 0;
+        [SerializeField] private NetworkVariable<int> age = new NetworkVariable<int>(0);
         #endregion
 
         #region Properties
@@ -18,12 +18,31 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public int Age
         {
-            get => age;
+            get => age.Value;
             set
             {
-                age = Mathf.Max(0, value);
-                OnAgeChanged?.Invoke(age);
+                if (IsServer)
+                {
+                    age.Value = Mathf.Max(0, value);
+                }
+                else
+                {
+                    SetAgeServerRpc(value);
+                }
             }
+        }
+        #endregion
+
+        #region Methods
+        [ServerRpc]
+        private void SetAgeServerRpc(int a)
+        {
+            age.Value = a;
+        }
+        private void UpdateAge(int oldAge, int newAge)
+        {
+            Age = newAge;
+            OnAgeChanged?.Invoke(Age);
         }
         #endregion
     }

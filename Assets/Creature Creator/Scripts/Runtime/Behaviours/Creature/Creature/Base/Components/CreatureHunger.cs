@@ -3,13 +3,14 @@
 
 using System;
 using UnityEngine;
+using Unity.Netcode;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CreatureHunger : MonoBehaviour
+    public class CreatureHunger : NetworkBehaviour
     {
         #region Fields
-        [SerializeField, ReadOnly] private float hunger = 1f;
+        [SerializeField, ReadOnly] private NetworkVariable<float> hunger = new NetworkVariable<float>(1f);
         #endregion
 
         #region Properties
@@ -17,12 +18,31 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float Hunger
         {
-            get => hunger;
+            get => hunger.Value;
             set
             {
-                hunger = Mathf.Clamp01(value);
-                OnHungerChanged?.Invoke(hunger);
+                if (IsServer)
+                {
+                    hunger.Value = Mathf.Clamp01(value);
+                }
+                else
+                {
+                    SetHungerServerRpc(value);
+                }
             }
+        }
+        #endregion
+
+        #region Methods
+        [ServerRpc]
+        private void SetHungerServerRpc(float h)
+        {
+            hunger.Value = h;
+        }
+        private void UpdateHunger(float oldHunger, float newHunger)
+        {
+            Hunger = newHunger;
+            OnHungerChanged?.Invoke(Hunger);
         }
         #endregion
     }

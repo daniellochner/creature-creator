@@ -1,14 +1,15 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class PlayerHealth : MonoBehaviour
+    public class PlayerHealth : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private MinMax minMaxHealth = new MinMax(0f, 100f);
         [Space]
-        [SerializeField, ReadOnly] private float health;
+        [SerializeField] private NetworkVariable<float> health = new NetworkVariable<float>(100);
         #endregion
 
         #region Properties
@@ -16,11 +17,17 @@ namespace DanielLochner.Assets
 
         public float Health
         {
-            get => health;
+            get => health.Value;
             set
             {
-                health = Mathf.Clamp(value, minMaxHealth.min, minMaxHealth.max);
-                OnHealthChanged?.Invoke(health);
+                if (IsServer)
+                {
+                    health.Value = Mathf.Clamp(value, minMaxHealth.min, minMaxHealth.max);
+                }
+                else
+                {
+                    SetHealthServerRpc(value);
+                }
             }
         }
         public float HealthPercentage
@@ -38,9 +45,10 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void Start()
+        private void Awake()
         {
-            health = minMaxHealth.max;
+            health.OnValueChanged += UpdateHealth;
+            health.Value = minMaxHealth.max;
         }
 
         public virtual void TakeDamage(float damage)
@@ -67,6 +75,17 @@ namespace DanielLochner.Assets
             Health = minMaxHealth.max;
             IsDead = false;
             OnRespawn?.Invoke();
+        }
+
+        [ServerRpc]
+        private void SetHealthServerRpc(float health)
+        {
+            Health = health;
+        }
+        private void UpdateHealth(float oldHealth, float newHealth)
+        {
+            Health = newHealth;
+            OnHealthChanged?.Invoke(Health);
         }
 
         [ContextMenu("Take Damage")]

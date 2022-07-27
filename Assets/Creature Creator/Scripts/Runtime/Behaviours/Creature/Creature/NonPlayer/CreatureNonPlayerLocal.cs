@@ -10,12 +10,12 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureNonPlayerLocal : CreatureNonPlayer
     {
         #region Fields
-        [SerializeField] private CreatureHungerDepleter energyDepleter;
+        [SerializeField] private CreatureHungerDepleter hungerDepleter;
         [SerializeField] private CreatureAger ager;
         #endregion
 
         #region Properties
-        public CreatureHungerDepleter EnergyDepleter => energyDepleter;
+        public CreatureHungerDepleter HungerDepleter => hungerDepleter;
         public CreatureAger Ager => ager;
         #endregion
 
@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnValidate();
 
-            energyDepleter = GetComponent<CreatureHungerDepleter>();
+            hungerDepleter = GetComponent<CreatureHungerDepleter>();
             ager = GetComponent<CreatureAger>();
         }
 #endif

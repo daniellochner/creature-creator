@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public CreatureKiller Killer { get; private set; }
         public CreatureInformer Informer { get; private set; }
-        public CreatureHunger Energy { get; private set; }
+        public CreatureHunger Hunger { get; private set; }
         public CreatureAge Age { get; private set; }
         #endregion
 
@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Killer = GetComponent<CreatureKiller>();
             Informer = GetComponent<CreatureInformer>();
-            Energy = GetComponent<CreatureHunger>();
+            Hunger = GetComponent<CreatureHunger>();
             Age = GetComponent<CreatureAge>();
         }
 
@@ -39,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Killer.Respawn();
             Informer.Respawn();
 
-            Energy.Hunger = 1f;
+            Hunger.Hunger = 1f;
             Age.Age = 0;
         }
         #endregion
