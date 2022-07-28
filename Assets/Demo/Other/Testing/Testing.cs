@@ -9,27 +9,33 @@ using Unity.Netcode;
 
 public class Testing : MonoBehaviour
 {
-    public GameObject source;
-    public GameObject target;
-
-    [ContextMenu("COMPARE")]
-    public void Compare()
+    private void OnCollisionEnter(Collision collision)
     {
-        List<Component> sourceComps = new List<Component>(source.GetComponents<Component>());
-        List<Component> targetComps = new List<Component>(target.GetComponents<Component>());
-
-        foreach (Component comp in sourceComps)
-        {
-            if (!targetComps.Find(x => x.GetType() == comp.GetType()))
-            {
-                //Component c = target.AddComponent(comp.GetType());
-                //comp.CopyValues();
-                //c.PasteValues();
-
-                Debug.Log(comp);
-            }
-        }
+        Debug.Log(collision.gameObject, collision.gameObject);
     }
+
+
+    //public GameObject source;
+    //public GameObject target;
+
+    //[ContextMenu("COMPARE")]
+    //public void Compare()
+    //{
+    //    List<Component> sourceComps = new List<Component>(source.GetComponents<Component>());
+    //    List<Component> targetComps = new List<Component>(target.GetComponents<Component>());
+
+    //    foreach (Component comp in sourceComps)
+    //    {
+    //        if (!targetComps.Find(x => x.GetType() == comp.GetType()))
+    //        {
+    //            //Component c = target.AddComponent(comp.GetType());
+    //            //comp.CopyValues();
+    //            //c.PasteValues();
+
+    //            Debug.Log(comp);
+    //        }
+    //    }
+    //}
 
     //public Database bps;
 

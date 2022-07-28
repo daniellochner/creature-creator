@@ -25,6 +25,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float baseMovementSpeed;
         [SerializeField] private float baseTurnSpeed;
         [SerializeField] private float contactDistance;
+        [SerializeField] private bool useDamping;
+        [SerializeField] private bool useEasing;
 
         private Transform head, tail, limbs;
         private RigBuilder rigBuilder;
@@ -54,6 +56,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
 
+        public bool UseDamping
+        {
+            get => useDamping;
+            set => useDamping = value;
+        }
         public bool IsMovingBody
         {
             get; private set;
@@ -173,8 +180,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     defaultRotations[i] = Quaternion.Inverse(transform.rotation) * Constructor.Bones[i].rotation;
                 }
 
-                if (Legs.Count == 0) // Creatures without legs should fall down to the ground.
+                Vector3 offset = Vector3.zero;
+                EasingFunction.Function function = null;
+
+                if (Legs.Count == 0)
                 {
+                    // Creatures without legs should fall down to the ground.
+
                     Mesh bodyMesh = new Mesh();
                     Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
 
@@ -187,11 +199,13 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
 
-                    Vector3 offset = Vector3.up * Mathf.Abs(minY);
-                    moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutBounce));
+                    offset = Constructor.transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
+                    function = EasingFunction.EaseOutBounce;
                 }
-                else // Creatures with legs should slump down to put weight on them.
+                else
                 {
+                    // Creatures with legs should slump down to put weight on them.
+
                     // Determine the most extended leg and record its extension percentage.
                     LegAnimator mostExtendedLeg = null;
                     float maxExtension = Mathf.NegativeInfinity;
@@ -223,9 +237,18 @@ namespace DanielLochner.Assets.CreatureCreator
                         float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
                         float targetHeight = b;
 
-                        Vector3 offset = Vector3.up * (targetHeight - currentHeight);
-                        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, EasingFunction.EaseOutExpo));
+                        offset = Vector3.up * (targetHeight - currentHeight);
+                        function = EasingFunction.EaseOutExpo;
                     }
+                }
+
+                if (useEasing)
+                {
+                    moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
+                }
+                else
+                {
+                    Constructor.Body.localPosition += offset;
                 }
 
                 hasCapturedDefaults = true;
@@ -284,40 +307,43 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                if (Limbs.Count > 0)
+                if (useDamping)
                 {
-                    for (int i = n - 1; i > h; --i)
+                    if (Limbs.Count > 0)
+                    {
+                        for (int i = n - 1; i > h; --i)
+                        {
+                            Transform bone = new GameObject($"Bone.{i}").transform;
+                            bone.SetParent(head, false);
+                            bone.SetAsFirstSibling();
+
+                            //DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                            //damping.data = new DampedTransformData()
+                            //{
+                            //    constrainedObject = Constructor.Bones[i],
+                            //    sourceObject = Constructor.Bones[i - 1],
+                            //    dampPosition = 0f,
+                            //    dampRotation = 0f,
+                            //    maintainAim = true
+                            //};
+                        }
+                    }
+                    for (int i = 0; i < t; ++i)
                     {
                         Transform bone = new GameObject($"Bone.{i}").transform;
-                        bone.SetParent(head, false);
+                        bone.SetParent(tail, false);
                         bone.SetAsFirstSibling();
 
-                        //DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                        //damping.data = new DampedTransformData()
-                        //{
-                        //    constrainedObject = Constructor.Bones[i],
-                        //    sourceObject = Constructor.Bones[i - 1],
-                        //    dampPosition = 0f,
-                        //    dampRotation = 0f,
-                        //    maintainAim = true
-                        //};
+                        DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
+                        damping.data = new DampedTransformData()
+                        {
+                            constrainedObject = Constructor.Bones[i],
+                            sourceObject = Constructor.Bones[i + 1],
+                            dampPosition = 0f,
+                            dampRotation = 0f,
+                            maintainAim = true
+                        };
                     }
-                }
-                for (int i = 0; i < t; ++i)
-                {
-                    Transform bone = new GameObject($"Bone.{i}").transform;
-                    bone.SetParent(tail, false);
-                    bone.SetAsFirstSibling();
-
-                    DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                    damping.data = new DampedTransformData()
-                    {
-                        constrainedObject = Constructor.Bones[i],
-                        sourceObject = Constructor.Bones[i + 1],
-                        dampPosition = 0f,
-                        dampRotation = 0f,
-                        maintainAim = true
-                    };
                 }
             }
             else
@@ -393,7 +419,7 @@ namespace DanielLochner.Assets.CreatureCreator
             IsMovingBody = true;
 
             Vector3 pos1 = Constructor.Body.localPosition;
-            Vector3 pos2 = Constructor.Body.W2LSpace(Constructor.Body.position + offset);
+            Vector3 pos2 = pos1 + offset;
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float progress)
             {
                 float t = 1f - easingFunction(1f, 0f, progress);

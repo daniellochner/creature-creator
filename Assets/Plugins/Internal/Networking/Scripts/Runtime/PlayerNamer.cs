@@ -15,14 +15,14 @@ namespace DanielLochner.Assets
         #endregion
         
         #region Methods
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (nameGO != null)
             {
                 nameGO.SetActive(true);
             }
         }
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (nameGO != null)
             {

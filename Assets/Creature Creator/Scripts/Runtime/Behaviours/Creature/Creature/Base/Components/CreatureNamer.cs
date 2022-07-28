@@ -14,11 +14,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Constructor = GetComponent<CreatureConstructor>();
         }
-
-        public override void Setup()
+        
+        protected override void OnEnable()
         {
-            base.Setup();
-
+            base.OnEnable();
             if (nameGO != null)
             {
                 nameGO.transform.localPosition = Vector3.up * (Constructor.Dimensions.height + 0.25f);

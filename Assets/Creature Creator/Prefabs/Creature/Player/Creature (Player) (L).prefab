@@ -51,6 +51,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4206887594253908336, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+      propertyPath: useEasing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4844542432179967607, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: m_IsKinematic
       value: 0
@@ -541,6 +545,7 @@ MonoBehaviour:
   hider: {fileID: 4051505228571095840}
   informer: {fileID: 6322874144728097388}
   spawner: {fileID: 8685507389503379873}
+  rb: {fileID: 7586173872509542935}
   namer: {fileID: 4012423436152039703}
   deathMessenger: {fileID: 7151558922526411801}
   editor: {fileID: 1922529363214902832}
@@ -797,6 +802,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &7586173872509542935 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 6464367467406691967, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 3526752849064750184}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8685507389503379873 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5222088643920328137, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}

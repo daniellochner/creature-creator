@@ -20,9 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Toggle();
             }
         }
-        protected override void LateUpdate()
-        {
-        }
+        protected override void LateUpdate() { /* Override default close-on-ESC behaviour */ }
 
         public void Leave()
         {

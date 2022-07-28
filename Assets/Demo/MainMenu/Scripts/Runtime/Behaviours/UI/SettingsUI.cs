@@ -66,6 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle worldChatToggle;
         [SerializeField] private Button resetProgressButton;
         [SerializeField] private NetworkStatsManager statsManagerPrefab;
+        [SerializeField] private GameObject creatureBasePrefab;
 
         [Header("Controls")]
         [SerializeField] private Slider sensitivityHorizontalSlider;
@@ -869,7 +870,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetPreviewFeatures(bool previewFeatures)
         {
+            if (previewFeatures)
+            {
+                InformationDialog.Inform("Preview Features", "Due to several Unity-related issues, certain features have been disabled by default.");
+            }
+
             SettingsManager.Data.PreviewFeatures = previewFeatures;
+
+            creatureBasePrefab.GetComponent<CreatureAnimator>().UseDamping = previewFeatures;
         }
         public void SetNetworkStats(bool networkStats)
         {

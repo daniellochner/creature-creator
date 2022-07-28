@@ -52,10 +52,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Respawn()
         {
-            CreatureData data = JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Constructor.Data));
-            Constructor.Demolish();
-            Constructor.Body.gameObject.SetActive(true);
-            Constructor.Construct(data);
+            //CreatureData data = JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Constructor.Data));
+            //Constructor.Demolish();
+            //Constructor.Body.gameObject.SetActive(true);
+            //Constructor.Construct(data);
 
             EditorManager.Instance.IsVisible = true;
             EditorManager.Instance.Play();

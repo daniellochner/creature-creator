@@ -66,6 +66,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnSpawn();
 
+            Constructor.Body.gameObject.SetActive(true);
+
             Abilities.enabled = true;
             Mover.enabled = true;
             Interactor.enabled = true;
