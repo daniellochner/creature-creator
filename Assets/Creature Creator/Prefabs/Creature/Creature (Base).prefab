@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 3710467496790067627}
   - component: {fileID: 6957859576106576722}
   - component: {fileID: -6302162848538571873}
+  - component: {fileID: 2499678688202256925}
   m_Layer: 0
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -359,7 +360,7 @@ MonoBehaviour:
   isAnimated: 0
   rig: {fileID: 5812436878079772818}
   extensionThreshold: 0.95
-  baseMovementSpeed: 1.6
+  baseMovementSpeed: 2
   baseTurnSpeed: 120
   contactDistance: 0.01
 --- !u!136 &3945330708831151637
@@ -566,9 +567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5336ac240f49c4c429d8e7e374f7127a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minMaxHealth:
-    min: 0
-    max: 100
+  maxHealth: 100
   health:
     m_InternalValue: 100
 --- !u!114 &1902851174053681457
@@ -599,6 +598,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hunger:
     m_InternalValue: 1
+  hungerDepletionRate: 0.00083333335
+  healthTickRate: 1
+  healthTickDamage: 5
 --- !u!114 &974720351450483152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,6 +775,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2499678688202256925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7193793692236944224

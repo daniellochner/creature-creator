@@ -192,7 +192,8 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove);
             Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
             worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
-            
+            worldPos += Creature.transform.up * stepHeight;
+
             if (Physics.Raycast(worldPos, -Creature.transform.up, out RaycastHit hitInfo/*, Creature.Constructor.MaxHeight*/))
             {
                 return hitInfo.point + (Creature.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
