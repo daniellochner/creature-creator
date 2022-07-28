@@ -475,7 +475,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         foreach (Transform bone in CreatureConstructor.Bones)
                         {
-                            bone.GetComponentInChildren<Collider>().isTrigger = false;
+                            bone.GetComponentInChildren<Collider>(true).isTrigger = false;
                         }
 
                         if (!hover.IsOver)
