@@ -13,8 +13,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         [SerializeField] private float timeR2O;
         [SerializeField] private float timeO2C;
         [SerializeField] private float timeC2R;
-
-        private bool hasDealtDamage;
         #endregion
 
         #region Properties
@@ -24,7 +22,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            hasDealtDamage = false;
             foreach (MouthAnimator mouth in Creature.Mouths)
             {
                 Creature.StartCoroutine(BiteRoutine(mouth));

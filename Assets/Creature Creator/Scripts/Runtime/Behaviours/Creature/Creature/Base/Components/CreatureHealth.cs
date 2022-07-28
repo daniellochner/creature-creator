@@ -20,10 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override void Die()
         {
-            base.Die();
             Killer.Kill();
-
-            Debug.Log("KILL");
+            base.Die();
         }
         #endregion
     }

@@ -11,6 +11,14 @@ namespace DanielLochner.Assets
         [SerializeField, ReadOnly] private float elapsedTime = 0f;
         #endregion
 
+        #region Properties
+        public float Lifetime
+        {
+            get => lifetime;
+            set => lifetime = value;
+        }
+        #endregion
+
         #region Methods
         private void Update()
         {

@@ -16,14 +16,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             DespawnServerRpc();
         }
-        public void Respawn()
-        {
-            RespawnServerRpc();
-        }
 
         [ServerRpc]
         public void SpawnServerRpc()
         {
+            OnDespawn?.Invoke();
             OnSpawn?.Invoke();
         }
 
@@ -31,13 +28,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void DespawnServerRpc()
         {
             OnDespawn?.Invoke();
-        }
-
-        [ServerRpc]
-        public void RespawnServerRpc()
-        {
-            OnDespawn?.Invoke();
-            OnSpawn?.Invoke();
         }
     }
 }

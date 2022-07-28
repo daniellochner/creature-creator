@@ -30,6 +30,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
         private bool hasCapturedDefaults;
+        private Vector3[] defaultPositions;
+        private Quaternion[] defaultRotations;
         #endregion
 
         #region Properties
@@ -71,8 +73,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Reinitialize();
                 }
-                RestoreDefaults(isAnimated);
-                Restructure(isAnimated);
+
+                if (isAnimated)
+                {
+                    RestoreDefaults(isAnimated);
+                    Restructure(isAnimated);
+                }
+                else
+                {
+                    Restructure(isAnimated);
+                    RestoreDefaults(isAnimated);
+                }
+                
                 if (isAnimated)
                 {
                     Rebuild();
@@ -153,6 +165,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 DefaultHeight = Constructor.Body.localPosition.y;
 
+                defaultPositions = new Vector3[Constructor.Bones.Count];
+                defaultRotations = new Quaternion[Constructor.Bones.Count];
+                for (int i = 0; i < defaultPositions.Length; i++)
+                {
+                    defaultPositions[i] = transform.InverseTransformPoint(Constructor.Bones[i].position);
+                    defaultRotations[i] = Quaternion.Inverse(transform.rotation) * Constructor.Bones[i].rotation;
+                }
+
                 if (Legs.Count == 0) // Creatures without legs should fall down to the ground.
                 {
                     Mesh bodyMesh = new Mesh();
@@ -218,6 +238,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     IsMovingBody = false;
                 }
                 Constructor.Body.localPosition = Vector3.up * DefaultHeight;
+
+                for (int i = 0; i < defaultPositions.Length; i++)
+                {
+                    Constructor.Bones[i].position = transform.TransformPoint(defaultPositions[i]);
+                    Constructor.Bones[i].rotation = transform.rotation * defaultRotations[i];
+                }
+
                 hasCapturedDefaults = false;
             }
 

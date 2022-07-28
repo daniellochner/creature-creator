@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureRagdoll))]
-    [RequireComponent(typeof(CreatureAnimator))]
+    [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureKiller : MonoBehaviour
     {
@@ -16,43 +16,35 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public CreatureAnimator CreatureAnimator { get; private set; }
         public CreatureConstructor CreatureConstructor { get; private set; }
         public CreatureRagdoll CreatureRagdoll { get; private set; }
+        public CreatureHider CreatureHider { get; private set; }
 
         public GameObject Corpse { get; private set; }
 
         public Action OnKill { get; set; }
-        public Action OnRespawn { get; set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
             CreatureConstructor = GetComponent<CreatureConstructor>();
-            CreatureAnimator = GetComponent<CreatureAnimator>();
             CreatureRagdoll = GetComponent<CreatureRagdoll>();
         }
 
         public void Kill()
         {
             Corpse = CreatureRagdoll.Generate().gameObject;
+            Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
+
+            CreatureConstructor.Body.gameObject.SetActive(false);
+
             foreach (Behaviour behaviour in disabled)
             {
                 behaviour.enabled = false;
             }
 
             OnKill?.Invoke();
-        }
-        public void Respawn()
-        {
-            Destroy(Corpse);
-            foreach (Behaviour behaviour in disabled)
-            {
-                behaviour.enabled = true;
-            }
-
-            OnRespawn?.Invoke();
         }
         #endregion
     }

@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Transform Root { get; private set; }
         public CameraOrbit CameraOrbit { get; private set; }
         public Camera Camera { get; private set; }
+        public Follower Follower { get; private set; }
 
         public void Setup()
         {
@@ -17,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Root = camera.transform;
             CameraOrbit = camera.GetComponent<CameraOrbit>();
             Camera = camera.GetComponentInChildren<Camera>();
+            Follower = camera.GetComponent<Follower>();
 
             camera.GetComponent<Follower>().SetFollow(transform, true);
         }

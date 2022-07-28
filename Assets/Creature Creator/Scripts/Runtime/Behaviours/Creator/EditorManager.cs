@@ -277,10 +277,30 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Modes
+        public void TryBuild()
+        {
+            if (!buildMenu.IsOpen)
+            {
+                Build();
+            }
+        }
+        public void TryPlay()
+        {
+            if (!playMenu.IsOpen)
+            {
+                Play();
+            }
+        }
+        public void TryPaint()
+        {
+            if (!paintMenu.IsOpen)
+            {
+                Paint();
+            }
+        }
+
         public void Build()
         {
-            if (buildMenu.IsOpen) return;
-
             // Editor
             buildMenu.Open();
             playMenu.Close();
@@ -302,8 +322,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Play()
         {
-            if (playMenu.IsOpen) return;
-
             // Editor
             buildMenu.Close();
             playMenu.Open();
@@ -332,8 +350,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Paint()
         {
-            if (paintMenu.IsOpen) return;
-
             // Editor
             buildMenu.Close();
             playMenu.Close();
@@ -420,7 +436,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsPlaying)
             {
-                Creature.Respawner.Respawn();
+                Creature.Mover.Teleport(Creature.Mover.Platform);
+                Creature.Spawner.Spawn();
             }
 
             // Colour

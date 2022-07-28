@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureMover))]
@@ -13,20 +14,20 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureRespawner : MonoBehaviour
     {
         #region Properties
+        public CreatureConstructor Constructor { get; private set; }
         public CreatureHealth Health { get; private set; }
         public CreatureInformer Informer { get; private set; }
         public CreatureMover Mover { get; private set; }
-        public CreatureAnimator Animator { get; private set; }
         public CreatureSpawner Spawner { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
+            Constructor = GetComponent<CreatureConstructor>();
             Health = GetComponent<CreatureHealth>();
             Informer = GetComponent<CreatureInformer>();
             Mover = GetComponent<CreatureMover>();
-            Animator = GetComponent<CreatureAnimator>();
             Spawner = GetComponent<CreatureSpawner>();
         }
 
@@ -44,15 +45,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
                 string age = Informer.Information.FormattedAge;
                 InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Respawn);
+
             }, 1f);
         }
-        public void Respawn()
+        private void Respawn()
         {
             Mover.Teleport(Mover.Platform);
-            Animator.IsAnimated = true;
-            Spawner.Respawn();
+
+            CreatureData data = JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Constructor.Data));
+            Constructor.Demolish();
+            Constructor.Body.gameObject.SetActive(true);
+            Constructor.Construct(data);
 
             EditorManager.Instance.IsVisible = true;
+            EditorManager.Instance.Play();
         }
         #endregion
     }
