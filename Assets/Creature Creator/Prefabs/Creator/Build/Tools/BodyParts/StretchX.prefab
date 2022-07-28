@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8595719479470861880}
   m_Father: {fileID: 0}
@@ -63,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b214715c83905046a4d7e6ac545e11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseButton: 0
   mousePlaneAlignment: 0
   localDirection: {x: 0, y: 0, z: 1}
   worldDirection: {x: 1, y: 0, z: 0}
@@ -216,14 +218,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fb891fc6eeb2084fb22bea283af3bad, type: 3}
---- !u!1 &8935689215488062594 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5fb891fc6eeb2084fb22bea283af3bad, type: 3}
-  m_PrefabInstance: {fileID: 8124661052932180435}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8595719479470861880 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5fb891fc6eeb2084fb22bea283af3bad, type: 3}
+  m_PrefabInstance: {fileID: 8124661052932180435}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8935689215488062594 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5fb891fc6eeb2084fb22bea283af3bad, type: 3}
   m_PrefabInstance: {fileID: 8124661052932180435}
   m_PrefabAsset: {fileID: 0}
 --- !u!64 &7933176039794868640
@@ -234,7 +236,7 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8935689215488062594}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
