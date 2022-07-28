@@ -38,6 +38,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void OnDie()
         {
+            Spawner.Despawn();
+
             EditorManager.Instance.IsVisible = false;
 
             EditorManager.Instance.Invoke(delegate
@@ -50,8 +52,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Respawn()
         {
-            Mover.Teleport(Mover.Platform);
-
             CreatureData data = JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Constructor.Data));
             Constructor.Demolish();
             Constructor.Body.gameObject.SetActive(true);

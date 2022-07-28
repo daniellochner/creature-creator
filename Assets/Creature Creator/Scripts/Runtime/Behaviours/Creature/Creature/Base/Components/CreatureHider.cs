@@ -16,7 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         private CreatureConstructor Constructor { get; set; }
-        private CreatureNamer Namer { get; set; }
 
         public Action OnShow { get; set; }
         public Action OnHide { get; set; }
@@ -28,18 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
-            Namer = GetComponent<CreatureNamer>();
-        }
-
-        public void Setup()
-        {
-            if (!IsOwner)
-            {
-                if (!IsHidden)
-                {
-                    RequestShow();
-                }
-            }
         }
         
         public void RequestShow()

@@ -106,13 +106,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
             float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
-            Params.SetFloat("%LSpeed", l, false);
-            Params.SetFloat("%ASpeed", a, false);
-
-            Debug.Log(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude);
+            Animator.SetFloat("%LSpeed", l);
+            Animator.SetFloat("%ASpeed", a);
 
             IsGrounded = Physics.Raycast(transform.position + transform.up, -transform.up, 1f + contactDistance);
-            Params.SetBool("IsGrounded", IsGrounded, false);
+            Animator.SetBool("IsGrounded", IsGrounded);
         }
 
         private void Initialize()

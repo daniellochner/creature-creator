@@ -38,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureHider hider;
         [SerializeField] private CreatureInformer informer;
         [SerializeField] private CreatureSpawner spawner;
+        [SerializeField] private Rigidbody rb;
         #endregion
 
         #region Properties
@@ -55,6 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureInformer Informer => informer;
         public CreatureSpawner Spawner => spawner;
         public PlayerEffects Effects => effects;
+        public Rigidbody Rigidbody => rb;
         #endregion
 
         #region Methods
@@ -75,6 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
             hider = GetComponent<CreatureHider>();
             informer = GetComponent<CreatureInformer>();
             spawner = GetComponent<CreatureSpawner>();
+            rb = GetComponent<Rigidbody>();
         }
 #endif
 
@@ -82,6 +85,33 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Scaler.Setup();
             Animator.Setup();
+
+            Health.OnDie += OnDie;
+            Spawner.OnSpawn += OnSpawn;
+            Spawner.OnDespawn += OnDespawn;
+            Hider.OnHide += OnHide;
+            Hider.OnShow += OnShow;
+        }
+
+        public virtual void OnDie()
+        {
+            Collider.enabled = false;
+        }
+        public virtual void OnSpawn()
+        {
+
+        }
+        public virtual void OnDespawn()
+        {
+
+        }
+        public virtual void OnHide()
+        {
+
+        }
+        public virtual void OnShow()
+        {
+
         }
         #endregion
     }

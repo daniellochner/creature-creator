@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private NetworkObject playerPrefab;
         [SerializeField] private NetworkObject[] helpers;
+
+        [SerializeField] private Platform startingPlatform;
         #endregion
 
         #region Properties
@@ -30,13 +33,21 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            if (NetworkManager.Singleton.IsHost)
+            if (NetworkManager.Singleton.IsServer)
             {
                 foreach (NetworkObject helper in helpers)
                 {
                     Instantiate(helper).Spawn();
                 }
-                Instantiate(playerPrefab).SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
+
+                NetworkHostManager.Instance.SpawnPosition = startingPlatform.transform.position;
+                NetworkHostManager.Instance.SpawnRotation = startingPlatform.transform.rotation;
+
+                if (NetworkManager.Singleton.IsHost)
+                {
+                    NetworkObject obj = Instantiate(playerPrefab, NetworkHostManager.Instance.SpawnPosition, NetworkHostManager.Instance.SpawnRotation);
+                    obj.SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
+                }
             }
 
             if (IsMultiplayer)

@@ -11,10 +11,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private CreatureSelectable selectable;
+        [SerializeField] private Commandable commandable;
         #endregion
 
         #region Properties
         public CreatureSelectable Selectable => selectable;
+        public Commandable Commandable => commandable;
         #endregion
 
         #region Methods
@@ -24,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnValidate();
 
             selectable = GetComponent<CreatureSelectable>();
+            commandable = GetComponent<Commandable>();
         }
 #endif
         private IEnumerator Start()
@@ -36,6 +39,17 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
             Selectable.Setup();
+        }
+
+        public override void OnDie()
+        {
+            base.OnDie();
+            Selectable.SetSelected(false);
+        }
+        public override void OnHide()
+        {
+            base.OnHide();
+            Collider.enabled = false;
         }
         #endregion
     }

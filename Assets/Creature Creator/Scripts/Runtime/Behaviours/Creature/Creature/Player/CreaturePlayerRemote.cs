@@ -36,8 +36,40 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
             Selectable.Setup();
-            Hider.Setup();
             Namer.Setup();
+
+            if (!Hider.IsHidden)
+            {
+                Hider.RequestShow();
+            }
+            else
+            {
+                Hider.OnHide();
+            }
+        }
+
+        public override void OnDie()
+        {
+            base.OnDie();
+
+            Selectable.SetSelected(false);
+            Collider.enabled = false;
+            Namer.enabled = false;
+        }
+        public override void OnShow()
+        {
+            base.OnShow();
+
+            Collider.enabled = true;
+            Namer.enabled = true;
+        }
+        public override void OnHide()
+        {
+            base.OnHide();
+
+            Selectable.SetSelected(false);
+            Collider.enabled = false;
+            Namer.enabled = false;
         }
         #endregion
     }

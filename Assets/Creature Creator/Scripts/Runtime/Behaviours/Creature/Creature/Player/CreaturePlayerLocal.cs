@@ -52,6 +52,31 @@ namespace DanielLochner.Assets.CreatureCreator
 
             IsSetup = true;
         }
+
+        public override void OnDie()
+        {
+            base.OnDie();
+
+            Abilities.enabled = false;
+            Mover.enabled = false;
+            Interactor.enabled = false;
+            Rigidbody.isKinematic = true;
+        }
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
+
+            Abilities.enabled = true;
+            Mover.enabled = true;
+            Interactor.enabled = true;
+
+            Collider.enabled = true;
+            Rigidbody.isKinematic = false;
+        }
+        public override void OnDespawn()
+        {
+            base.OnDespawn();
+        }
         #endregion
     }
 }

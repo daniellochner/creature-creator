@@ -54,22 +54,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             hunger.OnValueChanged += UpdateHunger;
             hunger.SetDirty(true);
-
-            if (IsServer)
-            {
-                Spawner.OnSpawn += delegate
-                {
-                    hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
-                };
-                Spawner.OnDespawn += delegate
-                {
-                    if (hungerDepletingCoroutine != null)
-                    {
-                        StopCoroutine(hungerDepletingCoroutine);
-                    }
-                    Hunger = 1f;
-                };
-            }
         }
 
         [ServerRpc]
@@ -81,6 +65,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Hunger = newHunger;
             OnHungerChanged?.Invoke(Hunger);
+        }
+
+        public void StartDepletingHunger()
+        {
+            Hunger = 1f;
+            hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
+        }
+        public void StopDepletingHunger()
+        {
+            if (hungerDepletingCoroutine != null)
+            {
+                StopCoroutine(hungerDepletingCoroutine);
+            }
         }
 
         private IEnumerator HungerDepletionRoutine(float hungerDepletionRate, float healthTickRate, float healthTickDamage)

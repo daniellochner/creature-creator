@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Camera = camera.GetComponentInChildren<Camera>();
             Follower = camera.GetComponent<Follower>();
 
-            camera.GetComponent<Follower>().SetFollow(transform, true);
+            Follower.SetFollow(transform, true);
         }
     }
 }

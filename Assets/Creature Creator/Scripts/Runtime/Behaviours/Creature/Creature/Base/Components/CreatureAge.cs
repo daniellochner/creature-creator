@@ -9,7 +9,6 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureHealth))]
-    [RequireComponent(typeof(CreatureSpawner))]
     public class CreatureAge : NetworkBehaviour
     {
         #region Fields
@@ -21,7 +20,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action<int> OnAgeChanged { get; set; }
         
         public CreatureHealth Health { get; private set; }
-        public CreatureSpawner Spawner { get; private set; }
 
         public int Age
         {
@@ -44,28 +42,11 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Health = GetComponent<CreatureHealth>();
-            Spawner = GetComponent<CreatureSpawner>();
         }
         private void Start()
         {
             age.OnValueChanged += UpdateAge;
             age.SetDirty(true);
-
-            if (IsServer)
-            {
-                Spawner.OnSpawn += delegate
-                {
-                    agingRoutine = StartCoroutine(AgingRoutine());
-                };
-                Spawner.OnDespawn += delegate
-                {
-                    if (agingRoutine != null)
-                    {
-                        StopCoroutine(agingRoutine);
-                    }
-                    Age = 0;
-                };
-            }
         }
 
         [ServerRpc]
@@ -77,6 +58,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Age = newAge;
             OnAgeChanged?.Invoke(Age);
+        }
+
+        public void StartAging()
+        {
+            Age = 0;
+            agingRoutine = StartCoroutine(AgingRoutine());
+        }
+        public void StopAging()
+        {
+            if (agingRoutine != null)
+            {
+                StopCoroutine(agingRoutine);
+            }
         }
 
         private IEnumerator AgingRoutine()

@@ -14,17 +14,18 @@ namespace DanielLochner.Assets
         {
             Health = GetComponent<PlayerHealth>();
         }
-
-        public void Setup()
+        private void Start()
         {
-            if (IsOwner)
+            if (IsServer)
             {
-                Health.OnDie += () => SendDeathMsgServerRpc(OwnerClientId);
+                Health.OnDie += delegate
+                {
+                    SendDeathMsg(OwnerClientId);
+                };
             }
         }
 
-        [ServerRpc]
-        private void SendDeathMsgServerRpc(ulong clientId)
+        private void SendDeathMsg(ulong clientId)
         {
             SendDeathMsgClientRpc(Random.Range(0, deathMessages.Length), NetworkHostManager.Instance.Players[clientId].username);
         }

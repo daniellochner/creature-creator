@@ -28,6 +28,9 @@ namespace DanielLochner.Assets
             set => password = value;
         }
 
+        public Vector3 SpawnPosition { get; set; } = Vector3.zero;
+        public Quaternion SpawnRotation { get; set; } = Quaternion.identity;
+
         public Action<ulong> OnApproveConnection { get; set; }
         #endregion
 
@@ -88,6 +91,8 @@ namespace DanielLochner.Assets
             Add(playerData);
 
             response.CreatePlayerObject = NetworkManager.Singleton.LocalClientId != clientId && NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null;
+            response.Position = SpawnPosition;
+            response.Rotation = SpawnRotation;
             response.Approved = true;
             OnApproveConnection?.Invoke(clientId);
         }

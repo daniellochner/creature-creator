@@ -11,8 +11,25 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Setup()
         {
             base.Setup();
-            
-            Hider.Setup();
+
+            if (!Hider.IsHidden)
+            {
+                Hider.RequestShow();
+            }
+            else
+            {
+                Hider.OnHide();
+            }
+        }
+
+        public override void OnDie()
+        {
+            base.OnDie();
+        }
+        public override void OnHide()
+        {
+            base.OnHide();
+            Collider.enabled = false;
         }
     }
 }

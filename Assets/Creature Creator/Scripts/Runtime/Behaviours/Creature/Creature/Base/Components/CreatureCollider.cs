@@ -30,6 +30,14 @@ namespace DanielLochner.Assets.CreatureCreator
             Initialize();
             Setup();
         }
+        private void OnEnable()
+        {
+            capsule.enabled = true;
+        }
+        private void OnDisable()
+        {
+            capsule.enabled = false;
+        }
 
         private void Initialize()
         {

@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -9,42 +10,34 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureRagdoll))]
     [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureConstructor))]
-    public class CreatureKiller : MonoBehaviour
+    [RequireComponent(typeof(CreatureHealth))]
+    public class CreatureKiller : NetworkBehaviour
     {
-        #region Fields
-        [SerializeField] private Behaviour[] disabled;
-        #endregion
-
         #region Properties
-        public CreatureConstructor CreatureConstructor { get; private set; }
-        public CreatureRagdoll CreatureRagdoll { get; private set; }
-        public CreatureHider CreatureHider { get; private set; }
+        public CreatureConstructor Constructor { get; private set; }
+        public CreatureRagdoll Ragdoll { get; private set; }
+        public CreatureHealth Health { get; private set; }
 
         public GameObject Corpse { get; private set; }
-
-        public Action OnKill { get; set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            CreatureConstructor = GetComponent<CreatureConstructor>();
-            CreatureRagdoll = GetComponent<CreatureRagdoll>();
+            Constructor = GetComponent<CreatureConstructor>();
+            Ragdoll = GetComponent<CreatureRagdoll>();
+            Health = GetComponent<CreatureHealth>();
+        }
+        private void Start()
+        {
+            Health.OnDie += Kill;
         }
 
         public void Kill()
         {
-            Corpse = CreatureRagdoll.Generate().gameObject;
+            Corpse = Ragdoll.Generate().gameObject;
             Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
-
-            CreatureConstructor.Body.gameObject.SetActive(false);
-
-            foreach (Behaviour behaviour in disabled)
-            {
-                behaviour.enabled = false;
-            }
-
-            OnKill?.Invoke();
+            Constructor.Body.gameObject.SetActive(false);
         }
         #endregion
     }

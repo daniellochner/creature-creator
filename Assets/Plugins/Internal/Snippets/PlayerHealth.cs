@@ -21,6 +21,11 @@ namespace DanielLochner.Assets
                 if (IsServer)
                 {
                     health.Value = Mathf.Clamp(value, 0f, maxHealth);
+
+                    if (Health <= 0f)
+                    {
+                        Die();
+                    }
                 }
                 else
                 {
@@ -54,18 +59,6 @@ namespace DanielLochner.Assets
             health.SetDirty(true);
         }
 
-        public virtual void TakeDamage(float damage)
-        {
-            if (IsDead) return;
-            
-            Health -= damage;
-            OnTakeDamage?.Invoke(damage);
-        }
-        public virtual void Die()
-        {
-            OnDie?.Invoke();
-        }
-
         [ServerRpc]
         private void SetHealthServerRpc(float health)
         {
@@ -75,11 +68,38 @@ namespace DanielLochner.Assets
         {
             Health = newHealth;
             OnHealthChanged?.Invoke(Health);
+        }
 
-            if (Health <= 0f)
-            {
-                Die();
-            }
+        public void TakeDamage(float damage)
+        {
+            TakeDamageServerRpc(damage);
+        }
+        [ServerRpc]
+        private void TakeDamageServerRpc(float damage)
+        {
+            if (IsDead) return;
+            Health -= damage;
+            TakeDamageClientRpc(damage);
+        }
+        [ClientRpc]
+        private void TakeDamageClientRpc(float damage)
+        {
+            OnTakeDamage?.Invoke(damage);
+        }
+
+        public void Die()
+        {
+            DieServerRpc();
+        }
+        [ServerRpc]
+        private void DieServerRpc()
+        {
+            DieClientRpc();
+        }
+        [ClientRpc]
+        private void DieClientRpc()
+        {
+            OnDie?.Invoke();
         }
 
         [ContextMenu("Take Random Damage")]

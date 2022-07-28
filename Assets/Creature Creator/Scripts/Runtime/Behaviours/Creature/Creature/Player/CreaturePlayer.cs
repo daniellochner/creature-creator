@@ -25,7 +25,22 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Setup()
         {
             base.Setup();
-            DeathMessenger.Setup();
+        }
+
+        public override void OnDie()
+        {
+            base.OnDie();
+
+            Namer.enabled = false;
+            DeathMessenger.enabled = false;
+        }
+        public override void OnHide()
+        {
+            base.OnHide();
+        }
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
         }
     }
 }
