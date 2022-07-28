@@ -77,7 +77,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            Destroy(connectionPoint.gameObject);
+            if (connectionPoint != null){
+                Destroy(connectionPoint.gameObject);
+            }
         }
 
         protected virtual void Initialize()

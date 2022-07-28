@@ -157,6 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 RemoveBodyPart(BodyParts[0]);
             }
             Root.DestroyChildren();
+            Root.localPosition = Vector3.zero;
             Bones.Clear();
 
             data = new CreatureData();

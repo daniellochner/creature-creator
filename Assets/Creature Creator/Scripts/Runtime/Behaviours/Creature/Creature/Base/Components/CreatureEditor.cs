@@ -171,6 +171,10 @@ namespace DanielLochner.Assets.CreatureCreator
             get => tempModel != null;
             set
             {
+                if (tempModel != null)
+                {
+                    Destroy(tempModel);
+                }
                 if (value)
                 {
                     tempModel = new GameObject("Temp");
@@ -187,10 +191,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 else
                 {
-                    if (tempModel != null)
-                    {
-                        Destroy(tempModel);
-                    }
                     select.UseOutline = true;
                 }
             }

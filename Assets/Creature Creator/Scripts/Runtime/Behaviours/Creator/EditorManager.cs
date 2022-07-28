@@ -332,7 +332,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Constructor.Recenter();
             Creature.Constructor.UpdateConfiguration();
             Creature.Collider.UpdateCollider();
-            Creature.Mover.TargetPosition = Creature.transform.position;
+            Creature.Mover.Teleport(Creature.Mover.Platform);
             Creature.Mover.IsMovable = true;
             Creature.Constructor.IsTextured = true;
             Creature.Editor.IsInteractable = false;
@@ -432,12 +432,21 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Load(CreatureData creatureData)
         {
-            PerformOperation(() => Creature.Editor.Load(creatureData));
+            Creature.Editor.Load(creatureData);
 
+            if (IsBuilding)
+            {
+                Build();
+            }
+            else
             if (IsPlaying)
             {
-                Creature.Mover.Teleport(Creature.Mover.Platform);
-                Creature.Spawner.Spawn();
+                Play();
+            }
+            else
+            if (IsPainting)
+            {
+                Paint();
             }
 
             // Colour
@@ -1137,27 +1146,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// When performing an operation, the creature should be unaminated and immovable, and its body should temporarily realign to ensure that it is in the correct sate when operated on.
-        /// </summary>
-        /// <param name="operation">The operation to be performed.</param>
-        /// <param name="restructure">Whether or not the creature needs to be restructured.</param>
-        private void PerformOperation(UnityAction operation, bool restructure = false)
-        {
-            // Reset to default state.
-            Creature.transform.position = Creature.Mover.Platform.transform.position;
-            Creature.Constructor.Root.localPosition = Vector3.zero;
-
-            // Perform operation.
-            operation();
-
-            // Restore to previous state.
-            Creature.Constructor.IsTextured = Creature.Constructor.IsTextured;
-            Creature.Editor.IsEditing = Creature.Editor.IsEditing;
-            Creature.Mover.IsMovable = Creature.Mover.IsMovable;
-            Creature.Animator.IsAnimated = Creature.Animator.IsAnimated;
         }
 
         /// <summary>
