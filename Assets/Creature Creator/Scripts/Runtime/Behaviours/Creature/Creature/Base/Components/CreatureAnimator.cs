@@ -242,13 +242,16 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                if (useEasing)
+                if (offset != Vector3.zero)
                 {
-                    moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
-                }
-                else
-                {
-                    Constructor.Body.localPosition += offset;
+                    if (useEasing)
+                    {
+                        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
+                    }
+                    else
+                    {
+                        Constructor.Body.localPosition += offset;
+                    }
                 }
 
                 hasCapturedDefaults = true;

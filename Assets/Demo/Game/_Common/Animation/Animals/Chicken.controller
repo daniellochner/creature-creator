@@ -184,6 +184,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897c14bcb36dd5840855296119aa9337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseMovementSpeed: 2
+  baseRotationSpeed: 120
+  baseTimeToMove: 0.2
+  bodySmoothing: 2.5
+  maxRoll: 10
+  maxPitch: 30
+  stepHeightFactor: 0.3
+  liftHeightFactor: 0.5
 --- !u!114 &-2395481018389549848
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -288,37 +296,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: '%LSpeed'
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsGrounded
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Eye_IsDilated
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Mouth_Breathe
     m_Type: 1
     m_DefaultFloat: 0.5
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Mouth_IsOpen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Body

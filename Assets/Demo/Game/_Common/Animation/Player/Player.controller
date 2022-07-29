@@ -321,19 +321,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c23e7a232e50cd04093629c1e1f4d5b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flapSounds:
-  - name: Flap1
-    volume: 0.5
-  - name: Flap2
-    volume: 0.5
-  - name: Flap3
-    volume: 0.5
-  - name: Flap4
-    volume: 0.5
-  - name: Flap5
-    volume: 0.5
-  - name: Flap6
-    volume: 0.5
 --- !u!1107 &-3018549544153398771
 AnimatorStateMachine:
   serializedVersion: 6
@@ -410,6 +397,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897c14bcb36dd5840855296119aa9337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smoothing: 2.5
+  maxRoll: 10
+  maxPitch: 30
+  timeToMove: 0.2
+  stepHeightFactor: 0.3
+  liftHeightFactor: 0.5
 --- !u!1101 &-1119425300949184486
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
