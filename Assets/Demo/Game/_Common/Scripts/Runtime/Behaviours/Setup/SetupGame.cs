@@ -40,12 +40,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     Instantiate(helper).Spawn();
                 }
 
-                NetworkHostManager.Instance.SpawnPosition = startingPlatform.transform.position;
-                NetworkHostManager.Instance.SpawnRotation = startingPlatform.transform.rotation;
+                NetworkHostManager.Instance.SpawnPosition = startingPlatform.Position;
+                NetworkHostManager.Instance.SpawnRotation = startingPlatform.Rotation;
 
                 if (NetworkManager.Singleton.IsHost)
                 {
-                    NetworkObject obj = Instantiate(playerPrefab, NetworkHostManager.Instance.SpawnPosition, NetworkHostManager.Instance.SpawnRotation);
+                    NetworkObject obj = Instantiate(playerPrefab, startingPlatform.Position, startingPlatform.Rotation);
                     obj.SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
                 }
             }

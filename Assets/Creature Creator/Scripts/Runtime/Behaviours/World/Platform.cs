@@ -9,6 +9,18 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private bool hasEntered;
+        [SerializeField] private Vector3 editOffset;
+        #endregion
+
+        #region Properties
+        public Vector3 Position
+        {
+            get => transform.position + editOffset;
+        }
+        public Quaternion Rotation
+        {
+            get => transform.rotation;
+        }
         #endregion
 
         #region Methods

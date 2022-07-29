@@ -70,7 +70,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5477815132022054366}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9ac8d30c6a0d9642a11e5be4c440740, type: 3}
   m_Name: 
@@ -293,7 +293,6 @@ GameObject:
   - component: {fileID: 5812436878276722343}
   - component: {fileID: 501283603706205489}
   - component: {fileID: 3811310191443384886}
-  - component: {fileID: 6255390858034542078}
   - component: {fileID: 5812436878276722340}
   - component: {fileID: 3945330708831151637}
   - component: {fileID: 8789640660392786810}
@@ -310,11 +309,14 @@ GameObject:
   - component: {fileID: 9001263530314210148}
   - component: {fileID: 7061764046128142492}
   - component: {fileID: 88016231886973403}
-  - component: {fileID: -4379882553468307030}
+  - component: {fileID: -3788271431408511533}
   - component: {fileID: 3710467496790067627}
   - component: {fileID: 6957859576106576722}
   - component: {fileID: -6302162848538571873}
   - component: {fileID: 2499678688202256925}
+  - component: {fileID: 1908310334534630441}
+  - component: {fileID: 1989945688205631290}
+  - component: {fileID: 8039239263990838917}
   m_Layer: 0
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -480,25 +482,9 @@ MonoBehaviour:
     type: 1
   - name: IsGrounded
     type: 4
+  - name: IsUnderwater
+    type: 4
   updateParameterList: 0
---- !u!114 &6255390858034542078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e70812401d0c2d04aae196f776a16d36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useThisTransform: 1
-  source: {fileID: 7193793692207522153}
-  sourcePosition: {fileID: 7193793692207522153}
-  sourceRotation: {fileID: 7193793692207522153}
-  posThreshold: 0.001
-  rotThreshold: 0.01
 --- !u!114 &5812436878276722340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,9 +500,6 @@ MonoBehaviour:
   isAnimated: 0
   useEasing: 0
   extensionThreshold: 0.8
-  baseMovementSpeed: 2
-  baseTurnSpeed: 120
-  contactDistance: 0.05
   rig: {fileID: 5812436878079772818}
   head: {fileID: 6064214194610313706}
   tail: {fileID: 5526538298011628014}
@@ -870,7 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c0c6e0f2ddd8d43b2e40670311aab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-4379882553468307030
+--- !u!114 &-3788271431408511533
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -896,7 +879,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &6957859576106576722
 MonoBehaviour:
@@ -946,6 +929,52 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1908310334534630441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contactDistance: 0.1
+--- !u!114 &1989945688205631290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useThisTransform: 1
+  source: {fileID: 7193793692207522153}
+  sourcePosition: {fileID: 7193793692207522153}
+  sourceRotation: {fileID: 7193793692207522153}
+  posThreshold: 0.001
+  rotThreshold: 0.01
+  updateTime: 0.1
+  baseMovementSpeed: 2
+  baseTurnSpeed: 120
+--- !u!114 &8039239263990838917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5bc3cd8e72e25e4f9bf95c139f882d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7193793692236944224
@@ -1022,7 +1051,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 0}
   m_Bones:
@@ -1075,7 +1104,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8806243977375375441}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9ac8d30c6a0d9642a11e5be4c440740, type: 3}
   m_Name: 

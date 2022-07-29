@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override bool CanAttach(out Vector3 aPosition, out Quaternion aRotation)
         {
-            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.CreatureCamera.Camera, Input.mousePosition), out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Body Parts")))
+            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.Camera, Input.mousePosition), out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Body Parts")))
             {
                 LimbConstructor limb = hitInfo.collider.GetComponentInParent<LimbConstructor>();
                 if (CanConnectToLimb(limb))

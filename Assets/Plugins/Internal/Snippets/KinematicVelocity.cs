@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets
@@ -11,20 +13,35 @@ namespace DanielLochner.Assets
         [SerializeField, DrawIf("source", null)] private Transform sourceRotation;
         [SerializeField] private float posThreshold;
         [SerializeField] private float rotThreshold;
+        [SerializeField] private float updateTime;
 
         private Vector3? prevPosition = null;
         private Quaternion? prevRotation = null;
+        private Vector3 angular, linear;
         #endregion
 
         #region Properties
         public Vector3 Linear
         {
-            get; private set;
+            get => linear;
+            set
+            {
+                linear = value;
+                OnLinearChanged?.Invoke(linear);
+            }
         }
         public Vector3 Angular
         {
-            get; private set;
+            get => angular;
+            set
+            {
+                angular = value;
+                OnAngularChanged?.Invoke(angular);
+            }
         }
+
+        public Action<Vector3> OnLinearChanged { get; set; }
+        public Action<Vector3> OnAngularChanged { get; set; }
         #endregion
 
         #region Methods
@@ -36,7 +53,12 @@ namespace DanielLochner.Assets
             if (source != null) { sourcePosition = sourceRotation = source; }
         }
 #endif
-        private void FixedUpdate()
+        private void OnEnable()
+        {
+            InvokeRepeating("Calculate", 0f, updateTime);
+        }
+
+        public void Calculate()
         {
             if (sourcePosition)
             {

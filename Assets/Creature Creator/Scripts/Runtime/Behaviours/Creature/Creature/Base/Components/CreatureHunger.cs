@@ -70,6 +70,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public void StartDepletingHunger()
         {
             Hunger = 1f;
+
+            StopDepletingHunger();
             hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
         }
         public void StopDepletingHunger()

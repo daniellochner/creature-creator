@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureBase creature = other.GetComponent<CreatureBase>();
             if (creature != null)
             {
-                Instantiate(splashPrefab, creature.Constructor.Body.position, Quaternion.identity);
+                Instantiate(splashPrefab, creature.transform.position, Quaternion.identity);
 
                 CreaturePlayerLocal player = creature as CreaturePlayerLocal;
                 if (player != null && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))

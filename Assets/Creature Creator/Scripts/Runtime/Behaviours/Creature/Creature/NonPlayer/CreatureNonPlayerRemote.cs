@@ -26,10 +26,5 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnDie();
         }
-        public override void OnHide()
-        {
-            base.OnHide();
-            Collider.enabled = false;
-        }
     }
 }

@@ -32,6 +32,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         private Coroutine[][] moveFeet;
         #endregion
 
+        #region Properties
+        private float LSpeed => m_Animator.GetFloat("%LSpeed");
+        private float ASpeed => m_Animator.GetFloat("%ASpeed");
+        #endregion
+
         #region Methods
         public override void Setup()
         {
@@ -116,9 +121,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 }
             });
 
-            float t = Creature.Animator.GetFloat("%ASpeed");
-
-            walkTimeScale = Mathf.Lerp(1f, 2f, t);
+            walkTimeScale = Mathf.Lerp(1f, 2f, ASpeed);
             foreach (LegAnimator leg in Creature.Legs)
             {
                 leg.MovementTimeScale = walkTimeScale;
@@ -142,13 +145,15 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 float liftHeight = Creature.DefaultHeight * liftHeightFactor;
 
                 Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove);
-                float t1 = Mathf.Clamp01(Vector3.Distance(leg1.Anchor.position, pos1) / leg1.MaxDistance);                
+                //float t1 = Mathf.Clamp01(Vector3.Distance(leg1.Anchor.position, pos1) / leg1.MaxDistance);
+                float t1 = Mathf.Clamp01(LSpeed + ASpeed);
                 Coroutine moveFoot1 = leg1.StartCoroutine(leg1.MoveFootRoutine(pos1, rot, timeToMove, liftHeight * t1));
                 moveFeet[pair][0] = moveFoot1;
                 yield return moveFoot1;
 
                 Vector3 pos2 = GetTargetFootPosition(leg2, timeToMove);
-                float t2 = Mathf.Clamp01(Vector3.Distance(leg2.Anchor.position, pos2) / leg2.MaxDistance);
+                //float t2 = Mathf.Clamp01(Vector3.Distance(leg2.Anchor.position, pos2) / leg2.MaxDistance);
+                float t2 = Mathf.Clamp01(LSpeed + ASpeed);
                 Coroutine moveFoot2 = leg2.StartCoroutine(leg2.MoveFootRoutine(pos2, rot, timeToMove, liftHeight * t2));
                 moveFeet[pair][1] = moveFoot2;
                 yield return moveFoot2;
@@ -186,9 +191,18 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
-            Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove);
+            //Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove);
+            //Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
+            //worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
+
+
+
+            // fix issue where non-local player animations are very far ahead?!?!?!?
+            // SOMEWHERE HERE, BECAUSE IT's working now........?
+
+
+            Vector3 localPos = leg.DefaultFootPosition;
             Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
-            worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
 
             Vector3 origin = worldPos + Creature.transform.up * (Creature.DefaultHeight * stepHeightFactor);
             if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo, Mathf.Infinity))
@@ -222,9 +236,8 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             }
             avgHeight /= Creature.Legs.Count;
 
-            float t = Creature.Animator.GetFloat("%LSpeed");
             float offset = avgHeight - minHeight;
-            Vector3 targetPosition = Vector3.Lerp(Vector3.zero, -Vector3.up * offset, t);
+            Vector3 targetPosition = Vector3.Lerp(Vector3.zero, -Vector3.up * offset, LSpeed);
 
             Creature.Constructor.Root.localPosition = Vector3.Lerp(Creature.Constructor.Root.localPosition, targetPosition, Time.deltaTime * smoothing);
         }
@@ -252,8 +265,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 pitch = Quaternion.AngleAxis(pitchAngle, Vector3.right);
             }
 
-            float t = Creature.Animator.GetFloat("%LSpeed");
-            Quaternion targetRotation = Quaternion.Lerp(Quaternion.identity, roll * pitch, t);
+            Quaternion targetRotation = Quaternion.Lerp(Quaternion.identity, roll * pitch, LSpeed);
 
             Creature.Constructor.Root.localRotation = Quaternion.Slerp(Creature.Constructor.Root.localRotation, targetRotation, Time.deltaTime * smoothing);
         }

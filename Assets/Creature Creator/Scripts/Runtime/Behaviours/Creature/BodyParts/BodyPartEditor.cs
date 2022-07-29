@@ -115,14 +115,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                 {
-                    CreatureEditor.CreatureCamera.CameraOrbit.Freeze();
+                    CreatureEditor.Camera.CameraOrbit.Freeze();
                 }
             });
             Hover.OnExit.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                 {
-                    CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze();
+                    CreatureEditor.Camera.CameraOrbit.Unfreeze();
                 }
             });
 
@@ -148,14 +148,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    CreatureEditor.CreatureCamera.CameraOrbit.Freeze();
+                    CreatureEditor.Camera.CameraOrbit.Freeze();
                 }
             });
             LDrag.OnRelease.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0) && !Hover.IsOver)
                 {
-                    CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze();
+                    CreatureEditor.Camera.CameraOrbit.Unfreeze();
                 }
             });
             LDrag.OnBeginDrag.AddListener(delegate
@@ -223,7 +223,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         Instantiate(CreatureEditor.PoofPrefab, transform.position, Quaternion.identity, Dynamic.Transform);
                         BodyPartConstructor.Detach();
 
-                        CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze(); // Since the body part is destroyed immediately, the OnRelease() method is not invoked.
+                        CreatureEditor.Camera.CameraOrbit.Unfreeze(); // Since the body part is destroyed immediately, the OnRelease() method is not invoked.
                     }
 
                     EditorManager.Instance.UpdateStatistics();
@@ -253,7 +253,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         CreatureEditor.PaintedBodyPart = this;
                     }
-                    else if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.CreatureCamera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit hitInfo) && !hitInfo.collider.CompareTag("Body Part"))
+                    else if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit hitInfo) && !hitInfo.collider.CompareTag("Body Part"))
                     {
                         CreatureEditor.PaintedBodyPart = null;
                     }
@@ -292,7 +292,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             string bodyPartID = BodyPartConstructor.AttachedBodyPart.bodyPartID;
 
-            BodyPartConstructor main = CreatureEditor.CreatureConstructor.AddBodyPart(bodyPartID);
+            BodyPartConstructor main = CreatureEditor.Constructor.AddBodyPart(bodyPartID);
             main.SetAttached(new AttachedBodyPart(bodyPartID));
 
             main.SetPrimaryColour(BodyPartConstructor.AttachedBodyPart.primaryColour);
@@ -316,7 +316,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual bool CanAttach(out Vector3 aPosition, out Quaternion aRotation)
         {
-            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.CreatureCamera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit raycastHit) && raycastHit.collider.CompareTag("Body"))
+            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit raycastHit) && raycastHit.collider.CompareTag("Body"))
             {
                 aPosition = raycastHit.point;
                 aRotation = Quaternion.LookRotation(raycastHit.normal, CreatureEditor.transform.up);

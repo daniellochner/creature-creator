@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [RequireComponent(typeof(CreatureMover))]
     [RequireComponent(typeof(CreatureCamera))]
-    [RequireComponent(typeof(CreatureConstructor), typeof(CreatureMover))]
+    [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureEditor : MonoBehaviour
     {
         #region Fields
@@ -49,9 +50,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public GameObject PoofPrefab => poofPrefab;
         public float AngleLimit => angleLimit;
 
-        public CreatureConstructor CreatureConstructor { get; private set; }
-        public CreatureMover CreatureMover { get; private set; }
-        public CreatureCamera CreatureCamera { get; private set; }
+        public CreatureConstructor Constructor { get; private set; }
+        public CreatureMover Mover { get; private set; }
+        public CreatureCamera Camera { get; private set; }
 
         public TransformationTools TransformationTools { get; private set; }
 
@@ -75,7 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else if (bpc.CanOverridePrimary)
                     {
-                        primaryColour = CreatureConstructor.Data.PrimaryColour;
+                        primaryColour = Constructor.Data.PrimaryColour;
                     }
 
                     sColour = bpc.AttachedBodyPart.secondaryColour;
@@ -85,13 +86,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else if (bpc.CanOverrideSecondary)
                     {
-                        sColour = CreatureConstructor.Data.SecondaryColour;
+                        sColour = Constructor.Data.SecondaryColour;
                     }
                 }
                 else
                 {
-                    primaryColour = CreatureConstructor.Data.PrimaryColour;
-                    sColour = CreatureConstructor.Data.SecondaryColour;
+                    primaryColour = Constructor.Data.PrimaryColour;
+                    sColour = Constructor.Data.SecondaryColour;
                 }
                 EditorManager.Instance.SetPrimaryColourUI(primaryColour, isPrimaryOverridden);
                 EditorManager.Instance.SetSecondaryColourUI(sColour, isSOverride);
@@ -137,7 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 isInteractable = value;
 
-                foreach (Collider collider in CreatureConstructor.Body.GetComponentsInChildren<Collider>(true))
+                foreach (Collider collider in Constructor.Body.GetComponentsInChildren<Collider>(true))
                 {
                     collider.enabled = isInteractable;
                 }
@@ -178,7 +179,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (value)
                 {
                     tempModel = new GameObject("Temp");
-                    tempModel.transform.SetParent(CreatureConstructor.Model, false);
+                    tempModel.transform.SetParent(Constructor.Model, false);
 
                     MeshFilter tempBodyMeshFilter = tempModel.AddComponent<MeshFilter>();
                     tempBodyMeshFilter.mesh = colliderMesh;
@@ -205,9 +206,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Initialize()
         {
-            CreatureConstructor = GetComponent<CreatureConstructor>();
-            CreatureMover = GetComponent<CreatureMover>();
-            CreatureCamera = GetComponent<CreatureCamera>();
+            Constructor = GetComponent<CreatureConstructor>();
+            Mover = GetComponent<CreatureMover>();
+            Camera = GetComponent<CreatureCamera>();
         }
 
         public void Setup()
@@ -217,19 +218,19 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupInteraction()
         {
-            meshCollider = CreatureConstructor.Model.GetComponent<MeshCollider>();
+            meshCollider = Constructor.Model.GetComponent<MeshCollider>();
             colliderMesh = new Mesh(); // Separate mesh used to contain a snapshot of the body for the collider.
 
             // Interact
             toolsAudioSource = gameObject.AddComponent<AudioSource>();
             toolsAudioSource.volume = 0.25f;
 
-            Hover hover = CreatureConstructor.Body.GetComponent<Hover>();
+            Hover hover = Constructor.Body.GetComponent<Hover>();
             hover.OnEnter.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                 {
-                    CreatureCamera.CameraOrbit.Freeze();
+                    Camera.CameraOrbit.Freeze();
                     SetBonesVisibility(true);
                 }
             });
@@ -237,7 +238,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                 {
-                    CreatureCamera.CameraOrbit.Unfreeze();
+                    Camera.CameraOrbit.Unfreeze();
 
                     if (!IsSelected)
                     {
@@ -246,12 +247,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
-            drag = CreatureConstructor.Body.GetComponent<Drag>();
+            drag = Constructor.Body.GetComponent<Drag>();
             drag.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    CreatureCamera.CameraOrbit.Freeze();
+                    Camera.CameraOrbit.Freeze();
                 }
             });
             drag.OnRelease.AddListener(delegate
@@ -260,12 +261,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (!hover.IsOver)
                     {
-                        CreatureCamera.CameraOrbit.Unfreeze();
+                        Camera.CameraOrbit.Unfreeze();
                     }
 
-                    CreatureConstructor.UpdateDimensions();
-                    CreatureConstructor.UpdateConfiguration();
-                    foreach (LimbEditor limb in CreatureConstructor.Root.GetComponentsInChildren<LimbEditor>())
+                    Constructor.UpdateDimensions();
+                    Constructor.UpdateConfiguration();
+                    foreach (LimbEditor limb in Constructor.Root.GetComponentsInChildren<LimbEditor>())
                     {
                         limb.UpdateMeshCollider();
                     }
@@ -274,11 +275,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     IsDirty = true;
                 }
             });
-            drag.cylinderRadius = CreatureConstructor.MaxRadius;
-            drag.cylinderHeight = CreatureConstructor.MaxHeight;
+            drag.cylinderRadius = Constructor.MaxRadius;
+            drag.cylinderHeight = Constructor.MaxHeight;
 
-            CreatureConstructor.Body.GetComponent<Click>();
-            select = CreatureConstructor.Body.GetComponent<Select>();
+            Constructor.Body.GetComponent<Click>();
+            select = Constructor.Body.GetComponent<Select>();
             select.OnSelect.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
@@ -302,7 +303,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    CreatureCamera.CameraOrbit.Freeze();
+                    Camera.CameraOrbit.Freeze();
                     pointerPosOffset = null;
                 }
             });
@@ -310,7 +311,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    CreatureCamera.CameraOrbit.Unfreeze();
+                    Camera.CameraOrbit.Unfreeze();
                 }
             });
             frontToolPress.OnHold.AddListener(delegate
@@ -327,7 +328,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    CreatureCamera.CameraOrbit.Freeze();
+                    Camera.CameraOrbit.Freeze();
                     pointerPosOffset = null;
                 }
             });
@@ -335,55 +336,55 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    CreatureCamera.CameraOrbit.Unfreeze();
+                    Camera.CameraOrbit.Unfreeze();
                 }
             });
             backToolPress.OnHold.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    HandleStretchTools(CreatureConstructor.Bones.Count - 1, CreatureConstructor.Bones.Count, backTool);
+                    HandleStretchTools(Constructor.Bones.Count - 1, Constructor.Bones.Count, backTool);
                 }
             });
             
-            frontTool.GetChild(0).localPosition = backTool.GetChild(0).localPosition = Vector3.forward * (CreatureConstructor.BoneSettings.Length / 2f + CreatureConstructor.BoneSettings.Radius + 0.05f);
+            frontTool.GetChild(0).localPosition = backTool.GetChild(0).localPosition = Vector3.forward * (Constructor.BoneSettings.Length / 2f + Constructor.BoneSettings.Radius + 0.05f);
         }
         private void SetupConstruction()
         {
-            CreatureConstructor.OnPreDemolish += delegate ()
+            Constructor.OnPreDemolish += delegate ()
             {
                 // Prevent tools from being demolished along with creature.
                 frontTool.parent = backTool.parent = Dynamic.Transform;
                 TransformationTools.Hide();
             };
-            CreatureConstructor.OnConstructBody += delegate ()
+            Constructor.OnConstructBody += delegate ()
             {
                 EditorManager.Instance.UpdateStatistics();
                 UpdateMeshCollider();
-                CreatureConstructor.IsTextured = CreatureConstructor.IsTextured;
+                Constructor.IsTextured = Constructor.IsTextured;
             };
-            CreatureConstructor.OnSetupBone += delegate (int index)
+            Constructor.OnSetupBone += delegate (int index)
             {
                 // Hinge Joint
-                HingeJoint hingeJoint = CreatureConstructor.Bones[index].GetComponent<HingeJoint>();
+                HingeJoint hingeJoint = Constructor.Bones[index].GetComponent<HingeJoint>();
                 if (hingeJoint != null)
                 {
-                    hingeJoint.anchor = new Vector3(0, 0, -CreatureConstructor.BoneSettings.Length / 2f);
-                    hingeJoint.connectedBody = CreatureConstructor.Bones[index - 1].GetComponent<Rigidbody>();
+                    hingeJoint.anchor = new Vector3(0, 0, -Constructor.BoneSettings.Length / 2f);
+                    hingeJoint.connectedBody = Constructor.Bones[index - 1].GetComponent<Rigidbody>();
                 }
 
                 // Scroll
-                Scroll scroll = CreatureConstructor.Bones[index].GetComponent<Scroll>();
+                Scroll scroll = Constructor.Bones[index].GetComponent<Scroll>();
                 scroll.OnScrollDown.RemoveAllListeners();
                 scroll.OnScrollDown.AddListener(delegate 
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
-                        if (CreatureConstructor.GetWeight(index) > 0)
+                        if (Constructor.GetWeight(index) > 0)
                         {
                             toolsAudioSource.PlayOneShot(ResizeAudioClip);
                         }
-                        CreatureConstructor.RemoveWeight(index, 5);
+                        Constructor.RemoveWeight(index, 5);
 
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(-1);
@@ -394,21 +395,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
-                        if (CreatureConstructor.GetWeight(index) < 100)
+                        if (Constructor.GetWeight(index) < 100)
                         {
                             toolsAudioSource.PlayOneShot(ResizeAudioClip);
                         }
-                        CreatureConstructor.AddWeight(index, 5);
+                        Constructor.AddWeight(index, 5);
 
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(1);
                     }
                 });
             };
-            CreatureConstructor.OnAddBone += delegate (int index)
+            Constructor.OnAddBone += delegate (int index)
             {
                 // Bone
-                GameObject addedBoneGO = CreatureConstructor.Bones[CreatureConstructor.Bones.Count - 1].gameObject;
+                GameObject addedBoneGO = Constructor.Bones[Constructor.Bones.Count - 1].gameObject;
                 Instantiate(boneToolPrefab, addedBoneGO.transform);
 
                 Rigidbody rb = addedBoneGO.AddComponent<Rigidbody>();
@@ -417,7 +418,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 rb.angularDrag = Mathf.Infinity;
                 rb.useGravity = false;
 
-                if (CreatureConstructor.Data.Bones.Count > 0) // Necessary to use bone data instead of childCount.
+                if (Constructor.Data.Bones.Count > 0) // Necessary to use bone data instead of childCount.
                 {
                     HingeJoint hingeJoint = addedBoneGO.AddComponent<HingeJoint>();
 
@@ -439,7 +440,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                     {
-                        CreatureCamera.CameraOrbit.Freeze();
+                        Camera.CameraOrbit.Freeze();
                         SetBonesVisibility(true);
                     }
                 });
@@ -447,7 +448,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding && !Input.GetMouseButton(0))
                     {
-                        CreatureCamera.CameraOrbit.Unfreeze();
+                        Camera.CameraOrbit.Unfreeze();
 
                         if (!IsSelected)
                         {
@@ -461,34 +462,34 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
-                        foreach (Transform bone in CreatureConstructor.Bones)
+                        foreach (Transform bone in Constructor.Bones)
                         {
                             bone.GetComponentInChildren<Collider>().isTrigger = true;
                         }
 
-                        CreatureCamera.CameraOrbit.Freeze();
+                        Camera.CameraOrbit.Freeze();
                     }
                 });
                 drag.OnRelease.AddListener(delegate
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
-                        foreach (Transform bone in CreatureConstructor.Bones)
+                        foreach (Transform bone in Constructor.Bones)
                         {
                             bone.GetComponentInChildren<Collider>(true).isTrigger = false;
                         }
 
                         if (!hover.IsOver)
                         {
-                            CreatureCamera.CameraOrbit.Unfreeze();
+                            Camera.CameraOrbit.Unfreeze();
                         }
 
-                        CreatureConstructor.UpdateOrigin();
-                        CreatureConstructor.UpdateConfiguration();
-                        CreatureConstructor.UpdateDimensions();
+                        Constructor.UpdateOrigin();
+                        Constructor.UpdateConfiguration();
+                        Constructor.UpdateDimensions();
 
                         UpdateMeshCollider();
-                        foreach (LimbEditor limb in CreatureConstructor.Root.GetComponentsInChildren<LimbEditor>(true))
+                        foreach (LimbEditor limb in Constructor.Root.GetComponentsInChildren<LimbEditor>(true))
                         {
                             limb.UpdateMeshCollider();
                         }
@@ -500,8 +501,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 drag.mousePlaneAlignment = Drag.MousePlaneAlignment.ToWorldDirection;
                 drag.world = transform;
                 drag.boundsShape = Drag.BoundsShape.Cylinder;
-                drag.cylinderHeight = CreatureConstructor.MaxHeight;
-                drag.cylinderRadius = CreatureConstructor.MaxRadius;
+                drag.cylinderHeight = Constructor.MaxHeight;
+                drag.cylinderRadius = Constructor.MaxRadius;
                 drag.updatePlaneOnPress = true;
 
                 Click click = addedBoneGO.AddComponent<Click>();
@@ -513,8 +514,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 });
 
-                frontTool.SetParent(CreatureConstructor.Bones[0]);
-                backTool.SetParent(CreatureConstructor.Bones[CreatureConstructor.Bones.Count - 1]);
+                frontTool.SetParent(Constructor.Bones[0]);
+                backTool.SetParent(Constructor.Bones[Constructor.Bones.Count - 1]);
 
                 frontTool.localPosition = backTool.localPosition = Vector3.zero;
                 frontTool.localRotation = Quaternion.Euler(0, 180, 0);
@@ -523,21 +524,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Editor
                 IsDirty = true;
             };
-            CreatureConstructor.OnPreRemoveBone += delegate (int index)
+            Constructor.OnPreRemoveBone += delegate (int index)
             {
-                backTool.SetParent(CreatureConstructor.Bones[CreatureConstructor.Bones.Count - 2]);
+                backTool.SetParent(Constructor.Bones[Constructor.Bones.Count - 2]);
                 backTool.localPosition = frontTool.localPosition = Vector3.zero;
                 backTool.localRotation = Quaternion.identity;
             };
-            CreatureConstructor.OnRemoveBone += delegate (int index)
+            Constructor.OnRemoveBone += delegate (int index)
             {
                 IsDirty = true;
             };
-            CreatureConstructor.OnSetWeight += delegate (int index, float weight)
+            Constructor.OnSetWeight += delegate (int index, float weight)
             {
                 //UpdateMeshCollider(); // Causes a considerable amount of lag when constructing.
 
-                Transform bone = CreatureConstructor.Bones[index];
+                Transform bone = Constructor.Bones[index];
 
                 // Bone model
                 Transform model = bone.GetChild(0);
@@ -549,39 +550,39 @@ namespace DanielLochner.Assets.CreatureCreator
                 EditorManager.Instance.UpdateStatistics();
                 IsDirty = true;
             };
-            CreatureConstructor.OnSetPrimaryColour += delegate (Color colour)
+            Constructor.OnSetPrimaryColour += delegate (Color colour)
             {
                 IsDirty = true;
             };
-            CreatureConstructor.OnSetSecondaryColour += delegate (Color colour)
+            Constructor.OnSetSecondaryColour += delegate (Color colour)
             {
                 IsDirty = true;
             };
-            CreatureConstructor.OnSetPattern += delegate (string patternID)
+            Constructor.OnSetPattern += delegate (string patternID)
             {
                 IsDirty = true;
             };
-            CreatureConstructor.OnSetTiling += delegate (Vector2 tiling)
+            Constructor.OnSetTiling += delegate (Vector2 tiling)
             {
                 IsDirty = true;
                 EditorManager.Instance.SetTilingUI(tiling);
             };
-            CreatureConstructor.OnSetOffset += delegate (Vector2 offset)
+            Constructor.OnSetOffset += delegate (Vector2 offset)
             {
                 IsDirty = true;
                 EditorManager.Instance.SetOffsetUI(offset);
             };
-            CreatureConstructor.OnSetShine += delegate (float shine)
+            Constructor.OnSetShine += delegate (float shine)
             {
                 IsDirty = true;
                 EditorManager.Instance.SetShineUI(shine);
             };
-            CreatureConstructor.OnSetMetallic += delegate (float metallic)
+            Constructor.OnSetMetallic += delegate (float metallic)
             {
                 IsDirty = true;
                 EditorManager.Instance.SetMetallicUI(metallic);
             };
-            CreatureConstructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
+            Constructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
             {
                 BodyPartEditor mainBPE = main.GetComponent<BodyPartEditor>();
                 mainBPE.Setup(this);
@@ -590,19 +591,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 flippedBPE.SetFlipped(mainBPE);
                 flippedBPE.Setup(this);
             };
-            CreatureConstructor.OnAddBodyPartData += delegate (BodyPart bodyPart)
+            Constructor.OnAddBodyPartData += delegate (BodyPart bodyPart)
             {
                 Cash -= bodyPart.Price;
             };
-            CreatureConstructor.OnRemoveBodyPartData += delegate (BodyPart bodyPart)
+            Constructor.OnRemoveBodyPartData += delegate (BodyPart bodyPart)
             {
                 Cash += bodyPart.Price;
             };
-            CreatureConstructor.OnBodyPartPrefabOverride += delegate (BodyPart bodyPart)
+            Constructor.OnBodyPartPrefabOverride += delegate (BodyPart bodyPart)
             {
                 return bodyPart.GetPrefab(BodyPart.PrefabType.Editable);
             };
-            CreatureConstructor.OnConstructCreature += delegate
+            Constructor.OnConstructCreature += delegate
             {
                 if (EditorManager.Instance.IsPainting)
                 {
@@ -614,32 +615,32 @@ namespace DanielLochner.Assets.CreatureCreator
         
         public void Load(CreatureData creatureData)
         {
-            CreatureConstructor.Demolish();
+            Constructor.Demolish();
 
             Cash = ProgressManager.Data.Cash;
             if (creatureData != null)
             {
-                CreatureConstructor.Construct(creatureData);
+                Constructor.Construct(creatureData);
 
                 LoadedCreature = creatureData.Name;
             }
             else
             {
-                CreatureConstructor.AddBone(0, Vector3.up * 1.5f, Quaternion.identity, 0f);
-                CreatureConstructor.AddBoneToBack();
-                CreatureConstructor.Body.localPosition = new Vector3(0, CreatureConstructor.Body.localPosition.y, 0); // Added bones aren't initially center-aligned.
-                CreatureConstructor.SetPrimaryColour(Color.white);
-                CreatureConstructor.SetSecondaryColour(Color.black);
-                CreatureConstructor.SetPattern("");
-                CreatureConstructor.SetTiling(Vector2.one);
-                CreatureConstructor.SetOffset(Vector2.zero);
-                CreatureConstructor.SetShine(0f);
-                CreatureConstructor.SetMetallic(0f);
+                Constructor.AddBone(0, Vector3.up * 1.5f, Quaternion.identity, 0f);
+                Constructor.AddBoneToBack();
+                Constructor.Body.localPosition = new Vector3(0, Constructor.Body.localPosition.y, 0); // Added bones aren't initially center-aligned.
+                Constructor.SetPrimaryColour(Color.white);
+                Constructor.SetSecondaryColour(Color.black);
+                Constructor.SetPattern("");
+                Constructor.SetTiling(Vector2.one);
+                Constructor.SetOffset(Vector2.zero);
+                Constructor.SetShine(0f);
+                Constructor.SetMetallic(0f);
 
                 LoadedCreature = null;
             }
 
-            CreatureConstructor.IsTextured = CreatureConstructor.IsTextured;
+            Constructor.IsTextured = Constructor.IsTextured;
             IsInteractable = IsInteractable;
             IsDirty = false;
 
@@ -662,7 +663,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SetBonesVisibility(bool isVisible)
         {
-            foreach (Transform bone in CreatureConstructor.Bones)
+            foreach (Transform bone in Constructor.Bones)
             {
                 bone.GetChild(0).gameObject.SetActive(isVisible);
             }
@@ -676,13 +677,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateMeshCollider()
         {
             colliderMesh.Clear();
-            CreatureConstructor.SkinnedMeshRenderer.BakeMesh(colliderMesh);
+            Constructor.SkinnedMeshRenderer.BakeMesh(colliderMesh);
             meshCollider.sharedMesh = colliderMesh;
-            CreatureConstructor.SkinnedMeshRenderer.localBounds = colliderMesh.bounds;
         }
         public void UpdateBodyPartsAlignment(int alignment)
         {
-            foreach (Transform bone in CreatureConstructor.Bones)
+            foreach (Transform bone in Constructor.Bones)
             {
                 foreach (BodyPartConstructor bpc in bone.GetComponentsInChildren<BodyPartConstructor>())
                 {
@@ -705,9 +705,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleStretchTools(int oldIndex, int newIndex, Transform tool)
         {
-            Plane stretchPlane = new Plane(transform.right, CreatureMover.Platform.transform.position);
+            Plane stretchPlane = new Plane(transform.right, Mover.Platform.transform.position);
 
-            Ray ray = CreatureCamera.Camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.Camera.ScreenPointToRay(Input.mousePosition);
             if (stretchPlane.Raycast(ray, out float distance))
             {
                 Vector3 pointerPos = ray.GetPoint(distance);
@@ -718,7 +718,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 Vector3 initialPointerPos = tool.TransformPoint((Vector3)pointerPosOffset);
-                bool isFarEnough = Vector3Utility.SqrDistanceComp(pointerPos, initialPointerPos, CreatureConstructor.BoneSettings.Length);
+                bool isFarEnough = Vector3Utility.SqrDistanceComp(pointerPos, initialPointerPos, Constructor.BoneSettings.Length);
                 bool hasCooledDown = Time.time > addedOrRemovedTime + AddOrRemoveCooldown;
 
                 if (isFarEnough && hasCooledDown)
@@ -729,21 +729,21 @@ namespace DanielLochner.Assets.CreatureCreator
                     float pointerAngle = Vector3.Angle(pointerDisplacement, tool.forward);
                     float toolAngle = Vector3.Angle(toolDisplacement, tool.forward);
 
-                    if ((pointerAngle < 90f) && (toolAngle < angleLimit) && CreatureConstructor.CanAddBone(oldIndex))
+                    if ((pointerAngle < 90f) && (toolAngle < angleLimit) && Constructor.CanAddBone(oldIndex))
                     {
-                        CreatureConstructor.UpdateBoneConfiguration(); // Necessary in-case creature moves slightly while editing (due to hinge-joint bounciness).
+                        Constructor.UpdateBoneConfiguration(); // Necessary in-case creature moves slightly while editing (due to hinge-joint bounciness).
 
-                        Vector3 position = CreatureConstructor.Bones[oldIndex].position + ((0.5f * CreatureConstructor.BoneSettings.Length) * (tool.forward + toolDisplacement.normalized));
-                        Quaternion rotation = Quaternion.LookRotation(Mathf.Sign(Vector3.Dot(tool.forward, CreatureConstructor.Bones[oldIndex].forward)) * toolDisplacement.normalized, tool.up);
+                        Vector3 position = Constructor.Bones[oldIndex].position + ((0.5f * Constructor.BoneSettings.Length) * (tool.forward + toolDisplacement.normalized));
+                        Quaternion rotation = Quaternion.LookRotation(Mathf.Sign(Vector3.Dot(tool.forward, Constructor.Bones[oldIndex].forward)) * toolDisplacement.normalized, tool.up);
 
                         position = transform.InverseTransformPoint(position);
                         rotation = Quaternion.Inverse(transform.rotation) * rotation;
 
-                        CreatureConstructor.AddBone(newIndex, position, rotation, Mathf.Clamp(CreatureConstructor.GetWeight(oldIndex) * 0.75f, 0f, 100f));
+                        Constructor.AddBone(newIndex, position, rotation, Mathf.Clamp(Constructor.GetWeight(oldIndex) * 0.75f, 0f, 100f));
                     }
-                    else if (pointerAngle > (180f - angleLimit) && CreatureConstructor.CanRemoveBone(oldIndex))
+                    else if (pointerAngle > (180f - angleLimit) && Constructor.CanRemoveBone(oldIndex))
                     {
-                        CreatureConstructor.RemoveBone(oldIndex);
+                        Constructor.RemoveBone(oldIndex);
                     }
                     else
                     {

@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         private CreatureAnimator creatureAnimator;
         private Rigidbody rigidbody;
 
-        public override bool CanPerform => creatureAnimator.IsGrounded;
+        public override bool CanPerform => creatureAnimator.Grounded.IsGrounded;
 
         public override void Setup(CreatureAbilities creatureAbilities)
         {

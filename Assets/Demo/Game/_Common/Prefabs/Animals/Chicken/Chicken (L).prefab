@@ -102,7 +102,10 @@ MonoBehaviour:
   age: {fileID: 9192715740135011159}
   hider: {fileID: 575110213310608122}
   informer: {fileID: 7529378334200357814}
+  spawner: {fileID: 5137476640467376251}
+  rb: {fileID: 6234501180019057613}
   selectable: {fileID: 8850821952642902664}
+  commandable: {fileID: 4894155746139926311}
   ai: {fileID: 9027422358427779439}
 --- !u!114 &9027422358427779439
 MonoBehaviour:
@@ -168,7 +171,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -246,6 +249,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4894155746139926311 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2017508705965841739, guid: 0cae29d8014056f47b67835b296895a3, type: 3}
+  m_PrefabInstance: {fileID: 6346743688378544748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445331289289886476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5137476640467376251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2260756482224925207, guid: 0cae29d8014056f47b67835b296895a3, type: 3}
+  m_PrefabInstance: {fileID: 6346743688378544748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445331289289886476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &6234501180019057613 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 1049703787688317345, guid: 0cae29d8014056f47b67835b296895a3, type: 3}
+  m_PrefabInstance: {fileID: 6346743688378544748}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6304739756234033290 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1110918672519379686, guid: 0cae29d8014056f47b67835b296895a3, type: 3}

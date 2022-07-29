@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void FixedUpdate()
         {
-            rb.drag = (creatureAnimator.Wings.Count > 0 && !creatureAnimator.IsGrounded) ? airDrag : 0f;
+            rb.drag = (creatureAnimator.Wings.Count > 0 && !creatureAnimator.Grounded.IsGrounded) ? airDrag : 0f;
         }
     }
 }

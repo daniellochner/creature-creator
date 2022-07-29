@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Anchor = new GameObject("Anchor").transform;
             Anchor.SetParent(LimbConstructor.Extremity, false);
-        }  
+        }
 
         public override void Restructure(bool isAnimated)
         {

@@ -189,6 +189,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d71ead22d4823640887246afa879410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &2475897302938805808 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 5454955166957901076, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+  m_PrefabInstance: {fileID: 7633535019909575460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2569213254376426871 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5352649651980074579, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
@@ -198,6 +203,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3716236570872061318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6520502872731545250, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+  m_PrefabInstance: {fileID: 7633535019909575460}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284196428221533937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3977463559663823578 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6835630395420334590, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+  m_PrefabInstance: {fileID: 7633535019909575460}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284196428221533937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4723134126354174271 stripped
@@ -374,7 +401,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -411,7 +438,10 @@ MonoBehaviour:
   age: {fileID: 813556083253212842}
   hider: {fileID: 8296317713011848967}
   informer: {fileID: 2064050523526473291}
+  spawner: {fileID: 3716236570872061318}
+  rb: {fileID: 2475897302938805808}
   selectable: {fileID: 1012515090203389813}
+  commandable: {fileID: 3977463559663823578}
   ai: {fileID: 4063777470767587221}
 --- !u!4 &8284196428221533938 stripped
 Transform:

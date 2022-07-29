@@ -113,7 +113,10 @@ MonoBehaviour:
   age: {fileID: 9131785724859144868}
   hider: {fileID: 491661259859958537}
   informer: {fileID: 7589745480576076357}
+  spawner: {fileID: 5071742807215518088}
+  rb: {fileID: 6317685185661880894}
   selectable: {fileID: 8934551578054460283}
+  commandable: {fileID: 4810407653451663060}
   ai: {fileID: 3780293573951464714}
 --- !u!114 &3780293573951464714
 MonoBehaviour:
@@ -187,7 +190,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -254,6 +257,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4810407653451663060 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5966765168025571837, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}
+  m_PrefabInstance: {fileID: 1156357515665479465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506561001603752703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5071742807215518088 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6227992570738321057, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}
+  m_PrefabInstance: {fileID: 1156357515665479465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506561001603752703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6221555317990826361 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5069736590907094608, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}
@@ -265,6 +290,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &6317685185661880894 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 5161362927399722263, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}
+  m_PrefabInstance: {fileID: 1156357515665479465}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7009123994926563378 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8163157141937182491, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}

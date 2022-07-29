@@ -113,7 +113,10 @@ MonoBehaviour:
   age: {fileID: 6151037071081250767}
   hider: {fileID: 3257503669028839010}
   informer: {fileID: 4806027245693292334}
+  spawner: {fileID: 7891487603583743203}
+  rb: {fileID: 8956160098106281813}
   selectable: {fileID: 5772390204772926992}
+  commandable: {fileID: 7576252329321972671}
   ai: {fileID: 7959705396012673036}
 --- !u!114 &7959705396012673036
 MonoBehaviour:
@@ -189,7 +192,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -322,6 +325,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7576252329321972671 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 634713248282935551, guid: 0fe28dae791abbb499935469b1614a5e, type: 3}
+  m_PrefabInstance: {fileID: 7055650831316927296}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3234125012957964180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7891487603583743203 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 895801974561453987, guid: 0fe28dae791abbb499935469b1614a5e, type: 3}
+  m_PrefabInstance: {fileID: 7055650831316927296}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3234125012957964180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &8956160098106281813 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2134733866805677077, guid: 0fe28dae791abbb499935469b1614a5e, type: 3}
+  m_PrefabInstance: {fileID: 7055650831316927296}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9057062679741588498 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2043389073193969490, guid: 0fe28dae791abbb499935469b1614a5e, type: 3}

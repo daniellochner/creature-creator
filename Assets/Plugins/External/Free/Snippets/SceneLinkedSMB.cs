@@ -5,6 +5,7 @@ using UnityEngine.Animations;
 
 public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : MonoBehaviour
 {
+    protected Animator m_Animator;
     protected TMonoBehaviour m_MonoBehaviour;
 
     bool m_FirstFrameHappened;
@@ -22,6 +23,7 @@ public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : M
 
     protected void InternalInitialize(Animator animator, TMonoBehaviour monoBehaviour)
     {
+        m_Animator = animator;
         m_MonoBehaviour = monoBehaviour;
         OnStart(animator);
     }

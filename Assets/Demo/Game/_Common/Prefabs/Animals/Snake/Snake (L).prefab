@@ -197,6 +197,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2451249857297187828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8737861473705917211, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2784603024286987432 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9071214777601641543, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3932189056534488153 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7914646883057294518, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
@@ -208,6 +230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &3993140015885209374 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7795154557652088817, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5699210762730819004 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1463706760442656083, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
@@ -287,7 +314,10 @@ MonoBehaviour:
   age: {fileID: 2196639755667890052}
   hider: {fileID: 7355554444003876393}
   informer: {fileID: 689798176256724837}
+  spawner: {fileID: 2784603024286987432}
+  rb: {fileID: 3993140015885209374}
   selectable: {fileID: 1962287229178218075}
+  commandable: {fileID: 2451249857297187828}
   ai: {fileID: 2304548901012607126}
 --- !u!114 &2304548901012607126
 MonoBehaviour:
@@ -400,7 +430,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

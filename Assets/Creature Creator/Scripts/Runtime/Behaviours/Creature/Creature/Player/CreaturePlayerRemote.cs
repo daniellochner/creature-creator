@@ -70,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Selectable.SetSelected(false);
             Collider.enabled = false;
             Namer.enabled = false;
+            Animator.IsAnimated = false;
         }
         #endregion
     }

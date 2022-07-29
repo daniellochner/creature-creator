@@ -10,20 +10,19 @@ using UnityEngine.Animations.Rigging;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(CreatureConstructor))]
-    [RequireComponent(typeof(PlayerEffects))]
-    [RequireComponent(typeof(KinematicVelocity))]
     [RequireComponent(typeof(AnimatorParams))]
+    [RequireComponent(typeof(PlayerEffects))]
+    [RequireComponent(typeof(CreatureVelocity))]
+    [RequireComponent(typeof(CreatureGrounded))]
+    [RequireComponent(typeof(CreatureConstructor))]
+    [RequireComponent(typeof(CreatureUnderwater))]
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
         [SerializeField] private bool isAnimated;
         [SerializeField] private bool useEasing;
         [SerializeField] private float extensionThreshold;
-        [SerializeField] private float baseMovementSpeed;
-        [SerializeField] private float baseTurnSpeed;
-        [SerializeField] private float contactDistance;
-
+        
         [Header("Internal References")]
         [SerializeField] private Transform rig;
         [SerializeField] private Transform head;
@@ -45,8 +44,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureConstructor Constructor { get; private set; }
         public PlayerEffects Effector { get; private set; }
         public Animator Animator { get; private set; }
-        public KinematicVelocity Velocity { get; private set; }
         public AnimatorParams Params { get; private set; }
+        public CreatureVelocity Velocity { get; private set; }
+        public CreatureGrounded Grounded { get; private set; }
+        public CreatureUnderwater Underwater { get; private set; }
 
         public Action OnBuild { get; set; }
 
@@ -63,48 +64,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get; private set;
         }
-        public bool IsGrounded
+        public bool IsAnimated
         {
-            get; private set;
+            get => Animator.enabled;
+            set => Animator.enabled = value;
         }
-        //public bool IsAnimated
-        //{
-        //    get => isAnimated;
-        //    set
-        //    {
-        //        isAnimated = value;
-                
-        //        //if (isAnimated)
-        //        //{
-        //        //    headDynamicBone.SetupParticles();
-        //        //    tailDynamicBone.SetupParticles();
-        //        //}
-        //        //headDynamicBone.enabled = false;
-        //        //tailDynamicBone.enabled = false;
-                
-
-        //        //if (isAnimated)
-        //        //{
-        //        //    Restructure(isAnimated);
-        //        //}
-        //        //else
-        //        //{
-        //        //    Restructure(isAnimated);
-        //        //    RestoreDefaults(isAnimated);
-        //        //}
-                
-        //        //if (isAnimated)
-        //        //{
-        //        //    Rebuild();
-        //        //}
-
-        //        //Animator.enabled = isAnimated; // Remove to temporarily disable creature animations.
-
-        //        //headDynamicBone.enabled = isAnimated;
-        //        //tailDynamicBone.enabled = isAnimated;
-
-        //    }
-        //}
         #endregion
 
         #region Methods
@@ -112,27 +76,17 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        private void FixedUpdate()
-        {
-            if (!Animator.enabled) return;
-
-            float l = Mathf.Clamp01(Vector3.ProjectOnPlane(Velocity.Linear, transform.up).magnitude / baseMovementSpeed);
-            float a = Mathf.Clamp01(Mathf.Abs(Velocity.Angular.y) / baseTurnSpeed);
-            Animator.SetFloat("%LSpeed", l);
-            Animator.SetFloat("%ASpeed", a);
-
-            IsGrounded = Physics.Raycast(transform.position + transform.up, -transform.up, 1f + contactDistance);
-            Animator.SetBool("IsGrounded", IsGrounded);
-        }
-
+        
         private void Initialize()
         {
             Animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
             Constructor = GetComponent<CreatureConstructor>();
             Effector = GetComponent<PlayerEffects>();
-            Velocity = GetComponent<KinematicVelocity>();
+            Velocity = GetComponent<CreatureVelocity>();
             Params = GetComponent<AnimatorParams>();
+            Grounded = GetComponent<CreatureGrounded>();
+            Underwater = GetComponent<CreatureUnderwater>();
 
             Rebuild();
         }
@@ -160,9 +114,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Reinitialize();
                 CaptureDefaults();
-                Rebuild();
                 Restructure(isAnimated);
-                Animator.enabled = isAnimated;
+                Rebuild();
+                Reposition();
+                IsAnimated = isAnimated;
             };
         }
         
@@ -331,82 +286,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 //        maintainAim = true
                 //    };
                 //}
-
-
-                Vector3 offset = Vector3.zero;
-                EasingFunction.Function function = null;
-
-                if (Legs.Count == 0)
-                {
-                    // Creatures without legs should fall down to the ground.
-
-                    Mesh bodyMesh = new Mesh();
-                    Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-
-                    float minY = Mathf.Infinity;
-                    foreach (Vector3 vertex in bodyMesh.vertices)
-                    {
-                        if (vertex.y < minY)
-                        {
-                            minY = vertex.y;
-                        }
-                    }
-
-                    offset = Constructor.transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
-                    function = EasingFunction.EaseOutBounce;
-                }
-                else
-                {
-                    // Creatures with legs should slump down to put weight on them.
-
-                    // Determine the most extended leg and record its extension percentage.
-                    LegAnimator mostExtendedLeg = null;
-                    float maxExtension = Mathf.NegativeInfinity;
-                    foreach (LegAnimator leg in Legs)
-                    {
-                        if (leg.IsFlipped)
-                        {
-                            continue;
-                        }
-
-                        float extension = leg.Length / leg.MaxLength;
-                        if (extension > maxExtension)
-                        {
-                            maxExtension = extension;
-                            mostExtendedLeg = leg;
-                        }
-                    }
-
-                    // If the most extended leg is too extended (i.e., exceeds the extension threshold), slump body down by an offset:
-                    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
-                    if (maxExtension > extensionThreshold)
-                    {
-                        float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
-
-                        float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
-                        float c = targetLength;
-                        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
-
-                        float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
-                        float targetHeight = b;
-
-                        offset = Vector3.up * (targetHeight - currentHeight);
-                        function = EasingFunction.EaseOutExpo;
-                    }
-                }
-
-                if (offset != Vector3.zero)
-                {
-                    if (useEasing)
-                    {
-                        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
-                    }
-                    else
-                    {
-                        Constructor.Body.localPosition += offset;
-                    }
-                }
-
             }
             else
             {
@@ -431,7 +310,83 @@ namespace DanielLochner.Assets.CreatureCreator
                 limb.Restructure(isAnimated);
             }
         }
-        
+        public void Reposition()
+        {
+            Vector3 offset = Vector3.zero;
+            EasingFunction.Function function = null;
+
+            if (Legs.Count == 0)
+            {
+                // Creatures without legs should fall down to the ground.
+
+                Mesh bodyMesh = new Mesh();
+                Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
+
+                float minY = Mathf.Infinity;
+                foreach (Vector3 vertex in bodyMesh.vertices)
+                {
+                    if (vertex.y < minY)
+                    {
+                        minY = vertex.y;
+                    }
+                }
+
+                offset = Constructor.transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
+                function = EasingFunction.EaseOutBounce;
+            }
+            else
+            {
+                // Creatures with legs should slump down to put weight on them.
+
+                // Determine the most extended leg and record its extension percentage.
+                LegAnimator mostExtendedLeg = null;
+                float maxExtension = Mathf.NegativeInfinity;
+                foreach (LegAnimator leg in Legs)
+                {
+                    if (leg.IsFlipped)
+                    {
+                        continue;
+                    }
+
+                    float extension = leg.Length / leg.MaxLength;
+                    if (extension > maxExtension)
+                    {
+                        maxExtension = extension;
+                        mostExtendedLeg = leg;
+                    }
+                }
+
+                // If the most extended leg is too extended (i.e., exceeds the extension threshold), slump body down by an offset:
+                // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
+                if (maxExtension > extensionThreshold)
+                {
+                    float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
+
+                    float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
+                    float c = targetLength;
+                    float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
+
+                    float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
+                    float targetHeight = b;
+
+                    offset = Vector3.up * (targetHeight - currentHeight);
+                    function = EasingFunction.EaseOutExpo;
+                }
+            }
+
+            if (offset != Vector3.zero)
+            {
+                if (useEasing)
+                {
+                    moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
+                }
+                else
+                {
+                    Constructor.Body.localPosition += offset;
+                }
+            }
+        }
+
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;

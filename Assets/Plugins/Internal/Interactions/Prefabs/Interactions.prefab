@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 3037395091085092810}
   - component: {fileID: 3037395091085092853}
   - component: {fileID: 3037395091085092852}
+  - component: {fileID: 6849740058890272046}
   m_Layer: 5
   m_Name: Grid
   m_TagString: Untagged
@@ -135,7 +136,7 @@ MonoBehaviour:
   m_ChildAlignment: 7
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 48, y: 48}
+  m_CellSize: {x: 64, y: 64}
   m_Spacing: {x: 5, y: 5}
   m_Constraint: 2
   m_ConstraintCount: 1
@@ -166,6 +167,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!114 &6849740058890272046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037395091085092854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db513fdd5d5a554facdadaacc631904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3037395092027179445
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +190,6 @@ GameObject:
   - component: {fileID: 3037395092027179402}
   - component: {fileID: 3037395092027179406}
   - component: {fileID: 3037395092027179401}
-  - component: {fileID: 3037395092027179403}
   - component: {fileID: 3037395092027179400}
   m_Layer: 5
   m_Name: Interactions
@@ -252,18 +264,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
---- !u!114 &3037395092027179403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3037395092027179445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db513fdd5d5a554facdadaacc631904, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3037395092027179400
 MonoBehaviour:
   m_ObjectHideFlags: 0

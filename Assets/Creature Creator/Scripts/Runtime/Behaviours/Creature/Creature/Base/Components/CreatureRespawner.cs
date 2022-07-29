@@ -6,15 +6,16 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor))]
+    [RequireComponent(typeof(CreatureAnimator))]
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureMover))]
-    [RequireComponent(typeof(CreatureAnimator))]
     [RequireComponent(typeof(CreatureSpawner))]
     public class CreatureRespawner : MonoBehaviour
     {
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
+        public CreatureAnimator Animator { get; private set; }
         public CreatureHealth Health { get; private set; }
         public CreatureInformer Informer { get; private set; }
         public CreatureMover Mover { get; private set; }
@@ -25,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
+            Animator = GetComponent<CreatureAnimator>();
             Health = GetComponent<CreatureHealth>();
             Informer = GetComponent<CreatureInformer>();
             Mover = GetComponent<CreatureMover>();
@@ -38,6 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void OnDie()
         {
+            Animator.Animator.enabled = false;
             Spawner.Despawn();
 
             EditorManager.Instance.IsVisible = false;
@@ -53,8 +56,18 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Respawn()
         {
             Mover.Teleport(Mover.Platform);
+
+            Animator.RestoreDefaults();
+            Animator.Restructure(false);
+            Animator.IsAnimated = false;
+
+            Animator.Restructure(true);
+            Animator.Rebuild();
+            Animator.Reposition();
+            Animator.IsAnimated = true;
+            Spawner.Spawn();
+
             EditorManager.Instance.IsVisible = true;
-            EditorManager.Instance.Play();
         }
         #endregion
     }

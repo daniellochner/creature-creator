@@ -204,7 +204,10 @@ MonoBehaviour:
   age: {fileID: 5813477178390207534}
   hider: {fileID: 2937960227816447363}
   informer: {fileID: 5135002151644466383}
+  spawner: {fileID: 7527049049607157506}
+  rb: {fileID: 8771865530029067444}
   selectable: {fileID: 6191015036835071473}
+  commandable: {fileID: 7842174650274611294}
   ai: {fileID: 2941841359456031920}
 --- !u!114 &2941841359456031920
 MonoBehaviour:
@@ -383,7 +386,7 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -510,6 +513,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7527049049607157506 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5389559596413542154, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
+  m_PrefabInstance: {fileID: 2503716476779784200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959052427373306997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7842174650274611294 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5650887877181139030, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
+  m_PrefabInstance: {fileID: 2503716476779784200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959052427373306997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8665039570556332019 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6556848852571705339, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
@@ -521,3 +546,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &8771865530029067444 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 6558668119225672892, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
+  m_PrefabInstance: {fileID: 2503716476779784200}
+  m_PrefabAsset: {fileID: 0}

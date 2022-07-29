@@ -64,14 +64,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!Input.GetMouseButton(0))
                 {
-                    BodyPartEditor.CreatureEditor.CreatureCamera.CameraOrbit.Freeze();
+                    BodyPartEditor.CreatureEditor.Camera.CameraOrbit.Freeze();
                 }
             });
             hover.OnExit.AddListener(delegate
             {
                 if (!Input.GetMouseButton(0))
                 {
-                    BodyPartEditor.CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze();
+                    BodyPartEditor.CreatureEditor.Camera.CameraOrbit.Unfreeze();
                 }
             });
 
@@ -85,7 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
             drag.ResetEvents();
             drag.OnPress.AddListener(delegate
             {
-                BodyPartEditor.CreatureEditor.CreatureCamera.CameraOrbit.Freeze();
+                BodyPartEditor.CreatureEditor.Camera.CameraOrbit.Freeze();
 
                 transform.SetParent(Dynamic.Transform);
 
@@ -99,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             drag.OnRelease.AddListener(delegate
             {
-                BodyPartEditor.CreatureEditor.CreatureCamera.CameraOrbit.Unfreeze();
+                BodyPartEditor.CreatureEditor.Camera.CameraOrbit.Unfreeze();
 
                 transform.parent = transformationTools.transform;
                 transform.localRotation = Quaternion.identity;

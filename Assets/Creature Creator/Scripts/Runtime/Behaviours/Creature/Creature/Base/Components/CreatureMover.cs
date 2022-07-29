@@ -39,21 +39,19 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isMovable, canMove, canTurn;
         private Vector3 keyboardForward, keyboardRight, moveDisplacement, direction;
         private InputMode inputMode;
+        private Vector3 targetPosition;
         #endregion
 
-        #region Properties
-        public bool RequestToMove => requestToMove;
-        
-        public CreatureConstructor CreatureConstructor { get; private set; }
-        public CreatureAnimator CreatureAnimator { get; private set; }
-        public CreatureCamera CreatureCamera { get; private set; }
+        #region Properties        
+        public CreatureConstructor Constructor { get; private set; }
+        public CreatureAnimator Animator { get; private set; }
+        public CreatureCamera Camera { get; private set; }
 
         public Platform Platform
         {
             get => platform;
             set => platform = value;
         }
-        public Vector3 TargetPosition { get; set; }
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
@@ -72,13 +70,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 isMovable = value;
 
-                if (!isMovable)
-                {
-                    moveDisplacement = Vector3.zero;
-                }
+                moveDisplacement = Vector3.zero;
+                targetPosition = transform.position;
 
                 // Physics
-                foreach (Transform bone in CreatureConstructor.Bones)
+                foreach (Transform bone in Constructor.Bones)
                 {
                     bone.GetComponent<Rigidbody>().isKinematic = isMovable;
                 }
@@ -111,12 +107,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 HandleMovement();
             }
         }
+        private void OnDisable()
+        {
+            if (targetAnimator != null)
+            {
+                targetAnimator.SetBool("IsHolding", false);
+            }
+        }
 
         private void Initialize()
         {
-            CreatureConstructor = GetComponent<CreatureConstructor>();
-            CreatureAnimator = GetComponent<CreatureAnimator>();
-            CreatureCamera = GetComponent<CreatureCamera>();
+            Constructor = GetComponent<CreatureConstructor>();
+            Animator = GetComponent<CreatureAnimator>();
+            Camera = GetComponent<CreatureCamera>();
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
@@ -150,8 +153,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (!InputUtility.GetKey(KeybindingsManager.Data.FreeLook) || !kInput) // Free-look when holding ALT.
                     {
-                        keyboardForward = Vector3.ProjectOnPlane(CreatureCamera.Camera.transform.forward, transform.up);
-                        keyboardRight = Vector3.ProjectOnPlane(CreatureCamera.Camera.transform.right, transform.up);
+                        keyboardForward = Vector3.ProjectOnPlane(Camera.Camera.transform.forward, transform.up);
+                        keyboardRight = Vector3.ProjectOnPlane(Camera.Camera.transform.right, transform.up);
                     }
 
                     int vAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) ? -1 : 0);
@@ -170,7 +173,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 #region Pointer
                 case InputMode.Pointer:
 
-                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureCamera.Camera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.Camera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
                     {
                         Vector3 position = raycastHit.point;
                         Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
@@ -182,10 +185,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
 
                         targetGO.transform.SetPositionAndRotation(position, rotation);
-                        TargetPosition = position;
+                        targetPosition = position;
                     }
 
-                    Vector3 displacement = Vector3.ProjectOnPlane(TargetPosition - transform.position, transform.up);
+                    Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
 
                     direction = displacement.normalized;
                     canTurn = displacement.magnitude > moveSpeed * moveSmoothTime;
@@ -215,7 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandlePlatform()
         {
-            if (Platform != null) transform.LerpTo(Platform.transform.position, positionSmoothing);
+            if (Platform != null) transform.LerpTo(Platform.Position, positionSmoothing);
         }
 
         public void RequestMove(Vector3 direction)
@@ -254,19 +257,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Teleport(Vector3 position)
         {
-            transform.position = TargetPosition = position;
+            transform.position = targetPosition = position;
 
             moveDisplacement = Vector3.zero;
         }
         public void Teleport(Platform platform, bool start = false)
         {
             Platform = platform;
-            Teleport(Platform.transform.position);
+            Teleport(Platform.Position);
 
             if (start)
             {
-                transform.rotation = platform.transform.rotation;
-                CreatureCamera.Root.SetPositionAndRotation(platform.transform.position, platform.transform.rotation);
+                transform.rotation = Platform.Rotation;
+                Camera.Root.SetPositionAndRotation(platform.Position, platform.Rotation);
             }
         }
         #endregion

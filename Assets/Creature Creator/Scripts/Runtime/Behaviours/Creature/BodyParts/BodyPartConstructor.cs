@@ -93,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     OverrideMat("BodyPart_Primary", CreatureConstructor.BodyPrimaryMat, true);
                     Flipped.OverrideMat("BodyPart_Primary", CreatureConstructor.BodyPrimaryMat, true);
 
-                    AttachedBodyPart.primaryColour = default;
+                    AttachedBodyPart.primaryColour = BodyPart.DefaultColours.primary;
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     OverrideMat("BodyPart_Secondary", CreatureConstructor.BodySecondaryMat, true);
                     Flipped.OverrideMat("BodyPart_Secondary", CreatureConstructor.BodySecondaryMat, true);
 
-                    AttachedBodyPart.secondaryColour = default;
+                    AttachedBodyPart.secondaryColour = BodyPart.DefaultColours.secondary;
                 }
             }
         }

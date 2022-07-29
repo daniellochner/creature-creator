@@ -50,6 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnHide();
             Collider.enabled = false;
+            Animator.IsAnimated = false;
         }
         #endregion
     }
