@@ -142,7 +142,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 LegAnimator leg2 = (pair % 2 == 0) ? rleg : lleg;
                 
                 Quaternion rot = Creature.Constructor.Body.rotation;
-                float liftHeight = Creature.DefaultHeight * liftHeightFactor;
+                float liftHeight = Creature.Constructor.transform.W2LSpace(leg1.transform.position).y * liftHeightFactor;
 
                 Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove);
                 //float t1 = Mathf.Clamp01(Vector3.Distance(leg1.Anchor.position, pos1) / leg1.MaxDistance);
@@ -191,23 +191,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
-            //Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove);
-            //Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
-            //worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
-
-
-
-            Debug.Log(Creature.Velocity.Linear.magnitude);
-
-
-            // fix issue where non-local player animations are very far ahead?!?!?!?
-            // SOMEWHERE HERE, BECAUSE IT's working now........?
-
-
-            Vector3 localPos = leg.DefaultFootPosition;
+            Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootPosition, Vector3.zero, Creature.Velocity.Angular * timeToMove);
             Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
+            worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
 
-            Vector3 origin = worldPos + Creature.transform.up * (Creature.DefaultHeight * stepHeightFactor);
+            Vector3 origin = worldPos + Creature.transform.up * (Creature.Constructor.transform.W2LSpace(leg.transform.position).y * stepHeightFactor);
             if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo, Mathf.Infinity))
             {
                 return hitInfo.point + (Creature.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
