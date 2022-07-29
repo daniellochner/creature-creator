@@ -15,10 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Transform[] bones;
         [SerializeField] private Transform root;
         [SerializeField] private Transform extremity;
-
-        private bool isHandlingAlignment;
-        private LookAtConstraint[] boneConstraints;
-        private RotationConstraint extremityConstraint;
         #endregion
 
         #region Properties
@@ -49,21 +45,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public bool IsHandlingAlignment
-        {
-            get => isHandlingAlignment;
-            set
-            {
-                isHandlingAlignment = value;
-
-                foreach (LookAtConstraint boneConstraint in boneConstraints)
-                {
-                    boneConstraint.constraintActive = isHandlingAlignment;
-                }
-                extremityConstraint.constraintActive = isHandlingAlignment;
-            }
-        }
-
         public AttachedLimb AttachedLimb => AttachedBodyPart as AttachedLimb;
         public LimbConstructor FlippedLimb => Flipped as LimbConstructor;
 
@@ -83,7 +64,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ConnectedExtremity.gameObject.SetActive(true);
             }
-            IsHandlingAlignment = true;
         }
         private void OnDisable()
         {
@@ -91,19 +71,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ConnectedExtremity.gameObject.SetActive(false);
             }
-            IsHandlingAlignment = false;
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            boneConstraints = new LookAtConstraint[bones.Length - 1];
-            for (int i = 0; i < bones.Length - 1; i++)
-            {
-                boneConstraints[i] = bones[i].gameObject.GetOrAddComponent<LookAtConstraint>();
-            }
-            extremityConstraint = bones[bones.Length - 1].gameObject.GetComponent<RotationConstraint>();
         }
 
         public override void Attach(AttachedBodyPart abp)

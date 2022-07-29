@@ -11,6 +11,37 @@ using UnityEngine.Animations;
 public class Testing : MonoBehaviour
 {
 
+    //public Database bps;
+
+    //[ContextMenu("SETUP")]
+    //public void Setup()
+    //{
+    //    foreach (var bp in bps.Objects)
+    //    {
+    //        var b = bp.Value as BodyPart;
+
+    //        if (b is Limb)
+    //        {
+    //            RemoveIt(b.GetPrefab(BodyPart.PrefabType.Constructible));
+    //            RemoveIt(b.GetPrefab(BodyPart.PrefabType.Animatable));
+
+    //            Debug.Log(b.name);
+    //        }
+    //    }
+    //}
+
+    //public void RemoveIt(GameObject go)
+    //{
+    //    foreach (LookAtConstraint lac in go.GetComponentsInChildren<LookAtConstraint>())
+    //    {
+    //        DestroyImmediate(lac, true);
+    //    }
+    //    foreach (RotationConstraint rc in go.GetComponentsInChildren<RotationConstraint>())
+    //    {
+    //        DestroyImmediate(rc, true);
+    //    }
+    //}
+
     //public GameObject[] gos;
 
     //[ContextMenu("Setup constriants")]

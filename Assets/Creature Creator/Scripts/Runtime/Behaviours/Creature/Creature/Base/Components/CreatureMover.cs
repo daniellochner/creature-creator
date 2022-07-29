@@ -244,12 +244,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Vector3 displacement = direction * moveSpeed * Time.fixedDeltaTime;
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
-            transform.position += moveDisplacement;
+            rigidbody.position += moveDisplacement;
         }
         public void Turn(float angle)
         {
             Quaternion rotation = Quaternion.Euler(0f, angle * turnSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 0f);
-            transform.rotation *= rotation;
+            rigidbody.rotation *= rotation;
         }
 
         public void Teleport(Vector3 position)
