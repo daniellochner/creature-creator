@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets
@@ -7,13 +6,14 @@ namespace DanielLochner.Assets
     public class KinematicVelocity : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private bool useFixedUpdate;
         [SerializeField] private bool useThisTransform = true;
         [SerializeField, DrawIf("useThisTransform", false)] private Transform source;
         [SerializeField, DrawIf("source", null)] private Transform sourcePosition;
         [SerializeField, DrawIf("source", null)] private Transform sourceRotation;
         [SerializeField] private float posThreshold;
         [SerializeField] private float rotThreshold;
-        [SerializeField] private float updateTime;
+        [SerializeField] private float alpha = 0.75f;
 
         private Vector3? prevPosition = null;
         private Quaternion? prevRotation = null;
@@ -26,7 +26,7 @@ namespace DanielLochner.Assets
             get => linear;
             set
             {
-                linear = value;
+                linear = (alpha * value) + ((1f - alpha) * linear);
                 OnLinearChanged?.Invoke(linear);
             }
         }
@@ -35,7 +35,7 @@ namespace DanielLochner.Assets
             get => angular;
             set
             {
-                angular = value;
+                angular = (alpha * value) + ((1f - alpha) * angular);
                 OnAngularChanged?.Invoke(angular);
             }
         }
@@ -53,12 +53,21 @@ namespace DanielLochner.Assets
             if (source != null) { sourcePosition = sourceRotation = source; }
         }
 #endif
-        private void OnEnable()
+
+        private void FixedUpdate()
         {
-            InvokeRepeating("Calculate", 0f, updateTime);
+            if (useFixedUpdate){
+                Calculate(Time.fixedDeltaTime);
+            }
+        }
+        private void Update()
+        {
+            if (!useFixedUpdate){
+                Calculate(Time.deltaTime);
+            }
         }
 
-        public void Calculate()
+        public void Calculate(float deltaTime)
         {
             if (sourcePosition)
             {
@@ -67,7 +76,7 @@ namespace DanielLochner.Assets
                     Vector3 deltaPosition = sourcePosition.position - (Vector3)prevPosition;
                     if (deltaPosition.sqrMagnitude > posThreshold * posThreshold)
                     {
-                        Linear = deltaPosition / Time.fixedDeltaTime;
+                        Linear = deltaPosition / deltaTime;
                     }
                     else
                     {
@@ -84,7 +93,7 @@ namespace DanielLochner.Assets
                     deltaRotation.ToAngleAxis(out float deltaAngle, out var axis);
                     if (deltaAngle > rotThreshold)
                     {
-                        Angular = (deltaAngle / Time.fixedDeltaTime) * axis;
+                        Angular = (deltaAngle / deltaTime) * axis;
                     }
                     else
                     {

@@ -39,9 +39,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Instantiate(helper).Spawn();
                 }
-
+                
                 NetworkHostManager.Instance.SpawnPosition = startingPlatform.Position;
                 NetworkHostManager.Instance.SpawnRotation = startingPlatform.Rotation;
+                
 
                 if (NetworkManager.Singleton.IsHost)
                 {

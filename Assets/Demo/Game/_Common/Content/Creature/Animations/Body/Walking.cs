@@ -197,6 +197,9 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 
 
 
+            Debug.Log(Creature.Velocity.Linear.magnitude);
+
+
             // fix issue where non-local player animations are very far ahead?!?!?!?
             // SOMEWHERE HERE, BECAUSE IT's working now........?
 
