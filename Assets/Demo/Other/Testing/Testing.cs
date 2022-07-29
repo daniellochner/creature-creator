@@ -9,10 +9,102 @@ using Unity.Netcode;
 
 public class Testing : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    public Database bps;
+
+    [ContextMenu("TEST")]
+    void Test()
     {
-        Debug.Log(collision.gameObject, collision.gameObject);
+        foreach (var bp in bps.Objects)
+        {
+            BodyPart b = bp.Value as BodyPart;
+
+            //CheckAll(b.GetPrefab(BodyPart.PrefabType.Constructible));
+            //CheckAll(b.GetPrefab(BodyPart.PrefabType.Animatable));
+            //CheckAll(b.GetPrefab(BodyPart.PrefabType.Editable));
+
+            //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Constructible));
+            //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Animatable));
+            //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Editable));
+
+            //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Constructible));
+            //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Animatable));
+            //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Editable));
+        }
+
+
+
+        //Destroy(m);
     }
+
+    [ContextMenu("UPDATE THIS COL")]
+    private void UpdateCollider()
+    {
+        Mesh m = new Mesh();
+
+        var smr = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+
+        smr.BakeMesh(m);
+
+        gameObject.GetComponentInChildren<MeshCollider>().sharedMesh = m;
+    }
+
+    private void CheckAll(GameObject go)
+    {
+        if (go.GetComponentInChildren<Testing>() != null)
+        {
+            Debug.Log(go, go);
+        }
+    }
+
+    [ContextMenu("UPDATE THIS ONE")]
+    void UpdateThisOne()
+    {
+        UpdateSMRS(gameObject);
+    }
+
+
+    void UpdateSMRS(GameObject go)
+    {
+        Vector3 offset = Vector3.zero;
+        Transform root = go.transform.Find("Root");
+
+        if (root != null)
+        {
+            offset = root.localEulerAngles;
+        }
+
+        foreach (SkinnedMeshRenderer smr in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            UpdateBounds(smr, offset);
+        }
+    }
+
+    void UpdateBounds(SkinnedMeshRenderer smr, Vector3 offset)
+    {
+        smr.transform.localEulerAngles = offset;
+
+        Mesh m = new Mesh();
+        smr.BakeMesh(m);
+
+        smr.updateWhenOffscreen = false;
+
+        m.RecalculateBounds();
+        Debug.Log(m.bounds);
+
+        smr.localBounds = new UnityEngine.Bounds(m.bounds.center, m.bounds.size);
+
+        smr.transform.localEulerAngles = Vector3.zero;
+
+        //smr.bounds = new UnityEngine.Bounds(m.bounds.center, m.bounds.size);
+
+        //Destroy(m);
+    }
+
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Debug.Log(collision.gameObject, collision.gameObject);
+    //}
 
 
     //public GameObject source;

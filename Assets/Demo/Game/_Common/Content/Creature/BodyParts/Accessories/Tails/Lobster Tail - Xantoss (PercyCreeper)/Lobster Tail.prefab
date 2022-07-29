@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: -2.41e-43, y: 0.00000011920929, z: 4.2351637e-22, w: 1}
   m_LocalPosition: {x: -0, y: 0.0775926, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1463755976664569961}
   m_RootOrder: 0
@@ -56,6 +57,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8431200600274392651}
   m_Father: {fileID: 8635869415273943149}
@@ -87,6 +89,7 @@ Transform:
   m_LocalRotation: {x: 1.6940659e-21, y: -1.0658141e-14, z: 3.0292259e-28, w: 1}
   m_LocalPosition: {x: -0, y: 0.0883048, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5193987108518711421}
   m_Father: {fileID: 7154286178880858655}
@@ -119,6 +122,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8635869415273943149}
   m_RootOrder: 0
@@ -134,6 +138,7 @@ SkinnedMeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -178,8 +183,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 8431200600274392651}
   m_AABB:
-    m_Center: {x: -0.000000022351742, y: 0.13668442, z: 0.000000026077032}
-    m_Extent: {x: 0.091302894, y: 0.13751942, z: 0.05631169}
+    m_Center: {x: -0.00000008940697, y: -0.00000008195639, z: 0.43739033}
+    m_Extent: {x: 0.2921692, y: 0.18019745, z: 0.4400624}
   m_DirtyAABB: 0
 --- !u!1 &5133843901071474849
 GameObject:
@@ -207,6 +212,7 @@ Transform:
   m_LocalRotation: {x: -3.552712e-15, y: 1.0658141e-14, z: 4.235166e-22, w: 1}
   m_LocalPosition: {x: -0, y: 0.1121154, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1463755976664569961}
   m_Father: {fileID: 7917635981713586064}
@@ -238,6 +244,7 @@ Transform:
   m_LocalRotation: {x: -3.552712e-15, y: -1.7763568e-14, z: 2.019484e-28, w: 1}
   m_LocalPosition: {x: -0, y: 0.3041146, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7154286178880858655}
   m_Father: {fileID: 8431200600274392651}
@@ -269,6 +276,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.99999994}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7917635981713586064}
   m_Father: {fileID: 1086717450907382606}
@@ -283,6 +291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8635869415273943149}
+  - component: {fileID: 8174327622508744092}
   m_Layer: 0
   m_Name: Lobster Tail
   m_TagString: Untagged
@@ -300,9 +309,23 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5288812127822168691}
   - {fileID: 1086717450907382606}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8174327622508744092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976542494948854487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25254960574b3d84b93cc47fc1079f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bps: {fileID: 0}

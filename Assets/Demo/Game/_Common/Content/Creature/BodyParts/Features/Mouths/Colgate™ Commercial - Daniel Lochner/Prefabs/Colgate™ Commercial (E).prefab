@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2947461774600000707}
   m_RootOrder: 0
@@ -44,6 +45,7 @@ SkinnedMeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -77,15 +79,15 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 1
+  m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 1505553829542299199, guid: d0c1ee82a4ba2da4c99c8be760f94507, type: 3}
   m_Bones: []
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: -0.00052949786, y: -0.01673162, z: 0.3762027}
-    m_Extent: {x: 0.32001218, y: 0.24121264, z: 0.42164278}
+    m_Center: {x: 0.0000001937151, y: -0.027047448, z: 0.31519383}
+    m_Extent: {x: 0.2964028, y: 0.178673, z: 0.35246295}
   m_DirtyAABB: 0
 --- !u!64 &6724501451299373033
 MeshCollider:
@@ -156,6 +158,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1548522294249381207}
   m_Father: {fileID: 0}
