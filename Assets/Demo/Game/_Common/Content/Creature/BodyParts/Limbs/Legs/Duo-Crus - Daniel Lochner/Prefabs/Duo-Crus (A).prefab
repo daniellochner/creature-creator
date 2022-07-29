@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2823934305060423268}
+  - component: {fileID: -4552941794202857815}
   m_Layer: 0
   m_Name: Bone.2
   m_TagString: Untagged
@@ -32,6 +33,25 @@ Transform:
   m_Father: {fileID: 5014683165039895010}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1818360609 &-4552941794202857815
+RotationConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391391056985535769}
+  m_Enabled: 1
+  m_Weight: 1
+  m_RotationAtRest: {x: 1.5166067e-19, y: -3.0299309e-21, z: 1.5166067e-21}
+  m_RotationOffset: {x: 90, y: 6.6662886e-22, z: 0}
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 0
+  m_Sources:
+  - sourceTransform: {fileID: 8181960723459101863}
+    weight: 1
 --- !u!1 &559212231358595625
 GameObject:
   m_ObjectHideFlags: 0
@@ -41,6 +61,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8181960723459101863}
+  - component: {fileID: 6641893558678931076}
   m_Layer: 0
   m_Name: Bone.1
   m_TagString: Untagged
@@ -63,6 +84,25 @@ Transform:
   m_Father: {fileID: 5014683165039895010}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1183024399 &6641893558678931076
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559212231358595625}
+  m_Enabled: 1
+  m_Weight: 1
+  m_RotationAtRest: {x: 1.5166067e-19, y: 2.1832354e-21, z: 1.5166067e-21}
+  m_RotationOffset: {x: 90, y: 6.6662886e-22, z: 0}
+  m_Roll: 0
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 2823934305060423268}
+    weight: 1
 --- !u!1 &1064855381595919914
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7926b95d1de6585499dc45b1280893a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useIK: 1
 --- !u!1 &1384236822024972428
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,6 +359,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2554328949988271000}
+  - component: {fileID: -160332918952982377}
   m_Layer: 0
   m_Name: Bone.0
   m_TagString: Untagged
@@ -340,3 +382,22 @@ Transform:
   m_Father: {fileID: 5014683165039895010}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1183024399 &-160332918952982377
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4514820295386930587}
+  m_Enabled: 1
+  m_Weight: 1
+  m_RotationAtRest: {x: 0.000076953314, y: -0.000008651422, z: -6.016148e-12}
+  m_RotationOffset: {x: 90, y: -0.000008651428, z: 0}
+  m_Roll: 0
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 8181960723459101863}
+    weight: 1

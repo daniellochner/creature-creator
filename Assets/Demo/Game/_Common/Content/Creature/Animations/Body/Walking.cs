@@ -191,7 +191,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
 
             Vector3 origin = worldPos + Creature.transform.up * (Creature.DefaultHeight * stepHeightFactor);
-            if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo))
+            if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo, Mathf.Infinity))
             {
                 return hitInfo.point + (Creature.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
             }

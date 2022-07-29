@@ -678,6 +678,7 @@ namespace DanielLochner.Assets.CreatureCreator
             colliderMesh.Clear();
             CreatureConstructor.SkinnedMeshRenderer.BakeMesh(colliderMesh);
             meshCollider.sharedMesh = colliderMesh;
+            CreatureConstructor.SkinnedMeshRenderer.localBounds = colliderMesh.bounds;
         }
         public void UpdateBodyPartsAlignment(int alignment)
         {

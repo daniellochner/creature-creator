@@ -315,7 +315,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.IsDraggable = true;
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
-            Creature.Animator.IsAnimated = false;
+            Creature.Animator.RestoreDefaults();
+            Creature.Animator.Restructure(false);
+            Creature.Animator.Animator.enabled = false;
             Creature.Spawner.Despawn();
 
             SetCameraOffset(-1.5f);
@@ -332,7 +334,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Constructor.Recenter();
             Creature.Constructor.UpdateConfiguration();
             Creature.Collider.UpdateCollider();
-            Creature.Mover.Teleport(Creature.Mover.Platform);
             Creature.Mover.IsMovable = true;
             Creature.Constructor.IsTextured = true;
             Creature.Editor.IsInteractable = false;
@@ -341,7 +342,11 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
             Creature.Animator.Velocity.Reset();
-            Creature.Animator.IsAnimated = true;
+            Creature.Animator.Reinitialize();
+            Creature.Animator.CaptureDefaults();
+            Creature.Animator.Restructure(true);
+            Creature.Animator.Rebuild();
+            Creature.Animator.Animator.enabled = true;
             Creature.Informer.Capture();
             Creature.Collider.UpdateCollider();
             Creature.Spawner.Spawn();
@@ -364,7 +369,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = true;
             Creature.Editor.Deselect();
-            Creature.Animator.IsAnimated = false;
+            Creature.Animator.RestoreDefaults();
+            Creature.Animator.Restructure(false);
+            Creature.Animator.Animator.enabled = false;
             Creature.Spawner.Despawn();
 
             SetCameraOffset(1.5f);
@@ -432,6 +439,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Load(CreatureData creatureData)
         {
+            Creature.Mover.Teleport(Creature.Mover.Platform);
             Creature.Editor.Load(creatureData);
 
             if (IsBuilding)

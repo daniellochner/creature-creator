@@ -11,12 +11,13 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LimbAnimator : BodyPartAnimator
     {
         #region Fields
+        [SerializeField] private bool useIK;
+
         protected Transform target, limb;
         protected ChainIKConstraint limbIK; //protected TwoBoneIKConstraint limbIK;
         
         protected Vector3[] defaultBonePositions;
         protected Quaternion defaultExtremityRotation;
-        protected bool hasCapturedDefaults;
         #endregion
 
         #region Properties
@@ -50,26 +51,29 @@ namespace DanielLochner.Assets.CreatureCreator
             target = new GameObject("Target").transform;
             target.SetParent(limb, false);
 
-            //if (LimbConstructor.Bones.Length == 3)
-            //{
-            //    limbIK = limb.gameObject.AddComponent<TwoBoneIKConstraint>();
-            //    limbIK.Reset();
-
-            //    limbIK.data.root = LimbConstructor.Bones[0];
-            //    limbIK.data.mid = LimbConstructor.Bones[1];
-            //    limbIK.data.tip = LimbConstructor.Bones[2];
-            //    limbIK.data.target = target;
-            //    limbIK.data.targetRotationWeight = 0;
-            //}
-            //else
+            if (useIK)
             {
-                limbIK = limb.gameObject.AddComponent<ChainIKConstraint>();
-                limbIK.Reset();
+                //if (LimbConstructor.Bones.Length == 3)
+                //{
+                //    limbIK = limb.gameObject.AddComponent<TwoBoneIKConstraint>();
+                //    limbIK.Reset();
 
-                limbIK.data.root = LimbConstructor.Bones[0];
-                limbIK.data.tip = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1];
-                limbIK.data.target = target;
-                limbIK.data.tipRotationWeight = 0;
+                //    limbIK.data.root = LimbConstructor.Bones[0];
+                //    limbIK.data.mid = LimbConstructor.Bones[1];
+                //    limbIK.data.tip = LimbConstructor.Bones[2];
+                //    limbIK.data.target = target;
+                //    limbIK.data.targetRotationWeight = 0;
+                //}
+                //else
+                {
+                    limbIK = limb.gameObject.AddComponent<ChainIKConstraint>();
+                    limbIK.Reset();
+
+                    limbIK.data.root = LimbConstructor.Bones[0];
+                    limbIK.data.tip = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1];
+                    limbIK.data.target = target;
+                    limbIK.data.tipRotationWeight = 0;
+                }
             }
 
             LimbConstructor.OnSetAttached += delegate
@@ -79,40 +83,33 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
-        public virtual void RestoreDefaults(bool isAnimated)
+        public virtual void CaptureDefaults()
         {
-            if (isAnimated)
+            // Limb
+            defaultBonePositions = new Vector3[LimbConstructor.Bones.Length];
+            for (int i = 0; i < defaultBonePositions.Length; i++)
             {
-                // Limb
-                defaultBonePositions = new Vector3[LimbConstructor.Bones.Length];
-                for (int i = 0; i < defaultBonePositions.Length; i++)
-                {
-                    defaultBonePositions[i] = CreatureAnimator.Constructor.Body.InverseTransformPoint(LimbConstructor.Bones[i].position);
-                }
-
-                // Connected Extremity
-                if (LimbConstructor.ConnectedExtremity != null)
-                {
-                    defaultExtremityRotation = Quaternion.Inverse(CreatureAnimator.Constructor.Body.rotation) * LimbConstructor.ConnectedExtremity.transform.rotation;
-                }
-
-                hasCapturedDefaults = true;
+                defaultBonePositions[i] = CreatureAnimator.Constructor.Body.InverseTransformPoint(LimbConstructor.Bones[i].position);
             }
-            else if (hasCapturedDefaults)
+
+            // Connected Extremity
+            if (LimbConstructor.ConnectedExtremity != null)
             {
-                // Limb
-                for (int i = 0; i < defaultBonePositions.Length; i++)
-                {
-                    LimbConstructor.Bones[i].position = CreatureAnimator.Constructor.Body.TransformPoint(defaultBonePositions[i]);
-                }
+                defaultExtremityRotation = Quaternion.Inverse(CreatureAnimator.Constructor.Body.rotation) * LimbConstructor.ConnectedExtremity.transform.rotation;
+            }
+        }
+        public virtual void RestoreDefaults()
+        {
+            // Limb
+            for (int i = 0; i < defaultBonePositions.Length; i++)
+            {
+                LimbConstructor.Bones[i].position = CreatureAnimator.Constructor.Body.TransformPoint(defaultBonePositions[i]);
+            }
 
-                // Connected Extremity
-                if (LimbConstructor.ConnectedExtremity != null)
-                {
-                    LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.Constructor.Body.rotation * defaultExtremityRotation;
-                }
-
-                hasCapturedDefaults = false;
+            // Connected Extremity
+            if (LimbConstructor.ConnectedExtremity != null)
+            {
+                LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.Constructor.Body.rotation * defaultExtremityRotation;
             }
         }
         public virtual void Restructure(bool isAnimated)

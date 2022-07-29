@@ -29,7 +29,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             creature.Setup();
             creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
-            creature.Animator.IsAnimated = true;
         }
         #endregion
     }

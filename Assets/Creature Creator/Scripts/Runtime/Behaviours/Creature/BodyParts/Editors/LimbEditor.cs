@@ -9,11 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LimbEditor : BodyPartEditor
     {
         #region Fields
-        private LookAtConstraint[] boneConstraints;
-        private RotationConstraint extremityConstraint;
         private MeshRenderer[] toolRenderers;
         private SphereCollider[] toolColliders;
-        private bool isHandlingAlignment;
         private Quaternion[] offsets;
         #endregion
 
@@ -23,20 +20,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public ExtremityEditor ConnectedExtremity { get; set; }
 
-        public bool IsHandlingAlignment
-        {
-            get => isHandlingAlignment;
-            set
-            {
-                isHandlingAlignment = value;
-
-                foreach (LookAtConstraint boneConstraint in boneConstraints)
-                {
-                    boneConstraint.constraintActive = isHandlingAlignment;
-                }
-                extremityConstraint.constraintActive = isHandlingAlignment;
-            }
-        }
         public override bool IsInteractable
         {
             get => base.IsInteractable;
@@ -67,29 +50,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void OnEnable()
-        {
-            IsHandlingAlignment = true;
-        }
-        private void OnDisable()
-        {
-            IsHandlingAlignment = false;
-        }
-
         protected override void Initialize()
         {
             base.Initialize();
 
             toolRenderers = LimbConstructor.Root.GetComponentsInChildren<MeshRenderer>();
             toolColliders = LimbConstructor.Root.GetComponentsInChildren<SphereCollider>();
-
-            Transform[] bones = LimbConstructor.Bones;
-            boneConstraints = new LookAtConstraint[bones.Length - 1];
-            for (int i = 0; i < bones.Length - 1; i++)
-            {
-                boneConstraints[i] = bones[i].GetComponent<LookAtConstraint>();
-            }
-            extremityConstraint = bones[bones.Length - 1].GetComponent<RotationConstraint>();
         }
 
         public override void Setup(CreatureEditor creatureEditor)
@@ -268,11 +234,11 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     });
                 }
-                if (i < LimbConstructor.Bones.Length - 1)
-                {
-                    boneConstraints[i].worldUpObject = CreatureEditor.transform;
-                    boneConstraints[i].useUpObject = true;
-                }
+                //if (i < LimbConstructor.Bones.Length - 1)
+                //{
+                //    boneConstraints[i].worldUpObject = CreatureEditor.transform;
+                //    boneConstraints[i].useUpObject = true;
+                //}
             }
 
             UpdateMeshCollider();

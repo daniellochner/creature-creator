@@ -6,99 +6,154 @@ using System.Collections.Generic;
 //using UnityEditor;
 using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 using Unity.Netcode;
+using UnityEngine.Animations;
 
 public class Testing : MonoBehaviour
 {
-    public Database bps;
 
-    [ContextMenu("TEST")]
-    void Test()
-    {
-        foreach (var bp in bps.Objects)
-        {
-            BodyPart b = bp.Value as BodyPart;
+    //public GameObject[] gos;
 
-            //CheckAll(b.GetPrefab(BodyPart.PrefabType.Constructible));
-            //CheckAll(b.GetPrefab(BodyPart.PrefabType.Animatable));
-            //CheckAll(b.GetPrefab(BodyPart.PrefabType.Editable));
+    //[ContextMenu("Setup constriants")]
+    //public void SetupC()
+    //{
+    //    foreach (GameObject go in gos)
+    //    {
+    //        Setup(go.GetComponent<LimbConstructor>());
+    //    }
+    //}
 
-            //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Constructible));
-            //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Animatable));
-            //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Editable));
+    //public void Setup(LimbConstructor limbConstructor)
+    //{
+    //    for (int i = 0; i < limbConstructor.Bones.Length; i++)
+    //    {
+    //        Debug.Log(i);
+    //        Transform bone = limbConstructor.Bones[i];
+    //        if (i < limbConstructor.Bones.Length - 1)
+    //        {
+    //            if (bone.gameObject.GetComponent<LookAtConstraint>() != null) continue;
 
-            //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Constructible));
-            //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Animatable));
-            //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Editable));
-        }
+    //            LookAtConstraint boneConstraint = bone.gameObject.AddComponent<LookAtConstraint>();
+    //            Quaternion offset = QuaternionUtility.GetRotationOffset(limbConstructor.Bones[i + 1], limbConstructor.Bones[i]);
+
+    //            boneConstraint.AddSource(new ConstraintSource()
+    //            {
+    //                sourceTransform = limbConstructor.Bones[i + 1],
+    //                weight = 1f
+    //            });
+    //            boneConstraint.rotationAtRest = bone.localEulerAngles;
+    //            boneConstraint.rotationOffset = offset.eulerAngles;
+    //            boneConstraint.constraintActive = true;
+    //            boneConstraint.locked = true;
+    //        }
+    //        else
+    //        {
+    //            if (bone.gameObject.GetComponent<RotationConstraint>() != null) continue;
+    //            RotationConstraint extremityConstraint = bone.gameObject.AddComponent<RotationConstraint>();
+    //            Quaternion offset = QuaternionUtility.GetRotationOffset(bone, limbConstructor.Bones[i - 1]);
+
+    //            extremityConstraint.AddSource(new ConstraintSource()
+    //            {
+    //                sourceTransform = limbConstructor.Bones[i - 1],
+    //                weight = 1f
+    //            });
+    //            extremityConstraint.rotationAtRest = bone.localEulerAngles;
+    //            extremityConstraint.rotationOffset = offset.eulerAngles;
+    //            extremityConstraint.constraintActive = true;
+    //            //extremityConstraint.locked = true; // Must lock manually - bug with Unity's RotationConstraint
+    //        }
+    //    }
+    //}
+
+    //public Database bps;
+
+    //[ContextMenu("TEST")]
+    //void Test()
+    //{
+    //    foreach (var bp in bps.Objects)
+    //    {
+    //        BodyPart b = bp.Value as BodyPart;
+
+    //        //CheckAll(b.GetPrefab(BodyPart.PrefabType.Constructible));
+    //        //CheckAll(b.GetPrefab(BodyPart.PrefabType.Animatable));
+    //        //CheckAll(b.GetPrefab(BodyPart.PrefabType.Editable));
+
+    //        //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Constructible));
+    //        //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Animatable));
+    //        //UpdateCollider(b.GetPrefab(BodyPart.PrefabType.Editable));
+
+    //        //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Constructible));
+    //        //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Animatable));
+    //        //UpdateSMRS(b.GetPrefab(BodyPart.PrefabType.Editable));
+    //    }
 
 
 
-        //Destroy(m);
-    }
+    //    //Destroy(m);
+    //}
 
-    [ContextMenu("UPDATE THIS COL")]
-    private void UpdateCollider()
-    {
-        Mesh m = new Mesh();
+    //[ContextMenu("UPDATE THIS COL")]
+    //private void UpdateCollider()
+    //{
+    //    Mesh m = new Mesh();
 
-        var smr = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+    //    var smr = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
 
-        smr.BakeMesh(m);
+    //    smr.BakeMesh(m);
 
-        gameObject.GetComponentInChildren<MeshCollider>().sharedMesh = m;
-    }
+    //    gameObject.GetComponentInChildren<MeshCollider>().sharedMesh = m;
+    //}
 
-    private void CheckAll(GameObject go)
-    {
-        if (go.GetComponentInChildren<Testing>() != null)
-        {
-            Debug.Log(go, go);
-        }
-    }
+    //private void CheckAll(GameObject go)
+    //{
+    //    if (go.GetComponentInChildren<Testing>() != null)
+    //    {
+    //        Debug.Log(go, go);
+    //    }
+    //}
 
-    [ContextMenu("UPDATE THIS ONE")]
-    void UpdateThisOne()
-    {
-        UpdateSMRS(gameObject);
-    }
+    //[ContextMenu("UPDATE THIS ONE")]
+    //void UpdateThisOne()
+    //{
+    //    UpdateSMRS(gameObject);
+    //}
 
 
-    void UpdateSMRS(GameObject go)
-    {
-        Vector3 offset = Vector3.zero;
-        Transform root = go.transform.Find("Root");
+    //void UpdateSMRS(GameObject go)
+    //{
+    //    Vector3 offset = Vector3.zero;
+    //    Transform root = go.transform.Find("Root");
 
-        if (root != null)
-        {
-            offset = root.localEulerAngles;
-        }
+    //    if (root != null)
+    //    {
+    //        offset = root.localEulerAngles;
+    //    }
 
-        foreach (SkinnedMeshRenderer smr in go.GetComponentsInChildren<SkinnedMeshRenderer>())
-        {
-            UpdateBounds(smr, offset);
-        }
-    }
+    //    foreach (SkinnedMeshRenderer smr in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+    //    {
+    //        UpdateBounds(smr, offset);
+    //    }
+    //}
 
-    void UpdateBounds(SkinnedMeshRenderer smr, Vector3 offset)
-    {
-        smr.transform.localEulerAngles = offset;
+    //void UpdateBounds(SkinnedMeshRenderer smr, Vector3 offset)
+    //{
+    //    smr.transform.localEulerAngles = offset;
 
-        Mesh m = new Mesh();
-        smr.BakeMesh(m);
+    //    Mesh m = new Mesh();
+    //    smr.BakeMesh(m);
 
-        smr.updateWhenOffscreen = false;
+    //    smr.updateWhenOffscreen = false;
 
-        m.RecalculateBounds();
-        Debug.Log(m.bounds);
+    //    m.RecalculateBounds();
+    //    Debug.Log(m.bounds);
 
-        smr.localBounds = new UnityEngine.Bounds(m.bounds.center, m.bounds.size);
+    //    smr.localBounds = new UnityEngine.Bounds(m.bounds.center, m.bounds.size);
 
-        smr.transform.localEulerAngles = Vector3.zero;
+    //    smr.transform.localEulerAngles = Vector3.zero;
 
-        //smr.bounds = new UnityEngine.Bounds(m.bounds.center, m.bounds.size);
+    //    //smr.bounds = new UnityEngine.Bounds(m.bounds.center, m.bounds.size);
 
-        //Destroy(m);
-    }
+    //    //Destroy(m);
+    //}
 
 
     //private void OnCollisionEnter(Collision collision)

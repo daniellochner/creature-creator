@@ -11,10 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override void OnStart(Animator animator)
         {
-            if (Creature.IsAnimated)
-            {
-                Setup();
-            }
+            Setup();
         }
 
         public virtual void Setup() { }

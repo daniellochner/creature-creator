@@ -870,14 +870,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetPreviewFeatures(bool previewFeatures)
         {
-            if (previewFeatures)
-            {
-                InformationDialog.Inform("Preview Features", "Due to several Unity-related issues, certain features have been disabled by default.");
-            }
+            //if (previewFeatures)
+            //{
+            //    InformationDialog.Inform("Preview Features", "Due to several Unity-related issues, certain features have been disabled by default.");
+            //}
 
             SettingsManager.Data.PreviewFeatures = previewFeatures;
-
-            creatureBasePrefab.GetComponent<CreatureAnimator>().UseDamping = previewFeatures;
         }
         public void SetNetworkStats(bool networkStats)
         {
