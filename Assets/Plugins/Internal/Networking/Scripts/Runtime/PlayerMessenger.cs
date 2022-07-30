@@ -22,6 +22,12 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
+        public bool CheckForProfanity
+        {
+            get => checkForProfanity;
+            set => checkForProfanity = value;
+        }
+
         public virtual bool CanSend => !InputDialog.Instance.IsOpen && cooldownTimeLeft < 0;
         public virtual bool CanReceive => true;
         #endregion

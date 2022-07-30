@@ -10,8 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private TextMeshProUGUI playersText;
         [SerializeField] private TextMeshProUGUI nameText;
-        [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private GameObject padlockIcon;
+        [SerializeField] private Button infoButton;
         [SerializeField] private Button joinButton;
         #endregion
 
@@ -34,13 +34,28 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             World world = new World(lobby);
-            descriptionText.text = $"{world.MapName} ({world.Version}) | {FormatTag("PVP", world.AllowPVP)}, {FormatTag("PVE", world.AllowPVE)}, {FormatTag("NPCs", world.SpawnNPC)}";
+
+            infoButton.onClick.AddListener(delegate
+            {
+                InformationDialog.Inform(world.WorldName, 
+                    $"Map: {world.MapName} ({world.Version})<br>" +
+                    $"PVP: {FormatEnabled(world.EnablePVP)}<br>" +
+                    $"PVE: {FormatEnabled(world.EnablePVE)}<br>" +
+                    $"NPCs: {FormatEnabled(world.SpawnNPC)}<br>" +
+                    $"Profanity: {FormatAllowed(world.AllowProfanity)}"
+                    );
+            });
+
             padlockIcon.SetActive(world.IsPasswordProtected);
         }
 
-        private string FormatTag(string tag, bool enabled)
+        private string FormatEnabled(bool isEnabled)
         {
-            return $"{(enabled ? "" : "<s>")}{tag}{(enabled ? "" : "</s>")}";
+            return isEnabled ? "Enabled" : "Disabled";
+        }
+        private string FormatAllowed(bool isAllowed)
+        {
+            return isAllowed ? "Allowed" : "Forbidden";
         }
         #endregion
     }

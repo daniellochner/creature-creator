@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool unlockAllBodyParts;
         [SerializeField] private bool unlockAllPatterns;
+        [SerializeField] private bool checkForProfanity;
         [SerializeField] private SecretKey creatureEncryptionKey;
 
         [Header("General")]
@@ -89,6 +90,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public bool CheckForProfanity
+        {
+            get => checkForProfanity;
+            set
+            {
+                checkForProfanity = value;
+                Creature.Messenger.CheckForProfanity = checkForProfanity;
+            }
+        }
+
         public bool IsVisible
         {
             get => isVisible;
@@ -325,20 +336,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = false;
-            //Creature.Animator.SetDamping(false);
-            //Creature.Animator.RestoreDefaults();
-            //Creature.Animator.Restructure(false);
-            //Creature.Animator.IsAnimated = false;
 
             Creature.Animator.enabled = false;
 
-            Creature.Editor.IsInteractable = true;
             Creature.Editor.IsDraggable = true;
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
             Creature.Editor.enabled = true;
-
-
+            
             Creature.Mover.enabled = false;
         }
         public void Play()
@@ -346,25 +351,19 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Constructor.Recenter();
             Creature.Constructor.UpdateConfiguration();
             Creature.Constructor.IsTextured = true;
-            Creature.Editor.IsInteractable = false;
+
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
             Creature.Editor.enabled = false;
-
-            //Creature.Animator.Reinitialize();
-            //Creature.Animator.CaptureDefaults();
-            //Creature.Animator.Restructure(true);
-            //Creature.Animator.Rebuild();
-            //Creature.Animator.IsAnimated = true;
-            //Creature.Animator.SetDamping(true);
-
+            
             Creature.Animator.CaptureDefaults();
             Creature.Animator.enabled = true;
 
             Creature.Informer.Capture();
             Creature.Collider.UpdateCollider();
             Creature.Mover.enabled = true;
+
             Creature.Spawner.Spawn();
         }
         public void Paint()
@@ -372,19 +371,13 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = true;
 
-            //Creature.Animator.SetDamping(false);
-            //Creature.Animator.RestoreDefaults();
-            //Creature.Animator.Restructure(false);
-            //Creature.Animator.IsAnimated = false;
             Creature.Animator.enabled = false;
 
-            Creature.Editor.IsInteractable = true;
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = true;
             Creature.Editor.Deselect();
             Creature.Editor.enabled = true;
-
-
+            
             Creature.Mover.enabled = false;
         }
 
@@ -405,7 +398,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Operations
         public void TrySave()
         {
-            string savedCreatureName = creatureNameText.text;
+            string savedCreatureName = PreProcessName(creatureNameText.text);
             if (IsValidName(savedCreatureName))
             {
                 Creature.Constructor.SetName(savedCreatureName);
@@ -444,6 +437,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 creatureName = selectedCreatureUI.name;
             }
             else return;
+
+            if (!IsValidName(creatureName))
+            {
+                return;
+            }
 
             CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureName}.dat"), creatureEncryptionKey.Value);
             ConfirmUnsavedChanges(() => Load(creatureData), "loading");
@@ -527,7 +525,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryExport()
         {
-            string exportedCreatureName = creatureNameText.text;
+            string exportedCreatureName = PreProcessName(creatureNameText.text);
             if (IsValidName(exportedCreatureName))
             {
                 Creature.Constructor.SetName(exportedCreatureName);
@@ -1143,28 +1141,37 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform("Creature Unnamed", "Please enter a name for your creature.");
                 return false;
             }
+
+            if (checkForProfanity)
+            {
+                ProfanityFilter filter = new ProfanityFilter();
+                if (filter.ContainsProfanity(creatureName))
+                {
+                    IReadOnlyCollection<string> profanities = filter.DetectAllProfanities(creatureName);
+                    if (profanities.Count > 0)
+                    {
+                        InformationDialog.Inform("Profanity Detected", $"Please remove the following from your creature's name:\n<i>{string.Join(", ", profanities)}</i>");
+                    }
+                    else
+                    {
+                        InformationDialog.Inform("Profanity Detected", $"Please don't include profane terms in your creature's name.");
+                    }
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private string PreProcessName(string creatureName)
+        {
             foreach (char c in Path.GetInvalidFileNameChars())
             {
                 creatureName = creatureName.Replace(c.ToString(), "");
             }
             creatureName = creatureName.Trim();
 
-            ProfanityFilter filter = new ProfanityFilter();
-            if (filter.ContainsProfanity(creatureName))
-            {
-                IReadOnlyCollection<string> profanities = filter.DetectAllProfanities(creatureName);
-                if (profanities.Count > 0)
-                {
-                    InformationDialog.Inform("Profanity Detected", $"Please remove the following from your creature's name:\n<i>{string.Join(", ", profanities)}</i>");
-                }
-                else
-                {
-                    InformationDialog.Inform("Profanity Detected", $"Please don't include profane terms in your creature's name.");
-                }
-                return false;
-            }
-
-            return true;
+            return creatureName;
         }
 
         /// <summary>

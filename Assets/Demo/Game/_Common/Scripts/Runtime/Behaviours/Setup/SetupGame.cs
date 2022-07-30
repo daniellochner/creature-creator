@@ -90,6 +90,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             NetworkPlayersManager.Instance.Setup(world.Id);
+
+            EditorManager.Instance.CheckForProfanity = !world.AllowProfanity;
         }
         public void SetupSP()
         {

@@ -197,6 +197,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnEnable()
         {
+            IsInteractable = true;
+
             foreach (BodyPartEditor bpe in GetComponentsInChildren<BodyPartEditor>(true))
             {
                 bpe.enabled = true;
@@ -210,6 +212,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDisable()
         {
+            IsInteractable = false;
+
             foreach (BodyPartEditor bpe in GetComponentsInChildren<BodyPartEditor>(true))
             {
                 bpe.enabled = false;

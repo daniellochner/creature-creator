@@ -54,6 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle pvpToggle;
         [SerializeField] private Toggle pveToggle;
         [SerializeField] private Toggle npcToggle;
+        [SerializeField] private Toggle profanityToggle;
         [SerializeField] private Image sortByIcon;
 
         private ProfanityFilter filter = new ProfanityFilter();
@@ -269,9 +270,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 string mapName = ((MapType)mapOS.Selected).ToString();
                 string version = Application.version;
                 int maxPlayers = (int)maxPlayersSlider.value;
-                bool allowPVP = pvpToggle.isOn;
+                bool enablePVP = pvpToggle.isOn;
                 bool spawnNPC = npcToggle.isOn;
-                bool allowPVE = pveToggle.isOn;
+                bool enablePVE = pveToggle.isOn;
+                bool allowProfanity = profanityToggle.isOn;
 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
@@ -280,7 +282,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetConnectionData(username, password);
 
                 // Authenticate
-                await Authenticate();//
+                await Authenticate();
 
                 // Allocate Relay
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
@@ -304,9 +306,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
                         { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
-                        { "allowPVP", new DataObject(DataObject.VisibilityOptions.Public, allowPVP.ToString()) },
-                        { "allowPVE", new DataObject(DataObject.VisibilityOptions.Public, allowPVE.ToString()) },
-                        { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) }
+                        { "enablePVP", new DataObject(DataObject.VisibilityOptions.Public, enablePVP.ToString()) },
+                        { "enablePVE", new DataObject(DataObject.VisibilityOptions.Public, enablePVE.ToString()) },
+                        { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
+                        { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };

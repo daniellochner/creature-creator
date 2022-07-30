@@ -16,9 +16,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public string WorldName { get; private set; }
         public string MapName { get; private set; }
         public string Version { get; private set; }
-        public bool AllowPVP { get; private set; }
-        public bool AllowPVE { get; private set; }
+        public bool EnablePVP { get; private set; }
+        public bool EnablePVE { get; private set; }
         public bool SpawnNPC { get; private set; }
+        public bool AllowProfanity { get; private set; }
         #endregion
 
         #region Methods
@@ -33,9 +34,10 @@ namespace DanielLochner.Assets.CreatureCreator
             WorldName = lobby.Name;
             MapName = lobby.Data["mapName"].Value;
             Version = lobby.Data["version"].Value;
-            AllowPVP = bool.Parse(lobby.Data["allowPVP"].Value);
-            AllowPVE = bool.Parse(lobby.Data["allowPVE"].Value);
+            EnablePVP = bool.Parse(lobby.Data["enablePVP"].Value);
+            EnablePVE = bool.Parse(lobby.Data["enablePVE"].Value);
             SpawnNPC = bool.Parse(lobby.Data["spawnNPC"].Value);
+            AllowProfanity = bool.Parse(lobby.Data["allowProfanity"].Value);
         }
         #endregion
     }
