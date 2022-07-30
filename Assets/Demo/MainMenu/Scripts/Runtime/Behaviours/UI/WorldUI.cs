@@ -38,11 +38,12 @@ namespace DanielLochner.Assets.CreatureCreator
             infoButton.onClick.AddListener(delegate
             {
                 InformationDialog.Inform(world.WorldName, 
-                    $"Map: {world.MapName} ({world.Version})<br>" +
-                    $"PVP: {FormatEnabled(world.EnablePVP)}<br>" +
-                    $"PVE: {FormatEnabled(world.EnablePVE)}<br>" +
-                    $"NPCs: {FormatEnabled(world.SpawnNPC)}<br>" +
-                    $"Profanity: {FormatAllowed(world.AllowProfanity)}"
+                    $"<b>Version:</b> {world.Version}<br>" +
+                    $"<b>Map:</b> {world.MapName}<br>" + 
+                    $"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
+                    $"<b>PVE:</b> {FormatEnabled(world.EnablePVE)}<br>" +
+                    $"<b>NPCs:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
+                    $"<b>Profanity:</b> {FormatAllowed(world.AllowProfanity)}"
                     );
             });
 
