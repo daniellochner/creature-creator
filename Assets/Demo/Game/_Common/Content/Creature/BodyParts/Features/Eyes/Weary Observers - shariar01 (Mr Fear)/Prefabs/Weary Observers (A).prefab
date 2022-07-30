@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6050711967600296720}
   m_RootOrder: 0
@@ -51,6 +52,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -94,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6050711967600296720}
   - component: {fileID: 2789682766260853053}
-  - component: {fileID: -5852480957981019224}
+  - component: {fileID: 3209056690078116087}
   m_Layer: 0
   m_Name: Weary Observers (A)
   m_TagString: Untagged
@@ -112,6 +114,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1236420573312541750}
   m_Father: {fileID: 0}
@@ -157,7 +160,7 @@ MonoBehaviour:
     _keyValues: 
     _keys: 
     _values: []
---- !u!114 &-5852480957981019224
+--- !u!114 &3209056690078116087
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,6 +169,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7725585417680579307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc56f1c59885fed4c887f1f34fd38e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: -1

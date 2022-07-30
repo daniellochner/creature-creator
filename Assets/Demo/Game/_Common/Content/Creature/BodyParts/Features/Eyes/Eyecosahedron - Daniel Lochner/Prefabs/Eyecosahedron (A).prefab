@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2783549977689513895}
   - component: {fileID: 4405441871019151319}
-  - component: {fileID: -2136498578696193468}
+  - component: {fileID: 5156922821509899674}
   m_Layer: 0
   m_Name: Eyecosahedron (A)
   m_TagString: Untagged
@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7199298384652092528}
   m_Father: {fileID: 0}
@@ -73,7 +74,7 @@ MonoBehaviour:
     _keyValues: 
     _keys: 
     _values: []
---- !u!114 &-2136498578696193468
+--- !u!114 &5156922821509899674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,9 +83,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3683813840859945595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc56f1c59885fed4c887f1f34fd38e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: -1
 --- !u!1 &4925876293475811592
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,6 +115,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2783549977689513895}
   m_RootOrder: 0
@@ -136,6 +139,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

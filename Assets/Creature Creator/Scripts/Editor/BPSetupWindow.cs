@@ -534,6 +534,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             switch (type.Name)
             {
+                case "Eye":
+                    return typeof(EyeAnimator);
                 case "Arm":
                     return typeof(ArmAnimator);
                 case "Leg":

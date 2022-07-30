@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2137028121158206676}
   m_RootOrder: 0
@@ -53,6 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -127,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2137028121158206676}
   - component: {fileID: 9132147299379561401}
-  - component: {fileID: -7966860134100341042}
+  - component: {fileID: -7054922624112620113}
   - component: {fileID: 8396327395166934119}
   - component: {fileID: 2263212075602706747}
   - component: {fileID: 1191889085152326612}
@@ -153,6 +155,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8014076606269230213}
   m_Father: {fileID: 0}
@@ -198,7 +201,7 @@ MonoBehaviour:
     _keyValues: 
     _keys: 
     _values: []
---- !u!114 &-7966860134100341042
+--- !u!114 &-7054922624112620113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,9 +210,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4956734749011593506}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7af8e10249be6f47a189d51f0a4377c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc56f1c59885fed4c887f1f34fd38e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: -1
 --- !u!114 &8396327395166934119
 MonoBehaviour:
   m_ObjectHideFlags: 0
