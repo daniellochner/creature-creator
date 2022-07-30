@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.IsEditing = true;
 
-                player.Mover.Platform = this;
+                player.Editor.Platform = this;
                 player.Hider.Hide();
 
                 hasEntered = true;

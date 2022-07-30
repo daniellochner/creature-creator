@@ -10,7 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private CreatureEditor editor;
-        [SerializeField] private CreatureRespawner respawner;
         [SerializeField] private CreatureAbilities abilities;
         [SerializeField] private CreatureMover mover;
         [SerializeField] private CreatureInteractor interactor;
@@ -19,7 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureEditor Editor => editor;
-        public CreatureRespawner Respawner => respawner;
         public CreatureAbilities Abilities => abilities;
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
@@ -35,7 +33,6 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnValidate();
 
             editor = GetComponent<CreatureEditor>();
-            respawner = GetComponent<CreatureRespawner>();
             abilities = GetComponent<CreatureAbilities>();
             mover = GetComponent<CreatureMover>();
             interactor = GetComponent<CreatureInteractor>();
@@ -61,6 +58,21 @@ namespace DanielLochner.Assets.CreatureCreator
             Mover.enabled = false;
             Interactor.enabled = false;
             Rigidbody.isKinematic = true;
+
+            //Animator.SetDamping(false);
+            //Animator.IsAnimated = false;
+
+            Spawner.Despawn();
+
+            EditorManager.Instance.IsVisible = false;
+
+            EditorManager.Instance.Invoke(delegate
+            {
+                string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
+                string age = Informer.Information.FormattedAge;
+                InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Respawn);
+
+            }, 1f);
         }
         public override void OnSpawn()
         {
@@ -78,6 +90,28 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void OnDespawn()
         {
             base.OnDespawn();
+        }
+
+
+        private void Respawn()
+        {
+            Mover.Teleport(Editor.Platform);
+
+
+            // set these in creature player local rather...
+            //Animator.RestoreDefaults();
+            //Animator.Restructure(false);
+            //Animator.IsAnimated = false;
+            //Animator.SetDamping(false);
+
+
+            //Animator.Restructure(true);
+            //Animator.Rebuild();
+            //Animator.IsAnimated = true;
+            //Animator.SetDamping(true);
+            Spawner.Spawn();
+
+            EditorManager.Instance.IsVisible = true;
         }
         #endregion
     }

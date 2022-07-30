@@ -64,11 +64,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get; private set;
         }
-        public bool IsAnimated
-        {
-            get => Animator.enabled;
-            set => Animator.enabled = value;
-        }
         #endregion
 
         #region Methods
@@ -76,7 +71,25 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
-        
+        private void OnEnable()
+        {
+            Velocity.Reset();
+            Reinitialize();
+            CaptureDefaults();
+            Restructure(true);
+            Rebuild();
+            Animator.enabled = true;
+            SetDamping(true);
+
+        }
+        private void OnDisable()
+        {
+            SetDamping(false);
+            RestoreDefaults();
+            Restructure(false);
+            Animator.enabled = false;
+        }
+
         private void Initialize()
         {
             Animator = GetComponent<Animator>();
@@ -110,17 +123,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return bodyPart.GetPrefab(BodyPart.PrefabType.Animatable) ?? bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
             };
-            Constructor.OnConstructCreature += delegate
-            {
-                Reinitialize();
-                CaptureDefaults();
-                Restructure(isAnimated);
-                Rebuild();
-                IsAnimated = isAnimated;
-                SetDamping(true);
-            };
         }
-        
+
         public void CaptureDefaults()
         {
             DefaultHeight = Constructor.Body.localPosition.y;
@@ -140,17 +144,20 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void RestoreDefaults()
         {
-            Constructor.Body.localPosition = Vector3.up * DefaultHeight;
-
-            //for (int i = 0; i < defaultPositions.Length; i++)
-            //{
-            //    Constructor.Bones[i].position = transform.TransformPoint(defaultPositions[i]);
-            //    Constructor.Bones[i].rotation = transform.rotation * defaultRotations[i];
-            //}
-
-            foreach (LimbAnimator limb in Limbs)
+            if (DefaultHeight != Mathf.NegativeInfinity)
             {
-                limb.RestoreDefaults();
+                Constructor.Body.localPosition = Vector3.up * DefaultHeight;
+
+                //for (int i = 0; i < defaultPositions.Length; i++)
+                //{
+                //    Constructor.Bones[i].position = transform.TransformPoint(defaultPositions[i]);
+                //    Constructor.Bones[i].rotation = transform.rotation * defaultRotations[i];
+                //}
+
+                foreach (LimbAnimator limb in Limbs)
+                {
+                    limb.RestoreDefaults();
+                }
             }
         }
         public void Reinitialize()
@@ -386,16 +393,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 limb.Restructure(isAnimated);
             }
         }
-        public void SetDamping(bool d)
+        public void SetDamping(bool isDamped)
         {
-            //if (d)
-            {
-                headDynamicBone.enabled = tailDynamicBone.enabled = false;
-                headDynamicBone.SetupParticles();
-                tailDynamicBone.SetupParticles();
-            }
+            headDynamicBone.enabled = tailDynamicBone.enabled = false;
 
-            headDynamicBone.enabled = tailDynamicBone.enabled = d;
+            headDynamicBone.SetupParticles();
+            tailDynamicBone.SetupParticles();
+
+            headDynamicBone.enabled = tailDynamicBone.enabled = isDamped;
         }
 
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)

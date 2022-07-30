@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHider))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureHealth))]
-    public class CreatureKiller : NetworkBehaviour
+    public class CreatureCorpse : NetworkBehaviour
     {
         #region Properties
         public CreatureConstructor Constructor { get; private set; }

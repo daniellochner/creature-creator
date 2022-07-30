@@ -269,9 +269,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 Creature.Editor.Load(null);
             }
             Creature.Editor.IsInteractable = true;
-            Creature.Editor.IsEditing = true;
+            Creature.Editor.enabled = true;
             Creature.Editor.Cash = ProgressManager.Data.Cash;
             Creature.Informer.Setup(informationMenu);
+            Creature.Editor.Platform = platform;
             Creature.Mover.Teleport(platform, true);
         }
         #endregion
@@ -281,103 +282,110 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!buildMenu.IsOpen)
             {
+                buildMenu.Open();
+                playMenu.Close();
+                paintMenu.Close();
+
                 Build();
+
+                SetMode();
+                SetCameraOffset(-1.5f);
             }
         }
         public void TryPlay()
         {
             if (!playMenu.IsOpen)
             {
+                buildMenu.Close();
+                playMenu.Open();
+                paintMenu.Close();
+
                 Play();
+                
+                SetMode();
+                SetCameraOffset(0f);
             }
         }
         public void TryPaint()
         {
             if (!paintMenu.IsOpen)
             {
+                buildMenu.Close();
+                playMenu.Close();
+                paintMenu.Open();
+
                 Paint();
+
+                SetMode();
+                SetCameraOffset(1.5f);
             }
         }
 
         public void Build()
         {
-            // Editor
-            buildMenu.Open();
-            playMenu.Close();
-            paintMenu.Close();
-            SetMode();
-
-            // Creature
+            Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = false;
-            Creature.Animator.SetDamping(false);
-            Creature.Animator.RestoreDefaults();
-            Creature.Animator.Restructure(false);
-            Creature.Animator.IsAnimated = false;
+            //Creature.Animator.SetDamping(false);
+            //Creature.Animator.RestoreDefaults();
+            //Creature.Animator.Restructure(false);
+            //Creature.Animator.IsAnimated = false;
+
+            Creature.Animator.enabled = false;
+
             Creature.Editor.IsInteractable = true;
-            Creature.Editor.IsEditing = true;
             Creature.Editor.IsDraggable = true;
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
-            Creature.Mover.IsMovable = false;
-            Creature.Spawner.Despawn();
+            Creature.Editor.enabled = true;
 
-            SetCameraOffset(-1.5f);
+
+            Creature.Mover.enabled = false;
         }
         public void Play()
         {
-            // Editor
-            buildMenu.Close();
-            playMenu.Open();
-            paintMenu.Close();
-            SetMode();
-
-            // Creature
             Creature.Constructor.Recenter();
             Creature.Constructor.UpdateConfiguration();
-            Creature.Collider.UpdateCollider();
-            Creature.Mover.IsMovable = true;
             Creature.Constructor.IsTextured = true;
             Creature.Editor.IsInteractable = false;
-            Creature.Editor.IsEditing = false;
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
-            Creature.Animator.Velocity.Reset();
-            Creature.Animator.Reinitialize();
+            Creature.Editor.enabled = false;
+
+            //Creature.Animator.Reinitialize();
+            //Creature.Animator.CaptureDefaults();
+            //Creature.Animator.Restructure(true);
+            //Creature.Animator.Rebuild();
+            //Creature.Animator.IsAnimated = true;
+            //Creature.Animator.SetDamping(true);
+
             Creature.Animator.CaptureDefaults();
-            Creature.Animator.Restructure(true);
-            Creature.Animator.Rebuild();
-            Creature.Animator.IsAnimated = true;
-            Creature.Animator.SetDamping(true);
+            Creature.Animator.enabled = true;
+
             Creature.Informer.Capture();
             Creature.Collider.UpdateCollider();
+            Creature.Mover.enabled = true;
             Creature.Spawner.Spawn();
-
-            SetCameraOffset(0f);
         }
         public void Paint()
         {
-            // Editor
-            buildMenu.Close();
-            playMenu.Close();
-            paintMenu.Open();
-            SetMode();
-
-            // Creature
+            Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = true;
-            Creature.Animator.SetDamping(false);
-            Creature.Animator.RestoreDefaults();
-            Creature.Animator.Restructure(false);
-            Creature.Animator.IsAnimated = false;
+
+            //Creature.Animator.SetDamping(false);
+            //Creature.Animator.RestoreDefaults();
+            //Creature.Animator.Restructure(false);
+            //Creature.Animator.IsAnimated = false;
+            Creature.Animator.enabled = false;
+
             Creature.Editor.IsInteractable = true;
-            Creature.Editor.IsEditing = true;
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = true;
             Creature.Editor.Deselect();
-            Creature.Mover.IsMovable = false;
-            Creature.Spawner.Despawn();
+            Creature.Editor.enabled = true;
 
-            SetCameraOffset(1.5f);
+
+            Creature.Mover.enabled = false;
         }
 
         private void SetCameraOffset(float x)
@@ -442,7 +450,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Load(CreatureData creatureData)
         {
-            Creature.Mover.Teleport(Creature.Mover.Platform);
+            Creature.Mover.Teleport(Creature.Editor.Platform);
             Creature.Editor.Load(creatureData);
 
             if (IsBuilding)
@@ -799,7 +807,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     editorAudioSource.PlayOneShot(createAudioClip);
 
                     Ray ray = Creature.Camera.Camera.ScreenPointToRay(Input.mousePosition);
-                    Plane plane = new Plane(Creature.Camera.Camera.transform.forward, Creature.Mover.Platform.transform.position);
+                    Plane plane = new Plane(Creature.Camera.Camera.transform.forward, Creature.Editor.Platform.transform.position);
 
                     if (plane.Raycast(ray, out float distance))
                     {

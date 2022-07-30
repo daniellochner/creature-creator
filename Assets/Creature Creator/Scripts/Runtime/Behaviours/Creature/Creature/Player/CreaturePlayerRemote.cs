@@ -35,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Setup()
         {
             base.Setup();
+
             Selectable.Setup();
             Namer.Setup();
 
@@ -52,9 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnDie();
 
-            Selectable.SetSelected(false);
-            Collider.enabled = false;
-            Namer.enabled = false;
+            OnHide();
         }
         public override void OnShow()
         {
@@ -62,17 +61,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Collider.enabled = true;
             Namer.enabled = true;
-            Animator.SetDamping(true);
         }
         public override void OnHide()
         {
             base.OnHide();
 
             Selectable.SetSelected(false);
-            Collider.enabled = false;
             Namer.enabled = false;
-            Animator.SetDamping(false);
-            Animator.IsAnimated = false;
         }
         #endregion
     }

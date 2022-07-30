@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureCollider))]
     [RequireComponent(typeof(CreatureCloner))]
     [RequireComponent(typeof(CreaturePhotographer))]
-    [RequireComponent(typeof(CreatureKiller))]
+    [RequireComponent(typeof(CreatureCorpse))]
     [RequireComponent(typeof(CreatureScaler))]
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureHunger))]
@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private new CreatureCollider collider;
         [SerializeField] private CreatureCloner cloner;
         [SerializeField] private CreaturePhotographer photographer;
-        [SerializeField] private CreatureKiller killer;
+        [SerializeField] private CreatureCorpse corpse;
         [SerializeField] private PlayerEffects effects;
         [SerializeField] private CreatureScaler scaler;
         [SerializeField] private CreatureHealth health;
@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureCollider Collider => collider;
         public CreatureCloner Cloner => cloner;
         public CreaturePhotographer Photographer => photographer;
-        public CreatureKiller Killer => killer;
+        public CreatureCorpse Corpse => corpse;
         public CreatureScaler Scaler => scaler;
         public CreatureHealth Health => health;
         public CreatureHunger Hunger => hunger;
@@ -68,7 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
             collider = GetComponent<CreatureCollider>();
             photographer = GetComponent<CreaturePhotographer>();
             cloner = GetComponent<CreatureCloner>();
-            killer = GetComponent<CreatureKiller>();
+            corpse = GetComponent<CreatureCorpse>();
             effects = GetComponent<PlayerEffects>();
             scaler = GetComponent<CreatureScaler>();
             health = GetComponent<CreatureHealth>();
@@ -83,14 +83,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Setup()
         {
-            Scaler.Setup();
             Animator.Setup();
 
-            Health.OnDie += OnDie;
             Spawner.OnSpawn += OnSpawn;
             Spawner.OnDespawn += OnDespawn;
-            Hider.OnHide += OnHide;
             Hider.OnShow += OnShow;
+            Hider.OnHide += OnHide;
+            Health.OnDie += OnDie;
         }
 
         public virtual void OnDie()
@@ -99,19 +98,15 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public virtual void OnSpawn()
         {
-
         }
         public virtual void OnDespawn()
         {
-
         }
         public virtual void OnHide()
         {
-
         }
         public virtual void OnShow()
         {
-
         }
         #endregion
     }

@@ -10,9 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureInformer : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private CreatureInformationMenu informationMenu;
-
-        [Header("Debug")]
         [SerializeField, ReadOnly] private CreatureInformation information;
         #endregion
 
@@ -43,38 +40,35 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup(CreatureInformationMenu menu)
         {
-            informationMenu = menu;
-            informationMenu.Setup(information);
+            menu.Setup(information);
 
             Health.OnHealthChanged += InformHealth;
             Hunger.OnHungerChanged += InformHunger;
             Age.OnAgeChanged += InformAge;
-
-            Constructor.OnConstructCreature += Capture;
         }
 
         private void InformHealth(float health)
         {
-            Information.Health = Health.HealthPercentage;
+            information.Health = Health.HealthPercentage;
         }
         private void InformHunger(float hunger)
         {
-            Information.Hunger = hunger;
+            information.Hunger = hunger;
         }
         private void InformAge(int age)
         {
-            Information.Age = age;
+            information.Age = age;
         }
 
         public void Capture()
         {
-            Information.Reset();
+            information.Reset();
 
             Photographer.TakePhoto(128, (Texture2D photo) =>
             {
-                Information.Photo = photo;
+                information.Photo = photo;
             });
-            Information.Name = Constructor.Data.Name;
+            information.Name = Constructor.Data.Name;
         }
         #endregion
     }

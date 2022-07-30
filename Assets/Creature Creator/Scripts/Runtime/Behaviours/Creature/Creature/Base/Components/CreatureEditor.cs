@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureMover))]
     [RequireComponent(typeof(CreatureCamera))]
     [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureEditor : MonoBehaviour
@@ -23,6 +22,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Settings")]
         [SerializeField] private float addOrRemoveCooldown = 0.05f;
         [SerializeField] private int angleLimit = 30;
+        [SerializeField] private float positionSmoothing;
+        [SerializeField] private float rotationSmoothing;
 
         private MeshCollider meshCollider;
         private Mesh colliderMesh;
@@ -30,9 +31,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private Transform frontTool, backTool;
         private Select select;
         private Drag drag;
+        private Rigidbody rb;
 
         private float addedOrRemovedTime;
-        private bool isInteractable, isDirty, isEditing;
+        private bool isInteractable, isDirty;
         private string loadedCreature;
         private int cash;
         private Vector3? pointerPosOffset;
@@ -51,9 +53,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public float AngleLimit => angleLimit;
 
         public CreatureConstructor Constructor { get; private set; }
-        public CreatureMover Mover { get; private set; }
         public CreatureCamera Camera { get; private set; }
-
+        
         public TransformationTools TransformationTools { get; private set; }
 
         public BodyPartEditor PaintedBodyPart
@@ -118,6 +119,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 EditorManager.Instance.UpdateStatistics();
             }
         }
+        public Platform Platform
+        {
+            get; set;
+        }
 
         public bool IsDirty
         {
@@ -141,19 +146,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (Collider collider in Constructor.Body.GetComponentsInChildren<Collider>(true))
                 {
                     collider.enabled = isInteractable;
-                }
-            }
-        }
-        public bool IsEditing
-        {
-            get => isEditing;
-            set
-            {
-                isEditing = value;
-
-                foreach (BodyPartEditor bpe in GetComponentsInChildren<BodyPartEditor>(true))
-                {
-                    bpe.enabled = isEditing;
                 }
             }
         }
@@ -203,12 +195,37 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Initialize();
         }
+        private void OnEnable()
+        {
+            foreach (BodyPartEditor bpe in GetComponentsInChildren<BodyPartEditor>(true))
+            {
+                bpe.enabled = true;
+            }
+
+            foreach (Transform bone in Constructor.Bones)
+            {
+                bone.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        private void OnDisable()
+        {
+            foreach (BodyPartEditor bpe in GetComponentsInChildren<BodyPartEditor>(true))
+            {
+                bpe.enabled = false;
+            }
+        }
+        private void Update()
+        {
+            HandlePlatform();
+        }
 
         private void Initialize()
         {
             Constructor = GetComponent<CreatureConstructor>();
-            Mover = GetComponent<CreatureMover>();
             Camera = GetComponent<CreatureCamera>();
+
+            rb = GetComponent<Rigidbody>();
         }
 
         public void Setup()
@@ -603,14 +620,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return bodyPart.GetPrefab(BodyPart.PrefabType.Editable);
             };
-            Constructor.OnConstructCreature += delegate
-            {
-                if (EditorManager.Instance.IsPainting)
-                {
-                    UseTemporaryOutline = false;
-                    UseTemporaryOutline = true;
-                }
-            };
         }
         
         public void Load(CreatureData creatureData)
@@ -705,7 +714,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleStretchTools(int oldIndex, int newIndex, Transform tool)
         {
-            Plane stretchPlane = new Plane(transform.right, Mover.Platform.transform.position);
+            Plane stretchPlane = new Plane(transform.right, Platform.transform.position);
 
             Ray ray = Camera.Camera.ScreenPointToRay(Input.mousePosition);
             if (stretchPlane.Raycast(ray, out float distance))
@@ -754,6 +763,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     addedOrRemovedTime = Time.time;
                 }
             }
+        }
+        private void HandlePlatform()
+        {
+            if (Platform != null) transform.LerpTo(Platform.Position, positionSmoothing);
         }
         #endregion
     }

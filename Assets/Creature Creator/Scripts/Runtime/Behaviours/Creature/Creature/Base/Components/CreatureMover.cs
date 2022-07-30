@@ -12,7 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureMover : MonoBehaviour
     {
         #region Fields
-        [Header("Movement")]
         [SerializeField] private bool requestToMove;
         [SerializeField] private float moveSpeed;
         [SerializeField] private float turnSpeed;
@@ -21,11 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float angleToMove;
         [SerializeField] private float thresholdWalkSpeed;
         [SerializeField] private GameObject targetPrefab;
-        
-        [Header("Platform")]
-        [SerializeField] private Platform platform;
-        [SerializeField] private float positionSmoothing;
-        [SerializeField] private float rotationSmoothing;
+        [SerializeField] private float airDrag;
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private Vector3 velocity;
@@ -47,11 +42,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAnimator Animator { get; private set; }
         public CreatureCamera Camera { get; private set; }
 
-        public Platform Platform
-        {
-            get => platform;
-            set => platform = value;
-        }
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
@@ -63,25 +53,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 return EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen;
             }
         }
-        public bool IsMovable
-        {
-            get => isMovable;
-            set
-            {
-                isMovable = value;
-
-                moveDisplacement = Vector3.zero;
-                targetPosition = transform.position;
-
-                // Physics
-                foreach (Transform bone in Constructor.Bones)
-                {
-                    bone.GetComponent<Rigidbody>().isKinematic = isMovable;
-                }
-                rigidbody.constraints = isMovable ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeAll; // Setting "isKinematic" to false will invoke OnTriggerExit().
-                rigidbody.useGravity = isMovable;
-            }
-        }
         #endregion
 
         #region Methods
@@ -91,21 +62,25 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
-            if (!IsMovable)
-            {
-                HandlePlatform();
-            }
-            else if (CanInput)
+            if (CanInput)
             {
                 HandleInput();
             }
         }
         private void FixedUpdate()
         {
-            if (IsMovable)
+            HandleMovement();
+        }
+        private void OnEnable()
+        {
+            moveDisplacement = Vector3.zero;
+            targetPosition = transform.position;
+
+            foreach (Transform bone in Constructor.Bones)
             {
-                HandleMovement();
+                bone.GetComponent<Rigidbody>().isKinematic = true;
             }
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
         private void OnDisable()
         {
@@ -114,7 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 targetAnimator.SetBool("IsHolding", false);
             }
         }
-
+        
         private void Initialize()
         {
             Constructor = GetComponent<CreatureConstructor>();
@@ -216,9 +191,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             RequestMove(canMove ? direction : Vector3.zero);
         }
-        private void HandlePlatform()
+        private void HandleGliding()
         {
-            if (Platform != null) transform.LerpTo(Platform.Position, positionSmoothing);
+            rigidbody.drag = (Animator.Wings.Count > 0 && !Animator.Grounded.IsGrounded) ? airDrag : 0f;
         }
 
         public void RequestMove(Vector3 direction)
@@ -263,12 +238,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Teleport(Platform platform, bool start = false)
         {
-            Platform = platform;
-            Teleport(Platform.Position);
+            Teleport(platform.Position);
 
             if (start)
             {
-                transform.rotation = Platform.Rotation;
+                transform.rotation = platform.Rotation;
                 Camera.Root.SetPositionAndRotation(platform.Position, platform.Rotation);
             }
         }

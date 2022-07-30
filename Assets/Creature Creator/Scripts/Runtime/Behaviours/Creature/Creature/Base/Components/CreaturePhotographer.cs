@@ -67,7 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
             onPhotoTaken(photoCam.targetTexture.ToTexture2D(resolution));
 
             // Destroy temporary creature.
-            Destroy(tmpCreature.gameObject);
+            DestroyImmediate(tmpCreature.gameObject); // Must be immediate to prevent creature from showing in next photo.
 
             IsTakingPhoto = false;
         }

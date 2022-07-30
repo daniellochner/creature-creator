@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, ReadOnly] private CreatureDimensions dimensions;
 
         private bool isTextured;
+        private Rigidbody rb;
         #endregion
 
         #region Properties
@@ -60,8 +61,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Action OnPreDemolish { get; set; }
         public Action OnConstructBody { get; set; }
-        public Action OnPreConstructCreature { get; set; }
-        public Action OnConstructCreature { get; set; }
         public Action<int> OnSetupBone { get; set; }
         public Action<int> OnAddBone { get; set; }
         public Action<int> OnRemoveBone { get; set; }
@@ -105,6 +104,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Initialize()
         {
+            rb = GetComponent<Rigidbody>();
+
             SkinnedMeshRenderer = Model.GetComponent<SkinnedMeshRenderer>();
             SkinnedMeshRenderer.material = BodyMat = new Material(bodyMaterial);
             SkinnedMeshRenderer.sharedMesh = Mesh = new Mesh();
@@ -119,8 +120,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Construct(CreatureData data, bool debug = false)
         {
             if (debug) Timer.Start("Creature");
-
-            OnPreConstructCreature?.Invoke();
 
             SetName(data.Name);
             for (int i = 0; i < data.Bones.Count; i++)
@@ -143,8 +142,6 @@ namespace DanielLochner.Assets.CreatureCreator
             SetShine(data.Shine);
             SetMetallic(data.Metallic);
             UpdateDimensions();
-
-            OnConstructCreature?.Invoke();
 
             if (debug) Timer.Stop("Creature");
         }
@@ -750,7 +747,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 weight += bpc.BodyPart.Weight;
             }
-            statistics.weight = weight;
+            rb.mass = statistics.weight = weight;
         }
         #endregion
     }

@@ -45,12 +45,26 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnDie();
             Selectable.SetSelected(false);
+            //Animator.SetDamping(false);
+            //Animator.IsAnimated = false;
+        }
+        public override void OnShow()
+        {
+            base.OnShow();
+
+
+
+            Collider.UpdateCollider();
+
+            
+
         }
         public override void OnHide()
         {
             base.OnHide();
             Collider.enabled = false;
-            Animator.IsAnimated = false;
+            //Animator.SetDamping(false);
+            //Animator.IsAnimated = false;
         }
         #endregion
     }

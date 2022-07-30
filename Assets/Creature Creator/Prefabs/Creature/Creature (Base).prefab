@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Root: {fileID: 0}
   m_Roots: []
   m_UpdateRate: 60
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_Damping: 0.2
   m_DampingDistrib:
     serializedVersion: 2
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
@@ -756,7 +756,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d71ead22d4823640887246afa879410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  informationMenu: {fileID: 0}
   information:
     name: Unnamed
     photo: {fileID: 0}
@@ -956,13 +955,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useFixedUpdate: 0
   useThisTransform: 1
   source: {fileID: 7193793692207522153}
   sourcePosition: {fileID: 7193793692207522153}
   sourceRotation: {fileID: 7193793692207522153}
   posThreshold: 0.001
   rotThreshold: 0.01
-  updateTime: 0.1
+  alpha: 0.75
   baseMovementSpeed: 2
   baseTurnSpeed: 120
 --- !u!114 &8039239263990838917
@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_Root: {fileID: 0}
   m_Roots: []
   m_UpdateRate: 60
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_Damping: 0.2
   m_DampingDistrib:
     serializedVersion: 2
