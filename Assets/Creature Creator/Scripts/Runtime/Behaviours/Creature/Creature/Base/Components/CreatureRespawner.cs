@@ -63,7 +63,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Animator.Restructure(true);
             Animator.Rebuild();
-            Animator.Reposition();
             Animator.IsAnimated = true;
             Spawner.Spawn();
 

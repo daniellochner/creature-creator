@@ -103,6 +103,8 @@ namespace DanielLochner.Assets.CreatureCreator
             // Limb
             for (int i = 0; i < defaultBonePositions.Length; i++)
             {
+                Debug.Log(CreatureAnimator.Constructor.Body);
+                Debug.Log(LimbConstructor.Bones[i]);
                 LimbConstructor.Bones[i].position = CreatureAnimator.Constructor.Body.TransformPoint(defaultBonePositions[i]);
             }
 

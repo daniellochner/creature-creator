@@ -21,6 +21,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             return base.CanInteract(interactor) && EditorManager.Instance.IsPlaying && hasReqAbility;
         }
+        public override bool CanHighlight(Interactor interactor)
+        {
+            return base.CanHighlight(interactor) && EditorManager.Instance.IsPlaying;
+        }
         #endregion
     }
 }

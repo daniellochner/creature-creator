@@ -116,8 +116,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 CaptureDefaults();
                 Restructure(isAnimated);
                 Rebuild();
-                Reposition();
                 IsAnimated = isAnimated;
+                SetDamping(true);
             };
         }
         
@@ -147,7 +147,7 @@ namespace DanielLochner.Assets.CreatureCreator
             //    Constructor.Bones[i].position = transform.TransformPoint(defaultPositions[i]);
             //    Constructor.Bones[i].rotation = transform.rotation * defaultRotations[i];
             //}
-            
+
             foreach (LimbAnimator limb in Limbs)
             {
                 limb.RestoreDefaults();
@@ -205,6 +205,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Restructure(bool isAnimated)
         {
+            Constructor.Root.localPosition = Vector3.zero;
+            Constructor.Root.localRotation = Quaternion.identity;
+
             if (isAnimated)
             {
                 bool isUpper = Limbs.Count > 0;
@@ -246,8 +249,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     tailDynamicBone.m_Root = Constructor.Bones[tIndex];
                 }
-
-
+                
 
                 // Unity's DampedTransform is broken...
 
@@ -286,6 +288,80 @@ namespace DanielLochner.Assets.CreatureCreator
                 //        maintainAim = true
                 //    };
                 //}
+
+                Vector3 offset = Vector3.zero;
+                EasingFunction.Function function = null;
+
+                if (Legs.Count == 0)
+                {
+                    // Creatures without legs should fall down to the ground.
+
+                    Mesh bodyMesh = new Mesh();
+                    Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
+
+                    float minY = Mathf.Infinity;
+                    foreach (Vector3 vertex in bodyMesh.vertices)
+                    {
+                        if (vertex.y < minY)
+                        {
+                            minY = vertex.y;
+                        }
+                    }
+
+                    offset = Constructor.transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
+                    function = EasingFunction.EaseOutBounce;
+                }
+                else
+                {
+                    // Creatures with legs should slump down to put weight on them.
+
+                    // Determine the most extended leg and record its extension percentage.
+                    LegAnimator mostExtendedLeg = null;
+                    float maxExtension = Mathf.NegativeInfinity;
+                    foreach (LegAnimator leg in Legs)
+                    {
+                        if (leg.IsFlipped)
+                        {
+                            continue;
+                        }
+
+                        float extension = leg.Length / leg.MaxLength;
+                        if (extension > maxExtension)
+                        {
+                            maxExtension = extension;
+                            mostExtendedLeg = leg;
+                        }
+                    }
+
+                    // If the most extended leg is too extended (i.e., exceeds the extension threshold), slump body down by an offset:
+                    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
+                    if (maxExtension > extensionThreshold)
+                    {
+                        float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
+
+                        float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
+                        float c = targetLength;
+                        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
+
+                        float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
+                        float targetHeight = b;
+
+                        offset = Vector3.up * (targetHeight - currentHeight);
+                        function = EasingFunction.EaseOutExpo;
+                    }
+                }
+
+                if (offset != Vector3.zero)
+                {
+                    if (useEasing)
+                    {
+                        moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
+                    }
+                    else
+                    {
+                        Constructor.Body.localPosition += offset;
+                    }
+                }
             }
             else
             {
@@ -297,7 +373,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 head.DestroyChildren();
                 tail.DestroyChildren();
-
+                
                 if (moveBodyCoroutine != null)
                 {
                     StopCoroutine(moveBodyCoroutine);
@@ -310,81 +386,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 limb.Restructure(isAnimated);
             }
         }
-        public void Reposition()
+        public void SetDamping(bool d)
         {
-            Vector3 offset = Vector3.zero;
-            EasingFunction.Function function = null;
-
-            if (Legs.Count == 0)
+            //if (d)
             {
-                // Creatures without legs should fall down to the ground.
-
-                Mesh bodyMesh = new Mesh();
-                Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-
-                float minY = Mathf.Infinity;
-                foreach (Vector3 vertex in bodyMesh.vertices)
-                {
-                    if (vertex.y < minY)
-                    {
-                        minY = vertex.y;
-                    }
-                }
-
-                offset = Constructor.transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
-                function = EasingFunction.EaseOutBounce;
-            }
-            else
-            {
-                // Creatures with legs should slump down to put weight on them.
-
-                // Determine the most extended leg and record its extension percentage.
-                LegAnimator mostExtendedLeg = null;
-                float maxExtension = Mathf.NegativeInfinity;
-                foreach (LegAnimator leg in Legs)
-                {
-                    if (leg.IsFlipped)
-                    {
-                        continue;
-                    }
-
-                    float extension = leg.Length / leg.MaxLength;
-                    if (extension > maxExtension)
-                    {
-                        maxExtension = extension;
-                        mostExtendedLeg = leg;
-                    }
-                }
-
-                // If the most extended leg is too extended (i.e., exceeds the extension threshold), slump body down by an offset:
-                // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
-                if (maxExtension > extensionThreshold)
-                {
-                    float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
-
-                    float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
-                    float c = targetLength;
-                    float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
-
-                    float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
-                    float targetHeight = b;
-
-                    offset = Vector3.up * (targetHeight - currentHeight);
-                    function = EasingFunction.EaseOutExpo;
-                }
+                headDynamicBone.enabled = tailDynamicBone.enabled = false;
+                headDynamicBone.SetupParticles();
+                tailDynamicBone.SetupParticles();
             }
 
-            if (offset != Vector3.zero)
-            {
-                if (useEasing)
-                {
-                    moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
-                }
-                else
-                {
-                    Constructor.Body.localPosition += offset;
-                }
-            }
+            headDynamicBone.enabled = tailDynamicBone.enabled = d;
         }
 
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)

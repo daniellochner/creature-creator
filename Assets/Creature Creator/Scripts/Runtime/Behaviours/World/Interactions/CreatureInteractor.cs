@@ -26,7 +26,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             InteractionsManager.Instance.OnTarget += delegate (GameObject targeted)
             {
-                CreatureCamera.CameraOrbit.SetFrozen(targeted != null);
+                if (EditorManager.Instance.IsPlaying)
+                {
+                    CreatureCamera.CameraOrbit.SetFrozen(targeted != null);
+                }
             };
         }
         #endregion

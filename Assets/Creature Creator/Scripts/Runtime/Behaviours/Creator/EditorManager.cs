@@ -308,16 +308,17 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMode();
 
             // Creature
-            Creature.Mover.IsMovable = false;
             Creature.Constructor.IsTextured = false;
+            Creature.Animator.SetDamping(false);
+            Creature.Animator.RestoreDefaults();
+            Creature.Animator.Restructure(false);
+            Creature.Animator.IsAnimated = false;
             Creature.Editor.IsInteractable = true;
             Creature.Editor.IsEditing = true;
             Creature.Editor.IsDraggable = true;
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
-            Creature.Animator.RestoreDefaults();
-            Creature.Animator.Restructure(false);
-            Creature.Animator.IsAnimated = false;
+            Creature.Mover.IsMovable = false;
             Creature.Spawner.Despawn();
 
             SetCameraOffset(-1.5f);
@@ -346,8 +347,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Animator.CaptureDefaults();
             Creature.Animator.Restructure(true);
             Creature.Animator.Rebuild();
-            Creature.Animator.Reposition();
             Creature.Animator.IsAnimated = true;
+            Creature.Animator.SetDamping(true);
             Creature.Informer.Capture();
             Creature.Collider.UpdateCollider();
             Creature.Spawner.Spawn();
@@ -363,16 +364,17 @@ namespace DanielLochner.Assets.CreatureCreator
             SetMode();
 
             // Creature
-            Creature.Mover.IsMovable = false;
             Creature.Constructor.IsTextured = true;
+            Creature.Animator.SetDamping(false);
+            Creature.Animator.RestoreDefaults();
+            Creature.Animator.Restructure(false);
+            Creature.Animator.IsAnimated = false;
             Creature.Editor.IsInteractable = true;
             Creature.Editor.IsEditing = true;
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = true;
             Creature.Editor.Deselect();
-            Creature.Animator.RestoreDefaults();
-            Creature.Animator.Restructure(false);
-            Creature.Animator.IsAnimated = false;
+            Creature.Mover.IsMovable = false;
             Creature.Spawner.Despawn();
 
             SetCameraOffset(1.5f);
