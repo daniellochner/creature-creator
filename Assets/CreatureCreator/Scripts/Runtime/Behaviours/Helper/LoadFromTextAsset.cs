@@ -8,27 +8,17 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LoadFromTextAsset : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private CreatureBase creature;
+        [SerializeField] private CreatureConstructor creaturePrefab;
         [SerializeField] private TextAsset data;
         [Space]
         [SerializeField, Button("Load")] private bool load;
         #endregion
 
         #region Methods
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            CreatureBase c = GetComponent<CreatureBase>();
-            if (c != null)
-            {
-                creature = c;
-            }
-        }
-#endif
         public void Load()
         {
-            creature.Setup();
-            creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
+            CreatureConstructor creature = Instantiate(creaturePrefab, transform.position, transform.rotation, transform);
+            creature.Construct(JsonUtility.FromJson<CreatureData>(data.text));
         }
         #endregion
     }

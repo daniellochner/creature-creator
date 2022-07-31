@@ -357,7 +357,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.Deselect();
             Creature.Editor.enabled = false;
             
-            Creature.Animator.CaptureDefaults();
             Creature.Animator.enabled = true;
 
             Creature.Informer.Capture();

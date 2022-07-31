@@ -247,6 +247,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 Play();
                 NetworkManager.Singleton.StartClient();
             }
+            catch (NullReferenceException nre)
+            {
+                UpdateNetworkStatus("Lobby error.", Color.red); // TODO: Bug with Lobby returning NullReferenceException?
+                IsConnecting = false;
+            }
             catch (Exception e)
             {
                 UpdateNetworkStatus(e.Message, Color.red);
@@ -322,7 +327,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (Exception e)
             {
-                UpdateNetworkStatus($"{e.Message}", Color.red);
+                UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
             }
         }

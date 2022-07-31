@@ -19,23 +19,20 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureAnimator : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private bool isAnimated;
         [SerializeField] private bool useEasing;
         [SerializeField] private float extensionThreshold;
         
         [Header("Internal References")]
         [SerializeField] private Transform rig;
-        [SerializeField] private Transform head;
         [SerializeField] private Transform tail;
         [SerializeField] private Transform limbs;
-        [SerializeField] private DynamicBone headDynamicBone;
-        [SerializeField] private DynamicBone tailDynamicBone;
 
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
         private bool hasCapturedDefaults;
         private Vector3[] defaultPositions;
         private Quaternion[] defaultRotations;
+        private DynamicBone tailDynamicBone;
         #endregion
 
         #region Properties
@@ -101,12 +98,15 @@ namespace DanielLochner.Assets.CreatureCreator
             Grounded = GetComponent<CreatureGrounded>();
             Underwater = GetComponent<CreatureUnderwater>();
 
+            tailDynamicBone = tail.GetComponent<DynamicBone>();
+
             Rebuild();
         }
 
         public void Setup()
         {
             SetupConstruction();
+            SetupAnimation();
         }
         public void SetupConstruction()
         {
@@ -123,6 +123,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return bodyPart.GetPrefab(BodyPart.PrefabType.Animatable) ?? bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
             };
+        }
+        public void SetupAnimation()
+        {
+            tailDynamicBone.m_ReferenceObject = Player.Instance.transform;
         }
 
         public void CaptureDefaults()
@@ -243,15 +247,9 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 }
-
-
-                int hIndex = h + 1;
+                
                 int tIndex = t - 1;
 
-                if (hIndex <= Constructor.Bones.Count - 1)
-                {
-                    headDynamicBone.m_Root = Constructor.Bones[hIndex];
-                }
                 if (tIndex >= 0)
                 {
                     tailDynamicBone.m_Root = Constructor.Bones[tIndex];
@@ -378,7 +376,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     bone.SetAsLastSibling();
                 }
 
-                head.DestroyChildren();
                 tail.DestroyChildren();
                 
                 if (moveBodyCoroutine != null)
@@ -395,12 +392,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetDamping(bool isDamped)
         {
-            headDynamicBone.enabled = tailDynamicBone.enabled = false;
+            tailDynamicBone.enabled = false;
 
-            headDynamicBone.SetupParticles();
             tailDynamicBone.SetupParticles();
 
-            headDynamicBone.enabled = tailDynamicBone.enabled = isDamped;
+            tailDynamicBone.enabled = isDamped;
         }
 
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)

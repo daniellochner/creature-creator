@@ -111,14 +111,16 @@ namespace DanielLochner.Assets.CreatureCreator
             // Bones
             for (int i = 0; i < Bones.Length; i++)
             {
-                // Position
-                Vector3 localBonePosition = CreatureConstructor.transform.InverseTransformPoint(Bones[i].position);
-                localBonePosition.x *= -1;
-                FlippedLimb.Bones[i].position = CreatureConstructor.transform.TransformPoint(localBonePosition);
+                //// Position
+                //Vector3 localBonePosition = CreatureConstructor.transform.InverseTransformPoint(Bones[i].position);
+                //localBonePosition.x *= -1;
+                //FlippedLimb.Bones[i].position = CreatureConstructor.transform.TransformPoint(localBonePosition);
+                FlippedLimb.Bones[i].localPosition = Bones[i].localPosition;
 
-                // Rotation
-                Quaternion worldRotation = CreatureConstructor.transform.rotation * Quaternion.Euler(Bones[i].eulerAngles.x, -Bones[i].eulerAngles.y, -Bones[i].eulerAngles.z);
-                FlippedLimb.Bones[i].rotation = worldRotation;
+                //// Rotation
+                //Quaternion worldRotation = CreatureConstructor.transform.rotation * Quaternion.Euler(Bones[i].eulerAngles.x, -Bones[i].eulerAngles.y, -Bones[i].eulerAngles.z);
+                //FlippedLimb.Bones[i].rotation = worldRotation;
+                FlippedLimb.Bones[i].localRotation = Bones[i].localRotation;
 
                 // Weight
                 FlippedLimb.SetWeight(i, GetWeight(i));

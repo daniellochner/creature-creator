@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &2027977242
+--- !u!1 &1886460195
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,35 +131,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2027977244}
-  - component: {fileID: 2027977243}
+  - component: {fileID: 1886460197}
+  - component: {fileID: 1886460196}
+  - component: {fileID: 1886460198}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2027977243
+--- !u!114 &1886460196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2027977242}
+  m_GameObject: {fileID: 1886460195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25254960574b3d84b93cc47fc1079f5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b21b1eda3992024f95a718a60c0f802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bps: {fileID: 11400000, guid: ccc0a5882387d374c828d2130ddd8650, type: 2}
---- !u!4 &2027977244
+  creaturePrefab: {fileID: 3002746977395476853, guid: ed53cf7f0320509468686cd7c86e2c7e, type: 3}
+  data: {fileID: 4900000, guid: 3f24ff9feb19df74fba212168454f7f1, type: 3}
+  load: 0
+--- !u!4 &1886460197
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2027977242}
+  m_GameObject: {fileID: 1886460195}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -168,3 +171,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1886460198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886460195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11437d18e6ee9b848b7abc28db8b8fba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  databases:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - Body Parts
+    - Patterns
+    _keys:
+    - Body Parts
+    - Patterns
+    _values:
+    - {fileID: 11400000, guid: ccc0a5882387d374c828d2130ddd8650, type: 2}
+    - {fileID: 11400000, guid: 9bd0b8f44b7837a40a388ecc7dbb94e2, type: 2}
