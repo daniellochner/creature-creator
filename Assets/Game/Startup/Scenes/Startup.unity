@@ -463,6 +463,30 @@ MonoBehaviour:
     toggleUI:
       key: 0
       modifierKey: 0
+    bite:
+      key: 0
+      modifierKey: 0
+    dig:
+      key: 0
+      modifierKey: 0
+    distract:
+      key: 0
+      modifierKey: 0
+    eat:
+      key: 0
+      modifierKey: 0
+    pickUp:
+      key: 0
+      modifierKey: 0
+    ping:
+      key: 0
+      modifierKey: 0
+    roar:
+      key: 0
+      modifierKey: 0
+    strike:
+      key: 0
+      modifierKey: 0
     copy:
       key: 0
       modifierKey: 0
@@ -484,6 +508,32 @@ MonoBehaviour:
   save: 0
   load: 0
   revert: 0
+  networkPlayersMenu: {fileID: 2438019226558733466, guid: 383537c1967d9214f8775e5116126a0e, type: 3}
+  digAbility: {fileID: 11400000, guid: a9897a294939f3343ace62c499131ed6, type: 2}
+  distractAbility: {fileID: 11400000, guid: 1f951caa038482a449884f36921e25eb, type: 2}
+  dropAbility: {fileID: 11400000, guid: 1fe428c6042e1f246a8ddfb618ed5662, type: 2}
+  eatAbility: {fileID: 11400000, guid: 6d13c8e6dd1cfa94fa3ecf3efa059a47, type: 2}
+  pickUpAbility: {fileID: 11400000, guid: 8908108a863934a4cbefe7500c4f10a6, type: 2}
+  pingAbility: {fileID: 11400000, guid: 22ecb2d95f56504458ceafdb640445db, type: 2}
+  roarAbility: {fileID: 11400000, guid: 053cb247c3c4169458e3a25362e10f96, type: 2}
+  biteAbilities:
+  - {fileID: 11400000, guid: 06fd584d804165842becbca2b664970e, type: 2}
+  - {fileID: 11400000, guid: 8869d360f61d3a74faa0f780a33501f0, type: 2}
+  - {fileID: 11400000, guid: 8b5c74ab0da1b924287c11cc12698748, type: 2}
+  jumpAbilities:
+  - {fileID: 11400000, guid: 3cc7113d958504246bc0d4b993856da9, type: 2}
+  - {fileID: 11400000, guid: 0a270ee7a178d2146a3aadbad460baf1, type: 2}
+  flapAbilities:
+  - {fileID: 11400000, guid: f5eb0f9fc71c6b8418560899e61769db, type: 2}
+  - {fileID: 11400000, guid: a861f75e82ae1864ca1ffd085267d0e7, type: 2}
+  sprintAbilities:
+  - {fileID: 11400000, guid: bf1e16074d5ca8741a73b921fea862e1, type: 2}
+  - {fileID: 11400000, guid: b6f28610add982d438f9da76de7a63b4, type: 2}
+  - {fileID: 11400000, guid: cfd3f785a4b1ca24ca48fa28a63f27f8, type: 2}
+  strikeAbilities:
+  - {fileID: 11400000, guid: 7f655934922b83947a24f9c2f717e7c5, type: 2}
+  - {fileID: 11400000, guid: ddeb2a2e9d88921409b56b3af43d9569, type: 2}
+  - {fileID: 11400000, guid: b9589e2d7f3527d489531fbef8980880, type: 2}
 --- !u!1 &522513778
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,6 +1078,34 @@ MonoBehaviour:
   save: 0
   load: 0
   revert: 0
+  creatureQualitySettings: {fileID: 11400000, guid: 04a9205d1b89bf843bab99a0c9900737, type: 2}
+  cameras:
+  - {fileID: 4041236049601487436, guid: 1d105993763b3c141ab23abc4e63cb9c, type: 3}
+  - {fileID: 6888884849366238842, guid: 212093b088ad4184091ba4177a2bb0e7, type: 3}
+  profiles:
+  - {fileID: 11400000, guid: d17cc7f455d5f6d4398f5e568955ff6f, type: 2}
+  - {fileID: 11400000, guid: 5b32a9c2934b6264191bfa358cbc4018, type: 2}
+  waterProfiles:
+  - {fileID: 11400000, guid: 60c0ef708516a3344a8f479e005958a7, type: 2}
+  - {fileID: 11400000, guid: 10f92686b7beed54a9faebda6d14d9fd, type: 2}
+  renderingProfiles:
+  - {fileID: -3184765258665741883, guid: 1f4aee24182870243b746fa26bfc9957, type: 2}
+  - {fileID: 7854759077151387082, guid: 5dd2639bd3ef3a442901b320991851c8, type: 2}
+  - {fileID: -8149856835586959, guid: c5dda656d983aad4d9899b982abe6b99, type: 2}
+  - {fileID: -4867370108597565328, guid: 8e098ac3b85f6314dada7d72d263fee3, type: 2}
+  - {fileID: 4675657980457024549, guid: a6db5f110dca571448534e4dae947a0a, type: 2}
+  - {fileID: -143346307342952461, guid: 2359cc335a595714bbddc973a80e548f, type: 2}
+  - {fileID: 4030627986699909096, guid: 4fbe2e0bcee616f4f8c7077616df434c, type: 2}
+  windMaterials:
+  - {fileID: 2100000, guid: aaa68886c29e1714b80fd1f08f2c79e9, type: 2}
+  - {fileID: 2100000, guid: af65c0942482e46aeb256506726ff0f7, type: 2}
+  masterAudioMixer: {fileID: 24100000, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
+  minMaxVolumeDB:
+    min: -20
+    max: 1
+  statsManagerPrefab: {fileID: 384159566301628347, guid: d997a0b1aee464e4db3ad81c909e492c, type: 3}
+  creatureBasePrefab: {fileID: 7193793692207522154, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+  cameraOrbitPrefab: {fileID: 4041236049601487433, guid: 1d105993763b3c141ab23abc4e63cb9c, type: 3}
   references:
     version: 2
     RefIds: []

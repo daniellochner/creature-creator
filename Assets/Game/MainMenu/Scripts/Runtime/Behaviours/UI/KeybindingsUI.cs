@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using DanielLochner.Assets.CreatureCreator.Abilities;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -25,10 +24,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI stopMoveKUI;
         [SerializeField] private KeybindUI respawnKUI;
         [SerializeField] private KeybindUI toggleUIKUI;
-        [SerializeField] private NetworkPlayersMenu networkPlayersMenu;
-        [SerializeField] private Jump[] jumpAbilities;
-        [SerializeField] private Flap[] flapAbilities;
-        [SerializeField] private Sprint[] sprintAbilities;
+        [SerializeField] private KeybindUI biteKUI;
+        [SerializeField] private KeybindUI digKUI;
+        [SerializeField] private KeybindUI distractKUI;
+        [SerializeField] private KeybindUI eatKUI;
+        [SerializeField] private KeybindUI pickUpKUI;
+        [SerializeField] private KeybindUI pingKUI;
+        [SerializeField] private KeybindUI roarKUI;
+        [SerializeField] private KeybindUI strikeKUI;
 
         [Header("Build")]
         [SerializeField] private KeybindUI copyKUI;
@@ -86,33 +89,21 @@ namespace DanielLochner.Assets.CreatureCreator
             jumpKUI.Rebind(KeybindingsManager.Data.Jump, false);
             jumpKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                foreach (Jump jumpAbility in jumpAbilities)
-                {
-                    jumpAbility.PerformKeybind = key;
-                }
-                KeybindingsManager.Data.Jump = key;
+                KeybindingsManager.Instance.RebindJump(key);
             });
 
             // Flap
             flapKUI.Rebind(KeybindingsManager.Data.Flap, false);
             flapKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                foreach (Flap flapAbility in flapAbilities)
-                {
-                    flapAbility.PerformKeybind = key;
-                }
-                KeybindingsManager.Data.Flap = key;
+                KeybindingsManager.Instance.RebindFlap(key);
             });
 
             // Sprint
             sprintKUI.Rebind(KeybindingsManager.Data.Sprint, false);
             sprintKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                foreach (Sprint sprintAbility in sprintAbilities)
-                {
-                    sprintAbility.PerformKeybind = key;
-                }
-                KeybindingsManager.Data.Sprint = key;
+                KeybindingsManager.Instance.RebindSprint(key);
             });
 
             // Interact
@@ -140,7 +131,7 @@ namespace DanielLochner.Assets.CreatureCreator
             viewPlayersKUI.Rebind(KeybindingsManager.Data.ViewPlayers, false);
             viewPlayersKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                KeybindingsManager.Data.ViewPlayers = networkPlayersMenu.Keybind = key;
+                KeybindingsManager.Instance.RebindViewPlayers(key);
             });
 
             // Free Look
@@ -169,6 +160,69 @@ namespace DanielLochner.Assets.CreatureCreator
             toggleUIKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Data.ToggleUI = key;
+            });
+
+            // Bite
+            biteKUI.Rebind(KeybindingsManager.Data.Bite, false);
+            biteKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindBite(key);
+            });
+
+            // Dig
+            digKUI.Rebind(KeybindingsManager.Data.Dig, false);
+            digKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindDig(key);
+            });
+
+            // Distract
+            distractKUI.Rebind(KeybindingsManager.Data.Distract, false);
+            distractKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindDistract(key);
+            });
+
+            // Drop
+            dropKUI.Rebind(KeybindingsManager.Data.Drop, false);
+            dropKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindDrop(key);
+            });
+
+            // Eat
+            eatKUI.Rebind(KeybindingsManager.Data.Eat, false);
+            eatKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindEat(key);
+            });
+
+            // PickUp
+            pickUpKUI.Rebind(KeybindingsManager.Data.PickUp, false);
+            pickUpKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindPickUp(key);
+            });
+
+            // Ping
+            pingKUI.Rebind(KeybindingsManager.Data.Ping, false);
+            pingKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindPing(key);
+            });
+
+            // Roar
+            roarKUI.Rebind(KeybindingsManager.Data.Roar, false);
+            roarKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindRoar(key);
+            });
+
+            // Strike
+            strikeKUI.Rebind(KeybindingsManager.Data.Strike, false);
+            strikeKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindStrike(key);
             });
             #endregion
 

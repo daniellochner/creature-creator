@@ -23,6 +23,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind stopMove;
         [SerializeField] private Keybind respawn;
         [SerializeField] private Keybind toggleUI;
+        [SerializeField] private Keybind bite;
+        [SerializeField] private Keybind dig;
+        [SerializeField] private Keybind distract;
+        [SerializeField] private Keybind eat;
+        [SerializeField] private Keybind pickUp;
+        [SerializeField] private Keybind ping;
+        [SerializeField] private Keybind roar;
+        [SerializeField] private Keybind strike;
 
         [Header("Build")]
         [SerializeField] private Keybind copy;
@@ -111,6 +119,46 @@ namespace DanielLochner.Assets.CreatureCreator
             get => toggleUI;
             set => toggleUI = value;
         }
+        public Keybind Bite
+        {
+            get => bite;
+            set => bite = value;
+        }
+        public Keybind Dig
+        {
+            get => dig;
+            set => dig = value;
+        }
+        public Keybind Distract
+        {
+            get => distract;
+            set => distract = value;
+        }
+        public Keybind Eat
+        {
+            get => eat;
+            set => eat = value;
+        }
+        public Keybind PickUp
+        {
+            get => pickUp;
+            set => pickUp = value;
+        }
+        public Keybind Ping
+        {
+            get => ping;
+            set => ping = value;
+        }
+        public Keybind Roar
+        {
+            get => roar;
+            set => roar = value;
+        }
+        public Keybind Strike
+        {
+            get => strike;
+            set => strike = value;
+        }
 
         public Keybind Copy
         {
@@ -163,6 +211,14 @@ namespace DanielLochner.Assets.CreatureCreator
             StopMove = new Keybind(KeyCode.LeftControl);
             Respawn = new Keybind(KeyCode.R, KeyCode.LeftControl);
             ToggleUI = new Keybind(KeyCode.U, KeyCode.LeftControl);
+            Bite = new Keybind(KeyCode.F);
+            Dig = new Keybind(KeyCode.F);
+            Distract = new Keybind(KeyCode.F);
+            Eat = new Keybind(KeyCode.F);
+            PickUp = new Keybind(KeyCode.F);
+            Ping = new Keybind(KeyCode.F);
+            Roar = new Keybind(KeyCode.F);
+            Strike = new Keybind(KeyCode.F);
 
             Copy = new Keybind(KeyCode.LeftAlt);
 

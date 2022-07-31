@@ -6,8 +6,8 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace DanielLochner.Assets.CreatureCreator.Abilities
 {
-    [CreateAssetMenu(menuName = "Creature Creator/Ability/Hold")]
-    public class Hold : Ability
+    [CreateAssetMenu(menuName = "Creature Creator/Ability/PickUp")]
+    public class PickUp : Ability
     {
     }
 }
