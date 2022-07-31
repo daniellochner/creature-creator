@@ -798,7 +798,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPartUI.DragUI.OnPointerUp(null);
                 }
 
-                if (!RectTransformUtility.RectangleContainsScreenPoint(bodyPartsRT, Input.mousePosition))
+                if (!RectTransformUtility.RectangleContainsScreenPoint(bodyPartsRT, Input.mousePosition) && !CanvasUtility.IsPointerOverUI)
                 {
                     bodyPartUI.DragUI.OnPointerUp(null);
                     editorAudioSource.PlayOneShot(createAudioClip);
