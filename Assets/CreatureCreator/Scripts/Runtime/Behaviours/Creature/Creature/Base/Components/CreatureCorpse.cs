@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -37,7 +36,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Corpse = Ragdoll.Generate().gameObject;
             Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
-            Constructor.Body.gameObject.SetActive(false);
         }
         #endregion
     }

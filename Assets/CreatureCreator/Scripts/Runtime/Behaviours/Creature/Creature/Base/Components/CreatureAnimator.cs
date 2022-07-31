@@ -141,10 +141,13 @@ namespace DanielLochner.Assets.CreatureCreator
             //    defaultRotations[i] = Quaternion.Inverse(transform.rotation) * Constructor.Bones[i].rotation;
             //}
 
-            foreach (LimbAnimator limb in Limbs)
-            {
-                limb.CaptureDefaults();
-            }
+            //foreach (LimbAnimator limb in Limbs)
+            //{
+            //    if (!limb.IsFlipped)
+            //    {
+            //        limb.CaptureDefaults();
+            //    }
+            //}
         }
         public void RestoreDefaults()
         {
@@ -160,7 +163,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 foreach (LimbAnimator limb in Limbs)
                 {
-                    limb.RestoreDefaults();
+                    if (!limb.IsFlipped)
+                    {
+                        limb.RestoreDefaults();
+                    }
                 }
             }
         }

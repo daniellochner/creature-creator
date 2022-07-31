@@ -31,6 +31,14 @@ namespace DanielLochner.Assets.CreatureCreator
             Initialize();
             Setup();
         }
+        private void OnDisable()
+        {
+            foreach (Ability ability in Abilities)
+            {
+                ability.CooldownTimeLeft = 0f;
+            }
+        }
+
         private void Update()
         {
             foreach (Ability ability in Abilities)

@@ -336,6 +336,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = false;
+            Creature.Collider.enabled = false;
 
             Creature.Animator.enabled = false;
 
@@ -343,14 +344,21 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
             Creature.Editor.enabled = true;
-            
+
+            Creature.Abilities.enabled = false;
             Creature.Mover.enabled = false;
+            Creature.Interactor.enabled = false;
         }
         public void Play()
         {
             Creature.Constructor.Recenter();
             Creature.Constructor.UpdateConfiguration();
             Creature.Constructor.IsTextured = true;
+
+            Creature.Informer.Capture();
+
+            Creature.Collider.UpdateCollider();
+            Creature.Collider.enabled = true;
 
             Creature.Editor.IsDraggable = false;
             Creature.Editor.UseTemporaryOutline = false;
@@ -359,9 +367,9 @@ namespace DanielLochner.Assets.CreatureCreator
             
             Creature.Animator.enabled = true;
 
-            Creature.Informer.Capture();
-            Creature.Collider.UpdateCollider();
+            Creature.Abilities.enabled = true;
             Creature.Mover.enabled = true;
+            Creature.Interactor.enabled = true;
 
             Creature.Spawner.Spawn();
         }
@@ -369,6 +377,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = true;
+            Creature.Collider.enabled = false;
 
             Creature.Animator.enabled = false;
 
@@ -376,8 +385,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.UseTemporaryOutline = true;
             Creature.Editor.Deselect();
             Creature.Editor.enabled = true;
-            
+
+            Creature.Abilities.enabled = false;
             Creature.Mover.enabled = false;
+            Creature.Interactor.enabled = false;
         }
 
         private void SetCameraOffset(float x)
@@ -448,6 +459,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Load(CreatureData creatureData)
         {
             Creature.Mover.Teleport(Creature.Editor.Platform);
+
+            Creature.Animator.enabled = false;
+            Creature.Mover.enabled = false;
+
             Creature.Editor.Load(creatureData);
 
             if (IsBuilding)

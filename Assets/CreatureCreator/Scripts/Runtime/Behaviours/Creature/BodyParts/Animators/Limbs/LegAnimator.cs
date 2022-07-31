@@ -34,13 +34,21 @@ namespace DanielLochner.Assets.CreatureCreator
             get; set;
         } = 1f;
 
-        public Vector3 DefaultFootPosition
-        {
-            get => defaultBonePositions[defaultBonePositions.Length - 1];
-        }
         public float Length
         {
             get => Vector3.Distance(transform.position, LegConstructor.Extremity.position);
+        }
+        public Vector3 DefaultFootLocalPos
+        {
+            get
+            {
+                Vector3 localPos = LegConstructor.AttachedLimb.bones[LegConstructor.AttachedLimb.bones.Count - 1].position;
+                if (IsFlipped)
+                {
+                    localPos.x *= -1;
+                }
+                return localPos;
+            }
         }
 
         public bool IsMovingFoot

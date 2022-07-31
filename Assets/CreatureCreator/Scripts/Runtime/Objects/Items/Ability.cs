@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public CreatureAbilities CreatureAbilities { get; private set; }
 
-        public float CooldownTimeLeft { get; private set; }
+        public float CooldownTimeLeft { get; set; }
         public virtual bool CanPerform => true;
         #endregion
 

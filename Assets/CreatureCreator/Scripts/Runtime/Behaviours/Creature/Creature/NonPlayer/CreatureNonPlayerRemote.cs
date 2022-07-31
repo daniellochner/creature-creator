@@ -21,9 +21,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public override void OnDie()
-        {
-            base.OnDie();
-        }
+
+
+
+
+
     }
 }
