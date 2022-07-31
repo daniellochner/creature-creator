@@ -85,6 +85,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void CaptureDefaults()
         {
+            Debug.Log(LimbConstructor);
+            Debug.Log(LimbConstructor.Bones);
+            Debug.Log(CreatureAnimator.Constructor.Body);
+
             // Limb
             defaultBonePositions = new Vector3[LimbConstructor.Bones.Length];
             for (int i = 0; i < defaultBonePositions.Length; i++)

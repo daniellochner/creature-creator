@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image cooldownImage;
         [SerializeField] private Button performButton;
         [SerializeField] private TextMeshProUGUI performKeyText;
+        [SerializeField] private TextMeshProUGUI levelText;
 
         private Ability ability;
         #endregion
@@ -38,6 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ability.OnTryPerform();
             });
+            levelText.text = (ability.Level == 0) ? "" : ability.Level.ToString();
             cooldownImage.fillAmount = 0f;
         }
         public void UpdateUI()
