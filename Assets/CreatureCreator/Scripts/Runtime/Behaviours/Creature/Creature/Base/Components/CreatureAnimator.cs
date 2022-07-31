@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureGrounded))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureUnderwater))]
-    public class CreatureAnimator : MonoBehaviour
+    public class CreatureAnimator : AnimatorSMB<CreatureAnimator>
     {
         #region Fields
         [SerializeField] private bool useEasing;
@@ -40,7 +40,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public CreatureConstructor Constructor { get; private set; }
         public PlayerEffects Effector { get; private set; }
-        public Animator Animator { get; private set; }
         public AnimatorParams Params { get; private set; }
         public CreatureVelocity Velocity { get; private set; }
         public CreatureGrounded Grounded { get; private set; }
@@ -64,8 +63,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             Initialize();
         }
         private void OnEnable()
@@ -79,8 +79,10 @@ namespace DanielLochner.Assets.CreatureCreator
             SetDamping(true);
 
         }
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+
             SetDamping(false);
             RestoreDefaults();
             Restructure(false);
@@ -89,7 +91,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Initialize()
         {
-            Animator = GetComponent<Animator>();
             rigBuilder = GetComponent<RigBuilder>();
             Constructor = GetComponent<CreatureConstructor>();
             Effector = GetComponent<PlayerEffects>();

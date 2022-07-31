@@ -49,8 +49,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool worldChat;
 
         [Header("Controls")]
-        [SerializeField, Range(0, 1)] private float sensitivityHorizontal;
-        [SerializeField, Range(0, 1)] private float sensitivityVertical;
+        [SerializeField, Range(0, 3)] private float sensitivityHorizontal;
+        [SerializeField, Range(0, 3)] private float sensitivityVertical;
         [SerializeField] private bool invertHorizontal;
         [SerializeField] private bool invertVertical;
         #endregion
@@ -266,8 +266,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Tutorial = true;
             WorldChat = true;
 
-            SensitivityHorizontal = 0.5f;
-            SensitivityVertical = 0.5f;
+            SensitivityHorizontal = 2f;
+            SensitivityVertical = 2f;
             InvertHorizontal = false;
             InvertVertical = false;
         }

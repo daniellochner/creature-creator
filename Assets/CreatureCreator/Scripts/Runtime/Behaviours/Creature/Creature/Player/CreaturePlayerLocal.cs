@@ -54,13 +54,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnDie();
 
+            Constructor.Body.gameObject.SetActive(false);
+            Rigidbody.isKinematic = true;
+
+            Animator.enabled = false;
+
             Abilities.enabled = false;
             Mover.enabled = false;
             Interactor.enabled = false;
-            Rigidbody.isKinematic = true;
-
-            //Animator.SetDamping(false);
-            //Animator.IsAnimated = false;
 
             Spawner.Despawn();
 
@@ -74,45 +75,92 @@ namespace DanielLochner.Assets.CreatureCreator
 
             }, 1f);
         }
-        public override void OnSpawn()
-        {
-            base.OnSpawn();
-
-            Constructor.Body.gameObject.SetActive(true);
-
-            Abilities.enabled = true;
-            Mover.enabled = true;
-            Interactor.enabled = true;
-
-            Collider.enabled = true;
-            Rigidbody.isKinematic = false;
-        }
-        public override void OnDespawn()
-        {
-            base.OnDespawn();
-        }
-
 
         private void Respawn()
         {
             Mover.Teleport(Editor.Platform);
 
+            Constructor.Body.gameObject.SetActive(true);
+            Rigidbody.isKinematic = false;
 
-            // set these in creature player local rather...
-            //Animator.RestoreDefaults();
-            //Animator.Restructure(false);
-            //Animator.IsAnimated = false;
-            //Animator.SetDamping(false);
+            Collider.enabled = true;
 
+            Animator.enabled = true;
 
-            //Animator.Restructure(true);
-            //Animator.Rebuild();
-            //Animator.IsAnimated = true;
-            //Animator.SetDamping(true);
+            Abilities.enabled = true;
+            Mover.enabled = true;
+            Interactor.enabled = true;
+
             Spawner.Spawn();
 
             EditorManager.Instance.IsVisible = true;
         }
+
+
+
+        //public override void OnDie()
+        //{
+        //    base.OnDie();
+
+        //    Abilities.enabled = false;
+        //    Mover.enabled = false;
+        //    Interactor.enabled = false;
+        //    Rigidbody.isKinematic = true;
+
+        //    //Animator.SetDamping(false);
+        //    //Animator.IsAnimated = false;
+
+        //    Spawner.Despawn();
+
+        //    EditorManager.Instance.IsVisible = false;
+
+        //    EditorManager.Instance.Invoke(delegate
+        //    {
+        //        string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
+        //        string age = Informer.Information.FormattedAge;
+        //        InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Respawn);
+
+        //    }, 1f);
+        //}
+        //public override void OnSpawn()
+        //{
+        //    base.OnSpawn();
+
+        //    Constructor.Body.gameObject.SetActive(true);
+
+        //    Abilities.enabled = true;
+        //    Mover.enabled = true;
+        //    Interactor.enabled = true;
+
+        //    Collider.enabled = true;
+        //    Rigidbody.isKinematic = false;
+        //}
+        //public override void OnDespawn()
+        //{
+        //    base.OnDespawn();
+        //}
+
+
+        //private void Respawn()
+        //{
+        //    Mover.Teleport(Editor.Platform);
+
+
+        //    // set these in creature player local rather...
+        //    //Animator.RestoreDefaults();
+        //    //Animator.Restructure(false);
+        //    //Animator.IsAnimated = false;
+        //    //Animator.SetDamping(false);
+
+
+        //    //Animator.Restructure(true);
+        //    //Animator.Rebuild();
+        //    //Animator.IsAnimated = true;
+        //    //Animator.SetDamping(true);
+        //    Spawner.Spawn();
+
+        //    EditorManager.Instance.IsVisible = true;
+        //}
         #endregion
     }
 }

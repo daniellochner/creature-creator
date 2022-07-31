@@ -49,26 +49,28 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public override void OnDie()
-        {
-            base.OnDie();
 
-            OnHide();
-        }
-        public override void OnShow()
-        {
-            base.OnShow();
 
-            Collider.enabled = true;
-            Namer.enabled = true;
-        }
-        public override void OnHide()
-        {
-            base.OnHide();
 
-            Selectable.SetSelected(false);
-            Namer.enabled = false;
-        }
+
+
+
+
+        //public override void OnDie()
+        //{
+        //    base.OnDie();
+        //    OnHide();
+        //}
+        //public override void OnShow()
+        //{
+        //    base.OnShow();
+        //    gameObject.SetActive(true);
+        //}
+        //public override void OnHide()
+        //{
+        //    base.OnHide();
+        //    gameObject.SetActive(false);
+        //}
         #endregion
     }
 }

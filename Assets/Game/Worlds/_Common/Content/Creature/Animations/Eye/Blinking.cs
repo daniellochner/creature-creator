@@ -22,6 +22,13 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         {
             TimerUtility.OnTimer(ref blinkTimeLeft, blinkCooldown.Random, Time.deltaTime, Blink);
         }
+        public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            foreach (EyeAnimator eye in Creature.Eyes)
+            {
+                eye.SetClose(0f);
+            }
+        }
 
         private void Blink()
         {

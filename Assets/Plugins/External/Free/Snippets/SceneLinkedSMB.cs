@@ -11,6 +11,8 @@ public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : M
     bool m_FirstFrameHappened;
     bool m_LastFrameHappened;
 
+    public AnimatorStateInfo StateInfo { get; private set; }
+
     public static void Initialize(Animator animator, TMonoBehaviour monoBehaviour)
     {
         SceneLinkedSMB<TMonoBehaviour>[] sceneLinkedSMBs = animator.GetBehaviours<SceneLinkedSMB<TMonoBehaviour>>();
@@ -30,6 +32,8 @@ public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB where TMonoBehaviour : M
 
     public sealed override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
     {
+        StateInfo = stateInfo;
+
         m_FirstFrameHappened = false;
 
         //if (animator.GetLayerWeight(layerIndex) != 0f)

@@ -24,13 +24,5 @@ namespace DanielLochner.Assets.CreatureCreator
             messenger = GetComponent<PlayerMessenger>();
         }
 #endif
-        
-        public override void OnDie()
-        {
-            base.OnDie();
-
-            Namer.enabled = false;
-            DeathMessenger.enabled = false;
-        }
     }
 }
