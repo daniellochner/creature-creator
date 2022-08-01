@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,10 +8,15 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class MiscUI : MonoBehaviour
     {
+        // show roadmap the first time they open the game
         private IEnumerator Start()
         {
-            yield return new WaitForSeconds(1f);
-            RoadmapMenu.Instance.Open();
+            if (PlayerPrefs.GetInt("show_roadmap") == 0)
+            {
+                yield return new WaitForSeconds(1f);
+                RoadmapMenu.Instance.Open();
+                PlayerPrefs.SetInt("show_roadmap", 1);
+            }
         }
 
         public void SubscribeToYouTubeChannel()

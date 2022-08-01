@@ -40,9 +40,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform(world.WorldName, 
                     $"<b>Version:</b> {world.Version}<br>" +
                     $"<b>Map:</b> {world.MapName}<br>" + 
-                    $"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
-                    $"<b>PVE:</b> {FormatEnabled(world.EnablePVE)}<br>" +
+                    //$"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>NPCs:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
+                    $"<b>PVE:</b> {FormatEnabled(world.EnablePVE)}<br>" +
                     $"<b>Profanity:</b> {FormatAllowed(world.AllowProfanity)}"
                     );
             });

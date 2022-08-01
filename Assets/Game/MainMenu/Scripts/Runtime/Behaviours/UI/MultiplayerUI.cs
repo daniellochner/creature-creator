@@ -170,7 +170,24 @@ namespace DanielLochner.Assets.CreatureCreator
             relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
 
             mapOS.SetupUsingEnum<MapType>();
-            mapOS.Select(MapType.Farm);
+            mapOS.OnSelected.AddListener(delegate (int option)
+            {
+                MapType map = (MapType)option;
+                switch (map)
+                {
+                    case MapType.Island:
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 4;
+                        createButton.interactable = true;
+                        break;
+
+                    case MapType.Farm:
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 16;
+                        createButton.interactable = false;
+                        RoadmapMenu.Instance.Open();
+                        break;
+                }
+            });
+            mapOS.Select(MapType.Island);
 
             visibilityOS.SetupUsingEnum<VisibilityType>();
             visibilityOS.OnSelected.AddListener(delegate (int option)
