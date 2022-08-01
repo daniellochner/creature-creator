@@ -23,6 +23,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureConstructor CreatureConstructor { get; private set; }
 
         public List<Ability> Abilities => abilities;
+
+        public bool CanInput
+        {
+            get
+            {
+                return EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen;
+            }
+        }
         #endregion
 
         #region Methods
@@ -43,11 +51,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (Ability ability in Abilities)
             {
-                if (InputUtility.GetKeyDown(ability.PerformKeybind))
+                if (CanInput)
                 {
-                    if (ability.OnTryPerform())
+                    if (InputUtility.GetKeyDown(ability.PerformKeybind))
                     {
-                        break;
+                        if (ability.OnTryPerform())
+                        {
+                            break;
+                        }
                     }
                 }
                 ability.Tick(Time.deltaTime);
