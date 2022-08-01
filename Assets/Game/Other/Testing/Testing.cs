@@ -10,6 +10,22 @@ using UnityEngine.Animations;
 
 public class Testing : MonoBehaviour
 {
+
+    //public string data;
+
+    //public CreatureConstructor cPrefab;
+
+    //[ContextMenu("CONSTRUCT")]
+    //public void Construct()
+    //{
+    //    var cc = Instantiate(cPrefab);
+
+    //    CreatureData creature = JsonUtility.FromJson<CreatureData>(data);
+
+    //    cc.Construct(creature);
+    //}
+
+
     //public Database bps;
 
 

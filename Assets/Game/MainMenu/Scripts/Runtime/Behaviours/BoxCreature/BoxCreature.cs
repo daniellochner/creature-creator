@@ -8,12 +8,13 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BoxCreature : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private CreatureConstructor creatureConstructor;
+        [SerializeField] private CreatureConstructor displayPrefab;
         [SerializeField] private Click click;
         [Space]
         [SerializeField] private Vector3 force;
 
         private Camera mainCamera;
+        private CreatureConstructor creatureConstructor;
         #endregion
 
         #region Methods
@@ -24,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Spawn(CreatureData creatureData)
         {
+            creatureConstructor = Instantiate(displayPrefab, transform.position, transform.rotation, transform);
             creatureConstructor.Construct(creatureData);
 
             this.InvokeOverTime(delegate (float progress)
@@ -40,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             creatureConstructor.gameObject.SetActive(false);
             click.enabled = false;
 
-            CreatureConstructor ragdoll = creatureConstructor.GetComponent<CreatureRagdoll>().Generate(creatureConstructor.Data);
+            CreatureConstructor ragdoll = creatureConstructor.GetComponent<CreatureRagdoll>().Generate();
             foreach (Transform bone in ragdoll.Bones)
             {
                 Press press = bone.gameObject.AddComponent<Press>();
