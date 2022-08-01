@@ -176,7 +176,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 switch (map)
                 {
                     case MapType.Island:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 4;
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
                         createButton.interactable = true;
                         break;
 
