@@ -2,12 +2,19 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class MiscUI : MonoBehaviour
     {
+        private IEnumerator Start()
+        {
+            yield return new WaitForSeconds(1f);
+            RoadmapMenu.Instance.Open();
+        }
+
         public void SubscribeToYouTubeChannel()
         {
             Application.OpenURL("https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1");
@@ -22,18 +29,19 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ViewGitHubSourceCode()
         {
-            Application.OpenURL("https://github.com/daniellochner/Creature-Creator");
+            Application.OpenURL("https://github.com/daniellochner/creature-creator");
+            RoadmapMenu.Instance.Open();
 
-            DateTime releaseDate = new DateTime(2022, 8, 7);
-            TimeSpan diff = releaseDate - DateTime.Now;
-            if (diff > TimeSpan.Zero)
-            {
-                InformationDialog.Inform("Source Code", $"The source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
-            }
-            else
-            {
-                Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
-            }
+            //DateTime releaseDate = new DateTime(2022, 8, 7);
+            //TimeSpan diff = releaseDate - DateTime.Now;
+            //if (diff > TimeSpan.Zero)
+            //{
+            //    InformationDialog.Inform("Source Code", $"The source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
+            //}
+            //else
+            //{
+            //    Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
+            //}
         }
         public void Quit()
         {

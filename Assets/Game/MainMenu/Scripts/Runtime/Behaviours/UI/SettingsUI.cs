@@ -452,6 +452,19 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Gameplay
+        public void ViewUnlockableBodyParts()
+        {
+            UnlockableBodyPartsMenu.Instance.Open();
+        }
+        public void ViewUnlockablePatterns()
+        {
+            UnlockablePatternsMenu.Instance.Open();
+        }
+        public void ViewRoadmap()
+        {
+            RoadmapMenu.Instance.Open();
+        }
+
         public void ResetProgress()
         {
             ProgressManager.Instance.Revert();
