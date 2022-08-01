@@ -687,34 +687,40 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Unlocks
-        public void UnlockPattern(string patternID)
+        public void UnlockPattern(string patternID, bool notify = true)
         {
             if (ProgressManager.Data.UnlockedPatterns.Contains(patternID)) return;
 
             ProgressManager.Data.UnlockedPatterns.Add(patternID);
 
-            Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
-            Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
-            string title = pattern.name;
-            string description = $"You unlocked a new pattern! Click to view all. ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
-            UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
-            float iconScale = 0.8f;
-            NotificationsManager.Notify(icon, title, description, onClose, iconScale);
+            if (notify)
+            {
+                Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
+                Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
+                string title = pattern.name;
+                string description = $"You unlocked a new pattern! Click to view all. ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
+                UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
+                float iconScale = 0.8f;
+                NotificationsManager.Notify(icon, title, description, onClose, iconScale);
+            }
 
             AddPatternUI(patternID);
         }
-        public void UnlockBodyPart(string bodyPartID)
+        public void UnlockBodyPart(string bodyPartID, bool notify = true)
         {
             if (ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID)) return;
 
             ProgressManager.Data.UnlockedBodyParts.Add(bodyPartID);
 
-            BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
-            Sprite icon = bodyPart.Icon;
-            string title = bodyPart.name;
-            string description = $"You unlocked a new body part! Click to view all. ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
-            UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
-            NotificationsManager.Notify(icon, title, description, onClose);
+            if (notify)
+            {
+                BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
+                Sprite icon = bodyPart.Icon;
+                string title = bodyPart.name;
+                string description = $"You unlocked a new body part! Click to view all. ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
+                UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
+                NotificationsManager.Notify(icon, title, description, onClose);
+            }
 
             AddBodyPartUI(bodyPartID, true);
         }

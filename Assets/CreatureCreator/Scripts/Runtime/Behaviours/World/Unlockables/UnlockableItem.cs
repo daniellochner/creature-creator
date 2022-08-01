@@ -3,6 +3,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -11,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool isUnlockable = true;
         [SerializeField] private GameObject unlockFX;
+        [SerializeField] private UnityEvent onUnlock;
         #endregion
 
         #region Properties
@@ -35,6 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Player/Local") && isUnlockable)
             {
                 OnUnlock();
+                onUnlock.Invoke();
                 ProgressManager.Instance.Save();
                 Instantiate(unlockFX, transform.position, transform.rotation);
                 Destroy(gameObject);

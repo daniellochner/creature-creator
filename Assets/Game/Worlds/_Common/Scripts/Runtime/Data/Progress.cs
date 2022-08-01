@@ -79,10 +79,15 @@ namespace DanielLochner.Assets.CreatureCreator
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
 
+            // Supporter Perks
             if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
             {
                 GrantSupporterPerks();
             }
+
+            // Early Access
+            PlayerPrefs.SetInt("2g9ui01m", 0);
+            PlayerPrefs.SetInt("h3hq9as4", 0);
         }
 
         public void GrantSupporterPerks()
