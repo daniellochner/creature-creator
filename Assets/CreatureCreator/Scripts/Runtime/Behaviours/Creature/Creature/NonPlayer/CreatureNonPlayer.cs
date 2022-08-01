@@ -41,37 +41,30 @@ namespace DanielLochner.Assets.CreatureCreator
             Selectable.Setup();
         }
 
+        public override void OnDie()
+        {
+            base.OnDie();
+            OnHide();
+        }
 
+        public override void OnShow()
+        {
+            base.OnShow();
 
+            Informer.Capture();
 
+            Collider.enabled = true;
+            Animator.enabled = true;
+        }
+        public override void OnHide()
+        {
+            base.OnHide();
 
+            Selectable.SetSelected(false);
 
-
-
-
-
-
-        //public override void OnDie()
-        //{
-        //    base.OnDie();
-        //    Selectable.SetSelected(false);
-        //    //Animator.SetDamping(false);
-        //    //Animator.IsAnimated = false;
-        //}
-        //public override void OnShow()
-        //{
-        //    base.OnShow();
-        
-        //    Collider.UpdateCollider();
-        
-        //}
-        //public override void OnHide()
-        //{
-        //    base.OnHide();
-        //    Collider.enabled = false;
-        //    //Animator.SetDamping(false);
-        //    //Animator.IsAnimated = false;
-        //}
+            Collider.enabled = false;
+            Animator.enabled = false;
+        }
         #endregion
     }
 }

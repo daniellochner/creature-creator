@@ -30,6 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnEnable()
         {
             capsule.enabled = true;
+            UpdateCollider();
         }
         private void OnDisable()
         {

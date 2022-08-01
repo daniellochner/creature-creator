@@ -28,6 +28,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
             AI.Setup();
+
+            Hider.OnShow();
+        }
+
+        public override void OnShow()
+        {
+            base.OnShow();
+            AI.enabled = true;
+        }
+        public override void OnHide()
+        {
+            base.OnHide();
+            AI.enabled = false;
         }
     }
 }

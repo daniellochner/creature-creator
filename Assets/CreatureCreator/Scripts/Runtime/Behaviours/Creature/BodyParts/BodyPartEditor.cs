@@ -173,8 +173,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
-                        Debug.Log(connectionPoint);
-                        Debug.Log(Flipped.connectionPoint);
                         connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent = Flipped.transform.parent = Dynamic.Transform;
                         IsInteractable = false;
                     }

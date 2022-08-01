@@ -20,11 +20,5 @@ namespace DanielLochner.Assets.CreatureCreator
                 Hider.OnHide();
             }
         }
-
-
-
-
-
-
     }
 }
