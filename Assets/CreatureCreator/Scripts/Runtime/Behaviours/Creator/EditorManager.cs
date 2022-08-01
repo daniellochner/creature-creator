@@ -462,6 +462,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Creature.Animator.enabled = false;
             Creature.Mover.enabled = false;
+            Creature.Editor.enabled = true;
 
             Creature.Editor.Load(creatureData);
 

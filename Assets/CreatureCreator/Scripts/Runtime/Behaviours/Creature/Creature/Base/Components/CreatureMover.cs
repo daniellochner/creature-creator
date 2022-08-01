@@ -9,6 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureAnimator))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureCamera))]
+    [RequireComponent(typeof(CreatureGrounded))]
+    [RequireComponent(typeof(CreatureUnderwater))]
     public class CreatureMover : MonoBehaviour
     {
         #region Fields
@@ -41,7 +43,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureConstructor Constructor { get; private set; }
         public CreatureAnimator Animator { get; private set; }
         public CreatureCamera Camera { get; private set; }
-
+        public CreatureGrounded Grounded { get; private set; }
+        public CreatureUnderwater Underwater { get; private set; }
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
@@ -96,6 +99,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Animator = GetComponent<CreatureAnimator>();
             Camera = GetComponent<CreatureCamera>();
+            Grounded = GetComponent<CreatureGrounded>();
+            Underwater = GetComponent<CreatureUnderwater>();
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
@@ -194,7 +199,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandleGliding()
         {
-            rigidbody.drag = (Animator.Wings.Count > 0 && !Animator.Grounded.IsGrounded) ? airDrag : 0f;
+            if (Underwater.IsUnderwater || Animator.Wings.Count == 0) return;
+            rigidbody.drag = (!Grounded.IsGrounded) ? airDrag : 0f;
         }
 
         public void RequestMove(Vector3 direction)

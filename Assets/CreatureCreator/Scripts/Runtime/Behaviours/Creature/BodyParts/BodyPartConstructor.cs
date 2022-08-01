@@ -344,8 +344,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             CreatureConstructor.Data.AttachedBodyParts.Add(AttachedBodyPart = Flipped.AttachedBodyPart = abp);
 
-            Debug.Log(abp.primaryColour.a + " - " + bodyPart.DefaultColours.primary.a);
-
             if (abp.primaryColour.a == 0f && bodyPart.DefaultColours.primary.a != 0f)
             {
                 SetPrimaryColour(bodyPart.DefaultColours.primary);
