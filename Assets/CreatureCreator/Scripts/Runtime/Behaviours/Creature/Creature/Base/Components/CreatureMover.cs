@@ -11,6 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureCamera))]
     [RequireComponent(typeof(CreatureGrounded))]
     [RequireComponent(typeof(CreatureUnderwater))]
+    [RequireComponent(typeof(CreatureAbilities))]
+    [RequireComponent(typeof(BuoyantObject))]
     public class CreatureMover : MonoBehaviour
     {
         #region Fields
@@ -45,6 +47,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureCamera Camera { get; private set; }
         public CreatureGrounded Grounded { get; private set; }
         public CreatureUnderwater Underwater { get; private set; }
+        public BuoyantObject BuoyantObject { get; private set; }
+        public CreatureAbilities Abilities { get; private set; }
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
@@ -85,6 +89,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 bone.GetComponent<Rigidbody>().isKinematic = true;
             }
             rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+            BuoyantObject.enabled = Abilities.Abilities.Find(x => x is Abilities.Swim) != null;
         }
         private void OnDisable()
         {
@@ -92,6 +98,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 targetAnimator.SetBool("IsHolding", false);
             }
+
+            BuoyantObject.enabled = false;
         }
         
         private void Initialize()
@@ -101,6 +109,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Camera = GetComponent<CreatureCamera>();
             Grounded = GetComponent<CreatureGrounded>();
             Underwater = GetComponent<CreatureUnderwater>();
+            Abilities = GetComponent<CreatureAbilities>();
+            BuoyantObject = GetComponent<BuoyantObject>();
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();

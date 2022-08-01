@@ -94,6 +94,8 @@ namespace DanielLochner.Assets
         [ServerRpc]
         private void DieServerRpc()
         {
+            if (IsDead) return;
+            Health = 0f;
             DieClientRpc();
         }
         [ClientRpc]

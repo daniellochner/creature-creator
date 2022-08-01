@@ -51,6 +51,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnShow();
 
+            Constructor.Body.gameObject.SetActive(true);
+
             Informer.Capture();
 
             Collider.enabled = true;
@@ -59,6 +61,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void OnHide()
         {
             base.OnHide();
+
+            Constructor.Body.gameObject.SetActive(false);
 
             Selectable.SetSelected(false);
 
