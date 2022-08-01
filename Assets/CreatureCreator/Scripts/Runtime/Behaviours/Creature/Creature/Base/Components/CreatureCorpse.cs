@@ -26,15 +26,13 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Ragdoll = GetComponent<CreatureRagdoll>();
             Health = GetComponent<CreatureHealth>();
-        }
-        private void Start()
-        {
+
             Health.OnDie += Kill;
         }
 
         public void Kill()
-        {
-            Corpse = Ragdoll.Generate().gameObject;
+        {            
+            Corpse = Ragdoll.Generate(Constructor.Body.position).gameObject;
             Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
         }
         #endregion

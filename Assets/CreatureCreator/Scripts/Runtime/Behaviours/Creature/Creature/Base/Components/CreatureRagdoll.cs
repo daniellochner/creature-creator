@@ -24,13 +24,18 @@ namespace DanielLochner.Assets.CreatureCreator
             original = GetComponent<CreatureConstructor>();
         }
 
-        public CreatureConstructor Generate()
+        public CreatureConstructor Generate(Vector3? pos = null)
         {
-            return Generate(original.Data);
+            if (pos == null)
+            {
+                pos = original.Body.position;
+            }
+            return Generate(original.Data, (Vector3)pos);
         }
-        public CreatureConstructor Generate(CreatureData creatureData)
+        public CreatureConstructor Generate(CreatureData creatureData, Vector3 pos)
         {
             ragdoll = CreatureCloner.Clone(creatureData, transform.position, transform.rotation, transform.parent);
+            ragdoll.Body.position = pos;
 
             CopyPositionsAndRotations(original, ragdoll);
             ragdoll.Body.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Ragdoll"));
