@@ -186,19 +186,26 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 Vector3 pos = GetTargetFootPosition(leg, 0f);
                 Quaternion rot = Creature.Constructor.Body.rotation;
-                leg.StartCoroutine(leg.MoveFootRoutine(pos, rot, 0.25f, 0f));
+                if (Creature.enabled)
+                {
+                    leg.StartCoroutine(leg.MoveFootRoutine(pos, rot, 0.25f, 0f));
+                }
             }
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
             Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootLocalPos, Vector3.zero, Creature.Velocity.Angular * timeToMove);
-            Vector3 worldPos = Creature.Constructor.Body.L2WSpace(localPos);
+            Vector3 worldPos = Creature.transform.L2WSpace(localPos);
             worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
 
-            Vector3 origin = worldPos + Creature.transform.up * (Creature.DefaultHeight * stepHeightFactor);
-            if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo, Mathf.Infinity))
+            Vector3 bodyOffset = Creature.transform.up * (Creature.DefaultHeight * stepHeightFactor);
+            Vector3 footOffset = Creature.transform.up * ((leg.LegConstructor.ConnectedFoot != null) ? leg.LegConstructor.ConnectedFoot.Offset : 0f);
+
+            Vector3 origin = worldPos + bodyOffset;
+            Vector3? foothold = PhysicsUtility.RaycastCone(origin, -Creature.transform.up, leg.MaxLength, 15f, 3, 10);
+            if (foothold != null)
             {
-                return hitInfo.point + (Creature.transform.up * (leg.LegConstructor.ConnectedFoot?.Offset ?? 0f));
+                return (Vector3)foothold + footOffset;
             }
             else
             {

@@ -29,9 +29,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
-        private bool hasCapturedDefaults;
-        private Vector3[] defaultPositions;
-        private Quaternion[] defaultRotations;
         private DynamicBone tailDynamicBone;
         #endregion
 
@@ -54,7 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<MouthAnimator> Mouths { get; private set; } = new List<MouthAnimator>();
         public List<EyeAnimator> Eyes { get; private set; } = new List<EyeAnimator>();
 
-        public float DefaultHeight { get; private set; } = Mathf.NegativeInfinity;
+        public float DefaultHeight { get; private set; }
 
         public bool IsMovingBody
         {
@@ -70,14 +67,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnEnable()
         {
-            Velocity.Reset();
             Reinitialize();
-            CaptureDefaults();
             Restructure(true);
             Rebuild();
             Animator.enabled = true;
+            Grounded.enabled = true;
             SetDamping(true);
-
         }
         protected override void OnDisable()
         {
@@ -86,6 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetDamping(false);
             RestoreDefaults();
             Restructure(false);
+            Grounded.enabled = false;
             Animator.enabled = false;
         }
 
@@ -130,49 +126,22 @@ namespace DanielLochner.Assets.CreatureCreator
             tailDynamicBone.m_ReferenceObject = Player.Instance.transform;
         }
 
-        public void CaptureDefaults()
-        {
-            DefaultHeight = Constructor.Body.localPosition.y;
-
-            //defaultPositions = new Vector3[Constructor.Bones.Count];
-            //defaultRotations = new Quaternion[Constructor.Bones.Count];
-            //for (int i = 0; i < defaultPositions.Length; i++)
-            //{
-            //    defaultPositions[i] = transform.InverseTransformPoint(Constructor.Bones[i].position);
-            //    defaultRotations[i] = Quaternion.Inverse(transform.rotation) * Constructor.Bones[i].rotation;
-            //}
-
-            //foreach (LimbAnimator limb in Limbs)
-            //{
-            //    if (!limb.IsFlipped)
-            //    {
-            //        limb.CaptureDefaults();
-            //    }
-            //}
-        }
         public void RestoreDefaults()
         {
-            if (DefaultHeight != Mathf.NegativeInfinity)
+            Constructor.Body.localPosition = Vector3.up * DefaultHeight;
+
+            foreach (LimbAnimator limb in Limbs)
             {
-                Constructor.Body.localPosition = Vector3.up * DefaultHeight;
-
-                //for (int i = 0; i < defaultPositions.Length; i++)
-                //{
-                //    Constructor.Bones[i].position = transform.TransformPoint(defaultPositions[i]);
-                //    Constructor.Bones[i].rotation = transform.rotation * defaultRotations[i];
-                //}
-
-                foreach (LimbAnimator limb in Limbs)
+                if (!limb.IsFlipped)
                 {
-                    if (!limb.IsFlipped)
-                    {
-                        limb.RestoreDefaults();
-                    }
+                    limb.RestoreDefaults();
                 }
             }
         }
         public void Reinitialize()
         {
+            DefaultHeight = Constructor.Body.localPosition.y;
+
             Limbs.Clear();
             Arms.Clear();
             Legs.Clear();
@@ -223,9 +192,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Restructure(bool isAnimated)
         {
-            Constructor.Root.localPosition = Vector3.zero;
-            Constructor.Root.localRotation = Quaternion.identity;
-
             if (isAnimated)
             {
                 bool isUpper = Limbs.Count > 0;
@@ -261,7 +227,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     tailDynamicBone.m_Root = Constructor.Bones[tIndex];
                 }
-                
+
 
                 // Unity's DampedTransform is broken...
 
@@ -300,6 +266,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 //        maintainAim = true
                 //    };
                 //}
+
+                
 
                 Vector3 offset = Vector3.zero;
                 EasingFunction.Function function = null;

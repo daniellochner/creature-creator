@@ -8,8 +8,70 @@ using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 using Unity.Netcode;
 using UnityEngine.Animations;
 
+[ExecuteInEditMode]
 public class Testing : MonoBehaviour
 {
+    public bool isGrounded;
+    public float contactDistance;
+    public float radius;
+
+    public BoxCollider col;
+
+    private void Update()
+    {
+
+
+        //if (Physics.BoxCast(center, halfExtents, dir, orientation, maxDistance))
+        //{
+        //    isGrounded = true;
+        //}
+        //else
+        //{
+        //    isGrounded = false;
+        //}
+
+
+        Vector3 center = transform.position + Vector3.up * (0.5f + 0.001f);
+        Vector3 halfExtents = new Vector3(1f, 0.5f, 1f);
+        Vector3 dir = -transform.up;
+        Quaternion orientation = transform.rotation;
+        float maxDistance = 0.5f;
+        
+        if (Physics.BoxCast(center, halfExtents, Vector3.down, orientation, maxDistance))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+
+
+    }
+
+
+    //private void Update()
+    //{
+    //    Vector3 origin = transform.position;
+    //    Vector3 dir = -transform.up;
+    //    float radius = 0.5f;
+
+    //    if (Physics.SphereCast(origin, radius, dir * 2f, out RaycastHit hitInfo))
+    //    {
+    //        Debug.Log("TEST");
+    //    }
+    //}
+
+
+    //private void OnDrawGizmos()
+    //{
+    //    Vector3 origin = transform.position;
+    //    Vector3 dir = -transform.up;
+    //    float radius = 0.5f;
+
+    //    Gizmos.DrawSphere(origin, radius);
+    //}
+
 
     //public Database bps;
 
