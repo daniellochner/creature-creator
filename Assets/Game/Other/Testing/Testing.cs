@@ -8,46 +8,82 @@ using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 using Unity.Netcode;
 using UnityEngine.Animations;
 
-[ExecuteInEditMode]
 public class Testing : MonoBehaviour
 {
-    public bool isGrounded;
-    public float contactDistance;
-    public float radius;
-
-    public BoxCollider col;
-
-    private void Update()
-    {
+    //public Database bps;
 
 
-        //if (Physics.BoxCast(center, halfExtents, dir, orientation, maxDistance))
-        //{
-        //    isGrounded = true;
-        //}
-        //else
-        //{
-        //    isGrounded = false;
-        //}
+    //[ContextMenu("UPDATE")]
+    //public void UpdateBodyParts()
+    //{
+    //    foreach (var b in bps.Objects)
+    //    {
+    //        BodyPart bodyPart = b.Value as BodyPart;
+
+    //        Renderer r = bodyPart.GetPrefab(BodyPart.PrefabType.Constructible).GetComponentInChildren<Renderer>();
+
+    //        Material[] mats = r.sharedMaterials;
 
 
-        Vector3 center = transform.position + Vector3.up * (0.5f + 0.001f);
-        Vector3 halfExtents = new Vector3(1f, 0.5f, 1f);
-        Vector3 dir = -transform.up;
-        Quaternion orientation = transform.rotation;
-        float maxDistance = 0.5f;
+    //        if (bodyPart.DefaultColours.primary.a != 0f || bodyPart.DefaultColours.secondary.a != 0f)
+    //        {
+    //            Debug.Log(bodyPart.name + "COLOURS", bodyPart);
+    //        }
+
+
+    //        foreach (Material mat in mats)
+    //        {
+    //            if (mat.name == "BodyPart_Primary")
+    //            {
+    //                Debug.Log(bodyPart.name + " - PRIMARY", bodyPart);
+    //            }
+    //            else if (mat.name == "BodyPart_Secondary")
+    //            {
+    //                Debug.Log(bodyPart.name + " - Secondary", bodyPart);
+    //            }
+    //        }
+    //    }
+    //}
+
+
+
+    //public bool isGrounded;
+    //public float contactDistance;
+    //public float radius;
+
+    //public BoxCollider col;
+
+    //private void Update()
+    //{
+
+
+    //    //if (Physics.BoxCast(center, halfExtents, dir, orientation, maxDistance))
+    //    //{
+    //    //    isGrounded = true;
+    //    //}
+    //    //else
+    //    //{
+    //    //    isGrounded = false;
+    //    //}
+
+
+    //    Vector3 center = transform.position + Vector3.up * (0.5f + 0.001f);
+    //    Vector3 halfExtents = new Vector3(1f, 0.5f, 1f);
+    //    Vector3 dir = -transform.up;
+    //    Quaternion orientation = transform.rotation;
+    //    float maxDistance = 0.5f;
         
-        if (Physics.BoxCast(center, halfExtents, Vector3.down, orientation, maxDistance))
-        {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
+    //    if (Physics.BoxCast(center, halfExtents, Vector3.down, orientation, maxDistance))
+    //    {
+    //        isGrounded = true;
+    //    }
+    //    else
+    //    {
+    //        isGrounded = false;
+    //    }
 
 
-    }
+    //}
 
 
     //private void Update()

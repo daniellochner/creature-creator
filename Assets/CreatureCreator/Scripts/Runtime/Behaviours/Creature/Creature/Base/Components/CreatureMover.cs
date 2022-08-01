@@ -70,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void FixedUpdate()
         {
             HandleMovement();
+            HandleGliding();
         }
         private void OnEnable()
         {

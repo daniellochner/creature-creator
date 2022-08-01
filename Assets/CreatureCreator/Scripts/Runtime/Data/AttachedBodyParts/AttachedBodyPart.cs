@@ -14,8 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public int boneIndex = -1;
         public SerializableTransform serializableTransform;
         public Vector3 stretch;
-        public Color primaryColour = Color.white;
-        public Color secondaryColour = Color.black;
+        public Color primaryColour = default;
+        public Color secondaryColour = default;
 
         public AttachedBodyPart(string bodyPartID)
         {

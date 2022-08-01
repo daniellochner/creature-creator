@@ -32,7 +32,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public BodyPartPrefab Prefab => prefab;
-        public BodyPartDefaultColours DefaultColours => defaultColours;
+        public BodyPartDefaultColours DefaultColours
+        {
+            get => defaultColours;
+            set => defaultColours = value;
+        }
 
         public Transformation Transformations
         {
