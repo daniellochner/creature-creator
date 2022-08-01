@@ -99,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
             ability.Setup(this);
 
             AbilityUI abilityUI = default;
-            if (!ability.PerformKeybind.Equals(Keybind.None))
+            if (!ability.PerformKeybind.Equals(Keybind.None) && ability.IsImplemented) // TODO: Remote isImplemented.
             {
                 abilityUI = Instantiate(abilityUIPrefab, AbilitiesManager.Instance.AbilitiesGrid.transform);
                 abilityUI.Setup(ability);

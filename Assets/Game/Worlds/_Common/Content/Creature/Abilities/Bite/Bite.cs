@@ -8,5 +8,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     [CreateAssetMenu(menuName = "Creature Creator/Ability/Bite")]
     public class Bite : Ability
     {
+        [SerializeField] private PlayerEffects.Sound[] biteSounds;
+
+        public override void OnPerform()
+        {
+            CreatureAbilities.GetComponent<PlayerEffects>().PlaySound(biteSounds);
+        }
     }
 }
