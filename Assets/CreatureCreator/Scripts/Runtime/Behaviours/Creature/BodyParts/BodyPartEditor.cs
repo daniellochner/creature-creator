@@ -173,7 +173,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
-                        connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent = Flipped.transform.parent = Dynamic.Transform;
+                        if (connectionPoint != null) // TODO: Why is connection point null in the first place? Bug?
+                        {
+                            connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent = Flipped.transform.parent = Dynamic.Transform;
+                        }
                         IsInteractable = false;
                     }
 

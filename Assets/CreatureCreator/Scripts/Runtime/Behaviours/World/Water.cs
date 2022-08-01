@@ -13,6 +13,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Ability swimAbility;
         [SerializeField] private GameObject splashPrefab;
 
+        public BoxCollider Collider { get; private set; }
+
+        private void Awake()
+        {
+            Collider = GetComponent<BoxCollider>();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             CreatureBase creature = other.GetComponent<CreatureBase>();

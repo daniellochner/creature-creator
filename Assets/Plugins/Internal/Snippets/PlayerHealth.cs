@@ -74,7 +74,7 @@ namespace DanielLochner.Assets
         {
             TakeDamageServerRpc(damage);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void TakeDamageServerRpc(float damage)
         {
             if (IsDead) return;
@@ -91,7 +91,7 @@ namespace DanielLochner.Assets
         {
             DieServerRpc();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void DieServerRpc()
         {
             if (IsDead) return;
