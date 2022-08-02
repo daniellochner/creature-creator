@@ -26,7 +26,8 @@ namespace DanielLochner.Assets
             get => linear;
             set
             {
-                linear = (alpha * value) + ((1f - alpha) * linear);
+                linear = value;
+                //linear = (alpha * value) + ((1f - alpha) * linear);
                 OnLinearChanged?.Invoke(linear);
             }
         }
@@ -35,7 +36,8 @@ namespace DanielLochner.Assets
             get => angular;
             set
             {
-                angular = (alpha * value) + ((1f - alpha) * angular);
+                angular = value;
+                //angular = (alpha * value) + ((1f - alpha) * angular);
                 OnAngularChanged?.Invoke(angular);
             }
         }
@@ -56,6 +58,10 @@ namespace DanielLochner.Assets
         private void OnDisable()
         {
             Reset();
+        }
+        private void Awake()
+        {
+            angular = linear = Vector3.zero;
         }
 
         private void FixedUpdate()
