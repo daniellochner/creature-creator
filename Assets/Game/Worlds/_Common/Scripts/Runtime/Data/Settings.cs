@@ -239,13 +239,13 @@ namespace DanielLochner.Assets.CreatureCreator
             Fullscreen = true;
             VSync = false;
 
-            CreatureMeshQuality = CreatureMeshQualityType.Medium;
+            CreatureMeshQuality = CreatureMeshQualityType.High;
             ShadowQuality = ShadowQualityType.High;
             AmbientOcclusion = AmbientOcclusionType.MSVO;
-            TextureQuality = TextureQualityType.Medium;
+            TextureQuality = TextureQualityType.VeryHigh;
             Antialiasing = AntialiasingType.FXAA;
             ScreenSpaceReflections = ScreenSpaceReflectionsType.Medium;
-            Foliage = FoliageType.Medium;
+            Foliage = FoliageType.High;
             Reflections = true;
             AnisotropicFiltering = true;
             Bloom = true;
@@ -255,7 +255,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MasterVolume = 1f;
             MusicVolume = 0.75f;
             SoundEffectsVolume = 0.75f;
-            InGameMusic = InGameMusicType.WistfulHarp;
+            InGameMusic = InGameMusicType.None;
 
             OnlineUsername = "";
             CreaturePresets.Clear();
@@ -266,8 +266,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Tutorial = true;
             WorldChat = true;
 
-            SensitivityHorizontal = 2f;
-            SensitivityVertical = 2f;
+            SensitivityHorizontal = 1f;
+            SensitivityVertical = 1f;
             InvertHorizontal = false;
             InvertVertical = false;
         }
