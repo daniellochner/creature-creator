@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
 using Unity.Netcode;
 using UnityEngine.Animations;
+using Newtonsoft.Json;
 
 public class Testing : MonoBehaviour
 {
+    
 
     //public string data;
 
@@ -88,7 +90,7 @@ public class Testing : MonoBehaviour
     //    Vector3 dir = -transform.up;
     //    Quaternion orientation = transform.rotation;
     //    float maxDistance = 0.5f;
-        
+
     //    if (Physics.BoxCast(center, halfExtents, Vector3.down, orientation, maxDistance))
     //    {
     //        isGrounded = true;

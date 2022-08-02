@@ -43,6 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Gameplay")]
         [SerializeField] private TMP_InputField onlineUsernameTextField;
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
+        [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
         [SerializeField] private Toggle cameraShakeToggle;
         [SerializeField] private Toggle debugModeToggle;
@@ -353,6 +354,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     title: "Select Creature Preset(s)",
                     loadButtonText: "Select"
                 );
+            });
+
+            exportPrecisionSlider.value = SettingsManager.Data.ExportPrecision;
+            exportPrecisionSlider.onValueChanged.AddListener(delegate (float precision)
+            {
+                SettingsManager.Instance.SetExportPrecision((int)precision);
             });
 
             // Camera Shake

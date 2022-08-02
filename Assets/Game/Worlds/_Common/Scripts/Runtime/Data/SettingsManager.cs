@@ -58,6 +58,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetInGameMusic(Data.InGameMusic);
 
             SetOnlineUsername(Data.OnlineUsername);
+            SetExportPrecision(Data.ExportPrecision);
             SetCameraShake(Data.CameraShake);
             SetDebugMode(Data.DebugMode);
             SetPreviewFeatures(Data.PreviewFeatures);
@@ -420,6 +421,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetOnlineUsername(string username)
         {
             Data.OnlineUsername = username;
+        }
+        public void SetExportPrecision(int precision)
+        {
+            Data.ExportPrecision = precision;
         }
         public void SetCameraShake(bool cameraShake, bool updateMain = false)
         {

@@ -39,6 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Gameplay")]
         [SerializeField] private string onlineUsername;
         [SerializeField] private List<CreatureData> creaturePresets;
+        [SerializeField] private int exportPrecision;
         [SerializeField] private List<string> hiddenBodyParts;
         [SerializeField] private List<string> hiddenPatterns;
         [SerializeField] private bool cameraShake;
@@ -171,6 +172,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => creaturePresets;
         }
+        public int ExportPrecision
+        {
+            get => exportPrecision;
+            set => exportPrecision = value;
+        }
         public List<string> HiddenBodyParts
         {
             get => hiddenBodyParts;
@@ -259,6 +265,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             OnlineUsername = "";
             CreaturePresets.Clear();
+            ExportPrecision = 3;
             CameraShake = true;
             DebugMode = false;
             PreviewFeatures = false;
