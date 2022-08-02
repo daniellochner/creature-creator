@@ -54,6 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioClip createAudioClip;
         [SerializeField] private RectTransform bodyPartsRT;
         [SerializeField] private BodyPartGrids bodyPartGrids;
+        [SerializeField] private GameObject noPartsText;
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
@@ -70,6 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ToggleGroup patternsToggleGroup;
         [SerializeField] private RectTransform patternsRT;
         [SerializeField] private TextMeshProUGUI noColoursText;
+        [SerializeField] private GameObject noPatternsText;
 
         [Header("Options")]
         [SerializeField] private SimpleSideMenu optionsSideMenu;
@@ -173,6 +175,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 unlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
             }
+            noPartsText.SetActive(unlockedBodyParts.Count == 0);
             foreach (string bodyPartID in unlockedBodyParts)
             {
                 if (!SettingsManager.Data.HiddenBodyParts.Contains(bodyPartID)) AddBodyPartUI(bodyPartID);
@@ -236,6 +239,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 unlockedPatterns = ProgressManager.Data.UnlockedPatterns;
             }
+            noPatternsText.SetActive(unlockedPatterns.Count == 0);
             foreach (string patternID in unlockedPatterns)
             {
                 if (!SettingsManager.Data.HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
@@ -805,6 +809,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid as RectTransform);
             bodyPartUI.Setup(bodyPart);
             bodyPartUI.name = bodyPartID;
+            noPartsText.SetActive(false);
 
             bodyPartUI.HoverUI.OnEnter.AddListener(delegate
             {
@@ -887,6 +892,7 @@ namespace DanielLochner.Assets.CreatureCreator
             patternsUI.Add(patternUI);
             patternUI.Setup(pattern, patternMaterial);
             patternUI.name = patternID;
+            noPatternsText.SetActive(false);
 
             patternUI.SelectToggle.group = patternsToggleGroup;
             patternUI.SelectToggle.onValueChanged.AddListener((UnityAction<bool>)delegate (bool isSelected)
