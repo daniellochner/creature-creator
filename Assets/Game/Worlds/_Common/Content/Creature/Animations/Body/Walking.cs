@@ -194,11 +194,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
         {
-            Vector3 localPos = leg.DefaultFootLocalPos;
-            //if (Creature.Velocity.Angular != Vector3.zero)
-            //{
-            //    Vector3Utility.RotatePointAroundPivot(localPos, Vector3.zero, Creature.Velocity.Angular * timeToMove);
-            //}
+            Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootLocalPos, Vector3.zero, Creature.Velocity.Angular * timeToMove);
             Vector3 worldPos = Creature.transform.L2WSpace(localPos);
             worldPos += Vector3.ProjectOnPlane(Creature.Velocity.Linear, Creature.transform.up) * timeToMove;
 
