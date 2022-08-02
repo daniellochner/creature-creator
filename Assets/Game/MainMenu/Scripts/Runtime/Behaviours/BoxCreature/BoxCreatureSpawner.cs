@@ -4,6 +4,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,75 +13,112 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BoxCreatureSpawner : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private SecretKey creatureEncryptionKey;
+        [Space]
         [SerializeField] private BoxCreature boxCreaturePrefab;
         [SerializeField] private Transform boxCreaturesRoot;
         [SerializeField] private Animator spawnerAnimator;
         [SerializeField] private AudioSource spawnerAudioSource;
         [SerializeField] private AudioClip prepareAudioClip;
         [SerializeField] private AudioClip spawnAudioClip;
-        [SerializeField] private bool checkYouTube;
         [Space]
-        [SerializeField] private TextAsset[] creatureTextAssets;
         [SerializeField] private float spawnCooldown;
         [SerializeField] private float spawnStart;
         [SerializeField] private float rotationOffset;
 
         private List<string> creatures = new List<string>();
         private int index;
+        private Coroutine spawnCoroutine;
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        private void Start()
         {
-            if (creatureTextAssets.Length > 0)
+            ChangeSpawnerSource(SpawnerSource.Local);
+        }
+
+        public void ChangeSpawnerSource(SpawnerSource source)
+        {
+            if (spawnCoroutine != null)
             {
-                foreach (TextAsset creature in creatureTextAssets)
-                {
-                    creatures.Add(creature.text);
-                }
+                StopCoroutine(spawnCoroutine);
             }
-            else if (checkYouTube)
+            spawnCoroutine = StartCoroutine(SpawnRoutine(source));
+        }
+        private IEnumerator SpawnRoutine(SpawnerSource source)
+        {
+            creatures.Clear();
+            index = 0;
+
+            switch (source)
             {
-                string key = DatabaseManager.GetDatabaseEntry<SecretKey>("Keys", "GoogleAPI").Value;
-                string parentId = DatabaseManager.GetDatabaseEntry<SecretKey>("Keys", "PinnedCommentId").Value;
-
-                // Parent
-                UnityWebRequest getParent = UnityWebRequest.Get($"https://youtube.googleapis.com/youtube/v3/comments?part=snippet&id={parentId}&textFormat=plainText&key={key}");
-                yield return getParent.SendWebRequest();
-
-                JObject pData = JObject.Parse(getParent.downloadHandler.text);
-                JObject pItems = pData.GetValue("items").First as JObject;
-                JObject pSnippet = (pItems as JObject).GetValue("snippet") as JObject;
-
-                string pTextDisplay = pSnippet.GetValue("textDisplay").ToString();
-                string acKey = "acceptedCreatures:\n";
-                string acVal = pTextDisplay.Substring(pTextDisplay.IndexOf(acKey) + acKey.Length);
-                List<string> acIDs = new List<string>(acVal.Split('\n'));
-
-                // Replies
-                UnityWebRequest getReplies = UnityWebRequest.Get($"https://youtube.googleapis.com/youtube/v3/comments?part=snippet&parentId={parentId}&textFormat=plainText&maxResults=100&key={key}");
-                yield return getReplies.SendWebRequest();
-
-                JObject rData = JObject.Parse(getReplies.downloadHandler.text);
-                JToken rItems = rData.GetValue("items");
-                foreach (JToken rItem in rItems)
-                {
-                    string id = (rItem as JObject).GetValue("id").ToString();
-                    id = id.Substring(id.IndexOf('.') + 1);
-                    if (acIDs.Contains(id))
+                case SpawnerSource.Local:
+                    string creaturesDir = Path.Combine(Application.persistentDataPath, "creature");
+                    if (Directory.Exists(creaturesDir))
                     {
-                        JObject rSnippet = (rItem as JObject).GetValue("snippet") as JObject;
-
-                        string rPublishedDate = rSnippet.GetValue("publishedAt").ToString();
-                        string rUpdatedDate = rSnippet.GetValue("updatedAt").ToString();
-                        if (rPublishedDate == rUpdatedDate)
+                        foreach (string creaturePath in Directory.GetFiles(creaturesDir))
                         {
-                            creatures.Add(rSnippet.GetValue("textDisplay").ToString());
+                            CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath, creatureEncryptionKey.Value);
+                            if (creatureData != null)
+                            {
+                                creatures.Add(JsonUtility.ToJson(creatureData));
+                            }
                         }
                     }
-                }
-            }
+                    break;
 
+                case SpawnerSource.Presets:
+                    if (SettingsManager.Data.CreaturePresets.Count > 0)
+                    {
+                        foreach (CreatureData creature in SettingsManager.Data.CreaturePresets)
+                        {
+                            creatures.Add(JsonUtility.ToJson(creature));
+                        }
+                    }
+                    break;
+
+                case SpawnerSource.YouTube:
+                    string key = DatabaseManager.GetDatabaseEntry<SecretKey>("Keys", "GoogleAPI").Value;
+                    string parentId = DatabaseManager.GetDatabaseEntry<SecretKey>("Keys", "PinnedCommentId").Value;
+
+                    // Parent
+                    UnityWebRequest getParent = UnityWebRequest.Get($"https://youtube.googleapis.com/youtube/v3/comments?part=snippet&id={parentId}&textFormat=plainText&key={key}");
+                    yield return getParent.SendWebRequest();
+
+                    JObject pData = JObject.Parse(getParent.downloadHandler.text);
+                    JObject pItems = pData.GetValue("items").First as JObject;
+                    JObject pSnippet = (pItems as JObject).GetValue("snippet") as JObject;
+
+                    string pTextDisplay = pSnippet.GetValue("textDisplay").ToString();
+                    string acKey = "acceptedCreatures:\n";
+                    string acVal = pTextDisplay.Substring(pTextDisplay.IndexOf(acKey) + acKey.Length);
+                    List<string> acIDs = new List<string>(acVal.Split('\n'));
+
+                    // Replies
+                    UnityWebRequest getReplies = UnityWebRequest.Get($"https://youtube.googleapis.com/youtube/v3/comments?part=snippet&parentId={parentId}&textFormat=plainText&maxResults=100&key={key}");
+                    yield return getReplies.SendWebRequest();
+
+                    JObject rData = JObject.Parse(getReplies.downloadHandler.text);
+                    JToken rItems = rData.GetValue("items");
+                    foreach (JToken rItem in rItems)
+                    {
+                        string id = (rItem as JObject).GetValue("id").ToString();
+                        id = id.Substring(id.IndexOf('.') + 1);
+                        if (acIDs.Contains(id))
+                        {
+                            JObject rSnippet = (rItem as JObject).GetValue("snippet") as JObject;
+
+                            string rPublishedDate = rSnippet.GetValue("publishedAt").ToString();
+                            string rUpdatedDate = rSnippet.GetValue("updatedAt").ToString();
+                            if (rPublishedDate == rUpdatedDate)
+                            {
+                                creatures.Add(rSnippet.GetValue("textDisplay").ToString());
+                            }
+                        }
+                    }
+                    break;
+            }
+            
             if (creatures.Count > 0)
             {
                 yield return new WaitForSeconds(spawnStart);
@@ -106,6 +144,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             CreatureData creature = JsonUtility.FromJson<CreatureData>(creatures[index++ % creatures.Count]);
             boxCreature.Spawn(creature);
+        }
+        #endregion
+
+        #region Enum
+        public enum SpawnerSource
+        {
+            Presets,
+            Local,
+            YouTube
         }
         #endregion
     }
