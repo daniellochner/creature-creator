@@ -49,7 +49,7 @@ namespace DanielLochner.Assets
         {
             if (CanSend && Input.GetKey(KeyCode.T))
             {
-                InputDialog.Input("Send Message", onSubmit: SendMessage);
+                InputDialog.Input("Send Message", onSubmit: SendMessage, maxCharacters: characterLimit);
             }
             cooldownTimeLeft -= Time.deltaTime;
         }

@@ -19,6 +19,7 @@ namespace DanielLochner.Assets
         [SerializeField] private TextMeshProUGUI submitText;
         [SerializeField] private TextMeshProUGUI cancelText;
         [SerializeField] private TMP_InputField inputFieldText;
+        [SerializeField] private Image inputBackgroundImage;
         [SerializeField] private Button submitButton;
         [SerializeField] private Button cancelButton;
         #endregion
@@ -37,7 +38,7 @@ namespace DanielLochner.Assets
             }
         }
 
-        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null)
+        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null, int maxCharacters = -1)
         {
             Instance.titleText.text = title;
             Instance.placeholderText.text = placeholder;
@@ -48,12 +49,28 @@ namespace DanielLochner.Assets
 
             Instance.closeButton.gameObject.SetActive(closeable);
 
+            Instance.inputFieldText.onValueChanged.RemoveAllListeners();
+            Instance.inputFieldText.onValueChanged.AddListener(delegate (string text)
+            {
+                if (text.Length > maxCharacters && maxCharacters != -1)
+                {
+                    Instance.inputBackgroundImage.color = Color.red;
+                }
+                else
+                {
+                    Instance.inputBackgroundImage.color = Color.white;
+                }
+            });
+
             Instance.submitButton.onClick.RemoveAllListeners();
             Instance.cancelButton.onClick.RemoveAllListeners();
             Instance.submitButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onSubmit?.Invoke(Instance.inputFieldText.text);
+                if (Instance.inputFieldText.text.Length <= maxCharacters || maxCharacters == -1)
+                {
+                    Instance.Close();
+                    onSubmit?.Invoke(Instance.inputFieldText.text);
+                }
             });
             Instance.cancelButton.onClick.AddListener(delegate
             {
