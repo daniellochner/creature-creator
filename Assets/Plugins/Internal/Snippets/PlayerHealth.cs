@@ -21,11 +21,6 @@ namespace DanielLochner.Assets
                 if (IsServer)
                 {
                     health.Value = Mathf.Clamp(value, 0f, maxHealth);
-
-                    if (Health <= 0f)
-                    {
-                        Die();
-                    }
                 }
                 else
                 {
@@ -80,6 +75,11 @@ namespace DanielLochner.Assets
             if (IsDead) return;
             Health -= damage;
             TakeDamageClientRpc(damage);
+
+            if (Health <= 0f)
+            {
+                Die();
+            }
         }
         [ClientRpc]
         private void TakeDamageClientRpc(float damage)
@@ -94,8 +94,6 @@ namespace DanielLochner.Assets
         [ServerRpc(RequireOwnership = false)]
         private void DieServerRpc()
         {
-            if (IsDead) return;
-            Health = 0f;
             DieClientRpc();
         }
         [ClientRpc]
