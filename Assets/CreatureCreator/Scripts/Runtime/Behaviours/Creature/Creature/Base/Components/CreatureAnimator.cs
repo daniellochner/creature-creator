@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool useEasing;
         [SerializeField] private float extensionThreshold;
-        
+
         [Header("Internal References")]
         [SerializeField] private Transform rig;
         [SerializeField] private Transform tail;
@@ -222,7 +222,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 
                 int tIndex = t - 1;
-
                 if (tIndex >= 0)
                 {
                     tailDynamicBone.m_Root = Constructor.Bones[tIndex];
@@ -267,15 +266,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 //    };
                 //}
 
-                
 
-                Vector3 offset = Vector3.zero;
                 EasingFunction.Function function = null;
+                Vector3 offset = Vector3.zero;
 
                 if (Legs.Count == 0)
                 {
-                    // Creatures without legs should fall down to the ground.
-
                     Mesh bodyMesh = new Mesh();
                     Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
 
@@ -288,13 +284,11 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
 
-                    offset = Constructor.transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
+                    offset = transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
                     function = EasingFunction.EaseOutBounce;
                 }
                 else
                 {
-                    // Creatures with legs should slump down to put weight on them.
-
                     // Determine the most extended leg and record its extension percentage.
                     LegAnimator mostExtendedLeg = null;
                     float maxExtension = Mathf.NegativeInfinity;
@@ -313,8 +307,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
 
-                    // If the most extended leg is too extended (i.e., exceeds the extension threshold), slump body down by an offset:
-                    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg when it has a targetLength that satisfies the extensionThreshold.
+                    // If the most extended leg is too extended (i.e., exceeds the extension threshold), then
+                    // slump body down by an offset:
+                    // offset = targetHeight - currentHeight, where targetHeight is the height of the mostExtendedLeg
+                    // when it has a targetLength that satisfies the extensionThreshold.
                     if (maxExtension > extensionThreshold)
                     {
                         float targetLength = extensionThreshold * mostExtendedLeg.MaxLength;
@@ -333,7 +329,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (offset != Vector3.zero)
                 {
-                    if (useEasing)
+                    if (useEasing && function != null)
                     {
                         moveBodyCoroutine = StartCoroutine(MoveBodyRoutine(offset, 1f, function));
                     }
@@ -373,7 +369,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             tailDynamicBone.enabled = isDamped;
         }
-
+        
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;
