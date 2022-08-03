@@ -273,8 +273,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Tutorial = true;
             WorldChat = true;
 
-            SensitivityHorizontal = 1f;
-            SensitivityVertical = 1f;
+            SensitivityHorizontal = 1.5f;
+            SensitivityVertical = 1.5f;
             InvertHorizontal = false;
             InvertVertical = false;
         }
