@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -6,13 +7,19 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public void UnlockAll()
         {
+            StartCoroutine(UnlockAllRoutine());
+        }
+        private IEnumerator UnlockAllRoutine()
+        {
             foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
             {
                 EditorManager.Instance.UnlockBodyPart(obj.Key, false);
+                yield return null;
             }
             foreach (var obj in DatabaseManager.GetDatabase("Patterns").Objects)
             {
                 EditorManager.Instance.UnlockPattern(obj.Key, false);
+                yield return null;
             }
             NotificationsManager.Notify("You unlocked all the parts and patterns!");
 
@@ -22,7 +29,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 Destroy(item.gameObject);
             }
 
-            this.Invoke(() => RoadmapMenu.Instance.Open(), 2f);
+            yield return new WaitForSeconds(2f);
+
+            RoadmapMenu.Instance.Open();
         }
     }
 }
