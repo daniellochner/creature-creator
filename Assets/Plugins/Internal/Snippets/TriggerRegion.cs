@@ -20,6 +20,8 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
+        public SphereCollider Region => region;
+
         public UnityEvent<Collider> OnEnter => onEnter;
         public UnityEvent<Collider> OnExit => onExit;
 
@@ -31,6 +33,7 @@ namespace DanielLochner.Assets
         {
             region = GetComponent<SphereCollider>();
         }
+
         private void OnTriggerEnter(Collider other)
         {
             if (CanEnter(other) && !entered.Contains(other))
@@ -48,9 +51,14 @@ namespace DanielLochner.Assets
             }
         }
 
+        public void Clear()
+        {
+            entered.Clear();
+        }
         public void Validate()
         {
             List<Collider> tmp = new List<Collider>(entered);
+            Clear();
             Collider[] colliders = Physics.OverlapSphere(transform.position, region.radius);
             foreach (Collider collider in colliders)
             {
