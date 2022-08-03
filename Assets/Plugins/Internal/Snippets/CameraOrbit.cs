@@ -142,6 +142,15 @@ namespace DanielLochner.Assets
             SetFrozen(false);
         }
 
+        public void SetOffset(Vector3 offset, bool instant = false)
+        {
+            OffsetPosition = offset;
+            if (instant)
+            {
+                zoomTransform.localPosition = offset;
+            }
+        }
+
         public static float ClampAngle(float angle, float min, float max)
         {
             if (angle < -360f) { angle += 360f; }

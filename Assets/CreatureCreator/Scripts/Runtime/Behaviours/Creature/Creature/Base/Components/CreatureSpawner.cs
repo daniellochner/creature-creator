@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnSpawn { get; set; }
         public Action OnDespawn { get; set; }
 
-        private void Start()
+        private void Awake()
         {
             Age = GetComponent<CreatureAge>();
             Hunger = GetComponent<CreatureHunger>();

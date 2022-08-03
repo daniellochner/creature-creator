@@ -134,6 +134,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsPainting => paintMenu.IsOpen;
         public bool IsPlaying => playMenu.IsOpen;
 
+        public Menu BuildMenu => buildMenu;
+        public Menu PlayMenu => playMenu;
+        public Menu PaintMenu => paintMenu;
+
         public CreaturePlayerLocal Creature => Player.Instance;
         #endregion
 
@@ -297,11 +301,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Creature.Editor.Load(null);
             }
-            Creature.Editor.IsInteractable = true;
-            Creature.Editor.enabled = true;
             Creature.Editor.Cash = ProgressManager.Data.Cash;
-            Creature.Informer.Setup(informationMenu);
             Creature.Editor.Platform = platform;
+            Creature.Informer.Setup(informationMenu);
             Creature.Mover.Teleport(platform, true);
         }
         #endregion
@@ -309,44 +311,23 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Modes
         public void TryBuild()
         {
-            if (!buildMenu.IsOpen)
+            if (!IsBuilding)
             {
-                buildMenu.Open();
-                playMenu.Close();
-                paintMenu.Close();
-
-                Build();
-
-                SetMode();
-                SetCameraOffset(-1.5f);
+                SetMode(EditorMode.Build);
             }
         }
         public void TryPlay()
         {
-            if (!playMenu.IsOpen)
+            if (!IsPlaying)
             {
-                buildMenu.Close();
-                playMenu.Open();
-                paintMenu.Close();
-
-                Play();
-                
-                SetMode();
-                SetCameraOffset(0f);
+                SetMode(EditorMode.Play);
             }
         }
         public void TryPaint()
         {
-            if (!paintMenu.IsOpen)
+            if (!IsPainting)
             {
-                buildMenu.Close();
-                playMenu.Close();
-                paintMenu.Open();
-
-                Paint();
-
-                SetMode();
-                SetCameraOffset(1.5f);
+                SetMode(EditorMode.Paint);
             }
         }
 
@@ -408,18 +389,46 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Mover.enabled = false;
             Creature.Interactor.enabled = false;
         }
+        
+        public void SetMode(EditorMode mode, bool instant = false)
+        {
+            switch (mode)
+            {
+                case EditorMode.Build:
+                    buildMenu.Open(instant);
+                    playMenu.Close(instant);
+                    paintMenu.Close(instant);
+                    SetCameraOffset(-1.5f, instant);
+                    bodyPartSettingsMenu.Close(true);
 
-        private void SetCameraOffset(float x)
-        {
-            Creature.Camera.CameraOrbit.OffsetPosition = new Vector3(x, 2f, Creature.Camera.CameraOrbit.OffsetPosition.z);
-        }
-        private void SetMode()
-        {
+                    Build();
+                    break;
+
+                case EditorMode.Play:
+                    buildMenu.Close(instant);
+                    playMenu.Open(instant);
+                    paintMenu.Close(instant);
+                    SetCameraOffset(0f, instant);
+
+                    Play();
+                    break;
+
+                case EditorMode.Paint:
+                    buildMenu.Close(instant);
+                    playMenu.Close(instant);
+                    paintMenu.Open(instant);
+                    SetCameraOffset(1.5f, instant);
+                    patternSettingsMenu.Close(true);
+                    colourSettingsMenu.Close(true);
+
+                    Paint();
+                    break;
+            }
             editorAudioSource.PlayOneShot(whooshAudioClip);
-
-            bodyPartSettingsMenu.Close();
-            patternSettingsMenu.Close();
-            colourSettingsMenu.Close();
+        }
+        public void SetCameraOffset(float x, bool instant = false)
+        {
+            Creature.Camera.CameraOrbit.SetOffset(new Vector3(x, 2f, Creature.Camera.CameraOrbit.OffsetPosition.z), instant);
         }
         #endregion
 
@@ -1238,6 +1247,15 @@ namespace DanielLochner.Assets.CreatureCreator
             ConfirmOperation(operation, Creature.Editor.IsDirty && !string.IsNullOrEmpty(Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{Creature.Editor.LoadedCreature}\" without saving. Are you sure you want to continue {operationPCN}?");
         }
         #endregion
+        #endregion
+
+        #region Enums
+        public enum EditorMode
+        {
+            Build,
+            Play,
+            Paint
+        }
         #endregion
 
         #region Inner Classes

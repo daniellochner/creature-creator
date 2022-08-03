@@ -61,6 +61,16 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             EditorManager.Instance.Setup();
+
+            if (ProgressManager.Data.UnlockedBodyParts.Count == 0)
+            {
+                EditorManager.Instance.SetMode(EditorManager.EditorMode.Play, true);
+                TutorialManager.Instance.StartTutorial();
+            }
+            else
+            {
+                EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
+            }
         }
         public void SetupMP()
         {
