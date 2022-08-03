@@ -24,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int angleLimit = 30;
         [SerializeField] private float positionSmoothing;
         [SerializeField] private float rotationSmoothing;
+        [SerializeField] private GameObject arrow;
 
         private MeshCollider meshCollider;
         private Mesh colliderMesh;
@@ -209,6 +210,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 bone.GetComponent<Rigidbody>().isKinematic = false;
             }
             rb.constraints = RigidbodyConstraints.FreezeAll;
+
+            arrow.SetActive(true);
         }
         private void OnDisable()
         {
@@ -218,6 +221,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 bpe.enabled = false;
             }
+
+            arrow.SetActive(false);
         }
         private void Update()
         {
