@@ -37,16 +37,12 @@ namespace DanielLochner.Assets
             set
             {
                 if (targeted == value) return;
-
                 targeted = value;
 
+                Clear();
                 if (targeted != null)
                 {
                     Setup(targeted);
-                }
-                else
-                {
-                    Clear();
                 }
 
                 OnTarget?.Invoke(targeted);
