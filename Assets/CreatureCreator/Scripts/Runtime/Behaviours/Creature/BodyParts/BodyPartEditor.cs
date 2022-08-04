@@ -298,8 +298,16 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartConstructor main = CreatureEditor.Constructor.AddBodyPart(bodyPartID);
             main.SetAttached(new AttachedBodyPart(bodyPartID));
 
-            main.SetPrimaryColour(BodyPartConstructor.AttachedBodyPart.primaryColour);
-            main.SetSecondaryColour(BodyPartConstructor.AttachedBodyPart.secondaryColour);
+            Color pColour = BodyPartConstructor.AttachedBodyPart.primaryColour;
+            if (pColour.a != 0)
+            {
+                main.SetPrimaryColour(pColour);
+            }
+            Color sColour = BodyPartConstructor.AttachedBodyPart.secondaryColour;
+            if (sColour.a != 0)
+            {
+                main.SetSecondaryColour(sColour);
+            }
             main.SetStretch(BodyPartConstructor.AttachedBodyPart.stretch, Vector3Int.one);
             main.transform.SetPositionAndRotation(transform.position, transform.rotation);
             main.transform.localScale = transform.localScale;
