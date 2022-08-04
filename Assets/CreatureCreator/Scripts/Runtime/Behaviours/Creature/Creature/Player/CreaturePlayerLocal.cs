@@ -65,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Spawner.Despawn();
 
-            EditorManager.Instance.IsVisible = false;
+            EditorManager.Instance.SetVisibility(false);
 
             EditorManager.Instance.Invoke(delegate
             {
@@ -93,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Spawner.Spawn();
 
-            EditorManager.Instance.IsVisible = true;
+            EditorManager.Instance.SetVisibility(true);
         }
         #endregion
     }

@@ -102,41 +102,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public bool IsVisible
-        {
-            get => isVisible;
-            set
-            {
-                if (isVisible == value) return;
-                isVisible = value;
-
-                StartCoroutine(editorCanvasGroup.Fade(isVisible, 0.25f));
-            }
-        }
-        public bool IsEditing
-        {
-            get => isEditing;
-            set
-            {
-                if (isEditing == value) return;
-                isEditing = value;
-
-                optionsSideMenu.Close();
-
-                StartCoroutine(paginationCanvasGroup.Fade(isEditing, 0.25f));
-                StartCoroutine(optionsCanvasGroup.Fade(isEditing, 0.25f));
-
-                if (isEditing) UpdateLoadableCreatures();
-            }
-        }
-
+        public bool IsEditing => isEditing;
         public bool IsBuilding => buildMenu.IsOpen;
         public bool IsPainting => paintMenu.IsOpen;
-        public bool IsPlaying => playMenu.IsOpen;
-
-        public Menu BuildMenu => buildMenu;
-        public Menu PlayMenu => playMenu;
-        public Menu PaintMenu => paintMenu;
+        public bool IsPlaying  => playMenu.IsOpen;
 
         public CreaturePlayerLocal Creature => Player.Instance;
         #endregion
@@ -424,7 +393,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     Paint();
                     break;
             }
-            editorAudioSource.PlayOneShot(whooshAudioClip);
+
+            if (!instant)
+            {
+                editorAudioSource.PlayOneShot(whooshAudioClip);
+            }
         }
         public void SetCameraOffset(float x, bool instant = false)
         {
@@ -1107,6 +1080,26 @@ namespace DanielLochner.Assets.CreatureCreator
                 creatureUI.SelectToggle.interactable = canLoadCreature;
             }
         }
+
+        public void SetEditing(bool e)
+        {
+            isEditing = e;
+
+            optionsSideMenu.Close();
+
+            StartCoroutine(paginationCanvasGroup.Fade(isEditing, 0.25f));
+            StartCoroutine(optionsCanvasGroup.Fade(isEditing, 0.25f));
+
+            if (isEditing)
+            {
+                UpdateLoadableCreatures();
+            }
+        }
+        public void SetVisibility(bool v, float t = 0.25f)
+        {
+            isVisible = v;
+            StartCoroutine(editorCanvasGroup.Fade(v, t));
+        }
         #endregion
 
         #region Keyboard Shortcuts
@@ -1142,7 +1135,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InputUtility.GetKeyDown(KeybindingsManager.Data.ToggleUI))
             {
-                IsVisible = !IsVisible;
+                SetVisibility(!isVisible);
             }
             else
             if (InputUtility.GetKeyDown(KeybindingsManager.Data.Respawn))

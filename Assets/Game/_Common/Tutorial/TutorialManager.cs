@@ -16,6 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator TutorialRoutine()
         {
+            EditorManager.Instance.SetVisibility(false, 0f);
+
             GameObject hint1 = AddHint(eye.transform);
             yield return new WaitUntil(() => eye.IsUnlocked);
             Destroy(hint1);
@@ -24,6 +26,8 @@ namespace DanielLochner.Assets.CreatureCreator
             hint2.transform.localScale = Vector3.one * 3f;
             yield return new WaitUntil(() => EditorManager.Instance.IsEditing);
             Destroy(hint2);
+            
+            EditorManager.Instance.SetVisibility(true);
         }
 
         private GameObject AddHint(Transform hintT)

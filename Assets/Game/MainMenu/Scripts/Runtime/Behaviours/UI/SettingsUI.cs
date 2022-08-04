@@ -391,7 +391,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Tutorial
-            tutorialToggle.SetIsOnWithoutNotify(SettingsManager.Data.NetworkStats);
+            tutorialToggle.SetIsOnWithoutNotify(SettingsManager.Data.Tutorial);
             tutorialToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetTutorial(isOn);

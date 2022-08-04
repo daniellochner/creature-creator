@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
             if (player != null && !hasEntered)
             {
-                EditorManager.Instance.IsEditing = true;
+                EditorManager.Instance.SetEditing(true);
 
                 player.Editor.Platform = this;
                 player.Hider.Hide();
@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
             if (player != null && hasEntered)
             {
-                EditorManager.Instance.IsEditing = false;
+                EditorManager.Instance.SetEditing(false);
 
                 player.Hider.Show();
 
