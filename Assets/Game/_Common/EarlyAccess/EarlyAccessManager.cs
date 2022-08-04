@@ -23,6 +23,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             NotificationsManager.Notify("You unlocked all the parts and patterns!");
 
+            ProgressManager.Instance.Save();
+
             foreach (UnlockableItem item in FindObjectsOfType<UnlockableItem>())
             {
                 if (item is UnlockableCollection) continue;
