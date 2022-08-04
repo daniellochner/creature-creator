@@ -11,11 +11,10 @@ namespace DanielLochner.Assets.CreatureCreator
     public class AbilityUI : MonoBehaviour, IPointerDownHandler
     {
         #region Fields
-        [SerializeField] private Image iconImage;
+        [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image cooldownImage;
         [SerializeField] private Button performButton;
         [SerializeField] private TextMeshProUGUI performKeyText;
-        [SerializeField] private TextMeshProUGUI levelText;
 
         private Ability ability;
         #endregion
@@ -33,13 +32,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             this.ability = ability;
 
-            iconImage.sprite = ability.Icon;
             performKeyText.text = $"[{ability.PerformKeybind.ToString()}]";
             performButton.onClick.AddListener(delegate 
             {
                 ability.OnTryPerform();
             });
-            levelText.text = (ability.Level == 0) ? "" : ability.Level.ToString();
+            nameText.text = ability.name;
             cooldownImage.fillAmount = 0f;
         }
         public void UpdateUI()
