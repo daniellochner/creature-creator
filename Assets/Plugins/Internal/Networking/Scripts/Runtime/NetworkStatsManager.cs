@@ -81,11 +81,13 @@ namespace DanielLochner.Assets
         [ClientRpc]
         public void PongClientRPC(int pingId, ClientRpcParams clientParams)
         {
-            float startTime = m_PingHistoryStartTimes[pingId];
-            m_PingHistoryStartTimes.Remove(pingId);
-            m_MovingWindow.Enqueue(Time.realtimeSinceStartup - startTime);
-
-            UpdateRTTSlidingWindowAverage();
+            if (m_PingHistoryStartTimes.ContainsKey(pingId))
+            {
+                float startTime = m_PingHistoryStartTimes[pingId];
+                m_PingHistoryStartTimes.Remove(pingId);
+                m_MovingWindow.Enqueue(Time.realtimeSinceStartup - startTime);
+                UpdateRTTSlidingWindowAverage();
+            }
         }
         #endregion
     }
