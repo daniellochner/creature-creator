@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreaturePlayerLocal player = creature as CreaturePlayerLocal;
                 if (player != null && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
                 {
-                    player.Health.Die();
+                    player.Health.TakeDamage(player.Health.Health);
                 }
             }
         }
