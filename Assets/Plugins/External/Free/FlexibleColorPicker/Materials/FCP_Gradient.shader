@@ -120,6 +120,9 @@ Shader "Custom/FCP_Gradient" {
 					o.col = HSV();
 					break;
 				}
+				
+				o.col.a = vert.color.a;
+				
 				return o;
 			}
 

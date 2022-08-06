@@ -66,8 +66,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ColourSettingsMenu colourSettingsMenu;
         [SerializeField] private PatternUI patternUIPrefab;
         [SerializeField] private Material patternMaterial;
-        [SerializeField] private ColourPicker primaryColourPicker;
-        [SerializeField] private ColourPicker secondaryColourPicker;
+        [SerializeField] private ColourPalette primaryColourPalette;
+        [SerializeField] private ColourPalette secondaryColourPalette;
         [SerializeField] private ToggleGroup patternsToggleGroup;
         [SerializeField] private RectTransform patternsRT;
         [SerializeField] private TextMeshProUGUI noColoursText;
@@ -217,9 +217,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!SettingsManager.Data.HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
             }
-            primaryColourPicker.ClickUI.OnRightClick.AddListener(delegate
+            primaryColourPalette.ClickUI.OnRightClick.AddListener(delegate
             {
-                if (primaryColourPicker.Name.text.Contains("Override"))
+                if (primaryColourPalette.Name.text.Contains("Override"))
                 {
                     ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", onYes: (UnityAction)delegate
                     {
@@ -228,9 +228,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     });
                 }
             });
-            secondaryColourPicker.ClickUI.OnRightClick.AddListener(delegate
+            secondaryColourPalette.ClickUI.OnRightClick.AddListener(delegate
             {
-                if (secondaryColourPicker.Name.text.Contains("Override"))
+                if (secondaryColourPalette.Name.text.Contains("Override"))
                 {
                     ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", onYes: (UnityAction)delegate
                     {
@@ -482,8 +482,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Colour
-            primaryColourPicker.SetColour(Creature.Constructor.Data.PrimaryColour, false);
-            secondaryColourPicker.SetColour(Creature.Constructor.Data.SecondaryColour, false);
+            primaryColourPalette.SetColour(Creature.Constructor.Data.PrimaryColour, false);
+            secondaryColourPalette.SetColour(Creature.Constructor.Data.SecondaryColour, false);
 
             // Pattern
             patternsToggleGroup.SetAllTogglesOff(false);
@@ -491,8 +491,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 patternsUI.Find(x => x.name.Equals(Creature.Constructor.Data.PatternID)).SelectToggle.SetIsOnWithoutNotify(true);
             }
-            patternMaterial.SetColor("_PrimaryCol", primaryColourPicker.Colour);
-            patternMaterial.SetColor("_SecondaryCol", secondaryColourPicker.Colour);
+            patternMaterial.SetColor("_PrimaryCol", primaryColourPalette.Colour);
+            patternMaterial.SetColor("_SecondaryCol", secondaryColourPalette.Colour);
         }
         public void TryClear()
         {
@@ -947,35 +947,35 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SetPrimaryColourUI(Color colour, bool isOverride)
         {
-            primaryColourPicker.SetColour(colour);
-            primaryColourPicker.gameObject.SetActive(colour.a != 0);
+            primaryColourPalette.SetColour(colour);
+            primaryColourPalette.gameObject.SetActive(colour.a != 0);
             SetPrimaryColourOverrideUI(isOverride);
 
             SetColourNoneUI();
         }
         public void SetPrimaryColourOverrideUI(bool isOverride)
         {
-            SetColourOverrideUI(primaryColourPicker, "Primary", isOverride);
+            SetColourOverrideUI(primaryColourPalette, "Primary", isOverride);
         }
         public void SetSecondaryColourUI(Color colour, bool isOverride)
         {
-            secondaryColourPicker.SetColour(colour);
-            secondaryColourPicker.gameObject.SetActive(colour.a != 0);
+            secondaryColourPalette.SetColour(colour);
+            secondaryColourPalette.gameObject.SetActive(colour.a != 0);
             SetSecondaryColourOverrideUI(isOverride);
 
             SetColourNoneUI();
         }
         public void SetSecondaryColourOverrideUI(bool isOverride)
         {
-            SetColourOverrideUI(secondaryColourPicker, "Secondary", isOverride);
+            SetColourOverrideUI(secondaryColourPalette, "Secondary", isOverride);
         }
-        private void SetColourOverrideUI(ColourPicker colourPicker, string name, bool isOverride)
+        private void SetColourOverrideUI(ColourPalette colourPicker, string name, bool isOverride)
         {
             colourPicker.Name.text = isOverride ? $"{name}\n<size=20>(Override)</size>" : name;
         }
         private void SetColourNoneUI()
         {
-            noColoursText.gameObject.SetActive(!primaryColourPicker.gameObject.activeSelf && !secondaryColourPicker.gameObject.activeSelf);
+            noColoursText.gameObject.SetActive(!primaryColourPalette.gameObject.activeSelf && !secondaryColourPalette.gameObject.activeSelf);
         }
 
         public void UpdateBodyPartTotals()
@@ -990,7 +990,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdatePrimaryColour()
         {
-            Color colour = primaryColourPicker.Colour;
+            Color colour = primaryColourPalette.Colour;
             BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
             if (bodyPart)
             {
@@ -999,14 +999,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                Creature.Constructor.SetPrimaryColour(primaryColourPicker.Colour);
+                Creature.Constructor.SetPrimaryColour(primaryColourPalette.Colour);
                 patternMaterial.SetColor("_PrimaryCol", colour);
                 SetPrimaryColourOverrideUI(false);
             }
         }
         public void UpdateSecondaryColour()
         {
-            Color colour = secondaryColourPicker.Colour;
+            Color colour = secondaryColourPalette.Colour;
             BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
             if (bodyPart)
             {
@@ -1015,7 +1015,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                Creature.Constructor.SetSecondaryColour(secondaryColourPicker.Colour);
+                Creature.Constructor.SetSecondaryColour(secondaryColourPalette.Colour);
                 patternMaterial.SetColor("_SecondaryCol", colour);
                 SetSecondaryColourOverrideUI(false);
             }

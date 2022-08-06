@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
-    public class ColourPicker : MonoBehaviour
+    public class ColourPalette : MonoBehaviour
     {
         #region Fields
         [SerializeField] private Color[] colours;
@@ -60,23 +60,30 @@ namespace DanielLochner.Assets
                     });
                     colourUI.ClickUI.OnRightClick.AddListener(delegate
                     {
-                        InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", onSubmit: delegate (string colourHEX)
+                        ColourPickerDialog.Pick(delegate (Color c)
                         {
-                            if (!colourHEX.StartsWith("#"))
-                            {
-                                colourHEX = colourHEX.Insert(0, "#");
-                            }
-
-                            if (ColorUtility.TryParseHtmlString(colourHEX, out colour))
-                            {
-                                colourUI.SetColour(colour);
-                                SetColour(colour, true);
-                            }
-                            else
-                            {
-                                InformationDialog.Inform("Error parsing colour!", "Please use the correct format for a hexadecimal colour (i.e., #RRGGBB).");
-                            }
+                            colour = c;
+                            colourUI.SetColour(c);
+                            SetColour(c, true);
                         });
+
+                        //InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", onSubmit: delegate (string colourHEX)
+                        //{
+                        //    if (!colourHEX.StartsWith("#"))
+                        //    {
+                        //        colourHEX = colourHEX.Insert(0, "#");
+                        //    }
+
+                        //    if (ColorUtility.TryParseHtmlString(colourHEX, out colour))
+                        //    {
+                        //        colourUI.SetColour(colour);
+                        //        SetColour(colour, true);
+                        //    }
+                        //    else
+                        //    {
+                        //        InformationDialog.Inform("Error parsing colour!", "Please use the correct format for a hexadecimal colour (i.e., #RRGGBB).");
+                        //    }
+                        //});
                     });
 
                     colourIndex++;
@@ -94,6 +101,14 @@ namespace DanielLochner.Assets
             {
                 onColourPick.Invoke();
             }
+        }
+
+        public void PickColour()
+        {
+            ColourPickerDialog.Pick(delegate (Color c)
+            {
+                SetColour(c, true);
+            });
         }
         #endregion
     }
