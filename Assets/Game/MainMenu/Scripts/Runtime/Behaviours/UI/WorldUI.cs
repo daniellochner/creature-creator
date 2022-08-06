@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private TextMeshProUGUI playersText;
         [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private TextMeshProUGUI mapText;
         [SerializeField] private GameObject padlockIcon;
         [SerializeField] private Button infoButton;
         [SerializeField] private Button joinButton;
@@ -34,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             World world = new World(lobby);
+            mapText.text = world.MapName;
 
             infoButton.onClick.AddListener(delegate
             {

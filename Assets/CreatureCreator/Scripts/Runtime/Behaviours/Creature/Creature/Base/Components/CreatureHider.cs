@@ -54,9 +54,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsOwner)
             {
-                Constructor.Demolish();
-                Constructor.Body.gameObject.SetActive(true);
-                Constructor.Construct(JsonUtility.FromJson<CreatureData>(creatureData));
+                try
+                {
+                    CreatureData dat = JsonUtility.FromJson<CreatureData>(creatureData);
+                    Constructor.Demolish();
+                    Constructor.Body.gameObject.SetActive(true);
+                    Constructor.Construct(dat);
+                }
+                catch
+                {
+                    Debug.Log($"Parse error: {creatureData}");
+                    return;
+                }
             }
             OnShow?.Invoke();
         }
