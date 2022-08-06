@@ -12,6 +12,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Animator Animator { get; private set; }
 
+        public float LSpeedPercentage => Animator.GetFloat("%LSpeed");
+        public float ASpeedPercentage => Animator.GetFloat("%ASpeed");
+
         private void Awake()
         {
             Animator = GetComponent<Animator>();

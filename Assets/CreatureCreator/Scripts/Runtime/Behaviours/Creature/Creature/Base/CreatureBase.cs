@@ -39,6 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureInformer informer;
         [SerializeField] private CreatureSpawner spawner;
         [SerializeField] private Rigidbody rb;
+        [SerializeField] private CreatureVelocity velocity;
         #endregion
 
         #region Properties
@@ -57,6 +58,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureSpawner Spawner => spawner;
         public PlayerEffects Effects => effects;
         public Rigidbody Rigidbody => rb;
+        public CreatureVelocity Velocity => velocity;
         #endregion
 
         #region Methods
@@ -78,6 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
             informer = GetComponent<CreatureInformer>();
             spawner = GetComponent<CreatureSpawner>();
             rb = GetComponent<Rigidbody>();
+            velocity = GetComponent<CreatureVelocity>();
         }
 #endif
 

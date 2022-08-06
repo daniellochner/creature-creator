@@ -14,12 +14,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void OnTriggerEnter(Collider other)
         {
+            if (!IsServer) return;
+
             if (other.CompareTag("Ball") && !Scoreboard.Instance.HasWon)
             {
-                Instantiate(confettiPrefab, other.transform.position, Quaternion.identity);
-
-                other.GetComponent<Unity.Netcode.Components.NetworkTransform>().Teleport(start.position, start.rotation, other.transform.localScale);
-                other.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                SpawnConfettiClientRpc(other.transform.position);
+                other.GetComponent<Ball>().Teleport(start.position);
 
                 if (team == Team.Red)
                 {
@@ -31,6 +31,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     Scoreboard.Instance.RedScore.Value++;
                 }
             }
+        }
+
+        [ClientRpc]
+        private void SpawnConfettiClientRpc(Vector3 position)
+        {
+            Instantiate(confettiPrefab, position, Quaternion.identity);
         }
         #endregion
 

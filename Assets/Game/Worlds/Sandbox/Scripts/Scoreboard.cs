@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateScoreboard();
             };
+            UpdateScoreboard();
         }
         
         private void UpdateScoreboard()
@@ -63,7 +64,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             HasWon = false;
-            RedScore.Value = BlueScore.Value = 0;
+            if (IsServer)
+            {
+                RedScore.Value = BlueScore.Value = 0;
+            }
         }
         #endregion
     }
