@@ -180,6 +180,11 @@ namespace DanielLochner.Assets.CreatureCreator
                         createButton.interactable = true;
                         break;
 
+                    case MapType.Sandbox:
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
+                        createButton.interactable = true;
+                        break;
+
                     case MapType.Farm:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 16;
                         createButton.interactable = false;
@@ -504,7 +509,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public enum MapType
         {
             Farm,
-            Island
+            Island,
+            Sandbox
         }
         public enum VisibilityType
         {
