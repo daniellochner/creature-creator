@@ -44,14 +44,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetupBoneRagdoll(ragdoll.Bones[i], ragdoll.BoneSettings.Radius * Mathf.Lerp(1, 5, ragdoll.GetWeight(i) / 100f), 30);
             }
-            foreach (LimbConstructor limb in ragdoll.Limbs)
-            {
-                SetupLimbRagdoll(limb);
+            //foreach (LimbConstructor limb in ragdoll.Limbs)
+            //{
+            //    SetupLimbRagdoll(limb);
 
-                limb.FlippedLimb.Root.localScale = Vector3.one;
-                limb.Flip();
-                SetupLimbRagdoll(limb.FlippedLimb);
-            }
+            //    limb.FlippedLimb.Root.localScale = Vector3.one;
+            //    limb.Flip();
+            //    SetupLimbRagdoll(limb.FlippedLimb);
+            //}
 
             return ragdoll;
         }
