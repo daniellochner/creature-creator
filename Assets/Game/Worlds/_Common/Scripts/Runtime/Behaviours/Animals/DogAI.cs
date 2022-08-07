@@ -246,7 +246,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     foreach (Collider collider in colliders)
                     {
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature.Animator != DogAI.Creature)
+                        if (creature != null && creature != DogAI.Creature)
                         {
                             creature.Health.TakeDamage(biteDamage.Random);
                             hasDealtDamage = true;

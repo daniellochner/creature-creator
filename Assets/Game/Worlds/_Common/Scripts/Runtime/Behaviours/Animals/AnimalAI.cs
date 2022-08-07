@@ -207,8 +207,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public class Targeting : BaseState
         {
-            [SerializeField] private TrackRegion trackRegion;
-            [SerializeField] private float lookAtSmoothing;
+            [SerializeField] protected TrackRegion trackRegion;
+            [SerializeField] protected float lookAtSmoothing;
 
             protected CreatureBase target;
             protected Vector3 lookDir;

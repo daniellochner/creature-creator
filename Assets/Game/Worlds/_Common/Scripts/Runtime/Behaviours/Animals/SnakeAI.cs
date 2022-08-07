@@ -104,7 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     foreach (Collider collider in colliders)
                     {
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature.Animator != SnakeAI.Creature)
+                        if (creature != null && creature != SnakeAI.Creature)
                         {
                             creature.Health.TakeDamage(strikeDamage.Random);
                             hasDealtDamage = true;

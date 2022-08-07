@@ -5,6 +5,7 @@ using DanielLochner.Assets.CreatureCreator.Animations;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -15,13 +16,47 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Attack(Collider col)
+        public override void Start()
         {
-            ChangeState("BIT");
+            base.Start();
+            trackRegion.OnLoseTrackOf += delegate
+            {
+                if (trackRegion.tracked.Count == 0)
+                {
+                    ChangeState("SWI");
+                }
+            };
+        }
+        public override void Update()
+        {
+            base.Update();
+            if (trackRegion.tracked.Count > 0 && !(currentState is Biting))
+            {
+                ChangeState("BIT");
+            }
         }
         #endregion
 
         #region Nested
+        [Serializable]
+        public class Swimming : Idling
+        {
+            public Transform[] waypoints;
+            public int current;
+
+            public SharkAI SharkAI => StateMachine as SharkAI;
+
+            public override void UpdateLogic()
+            {
+                base.UpdateLogic();
+                if (!AnimalAI.IsMovingToPosition)
+                {
+                    current = (current + 1) % waypoints.Length;
+                    SharkAI.Agent.SetDestination(waypoints[current].position);
+                }
+            }
+        }
+
         [Serializable]
         public class Biting : Targeting
         {
@@ -55,6 +90,15 @@ namespace DanielLochner.Assets.CreatureCreator
                     if (!SharkAI.IsMovingToPosition)
                     {
                         HandleLookAt();
+                    }
+
+                    NavMeshPath path = new NavMeshPath();
+                    SharkAI.Agent.CalculatePath(target.transform.position, path);
+                    if (path.status != NavMeshPathStatus.PathComplete)
+                    {
+                        SharkAI.trackRegion.enabled = false;
+                        SharkAI.ChangeState("SWI");
+                        SharkAI.Invoke(delegate { SharkAI.trackRegion.enabled = true; }, 5f);
                     }
                 }
             }
@@ -97,7 +141,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     foreach (Collider collider in colliders)
                     {
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature.Animator != SharkAI.Creature)
+                        if (creature != null && creature != SharkAI.Creature)
                         {
                             creature.Health.TakeDamage(biteDamage.Random);
                             hasDealtDamage = true;

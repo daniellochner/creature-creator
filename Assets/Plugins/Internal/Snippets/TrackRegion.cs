@@ -58,11 +58,11 @@ namespace DanielLochner.Assets
         private void OnDisable()
         {
             collider.enabled = false;
-            //LoseTrackOfAll();
+            LoseTrackOfAll();
         }
         private void OnDestroy()
         {
-            //LoseTrackOfAll();
+            LoseTrackOfAll();
         }
 
         private void FixedUpdate()
@@ -117,11 +117,11 @@ namespace DanielLochner.Assets
                 OnLoseTrackOf?.Invoke(collider, col);
             }
         }
-        private void LoseTrackOfAll()
+        public void LoseTrackOfAll()
         {
-            foreach (Collider col in tracked)
+            for (int i = 0; i < tracked.Count; ++i)
             {
-                LoseTrackOf(col);
+                LoseTrackOf(tracked[i]);
             }
             tracked.Clear();
         }

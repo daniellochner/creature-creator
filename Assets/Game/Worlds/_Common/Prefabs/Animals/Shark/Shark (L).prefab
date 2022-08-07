@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5613836067430570196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8910858094227490122}
+  - component: {fileID: 5287057288485283221}
+  - component: {fileID: 7327758548027677695}
+  m_Layer: 0
+  m_Name: TrackRegion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8910858094227490122
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613836067430570196}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 603483102406388799}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &5287057288485283221
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613836067430570196}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 10
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7327758548027677695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613836067430570196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackable:
+  - Player/Local
+  - Player/Remote
+  tracked: []
 --- !u!1001 &169331969076154781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77,28 +139,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 736785114524351905, guid: 58a9390c2802810499424279cc0d8628, type: 3}
   m_PrefabInstance: {fileID: 169331969076154781}
   m_PrefabAsset: {fileID: 0}
---- !u!195 &1437172671
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 603483102406388796}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &1437172670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,14 +151,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 289a503e9c5f4df4383f22929acf4df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStateID: 
+  startStateID: SWI
   currentStateId: 
-  states: []
-  data: {fileID: 0}
-  trackRegion: {fileID: 0}
+  states:
+  - rid: 5486954623467520002
+  - rid: 5486954623467520003
+  data: {fileID: 4900000, guid: 161df67d6d9bed44cbac0d62895aa5a8, type: 3}
+  trackRegion: {fileID: 7327758548027677695}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5486954623467520002
+      type: {class: SharkAI/Swimming, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: SWI
+        sm: {fileID: 1437172670}
+        ambientCooldown:
+          min: 0
+          max: 0
+        actionCooldown:
+          min: 0
+          max: 0
+        ambientSounds: []
+        actions: []
+        waypoints: []
+        current: 0
+    - rid: 5486954623467520003
+      type: {class: SharkAI/Biting, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: BIT
+        sm: {fileID: 1437172670}
+        trackRegion: {fileID: 7327758548027677695}
+        lookAtSmoothing: 5
+        biteOffset: 0.25
+        minBiteAngle: 5
+        biteDelay:
+          min: 2
+          max: 4
+        biteRadius: 0.5
+        biteDamage:
+          min: 25
+          max: 50
+        biteSounds: []
+--- !u!195 &1437172671
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603483102406388796}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 8
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &1437172690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +246,11 @@ MonoBehaviour:
   selectable: {fileID: 8402113204856933816}
   commandable: {fileID: 5595065463240706071}
   ai: {fileID: 1437172670}
+--- !u!4 &603483102406388799 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 736785114524351906, guid: 58a9390c2802810499424279cc0d8628, type: 3}
+  m_PrefabInstance: {fileID: 169331969076154781}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &699484475642107338 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 859211076224058455, guid: 58a9390c2802810499424279cc0d8628, type: 3}
