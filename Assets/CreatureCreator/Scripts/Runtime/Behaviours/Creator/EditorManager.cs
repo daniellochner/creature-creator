@@ -1140,7 +1140,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             if (InputUtility.GetKeyDown(KeybindingsManager.Data.Respawn))
             {
-                Creature.Health.Die();
+                Creature.Health.TakeDamage(Creature.Health.Health);
             }
         }
         private void HandlePaintShortcuts()
