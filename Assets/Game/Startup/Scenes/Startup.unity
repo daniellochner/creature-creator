@@ -1167,7 +1167,7 @@ MonoBehaviour:
   m_HeartbeatTimeoutMS: 500
   m_ConnectTimeoutMS: 1000
   m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 30000
+  m_DisconnectTimeoutMS: 60000
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
@@ -3152,6 +3152,7 @@ GameObject:
   - component: {fileID: 2009414140}
   - component: {fileID: 2009414139}
   - component: {fileID: 2009414138}
+  - component: {fileID: 2009414144}
   m_Layer: 0
   m_Name: Prefabs
   m_TagString: Untagged
@@ -3300,6 +3301,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPrefab: {fileID: 6540495017155020292, guid: da5bc3f7710eb804d86eebc7676d881a, type: 3}
   remotePrefab: {fileID: 5844319844566182447, guid: 77e3fda5751eb3f42af018194065a953, type: 3}
+--- !u!114 &2009414144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009414133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfade4c1a05c2d44e995d4b3c3d88897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localPrefab: {fileID: 6091860998072000820, guid: 16b4e43c936370e4a9be4057a088674d, type: 3}
+  remotePrefab: {fileID: 5717902094038890847, guid: 7ee5d724817ff284a980642082f26c67, type: 3}
 --- !u!1 &2078033486
 GameObject:
   m_ObjectHideFlags: 0
