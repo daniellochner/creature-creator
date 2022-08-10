@@ -13,6 +13,7 @@ namespace DanielLochner.Assets
         [SerializeField] private UnityEvent onClick = new UnityEvent();
 
         private Vector2 initialMousePosition;
+        private bool pressed;
         #endregion
 
         #region Properties
@@ -32,13 +33,18 @@ namespace DanielLochner.Assets
         {
             if (CanvasUtility.IsPointerOverUI) return;
             initialMousePosition = Input.mousePosition;
+            pressed = true;
         }
-        private void OnMouseUpAsButton()
+        private void Update()
         {
-            if (CanvasUtility.IsPointerOverUI || !isActiveAndEnabled) return;
-            if (Vector2.Distance(Input.mousePosition, initialMousePosition) <= threshold)
+            if (Input.GetMouseButtonUp(0) && pressed)
             {
-                OnClick.Invoke();
+                if (CanvasUtility.IsPointerOverUI || !isActiveAndEnabled) return;
+                if (Vector2.Distance(Input.mousePosition, initialMousePosition) <= threshold)
+                {
+                    OnClick.Invoke();
+                }
+                pressed = false;
             }
         }
         #endregion
