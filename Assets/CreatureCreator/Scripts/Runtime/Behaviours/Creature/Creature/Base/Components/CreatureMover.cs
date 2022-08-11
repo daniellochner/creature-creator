@@ -98,6 +98,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 targetAnimator.SetBool("IsHolding", false);
             }
+            if (targetGO != null)
+            {
+                Destroy(targetGO);
+            }
 
             BuoyantObject.enabled = false;
         }
