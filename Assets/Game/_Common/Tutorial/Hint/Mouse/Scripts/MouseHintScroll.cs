@@ -10,21 +10,24 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void Setup(int dir, Transform pos, bool inWorld)
+        public void Setup(int dir, Transform pos, bool inWorld, float t1 = 2f)
         {
             arrow.localScale = new Vector3(1, dir, 1);
-            StartCoroutine(AnimateRoutine(dir, pos, inWorld));
+            StartCoroutine(AnimateRoutine(dir, pos, inWorld, t1));
         }
 
-        private IEnumerator AnimateRoutine(int dir, Transform pos, bool inWorld)
+        private IEnumerator AnimateRoutine(int dir, Transform pos, bool inWorld, float t1)
         {
             while (true)
             {
                 if (pos == null) yield break;
 
-                transform.position = GetPosition(pos, inWorld);
-
-                yield return null;
+                yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)
+                {
+                    transform.position = GetPosition(pos, inWorld);
+                    arrow.localPosition = new Vector3(0, 15f + (10f * (0.5f + Mathf.Sin(Mathf.PI * p * 2f) / 2f)), 0);
+                },
+                t1);
             }
         }
         #endregion

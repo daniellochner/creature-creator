@@ -97,7 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 AddWeightRoutine(),
                 "Add Weight",
                 "Hover over your creature's body to reveal the bone tools. Then, scroll up/down using your mouse wheel to add/remove weight.",
-                10f);
+                20f);
 
             yield return TutorialItemRoutine(
                 SwitchToPaintModeRoutine(),
