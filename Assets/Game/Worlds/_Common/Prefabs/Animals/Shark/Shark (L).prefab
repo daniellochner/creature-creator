@@ -156,6 +156,7 @@ MonoBehaviour:
   states:
   - rid: 5486954623467520002
   - rid: 5486954623467520003
+  - rid: 5486954710187114496
   data: {fileID: 4900000, guid: 161df67d6d9bed44cbac0d62895aa5a8, type: 3}
   trackRegion: {fileID: 7327758548027677695}
   references:
@@ -193,6 +194,42 @@ MonoBehaviour:
           min: 25
           max: 50
         biteSounds: []
+    - rid: 5486954710187114496
+      type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
+      data:
+        id: FOL
+        sm: {fileID: 1437172670}
+        baseFollowOffset: 2
+        onFollow:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 7327758548027677695}
+              m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        onStopFollowing:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 7327758548027677695}
+              m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+              m_MethodName: set_enabled
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 1
+              m_CallState: 2
 --- !u!195 &1437172671
 NavMeshAgent:
   m_ObjectHideFlags: 0
