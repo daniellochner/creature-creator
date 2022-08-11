@@ -30,9 +30,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc]
         private void SpawnServerRpc()
         {
+            Health.HealthPercentage = 1f;
             Age.StartAging();
             Hunger.StartDepletingHunger();
-            Health.HealthPercentage = 1f;
 
             SpawnClientRpc();
         }
