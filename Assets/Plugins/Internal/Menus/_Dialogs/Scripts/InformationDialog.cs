@@ -19,6 +19,11 @@ namespace DanielLochner.Assets
         #region Methods
         public static void Inform(string title = "Title", string informationMessage = "Message", string okay = "Okay", bool closeable = true, UnityAction onOkay = null)
         {
+            if (Instance.IsOpen)
+            {
+                Instance.ignoreButton.onClick.Invoke();
+            }
+
             Instance.titleText.text = title;
             Instance.informationMessageText.text = informationMessage;
             Instance.okayText.text = okay;

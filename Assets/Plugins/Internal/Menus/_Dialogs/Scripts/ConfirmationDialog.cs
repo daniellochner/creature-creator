@@ -21,6 +21,11 @@ namespace DanielLochner.Assets
         #region Methods
         public static void Confirm(string title = "Title", string confirmationMessage = "Message", string yes = "Yes", string no = "No", bool closeable = true, UnityAction onYes = null, UnityAction onNo = null)
         {
+            if (Instance.IsOpen)
+            {
+                Instance.ignoreButton.onClick.Invoke();
+            }
+
             Instance.titleText.text = title;
             Instance.confirmationMessageText.text = confirmationMessage;
             Instance.yesText.text = yes;

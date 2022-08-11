@@ -40,6 +40,11 @@ namespace DanielLochner.Assets
 
         public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null, int maxCharacters = -1)
         {
+            if (Instance.IsOpen)
+            {
+                Instance.ignoreButton.onClick.Invoke();
+            }
+
             Instance.titleText.text = title;
             Instance.placeholderText.text = placeholder;
             Instance.submitText.text = submit;

@@ -23,6 +23,14 @@ namespace DanielLochner.Assets
                 }
             }
         }
+        public override void Open(bool instant = false)
+        {
+            if (IsOpen)
+            {
+                ignoreButton.onClick.Invoke();
+            }
+            base.Open(instant);
+        }
         #endregion
     }
 }

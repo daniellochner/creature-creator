@@ -11,6 +11,11 @@ namespace DanielLochner.Assets
 
         public static void Pick(Action<Color> onPick = null)
         {
+            if (Instance.IsOpen)
+            {
+                Instance.ignoreButton.onClick.Invoke();
+            }
+
             Instance.confirmButton.onClick.RemoveAllListeners();
             Instance.confirmButton.onClick.AddListener(delegate
             {
