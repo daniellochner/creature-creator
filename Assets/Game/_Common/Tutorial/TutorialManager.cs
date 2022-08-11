@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private RectTransform paintMenuRT;
         [SerializeField] private RectTransform paintButtonRT;
         [SerializeField] private RectTransform patternsRT;
-        [SerializeField] private RectTransform primaryColourButtonRT;
+        [SerializeField] private RectTransform secondaryColourButtonRT;
         [SerializeField] private RectTransform playMenuRT;
         [SerializeField] private RectTransform playButtonRT;
         [SerializeField] private RectTransform optionsHandleRT;
@@ -29,6 +29,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private UnlockableBodyPart eye;
         [SerializeField] private UnlockablePattern pattern;
         [SerializeField] private Platform platform;
+
+        private Coroutine tutorialCoroutine;
+        private string currentTutorialItem;
         #endregion
 
         #region Properties
@@ -39,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Begin()
         {
-            StartCoroutine(TutorialRoutine());
+            tutorialCoroutine = StartCoroutine(TutorialRoutine());
         }
 
         private IEnumerator TutorialRoutine()
@@ -48,94 +51,100 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return TutorialItemRoutine(
                 UnlockBodyPartRoutine(), 
-                "Unlock a body part", 
+                "Unlock A Body Part", 
                 $"Move to the highlighted body part on the ground using {MoveKeys} or {MoveToTargetButton}.", 
                 20f);
 
             yield return TutorialItemRoutine(
                 UnlockPatternRoutine(), 
-                "Unlock a pattern", 
+                "Unlock A Pattern", 
                 $"Move to the highlighted pattern on the ground using {MoveKeys} or {MoveToTargetButton}.", 
                 10f);
 
             yield return TutorialItemRoutine(
                 ReturnToEditingPlatformRoutine(), 
-                "Return to an editing platform", 
+                "Return To An Editing Platform", 
                 $"Move to the highlighted editing platform using {MoveKeys} or {MoveToTargetButton}.", 
                 20f);
 
             yield return TutorialItemRoutine(
                 SwitchToBuildModeRoutine(), 
-                "Switch to build mode", 
+                "Switch To Build Mode", 
                 "Click on the 'Build' button at the top-center of your screen.", 
                 10f);
 
+            Coroutine endTutorialCoroutine = StartCoroutine(EndTutorialRoutine()); // Tutorial is terminable once entering build mode.
+
             yield return TutorialItemRoutine(
                 AttachBodyPartRoutine(), 
-                "Attach a body part", 
-                "Drag-and-drop the highlighted body part onto your creature's body.", 
-                10f);
+                "Attach A Body Part", 
+                "Drag-and-drop a body part onto your creature's body.", 
+                15f);
 
             yield return TutorialItemRoutine(
                 RevealToolsRoutine(),
-                "Reveal tools",
+                "Reveal Build Tools",
                 "Hover over and click on your creature's body to reveal the stretch tools.",
                 10f);
 
             yield return TutorialItemRoutine(
                 AddBonesRoutine(),
-                "Add bones",
-                "Drag away from your creature's body to extend your spine.",
+                "Add Bones",
+                "Drag the stretch tools to extend your creature's spine.",
                 10f);
 
             yield return TutorialItemRoutine(
                 AddWeightRoutine(),
-                "Add weight",
+                "Add Weight",
                 "Hover over your creature's body to reveal the bone tools. Then, scroll up/down using your mouse wheel to add/remove weight.",
                 10f);
 
             yield return TutorialItemRoutine(
                 SwitchToPaintModeRoutine(),
-                "Switch to paint mode",
+                "Switch To Paint Mode",
                 "Click on the 'Paint' button at the top-center of your screen.",
                 10f);
 
             yield return TutorialItemRoutine(
                 ApplyPatternRoutine(),
-                "Apply a pattern",
-                "Click on the highlighted pattern.",
+                "Apply A Pattern",
+                "Click on a pattern to apply it to your creature.",
                 10f);
 
             yield return TutorialItemRoutine(
                 SetColourRoutine(),
-                "Set colour",
-                "Click on either the 'Primary' or 'Secondary' buttons at the bottom-right of your screen, and choose a colour using the colour picker tool.",
+                "Set A Colour",
+                "Click on the 'Primary' or 'Secondary' button at the bottom-right of your screen, and choose a colour using the colour picker tool.",
                 30f);
 
             yield return TutorialItemRoutine(
-                OpenOptionsMenuRoutine(),
-                "View options menu",
-                "Click on the arrow icon at the bottom-center of your screen.",
+                ViewOptionsMenuRoutine(),
+                "View Options Menu",
+                "Drag the menu handle, at the bottom-center of your screen, upwards. You can also click on it once to toggle the menu's state.",
                 10f);
 
             yield return TutorialItemRoutine(
                 SaveCreatureRoutine(),
-                "Save creature",
+                "Save Creature",
                 "Enter a name for your creature and then click on the 'Save' button.",
                 30f);
 
             yield return TutorialItemRoutine(
                 SwitchToPlayModeRoutine(),
-                "Switch to play mode",
+                "Switch To Play Mode",
                 "Click on the 'Play' button at the top-center of your screen.",
                 10f);
+
+            StopCoroutine(endTutorialCoroutine);
 
             yield return new WaitForSeconds(1f);
 
             InformationDialog.Inform("Tutorial Complete", "Great, you now know the basics! Go ahead and explore the world!");
-        }    
+        }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
         {
+            currentTutorialItem = textHintTitle;
+
             Coroutine textHintCoroutine = StartCoroutine(TextHintRoutine(textHintTitle, textHintMessage, textHintTime));
             yield return tutorialRoutine;
             StopCoroutine(textHintCoroutine);
@@ -144,6 +153,39 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitForSeconds(time);
             InformationDialog.Inform(title, message);
+        }
+        private IEnumerator EndTutorialRoutine()
+        {
+            bool ended = false;
+            while (!ended)
+            {
+                yield return new WaitUntil(() => !EditorManager.Instance.IsEditing);
+
+                yield return new WaitForSeconds(60f);
+
+                ConfirmationDialog.Confirm("End Tutorial?", "Looks like you've already got the hang of it! Would you like to end the tutorial?", 
+                    onYes: delegate
+                    {
+                        StopCoroutine(tutorialCoroutine);
+                        ended = true;
+
+                        MouseHint[] hints = FindObjectsOfType<MouseHint>();
+                        for (int i = 0; i < hints.Length; i++)
+                        {
+                            Destroy(hints[i].gameObject);
+                        }
+                    },
+                    onNo: delegate
+                    {
+                        InformationDialog.Inform("Continue Tutorial", $"Okay then, you still need to '{currentTutorialItem}'. Head back to an editing platform to continue!");
+                    }
+                );
+
+                if (!ended)
+                {
+                    yield return new WaitUntil(() => EditorManager.Instance.IsEditing);
+                }
+            }
         }
 
         private IEnumerator UnlockBodyPartRoutine()
@@ -178,7 +220,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPartUI bodyPartUI = bodyPartsRT.GetComponentInChildren<BodyPartUI>();
             MouseHintDrag hint = Instantiate(mouseHintDragPrefab, buildMenuRT);
-            hint.Setup(0, bodyPartUI.transform, Player.Instance.Constructor.Body, false, true);
+            hint.Setup(0, bodyPartUI.transform, Player.Instance.Constructor.Body, false, true, 1f, 1f, 1f);
 
             yield return new WaitUntil(() => Player.Instance.Constructor.Data.AttachedBodyParts.Count > 0);
             Destroy(hint.gameObject);
@@ -195,7 +237,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Transform pos1 = new GameObject().transform;
             Transform pos2 = new GameObject().transform;
-            pos1.parent = pos2.parent = Player.Instance.Editor.BackTool;
+            pos1.parent = pos2.parent = Player.Instance.Editor.BTool;
             pos1.localPosition = 0.5f * Vector3.forward;
             pos2.localPosition = 1.0f * Vector3.forward;
 
@@ -216,7 +258,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Transform bone = Player.Instance.Constructor.Bones[i];
                 hint.Setup(1, bone, true);
 
-                yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 0.25f));
+                yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 25f));
 
                 Destroy(hint.gameObject);
             }
@@ -242,31 +284,31 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator SetColourRoutine()
         {
             MouseHintClick hint = Instantiate(mouseHintClickPrefab, paintMenuRT.transform);
-            hint.Setup(0, primaryColourButtonRT, false);
+            hint.Setup(0, secondaryColourButtonRT, false);
 
             yield return new WaitUntil(() => ColourPickerDialog.Instance.IsOpen);
             Destroy(hint.gameObject);
 
             yield return new WaitUntil(() => !ColourPickerDialog.Instance.IsOpen);
         }
-        private IEnumerator OpenOptionsMenuRoutine()
+        private IEnumerator ViewOptionsMenuRoutine()
         {
             Transform pos1 = optionsHandleRT;
             Transform pos2 = new GameObject().transform;
-            pos2.parent = optionsHandleRT;
-            pos2.localPosition = Vector3.up * (optionsMenu.transform as RectTransform).sizeDelta.y;
-            pos2.parent = Dynamic.OverlayCanvas;
+            pos2.parent = EditorManager.Instance.transform;
+            pos2.position = pos1.position + (Vector3.up * (optionsMenu.transform as RectTransform).sizeDelta.y);
 
             MouseHintDrag hint = Instantiate(mouseHintDragPrefab, EditorManager.Instance.transform);
             hint.Setup(0, pos1, pos2, false, false, 0.5f, 1f, 0.5f);
 
             yield return new WaitUntil(() => optionsMenu.CurrentState == SimpleSideMenu.State.Open);
 
+            Destroy(pos2.gameObject);
             Destroy(hint.gameObject);
         }
         private IEnumerator SaveCreatureRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, saveButtonRT);
+            MouseHintClick hint = Instantiate(mouseHintClickPrefab, EditorManager.Instance.transform);
             hint.Setup(0, saveButtonRT, false);
 
             yield return new WaitUntil(() => creaturesRT.childCount > 0);

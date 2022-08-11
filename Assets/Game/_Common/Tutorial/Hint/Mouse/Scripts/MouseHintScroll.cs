@@ -5,7 +5,9 @@ namespace DanielLochner.Assets
 {
     public class MouseHintScroll : MouseHint
     {
+        #region Fields
         [SerializeField] private RectTransform arrow;
+        #endregion
 
         #region Methods
         public void Setup(int dir, Transform pos, bool inWorld)

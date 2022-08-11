@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,12 +5,15 @@ namespace DanielLochner.Assets
 {
     public abstract class MouseHint : MonoBehaviour
     {
+        #region Fields
         protected Image icon;
+        #endregion
+
+        #region Methods
         private void Awake()
         {
             icon = GetComponent<Image>();
         }
-
         protected Vector3 GetPosition(Transform target, bool inWorld)
         {
             Vector3 pos = target.position;
@@ -21,5 +23,6 @@ namespace DanielLochner.Assets
             }
             return pos;
         }
+        #endregion
     }
 }
