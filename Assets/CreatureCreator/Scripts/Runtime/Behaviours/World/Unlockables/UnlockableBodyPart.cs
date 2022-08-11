@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public string BodyPartID => bodyPartID;
         public override bool IsUnlocked => ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID);
 
         public BodyPart BodyPart => DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);

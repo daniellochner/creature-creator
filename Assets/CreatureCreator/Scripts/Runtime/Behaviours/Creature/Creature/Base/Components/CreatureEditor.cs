@@ -29,7 +29,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private MeshCollider meshCollider;
         private Mesh colliderMesh;
         private AudioSource toolsAudioSource;
-        private Transform frontTool, backTool;
         private Select select;
         private Drag drag;
         private Rigidbody rb;
@@ -57,6 +56,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureCamera Camera { get; private set; }
         
         public TransformationTools TransformationTools { get; private set; }
+        public Transform FrontTool { get; private set; }
+        public Transform BackTool { get; private set; }
 
         public BodyPartEditor PaintedBodyPart
         {
@@ -323,8 +324,8 @@ namespace DanielLochner.Assets.CreatureCreator
             // Tools
             TransformationTools = Instantiate(transformationToolsPrefab, Dynamic.Transform).GetComponent<TransformationTools>();
 
-            frontTool = Instantiate(stretchToolPrefab).transform;
-            Press frontToolPress = frontTool.GetComponentInChildren<Press>();
+            FrontTool = Instantiate(stretchToolPrefab).transform;
+            Press frontToolPress = FrontTool.GetComponentInChildren<Press>();
             frontToolPress.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
@@ -344,12 +345,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    HandleStretchTools(0, 0, frontTool);
+                    HandleStretchTools(0, 0, FrontTool);
                 }
             });
 
-            backTool = Instantiate(stretchToolPrefab).transform;
-            Press backToolPress = backTool.GetComponentInChildren<Press>();
+            BackTool = Instantiate(stretchToolPrefab).transform;
+            Press backToolPress = BackTool.GetComponentInChildren<Press>();
             backToolPress.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
@@ -369,18 +370,18 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    HandleStretchTools(Constructor.Bones.Count - 1, Constructor.Bones.Count, backTool);
+                    HandleStretchTools(Constructor.Bones.Count - 1, Constructor.Bones.Count, BackTool);
                 }
             });
             
-            frontTool.GetChild(0).localPosition = backTool.GetChild(0).localPosition = Vector3.forward * (Constructor.BoneSettings.Length / 2f + Constructor.BoneSettings.Radius + 0.05f);
+            FrontTool.GetChild(0).localPosition = BackTool.GetChild(0).localPosition = Vector3.forward * (Constructor.BoneSettings.Length / 2f + Constructor.BoneSettings.Radius + 0.05f);
         }
         private void SetupConstruction()
         {
             Constructor.OnPreDemolish += delegate ()
             {
                 // Prevent tools from being demolished along with creature.
-                frontTool.parent = backTool.parent = Dynamic.Transform;
+                FrontTool.parent = BackTool.parent = Dynamic.Transform;
                 TransformationTools.Hide();
             };
             Constructor.OnConstructBody += delegate ()
@@ -540,21 +541,21 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 });
 
-                frontTool.SetParent(Constructor.Bones[0]);
-                backTool.SetParent(Constructor.Bones[Constructor.Bones.Count - 1]);
+                FrontTool.SetParent(Constructor.Bones[0]);
+                BackTool.SetParent(Constructor.Bones[Constructor.Bones.Count - 1]);
 
-                frontTool.localPosition = backTool.localPosition = Vector3.zero;
-                frontTool.localRotation = Quaternion.Euler(0, 180, 0);
-                backTool.localRotation = Quaternion.identity;
+                FrontTool.localPosition = BackTool.localPosition = Vector3.zero;
+                FrontTool.localRotation = Quaternion.Euler(0, 180, 0);
+                BackTool.localRotation = Quaternion.identity;
 
                 // Editor
                 IsDirty = true;
             };
             Constructor.OnPreRemoveBone += delegate (int index)
             {
-                backTool.SetParent(Constructor.Bones[Constructor.Bones.Count - 2]);
-                backTool.localPosition = frontTool.localPosition = Vector3.zero;
-                backTool.localRotation = Quaternion.identity;
+                BackTool.SetParent(Constructor.Bones[Constructor.Bones.Count - 2]);
+                BackTool.localPosition = FrontTool.localPosition = Vector3.zero;
+                BackTool.localRotation = Quaternion.identity;
             };
             Constructor.OnRemoveBone += delegate (int index)
             {
@@ -688,8 +689,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetArrowsVisibility(bool isVisible)
         {
-            backTool.gameObject.SetActive(isVisible);
-            frontTool.gameObject.SetActive(isVisible);
+            BackTool.gameObject.SetActive(isVisible);
+            FrontTool.gameObject.SetActive(isVisible);
         }
 
         public void UpdateMeshCollider()
