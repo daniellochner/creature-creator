@@ -18,8 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public NetworkVariable<int> RedScore { get; private set; } = new NetworkVariable<int>(0);
         public NetworkVariable<int> BlueScore { get; private set; } = new NetworkVariable<int>(0);
-
-        public bool HasWon { get; private set; }
         #endregion
 
         #region Methods
@@ -33,28 +31,26 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateScoreboard();
             };
+
             UpdateScoreboard();
         }
         
         private void UpdateScoreboard()
         {
-            if (HasWon) return;
+            if (winCoroutine != null)
+            {
+                Reset();
+            }
 
-            scoreText.text = $"{BlueScore.Value:00}:{RedScore.Value:00}";
+            scoreText.text = $"{BlueScore.Value:00}-{RedScore.Value:00}";
             if (RedScore.Value >= 10 || BlueScore.Value >= 10)
             {
-                if (winCoroutine != null)
-                {
-                    StopCoroutine(winCoroutine);
-                }
                 winCoroutine = StartCoroutine(WinRoutine());
             }
         }
 
         private IEnumerator WinRoutine()
         {
-            HasWon = true;
-
             for (int i = 0; i < blinkCount; ++i)
             {
                 scoreText.enabled = false;
@@ -63,7 +59,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitForSeconds(blinkTime);
             }
 
-            HasWon = false;
+            Reset();
+        }
+        private void Reset()
+        {
+            StopCoroutine(winCoroutine);
+            winCoroutine = null;
+            scoreText.enabled = true;
+
             if (IsServer)
             {
                 RedScore.Value = BlueScore.Value = 0;

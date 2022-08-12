@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsServer) return;
 
-            if (other.CompareTag("Ball") && !Scoreboard.Instance.HasWon)
+            if (other.CompareTag("Ball"))
             {
                 SpawnConfettiClientRpc(other.transform.position);
                 other.GetComponent<Ball>().Teleport(start.position);
