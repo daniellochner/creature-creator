@@ -160,7 +160,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             }
         }
 
-        private void StopMovingLegs()
+        public void StopMovingLegs()
         {
             for (int i = 0; i < numPairs; ++i)
             {

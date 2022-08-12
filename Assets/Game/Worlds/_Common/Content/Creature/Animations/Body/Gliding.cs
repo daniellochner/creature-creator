@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets.CreatureCreator.Animations
 {
     public class Gliding : CreatureAnimation
     {
@@ -9,7 +9,6 @@ namespace DanielLochner.Assets.CreatureCreator
             foreach (LegAnimator leg in Creature.Legs)
             {
                 leg.Anchor.SetParent(Creature.Constructor.Root);
-                leg.Anchor.SetPositionAndRotation(Creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos), Quaternion.identity);
             }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -18,13 +17,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 leg.Anchor.SetParent(Dynamic.Transform);
             }
+
+            Walking walking = animator.GetBehaviour<Walking>();
+            if (walking != null)
+            {
+                walking.StopMovingLegs();
+            }
         }
-        //public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    foreach (LegAnimator leg in Creature.Legs)
-        //    {
-        //        leg.Anchor.SetPositionAndRotation(Creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos), Quaternion.identity);
-        //    }
-        //}
     }
 }
