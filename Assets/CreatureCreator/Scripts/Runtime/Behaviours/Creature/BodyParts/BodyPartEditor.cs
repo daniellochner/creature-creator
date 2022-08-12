@@ -327,7 +327,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual bool CanAttach(out Vector3 aPosition, out Quaternion aRotation)
         {
-            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit raycastHit) && raycastHit.collider.CompareTag("Body"))
+            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit raycastHit) && CanAttachToCollider(raycastHit.collider))
             {
                 aPosition = raycastHit.point;
                 aRotation = Quaternion.LookRotation(raycastHit.normal, CreatureEditor.transform.up);
@@ -339,6 +339,24 @@ namespace DanielLochner.Assets.CreatureCreator
                 aRotation = transform.rotation;
                 return false;
             }
+        }
+        private bool CanAttachToCollider(Collider collider)
+        {
+            // Body
+            bool tryAttachToBody = collider.CompareTag("Body");
+
+            // Body Parts
+            bool tryAttachEyeToMouth = false;
+            if (collider.CompareTag("Body Part"))
+            {
+                BodyPartConstructor bpc = collider.GetComponentInParent<BodyPartConstructor>();
+                if (BodyPartConstructor.BodyPart is Eye && (bpc != null && bpc.BodyPart is Mouth))
+                {
+                    tryAttachEyeToMouth = true;
+                }
+            }
+            
+            return tryAttachToBody || tryAttachEyeToMouth;
         }
 
         public virtual void Deselect()
