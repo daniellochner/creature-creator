@@ -365,6 +365,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             tailDynamicBone.enabled = false;
 
+            tailDynamicBone.m_Exclusions.Clear();
+            foreach (BodyPartAnimator bpa in Constructor.Root.GetComponentsInChildren<BodyPartAnimator>())
+            {
+                if (!(bpa is TailAnimator))
+                {
+                    tailDynamicBone.m_Exclusions.Add(bpa.transform);
+                }
+            }
+
             tailDynamicBone.SetupParticles();
 
             tailDynamicBone.enabled = isDamped;
