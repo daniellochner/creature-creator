@@ -11,21 +11,58 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureStatistics
     {
         #region Fields
-        public int complexity = 0;
-        public List<Diet> diets = new List<Diet>();
-        public int health = 0;
+        [SerializeField] private int complexity = 0;
+        [SerializeField] private List<Diet> diets = new List<Diet>();
+        [SerializeField] private int health = 0;
+        [SerializeField] private float weight = 0f;
         [SerializeField] private float speed = 1f;
-        public float weight = 0f;
         #endregion
 
         #region Properties
+        public int Complexity
+        {
+            get => complexity;
+            set
+            {
+                complexity = Mathf.Clamp(value, 0, 100);
+            }
+        }
+        public List<Diet> Diets
+        {
+            get => diets;
+        }
+        public int Health
+        {
+            get => health;
+            set
+            {
+                health = Mathf.Clamp(value, 0, 1000);
+            }
+        }
+        public float Weight
+        {
+            get => weight;
+            set
+            {
+                weight = Mathf.Clamp(value, 0, 1000);
+            }
+        }
+        public float Speed
+        {
+            get => speed;
+            set
+            {
+                speed = Mathf.Clamp(value, 0f, 5f);
+            }
+        }
+
         public Diet Diet
         {
             get
             {
                 Diet diet = Diet.None;
 
-                foreach (Diet d in diets)
+                foreach (Diet d in Diets)
                 {
                     if (d == Diet.Carnivore)
                     {
@@ -45,16 +82,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 return diet;
             }
-        }
-
-        public float Speed
-        {
-            get => speed;
-            set
-            {
-                speed = Mathf.Clamp(value, 0f, 5f);
-            }
-        }
+        }    
         #endregion
     }
 }

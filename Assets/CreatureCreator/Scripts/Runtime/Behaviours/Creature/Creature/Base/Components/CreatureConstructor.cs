@@ -417,7 +417,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
                 bone.SetParent(Root, false);
                 Bones.Add(bone);
-                Statistics.complexity++;
+                Statistics.Complexity++;
                 OnAddBone?.Invoke(index);
                 data.Bones.Insert(index, new Bone()
                 {
@@ -456,7 +456,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanAddBone(int index)
         {
             bool tooManyBones = Bones.Count + 1 > MinMaxBones.max;
-            bool tooComplicated = Statistics.complexity + 1 > MaxComplexity;
+            bool tooComplicated = Statistics.Complexity + 1 > MaxComplexity;
 
             return !tooManyBones && !tooComplicated;
         }
@@ -473,7 +473,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Transform bone = Bones[Bones.Count - 1];
                 Bones.Remove(bone);
                 DestroyImmediate(bone.gameObject);
-                Statistics.complexity--;
+                Statistics.Complexity--;
                 OnRemoveBone?.Invoke(index);
                 data.Bones.RemoveAt(index);
 
@@ -747,7 +747,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 weight += bpc.BodyPart.Weight;
             }
-            rb.mass = statistics.weight = weight;
+            rb.mass = statistics.Weight = weight;
         }
         #endregion
     }

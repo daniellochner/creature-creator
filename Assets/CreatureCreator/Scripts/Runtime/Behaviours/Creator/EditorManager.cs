@@ -664,7 +664,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
-            bool tooComplicated = Creature.Constructor.Statistics.complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity;
+            bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity;
             bool notEnoughCash = Creature.Editor.Cash < bodyPart.Price;
 
             if (notEnoughCash || tooComplicated)
@@ -1025,11 +1025,11 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = Creature.Constructor.Statistics;
             CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            complexityText.text = $"<b>Complexity:</b> {statistics.complexity}/{Creature.Constructor.MaxComplexity}";
+            complexityText.text = $"<b>Complexity:</b> {statistics.Complexity}/{Creature.Constructor.MaxComplexity}";
             heightText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
-            weightText.text = $"<b>Weight:</b> {Math.Round(statistics.weight, 2)}kg";
+            weightText.text = $"<b>Weight:</b> {Math.Round(statistics.Weight, 2)}kg";
             dietText.text = $"<b>Diet:</b> {statistics.Diet}";
-            healthText.text = $"<b>Health:</b> {statistics.health}";
+            healthText.text = $"<b>Health:</b> {statistics.Health}";
             speedText.text = $"<b>Speed:</b> {Math.Round(statistics.Speed, 2)}";
             bonesText.text = $"<b>Bones:</b> {Creature.Constructor.Bones.Count}";
 

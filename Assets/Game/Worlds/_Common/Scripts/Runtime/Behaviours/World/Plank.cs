@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         
         public void TryBreak(CreatureBase creature)
         {
-            if (creature.Constructor.Statistics.weight > weightThreshold)
+            if (creature.Constructor.Statistics.Weight > weightThreshold)
             {
                 if (Random.Range(0f, 1f) < breakProbability)
                 {

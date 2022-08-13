@@ -26,13 +26,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Add(stats);
 
-            stats.diets.Add(Diet);
+            stats.Diets.Add(Diet);
         }
         public override void Remove(CreatureStatistics stats)
         {
             base.Remove(stats);
 
-            stats.diets.Remove(Diet);
+            stats.Diets.Remove(Diet);
         }
         #endregion
     }
