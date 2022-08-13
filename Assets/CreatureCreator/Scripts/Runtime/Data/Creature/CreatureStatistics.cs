@@ -3,18 +3,22 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [Serializable]
     public class CreatureStatistics
     {
+        #region Fields
         public int complexity = 0;
         public List<Diet> diets = new List<Diet>();
         public int health = 0;
-        public int speed = 0;
+        [SerializeField] private float speed = 1f;
         public float weight = 0f;
+        #endregion
 
+        #region Properties
         public Diet Diet
         {
             get
@@ -42,5 +46,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 return diet;
             }
         }
+
+        public float Speed
+        {
+            get => speed;
+            set
+            {
+                speed = Mathf.Clamp(value, 0f, 5f);
+            }
+        }
+        #endregion
     }
 }

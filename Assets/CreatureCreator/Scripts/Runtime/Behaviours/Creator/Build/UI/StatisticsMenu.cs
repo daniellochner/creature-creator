@@ -31,7 +31,11 @@ namespace DanielLochner.Assets.CreatureCreator
             authorText.text = $"By {bodyPart.Author}";
             complexityText.text = bodyPart.Complexity.ToString();
             healthText.text = bodyPart.Health.ToString();
-            weightText.text = $"{Math.Round(bodyPart.Weight, 2)}kg";
+            weightText.text = $"{bodyPart.Weight}kg";
+
+            // Speed
+            speedText.transform.parent.gameObject.SetActive(bodyPart.Speed != 0);
+            speedText.text = $"{((bodyPart.Speed > 0) ? "+" : "-")}{bodyPart.Speed}";
 
             // Diet
             bool isMouth = bodyPart is Mouth;
@@ -39,14 +43,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (isMouth)
             {
                 dietText.text = (bodyPart as Mouth).Diet.ToString();
-            }
-
-            // Speed
-            bool isLeg = bodyPart is Leg;
-            speedText.transform.parent.gameObject.SetActive(isLeg);
-            if (isLeg)
-            {
-                speedText.text = (bodyPart as Leg).Speed.ToString();
             }
 
             // Abilities

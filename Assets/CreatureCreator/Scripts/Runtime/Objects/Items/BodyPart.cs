@@ -17,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int complexity;
         [SerializeField] private int health;
         [SerializeField] private float weight;
+        [SerializeField] private float speed;
         [SerializeField, Range(1, 5)] private int appeal = 1;
 
         [SerializeField] private Transformation transformations;
@@ -63,6 +64,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => weight;
             set => weight = value;
         }
+        public float Speed
+        {
+            get => speed;
+            set => speed = value;
+        }
 
         public int Appeal => appeal;
         public float PivotOffset => pivotOffset;
@@ -102,11 +108,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             stats.complexity += Complexity;
             stats.health += Health;
+            stats.Speed += Speed;
         }
         public virtual void Remove(CreatureStatistics stats)
         {
             stats.complexity -= Complexity;
             stats.health -= Health;
+            stats.Speed -= Speed;
         }
 
         public override string ToString()
