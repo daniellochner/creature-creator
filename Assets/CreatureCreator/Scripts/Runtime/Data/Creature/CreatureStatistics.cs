@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get => speed;
             set
             {
-                speed = Mathf.Clamp(value, 0f, 5f);
+                speed = Mathf.Clamp(value, 0f, 3f);
             }
         }
 
