@@ -73,8 +73,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 "Click on the 'Build' button at the top-center of your screen.", 
                 10f);
 
-            Coroutine endTutorialCoroutine = StartCoroutine(EndTutorialRoutine()); // Tutorial is terminable once entering build mode.
-
             yield return TutorialItemRoutine(
                 AttachBodyPartRoutine(), 
                 "Attach A Body Part", 
@@ -135,8 +133,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 "Click on the 'Play' button at the top-center of your screen.",
                 10f);
 
-            StopCoroutine(endTutorialCoroutine);
-
             yield return new WaitForSeconds(1f);
 
             InformationDialog.Inform("Tutorial Complete", "Great, you now know the basics! Go ahead and explore the world!");
@@ -153,39 +149,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitForSeconds(time);
             InformationDialog.Inform(title, message);
-        }
-        private IEnumerator EndTutorialRoutine()
-        {
-            bool ended = false;
-            while (!ended)
-            {
-                yield return new WaitUntil(() => !EditorManager.Instance.IsEditing);
-
-                yield return new WaitForSeconds(60f);
-
-                ConfirmationDialog.Confirm("End Tutorial?", "Looks like you've already got the hang of it! Would you like to end the tutorial?", 
-                    onYes: delegate
-                    {
-                        StopCoroutine(tutorialCoroutine);
-                        ended = true;
-
-                        MouseHint[] hints = FindObjectsOfType<MouseHint>();
-                        for (int i = 0; i < hints.Length; i++)
-                        {
-                            Destroy(hints[i].gameObject);
-                        }
-                    },
-                    onNo: delegate
-                    {
-                        InformationDialog.Inform("Continue Tutorial", $"Okay then, you still need to '{currentTutorialItem}'. Head back to an editing platform to continue!");
-                    }
-                );
-
-                if (!ended)
-                {
-                    yield return new WaitUntil(() => EditorManager.Instance.IsEditing);
-                }
-            }
         }
 
         private IEnumerator UnlockBodyPartRoutine()
