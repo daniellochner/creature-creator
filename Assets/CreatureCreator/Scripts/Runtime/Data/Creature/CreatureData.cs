@@ -74,5 +74,22 @@ namespace DanielLochner.Assets.CreatureCreator
             set => metallic = value;
         }
         #endregion
+
+        #region Methods
+        public void Reset()
+        {
+            name = "";
+            bones.Clear();
+            attachedBodyParts.Clear();
+
+            patternID = "";
+            scale = Vector2.one;
+            offset = new Vector2(0.25f, 0f);
+            primaryColour = Color.white;
+            secondaryColour = Color.black;
+            shine = 0f;
+            metallic = 0f;
+        }
+        #endregion
     }
 }

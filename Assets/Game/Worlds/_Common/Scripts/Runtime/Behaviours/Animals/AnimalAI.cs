@@ -57,6 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup()
         {
             Creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
+            Agent.speed *= Creature.Constructor.Statistics.Speed;
         }
 
         public virtual void Follow(Transform target)

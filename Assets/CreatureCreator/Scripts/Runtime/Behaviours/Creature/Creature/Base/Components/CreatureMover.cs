@@ -17,8 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private bool requestToMove;
-        [SerializeField] private float moveSpeed;
-        [SerializeField] private float turnSpeed;
+        [SerializeField] private float baseMovementSpeed;
+        [SerializeField] private float baseTurnSpeed;
         [SerializeField] private float moveSmoothTime;
         [SerializeField] private float turnSmoothTime;
         [SerializeField] private float angleToMove;
@@ -59,6 +59,15 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen;
             }
+        }
+
+        private float MoveSpeed
+        {
+            get => baseMovementSpeed * Constructor.Statistics.Speed;
+        }
+        private float TurnSpeed
+        {
+            get => baseTurnSpeed;
         }
         #endregion
 
@@ -186,7 +195,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
 
                     direction = displacement.normalized;
-                    canTurn = displacement.magnitude > moveSpeed * moveSmoothTime;
+                    canTurn = displacement.magnitude > MoveSpeed * moveSmoothTime;
                     canMove = canTurn;
 
                     break;
@@ -241,13 +250,13 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Move(Vector3 direction)
         {
-            Vector3 displacement = direction * moveSpeed * Time.fixedDeltaTime;
+            Vector3 displacement = direction * MoveSpeed * Time.fixedDeltaTime;
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
             rigidbody.position += moveDisplacement;
         }
         public void Turn(float angle)
         {
-            Quaternion rotation = Quaternion.Euler(0f, angle * turnSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 0f);
+            Quaternion rotation = Quaternion.Euler(0f, angle * baseTurnSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 0f);
             rigidbody.rotation *= rotation;
         }
 

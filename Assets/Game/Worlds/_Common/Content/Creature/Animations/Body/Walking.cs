@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         [SerializeField] private float maxPitch;
 
         [Header("Legs")]
-        [SerializeField] private float timeToMove;
+        [SerializeField] private float baseTimeToMove;
         [SerializeField] private float stepHeightFactor;
         [SerializeField] private float liftHeightFactor;
 
@@ -35,6 +35,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Properties
         private float LSpeed => m_Animator.GetFloat("%LSpeed");
         private float ASpeed => m_Animator.GetFloat("%ASpeed");
+
+        private float TimeToMove
+        {
+            get => baseTimeToMove/* / Creature.Constructor.Statistics.Speed*/;
+        }
         #endregion
 
         #region Methods
@@ -88,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             }
 
             // Determine the time to move for each leg
-            maxTime = maxFrequency * timeToMove;
+            maxTime = maxFrequency * TimeToMove;
             times = new float[numPairs];
             for (int i = 0; i < times.Length; ++i)
             {

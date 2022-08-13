@@ -82,7 +82,18 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 return diet;
             }
-        }    
+        }
+        #endregion
+
+        #region Methods
+        public void Reset()
+        {
+            complexity = 0;
+            diets.Clear();
+            health = 0;
+            weight = 0f;
+            speed = 1f;
+        }
         #endregion
     }
 }

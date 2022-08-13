@@ -645,6 +645,7 @@ MonoBehaviour:
   informer: {fileID: 6322874144728097388}
   spawner: {fileID: 8685507389503379873}
   rb: {fileID: 7586173872509542935}
+  velocity: {fileID: 4729922523030418566}
   namer: {fileID: 4012423436152039703}
   deathMessenger: {fileID: 7151558922526411801}
   messenger: {fileID: 8269862162959058614}
@@ -666,8 +667,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requestToMove: 0
-  moveSpeed: 2
-  turnSpeed: 120
+  baseMovementSpeed: 2
+  baseTurnSpeed: 120
   moveSmoothTime: 0.5
   turnSmoothTime: 0.5
   angleToMove: 60
@@ -822,6 +823,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4729922523030418566 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8166579178745960686, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 3526752849064750184}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6322874144728097388 stripped

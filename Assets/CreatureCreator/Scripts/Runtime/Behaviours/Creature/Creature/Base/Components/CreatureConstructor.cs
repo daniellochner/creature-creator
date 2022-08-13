@@ -157,8 +157,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Root.localPosition = Vector3.zero;
             Bones.Clear();
 
-            data = new CreatureData();
-            statistics = new CreatureStatistics();
+            data.Reset();
+            statistics.Reset();
+            dimensions.Reset();
         }
 
         private void ConstructBody()
