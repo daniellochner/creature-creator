@@ -12776,7 +12776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c91c05ff32fd7345b3ca4afbe2eb0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnerSource: 1
   creatureEncryptionKey: {fileID: 11400000, guid: d7aa960d9aa6b10499e23d730ed7d054, type: 2}
   boxCreaturePrefab: {fileID: -5428230303113445427, guid: d764e54900a9580439594b59e1cdd29f, type: 3}
   boxCreaturesRoot: {fileID: 2133011056}
@@ -12784,7 +12783,6 @@ MonoBehaviour:
   spawnerAudioSource: {fileID: 1036337911}
   prepareAudioClip: {fileID: 8300000, guid: b0129a799ee094c4093c7c3a0d764e48, type: 3}
   spawnAudioClip: {fileID: 8300000, guid: 3fdbf0081b30d5242aedc9fcf7add82e, type: 3}
-  creatureTextAssets: []
   spawnCooldown: 5
   spawnStart: 2.5
   rotationOffset: 15
@@ -13094,6 +13092,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 976343776123781895, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444259766593471702, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444259766593471702, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444259766593471702, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444259766593471702, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444259766593471702, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2111497152140117428, guid: 75de7c4210aaa7647bc61d8a1a13e1ac, type: 3}
@@ -13881,8 +13899,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 0, y: -60}
+  m_AnchoredPosition: {x: 0, y: 7.5}
+  m_SizeDelta: {x: 0, y: -135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064926821
 MonoBehaviour:

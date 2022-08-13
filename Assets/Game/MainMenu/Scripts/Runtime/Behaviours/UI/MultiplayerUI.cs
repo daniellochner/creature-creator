@@ -239,6 +239,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
+                // Version
+                string version = lobby.Data["version"].Value;
+                if (!version.Equals(Application.version))
+                {
+                    throw new Exception($"Version ({Application.version}) different to host ({version}).");
+                }
+
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
                 SetConnectionData(username, password);
