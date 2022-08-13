@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI authorText;
         [SerializeField] private TextMeshProUGUI complexityText;
         [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private TextMeshProUGUI weightText;
         [SerializeField] private TextMeshProUGUI dietText;
         [SerializeField] private TextMeshProUGUI speedText;
         [SerializeField] private TextMeshProUGUI abilitiesText;
@@ -29,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
             authorText.text = $"By {bodyPart.Author}";
             complexityText.text = bodyPart.Complexity.ToString();
             healthText.text = bodyPart.Health.ToString();
+            weightText.text = $"{Math.Round(bodyPart.Weight, 2)}kg";
 
             // Diet
             bool isMouth = bodyPart is Mouth;

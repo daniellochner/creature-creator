@@ -119,7 +119,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ViewOptionsMenuRoutine(),
                 "(12/14) View Options Menu",
                 "Drag the menu handle, at the bottom-center of your screen, upwards. You can also click on it once to toggle the menu's state.",
-                10f);
+                15f);
 
             yield return TutorialItemRoutine(
                 SaveCreatureRoutine(),
@@ -135,7 +135,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return new WaitForSeconds(1f);
 
-            InformationDialog.Inform("Tutorial Complete", "Great, you now know the basics! Go ahead and explore the world!");
+            InformationDialog.Inform("Tutorial Complete!", "Great, you now know the basics! Go ahead and explore the world!");
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
         {
@@ -259,7 +259,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Transform pos1 = optionsHandleRT;
             Transform pos2 = new GameObject().transform;
             pos2.parent = EditorManager.Instance.transform;
-            pos2.position = pos1.position + (Vector3.up * (optionsMenu.transform as RectTransform).sizeDelta.y);
+            pos2.position = pos1.position + (Vector3.up * (optionsMenu.transform as RectTransform).rect.height);
 
             MouseHintDrag hint = Instantiate(mouseHintDragPrefab, EditorManager.Instance.transform);
             hint.Setup(0, pos1, pos2, false, false, 0.5f, 1f, 0.5f);
