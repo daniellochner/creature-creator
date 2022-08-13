@@ -51,85 +51,85 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return TutorialItemRoutine(
                 UnlockBodyPartRoutine(), 
-                "Unlock A Body Part", 
+                "(1/14) Unlock A Body Part", 
                 $"Move to the highlighted body part on the ground using {MoveKeys} or {MoveToTargetButton}.", 
                 20f);
 
             yield return TutorialItemRoutine(
-                UnlockPatternRoutine(), 
-                "Unlock A Pattern", 
+                UnlockPatternRoutine(),
+                "(2/14) Unlock A Pattern", 
                 $"Move to the highlighted pattern on the ground using {MoveKeys} or {MoveToTargetButton}.", 
                 10f);
 
             yield return TutorialItemRoutine(
-                ReturnToEditingPlatformRoutine(), 
-                "Return To An Editing Platform", 
+                ReturnToEditingPlatformRoutine(),
+                "(3/14) Return To An Editing Platform", 
                 $"Move to the highlighted editing platform using {MoveKeys} or {MoveToTargetButton}.", 
                 20f);
 
             yield return TutorialItemRoutine(
-                SwitchToBuildModeRoutine(), 
-                "Switch To Build Mode", 
+                SwitchToBuildModeRoutine(),
+                "(4/14) Switch To Build Mode", 
                 "Click on the 'Build' button at the top-center of your screen.", 
                 10f);
 
             yield return TutorialItemRoutine(
-                AttachBodyPartRoutine(), 
-                "Attach A Body Part", 
+                AttachBodyPartRoutine(),
+                "(5/14) Attach A Body Part", 
                 "Drag-and-drop a body part onto your creature's body.", 
                 15f);
 
             yield return TutorialItemRoutine(
                 RevealToolsRoutine(),
-                "Reveal Build Tools",
+                "(6/14) Reveal Build Tools",
                 "Hover over and click on your creature's body to reveal the stretch tools.",
                 10f);
 
             yield return TutorialItemRoutine(
                 AddBonesRoutine(),
-                "Add Bones",
+                "(7/14) Add Bones",
                 "Drag the stretch tools to extend your creature's spine.",
                 10f);
 
             yield return TutorialItemRoutine(
                 AddWeightRoutine(),
-                "Add Weight",
+                "(8/14) Add Weight",
                 "Hover over your creature's body to reveal the bone tools. Then, scroll up/down using your mouse wheel to add/remove weight.",
                 20f);
 
             yield return TutorialItemRoutine(
                 SwitchToPaintModeRoutine(),
-                "Switch To Paint Mode",
+                "(9/14) Switch To Paint Mode",
                 "Click on the 'Paint' button at the top-center of your screen.",
                 10f);
 
             yield return TutorialItemRoutine(
                 ApplyPatternRoutine(),
-                "Apply A Pattern",
+                "(10/14) Apply A Pattern",
                 "Click on a pattern to apply it to your creature.",
                 10f);
 
             yield return TutorialItemRoutine(
                 SetColourRoutine(),
-                "Set A Colour",
+                "(11/14) Set A Colour",
                 "Click on the 'Primary' or 'Secondary' button at the bottom-right of your screen, and choose a colour using the colour picker tool.",
                 30f);
 
             yield return TutorialItemRoutine(
                 ViewOptionsMenuRoutine(),
-                "View Options Menu",
+                "(12/14) View Options Menu",
                 "Drag the menu handle, at the bottom-center of your screen, upwards. You can also click on it once to toggle the menu's state.",
                 10f);
 
             yield return TutorialItemRoutine(
                 SaveCreatureRoutine(),
-                "Save Creature",
+                "(13/14) Save Creature",
                 "Enter a name for your creature and then click on the 'Save' button.",
                 30f);
 
             yield return TutorialItemRoutine(
                 SwitchToPlayModeRoutine(),
-                "Switch To Play Mode",
+                "(14/14) Switch To Play Mode",
                 "Click on the 'Play' button at the top-center of your screen.",
                 10f);
 
