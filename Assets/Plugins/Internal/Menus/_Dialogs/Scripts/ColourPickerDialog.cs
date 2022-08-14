@@ -9,12 +9,14 @@ namespace DanielLochner.Assets
         [SerializeField] private FlexibleColorPicker colorPicker;
         [SerializeField] private Button confirmButton;
 
-        public static void Pick(Action<Color> onPick = null)
+        public static void Pick(Color start, Action<Color> onPick = null)
         {
             if (Instance.IsOpen)
             {
                 Instance.ignoreButton.onClick.Invoke();
             }
+
+            Instance.colorPicker.color = start;
 
             Instance.confirmButton.onClick.RemoveAllListeners();
             Instance.confirmButton.onClick.AddListener(delegate

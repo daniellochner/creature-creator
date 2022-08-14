@@ -60,11 +60,10 @@ namespace DanielLochner.Assets
                     });
                     colourUI.ClickUI.OnRightClick.AddListener(delegate
                     {
-                        ColourPickerDialog.Pick(delegate (Color c)
+                        ColourPickerDialog.Pick(colour, delegate(Color c)
                         {
                             colour = c;
                             colourUI.SetColour(c);
-                            SetColour(c, true);
                         });
 
                         //InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", onSubmit: delegate (string colourHEX)
@@ -105,7 +104,7 @@ namespace DanielLochner.Assets
 
         public void PickColour()
         {
-            ColourPickerDialog.Pick(delegate (Color c)
+            ColourPickerDialog.Pick(Colour, delegate(Color c)
             {
                 SetColour(c, true);
             });
