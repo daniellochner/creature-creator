@@ -17,6 +17,15 @@ namespace DanielLochner.Assets
             }
 
             Instance.colorPicker.color = start;
+            if (start == Color.white)
+            {
+                Instance.colorPicker.ChangeMode(FlexibleColorPicker.MainPickingMode.HS);
+            }
+            else 
+            if (start == Color.black)
+            {
+                Instance.colorPicker.ChangeMode(FlexibleColorPicker.MainPickingMode.HV);
+            }
 
             Instance.confirmButton.onClick.RemoveAllListeners();
             Instance.confirmButton.onClick.AddListener(delegate
