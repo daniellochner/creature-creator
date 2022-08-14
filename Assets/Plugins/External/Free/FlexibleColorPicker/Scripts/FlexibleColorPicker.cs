@@ -300,6 +300,7 @@ public class FlexibleColorPicker : MonoBehaviour {
     /// Softly sanitize hex color input and apply it
     /// </summary>
     public void TypeHex(string input) {
+        typeUpdate = false;
         TypeHex(input, false);
 
         UpdateTextures();
