@@ -1,24 +1,24 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SetupGame : MonoBehaviourSingleton<SetupGame>
+    public class GameSetup : MonoBehaviourSingleton<GameSetup>
     {
         #region Fields
         [SerializeField] private NetworkObject playerPrefab;
-        [SerializeField] private NetworkObject[] helpers;
-
         [SerializeField] private Platform startingPlatform;
+
+        [Header("Multiplayer")]
+        [SerializeField] private NetworkObject[] helpers;
         #endregion
 
         #region Properties
-        public static bool IsMultiplayer { get; set; }
+        public bool IsMultiplayer => WorldManager.Instance.World is WorldMP;
         #endregion
 
         #region Methods
@@ -33,22 +33,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            if (NetworkManager.Singleton.IsServer)
+            if (NetworkManager.Singleton.IsHost)
             {
-                foreach (NetworkObject helper in helpers)
-                {
-                    Instantiate(helper).Spawn();
-                }
-                
-                NetworkHostManager.Instance.SpawnPosition = startingPlatform.Position;
-                NetworkHostManager.Instance.SpawnRotation = startingPlatform.Rotation;
-                
-
-                if (NetworkManager.Singleton.IsHost)
-                {
-                    NetworkObject obj = Instantiate(playerPrefab, startingPlatform.Position, startingPlatform.Rotation);
-                    obj.SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
-                }
+                NetworkObject obj = Instantiate(playerPrefab, startingPlatform.Position, startingPlatform.Rotation);
+                obj.SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
             }
 
             if (IsMultiplayer)
@@ -62,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.Setup();
 
-            if (ProgressManager.Data.UnlockedBodyParts.Count == 0 && !EditorManager.Instance.CreativeMode && SettingsManager.Data.Tutorial)
+            if ((ProgressManager.Data.UnlockedBodyParts.Count == 0) && (ProgressManager.Data.UnlockedPatterns.Count == 0) && !EditorManager.Instance.CreativeMode && SettingsManager.Data.Tutorial)
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Play, true);
                 TutorialManager.Instance.Begin();
@@ -74,6 +62,17 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetupMP()
         {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                NetworkHostManager.Instance.SpawnPosition = startingPlatform.Position;
+                NetworkHostManager.Instance.SpawnRotation = startingPlatform.Rotation;
+
+                foreach (NetworkObject helper in helpers)
+                {
+                    Instantiate(helper).Spawn();
+                }
+            }
+            
             NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
@@ -81,7 +80,9 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkInactivityManager.Instance.OnInactivityKick += OnInactivityKick;
             NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
 
-            World world = new World(LobbyHelper.Instance.JoinedLobby);
+
+            WorldMP world = WorldManager.Instance.World as WorldMP;
+
             if (NetworkManager.Singleton.IsHost)
             {
                 if (world.IsPrivate)
@@ -99,19 +100,38 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
             }
+
             NetworkPlayersManager.Instance.Setup(world.Id);
 
+            EditorManager.Instance.CreativeMode = world.CreativeMode;
             EditorManager.Instance.CheckForProfanity = !world.AllowProfanity;
         }
         public void SetupSP()
         {
+            WorldSP world = WorldManager.Instance.World as WorldSP;
+
             foreach (NPCSpawner npc in NPCSpawner.Spawners)
             {
                 npc.Spawn();
             }
+
+            EditorManager.Instance.CreativeMode = world.CreativeMode;
         }
 
         public void Shutdown()
+        {
+            if (IsMultiplayer)
+            {
+                ShutdownMP();
+            }
+            else
+            {
+                ShutdownSP();
+            }
+
+            WorldManager.Instance.World = null;
+        }
+        public void ShutdownMP()
         {
             NetworkShutdownManager.Instance.OnUncontrolledShutdown -= OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown -= OnUncontrolledClientShutdown;
@@ -119,6 +139,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             NetworkInactivityManager.Instance.OnInactivityKick -= OnInactivityKick;
             NetworkInactivityManager.Instance.OnInactivityWarn -= OnInactivityWarn;
+        }
+        public void ShutdownSP()
+        {
+
         }
 
         private void OnUncontrolledShutdown()

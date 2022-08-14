@@ -34,14 +34,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 multiplayerUI.Join(lobby.Id);
             });
 
-            World world = new World(lobby);
-            mapText.text = world.MapName;
+            WorldMP world = new WorldMP(lobby);
+            mapText.text = world.MapName; // TODO: for now... just have as map name
+            //mapText.text = $"{world.MapName} ({FormatMode(world.CreativeMode)})";
 
             infoButton.onClick.AddListener(delegate
             {
                 InformationDialog.Inform(world.WorldName, 
                     $"<b>Version:</b> {world.Version}<br>" +
                     $"<b>Map:</b> {world.MapName}<br>" + 
+                    //$"<b>Mode:</b> {FormatMode(world.CreativeMode)}<br>" + // TODO: re-add this
                     //$"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>NPCs:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
                     $"<b>PVE:</b> {FormatEnabled(world.EnablePVE)}<br>" +
@@ -52,6 +54,10 @@ namespace DanielLochner.Assets.CreatureCreator
             padlockIcon.SetActive(world.IsPasswordProtected);
         }
 
+        private string FormatMode(bool isCreativeMode)
+        {
+            return isCreativeMode ? "Creative" : "Adventure";
+        }
         private string FormatEnabled(bool isEnabled)
         {
             return isEnabled ? "Enabled" : "Disabled";

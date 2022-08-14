@@ -3,10 +3,12 @@
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class World
+    public class WorldManager : MonoBehaviourSingleton<WorldManager>
     {
-        #region Properties
-        public bool CreativeMode { get; protected set; }
-        #endregion
+        public World World
+        {
+            get;
+            set;
+        }
     }
 }

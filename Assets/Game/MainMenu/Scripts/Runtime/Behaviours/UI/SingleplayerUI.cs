@@ -22,25 +22,13 @@ namespace DanielLochner.Assets.CreatureCreator
             MapManager.Instance.Map = defaultMap;
             Play();
         }
-        public void PlaySandbox()
-        {
-            if (!ProgressManager.Instance.IsComplete)
-            {
-                InformationDialog.Inform("Sandbox Locked", "You must collect all parts and patterns before you may access the sandbox!");
-            }
-            else
-            {
-                MapManager.Instance.Map = "Sandbox";
-                Play();
-            }
-        }
 
         public void Play()
         {
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData(usernameInputField.text, "")));
 
-            SetupGame.IsMultiplayer = false;
+            WorldManager.Instance.World = new WorldSP(false); // TODO: Use CreativeMode OptionSelector
 
             NetworkManager.Singleton.StartHost();
         }

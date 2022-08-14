@@ -3,10 +3,13 @@
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class World
+    public class WorldSP : World
     {
-        #region Properties
-        public bool CreativeMode { get; protected set; }
+        #region Methods
+        public WorldSP(bool creativeMode)
+        {
+            CreativeMode = creativeMode;
+        }
         #endregion
     }
 }

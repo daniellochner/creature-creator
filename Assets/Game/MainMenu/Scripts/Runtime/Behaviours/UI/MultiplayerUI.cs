@@ -276,7 +276,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Play();
                 NetworkManager.Singleton.StartClient();
             }
-            catch (NullReferenceException nre)
+            catch (NullReferenceException)
             {
                 UpdateNetworkStatus("Lobby error.", Color.red); // TODO: Bug with Lobby returning NullReferenceException?
                 IsConnecting = false;
@@ -308,6 +308,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool spawnNPC = npcToggle.isOn;
                 bool enablePVE = pveToggle.isOn;
                 bool allowProfanity = profanityToggle.isOn;
+                bool creativeMode = false; // TODO: change to use option selector
 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
@@ -344,6 +345,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "enablePVE", new DataObject(DataObject.VisibilityOptions.Public, enablePVE.ToString()) },
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
+                        { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) }
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
@@ -376,7 +378,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
-                    World world = new World(lobby);
+                    WorldMP world = new WorldMP(lobby);
                     if (!world.IsPrivate)
                     {
                         Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
@@ -424,7 +426,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Play()
         {
             MapManager.Instance.Map = mapOS.Options[mapOS.Selected].Name;
-            SetupGame.IsMultiplayer = true;
+            WorldManager.Instance.World = new WorldMP(LobbyHelper.Instance.JoinedLobby);
         }
 
         public void SortBy()
