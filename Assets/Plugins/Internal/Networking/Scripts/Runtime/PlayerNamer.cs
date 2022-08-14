@@ -35,6 +35,8 @@ namespace DanielLochner.Assets
             if (!IsOwner)
             {
                 nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
+                nameGO.SetActive(false);
+
                 SetNameServerRpc(OwnerClientId, NetworkManager.Singleton.LocalClientId);
             }
         }
