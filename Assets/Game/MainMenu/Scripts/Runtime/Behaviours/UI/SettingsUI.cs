@@ -83,7 +83,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Name = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
                 });
-                if (resolution.Equals(Screen.currentResolution))
+
+                if (resolution.Equals(SettingsManager.Data.Resolution))
                 {
                     resolutionOS.Select(i, false);
                 }
@@ -294,7 +295,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Background Music
             inGameMusicOS.SetupUsingEnum<InGameMusicType>();
-            inGameMusicOS.Select(SettingsManager.Data.InGameMusic, false);
             inGameMusicOS.OnSelected.AddListener(delegate (int option)
             {
                 InGameMusicType type = (InGameMusicType)option;
@@ -319,6 +319,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(music));
                 }
             });
+            inGameMusicOS.Select(SettingsManager.Data.InGameMusic, inGame);
             #endregion
 
             #region Gameplay
