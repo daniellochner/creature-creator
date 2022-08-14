@@ -5534,6 +5534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9082a581c503f488c3f8d23c80bf54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UI: {fileID: 0}
 --- !u!1 &516511605
 GameObject:
   m_ObjectHideFlags: 0
@@ -6733,6 +6734,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 625751619}
+  - component: {fileID: 625751620}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -6759,6 +6761,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!225 &625751620
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625751618}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &626848021
 GameObject:
   m_ObjectHideFlags: 0
@@ -16644,6 +16658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9082a581c503f488c3f8d23c80bf54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UI: {fileID: 625751620}
 --- !u!1 &1304098353
 GameObject:
   m_ObjectHideFlags: 0

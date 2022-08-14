@@ -8,10 +8,19 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class MiscUI : MonoBehaviour
     {
-        private IEnumerator Start()
+        #region Fields
+        [SerializeField] private CanvasGroup m_UI;
+        private bool m_IsVisible = true;
+        #endregion
+
+        #region Methods
+        private void Update()
         {
-            yield return new WaitForSeconds(1f);
-            RoadmapMenu.Instance.Open();
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))
+            {
+                m_IsVisible = !m_IsVisible;
+                StartCoroutine(m_UI.Fade(m_IsVisible, 0.25f));
+            }
         }
 
         public void SubscribeToYouTubeChannel()
@@ -46,5 +55,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConfirmationDialog.Confirm("Quit", "Are you sure you want to exit this application?", onYes: Application.Quit);
         }
+        #endregion
     }
 }
