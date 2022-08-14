@@ -24,5 +24,19 @@ namespace DanielLochner.Assets.CreatureCreator
             messenger = GetComponent<PlayerMessenger>();
         }
 #endif
+
+        public override void OnShow()
+        {
+            base.OnShow();
+
+            Messenger.enabled = true;
+        }
+
+        public override void OnHide()
+        {
+            base.OnHide();
+
+            Messenger.enabled = false;
+        }
     }
 }
