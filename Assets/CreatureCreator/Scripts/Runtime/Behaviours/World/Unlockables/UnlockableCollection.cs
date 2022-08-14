@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return PlayerPrefs.GetInt(collectionId) == 1;
+                return PlayerPrefs.GetInt(collectionId) == 1 || EditorManager.Instance.CreativeMode;
                 //List<Item> tmp = new List<Item>(items);
                 //foreach (Item item in items)
                 //{

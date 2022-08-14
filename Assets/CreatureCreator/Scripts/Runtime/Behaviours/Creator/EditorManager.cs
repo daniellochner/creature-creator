@@ -20,8 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class EditorManager : MonoBehaviourSingleton<EditorManager>
     {
         #region Fields
-        [SerializeField] private bool unlockAllBodyParts;
-        [SerializeField] private bool unlockAllPatterns;
+        [SerializeField] private bool creativeMode;
         [SerializeField] private bool checkForProfanity;
         [SerializeField] private SecretKey creatureEncryptionKey;
 
@@ -101,6 +100,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 Creature.Messenger.CheckForProfanity = checkForProfanity;
             }
         }
+        public bool CreativeMode
+        {
+            get => creativeMode;
+            set => creativeMode = value;
+        }
 
         public bool IsEditing => isEditing;
         public bool IsBuilding => buildMenu.IsOpen;
@@ -140,7 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             // Build
             List<string> unlockedBodyParts = null;
-            if (unlockAllBodyParts)
+            if (CreativeMode)
             {
                 unlockedBodyParts = DatabaseManager.GetDatabase("Body Parts").Objects.Keys.ToList();
             }
@@ -204,7 +208,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Paint
             patternMaterial = new Material(patternMaterial);
             List<string> unlockedPatterns = null;
-            if (unlockAllPatterns)
+            if (CreativeMode)
             {
                 unlockedPatterns = DatabaseManager.GetDatabase("Patterns").Objects.Keys.ToList();
             }
@@ -603,7 +607,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
         {
             // Load Conditions
-            bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || string.IsNullOrEmpty(creatureData.PatternID);
+            bool patternIsUnlocked = (ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode) || string.IsNullOrEmpty(creatureData.PatternID);
 
             bool bodyPartsAreUnlocked = true;
             int totalCost = 0, totalComplexity = 0;
@@ -620,7 +624,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPartsAreUnlocked = false;
                 }
 
-                if (!ProgressManager.Data.UnlockedBodyParts.Contains(attachedBodyPart.bodyPartID))
+                if (!ProgressManager.Data.UnlockedBodyParts.Contains(attachedBodyPart.bodyPartID) && !CreativeMode)
                 {
                     bodyPartsAreUnlocked = false;
                 }
@@ -690,7 +694,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Unlocks
         public void UnlockPattern(string patternID, bool notify = true)
         {
-            if (ProgressManager.Data.UnlockedPatterns.Contains(patternID)) return;
+            if (ProgressManager.Data.UnlockedPatterns.Contains(patternID) || CreativeMode) return;
 
             ProgressManager.Data.UnlockedPatterns.Add(patternID);
 
@@ -709,7 +713,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UnlockBodyPart(string bodyPartID, bool notify = true)
         {
-            if (ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID)) return;
+            if (ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID) || CreativeMode) return;
 
             ProgressManager.Data.UnlockedBodyParts.Add(bodyPartID);
 

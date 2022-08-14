@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public string PatternID => patternID;
-        public override bool IsUnlocked => ProgressManager.Data.UnlockedPatterns.Contains(patternID);
+        public override bool IsUnlocked => ProgressManager.Data.UnlockedPatterns.Contains(patternID) || EditorManager.Instance.CreativeMode;
 
         public Texture2D Pattern => DatabaseManager.GetDatabaseEntry<Texture2D>("Patterns", patternID);
         #endregion
