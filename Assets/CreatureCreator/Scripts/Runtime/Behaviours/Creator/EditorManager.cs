@@ -1137,11 +1137,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetVisibility(!isVisible);
             }
-            else
-            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Respawn))
-            {
-                Creature.Health.TakeDamage(Creature.Health.Health);
-            }
         }
         private void HandlePaintShortcuts()
         {
