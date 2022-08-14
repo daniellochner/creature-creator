@@ -271,7 +271,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (i < LimbConstructor.Bones.Length - 1)
                 {
                     boneConstraints[i].worldUpObject = CreatureEditor.transform;
-                    boneConstraints[i].useUpObject = true;
                 }
             }
 
