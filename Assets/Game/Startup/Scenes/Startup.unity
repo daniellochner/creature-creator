@@ -679,6 +679,10 @@ PrefabInstance:
         patterns will temporarily be unlocked (upon overcoming your first obstacle)."
       objectReference: {fileID: 0}
     - target: {fileID: 2142696549228924175, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontStyle
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 2142696549228924175, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_fontColor.a
       value: 0.5019608
       objectReference: {fileID: 0}
@@ -697,6 +701,10 @@ PrefabInstance:
     - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_text
       value: 01/08 - Early Bird
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontStyle
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_fontColor.a
@@ -818,12 +826,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2142696549228924175, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_text
-      value: "The major release of the open world \u201CFarm\u201D map! At this point,
-        all of the core content will be included in the game and it will be in \u201CRelease
-        Candidate\u201D phase! Parts and patterns will now be scattered throughout
-        both maps to be collected. Don\u2019t worry though \u2014 your existing creatures
-        will be safe \u2014 you\u2019ll just need to unlock the relevant parts and
-        patterns to be able to reconstruct them!"
+      value: "The major release of the map, \"Farm\"! At this point, all of the core
+        content will be included in the game and it will be in \"Release Candidate\"
+        phase! There will now be two separate modes: \"Creative\" and \"Adventure\"
+        mode. In \"Creative\" mode, all parts and patterns will be unlocked at all
+        times, and so you can construct all existing creatures. In \"Adventure\"
+        mode, parts and patterns will be scattered throughout the maps to be collected.
+        Don\u2019t worry though... your existing creatures will be safe! You\u2019ll
+        just need to unlock the relevant parts and patterns to be able to reconstruct
+        them!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3419089290683184872, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_IsOn
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3419089290683184872, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_Group
@@ -871,7 +886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6689952686198428457, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 190
+      value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 6689952686198428457, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -971,8 +986,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 57.5, y: -57.500244}
-  m_SizeDelta: {x: 10, y: -207.5}
+  m_AnchoredPosition: {x: 57.5, y: -60}
+  m_SizeDelta: {x: 10, y: -160.00014}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &467651051
 MonoBehaviour:
@@ -2260,11 +2275,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2142696549228924175, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_fontStyle
-      value: 0
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 2142696549228924175, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontColor.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2142696549228924175, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 2149983782
       objectReference: {fileID: 0}
     - target: {fileID: 3419089290683184872, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_IsOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3419089290683184872, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_Group
@@ -2273,6 +2296,18 @@ PrefabInstance:
     - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_text
       value: 07/08 - Over-powered
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontStyle
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontColor.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689952685920363983, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 2149983782
       objectReference: {fileID: 0}
     - target: {fileID: 6689952686198428456, guid: 5ccd674d2f098774a9c9e4d7271c2a3a, type: 3}
       propertyPath: m_Name
@@ -4794,7 +4829,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8052076555139070324}
   m_HandleRect: {fileID: 8052076555139070323}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0.3970588
   m_Size: 0.66
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4941,7 +4976,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 205}
   m_SizeDelta: {x: 0, y: 1000}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &8052076556594734883
