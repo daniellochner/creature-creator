@@ -39,15 +39,15 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void LateUpdate()
         {
-            HandlePosition();
-            HandleVisibility();
+            if (informationMenu != null)
+            {
+                HandlePosition();
+                HandleVisibility();
+            }
         }
         private void OnDisable()
         {
-            if (Application.isPlaying)
-            {
-                SetSelected(false, true);
-            }
+            SetSelected(false, true);
         }
 
         private void Initialize()
@@ -65,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandlePosition()
         {
-            if (informationMenu != null && informationMenu.IsVisible)
+            if (informationMenu.IsVisible)
             {
                 Vector3 position = transform.position + transform.up * Collider.Height;
                 informationMenu.transform.position = RectTransformUtility.WorldToScreenPoint(Player.Instance.Camera.Camera, position);
@@ -73,15 +73,23 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandleVisibility()
         {
-            if (informationMenu != null && IsSelected)
+            if (IsSelected)
             {
-                if (informationMenu.IsOpen && IsBehindPlayer)
+                if (EditorManager.Instance.IsPlaying)
                 {
-                    informationMenu.Close(true);
+                    if (informationMenu.IsOpen && IsBehindPlayer)
+                    {
+                        informationMenu.Close(true);
+                    }
+                    else
+                    if (!informationMenu.IsOpen && !IsBehindPlayer)
+                    {
+                        informationMenu.Open(true);
+                    }
                 }
-                else if (!informationMenu.IsOpen && !IsBehindPlayer)
+                else
                 {
-                    informationMenu.Open(true);
+                    SetSelected(false);
                 }
             }
         }
