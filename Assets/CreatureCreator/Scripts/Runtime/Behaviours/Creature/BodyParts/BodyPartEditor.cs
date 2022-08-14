@@ -361,7 +361,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Deselect()
         {
-            Select.Outline.enabled = false;
+            IsSelected = false;
 
             SetToolsVisibility(false);
         }

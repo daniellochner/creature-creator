@@ -668,11 +668,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Deselect()
         {
-            select.Outline.enabled = false;
-            PaintedBodyPart = null;
+            IsSelected = false;
 
             SetBonesVisibility(false);
             SetArrowsVisibility(false);
+            PaintedBodyPart = null;
 
             foreach (BodyPartEditor bpe in GetComponentsInChildren<BodyPartEditor>())
             {
