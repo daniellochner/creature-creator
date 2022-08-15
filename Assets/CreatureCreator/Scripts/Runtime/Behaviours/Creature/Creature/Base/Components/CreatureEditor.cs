@@ -291,8 +291,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         Camera.CameraOrbit.Unfreeze();
                     }
 
-                    Constructor.UpdateDimensions();
                     Constructor.UpdateConfiguration();
+                    Constructor.UpdateDimensions();
                     foreach (LimbEditor limb in Constructor.Root.GetComponentsInChildren<LimbEditor>())
                     {
                         limb.UpdateMeshCollider();
