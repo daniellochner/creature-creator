@@ -802,6 +802,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897c14bcb36dd5840855296119aa9337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smoothing: 2.5
+  maxRoll: 10
+  maxPitch: 30
+  baseTimeToMove: 0.25
+  stepHeightFactor: 0.8
+  liftHeightFactor: 0.4
 --- !u!1102 &2054201446301137555
 AnimatorState:
   serializedVersion: 6
@@ -1201,17 +1207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b91c9f4b77142d14794fd92d42f03a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  biteRadius: 0.5
-  biteDamage:
-    min: 10
-    max: 20
-  biteSounds:
-  - name: Bite1
-    volume: 1
-  - name: Bite2
-    volume: 1
-  - name: Bite3
-    volume: 1
   timeR2O: 0.2
   timeO2C: 0.1
   timeC2R: 0.2
