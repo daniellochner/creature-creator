@@ -32,16 +32,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             this.ability = ability;
 
-            performKeyText.text = $"[{ability.PerformKeybind.ToString()}]";
+            performButton.onClick.RemoveAllListeners();
             performButton.onClick.AddListener(delegate 
             {
                 ability.OnTryPerform();
             });
+
             nameText.text = ability.name;
             cooldownImage.fillAmount = 0f;
         }
         public void UpdateUI()
         {
+            performKeyText.text = $"[{ability.PerformKeybind.ToString()}]";
             cooldownImage.fillAmount = ability.CooldownTimeLeft / ability.Cooldown;
         }
 
