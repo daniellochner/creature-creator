@@ -48,6 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle abilitiesToggle;
         [SerializeField] private Animator cashWarningAnimator;
         [SerializeField] private Animator complexityWarningAnimator;
+        [SerializeField] private Animator bonesWarningAnimator;
         [SerializeField] private AudioClip whooshAudioClip;
         [SerializeField] private AudioClip errorAudioClip;
         [SerializeField] private AudioClip createAudioClip;
@@ -278,6 +279,25 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.Platform = platform;
             Creature.Informer.Setup(informationMenu);
             Creature.Mover.Teleport(platform, true);
+
+            Creature.Editor.OnTryRemoveBone += delegate
+            {
+                bool tooFewBones = Creature.Constructor.Bones.Count - 1 < Creature.Constructor.MinMaxBones.min;
+                if (tooFewBones && CanWarn(bonesWarningAnimator))
+                {
+                    editorAudioSource.PlayOneShot(errorAudioClip);
+                    bonesWarningAnimator.SetTrigger("Warn");
+                }
+            };
+            Creature.Editor.OnTryAddBone += delegate
+            {
+                bool tooManyBones = Creature.Constructor.Bones.Count + 1 > Creature.Constructor.MinMaxBones.max;
+                if (tooManyBones && CanWarn(bonesWarningAnimator))
+                {
+                    editorAudioSource.PlayOneShot(errorAudioClip);
+                    bonesWarningAnimator.SetTrigger("Warn");
+                }
+            };
         }
         #endregion
 
@@ -675,11 +695,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
-                if (notEnoughCash && cashWarningAnimator.CanTransitionTo("Warning"))
+                if (notEnoughCash && CanWarn(cashWarningAnimator))
                 {
                     cashWarningAnimator.SetTrigger("Warn");
                 }
-                if (tooComplicated && complexityWarningAnimator.CanTransitionTo("Warning"))
+                if (tooComplicated && CanWarn(complexityWarningAnimator))
                 {
                     complexityWarningAnimator.SetTrigger("Warn");
                 }
@@ -1035,7 +1055,7 @@ namespace DanielLochner.Assets.CreatureCreator
             dietText.text = $"<b>Diet:</b> {statistics.Diet}";
             healthText.text = $"<b>Health:</b> {statistics.Health}";
             speedText.text = $"<b>Speed:</b> {Math.Round(statistics.Speed, 2)}";
-            bonesText.text = $"<b>Bones:</b> {Creature.Constructor.Bones.Count}";
+            bonesText.text = $"<b>Bones:</b> {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
@@ -1171,6 +1191,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Helper
+        private bool CanWarn(Animator warnAnimator)
+        {
+            return warnAnimator.CanTransitionTo("Warn") && !warnAnimator.IsInTransition(0) && !warnAnimator.GetCurrentAnimatorStateInfo(0).IsName("Warn");
+        }
+
         /// <summary>
         /// Is this a valid name for a creature? Checks for invalid file name characters and profanity, and corrects when possible.
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -58,6 +59,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public TransformationTools TransformationTools { get; private set; }
         public Transform BTool { get; private set; }
         public Transform FTool { get; private set; }
+
+        public Action OnTryAddBone { get; set; }
+        public Action OnTryRemoveBone { get; set; }
 
         public BodyPartEditor PaintedBodyPart
         {
@@ -748,29 +752,43 @@ namespace DanielLochner.Assets.CreatureCreator
                     float pointerAngle = Vector3.Angle(pointerDisplacement, tool.forward);
                     float toolAngle = Vector3.Angle(toolDisplacement, tool.forward);
 
-                    if ((pointerAngle < 90f) && (toolAngle < angleLimit) && Constructor.CanAddBone(oldIndex))
+                    bool tryAdd = (pointerAngle < 90f) && (toolAngle < angleLimit);
+                    bool tryRem = (pointerAngle > (180f - angleLimit));
+                    bool addOrRemove = false;
+
+                    if (tryAdd)
                     {
-                        Constructor.UpdateBoneConfiguration(); // Necessary in-case creature moves slightly while editing (due to hinge-joint bounciness).
+                        if (Constructor.CanAddBone(oldIndex))
+                        {
+                            Constructor.UpdateBoneConfiguration(); // Necessary in-case creature moves slightly while editing (due to hinge-joint bounciness).
 
-                        Vector3 position = Constructor.Bones[oldIndex].position + ((0.5f * Constructor.BoneSettings.Length) * (tool.forward + toolDisplacement.normalized));
-                        Quaternion rotation = Quaternion.LookRotation(Mathf.Sign(Vector3.Dot(tool.forward, Constructor.Bones[oldIndex].forward)) * toolDisplacement.normalized, tool.up);
+                            Vector3 position = Constructor.Bones[oldIndex].position + ((0.5f * Constructor.BoneSettings.Length) * (tool.forward + toolDisplacement.normalized));
+                            Quaternion rotation = Quaternion.LookRotation(Mathf.Sign(Vector3.Dot(tool.forward, Constructor.Bones[oldIndex].forward)) * toolDisplacement.normalized, tool.up);
 
-                        position = transform.InverseTransformPoint(position);
-                        rotation = Quaternion.Inverse(transform.rotation) * rotation;
+                            position = transform.InverseTransformPoint(position);
+                            rotation = Quaternion.Inverse(transform.rotation) * rotation;
 
-                        Constructor.AddBone(newIndex, position, rotation, Mathf.Clamp(Constructor.GetWeight(oldIndex) * 0.75f, 0f, 100f));
+                            Constructor.AddBone(newIndex, position, rotation, Mathf.Clamp(Constructor.GetWeight(oldIndex) * 0.75f, 0f, 100f));
+                            addOrRemove = true;
+                        }
+                        OnTryAddBone?.Invoke();
                     }
-                    else if (pointerAngle > (180f - angleLimit) && Constructor.CanRemoveBone(oldIndex))
+                    else 
+                    if (tryRem)
                     {
-                        Constructor.RemoveBone(oldIndex);
-                    }
-                    else
-                    {
-                        return; // Prevent editor from providing feedback if no bone was added/removed.
+                        if (Constructor.CanRemoveBone(oldIndex))
+                        {
+                            Constructor.RemoveBone(oldIndex);
+                            addOrRemove = true;
+                        }
+                        OnTryRemoveBone?.Invoke();
                     }
 
-                    toolsAudioSource.PlayOneShot(StretchAudioClip);
-                    addedOrRemovedTime = Time.time;
+                    if (addOrRemove)
+                    {
+                        toolsAudioSource.PlayOneShot(StretchAudioClip);
+                        addedOrRemovedTime = Time.time;
+                    }
                 }
             }
         }
