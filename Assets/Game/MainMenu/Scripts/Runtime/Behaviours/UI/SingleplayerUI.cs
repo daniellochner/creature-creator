@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -13,18 +14,31 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private TMP_InputField usernameInputField;
-        [SerializeField] private string defaultMap;
+        [SerializeField] private OptionSelector mapOS;
+        [SerializeField] private Toggle npcToggle;
+        [SerializeField] private Toggle pveToggle;
         #endregion
 
         #region Methods
-        public void PlayDefault()
+        private void Start()
         {
-            MapManager.Instance.Map = defaultMap;
-            Play();
+            Setup();
+        }
+
+        public void Setup()
+        {
+            mapOS.SetupUsingEnum<MapType>();
+            mapOS.Select(MapType.Island);
         }
 
         public void Play()
         {
+            bool spawnNPC = npcToggle.isOn;
+            bool enablePVE = pveToggle.isOn;
+
+            MapManager.Instance.Map = mapOS.Options[mapOS.Selected].Name;
+
+
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData(usernameInputField.text, "")));
 

@@ -515,12 +515,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Enum
-        public enum MapType
-        {
-            Farm,
-            Island,
-            Sandbox
-        }
         public enum VisibilityType
         {
             Public,
