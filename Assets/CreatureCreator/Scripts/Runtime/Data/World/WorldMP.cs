@@ -15,7 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsPasswordProtected { get; private set; }
 
         public string WorldName { get; private set; }
-        public string MapName { get; private set; }
         public string Version { get; private set; }
         public bool AllowProfanity { get; private set; }
         public bool EnablePVP { get; private set; }

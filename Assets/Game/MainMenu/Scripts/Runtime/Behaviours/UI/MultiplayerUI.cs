@@ -425,7 +425,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Play()
         {
-            MapManager.Instance.Map = mapOS.Options[mapOS.Selected].Name;
             WorldManager.Instance.World = new WorldMP(LobbyHelper.Instance.JoinedLobby);
         }
 

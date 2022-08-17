@@ -6,8 +6,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class WorldSP : World
     {
         #region Methods
-        public WorldSP(bool creativeMode, bool spawnNPC, bool enablePVE)
+        public WorldSP(string mapName, bool creativeMode, bool spawnNPC, bool enablePVE)
         {
+            MapName = mapName;
             CreativeMode = creativeMode;
             SpawnNPC = spawnNPC;
             EnablePVE = enablePVE;
