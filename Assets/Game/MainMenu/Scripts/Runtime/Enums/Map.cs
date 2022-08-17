@@ -1,6 +1,6 @@
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public enum MapType
+    public enum Map
     {
         Farm,
         Island,

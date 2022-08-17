@@ -47,6 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TMP_InputField worldNameInputField;
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private OptionSelector mapOS;
+        [SerializeField] private OptionSelector modeOS;
         [SerializeField] private OptionSelector visibilityOS;
         [SerializeField] private GameObject passwordGO;
         [SerializeField] private Toggle passwordToggle;
@@ -169,30 +170,33 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
 
-            mapOS.SetupUsingEnum<MapType>();
+            mapOS.SetupUsingEnum<Map>();
             mapOS.OnSelected.AddListener(delegate (int option)
             {
-                MapType map = (MapType)option;
+                Map map = (Map)option;
                 switch (map)
                 {
-                    case MapType.Island:
+                    case Map.Island:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
                         createButton.interactable = true;
                         break;
 
-                    case MapType.Sandbox:
+                    case Map.Sandbox:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
                         createButton.interactable = true;
                         break;
 
-                    case MapType.Farm:
+                    case Map.Farm:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 16;
                         createButton.interactable = false;
                         RoadmapMenu.Instance.Open();
                         break;
                 }
             });
-            mapOS.Select(MapType.Island);
+            mapOS.Select(Map.Island);
+
+            modeOS.SetupUsingEnum<Mode>();
+            modeOS.Select(Mode.Adventure);
 
             visibilityOS.SetupUsingEnum<VisibilityType>();
             visibilityOS.OnSelected.AddListener(delegate (int option)
@@ -301,14 +305,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool isPrivate = (VisibilityType)visibilityOS.Selected == VisibilityType.Private;
                 bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
                 string worldName = worldNameInputField.text;
-                string mapName = ((MapType)mapOS.Selected).ToString();
+                string mapName = ((Map)mapOS.Selected).ToString();
                 string version = Application.version;
                 int maxPlayers = (int)maxPlayersSlider.value;
                 bool enablePVP = pvpToggle.isOn;
                 bool spawnNPC = npcToggle.isOn;
                 bool enablePVE = pveToggle.isOn;
                 bool allowProfanity = profanityToggle.isOn;
-                bool creativeMode = false; // TODO: change to use option selector
+                bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;

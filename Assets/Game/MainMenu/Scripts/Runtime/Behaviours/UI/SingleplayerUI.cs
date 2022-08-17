@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private TMP_InputField usernameInputField;
         [SerializeField] private OptionSelector mapOS;
+        [SerializeField] private OptionSelector modeOS;
         [SerializeField] private Toggle npcToggle;
         [SerializeField] private Toggle pveToggle;
         #endregion
@@ -27,14 +28,18 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            mapOS.SetupUsingEnum<MapType>();
-            mapOS.Select(MapType.Island);
+            mapOS.SetupUsingEnum<Map>();
+            mapOS.Select(Map.Island);
+
+            modeOS.SetupUsingEnum<Mode>();
+            modeOS.Select(Mode.Adventure);
         }
 
         public void Play()
         {
             bool spawnNPC = npcToggle.isOn;
             bool enablePVE = pveToggle.isOn;
+            bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
 
             MapManager.Instance.Map = mapOS.Options[mapOS.Selected].Name;
 
