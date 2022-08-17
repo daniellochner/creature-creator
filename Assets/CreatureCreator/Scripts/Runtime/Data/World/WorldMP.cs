@@ -39,12 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
             EnablePVP = bool.Parse(lobby.Data["enablePVP"].Value);
             EnablePVE = bool.Parse(lobby.Data["enablePVE"].Value);
             SpawnNPC = bool.Parse(lobby.Data["spawnNPC"].Value);
-
-            // TODO: remove this...
-            if (lobby.Data.ContainsKey("creativeMode"))
-            {
-                CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
-            }
+            CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
         }
         #endregion
     }

@@ -35,15 +35,14 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             WorldMP world = new WorldMP(lobby);
-            mapText.text = world.MapName; // TODO: for now... just have as map name
-            //mapText.text = $"{world.MapName} ({FormatMode(world.CreativeMode)})";
+            mapText.text = $"{world.MapName} ({FormatMode(world.CreativeMode)})";
 
             infoButton.onClick.AddListener(delegate
             {
                 InformationDialog.Inform(world.WorldName, 
                     $"<b>Version:</b> {world.Version}<br>" +
                     $"<b>Map:</b> {world.MapName}<br>" + 
-                    //$"<b>Mode:</b> {FormatMode(world.CreativeMode)}<br>" + // TODO: re-add this
+                    $"<b>Mode:</b> {FormatMode(world.CreativeMode)}<br>" +
                     //$"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>NPCs:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
                     $"<b>PVE:</b> {FormatEnabled(world.EnablePVE)}<br>" +

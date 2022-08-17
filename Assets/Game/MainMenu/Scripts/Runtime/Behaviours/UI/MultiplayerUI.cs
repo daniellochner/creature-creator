@@ -178,18 +178,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     case Map.Island:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
-                        createButton.interactable = true;
                         break;
 
                     case Map.Sandbox:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
-                        createButton.interactable = true;
                         break;
 
                     case Map.Farm:
                         maxPlayersSlider.value = maxPlayersSlider.maxValue = 16;
-                        createButton.interactable = false;
-                        RoadmapMenu.Instance.Open();
                         break;
                 }
             });
