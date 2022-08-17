@@ -79,23 +79,19 @@ namespace DanielLochner.Assets.CreatureCreator
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
 
-            // Supporter Perks
-            if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
-            {
-                GrantSupporterPerks();
-            }
-
-            // Early Access
-            PlayerPrefs.SetInt("2g9ui01m", 0);
-            PlayerPrefs.SetInt("h3hq9as4", 0);
+            //// Supporter Perks
+            //if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
+            //{
+            //    GrantSupporterPerks();
+            //}
         }
 
-        public void GrantSupporterPerks()
-        {
-            UnlockedBodyParts.AddRange(SupporterPerks.BODY_PARTS);
-            UnlockedPatterns.AddRange(SupporterPerks.PATTERNS);
-            Cash += 100;
-        }
+        //public void GrantSupporterPerks()
+        //{
+        //    UnlockedBodyParts.AddRange(SupporterPerks.BODY_PARTS);
+        //    UnlockedPatterns.AddRange(SupporterPerks.PATTERNS);
+        //    Cash += 100;
+        //}
         #endregion
     }
 }

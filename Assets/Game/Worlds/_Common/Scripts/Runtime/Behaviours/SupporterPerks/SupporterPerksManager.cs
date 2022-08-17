@@ -8,17 +8,17 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class SupporterPerksManager : MonoBehaviourSingleton<SupporterPerksManager>
     {
-        private IEnumerator Start()
-        {
-            if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
-            {
-                ProgressManager.Data.GrantSupporterPerks();
-                ProgressManager.Instance.Save();
+        //private IEnumerator Start()
+        //{
+        //    if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
+        //    {
+        //        ProgressManager.Data.GrantSupporterPerks();
+        //        ProgressManager.Instance.Save();
 
-                yield return new WaitForSeconds(1f);
+        //        yield return new WaitForSeconds(1f);
 
-                InformationDialog.Inform("Thank you for your support!", "Your supporter perks have been added to your inventory!");
-            }
-        }
+        //        InformationDialog.Inform("Thank you for your support!", "Your supporter perks have been added to your inventory!");
+        //    }
+        //}
     }
 }
