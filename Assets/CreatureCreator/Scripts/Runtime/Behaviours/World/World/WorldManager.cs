@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnServerStarted()
         {
-            NetworkManager.Singleton.SceneManager.LoadScene("", LoadSceneMode.Single); // TODO: change over to world map
+            NetworkManager.Singleton.SceneManager.LoadScene(World.MapName, LoadSceneMode.Single);
         }
         private void OnClientConnect(ulong clientID)
         {

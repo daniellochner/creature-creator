@@ -19,32 +19,38 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-            trackRegion.OnTrack += delegate (Collider col1, Collider col2)
+            if (PVE)
             {
-                CreatureBase creature = col2.GetComponent<CreatureBase>();
-                if (HasWeapon(creature) || trackRegion.tracked.Count >= 3)
+                trackRegion.OnTrack += delegate (Collider col1, Collider col2)
                 {
-                    ChangeState("SCU");
-                }
-                else if (currentStateId == "WAN")
+                    CreatureBase creature = col2.GetComponent<CreatureBase>();
+                    if (HasWeapon(creature) || trackRegion.tracked.Count >= 3)
+                    {
+                        ChangeState("SCU");
+                    }
+                    else if (currentStateId == "WAN")
+                    {
+                        ChangeState("BAR");
+                    }
+                };
+                trackRegion.OnLoseTrackOf += delegate
                 {
-                    ChangeState("BAR");
-                }
-            };
-            trackRegion.OnLoseTrackOf += delegate
-            {
-                if (currentStateId != "HID" && currentStateId != "SCU" && trackRegion.tracked.Count == 0)
-                {
-                    ChangeState("WAN");
-                }
-            };
+                    if (currentStateId != "HID" && currentStateId != "SCU" && trackRegion.tracked.Count == 0)
+                    {
+                        ChangeState("WAN");
+                    }
+                };
+            }
         }
 
         public void Attack(Collider col)
         {
-            if (currentStateId == "BAR")
+            if (PVE)
             {
-                ChangeState("BIT");
+                if (currentStateId == "BAR")
+                {
+                    ChangeState("BIT");
+                }
             }
         }
 

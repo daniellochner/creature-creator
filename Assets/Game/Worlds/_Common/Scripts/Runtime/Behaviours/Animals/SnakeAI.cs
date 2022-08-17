@@ -20,20 +20,23 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-            trackRegion.OnTrack += delegate
+            if (PVE)
             {
-                if (currentStateId == "WAN")
+                trackRegion.OnTrack += delegate
                 {
-                    ChangeState("STR");
-                }
-            };
-            trackRegion.OnLoseTrackOf += delegate
-            {
-                if (trackRegion.tracked.Count == 0)
+                    if (currentStateId == "WAN")
+                    {
+                        ChangeState("STR");
+                    }
+                };
+                trackRegion.OnLoseTrackOf += delegate
                 {
-                    ChangeState("WAN");
-                }
-            };
+                    if (trackRegion.tracked.Count == 0)
+                    {
+                        ChangeState("WAN");
+                    }
+                };
+            }
         }
         #endregion
 

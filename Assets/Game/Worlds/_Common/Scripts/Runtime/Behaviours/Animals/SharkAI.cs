@@ -19,20 +19,26 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Start()
         {
             base.Start();
-            trackRegion.OnLoseTrackOf += delegate
+            if (PVE)
             {
-                if (trackRegion.tracked.Count == 0)
+                trackRegion.OnLoseTrackOf += delegate
                 {
-                    ChangeState("SWI");
-                }
-            };
+                    if (trackRegion.tracked.Count == 0)
+                    {
+                        ChangeState("SWI");
+                    }
+                };
+            }
         }
         public override void Update()
         {
             base.Update();
-            if (trackRegion.tracked.Count > 0 && !(currentState is Biting))
+            if (PVE)
             {
-                ChangeState("BIT");
+                if (trackRegion.tracked.Count > 0 && !(currentState is Biting) && !(currentState is Following))
+                {
+                    ChangeState("BIT");
+                }
             }
         }
         #endregion

@@ -6,9 +6,11 @@ namespace DanielLochner.Assets
 {
     public abstract class NPCSpawner : MonoBehaviour
     {
-        public NetworkObject npcPrefab;
+        [SerializeField] private NetworkObject npcPrefab;
 
         public static List<NPCSpawner> Spawners { get; set; } = new List<NPCSpawner>();
+
+        public NetworkObject SpawnedNPC { get; private set; }
 
         private void OnEnable()
         {
@@ -21,9 +23,9 @@ namespace DanielLochner.Assets
 
         public void Spawn()
         {
-            NetworkObject npc = Instantiate(npcPrefab, transform.position, transform.rotation);
-            npc.Spawn();
-            Setup(npc);
+            SpawnedNPC = Instantiate(npcPrefab, transform.position, transform.rotation);
+            SpawnedNPC.Spawn();
+            Setup(SpawnedNPC);
         }
 
         public virtual void Setup(NetworkObject npc) { }

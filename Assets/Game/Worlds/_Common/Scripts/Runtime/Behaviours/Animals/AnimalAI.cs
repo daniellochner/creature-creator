@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -25,6 +24,11 @@ namespace DanielLochner.Assets.CreatureCreator
         protected CreatureNonPlayerLocal Creature { get; set; }
         protected NavMeshAgent Agent { get; set; }
 
+        public bool PVE
+        {
+            get;
+            set;
+        }
         public bool CanFollow
         {
             get => currentState is Idling || currentState is Following;

@@ -97,6 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     foreach (NPCSpawner npc in NPCSpawner.Spawners)
                     {
                         npc.Spawn();
+                        npc.SpawnedNPC.GetComponent<AnimalAI>().PVE = world.EnablePVE;
                     }
                 }
             }
@@ -109,10 +110,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetupSP()
         {
             WorldSP world = WorldManager.Instance.World as WorldSP;
-
-            foreach (NPCSpawner npc in NPCSpawner.Spawners)
+            
+            if (world.SpawnNPC)
             {
-                npc.Spawn();
+                foreach (NPCSpawner npc in NPCSpawner.Spawners)
+                {
+                    npc.Spawn();
+                    npc.SpawnedNPC.GetComponent<AnimalAI>().PVE = world.EnablePVE;
+                }
             }
 
             EditorManager.Instance.CreativeMode = world.CreativeMode;
