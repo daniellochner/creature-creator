@@ -19,8 +19,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public string Version { get; private set; }
         public bool AllowProfanity { get; private set; }
         public bool EnablePVP { get; private set; }
-        public bool EnablePVE { get; private set; }
-        public bool SpawnNPC { get; private set; }
         #endregion
 
         #region Methods

@@ -37,17 +37,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Play()
         {
+            bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
             bool spawnNPC = npcToggle.isOn;
             bool enablePVE = pveToggle.isOn;
-            bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
 
             MapManager.Instance.Map = mapOS.Options[mapOS.Selected].Name;
-
 
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData(usernameInputField.text, "")));
 
-            WorldManager.Instance.World = new WorldSP(false); // TODO: Use CreativeMode OptionSelector
+            WorldManager.Instance.World = new WorldSP(creativeMode, spawnNPC, enablePVE);
 
             NetworkManager.Singleton.StartHost();
         }

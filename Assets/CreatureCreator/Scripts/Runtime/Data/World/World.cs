@@ -7,6 +7,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Properties
         public bool CreativeMode { get; protected set; }
+        public bool EnablePVE { get; protected set; }
+        public bool SpawnNPC { get; protected set; }
         #endregion
     }
 }
