@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [DefaultExecutionOrder(-1)]
     public class GameSetup : MonoBehaviourSingleton<GameSetup>
     {
         #region Fields
@@ -70,6 +71,11 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
+            }
+
+            foreach (var item in FindObjectsOfType<UnlockableItem>(true))
+            {
+                item.Setup();
             }
         }
         public void SetupMP()

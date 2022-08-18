@@ -207,7 +207,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             Vector3 footOffset = Creature.transform.up * ((leg.LegConstructor.ConnectedFoot != null) ? leg.LegConstructor.ConnectedFoot.Offset : 0f);
 
             Vector3 origin = worldPos + bodyOffset;
-            Vector3? foothold = PhysicsUtility.RaycastCone(origin, -Creature.transform.up, leg.MaxLength, 15f, 3, 10, LayerMask.GetMask("Ground"));
+            Vector3? foothold = PhysicsUtility.RaycastCone(origin, -Creature.transform.up, leg.MaxLength, 15f, 3, 10, LayerMask.GetMask("Ground"), Creature.transform.up, 0.5f);
             if (foothold != null)
             {
                 return (Vector3)foothold + footOffset;

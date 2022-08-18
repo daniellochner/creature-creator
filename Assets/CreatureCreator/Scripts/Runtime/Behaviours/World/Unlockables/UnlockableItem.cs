@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        public void Setup()
         {
             if (IsUnlocked)
             {
