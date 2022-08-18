@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField, Range(0, 1)] private float experience = 0;
         [SerializeField, Range(0, 50)] private int level = 0;
-        [SerializeField] private int cash = 1000;
+        [SerializeField] private int cash = 500;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
         #endregion
@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Experience = 0;
             Level = 0;
-            Cash = 1000;
+            Cash = 500;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
 
