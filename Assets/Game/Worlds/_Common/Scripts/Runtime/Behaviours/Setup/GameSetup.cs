@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,9 +23,20 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        private IEnumerator Start()
         {
             Setup();
+
+            // TODO: Remove this in the next update...
+            if (!WorldManager.Instance.World.CreativeMode && PlayerPrefs.GetInt("ADVENTURE_MODE") == 0)
+            {
+                if (ProgressManager.Data.UnlockedBodyParts.Count > 0)
+                {
+                    yield return new WaitForSeconds(1f);
+                    InformationDialog.Inform("Welcome to Adventure Mode!", "In this mode, parts and patterns have been scattered around the world for you to go find!<br>Switch over to a <u>creative</u> world if you'd instead just like to create creatures with everything already unlocked!");
+                }
+                PlayerPrefs.SetInt("ADVENTURE_MODE", 1);
+            }
         }
         private void OnDestroy()
         {

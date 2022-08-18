@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
