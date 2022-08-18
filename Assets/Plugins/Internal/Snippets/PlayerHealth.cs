@@ -7,8 +7,6 @@ namespace DanielLochner.Assets
     public class PlayerHealth : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private float maxHealth = 100f;
-        [Space]
         [SerializeField] private NetworkVariable<float> health = new NetworkVariable<float>(100);
         #endregion
 
@@ -20,7 +18,7 @@ namespace DanielLochner.Assets
             {
                 if (IsServer)
                 {
-                    health.Value = Mathf.Clamp(value, 0f, maxHealth);
+                    health.Value = Mathf.Clamp(value, 0f, MaxHealth);
                 }
                 else
                 {
@@ -30,9 +28,11 @@ namespace DanielLochner.Assets
         }
         public float HealthPercentage
         {
-            get => Mathf.InverseLerp(0f, maxHealth, Health);
-            set => Health = Mathf.Lerp(0f, maxHealth, value);
+            get => Mathf.InverseLerp(0f, MaxHealth, Health);
+            set => Health = Mathf.Lerp(0f, MaxHealth, value);
         }
+
+        public virtual float MaxHealth => 100f;
 
         public Action<float> OnHealthChanged { get; set; }
         public Action<float> OnTakeDamage { get; set; }
@@ -105,7 +105,7 @@ namespace DanielLochner.Assets
         [ContextMenu("Take Random Damage")]
         private void TakeRandomDamage()
         {
-            TakeDamage(UnityEngine.Random.Range(0f, maxHealth));
+            TakeDamage(UnityEngine.Random.Range(0f, MaxHealth));
         }
         #endregion
     }

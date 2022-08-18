@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private int complexity = 0;
         [SerializeField] private List<Diet> diets = new List<Diet>();
-        [SerializeField] private int health = 0;
+        [SerializeField] private int health = 100;
         [SerializeField] private float weight = 0f;
         [SerializeField] private float speed = 1f;
         #endregion
@@ -36,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get => health;
             set
             {
-                health = Mathf.Clamp(value, 0, 1000);
+                health = Mathf.Clamp(value, 1, 1000);
             }
         }
         public float Weight
@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get => speed;
             set
             {
-                speed = Mathf.Clamp(value, 0f, 3f);
+                speed = Mathf.Clamp(value, 0f, 2.5f);
             }
         }
 
@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             complexity = 0;
             diets.Clear();
-            health = 0;
+            health = 100;
             weight = 0f;
             speed = 1f;
         }
