@@ -12,12 +12,17 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private float breakProbability;
         [SerializeField] private float weightThreshold;
-        [SerializeField] private float autoFixTime;
+        [SerializeField] private bool autoFix;
+        [SerializeField, DrawIf("autoFix", true)] private float autoFixTime;
         [SerializeField] private GameObject breakFX;
 
         private MeshRenderer meshRenderer;
         private MeshCollider meshCollider;
         private AudioSource creakAudioSource;
+        #endregion
+
+        #region Properties
+        public NetworkVariable<bool> IsBroken { get; set; } = new NetworkVariable<bool>(false);
         #endregion
 
         #region Methods
@@ -26,6 +31,13 @@ namespace DanielLochner.Assets.CreatureCreator
             creakAudioSource = GetComponentInParent<AudioSource>();
             meshCollider = GetComponent<MeshCollider>();
             meshRenderer = GetComponent<MeshRenderer>();
+        }
+        private void Start()
+        {
+            if (IsBroken.Value)
+            {
+                meshCollider.enabled = meshRenderer.enabled = false;
+            }
         }
         private void OnCollisionEnter(Collision other)
         {
@@ -80,9 +92,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator BreakRoutine()
         {
+            IsBroken.Value = true;
+
             BreakClientRpc();
-            yield return new WaitForSeconds(autoFixTime);
-            FixClientRpc();
+            if (autoFix)
+            {
+                yield return new WaitForSeconds(autoFixTime);
+                FixClientRpc();
+                IsBroken.Value = false;
+            }
         }
         #endregion
     }
