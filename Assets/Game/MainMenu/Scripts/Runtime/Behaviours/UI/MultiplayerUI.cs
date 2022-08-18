@@ -20,6 +20,8 @@ using System.Text;
 using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
 using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
+using Steamworks;
+using Netcode.Transports;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -33,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Menu multiplayerMenu;
         [SerializeField] private Menu multiplayerHintMenu;
         [SerializeField] private SimpleScrollSnap.SimpleScrollSnap multiplayerSSS;
+        [SerializeField] private OptionSelector relayServerOS;
 
         [Header("Join")]
         [SerializeField] private WorldUI worldUIPrefab;
@@ -61,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
         private bool isConnecting, isRefreshing, isSortedByAscending = true;
-        private UnityTransport relayTransport;
+        private NetworkTransport relayTransport;
         private Coroutine updateNetStatusCoroutine;
         private int refreshCount;
         #endregion
@@ -165,10 +168,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
             }
         }
-
+        
         private void Setup()
         {
-            relayTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+            relayServerOS.SetupUsingEnum<RelayServer>();
+            relayServerOS.OnSelected.AddListener(delegate (int option)
+            {
+                string relay = $"relay_{relayServerOS.Options[relayServerOS.Selected].Name.ToLower()}";
+                relayTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
+            });
+            relayServerOS.Select(RelayServer.Unity);
 
             mapOS.SetupUsingEnum<Map>();
             mapOS.OnSelected.AddListener(delegate (int option)
@@ -194,12 +203,12 @@ namespace DanielLochner.Assets.CreatureCreator
             modeOS.SetupUsingEnum<Mode>();
             modeOS.Select(Mode.Adventure);
 
-            visibilityOS.SetupUsingEnum<VisibilityType>();
+            visibilityOS.SetupUsingEnum<Visibility>();
             visibilityOS.OnSelected.AddListener(delegate (int option)
             {
-                passwordGO.gameObject.SetActive((VisibilityType)option == VisibilityType.Public);
+                passwordGO.gameObject.SetActive((Visibility)option == Visibility.Public);
             });
-            visibilityOS.Select(VisibilityType.Public);
+            visibilityOS.Select(Visibility.Public);
         }
 
         private void OnClientDisconnect(ulong clientID)
@@ -269,7 +278,16 @@ namespace DanielLochner.Assets.CreatureCreator
                     AllocationId = join.AllocationId.ToString(),
                     ConnectionInfo = joinCode
                 });
-                relayTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                if (relayTransport is UnityTransport)
+                {
+                    UnityTransport unityTransport = relayTransport as UnityTransport;
+                    unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                }
+                else
+                {
+                    SteamNetworkingTransport steamTransport = relayTransport as SteamNetworkingTransport;
+                    steamTransport.ConnectToSteamID = ulong.Parse(lobby.Data["hostSteamId"].Value);
+                }
 
                 // Start Client
                 UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
@@ -298,7 +316,7 @@ namespace DanielLochner.Assets.CreatureCreator
             try
             {
                 // Set Up World
-                bool isPrivate = (VisibilityType)visibilityOS.Selected == VisibilityType.Private;
+                bool isPrivate = (Visibility)visibilityOS.Selected == Visibility.Private;
                 bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
                 string worldName = worldNameInputField.text;
                 string mapName = ((Map)mapOS.Selected).ToString();
@@ -309,13 +327,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool enablePVE = pveToggle.isOn;
                 bool allowProfanity = profanityToggle.isOn;
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
+                ulong hostSteamId = SteamUser.GetSteamID().m_SteamID;
 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
                 SetConnectionData(username, password);
-
+                
                 // Authenticate
                 await Authenticate();
 
@@ -323,7 +342,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = relayTransport;
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
-                relayTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
+                if (relayTransport is UnityTransport)
+                {
+                    UnityTransport unityTransport = relayTransport as UnityTransport;
+                    unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
+                }
+                else
+                {
+                    SteamNetworkingTransport steamTransport = relayTransport as SteamNetworkingTransport;
+                    steamTransport.ConnectToSteamID = hostSteamId;
+                }
 
                 // Generate Join Code
                 UpdateNetworkStatus("Generating Join Code...", Color.yellow, -1);
@@ -345,7 +373,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "enablePVE", new DataObject(DataObject.VisibilityOptions.Public, enablePVE.ToString()) },
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
-                        { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) }
+                        { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
+                        { "hostSteamId", new DataObject(DataObject.VisibilityOptions.Public, hostSteamId.ToString()) }
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
@@ -514,7 +543,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Enum
-        public enum VisibilityType
+        public enum RelayServer
+        {
+            Unity,
+            Steam
+        }
+
+        public enum Visibility
         {
             Public,
             Private

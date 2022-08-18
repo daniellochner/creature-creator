@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool creativeMode;
         [SerializeField] private bool checkForProfanity;
+        [SerializeField] private int creativeCash;
         [SerializeField] private SecretKey creatureEncryptionKey;
 
         [Header("General")]
@@ -106,6 +107,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => creativeMode;
             set => creativeMode = value;
         }
+        public int CreativeCash
+        {
+            get => creativeCash;
+            set => creativeCash = value;
+        }
 
         public bool IsEditing => isEditing;
         public bool IsBuilding => buildMenu.IsOpen;
@@ -113,6 +119,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsPlaying  => playMenu.IsOpen;
 
         public CreaturePlayerLocal Creature => Player.Instance;
+
+        public int BaseCash
+        {
+            get => CreativeMode ? CreativeCash : ProgressManager.Data.Cash;
+        }
         #endregion
 
         #region Methods
@@ -261,7 +272,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Creature.Editor.Load(null);
             }
-            Creature.Editor.Cash = ProgressManager.Data.Cash;
+            Creature.Editor.Cash = BaseCash;
             Creature.Editor.Platform = platform;
             Creature.Informer.Setup(informationMenu);
             Creature.Mover.Teleport(platform, true);
@@ -638,7 +649,7 @@ namespace DanielLochner.Assets.CreatureCreator
             totalComplexity += creatureData.Bones.Count;
 
             bool creatureIsTooComplicated = totalComplexity > Creature.Constructor.MaxComplexity;
-            bool creatureIsTooExpensive = totalCost > ProgressManager.Data.Cash;
+            bool creatureIsTooExpensive = totalCost > BaseCash;
 
             // Error Message
             List<string> errors = new List<string>();
@@ -648,7 +659,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             if (creatureIsTooExpensive)
             {
-                errors.Add($"is too expensive. ({totalCost}/{ProgressManager.Data.Cash})");
+                errors.Add($"is too expensive. ({totalCost}/{BaseCash})");
             }
             if (!patternIsUnlocked)
             {
