@@ -4,10 +4,10 @@ namespace DanielLochner.Assets
 {
     public static class PhysicsUtility
     {
-        public static Vector3? RaycastCone(Vector3 origin, Vector3 dir, float length, float angle, int n, int m, int layerMask)
+        public static Vector3? RaycastCone(Vector3 origin, Vector3 dir, float length, float angle, int n, int m, int layerMask, Vector3 normal, float alignmentThreshold)
         {
             // Center
-            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo1, length, layerMask))
+            if (Physics.Raycast(origin, dir, out RaycastHit hitInfo1, length, layerMask) && Vector3.Dot(hitInfo1.normal, normal) > alignmentThreshold)
             {
                 return hitInfo1.point;
             }
@@ -19,7 +19,7 @@ namespace DanielLochner.Assets
                 {
                     dir = Quaternion.Euler(i * angle, j / 360f, 0) * dir;
 
-                    if (Physics.Raycast(origin, dir, out RaycastHit hitInfo2, length, layerMask))
+                    if (Physics.Raycast(origin, dir, out RaycastHit hitInfo2, length, layerMask) && Vector3.Dot(hitInfo2.normal, normal) > alignmentThreshold)
                     {
                         return hitInfo2.point;
                     }
