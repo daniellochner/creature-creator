@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         [Header("Jump")]
         [SerializeField] private float jumpForce;
+        [SerializeField] private float maxJumpForce;
 
         private CreatureAnimator creatureAnimator;
         private Rigidbody rigidbody;
@@ -23,9 +24,13 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             creatureAnimator = creatureAbilities.GetComponent<CreatureAnimator>();
             rigidbody = creatureAbilities.GetComponent<Rigidbody>();
         }
+
         public override void OnPerform()
         {
-            rigidbody.AddForce(rigidbody.transform.up * jumpForce, ForceMode.Impulse);
+            int pairs = creatureAnimator.Legs.Count / 2;
+            float force = Mathf.Min(jumpForce * pairs, maxJumpForce);
+            
+            rigidbody.AddForce(rigidbody.transform.up * force, ForceMode.Impulse);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         [Header("Flap")]
         [SerializeField] private float flapForce;
+        [SerializeField] private float maxFlapForce;
         [SerializeField] private PlayerEffects.Sound[] flapSounds;
 
         private CreatureAnimator creatureAnimator;
@@ -25,9 +26,13 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             creatureEffector = creatureAbilities.GetComponent<PlayerEffects>();
             rigidbody = creatureAbilities.GetComponent<Rigidbody>();
         }
+
         public override void OnPerform()
         {
-            rigidbody.AddForce(rigidbody.transform.up * flapForce, ForceMode.Impulse);
+            int pairs = creatureAnimator.Wings.Count / 2;
+            float force = Mathf.Min(flapForce * pairs, maxFlapForce);
+
+            rigidbody.AddForce(rigidbody.transform.up * force, ForceMode.Impulse);
             creatureAnimator.Params.SetTrigger("Wings_Flap");
             creatureEffector.PlaySound(flapSounds);
         }
