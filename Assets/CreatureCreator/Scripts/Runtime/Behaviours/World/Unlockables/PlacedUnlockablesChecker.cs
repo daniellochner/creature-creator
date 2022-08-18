@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,53 +6,16 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class PlacedUnlockablesChecker : MonoBehaviour
     {
-        public PlacedUnlockables placed;
+        #region Fields
+        [SerializeField] private PlacedUnlockables placed;
 
-        public Database bodypartsDB;
-        public Database patternsDB;
+        [SerializeField] private Database bodypartsDB;
+        [SerializeField] private Database patternsDB;
+        #endregion
 
-        [ContextMenu("CHECK ALL")]
-        public void CheckAll()
-        {
-            foreach (var bp in bodypartsDB.Objects.Keys)
-            {
-                if (!placed.bodyparts.Contains(bp))
-                {
-                    Debug.Log(bp);
-                }
-            }
-
-            foreach (var p in patternsDB.Objects.Keys)
-            {
-                if (!placed.patterns.Contains(p))
-                {
-                    Debug.Log(p);
-                }
-            }
-        }
-
-        [ContextMenu("FIND EMPTY")]
-        public void FindEmpty()
-        {
-            foreach (var bp in FindObjectsOfType<UnlockableBodyPart>())
-            {
-                if (string.IsNullOrEmpty(bp.BodyPartID))
-                {
-                    Debug.Log(bp.BodyPartID, bp.gameObject);
-                }
-            }
-
-            foreach (var p in FindObjectsOfType<UnlockablePattern>())
-            {
-                if (string.IsNullOrEmpty(p.PatternID))
-                {
-                    Debug.Log(p.PatternID, p.gameObject);
-                }
-            }
-        }
-
-        [ContextMenu("ADD ALL")]
-        public void AddAll()
+        #region Methods
+        [ContextMenu("Add Placed")]
+        public void AddPlaced()
         {
             foreach (var bp in FindObjectsOfType<UnlockableBodyPart>())
             {
@@ -63,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             foreach (var p in FindObjectsOfType<UnlockablePattern>())
             {
-                if (p.PatternID != "" && placed.patterns.Contains(p.PatternID))
+                if (p.PatternID != "" && !placed.patterns.Contains(p.PatternID))
                 {
                     placed.patterns.Add(p.PatternID);
                 }
@@ -73,5 +37,70 @@ namespace DanielLochner.Assets.CreatureCreator
             EditorUtility.SetDirty(placed);
 #endif
         }
+
+        [ContextMenu("Check Placed")]
+        public void CheckPlaced()
+        {
+            List<string> placedBP = new List<string>();
+            foreach (var bp in FindObjectsOfType<UnlockableBodyPart>())
+            {
+                if (string.IsNullOrEmpty(bp.BodyPartID))
+                {
+                    Debug.Log("Empty Body Part Found.", bp.gameObject);
+                }
+                else
+                {
+                    if (!placedBP.Contains(bp.BodyPartID))
+                    {
+                        placedBP.Add(bp.BodyPartID);
+                    }
+                    else
+                    {
+                        Debug.Log($"Duplicate Body Part Found ({bp.BodyPartID}).", bp.gameObject);
+                    }
+                }
+            }
+
+            List<string> placedP = new List<string>();
+            foreach (var p in FindObjectsOfType<UnlockablePattern>())
+            {
+                if (string.IsNullOrEmpty(p.PatternID))
+                {
+                    Debug.Log("Empty Pattern Found.", p.gameObject);
+                }
+                else
+                {
+                    if (!placedP.Contains(p.PatternID))
+                    {
+                        placedP.Add(p.PatternID);
+                    }
+                    else
+                    {
+                        Debug.Log($"Duplicate Pattern Found ({p.PatternID}).", p.gameObject);
+                    }
+                }
+            }
+        }
+
+        [ContextMenu("Find Unplaced")]
+        public void FindUnplaced()
+        {
+            foreach (var bp in bodypartsDB.Objects.Keys)
+            {
+                if (!placed.bodyparts.Contains(bp))
+                {
+                    Debug.Log($"Body Part Not Found: {bp} ({bodypartsDB.Objects[bp].name})");
+                }
+            }
+
+            foreach (var p in patternsDB.Objects.Keys)
+            {
+                if (!placed.patterns.Contains(p))
+                {
+                    Debug.Log($"Pattern Not Found: {p} ({patternsDB.Objects[p].name})");
+                }
+            }
+        }
+        #endregion
     }
 }
