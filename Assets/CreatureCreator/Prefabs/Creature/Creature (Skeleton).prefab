@@ -124,6 +124,15 @@ MonoBehaviour:
     min: 2
     max: 20
   density: 500
+  minMaxBodySpeed:
+    min: -1
+    max: 0
+  minMaxBodyHealth:
+    min: 0
+    max: 250
+  minMaxBodyWeight:
+    min: 10
+    max: 1000
   data:
     name: 
     bones: []
@@ -138,9 +147,12 @@ MonoBehaviour:
   statistics:
     complexity: 0
     diets: 
-    health: 0
-    speed: 0
-    weight: 0
+    weightBody: 0
+    weightBodyParts: 0
+    speedBody: 0
+    speedBodyParts: 0
+    healthBody: 0
+    healthBodyParts: 0
   dimensions:
     height: 0
     radius: 0

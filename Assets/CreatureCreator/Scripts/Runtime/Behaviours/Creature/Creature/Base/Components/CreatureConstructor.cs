@@ -26,6 +26,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureQuality boneSettings;
         [SerializeField] private MinMax minMaxBones = new MinMax(2, 20);
         [SerializeField] private float density = 500f;
+        [SerializeField] private MinMax minMaxBodySpeed = new MinMax(-1f, 0f);
+        [SerializeField] private MinMax minMaxBodyHealth = new MinMax(0, 250);
+        [SerializeField] private MinMax minMaxBodyWeight = new MinMax(10f, 1000f);
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private CreatureData data;
@@ -744,11 +747,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             float volume = Mathf.PI * Mathf.Pow(dimensions.body.radius, 2) * dimensions.body.length;
             float weight = volume * density;
-            foreach (BodyPartConstructor bpc in BodyParts)
-            {
-                weight += bpc.BodyPart.Weight;
-            }
-            rb.mass = statistics.Weight = weight;
+            statistics.WeightBody = weight;
+            
+            float w = Mathf.InverseLerp(minMaxBodyWeight.min, minMaxBodyWeight.max, weight);
+            statistics.SpeedBody = Mathf.Lerp(minMaxBodySpeed.min, minMaxBodySpeed.max, 1 - w);
+            statistics.HealthBody = (int)Mathf.Lerp(minMaxBodyHealth.min, minMaxBodyHealth.max, w);
+
+            rb.mass = statistics.Weight;
         }
         #endregion
     }

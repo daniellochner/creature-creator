@@ -13,9 +13,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private int complexity = 0;
         [SerializeField] private List<Diet> diets = new List<Diet>();
-        [SerializeField] private int health = 100;
-        [SerializeField] private float weight = 0f;
-        [SerializeField] private float speed = 1f;
+
+        [SerializeField] private float weightBody = 0f;
+        [SerializeField] private float weightBodyParts = 0f;
+
+        [SerializeField] private float speedBody = 0f;
+        [SerializeField] private float speedBodyParts = 0f;
+
+        [SerializeField] private int healthBody = 0;
+        [SerializeField] private int healthBodyParts = 0;
         #endregion
 
         #region Properties
@@ -31,29 +37,50 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => diets;
         }
-        public int Health
-        {
-            get => health;
-            set
-            {
-                health = Mathf.Clamp(value, 1, 1000);
-            }
-        }
+
         public float Weight
         {
-            get => weight;
-            set
-            {
-                weight = Mathf.Clamp(value, 0, 1000);
-            }
+            get => Mathf.Clamp(0f, WeightBody + WeightBodyParts, 1000f);
         }
+        public float WeightBody
+        {
+            get => weightBody;
+            set => weightBody = value;
+        }
+        public float WeightBodyParts
+        {
+            get => weightBodyParts;
+            set => weightBodyParts = value;
+        }
+        
+        public int Health
+        {
+            get => Mathf.Clamp(100 + HealthBody + HealthBodyParts, 0, 1000);
+        }
+        public int HealthBody
+        {
+            get => healthBody;
+            set => healthBody = value;
+        }
+        public int HealthBodyParts
+        {
+            get => healthBodyParts;
+            set => healthBodyParts = value;
+        }
+
         public float Speed
         {
-            get => speed;
-            set
-            {
-                speed = Mathf.Clamp(value, 0f, 2.5f);
-            }
+            get => Mathf.Clamp(1f + SpeedBody + SpeedBodyParts, 0f, 2.5f);
+        }
+        public float SpeedBody
+        {
+            get => speedBody;
+            set => speedBody = value;
+        }
+        public float SpeedBodyParts
+        {
+            get => speedBodyParts;
+            set => speedBodyParts = value;
         }
 
         public Diet Diet
@@ -90,9 +117,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             complexity = 0;
             diets.Clear();
-            health = 100;
-            weight = 0f;
-            speed = 1f;
+            healthBodyParts = 0;
+            weightBodyParts = 0f;
+            speedBodyParts = 0f;
         }
         #endregion
     }

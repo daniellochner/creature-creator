@@ -363,6 +363,15 @@ MonoBehaviour:
     min: 2
     max: 20
   density: 500
+  minMaxBodySpeed:
+    min: -1
+    max: 0
+  minMaxBodyHealth:
+    min: 0
+    max: 250
+  minMaxBodyWeight:
+    min: 10
+    max: 1000
   data:
     name: 
     bones: []
@@ -377,9 +386,12 @@ MonoBehaviour:
   statistics:
     complexity: 0
     diets: 
-    health: 100
-    speed: 1
-    weight: 0
+    weightBody: 0
+    weightBodyParts: 0
+    speedBody: 0
+    speedBodyParts: 0
+    healthBody: 0
+    healthBodyParts: 0
   dimensions:
     height: 0
     radius: 0
@@ -687,7 +699,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5336ac240f49c4c429d8e7e374f7127a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
   health:
     m_InternalValue: 100
 --- !u!114 &1902851174053681457

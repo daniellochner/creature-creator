@@ -107,14 +107,16 @@ namespace DanielLochner.Assets.CreatureCreator
         public virtual void Add(CreatureStatistics stats)
         {
             stats.Complexity += Complexity;
-            stats.Health += Health;
-            stats.Speed += Speed;
+            stats.HealthBodyParts += Health;
+            stats.SpeedBodyParts += Speed;
+            stats.WeightBodyParts += Weight;
         }
         public virtual void Remove(CreatureStatistics stats)
         {
             stats.Complexity -= Complexity;
-            stats.Health -= Health;
-            stats.Speed -= Speed;
+            stats.HealthBodyParts -= Health;
+            stats.SpeedBodyParts -= Speed;
+            stats.WeightBodyParts -= Weight;
         }
 
         public override string ToString()
