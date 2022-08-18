@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public NetworkVariable<bool> IsBroken { get; set; } = new NetworkVariable<bool>(false);
         #endregion
-
+        
         #region Methods
         private void Awake()
         {

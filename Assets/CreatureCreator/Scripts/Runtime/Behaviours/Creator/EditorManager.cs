@@ -116,20 +116,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-
-            // Quick fix to move creatures from version directory to root.
-            // TODO: Remove in next version!
-
-            string oldDir = Path.Combine(Application.persistentDataPath, "1.0.0-b.1", "Creatures");
-            string newDir = Path.Combine(Application.persistentDataPath, "creature");
-            if (Directory.Exists(oldDir))
-            {
-                Directory.Move(oldDir, newDir);
-            }
-        }
         private void Update()
         {
             HandleKeyboardShortcuts();
