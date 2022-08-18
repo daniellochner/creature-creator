@@ -1,17 +1,13 @@
 using UnityEngine;
-
 using DanielLochner.Assets.CreatureCreator;
 using DanielLochner.Assets;
-using System.Collections.Generic;
-//using UnityEditor;
-using BodyPart = DanielLochner.Assets.CreatureCreator.BodyPart;
-using Unity.Netcode;
-using UnityEngine.Animations;
-using Newtonsoft.Json;
+using UnityEditor;
 
 public class Testing : MonoBehaviour
 {
-    
+
+
+
 
     //public string data;
 
