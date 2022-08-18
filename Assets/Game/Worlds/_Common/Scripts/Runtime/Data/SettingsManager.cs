@@ -33,8 +33,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+
             SetResolution(Data.Resolution);
             SetFullscreen(Data.Fullscreen);
             SetVSync(Data.VSync);

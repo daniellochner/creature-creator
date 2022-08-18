@@ -19,20 +19,24 @@ namespace DanielLochner.Assets
         #region Properties
         public static M Data => Instance.data;
 
-        private string EncryptionKeyValue => (encryptionKey != null) ? encryptionKey.Value : "";
+        public virtual string SALT { get; }
+        private string EncryptionKeyValue => (encryptionKey != null) ? (encryptionKey.Value + SALT) : "";
         #endregion
 
         #region Methods
-        protected override void Awake()
+        protected virtual void Start()
         {
-            base.Awake();
-
+            Setup();
+        }
+        protected void Setup()
+        {
             if (!File.Exists(Path.Combine(Application.persistentDataPath, fileName)))
             {
                 Revert();
             }
             Load();
         }
+
         [ContextMenu("Save")]
         public virtual void Save()
         {
@@ -41,7 +45,15 @@ namespace DanielLochner.Assets
         [ContextMenu("Load")]
         public virtual void Load()
         {
-            data = SaveUtility.Load<M>(Path.Combine(Application.persistentDataPath, fileName), EncryptionKeyValue);
+            M loaded = SaveUtility.Load<M>(Path.Combine(Application.persistentDataPath, fileName), EncryptionKeyValue);        
+            if (loaded != null)
+            {
+                data = loaded;
+            }
+            else
+            {
+                Debug.Log($"Failed to load {Path.Combine(Application.persistentDataPath, fileName)}.");
+            }
         }
         [ContextMenu("Revert")]
         public void Revert()

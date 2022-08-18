@@ -14,6 +14,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private IEnumerator Start()
+        {
+            yield return new WaitForSeconds(1f);
+            RoadmapMenu.Instance.Open();
+        }
         private void Update()
         {
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))
