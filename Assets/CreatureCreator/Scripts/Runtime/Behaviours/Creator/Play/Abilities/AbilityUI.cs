@@ -8,15 +8,27 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class AbilityUI : MonoBehaviour, IPointerDownHandler
+    public class AbilityUI : MonoBehaviour
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image cooldownImage;
         [SerializeField] private Button performButton;
         [SerializeField] private TextMeshProUGUI performKeyText;
+        [SerializeField] private CanvasGroup abilityCG;
 
         private Ability ability;
+        #endregion
+
+        #region Properties
+        public bool IsInteractable
+        {
+            set
+            {
+                abilityCG.alpha = value ? 1f : 0.5f;
+                abilityCG.interactable = value;
+            }
+        }
         #endregion
 
         #region Methods
@@ -45,11 +57,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             performKeyText.text = $"[{ability.PerformKeybind.ToString()}]";
             cooldownImage.fillAmount = ability.CooldownTimeLeft / ability.Cooldown;
-        }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            performButton.interactable = (ability.CooldownTimeLeft == 0f) && ability.CanPerform;
+            IsInteractable = (ability.CooldownTimeLeft <= 0f) && ability.CanPerform;
         }
         #endregion
     }

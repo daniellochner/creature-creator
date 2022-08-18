@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.4}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 7006608130471880323}
   - component: {fileID: 7006608130471880351}
   - component: {fileID: 7006608130471880350}
+  - component: {fileID: 6743843069319006285}
   m_Layer: 5
   m_Name: AbilityUI
   m_TagString: Untagged
@@ -448,7 +449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -515,3 +516,16 @@ MonoBehaviour:
   cooldownImage: {fileID: 7006608130076399840}
   performButton: {fileID: 7006608130471880323}
   performKeyText: {fileID: 7006608129532166068}
+  abilityCG: {fileID: 6743843069319006285}
+--- !u!225 &6743843069319006285
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7006608130471880321}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
