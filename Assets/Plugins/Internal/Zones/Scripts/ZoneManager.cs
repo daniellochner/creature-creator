@@ -23,23 +23,56 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void SetZone(Zone zone)
+        public void EnterZone(Zone zone)
         {
-            if (currentZone == zone) return;
+            Debug.Log("ENTER: " + zone.name);
 
-            if (currentZone != null)
-            {
-                currentZone.onExit?.Invoke();
-            }
-            if (zone != null)
-            {
-                zone.onEnter?.Invoke();
-            }
+            if (zone == null || currentZone == zone) return;
+
+            zone.onEnter?.Invoke();
             currentZone = zone;
 
-            if (zone != null)
+            NotificationsManager.Notify($"You entered <b>{zone.name}</b>.");
+        }
+        public void ExitCurrentZone(Vector3 exitPosition)
+        {
+            Debug.Log("EXIT: " + exitPosition);
+
+            Zone zoneToEnter = null;
+            Collider[] cols = Physics.OverlapSphere(exitPosition, 0.01f, LayerMask.GetMask("Zone"), QueryTriggerInteraction.Collide);
+            foreach (Collider col in cols)
             {
-                NotificationsManager.Notify($"You entered <b>{zone.name}</b>.");
+                Zone zone = col.GetComponent<Zone>();
+                if (zone != null)
+                {
+                    zoneToEnter = zone;
+                    break;
+                }
+            }
+            
+            // TODO: Tidy this logic up...
+            if (zoneToEnter != null)
+            {
+                if (zoneToEnter != currentZone)
+                {
+                    if (currentZone != null)
+                    {
+                        currentZone.onExit?.Invoke();
+                    }
+                    EnterZone(zoneToEnter);
+                }
+                else
+                {
+                    // do nothing...
+                }
+            }
+            else
+            {
+                if (currentZone != null)
+                {
+                    currentZone.onExit?.Invoke();
+                }
+                currentZone = null;
             }
         }
         #endregion

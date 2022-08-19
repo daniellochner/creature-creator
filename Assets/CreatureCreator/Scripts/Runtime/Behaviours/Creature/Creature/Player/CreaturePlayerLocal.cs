@@ -78,7 +78,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Respawn()
         {
-            ZoneManager.Instance.SetZone(null);
+            ZoneManager.Instance.ExitCurrentZone(Editor.Platform.Position);
 
             Mover.Teleport(Editor.Platform);
 

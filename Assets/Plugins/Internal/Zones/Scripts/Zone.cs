@@ -9,6 +9,7 @@ namespace DanielLochner.Assets
     public class Zone : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private float entryDelay;
         public UnityEvent onEnter;
         public UnityEvent onExit;
         #endregion
@@ -18,17 +19,14 @@ namespace DanielLochner.Assets
         {
             if (other.CompareTag(ZoneManager.Instance.PlayerTag))
             {
-                Debug.Log("ENTER" + name);
-                ZoneManager.Instance.SetZone(this);
+                ZoneManager.Instance.EnterZone(this);
             }
         }
         public void OnTriggerExit(Collider other)
         {
             if (other.CompareTag(ZoneManager.Instance.PlayerTag))
             {
-                Debug.Log("EXIT" + name);
-
-                ZoneManager.Instance.SetZone(null);
+                ZoneManager.Instance.ExitCurrentZone(other.transform.position);
             }
         }
         #endregion
