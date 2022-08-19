@@ -70,7 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float Speed
         {
-            get => Mathf.Clamp(1f + SpeedBody + SpeedBodyParts, 0f, 2.5f);
+            get => Mathf.Clamp(1f + SpeedBody + SpeedBodyParts + SpeedBoost, 0f, 3f);
         }
         public float SpeedBody
         {
@@ -81,6 +81,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => speedBodyParts;
             set => speedBodyParts = value;
+        }
+        public float SpeedBoost
+        {
+            get; set;
         }
 
         public Diet Diet

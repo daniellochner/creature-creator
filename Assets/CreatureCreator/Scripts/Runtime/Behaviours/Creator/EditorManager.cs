@@ -26,7 +26,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private SecretKey creatureEncryptionKey;
 
         [Header("General")]
-        [SerializeField] private Platform platform;
         [SerializeField] private AudioSource editorAudioSource;
         [SerializeField] private CanvasGroup editorCanvasGroup;
         [SerializeField] private CanvasGroup paginationCanvasGroup;
@@ -273,9 +272,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 Creature.Editor.Load(null);
             }
             Creature.Editor.Cash = BaseCash;
-            Creature.Editor.Platform = platform;
             Creature.Informer.Setup(informationMenu);
-            Creature.Mover.Teleport(platform, true);
+            Creature.Mover.Teleport(Creature.Editor.Platform, true);
 
             Creature.Editor.OnTryRemoveBone += delegate
             {
