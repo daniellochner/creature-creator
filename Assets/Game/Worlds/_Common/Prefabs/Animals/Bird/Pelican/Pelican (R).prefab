@@ -61,6 +61,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
+--- !u!114 &741522003743500477 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3874528375690102134, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
+  m_PrefabInstance: {fileID: 4580017141417930187}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215307227820250861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &846560549477215926 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3760764105679995773, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
@@ -127,6 +138,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d71ead22d4823640887246afa879410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &2497780208008658476 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2100534018078479335, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
+  m_PrefabInstance: {fileID: 4580017141417930187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2545219268661581163 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2079838541955201184, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
@@ -138,13 +154,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3704065420127208858 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 930000526183491665, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
+  m_PrefabInstance: {fileID: 4580017141417930187}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215307227820250861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4019190742706172614 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 596856681940410125, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
+  m_PrefabInstance: {fileID: 4580017141417930187}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215307227820250861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4719266434696677667 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9147178644524721384, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
   m_PrefabInstance: {fileID: 4580017141417930187}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8215307227820250861}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
@@ -177,7 +215,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 4580017141417930187}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8215307227820250861}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6331468b6e73c6e4e9d9905b2bc66a22, type: 3}
   m_Name: 
@@ -226,15 +264,20 @@ MonoBehaviour:
   collider: {fileID: 7506599831635217661}
   cloner: {fileID: 6544917265739971726}
   photographer: {fileID: 7871507266851826915}
-  killer: {fileID: 2545219268661581163}
-  effector: {fileID: 1440392169478737633}
+  corpse: {fileID: 2545219268661581163}
+  effects: {fileID: 1440392169478737633}
   scaler: {fileID: 1267178129501906361}
   health: {fileID: 7248198669823805777}
-  energy: {fileID: 1459273802013176864}
+  hunger: {fileID: 1459273802013176864}
   age: {fileID: 846560549477215926}
   hider: {fileID: 8347337960714317595}
   informer: {fileID: 2040475486170758743}
+  spawner: {fileID: 3704065420127208858}
+  rb: {fileID: 2497780208008658476}
+  velocity: {fileID: 741522003743500477}
   selectable: {fileID: 1078875697362188137}
+  commandable: {fileID: 4019190742706172614}
+  cachedData: {fileID: 4900000, guid: d7ba8106e39ffe84a88d84c0c7e376f5, type: 3}
 --- !u!114 &1703913692
 MonoBehaviour:
   m_ObjectHideFlags: 0
