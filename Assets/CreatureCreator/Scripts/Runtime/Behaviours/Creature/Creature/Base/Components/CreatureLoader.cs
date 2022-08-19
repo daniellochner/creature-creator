@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
 
         private readonly string end = ",\"0000001D\":{\"type\":{\"class\":\"Terminus\",\"ns\":\"UnityEngine.DMAT\",\"asm\":\"FAKE_ASM\"},\"data\":{}}}}";
-        private Coroutine showCoroutine;
+        private float showTimeLeft;
         #endregion
 
         #region Properties
@@ -37,17 +37,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Constructor = GetComponent<CreatureConstructor>();
         }
-
         private void Update()
         {
-            
+            showTimeLeft = Mathf.Max(showTimeLeft - Time.deltaTime, 0);
         }
-
 
         // Request to show this creature to me
         public void RequestShow()
         {
-
             RequestShowServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         [ServerRpc(RequireOwnership = false)]
@@ -59,7 +56,12 @@ namespace DanielLochner.Assets.CreatureCreator
         // Show me to everyone else
         public void Show()
         {
-            ShowServerRpc(OptimizedData);
+            this.Invoke(delegate
+            {
+                ShowServerRpc(OptimizedData);
+            }, 
+            showTimeLeft);
+            showTimeLeft = showCooldown;
         }
         [ServerRpc(RequireOwnership = false)]
         private void ShowServerRpc(string creatureData)
@@ -98,6 +100,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             OnShow?.Invoke();
         }
+
+
 
         // Hide me from everyone else
         public void Hide()
