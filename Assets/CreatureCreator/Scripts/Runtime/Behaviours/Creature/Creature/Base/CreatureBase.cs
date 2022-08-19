@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHealth))]
     [RequireComponent(typeof(CreatureHunger))]
     [RequireComponent(typeof(CreatureAge))]
-    [RequireComponent(typeof(CreatureHider))]
+    [RequireComponent(typeof(CreatureLoader))]
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureSpawner))]
     [RequireComponent(typeof(PlayerEffects))]
@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureHealth health;
         [SerializeField] private CreatureHunger hunger;
         [SerializeField] private CreatureAge age;
-        [SerializeField] private CreatureHider hider;
+        [SerializeField] private CreatureLoader loader;
         [SerializeField] private CreatureInformer informer;
         [SerializeField] private CreatureSpawner spawner;
         [SerializeField] private Rigidbody rb;
@@ -53,7 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureHealth Health => health;
         public CreatureHunger Hunger => hunger;
         public CreatureAge Age => age;
-        public CreatureHider Hider => hider;
+        public CreatureLoader Loader => loader;
         public CreatureInformer Informer => informer;
         public CreatureSpawner Spawner => spawner;
         public PlayerEffects Effects => effects;
@@ -76,7 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
             health = GetComponent<CreatureHealth>();
             hunger = GetComponent<CreatureHunger>();
             age = GetComponent<CreatureAge>();
-            hider = GetComponent<CreatureHider>();
+            loader = GetComponent<CreatureLoader>();
             informer = GetComponent<CreatureInformer>();
             spawner = GetComponent<CreatureSpawner>();
             rb = GetComponent<Rigidbody>();
@@ -90,8 +90,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Spawner.OnSpawn += OnSpawn;
             Spawner.OnDespawn += OnDespawn;
-            Hider.OnShow += OnShow;
-            Hider.OnHide += OnHide;
+            Loader.OnShow += OnShow;
+            Loader.OnHide += OnHide;
             Health.OnDie += OnDie;
         }
 

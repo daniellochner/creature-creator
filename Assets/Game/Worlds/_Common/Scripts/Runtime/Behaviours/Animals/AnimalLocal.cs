@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
             AI.Setup();
 
-            Hider.OnShow();
+            Loader.OnShow();
         }
 
         public override void OnShow()

@@ -7,27 +7,17 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CreatureNonPlayerRemote : CreatureNonPlayer
     {
-        [SerializeField] private TextAsset cachedData;
-
         public override void Setup()
         {
             base.Setup();
 
-            if (!Hider.IsHidden)
+            if (!Loader.IsHidden)
             {
-                if (cachedData != null)
-                {
-                    Constructor.Construct(JsonUtility.FromJson<CreatureData>(cachedData.text));
-                    Hider.OnShow();
-                }
-                else
-                {
-                    Hider.RequestShow();
-                }
+                Loader.RequestShow();
             }
             else
             {
-                Hider.OnHide();
+                Loader.OnHide();
             }
         }
     }

@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 EditorManager.Instance.SetEditing(true);
 
                 player.Editor.Platform = this;
-                player.Hider.Hide();
+                player.Loader.Hide();
 
                 hasEntered = true;
             }
@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.SetEditing(false);
 
-                player.Hider.Show();
+                player.Loader.Show();
 
                 hasEntered = false;
             }

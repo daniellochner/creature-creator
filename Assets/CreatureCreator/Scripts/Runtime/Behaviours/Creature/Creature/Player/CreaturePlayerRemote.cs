@@ -39,13 +39,13 @@ namespace DanielLochner.Assets.CreatureCreator
             Selectable.Setup();
             Namer.Setup();
 
-            if (!Hider.IsHidden)
+            if (!Loader.IsHidden)
             {
-                Hider.RequestShow();
+                Loader.RequestShow();
             }
             else
             {
-                Hider.OnHide();
+                Loader.OnHide();
             }
         }
 

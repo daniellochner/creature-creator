@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureRagdoll))]
-    [RequireComponent(typeof(CreatureHider))]
+    [RequireComponent(typeof(CreatureLoader))]
     [RequireComponent(typeof(CreatureConstructor))]
     [RequireComponent(typeof(CreatureHealth))]
     public class CreatureCorpse : NetworkBehaviour
