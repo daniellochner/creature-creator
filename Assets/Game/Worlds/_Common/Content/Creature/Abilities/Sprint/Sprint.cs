@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace DanielLochner.Assets.CreatureCreator.Abilities
 {
@@ -10,6 +9,19 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     public class Sprint : Ability
     {
         [Header("Sprint")]
-        [SerializeField] private PostProcessProfile sprintProfile;
+        [SerializeField] private float speed;
+        [SerializeField] private float duration;
+        private CreatureSpeedup speedUp;
+
+        public override void Setup(CreatureAbilities creatureAbilities)
+        {
+            base.Setup(creatureAbilities);
+            speedUp = creatureAbilities.GetComponent<CreatureSpeedup>();
+        }
+        public override void OnPerform()
+        {
+            base.OnPerform();
+            speedUp.SpeedUp(speed, duration);
+        }
     }
 }

@@ -7,19 +7,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         [SerializeField] private float boostSpeed;
         [SerializeField] private float boostTime;
-        private AudioSource audioSource;
-
-        private void Awake()
-        {
-            audioSource = GetComponent<AudioSource>();
-        }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player/Local"))
             {
                 BoostServerRpc(NetworkManager.Singleton.LocalClientId);
-                audioSource.Play();
             }
         }
 

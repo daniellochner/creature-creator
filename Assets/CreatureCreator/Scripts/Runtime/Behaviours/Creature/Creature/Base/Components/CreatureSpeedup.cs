@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,11 +16,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
 
-        public MinMax MinMaxSpeedUp => minMaxSpeedUp;
+        public MinMax MinMaxSpeedUp
+        {
+            get => minMaxSpeedUp;
+        }
         public float Speed
         {
             get => speed.Value;
         }
+
+        public Action<float> OnSpeedUp { get; set; }
         #endregion
 
         #region Methods
@@ -45,16 +51,23 @@ namespace DanielLochner.Assets.CreatureCreator
                 StopCoroutine(speedUpCoroutine);
             }
 
-            speed.Value = minMaxSpeedUp.Clamp(s);
+            speed.Value = minMaxSpeedUp.Clamp(speed.Value + s);
             speedUpCoroutine = InvokeUtility.Invoke(this, delegate
             {
                 speed.Value = 0f;
             }, t);
+
+            SpeedUpClientRpc(s);
+        }
+        [ClientRpc]
+        public void SpeedUpClientRpc(float s)
+        {
+            OnSpeedUp?.Invoke(s);
         }
         
-        private void UpdateSpeed(float oldSpeedUp, float newSpeedUp)
+        private void UpdateSpeed(float oldSpeed, float newSpeed)
         {
-            Constructor.Statistics.SpeedBoost = newSpeedUp;
+            Constructor.Statistics.SpeedBoost = newSpeed;
         }
         #endregion
     }

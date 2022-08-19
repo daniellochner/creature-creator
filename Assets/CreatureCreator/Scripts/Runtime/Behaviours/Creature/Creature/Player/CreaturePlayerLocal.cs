@@ -6,6 +6,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureCamera))]
+    [RequireComponent(typeof(CreatureSpeedEffects))]
     public class CreaturePlayerLocal : CreaturePlayer, ISetupable
     {
         #region Fields
@@ -14,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureMover mover;
         [SerializeField] private CreatureInteractor interactor;
         [SerializeField] private new CreatureCamera camera;
+        [SerializeField] private CreatureSpeedEffects speedEffects;
         #endregion
 
         #region Properties
@@ -22,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureMover Mover => mover;
         public CreatureInteractor Interactor => interactor;
         public CreatureCamera Camera => camera;
+        public CreatureSpeedEffects SpeedEffects => speedEffects;
 
         public bool IsSetup { get; set; }
         #endregion
@@ -37,12 +40,14 @@ namespace DanielLochner.Assets.CreatureCreator
             mover = GetComponent<CreatureMover>();
             interactor = GetComponent<CreatureInteractor>();
             camera = GetComponent<CreatureCamera>();
+            speedEffects = GetComponent<CreatureSpeedEffects>();
         }
 #endif
 
         public override void Setup()
         {
             Camera.Setup();
+            SpeedEffects.Setup();
             base.Setup();
             Editor.Setup();
             Interactor.Setup();

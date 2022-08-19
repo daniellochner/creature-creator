@@ -10,7 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Ability")]
-        [SerializeField] private bool isImplemented;
         [SerializeField] private int level;
         [SerializeField] private int priority;
         [SerializeField] private Keybind performKeybind;
@@ -18,7 +17,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public bool IsImplemented => isImplemented;
         public int Level => level;
         public int Priority => priority;
         public Keybind PerformKeybind
