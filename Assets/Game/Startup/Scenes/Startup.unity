@@ -1200,8 +1200,8 @@ MonoBehaviour:
   m_MaxPacketQueueSize: 256
   m_MaxPayloadSize: 1024000
   m_MaxSendQueueSize: 98304
-  m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
+  m_HeartbeatTimeoutMS: 5000
+  m_ConnectTimeoutMS: 5000
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 60000
   ConnectionData:
@@ -1225,11 +1225,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProtocolType: 0
-  m_MaxPacketQueueSize: 128
+  m_MaxPacketQueueSize: 256
   m_MaxPayloadSize: 1024000
   m_MaxSendQueueSize: 98304
   m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
+  m_ConnectTimeoutMS: 5000
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 60000
   ConnectionData:
@@ -2908,7 +2908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ffc06a07ffff24bb236aa4a45eb853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  music:
+  sounds:
     reorderableList:
       canAdd: 1
       canRemove: 1
@@ -2932,19 +2932,20 @@ MonoBehaviour:
     reqReferences: {fileID: 0}
     isExpanded: 1
     _keyValues:
-    - WistfulHarp
     - Being
     - Fun
+    - WistfulHarp
     _keys:
-    - WistfulHarp
     - Being
     - Fun
+    - WistfulHarp
     _values:
-    - {fileID: 8300000, guid: 95d8ef575b2dd44448ab281615f065d7, type: 3}
     - {fileID: 8300000, guid: 39831c54cb8d47e4d840731d025746eb, type: 3}
     - {fileID: 8300000, guid: ce37869470666c04aa8278826e323808, type: 3}
+    - {fileID: 8300000, guid: 95d8ef575b2dd44448ab281615f065d7, type: 3}
   audioMixer: {fileID: 6239537105368895701, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
   useTimeScaledPitch: 0
+  startSound: 
 --- !u!4 &1694552245
 Transform:
   m_ObjectHideFlags: 0

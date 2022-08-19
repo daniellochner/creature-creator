@@ -78,6 +78,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Respawn()
         {
+            ZoneManager.Instance.SetZone(null);
+
             Mover.Teleport(Editor.Platform);
 
             Constructor.Body.gameObject.SetActive(true);
