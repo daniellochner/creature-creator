@@ -7,18 +7,5 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CreatureNonPlayerRemote : CreatureNonPlayer
     {
-        public override void Setup()
-        {
-            base.Setup();
-
-            if (!Loader.IsHidden)
-            {
-                Loader.RequestShow();
-            }
-            else
-            {
-                Loader.OnHide();
-            }
-        }
     }
 }

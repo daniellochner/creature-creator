@@ -19,7 +19,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
 
-        private readonly string end = ",\"0000001D\":{\"type\":{\"class\":\"Terminus\",\"ns\":\"UnityEngine.DMAT\",\"asm\":\"FAKE_ASM\"},\"data\":{}}}}";
         private float showTimeLeft;
         #endregion
 
@@ -42,80 +41,106 @@ namespace DanielLochner.Assets.CreatureCreator
             showTimeLeft = Mathf.Max(showTimeLeft - Time.deltaTime, 0);
         }
 
-        // Request to show this creature to me
-        public void RequestShow()
+        // Show To Me
+        public void ShowToMe()
         {
-            RequestShowServerRpc(NetworkManager.Singleton.LocalClientId);
+            ShowToSpecificServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         [ServerRpc(RequireOwnership = false)]
-        public void RequestShowServerRpc(ulong showToClientId)
+        private void ShowToSpecificServerRpc(ulong showToClientId)
         {
-            ShowClientRpc(OptimizedData, NetworkUtils.SendTo(showToClientId));
+            ClientRpcParams p = NetworkUtils.SendTo(showToClientId);
+            if (cachedData != null)
+            {
+                ShowToSpecificCachedClientRpc(p);
+            }
+            else
+            {
+                ShowToSpecificClientRpc(GetOptimizedData(), p);
+            }
+        }
+        [ClientRpc]
+        private void ShowToSpecificClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
+        {
+            Construct(creatureData);
+        }
+        [ClientRpc]
+        private void ShowToSpecificCachedClientRpc(ClientRpcParams clientRpcParams = default)
+        {
+            Construct(cachedData.text);
         }
 
-        // Show me to everyone else
-        public void Show()
+        // Show Me To Others
+        public void ShowMeToOthers()
         {
             this.Invoke(delegate
             {
-                ShowServerRpc(OptimizedData);
+                ShowToOthersServerRpc(GetOptimizedData());
             }, 
             showTimeLeft);
             showTimeLeft = showCooldown;
         }
         [ServerRpc(RequireOwnership = false)]
-        private void ShowServerRpc(string creatureData)
+        private void ShowToOthersServerRpc(string creatureData)
         {
-            ShowClientRpc(creatureData);
+            if (cachedData != null)
+            {
+                ShowToOthersCachedClientRpc();
+            }
+            else
+            {
+                ShowToOthersClientRpc(creatureData);
+            }
             isHidden.Value = false;
         }
         [ClientRpc]
-        private void ShowClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
-        {
-            ShowOptimized(creatureData);
-        }
-        [ClientRpc]
-        private void ShowCachedClientRpc(ClientRpcParams clientRpcParams = default)
-        {
-            ShowOptimized(cachedData.text);
-        }
-        private void ShowOptimized(string data)
+        private void ShowToOthersClientRpc(string creatureData)
         {
             if (!IsOwner)
             {
-                try
-                {
-                    data = ParseOptimizedData(data);
-
-                    CreatureData dat = JsonUtility.FromJson<CreatureData>(data);
-                    Constructor.Demolish();
-                    Constructor.Body.gameObject.SetActive(true);
-                    Constructor.Construct(dat);
-                }
-                catch
-                {
-                    Debug.Log($"Parse error: {data}");
-                    return;
-                }
+                Construct(creatureData);
             }
-            OnShow?.Invoke();
+        }
+        [ClientRpc]
+        private void ShowToOthersCachedClientRpc()
+        {
+            if (!IsOwner)
+            {
+                Construct(cachedData.text);
+            }
         }
 
-
-
-        // Hide me from everyone else
-        public void Hide()
+        // Construct
+        private void Construct(string data)
         {
-            HideServerRpc();
+            try
+            {
+                CreatureData dat = JsonUtility.FromJson<CreatureData>(data);
+                Constructor.Demolish();
+                Constructor.Body.gameObject.SetActive(true);
+                Constructor.Construct(dat);
+
+                OnShow?.Invoke();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+        }
+
+        // Hide Me From Others
+        public void HideMeFromOthers()
+        {
+            HideFromOthersServerRpc();
         }
         [ServerRpc(RequireOwnership = false)]
-        private void HideServerRpc()
+        private void HideFromOthersServerRpc()
         {
-            HideClientRpc();
+            HideFromOthersClientRpc();
             isHidden.Value = true;
         }
         [ClientRpc]
-        private void HideClientRpc()
+        private void HideFromOthersClientRpc()
         {
             if (!IsOwner)
             {
@@ -124,41 +149,22 @@ namespace DanielLochner.Assets.CreatureCreator
             OnHide?.Invoke();
         }
 
-
-
-
-
-
-        
-        public string OptimizedData
+        // Optimize
+        private string GetOptimizedData()
         {
-            get => OptimizeData(JsonUtility.ToJson(Constructor.Data));
+            return OptimizeData(JsonUtility.ToJson(Constructor.Data));
         }
-
-        public string ParseOptimizedData(string data)
+        private string OptimizeData(string data)
         {
-            return data + end;
-        }
-        public string OptimizeData(string data)
-        {
-            Debug.Log(data);
-            // Remove common end portion
-            data = data.Substring(0, data.Length - end.Length);
-
-            Debug.Log(data);
-
             // Replace all exponential notation with 0
             data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+e[+-][0-9]+", "0");
-            Debug.Log(data);
 
             // Round all floats to X decimal points
             MatchEvaluator round = new MatchEvaluator(Round);
             data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+", round);
-            Debug.Log(data);
 
             return data;
         }
-
         private string Round(Match t)
         {
             string num = t.Value;
@@ -166,7 +172,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
             int length = num.Substring(i + 1).Length;
 
-            return num.Substring(0, (i + 1) + precision);
+            if (length > precision)
+            {
+                return num.Substring(0, (i + 1) + precision);
+            }
+            else
+            {
+                return num;
+            }
         }
         #endregion
     }

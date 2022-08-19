@@ -41,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (!Loader.IsHidden)
             {
-                Loader.RequestShow();
+                Loader.ShowToMe();
             }
             else
             {

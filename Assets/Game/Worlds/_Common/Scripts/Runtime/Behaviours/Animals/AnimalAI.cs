@@ -12,11 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(NavMeshAgent))]
     public class AnimalAI : StateMachine
     {
-        #region Fields
-        [Header("Animal")]
-        [SerializeField] private TextAsset data;
-        #endregion
-
         #region Properties
         public AnimatorParams Params => Creature.Animator.Params;
         public Animator Animator => Creature.Animator.Animator;
@@ -60,7 +55,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            Creature.Constructor.Construct(JsonUtility.FromJson<CreatureData>(data.text));
             Agent.speed *= Creature.Constructor.Statistics.Speed;
         }
 

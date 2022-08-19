@@ -39,6 +39,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
             Selectable.Setup();
+
+            if (!Loader.IsHidden)
+            {
+                Loader.ShowToMe();
+            }
+            else
+            {
+                Loader.OnHide();
+            }
         }
 
         public override void OnDie()

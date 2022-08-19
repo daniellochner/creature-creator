@@ -157,7 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                DogAI.Creature.Loader.Hide();
+                DogAI.Creature.Loader.HideMeFromOthers();
                 hideTimeLeft = hideTime.Random;
             }
             public override void UpdateLogic()
@@ -172,7 +172,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
-                DogAI.Creature.Loader.Show();
+                DogAI.Creature.Loader.ShowMeToOthers();
                 DogAI.Agent.SetDestination(DogAI.Creature.transform.position);
             }
         }
