@@ -25,8 +25,6 @@ namespace DanielLochner.Assets
         #region Methods
         public void EnterZone(Zone zone)
         {
-            Debug.Log("ENTER: " + zone.name);
-
             if (zone == null || currentZone == zone) return;
 
             zone.onEnter?.Invoke();
@@ -36,8 +34,6 @@ namespace DanielLochner.Assets
         }
         public void ExitCurrentZone(Vector3 exitPosition)
         {
-            Debug.Log("EXIT: " + exitPosition);
-
             Zone zoneToEnter = null;
             Collider[] cols = Physics.OverlapSphere(exitPosition, 0.01f, LayerMask.GetMask("Zone"), QueryTriggerInteraction.Collide);
             foreach (Collider col in cols)
@@ -50,7 +46,7 @@ namespace DanielLochner.Assets
                 }
             }
             
-            // TODO: Tidy this logic up...
+            // TODO: Tidy up!
             if (zoneToEnter != null)
             {
                 if (zoneToEnter != currentZone)
