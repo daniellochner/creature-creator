@@ -7,7 +7,8 @@ namespace DanielLochner.Assets
     public class VisibilitySource : MonoBehaviourSingleton<VisibilitySource>
     {
         #region Fields
-        [SerializeField] private int tps = 1;
+        [SerializeField] private float tps = 1;
+        [SerializeField] private int batchSize = 100;
         private Coroutine checkCoroutine;
         #endregion
 
@@ -29,12 +30,18 @@ namespace DanielLochner.Assets
         {
             while (true)
             {
-                foreach (VisibilityObject obj in Objects)
-                {
-                    obj.CheckVisibility(transform.position);
-                }
+                yield return new WaitUntil(() => Objects.Count > 0);
 
-                yield return new WaitForSeconds(1f / tps);
+                int counter = 0;
+                while (counter < Objects.Count)
+                {
+                    for (int i = 0; i < batchSize && counter < Objects.Count; ++i, ++counter)
+                    {
+                        Objects[counter].CheckVisibility(transform.position);
+                    }
+
+                    yield return new WaitForSeconds(1f / tps);
+                }
             }
         }
         #endregion
