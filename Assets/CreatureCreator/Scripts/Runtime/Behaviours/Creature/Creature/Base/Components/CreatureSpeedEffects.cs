@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -8,7 +6,8 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureCamera))]
     public class CreatureSpeedEffects : MonoBehaviour
     {
-        [SerializeField] private AudioClip speedUpFX;
+        [SerializeField] private SpeedLines speedLinesPrefab;
+        [SerializeField] private AudioClip speedUpSFX;
         [SerializeField] private MinMax minMaxFOV;
         [SerializeField] private float fovSmoothing;
         private Camera[] cameras;
@@ -31,9 +30,10 @@ namespace DanielLochner.Assets.CreatureCreator
             targetFOV = minMaxFOV.min;
             cameras = Camera.Camera.GetComponentsInChildren<Camera>();
 
-            Speedup.OnSpeedUp += delegate
+            Speedup.OnSpeedUp += delegate (float s, float t)
             {
-                audioSource.PlayOneShot(speedUpFX);
+                audioSource.PlayOneShot(speedUpSFX);
+                Instantiate(speedLinesPrefab).Setup(t);
             };
         }
         private void Update()

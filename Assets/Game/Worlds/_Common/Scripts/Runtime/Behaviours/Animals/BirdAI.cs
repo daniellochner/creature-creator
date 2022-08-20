@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private float minDistanceFromCreature;
             [SerializeField] private PlayerEffects.Sound[] flapSounds;
             [SerializeField] private TriggerRegion frightenTrigger;
+            [SerializeField] private bool dilate;
 
             public BirdAI BirdAI => StateMachine as BirdAI;
 
@@ -90,9 +91,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             private IEnumerator FlyToPositionRoutine(Vector3 to)
-            {     
+            {
                 // Shock
-                BirdAI.Params.SetBool("Eye_IsDilated", true);
+                if (dilate) { BirdAI.Params.SetBool("Eye_IsDilated", true); }
 
                 yield return new WaitForSeconds(shockTime);
 
@@ -112,9 +113,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     BirdAI.transform.position = Vector3.Lerp(from, to, progress) + (Vector3.up * (flightHeight * flightPath.Evaluate(progress)));
                 }, flightTime);
-                
+
                 // Perch
-                BirdAI.Params.SetBool("Eye_IsDilated", false);
+                if (dilate) { BirdAI.Params.SetBool("Eye_IsDilated", false); }
                 BirdAI.ChangeState("IDL");
             }
 
