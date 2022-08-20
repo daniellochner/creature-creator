@@ -27,9 +27,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind dig;
         [SerializeField] private Keybind distract;
         [SerializeField] private Keybind eat;
-        [SerializeField] private Keybind pickUp;
         [SerializeField] private Keybind ping;
-        [SerializeField] private Keybind roar;
+        [SerializeField] private Keybind growl;
         [SerializeField] private Keybind strike;
 
         [Header("Build")]
@@ -139,20 +138,15 @@ namespace DanielLochner.Assets.CreatureCreator
             get => eat;
             set => eat = value;
         }
-        public Keybind PickUp
-        {
-            get => pickUp;
-            set => pickUp = value;
-        }
         public Keybind Ping
         {
             get => ping;
             set => ping = value;
         }
-        public Keybind Roar
+        public Keybind Growl
         {
-            get => roar;
-            set => roar = value;
+            get => growl;
+            set => growl = value;
         }
         public Keybind Strike
         {
@@ -215,9 +209,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Dig = new Keybind(KeyCode.F);
             Distract = new Keybind(KeyCode.F);
             Eat = new Keybind(KeyCode.F);
-            PickUp = new Keybind(KeyCode.F);
             Ping = new Keybind(KeyCode.F);
-            Roar = new Keybind(KeyCode.G);
+            Growl = new Keybind(KeyCode.G);
             Strike = new Keybind(KeyCode.F);
 
             Copy = new Keybind(KeyCode.LeftAlt);

@@ -13,9 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Distract distractAbility;
         [SerializeField] private Drop dropAbility;
         [SerializeField] private Eat eatAbility;
-        [SerializeField] private PickUp pickUpAbility;
         [SerializeField] private Abilities.Ping pingAbility;
-        [SerializeField] private Growl roarAbility;
+        [SerializeField] private Growl growlAbility;
         [SerializeField] private Bite[] biteAbilities;
         [SerializeField] private Jump[] jumpAbilities;
         [SerializeField] private Flap[] flapAbilities;
@@ -73,17 +72,13 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.Jump = key;
         }
-        public void RebindPickUp(Keybind key)
-        {
-            pickUpAbility.PerformKeybind = key;
-        }
         public void RebindPing(Keybind key)
         {
             pingAbility.PerformKeybind = key;
         }
-        public void RebindRoar(Keybind key)
+        public void RebindGrowl(Keybind key)
         {
-            roarAbility.PerformKeybind = key;
+            growlAbility.PerformKeybind = key;
         }
         public void RebindSprint(Keybind key)
         {

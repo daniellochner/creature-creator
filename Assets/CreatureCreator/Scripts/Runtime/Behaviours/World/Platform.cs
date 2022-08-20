@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
             if (player != null && !hasEntered)
             {
-                player.PickUp.DropAll();
+                player.Holder.DropAll();
 
                 EditorManager.Instance.SetEditing(true);
 

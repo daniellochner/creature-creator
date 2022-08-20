@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         public override void OnPerform()
         {
-            Player.Instance.PickUp.DropAll();
+            Player.Instance.Holder.DropAll();
         }
     }
 }

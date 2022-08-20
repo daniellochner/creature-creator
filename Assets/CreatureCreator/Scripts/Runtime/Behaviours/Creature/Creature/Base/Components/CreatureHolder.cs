@@ -8,20 +8,23 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureAnimator))]
-    public class CreaturePickUp : NetworkBehaviour
+    public class CreatureHolder : NetworkBehaviour
     {
+        #region Fields
         private Dictionary<ArmAnimator, Holdable> held = new Dictionary<ArmAnimator, Holdable>();
+        #endregion
 
+        #region Properties
         public CreatureAnimator Animator { get; private set; }
+        #endregion
 
+        #region Methods
         private void Awake()
         {
             Animator = GetComponent<CreatureAnimator>();
-        }
-        
+        }   
         private void OnDisable()
         {
-            Debug.Log("DISABLED?");
             DropAll();
         }
 
@@ -56,8 +59,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     nearestArm = arm;
                 }
             }
-
-            Debug.Log(nearestArm);
             
             if (nearestArm != null)
             {
@@ -80,5 +81,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             held.Clear();
         }
+        #endregion
     }
 }

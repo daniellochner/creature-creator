@@ -28,9 +28,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI digKUI;
         [SerializeField] private KeybindUI distractKUI;
         [SerializeField] private KeybindUI eatKUI;
-        [SerializeField] private KeybindUI pickUpKUI;
         [SerializeField] private KeybindUI pingKUI;
-        [SerializeField] private KeybindUI roarKUI;
+        [SerializeField] private KeybindUI growlKUI;
         [SerializeField] private KeybindUI strikeKUI;
 
         [Header("Build")]
@@ -197,13 +196,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 KeybindingsManager.Instance.RebindEat(key);
             });
 
-            // PickUp
-            pickUpKUI.Rebind(KeybindingsManager.Data.PickUp, false);
-            pickUpKUI.OnRebind.AddListener(delegate (Keybind key)
-            {
-                KeybindingsManager.Instance.RebindPickUp(key);
-            });
-
             // Ping
             pingKUI.Rebind(KeybindingsManager.Data.Ping, false);
             pingKUI.OnRebind.AddListener(delegate (Keybind key)
@@ -211,11 +203,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 KeybindingsManager.Instance.RebindPing(key);
             });
 
-            // Roar
-            roarKUI.Rebind(KeybindingsManager.Data.Roar, false);
-            roarKUI.OnRebind.AddListener(delegate (Keybind key)
+            // Growl
+            growlKUI.Rebind(KeybindingsManager.Data.Growl, false);
+            growlKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                KeybindingsManager.Instance.RebindRoar(key);
+                KeybindingsManager.Instance.RebindGrowl(key);
             });
 
             // Strike
