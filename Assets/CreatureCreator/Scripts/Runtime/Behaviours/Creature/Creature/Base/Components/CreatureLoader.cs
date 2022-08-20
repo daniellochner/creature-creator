@@ -100,6 +100,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Construct(creatureData);
             }
+            OnShow?.Invoke();
         }
         [ClientRpc]
         private void ShowToOthersCachedClientRpc()
@@ -108,6 +109,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Construct(cachedData.text);
             }
+            OnShow?.Invoke();
         }
 
         // Construct
