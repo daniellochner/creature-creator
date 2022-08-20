@@ -43,7 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     $"<b>Version:</b> {world.Version}<br>" +
                     $"<b>Map:</b> {world.MapName}<br>" + 
                     $"<b>Mode:</b> {FormatMode(world.CreativeMode)}<br>" +
-                    //$"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
+                    $"<b>PVP:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>NPCs:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
                     $"<b>PVE:</b> {FormatEnabled(world.EnablePVE)}<br>" +
                     $"<b>Profanity:</b> {FormatAllowed(world.AllowProfanity)}"

@@ -218,7 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 canMove &= Mathf.Abs(angle) < angleToMove;
             }
-            RequestMove(canMove ? direction : Vector3.zero);
+            RequestMove(canMove && CanInput ? direction : Vector3.zero);
         }
         private void HandleGliding()
         {

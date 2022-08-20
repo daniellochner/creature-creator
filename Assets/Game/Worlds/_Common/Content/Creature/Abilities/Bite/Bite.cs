@@ -13,6 +13,14 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [SerializeField] private float biteRadius;
         private bool hasDealtDamage;
 
+        private bool CanDealDamage
+        {
+            get
+            {
+                return !hasDealtDamage && ((WorldManager.Instance.World is WorldMP) && (WorldManager.Instance.World as WorldMP).EnablePVP);
+            }
+        }
+
         public override void OnPerform()
         {
             hasDealtDamage = false;
@@ -23,7 +31,8 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         private void OnBite(MouthAnimator mouth)
         {
             CreatureAbilities.GetComponent<PlayerEffects>().PlaySound(biteSounds);
-            if (!hasDealtDamage)
+            
+            if (CanDealDamage)
             {
                 Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
                 foreach (Collider collider in colliders)

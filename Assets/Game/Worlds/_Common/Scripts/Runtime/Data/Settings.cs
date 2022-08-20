@@ -246,13 +246,13 @@ namespace DanielLochner.Assets.CreatureCreator
             VSync = false;
 
             CreatureMeshQuality = CreatureMeshQualityType.High;
-            ShadowQuality = ShadowQualityType.High;
+            ShadowQuality = ShadowQualityType.Medium;
             AmbientOcclusion = AmbientOcclusionType.MSVO;
             TextureQuality = TextureQualityType.VeryHigh;
             Antialiasing = AntialiasingType.FXAA;
-            ScreenSpaceReflections = ScreenSpaceReflectionsType.Medium;
-            Foliage = FoliageType.High;
-            Reflections = true;
+            ScreenSpaceReflections = ScreenSpaceReflectionsType.None;
+            Foliage = FoliageType.Low;
+            Reflections = false;
             AnisotropicFiltering = true;
             Bloom = true;
             DepthOfField = false;

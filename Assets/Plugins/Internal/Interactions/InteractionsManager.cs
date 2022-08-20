@@ -22,7 +22,6 @@ namespace DanielLochner.Assets
         private List<InteractionUI> interactions = new List<InteractionUI>();
         private Collider prevHitCollider;
         private int highlightedIndex;
-
         #endregion
 
         #region Properties
@@ -96,6 +95,11 @@ namespace DanielLochner.Assets
         {
             HandleUI();
             HandleInteractions();
+        }
+        private void OnDisable()
+        {
+            Targeted = null;
+            Highlighted = null;
         }
 
         private void HandleUI()

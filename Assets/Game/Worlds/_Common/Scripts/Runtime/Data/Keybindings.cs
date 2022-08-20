@@ -217,7 +217,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Eat = new Keybind(KeyCode.F);
             PickUp = new Keybind(KeyCode.F);
             Ping = new Keybind(KeyCode.F);
-            Roar = new Keybind(KeyCode.F);
+            Roar = new Keybind(KeyCode.G);
             Strike = new Keybind(KeyCode.F);
 
             Copy = new Keybind(KeyCode.LeftAlt);
