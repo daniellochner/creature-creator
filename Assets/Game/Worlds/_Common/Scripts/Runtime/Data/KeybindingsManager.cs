@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Eat eatAbility;
         [SerializeField] private PickUp pickUpAbility;
         [SerializeField] private Abilities.Ping pingAbility;
-        [SerializeField] private Roar roarAbility;
+        [SerializeField] private Growl roarAbility;
         [SerializeField] private Bite[] biteAbilities;
         [SerializeField] private Jump[] jumpAbilities;
         [SerializeField] private Flap[] flapAbilities;
