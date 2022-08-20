@@ -299,6 +299,7 @@ GameObject:
   - component: {fileID: -7668269879912966557}
   - component: {fileID: -3178328401799033499}
   - component: {fileID: 4291803478494652999}
+  - component: {fileID: 3419583124823167692}
   m_Layer: 0
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -826,6 +827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970ffca359a2f054e915d710ef410561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  precision: 3
+  showCooldown: 10
+  cachedData: {fileID: 0}
   isHidden:
     m_InternalValue: 0
 --- !u!114 &88016231886973403
@@ -982,6 +986,18 @@ MonoBehaviour:
     max: 2
   speed:
     m_InternalValue: 0
+--- !u!114 &3419583124823167692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7193793692236944224
 GameObject:
   m_ObjectHideFlags: 0

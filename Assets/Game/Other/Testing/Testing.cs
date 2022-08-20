@@ -5,26 +5,6 @@ using UnityEditor;
 
 public class Testing : MonoBehaviour
 {
-    [ContextMenu("ACTIVATE")]
-    public void ACTIVATE_CHILDREN()
-    {
-        foreach (Transform t in GetComponentsInChildren<Transform>(true))
-        {
-            t.gameObject.SetActive(true);
-        }
-    }
-
-
-    [ContextMenu("TEST")]
-    public void Test()
-    {
-        foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
-        {
-            mr.receiveShadows = true;
-        }
-    }
-
-
     //public string data;
 
     //public CreatureConstructor cPrefab;

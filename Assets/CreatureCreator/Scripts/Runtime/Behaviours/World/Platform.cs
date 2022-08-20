@@ -29,6 +29,8 @@ namespace DanielLochner.Assets.CreatureCreator
             CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
             if (player != null && !hasEntered)
             {
+                player.PickUp.DropAll();
+
                 EditorManager.Instance.SetEditing(true);
 
                 player.Editor.Platform = this;

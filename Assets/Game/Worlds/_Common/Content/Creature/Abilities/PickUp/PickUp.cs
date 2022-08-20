@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace DanielLochner.Assets.CreatureCreator.Abilities
 {

@@ -67,6 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Abilities.enabled = false;
             Mover.enabled = false;
             Interactor.enabled = false;
+            PickUp.enabled = false;
 
             Spawner.Despawn();
 
@@ -98,6 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Abilities.enabled = true;
             Mover.enabled = true;
             Interactor.enabled = true;
+            PickUp.enabled = true;
 
             Spawner.Spawn();
 

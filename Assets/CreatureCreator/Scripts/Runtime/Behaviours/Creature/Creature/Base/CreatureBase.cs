@@ -21,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureInformer))]
     [RequireComponent(typeof(CreatureSpawner))]
     [RequireComponent(typeof(PlayerEffects))]
+    [RequireComponent(typeof(CreaturePickUp))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -40,6 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureSpawner spawner;
         [SerializeField] private Rigidbody rb;
         [SerializeField] private CreatureVelocity velocity;
+        [SerializeField] private CreaturePickUp pickUp;
         #endregion
 
         #region Properties
@@ -59,6 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public PlayerEffects Effects => effects;
         public Rigidbody Rigidbody => rb;
         public CreatureVelocity Velocity => velocity;
+        public CreaturePickUp PickUp => pickUp;
         #endregion
 
         #region Methods
@@ -81,6 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
             spawner = GetComponent<CreatureSpawner>();
             rb = GetComponent<Rigidbody>();
             velocity = GetComponent<CreatureVelocity>();
+            pickUp = GetComponent<CreaturePickUp>();
         }
 #endif
 
