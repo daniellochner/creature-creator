@@ -89,6 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Constructor.Body.gameObject.SetActive(true);
             Rigidbody.isKinematic = false;
+            transform.parent = null;
 
             Collider.enabled = true;
 

@@ -5,7 +5,6 @@ using DanielLochner.Assets.CreatureCreator.Animations;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
