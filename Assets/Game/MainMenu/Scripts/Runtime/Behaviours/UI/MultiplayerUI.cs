@@ -194,7 +194,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         break;
 
                     case Map.Farm:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 16;
                         break;
                 }
             });

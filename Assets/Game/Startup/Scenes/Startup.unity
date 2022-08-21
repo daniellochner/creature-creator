@@ -603,13 +603,10 @@ MonoBehaviour:
     eat:
       key: 0
       modifierKey: 0
-    pickUp:
-      key: 0
-      modifierKey: 0
     ping:
       key: 0
       modifierKey: 0
-    roar:
+    growl:
       key: 0
       modifierKey: 0
     strike:
@@ -641,9 +638,8 @@ MonoBehaviour:
   distractAbility: {fileID: 11400000, guid: 1f951caa038482a449884f36921e25eb, type: 2}
   dropAbility: {fileID: 11400000, guid: 1fe428c6042e1f246a8ddfb618ed5662, type: 2}
   eatAbility: {fileID: 11400000, guid: 6d13c8e6dd1cfa94fa3ecf3efa059a47, type: 2}
-  pickUpAbility: {fileID: 11400000, guid: 8908108a863934a4cbefe7500c4f10a6, type: 2}
   pingAbility: {fileID: 11400000, guid: 22ecb2d95f56504458ceafdb640445db, type: 2}
-  roarAbility: {fileID: 11400000, guid: 053cb247c3c4169458e3a25362e10f96, type: 2}
+  growlAbility: {fileID: 0}
   biteAbilities:
   - {fileID: 11400000, guid: 06fd584d804165842becbca2b664970e, type: 2}
   - {fileID: 11400000, guid: 8869d360f61d3a74faa0f780a33501f0, type: 2}
@@ -1198,13 +1194,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProtocolType: 1
-  m_MaxPacketQueueSize: 256
+  m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 1024000
   m_MaxSendQueueSize: 98304
-  m_HeartbeatTimeoutMS: 5000
-  m_ConnectTimeoutMS: 5000
+  m_HeartbeatTimeoutMS: 500
+  m_ConnectTimeoutMS: 1000
   m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 60000
+  m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
@@ -1226,13 +1222,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProtocolType: 0
-  m_MaxPacketQueueSize: 256
+  m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 1024000
   m_MaxSendQueueSize: 98304
-  m_HeartbeatTimeoutMS: 5000
-  m_ConnectTimeoutMS: 5000
+  m_HeartbeatTimeoutMS: 500
+  m_ConnectTimeoutMS: 1000
   m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 60000
+  m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
@@ -2606,6 +2602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee015098ca6faa14cb8fd853abe9f63c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tp: {fileID: 6523387008296765308, guid: 1948b629e1eafbd46bb90bfeb67c9f91, type: 3}
 --- !u!114 &1599475295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4304,6 +4301,11 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 1418829917652989015, guid: 7ee5d724817ff284a980642082f26c67, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 6523387008296765307, guid: 1948b629e1eafbd46bb90bfeb67c9f91, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}

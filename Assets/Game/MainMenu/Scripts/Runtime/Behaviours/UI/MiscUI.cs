@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator Start()
         {
             yield return new WaitForSeconds(1f);
-            InformationDialog.Inform("Early Access", "This game is in Early Access! <s>If</s> When you encounter a bug, please report it in the community Discord server. Thanks!");
+            InformationDialog.Inform("Early Access", "Please note that this game is in Early Access! If you encounter a bug, please consider reporting it in the community Discord server. Thank you!");
         }
         private void Update()
         {
