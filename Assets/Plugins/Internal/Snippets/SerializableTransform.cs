@@ -1,10 +1,11 @@
 ﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
     [Serializable]
-    public class SerializableTransform
+    public class SerializableTransform : INetworkSerializable
     {
         #region Fields
         public Vector3 position;
@@ -13,6 +14,10 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        public SerializableTransform()
+        {
+
+        }
         public SerializableTransform(Transform transform, Transform world)
         {
             position = world.InverseTransformPoint(transform.position);
@@ -23,6 +28,13 @@ namespace DanielLochner.Assets
         {
             position = world.InverseTransformPoint(position);
             rotation = Quaternion.Inverse(world.rotation) * rotation;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref position);
+            serializer.SerializeValue(ref scale);
+            serializer.SerializeValue(ref rotation);
         }
         #endregion
     }

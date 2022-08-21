@@ -157,7 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                DogAI.Creature.Loader.HideMeFromOthers();
+                DogAI.Creature.Loader.HideFromOthers();
                 hideTimeLeft = hideTime.Random;
             }
             public override void UpdateLogic()

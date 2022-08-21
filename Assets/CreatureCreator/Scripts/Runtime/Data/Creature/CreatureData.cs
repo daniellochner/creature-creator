@@ -3,12 +3,13 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [Serializable]
-    public class CreatureData
+    public class CreatureData : INetworkSerializable
     {
         #region Fields
         [SerializeField] private string name;
@@ -29,14 +30,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => name;
             set => name = value;
-        }
-        public List<Bone> Bones
-        {
-            get => bones;
-        }
-        public List<AttachedBodyPart> AttachedBodyParts
-        {
-            get => attachedBodyParts;
         }
         public string PatternID
         {
@@ -73,6 +66,14 @@ namespace DanielLochner.Assets.CreatureCreator
             get => metallic;
             set => metallic = value;
         }
+        public List<Bone> Bones
+        {
+            get => bones;
+        }
+        public List<AttachedBodyPart> AttachedBodyParts
+        {
+            get => attachedBodyParts;
+        }
         #endregion
 
         #region Methods
@@ -89,6 +90,36 @@ namespace DanielLochner.Assets.CreatureCreator
             secondaryColour = Color.black;
             shine = 0f;
             metallic = 0f;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref name);
+            serializer.SerializeValue(ref patternID);
+            serializer.SerializeValue(ref scale);
+            serializer.SerializeValue(ref offset);
+            serializer.SerializeValue(ref primaryColour);
+            serializer.SerializeValue(ref secondaryColour);
+            serializer.SerializeValue(ref shine);
+            serializer.SerializeValue(ref metallic);
+
+            Bone[] b = null;
+            AttachedBodyPart[] a = null;
+
+            if (serializer.IsWriter)
+            {
+                b = bones.ToArray();
+                a = attachedBodyParts.ToArray();
+            }
+            //
+            serializer.SerializeValue(ref b);
+            serializer.SerializeValue(ref a);
+
+            if (serializer.IsReader)
+            {
+                bones = new List<Bone>(b);
+                attachedBodyParts = new List<AttachedBodyPart>(a);
+            }
         }
         #endregion
     }

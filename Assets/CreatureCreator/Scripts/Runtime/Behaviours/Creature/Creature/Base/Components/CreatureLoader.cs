@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,10 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureLoader : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private int precision = 3;
         [SerializeField] private TextAsset cachedData;
-
-        [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
+        [SerializeField, ReadOnly] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
         #endregion
 
         #region Properties
@@ -34,92 +33,54 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
         }
 
-        // Show To Me
+        #region Show
         public void ShowToMe()
         {
-            ShowToSpecificServerRpc(NetworkManager.Singleton.LocalClientId);
-        }
-        [ServerRpc(RequireOwnership = false)]
-        private void ShowToSpecificServerRpc(ulong showToClientId)
-        {
-            ClientRpcParams p = NetworkUtils.SendTo(showToClientId);
             if (cachedData != null)
             {
-                ShowToSpecificCachedClientRpc(p);
+                Show(JsonUtility.FromJson<CreatureData>(cachedData.text));
             }
             else
             {
-                ShowToSpecificClientRpc(GetOptimizedData(), p);
+                ShowToMeServerRpc(NetworkManager.Singleton.LocalClientId);
             }
         }
-        [ClientRpc]
-        private void ShowToSpecificClientRpc(string creatureData, ClientRpcParams clientRpcParams = default)
-        {
-            Construct(creatureData);
-        }
-        [ClientRpc]
-        private void ShowToSpecificCachedClientRpc(ClientRpcParams clientRpcParams = default)
-        {
-            Construct(cachedData.text);
-        }
-
-        // Show Me To Others
         public void ShowMeToOthers()
         {
-            ShowToOthersServerRpc(GetOptimizedData());
+            ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
         }
+        
         [ServerRpc(RequireOwnership = false)]
-        private void ShowToOthersServerRpc(string creatureData)
+        private void ShowToMeServerRpc(ulong clientId)
         {
-            if (cachedData != null)
-            {
-                ShowToOthersCachedClientRpc();
-            }
-            else
-            {
-                ShowToOthersClientRpc(creatureData);
-            }
+            ShowClientRpc(Constructor.Data, NetworkUtils.SendTo(clientId));
+        }
+        [ServerRpc]
+        private void ShowMeToOthersServerRpc(CreatureData data, ulong clientId)
+        {
+            List<ulong> clientIds = new List<ulong>(NetworkManager.Singleton.ConnectedClientsIds);
+            clientIds.Remove(clientId); // Don't show me to me!
+            ShowClientRpc(data, NetworkUtils.SendTo(clientIds.ToArray()));
             isHidden.Value = false;
         }
+
         [ClientRpc]
-        private void ShowToOthersClientRpc(string creatureData)
+        private void ShowClientRpc(CreatureData data, ClientRpcParams clientRpcParams = default)
         {
-            if (!IsOwner)
-            {
-                Construct(creatureData);
-            }
+            Show(data);
+        }
+
+        private void Show(CreatureData data)
+        {
+            Constructor.Demolish();
+            Constructor.Body.gameObject.SetActive(true);
+            Constructor.Construct(data);
             OnShow?.Invoke();
         }
-        [ClientRpc]
-        private void ShowToOthersCachedClientRpc()
-        {
-            if (!IsOwner)
-            {
-                Construct(cachedData.text);
-            }
-            OnShow?.Invoke();
-        }
+        #endregion
 
-        // Construct
-        private void Construct(string data)
-        {
-            try
-            {
-                CreatureData dat = JsonUtility.FromJson<CreatureData>(data);
-                Constructor.Demolish();
-                Constructor.Body.gameObject.SetActive(true);
-                Constructor.Construct(dat);
-
-                OnShow?.Invoke();
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
-        }
-
-        // Hide Me From Others
-        public void HideMeFromOthers()
+        #region Hide
+        public void HideFromOthers()
         {
             HideFromOthersServerRpc();
         }
@@ -138,39 +99,39 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             OnHide?.Invoke();
         }
+        #endregion
 
-        // Optimize
-        private string GetOptimizedData()
-        {
-            return OptimizeData(JsonUtility.ToJson(Constructor.Data));
-        }
-        private string OptimizeData(string data)
-        {
-            // Replace all exponential notation with 0
-            data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+e[+-][0-9]+", "0");
+        //private string GetOptimizedData()
+        //{
+        //    return OptimizeData(JsonUtility.ToJson(Constructor.Data));
+        //}
+        //private string OptimizeData(string data)
+        //{
+        //    // Replace all exponential notation with 0
+        //    data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+e[+-][0-9]+", "0");
 
-            // Round all floats to X decimal points
-            MatchEvaluator round = new MatchEvaluator(Round);
-            data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+", round);
+        //    // Round all floats to X decimal points
+        //    MatchEvaluator round = new MatchEvaluator(Round);
+        //    data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+", round);
 
-            return data;
-        }
-        private string Round(Match t)
-        {
-            string num = t.Value;
-            int i = num.IndexOf('.');
+        //    return data;
+        //}
+        //private string Round(Match t)
+        //{
+        //    string num = t.Value;
+        //    int i = num.IndexOf('.');
 
-            int length = num.Substring(i + 1).Length;
+        //    int length = num.Substring(i + 1).Length;
 
-            if (length > precision)
-            {
-                return num.Substring(0, (i + 1) + precision);
-            }
-            else
-            {
-                return num;
-            }
-        }
+        //    if (length > precision)
+        //    {
+        //        return num.Substring(0, (i + 1) + precision);
+        //    }
+        //    else
+        //    {
+        //        return num;
+        //    }
+        //}
         #endregion
     }
 }
