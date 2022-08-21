@@ -14,12 +14,9 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private int precision = 3;
-        [SerializeField] private float showCooldown = 10f;
         [SerializeField] private TextAsset cachedData;
 
         [SerializeField] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
-
-        private float showTimeLeft;
         #endregion
 
         #region Properties
@@ -35,10 +32,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
-        }
-        private void Update()
-        {
-            showTimeLeft = Mathf.Max(showTimeLeft - Time.deltaTime, 0);
         }
 
         // Show To Me
@@ -73,12 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
         // Show Me To Others
         public void ShowMeToOthers()
         {
-            this.Invoke(delegate
-            {
-                ShowToOthersServerRpc(GetOptimizedData());
-            }, 
-            showTimeLeft);
-            showTimeLeft = showCooldown;
+            ShowToOthersServerRpc(GetOptimizedData());
         }
         [ServerRpc(RequireOwnership = false)]
         private void ShowToOthersServerRpc(string creatureData)
