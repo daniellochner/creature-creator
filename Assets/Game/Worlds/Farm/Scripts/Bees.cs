@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Bees : MonoBehaviour
+    public class Bees : NetworkBehaviour
     {
         [SerializeField] private MinMax stingDamage;
         [SerializeField] private float stingCooldown;
@@ -10,13 +11,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTriggerStay(Collider other)
         {
-            CreatureBase creature = other.GetComponent<CreatureBase>();
-            if (creature != null)
+            if (IsServer)
             {
-                TimerUtility.OnTimer(ref stingTimeLeft, stingCooldown, Time.deltaTime, delegate
+                CreatureBase creature = other.GetComponent<CreatureBase>();
+                if (creature != null)
                 {
-                    creature.Health.TakeDamage(stingDamage.Random);
-                });
+                    TimerUtility.OnTimer(ref stingTimeLeft, stingCooldown, Time.deltaTime, delegate
+                    {
+                        creature.Health.TakeDamage(stingDamage.Random);
+                    });
+                }
             }
         }
     }

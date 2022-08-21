@@ -6,14 +6,14 @@ using UnityEditor;
 public class Testing : MonoBehaviour
 {
 
-    [ContextMenu("SET ACTIVE")]
-    public void SetActive()
-    {
-        foreach (Transform t in GetComponentsInChildren<Transform>(true))
-        {
-            t.gameObject.SetActive(true);
-        }
-    }
+    //[ContextMenu("SET ACTIVE")]
+    //public void SetActive()
+    //{
+    //    foreach (Transform t in GetComponentsInChildren<Transform>(true))
+    //    {
+    //        t.gameObject.SetActive(true);
+    //    }
+    //}
 
 
     //public string data;
