@@ -535,10 +535,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath);
                     if (creatureData != null && IsValidName(creatureData.Name))
                     {
-                        Save(creatureData);
-
                         if (CanLoadCreature(creatureData, out string errorMessage))
                         {
+                            Save(creatureData);
                             Load(creatureData);
                         }
                         else
@@ -622,7 +621,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
         {
             // Load Conditions
-            bool patternIsUnlocked = (ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode) || string.IsNullOrEmpty(creatureData.PatternID);
+            bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode || string.IsNullOrEmpty(creatureData.PatternID);
 
             bool bodyPartsAreUnlocked = true;
             int totalCost = 0, totalComplexity = 0;

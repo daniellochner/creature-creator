@@ -111,7 +111,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 b = bones.ToArray();
                 a = attachedBodyParts.ToArray();
             }
-            //
+            
             serializer.SerializeValue(ref b);
             serializer.SerializeValue(ref a);
 
