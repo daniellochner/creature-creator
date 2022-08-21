@@ -67,6 +67,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Abilities.enabled = false;
             Mover.enabled = false;
             Interactor.enabled = false;
+
+            Holder.DropAll();
             Holder.enabled = false;
 
             Spawner.Despawn();

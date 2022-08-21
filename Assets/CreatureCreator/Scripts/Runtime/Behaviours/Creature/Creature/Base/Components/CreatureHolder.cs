@@ -22,10 +22,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Animator = GetComponent<CreatureAnimator>();
-        }   
-        private void OnDisable()
-        {
-            DropAll();
         }
 
         public void PickUp(Holdable holdable)
