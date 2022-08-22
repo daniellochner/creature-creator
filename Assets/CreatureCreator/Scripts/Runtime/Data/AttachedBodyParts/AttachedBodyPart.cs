@@ -31,6 +31,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
+            Serialize(serializer);
+        }
+
+        public virtual void Serialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
             serializer.SerializeValue(ref GUID);
             serializer.SerializeValue(ref bodyPartID);
             serializer.SerializeValue(ref boneIndex);

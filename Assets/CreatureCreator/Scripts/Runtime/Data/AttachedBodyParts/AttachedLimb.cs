@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -12,5 +13,21 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<Bone> bones = new List<Bone>();
 
         public AttachedLimb(string bodyPartID) : base(bodyPartID) { }
+
+        public override void Serialize<T>(BufferSerializer<T> serializer)
+        {
+            base.Serialize(serializer);
+
+            Bone[] b = null;
+            if (serializer.IsWriter)
+            {
+                b = bones.ToArray();
+            }
+            serializer.SerializeValue(ref b);
+            if (serializer.IsReader)
+            {
+                bones = new List<Bone>(b);
+            }
+        }
     }
 }
