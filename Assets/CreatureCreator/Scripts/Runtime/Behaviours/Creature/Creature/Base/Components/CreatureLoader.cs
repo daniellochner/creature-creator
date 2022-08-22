@@ -48,8 +48,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ShowMeToOthers()
         {
             ShowMeToOthersServerRpc(new NetworkCreatureData(Constructor.Data), NetworkManager.Singleton.LocalClientId);
+            OnShow?.Invoke();
         }
-        
+
         [ServerRpc(RequireOwnership = false)]
         private void ShowToMeServerRpc(ulong clientId)
         {
