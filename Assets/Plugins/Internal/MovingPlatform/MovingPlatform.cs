@@ -10,14 +10,23 @@ namespace DanielLochner.Assets
         {
             if (other.CompareTag(playerTag))
             {
-                other.transform.SetParent(transform);
+                SetParent(new NetworkObjectReference(other.gameObject), true);
             }
         }
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag(playerTag))
             {
-                other.transform.SetParent(null);
+                SetParent(new NetworkObjectReference(other.gameObject), false);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetParent(NetworkObjectReference networkObjectRef, bool isParented)
+        {
+            if (networkObjectRef.TryGet(out NetworkObject networkObject))
+            {
+                networkObject.transform.parent = isParented ? transform : null;
             }
         }
     }
