@@ -17,10 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator Start()
         {
             yield return new WaitForSeconds(1f);
-            InformationDialog.Inform("Early Access", "Please note that this game is in Early Access! If you encounter a bug, please consider reporting it in the community Discord server. Thank you!", okay: "View Roadmap", onOkay: delegate
-            {
-                RoadmapMenu.Instance.Open();
-            });
+            RoadmapMenu.Instance.Open();
         }
         private void Update()
         {

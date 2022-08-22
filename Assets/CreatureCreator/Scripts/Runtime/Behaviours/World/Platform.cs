@@ -45,7 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (player != null && hasEntered)
             {
                 EditorManager.Instance.SetEditing(false);
-
+                
                 player.Loader.ShowMeToOthers();
 
                 hasEntered = false;
