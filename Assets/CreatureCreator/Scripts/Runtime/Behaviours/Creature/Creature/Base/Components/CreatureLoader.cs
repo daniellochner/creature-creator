@@ -47,16 +47,16 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ShowMeToOthers()
         {
-            ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
+            ShowMeToOthersServerRpc(new NetworkCreatureData(Constructor.Data), NetworkManager.Singleton.LocalClientId);
         }
         
         [ServerRpc(RequireOwnership = false)]
         private void ShowToMeServerRpc(ulong clientId)
         {
-            ShowClientRpc(Constructor.Data, NetworkUtils.SendTo(clientId));
+            ShowClientRpc(new NetworkCreatureData(Constructor.Data), NetworkUtils.SendTo(clientId));
         }
         [ServerRpc]
-        private void ShowMeToOthersServerRpc(CreatureData data, ulong clientId)
+        private void ShowMeToOthersServerRpc(NetworkCreatureData data, ulong clientId)
         {
             List<ulong> clientIds = new List<ulong>(NetworkManager.Singleton.ConnectedClientsIds);
             clientIds.Remove(clientId); // Don't show me to me!
@@ -65,9 +65,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [ClientRpc]
-        private void ShowClientRpc(CreatureData data, ClientRpcParams clientRpcParams = default)
+        private void ShowClientRpc(NetworkCreatureData data, ClientRpcParams clientRpcParams = default)
         {
-            Show(data);
+            Show(data.Data);
         }
 
         private void Show(CreatureData data)
@@ -100,38 +100,6 @@ namespace DanielLochner.Assets.CreatureCreator
             OnHide?.Invoke();
         }
         #endregion
-
-        //private string GetOptimizedData()
-        //{
-        //    return OptimizeData(JsonUtility.ToJson(Constructor.Data));
-        //}
-        //private string OptimizeData(string data)
-        //{
-        //    // Replace all exponential notation with 0
-        //    data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+e[+-][0-9]+", "0");
-
-        //    // Round all floats to X decimal points
-        //    MatchEvaluator round = new MatchEvaluator(Round);
-        //    data = Regex.Replace(data, "[+-]?[0-9]+\\.[0-9]+", round);
-
-        //    return data;
-        //}
-        //private string Round(Match t)
-        //{
-        //    string num = t.Value;
-        //    int i = num.IndexOf('.');
-
-        //    int length = num.Substring(i + 1).Length;
-
-        //    if (length > precision)
-        //    {
-        //        return num.Substring(0, (i + 1) + precision);
-        //    }
-        //    else
-        //    {
-        //        return num;
-        //    }
-        //}
         #endregion
     }
 }
