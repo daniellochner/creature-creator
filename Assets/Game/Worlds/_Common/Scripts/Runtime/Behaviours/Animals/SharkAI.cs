@@ -130,9 +130,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     // Strike!
                     hasDealtDamage = false;
-                    float d = Vector3.Distance(target.transform.position, SharkAI.transform.position);
+                    Vector3 head = SharkAI.Creature.Animator.Mouths[0].transform.position;
+                    Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, SharkAI.Creature.transform.up);
+                    float d = displacement.magnitude;
                     SharkAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
-
+                    
                     // Wait...
                     yield return new WaitForSeconds(biteDelay.Random);
                 }

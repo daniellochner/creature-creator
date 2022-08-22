@@ -10,14 +10,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class WorldManager : MonoBehaviourSingleton<WorldManager>
     {
-        public NetworkObject tp;
-
         public World World
         {
             get;
             set;
         }
-
 
         private void Start()
         {
@@ -27,8 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnServerStarted()
         {
-            Instantiate(tp).Spawn();
-
             NetworkManager.Singleton.SceneManager.LoadScene(World.MapName, LoadSceneMode.Single);
         }
         private void OnClientConnect(ulong clientID)

@@ -12,23 +12,13 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         [SerializeField] private string strikeAction;
         [SerializeField] private float strikeTime;
         [SerializeField] private float returnTime;
-        [SerializeField] private float headOffset;
-        #endregion
-
-        #region Properties
-        private Transform Head
-        {
-            get => Creature.Constructor.Bones[Creature.Constructor.Bones.Count - 1];
-        }
         #endregion
 
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            Vector3 strikePosition = Creature.transform.position + (animator.GetFloat("Body_Strike_Distance") * Creature.transform.forward);
-            Vector3 displacement = Vector3.ProjectOnPlane(strikePosition - Head.position, Creature.transform.up);
-            Vector3 offset = headOffset * Creature.transform.forward;
-            Creature.StartCoroutine(StrikeRoutine(displacement - offset));
+            Vector3 displacement = (animator.GetFloat("Body_Strike_Distance") * Creature.transform.forward);
+            Creature.StartCoroutine(StrikeRoutine(displacement));
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

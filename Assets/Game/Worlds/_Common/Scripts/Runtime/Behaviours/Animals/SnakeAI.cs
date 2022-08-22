@@ -89,7 +89,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     // Strike!
                     hasDealtDamage = false;
-                    float d = Vector3.Distance(target.transform.position, SnakeAI.transform.position);
+                    Vector3 head = SnakeAI.Creature.Animator.Mouths[0].transform.position;
+                    Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, SnakeAI.Creature.transform.up);
+                    float d = displacement.magnitude;
                     SnakeAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Rest...

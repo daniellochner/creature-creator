@@ -235,7 +235,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     // Strike!
                     hasDealtDamage = false;
-                    float d = Vector3.Distance(target.transform.position, DogAI.transform.position);
+                    Vector3 head = DogAI.Creature.Animator.Mouths[0].transform.position;
+                    Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, DogAI.Creature.transform.up);
+                    float d = displacement.magnitude;
                     DogAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Wait...

@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public NetworkCreatureData(CreatureData data)
         {
-            Data = Data;
+            Data = data;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
