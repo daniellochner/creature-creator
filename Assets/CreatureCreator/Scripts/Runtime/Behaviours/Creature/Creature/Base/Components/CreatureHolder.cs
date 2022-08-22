@@ -24,42 +24,38 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator = GetComponent<CreatureAnimator>();
         }
 
-        public void PickUp(Holdable holdable)
+        public void Hold(Holdable holdable)
         {
-            PickUpServerRpc(holdable.NetworkObject);
+            HoldServerRpc(holdable.NetworkObject);
         }
         [ServerRpc(RequireOwnership = false)]
-        private void PickUpServerRpc(NetworkObjectReference networkObjectRef)
+        private void HoldServerRpc(NetworkObjectReference networkObjectRef)
         {
             Holdable holdable = null;
             if (networkObjectRef.TryGet(out NetworkObject networkObject))
             {
                 holdable = networkObject.GetComponent<Holdable>();
-            }
-            else
-            {
-                return;
-            }
-            
-            ArmAnimator nearestArm = null;
-            float minDistance = Mathf.Infinity;
 
-            foreach (ArmAnimator arm in Animator.Arms)
-            {
-                if (held.ContainsKey(arm)) continue;
+                ArmAnimator nearestArm = null;
+                float minDistance = Mathf.Infinity;
 
-                float d = Vector3.Distance(arm.LimbConstructor.Extremity.position, holdable.transform.position);
-                if (d < minDistance)
+                foreach (ArmAnimator arm in Animator.Arms)
                 {
-                    minDistance = d;
-                    nearestArm = arm;
+                    if (held.ContainsKey(arm)) continue;
+
+                    float d = Vector3.Distance(arm.LimbConstructor.Extremity.position, holdable.transform.position);
+                    if (d < minDistance)
+                    {
+                        minDistance = d;
+                        nearestArm = arm;
+                    }
                 }
-            }
-            
-            if (nearestArm != null)
-            {
-                holdable.PickUp(nearestArm.LimbConstructor.Extremity);
-                held[nearestArm] = holdable;
+
+                if (nearestArm != null)
+                {
+                    holdable.PickUp(nearestArm.LimbConstructor.Extremity);
+                    held[nearestArm] = holdable;
+                }
             }
         }
 

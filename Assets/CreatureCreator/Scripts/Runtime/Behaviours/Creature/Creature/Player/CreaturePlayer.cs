@@ -10,10 +10,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureNamer namer;
         [SerializeField] private PlayerDeathMessenger deathMessenger;
         [SerializeField] private PlayerMessenger messenger;
+        [SerializeField] private CreatureSpeedup speedup;
 
         public CreatureNamer Namer => namer;
         public PlayerDeathMessenger DeathMessenger => deathMessenger;
         public PlayerMessenger Messenger => messenger;
+        public CreatureSpeedup Speedup => speedup;
 
 #if UNITY_EDITOR
         protected override void OnValidate()
@@ -22,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
             namer = GetComponent<CreatureNamer>();
             deathMessenger = GetComponent<PlayerDeathMessenger>();
             messenger = GetComponent<PlayerMessenger>();
+            speedup = GetComponent<CreatureSpeedup>();
         }
 #endif
 

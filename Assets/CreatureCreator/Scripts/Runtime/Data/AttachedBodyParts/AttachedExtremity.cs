@@ -11,7 +11,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public string connectedLimbGUID;
 
-        public AttachedExtremity(string bodyPartID) : base(bodyPartID) { }
+        public AttachedExtremity()
+        {
+        }
+        public AttachedExtremity(string bodyPartID) : base(bodyPartID)
+        {
+        }
 
         public override void Serialize<T>(BufferSerializer<T> serializer)
         {

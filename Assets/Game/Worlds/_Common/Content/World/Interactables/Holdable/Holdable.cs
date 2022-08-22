@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void OnInteract(Interactor interactor)
         {
             base.OnInteract(interactor);
-            Player.Instance.Holder.PickUp(this);
+            Player.Instance.Holder.Hold(this);
         }
 
         public void PickUp(Transform hand)

@@ -10,17 +10,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player/Local"))
+            CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
+            if (player != null)
             {
-                BoostServerRpc(NetworkManager.Singleton.LocalClientId);
+                player.Speedup.SpeedUp(boostSpeed, boostTime);
             }
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void BoostServerRpc(ulong clientId)
-        {
-            CreatureSpeedup s = NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<CreatureSpeedup>();
-            s.SpeedUp(boostSpeed, boostTime);
         }
     }
 }

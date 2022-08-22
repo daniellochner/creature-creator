@@ -12,7 +12,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public List<Bone> bones = new List<Bone>();
 
-        public AttachedLimb(string bodyPartID) : base(bodyPartID) { }
+        public AttachedLimb()
+        {
+        }
+        public AttachedLimb(string bodyPartID) : base(bodyPartID)
+        {
+        }
 
         public override void Serialize<T>(BufferSerializer<T> serializer)
         {
