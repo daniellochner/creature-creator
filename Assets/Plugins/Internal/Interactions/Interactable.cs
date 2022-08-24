@@ -16,10 +16,17 @@ namespace DanielLochner.Assets
         #region Properties
         public Texture2D Cursor => cursor;
 
+        public Collider Col { get; set; }
+
         public virtual bool IsHighlighted { get; set; }
         #endregion
 
         #region Methods
+        protected virtual void Awake()
+        {
+            Col = GetComponent<Collider>();
+        }
+
         public virtual bool CanInteract(Interactor interactor)
         {
             return !Vector3Utility.SqrDistanceComp(transform.position, interactor.transform.position, interactionRange);

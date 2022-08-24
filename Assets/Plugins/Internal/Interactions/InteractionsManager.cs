@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ namespace DanielLochner.Assets
         [SerializeField, ReadOnly] private Interactable highlighted;
 
         private List<InteractionUI> interactions = new List<InteractionUI>();
-        private Collider prevHitCollider;
+        private Interactable prevHighlighted;
         private int highlightedIndex;
         #endregion
 
@@ -43,6 +44,10 @@ namespace DanielLochner.Assets
                 {
                     Setup(targeted);
                 }
+                else
+                {
+                    Highlighted = null;
+                }
 
                 OnTarget?.Invoke(targeted);
             }
@@ -57,8 +62,6 @@ namespace DanielLochner.Assets
                 highlighted?.Highlight(Interactor, false);
                 highlighted = value;
                 highlighted?.Highlight(Interactor, true);
-
-                if (highlighted == null) prevHitCollider = null;
 
                 Cursor.SetCursor((highlighted == null) ? defaultCursor : highlighted.Cursor, Vector2.zero, CursorMode.Auto);
 
@@ -91,15 +94,14 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        private void OnDisable()
+        {
+            Targeted = null;
+        }
         private void Update()
         {
             HandleUI();
             HandleInteractions();
-        }
-        private void OnDisable()
-        {
-            Targeted = null;
-            Highlighted = null;
         }
 
         private void HandleUI()
@@ -123,38 +125,43 @@ namespace DanielLochner.Assets
 
             if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(Interactor.InteractionCamera, Input.mousePosition), out RaycastHit hitInfo))
             {
-                if (hitInfo.collider == prevHitCollider)
+                if (Highlighted != null && hitInfo.collider == Highlighted.Col)
                 {
-                    if (Highlighted != null && Highlighted.CanInteract(Interactor))
+                    // If we are highlighting the already highlighted object... just perform a quick check
+                    // to see if we can continue highlighting the object.
+
+                    // If we can, then check if we interact with it!
+
+                    if (Highlighted.CanHighlight(Interactor))
                     {
-                        if (Input.GetMouseButtonDown(0))
+                        if (Input.GetMouseButtonDown(0) && Highlighted.CanInteract(Interactor))
                         {
                             Highlighted.Interact(Interactor);
                         }
                     }
                     else
                     {
-                        Highlighted = null;
+                        Targeted = null;
                     }
-                    return; // Returns to prevent having to recheck the same highlighted interactable every frame.
-                }
-                prevHitCollider = hitInfo.collider;
-
-                Interactable interactable = prevHitCollider.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    Targeted = prevHitCollider.gameObject;
                 }
                 else
                 {
-                    Targeted = null;
-                    Highlighted = null;
+                    // If not... then check the game object!
+
+                    Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
+                    if (interactable != null && interactable.CanHighlight(Interactor))
+                    {
+                        Targeted = interactable.gameObject;
+                    }
+                    else
+                    {
+                        Targeted = null;
+                    }
                 }
             }
             else
             {
                 Targeted = null;
-                Highlighted = null;
             }
         }
 

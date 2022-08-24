@@ -11,14 +11,13 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         private Follower follower;
-        private Collider col;
         private Rigidbody rb;
         #endregion
 
         #region Methods
-        private void Awake()
+        protected override void Awake()
         {
-            col = GetComponent<Collider>();
+            base.Awake();
             rb = GetComponent<Rigidbody>();
             follower = GetComponent<Follower>();
         }
@@ -49,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         public void ToggleColliderClientRpc(bool isEnabled)
         {
-            col.enabled = isEnabled;
+            Col.enabled = isEnabled;
         }
         #endregion
     }
