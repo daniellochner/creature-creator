@@ -30,15 +30,19 @@ namespace DanielLochner.Assets
 
         public void Show()
         {
-            if (IsVisible) return;
-            IsVisible = true;
-            onShow.Invoke();
+            if (!IsVisible)
+            {
+                IsVisible = true;
+                onShow.Invoke();
+            }
         }
         public void Hide()
         {
-            if (!IsVisible) return;
-            IsVisible = false;
-            onHide.Invoke();
+            if (IsVisible)
+            {
+                IsVisible = false;
+                onHide.Invoke();
+            }
         }
 
         public void CheckVisibility(Vector3 source)
