@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 8779435651257883753}
   - component: {fileID: 6787528804847888547}
   - component: {fileID: 34956962565782621}
+  - component: {fileID: 1116570054652772828}
   m_Layer: 0
   m_Name: WindTurbine
   m_TagString: Untagged
@@ -301,3 +302,47 @@ MonoBehaviour:
   minMaxRate:
     min: 0.125
     max: 0.165
+--- !u!114 &1116570054652772828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4986286384175057270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 931e3efde70bd5943a5a2013cd9c7aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isVisible: 0
+  radius: 250
+  onShow:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4986286384175057270}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onHide:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4986286384175057270}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
