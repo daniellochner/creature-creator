@@ -31,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 player.Holder.DropAll();
 
+                EditorManager.Instance.UpdateLoadableCreatures();
                 EditorManager.Instance.SetEditing(true);
 
                 player.Editor.Platform = this;

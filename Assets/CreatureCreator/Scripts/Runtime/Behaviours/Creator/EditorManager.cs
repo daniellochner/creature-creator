@@ -14,6 +14,7 @@ using UnityFBXExporter;
 using ProfanityDetector;
 using SimpleFileBrowser;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -879,7 +880,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (update)
             {
                 UpdateBodyPartTotals();
-                UpdateLoadableCreatures();
             }
 
             return bodyPartUI;
@@ -915,12 +915,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     SettingsManager.Data.HiddenPatterns.Add(patternID);
                 });
             });
-
-            if (update)
-            {
-                UpdateLoadableCreatures();
-            }
-
+            
             return patternUI;
         }
 
@@ -1074,6 +1069,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateLoadableCreatures()
         {
+            StartCoroutine(UpdateLoadableCreaturesRoutine());
+        }
+
+        /// <summary>
+        /// Convert to a routine to prevent lag spikes when entering the platform!
+        /// </summary>
+        private IEnumerator UpdateLoadableCreaturesRoutine()
+        {
             foreach (CreatureUI creatureUI in creaturesUI)
             {
                 CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureUI.name}.dat"), creatureEncryptionKey.Value);
@@ -1096,6 +1099,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 colour.a = 0.4f;
                 creatureUI.SelectToggle.targetGraphic.color = colour;
                 creatureUI.SelectToggle.interactable = canLoadCreature;
+
+                yield return null;
             }
         }
 
@@ -1107,11 +1112,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             StartCoroutine(paginationCanvasGroup.Fade(isEditing, 0.25f));
             StartCoroutine(optionsCanvasGroup.Fade(isEditing, 0.25f));
-
-            if (isEditing)
-            {
-                UpdateLoadableCreatures();
-            }
         }
         public void SetVisibility(bool v, float t = 0.25f)
         {
