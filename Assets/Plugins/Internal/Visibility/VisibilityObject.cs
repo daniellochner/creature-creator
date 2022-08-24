@@ -6,6 +6,7 @@ namespace DanielLochner.Assets
     public class VisibilityObject : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private bool isVisible;
         [SerializeField] private float radius = 100f;
         [SerializeField] private UnityEvent onShow = new UnityEvent();
         [SerializeField] private UnityEvent onHide = new UnityEvent();
@@ -14,15 +15,9 @@ namespace DanielLochner.Assets
         #region Properties
         public UnityEvent OnShow => onShow;
         public UnityEvent OnHide => onHide;
-
-        public bool IsVisible { get; private set; } = true;
         #endregion
 
         #region Methods
-        private void OnDestroy()
-        {
-            VisibilityManager.Instance.Objects.Remove(this);
-        }
         private void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireSphere(transform.position, radius);
@@ -30,17 +25,17 @@ namespace DanielLochner.Assets
 
         public void Show()
         {
-            if (!IsVisible)
+            if (!isVisible)
             {
-                IsVisible = true;
+                isVisible = true;
                 onShow.Invoke();
             }
         }
         public void Hide()
         {
-            if (IsVisible)
+            if (isVisible)
             {
-                IsVisible = false;
+                isVisible = false;
                 onHide.Invoke();
             }
         }

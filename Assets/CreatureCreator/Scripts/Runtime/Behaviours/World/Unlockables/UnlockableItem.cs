@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool isUnlockable = true;
         [SerializeField] private GameObject unlockFX;
         [SerializeField] private UnityEvent onUnlock;
+        private bool hasSpawned = false;
         #endregion
 
         #region Properties
@@ -26,9 +27,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Destroy(gameObject);
             }
-            else
+            else if (!hasSpawned)
             {
                 OnSpawn();
+                hasSpawned = true;
             }
         }
 

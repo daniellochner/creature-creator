@@ -70,11 +70,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
             }
-
-            foreach (var item in FindObjectsOfType<UnlockableItem>(true))
-            {
-                item.Setup();
-            }
         }
         public void SetupMP()
         {

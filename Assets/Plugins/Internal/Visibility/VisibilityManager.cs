@@ -40,7 +40,7 @@ namespace DanielLochner.Assets
                 {
                     for (int i = 0; i < batchSize && counter < Objects.Count; ++i, ++counter)
                     {
-                        if (Source != null)
+                        if (Source != null && Objects[counter] != null)
                         {
                             Objects[counter].CheckVisibility(Source.transform.position);
                         }
