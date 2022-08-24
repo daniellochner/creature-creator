@@ -11,10 +11,7 @@ namespace DanielLochner.Assets
         }
         private void OnDisable()
         {
-            if (VisibilityManager.Instance.Source == this)
-            {
-                VisibilityManager.Instance.Source = null;
-            }
+            if (VisibilityManager.Instance.Source == this) { VisibilityManager.Instance.Source = null; }
         }
         #endregion
     }

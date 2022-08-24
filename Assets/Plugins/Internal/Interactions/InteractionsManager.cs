@@ -125,9 +125,16 @@ namespace DanielLochner.Assets
             {
                 if (hitInfo.collider == prevHitCollider)
                 {
-                    if (Input.GetMouseButtonDown(0) && Highlighted != null && Highlighted.CanInteract(Interactor))
+                    if (Highlighted != null && Highlighted.CanInteract(Interactor))
                     {
-                        Highlighted.Interact(Interactor);
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            Highlighted.Interact(Interactor);
+                        }
+                    }
+                    else
+                    {
+                        Highlighted = null;
                     }
                     return; // Returns to prevent having to recheck the same highlighted interactable every frame.
                 }
