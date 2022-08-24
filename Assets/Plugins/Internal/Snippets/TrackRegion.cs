@@ -11,12 +11,11 @@ namespace DanielLochner.Assets
     public class TrackRegion : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private Collider region;
         [SerializeField] private List<string> trackable;
+        [ReadOnly] public List<Collider> tracked = new List<Collider>();
 
-        public List<Collider> tracked = new List<Collider>();
         private List<Collider> toBeRemoved = new List<Collider>();
-
-        private new Collider collider;
         #endregion
 
         #region Properties
@@ -48,16 +47,19 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            collider = GetComponent<Collider>();
-            collider.isTrigger = true;
+            if (region == null)
+            {
+                region = GetComponent<Collider>();
+                region.isTrigger = true;
+            }
         }
         private void OnEnable()
         {
-            collider.enabled = true;
+            region.enabled = true;
         }
         private void OnDisable()
         {
-            collider.enabled = false;
+            region.enabled = false;
             LoseTrackOfAll();
         }
         private void OnDestroy()
@@ -106,7 +108,7 @@ namespace DanielLochner.Assets
             if (trackable.Count == 0 || trackable.Contains(col.tag))
             {
                 tracked.Add(col);
-                OnTrack?.Invoke(collider, col);
+                OnTrack?.Invoke(col, col);
             }
         }
         private void LoseTrackOf(Collider col)
@@ -114,7 +116,7 @@ namespace DanielLochner.Assets
             if (tracked.Contains(col))
             {
                 tracked.Remove(col);
-                OnLoseTrackOf?.Invoke(collider, col);
+                OnLoseTrackOf?.Invoke(col, col);
             }
         }
         public void LoseTrackOfAll()

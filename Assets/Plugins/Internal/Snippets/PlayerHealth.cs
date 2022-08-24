@@ -94,6 +94,7 @@ namespace DanielLochner.Assets
         [ServerRpc(RequireOwnership = false)]
         private void DieServerRpc()
         {
+            transform.parent = null;
             DieClientRpc();
         }
         [ClientRpc]

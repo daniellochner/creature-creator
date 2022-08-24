@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public LimbAnimator FlippedLimb => Flipped as LimbAnimator;
 
         public Transform Target => target;
+        public ChainIKConstraint LimbIK => limbIK;
         public Vector3[] DefaultPositions => defaultBonePositions;
         #endregion
 
