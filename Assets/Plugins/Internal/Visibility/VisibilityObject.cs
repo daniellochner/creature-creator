@@ -19,13 +19,9 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void Awake()
-        {
-            VisibilitySource.Objects.Add(this);
-        }
         private void OnDestroy()
         {
-            VisibilitySource.Objects.Remove(this);
+            VisibilityManager.Instance.Objects.Remove(this);
         }
         private void OnDrawGizmosSelected()
         {
