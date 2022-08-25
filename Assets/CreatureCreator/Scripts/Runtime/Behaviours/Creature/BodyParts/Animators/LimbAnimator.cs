@@ -48,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup(creatureAnimator);
 
             limb = new GameObject("Limb").transform;
-            limb.SetParent(creatureAnimator.Rig.Find("Limbs"), false);
+            limb.SetParent(creatureAnimator.Rig.transform.Find("Limbs"), false);
 
             target = new GameObject("Target").transform;
             target.SetParent(limb, false);

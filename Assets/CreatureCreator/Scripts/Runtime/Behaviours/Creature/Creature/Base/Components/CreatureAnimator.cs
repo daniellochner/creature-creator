@@ -23,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float extensionThreshold;
 
         [Header("Internal References")]
-        [SerializeField] private Transform rig;
+        [SerializeField] private Rig rig;
         [SerializeField] private Transform tail;
         [SerializeField] private Transform limbs;
 
@@ -33,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public Transform Rig => rig;
+        public Rig Rig => rig;
 
         public CreatureConstructor Constructor { get; private set; }
         public PlayerEffects Effector { get; private set; }

@@ -46,15 +46,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleCreatureOnPlatform(CreatureBase creature, bool isOnMovingPlatform)
         {
+            creature.Animator.Animator.enabled = !isOnMovingPlatform;
+            creature.Animator.Rig.weight = isOnMovingPlatform ? 0f : 1f;
+
             foreach (LegAnimator leg in creature.Animator.Legs)
             {
-                leg.Anchor.parent = isOnMovingPlatform ? creature.Constructor.Root : Dynamic.Transform;
-                leg.LimbIK.weight = isOnMovingPlatform ? 0f : 1f;
-            }
-            if (creature is CreaturePlayerLocal)
-            {
-                CreaturePlayerLocal player = creature as CreaturePlayerLocal;
-                player.Mover.enabled = !isOnMovingPlatform;
+                if (isOnMovingPlatform)
+                {
+                    leg.Target.position = leg.Anchor.position = creature.transform.L2WSpace(leg.DefaultFootLocalPos);
+                }
+                leg.Anchor.parent = isOnMovingPlatform ? creature.transform : Dynamic.Transform;
             }
         }
 
