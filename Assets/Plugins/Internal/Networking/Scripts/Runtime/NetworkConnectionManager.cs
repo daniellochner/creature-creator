@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Unity.Netcode;
-using Unity.Services.Lobbies;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
