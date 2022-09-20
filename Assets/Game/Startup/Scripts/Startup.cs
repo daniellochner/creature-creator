@@ -5,6 +5,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Startup : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private int baseWidth;
         [SerializeField] private float scale;
         [SerializeField] private float speed;
         [SerializeField] private Material gridMaterial;
@@ -17,7 +18,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            gridMaterial.mainTextureScale = (1f / scale) * new Vector2(Screen.width, Screen.height);
+            float n = (float)baseWidth / Screen.width;
+            float s = 1f / scale;
+            gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
             MusicManager.Instance.FadeTo("Fun", 0f, 0.5f);
         }

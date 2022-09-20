@@ -336,10 +336,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetReflections(bool reflections)
         {
-            foreach (PWaterProfile waterProfile in waterProfiles)
-            {
-                waterProfile.EnableReflection = reflections;
-            }
+            // TODO: Disabling reflections mid-game causes magenta water error.
+            //foreach (PWaterProfile waterProfile in waterProfiles)
+            //{
+            //    waterProfile.EnableReflection = reflections;
+            //}
             Data.Reflections = reflections;
         }
         public void SetAnisotropicFiltering(bool anisotropicFiltering)

@@ -48,14 +48,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             creature.Animator.Animator.enabled = !isOnMovingPlatform;
             creature.Animator.Rig.weight = isOnMovingPlatform ? 0f : 1f;
-
-            foreach (LegAnimator leg in creature.Animator.Legs)
+            if (isOnMovingPlatform)
             {
-                if (isOnMovingPlatform)
+                foreach (LegAnimator leg in creature.Animator.Legs)
                 {
                     leg.Target.position = leg.Anchor.position = creature.transform.L2WSpace(leg.DefaultFootLocalPos);
                 }
-                leg.Anchor.parent = isOnMovingPlatform ? creature.transform : Dynamic.Transform;
             }
         }
 
