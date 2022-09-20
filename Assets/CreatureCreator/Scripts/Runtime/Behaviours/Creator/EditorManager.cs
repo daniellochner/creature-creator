@@ -90,6 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private List<PatternUI> patternsUI = new List<PatternUI>();
         private string creaturesDirectory = null; // null because Application.persistentDataPath cannot be called during serialization.
         private bool isVisible = true, isEditing = true;
+        private bool isUpdatingLoadableCreatures;
         #endregion
 
         #region Properties
@@ -459,6 +460,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryLoad()
         {
+            if (isUpdatingLoadableCreatures)
+            {
+                return;
+            }
+
             string creatureName = default;
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
@@ -1077,6 +1083,8 @@ namespace DanielLochner.Assets.CreatureCreator
         /// </summary>
         private IEnumerator UpdateLoadableCreaturesRoutine()
         {
+            isUpdatingLoadableCreatures = true;
+
             foreach (CreatureUI creatureUI in creaturesUI)
             {
                 CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureUI.name}.dat"), creatureEncryptionKey.Value);
@@ -1102,6 +1110,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 yield return null;
             }
+
+            isUpdatingLoadableCreatures = false;
         }
 
         public void SetEditing(bool e)
