@@ -336,7 +336,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetReflections(bool reflections)
         {
-            // TODO: Disabling reflections mid-game causes magenta water error.
             foreach (PWaterProfile waterProfile in waterProfiles)
             {
                 waterProfile.EnableReflection = reflections;
