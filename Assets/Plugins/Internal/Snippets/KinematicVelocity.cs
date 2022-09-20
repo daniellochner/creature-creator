@@ -83,7 +83,7 @@ namespace DanielLochner.Assets
             {
                 if (prevPosition != null)
                 {
-                    Vector3 deltaPosition = sourcePosition.position - (Vector3)prevPosition;
+                    Vector3 deltaPosition = sourcePosition.localPosition - (Vector3)prevPosition;
                     if (deltaPosition.sqrMagnitude > posThreshold * posThreshold)
                     {
                         Linear = deltaPosition / deltaTime;
@@ -93,13 +93,13 @@ namespace DanielLochner.Assets
                         Linear = Vector3.zero;
                     }
                 }
-                prevPosition = sourcePosition.position;
+                prevPosition = sourcePosition.localPosition;
             }
             if (sourceRotation)
             {
                 if (prevRotation != null)
                 {
-                    Quaternion deltaRotation = sourceRotation.rotation * Quaternion.Inverse((Quaternion)prevRotation);
+                    Quaternion deltaRotation = sourceRotation.localRotation * Quaternion.Inverse((Quaternion)prevRotation);
                     deltaRotation.ToAngleAxis(out float deltaAngle, out var axis);
                     if (deltaAngle > rotThreshold)
                     {
@@ -110,7 +110,7 @@ namespace DanielLochner.Assets
                         Angular = Vector3.zero;
                     }
                 }
-                prevRotation = sourceRotation.rotation;
+                prevRotation = sourceRotation.localRotation;
             }
         }
         public void Reset()
