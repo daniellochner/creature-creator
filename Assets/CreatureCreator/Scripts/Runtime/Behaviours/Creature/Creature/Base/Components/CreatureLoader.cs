@@ -2,9 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -47,17 +45,17 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ShowMeToOthers()
         {
-            ShowMeToOthersServerRpc(new NetworkCreatureData(Constructor.Data), NetworkManager.Singleton.LocalClientId);
+            ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
             OnShow?.Invoke();
         }
 
         [ServerRpc(RequireOwnership = false)]
         private void ShowToMeServerRpc(ulong clientId)
         {
-            ShowClientRpc(new NetworkCreatureData(Constructor.Data), NetworkUtils.SendTo(clientId));
+            ShowClientRpc(Constructor.Data, NetworkUtils.SendTo(clientId));
         }
         [ServerRpc]
-        private void ShowMeToOthersServerRpc(NetworkCreatureData data, ulong clientId)
+        private void ShowMeToOthersServerRpc(CreatureData data, ulong clientId)
         {
             List<ulong> clientIds = new List<ulong>(NetworkManager.Singleton.ConnectedClientsIds);
             clientIds.Remove(clientId); // Don't show me to me!
@@ -66,9 +64,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [ClientRpc]
-        private void ShowClientRpc(NetworkCreatureData data, ClientRpcParams clientRpcParams = default)
+        private void ShowClientRpc(CreatureData data, ClientRpcParams clientRpcParams = default)
         {
-            Show(data.Data);
+            Show(data);
         }
 
         private void Show(CreatureData data)

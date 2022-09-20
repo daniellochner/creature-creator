@@ -105,20 +105,51 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Bone[] b = null;
             AttachedBodyPart[] a = null;
+            AttachedLimb[] l = null;
+            AttachedExtremity[] e = null;
 
             if (serializer.IsWriter)
             {
                 b = bones.ToArray();
-                a = attachedBodyParts.ToArray();
+
+                List<AttachedBodyPart> aL = new List<AttachedBodyPart>();
+                List<AttachedLimb> lL = new List<AttachedLimb>();
+                List<AttachedExtremity> eL = new List<AttachedExtremity>();
+
+                foreach (AttachedBodyPart abp in attachedBodyParts)
+                {
+                    if (abp is AttachedLimb)
+                    {
+                        lL.Add(abp as AttachedLimb);
+                    }
+                    else
+                    if (abp is AttachedExtremity)
+                    {
+                        eL.Add(abp as AttachedExtremity);
+                    }
+                    else
+                    {
+                        aL.Add(abp);
+                    }
+                }
+
+                a = aL.ToArray();
+                l = lL.ToArray();
+                e = eL.ToArray();
             }
             
             serializer.SerializeValue(ref b);
             serializer.SerializeValue(ref a);
+            serializer.SerializeValue(ref l);
+            serializer.SerializeValue(ref e);
 
             if (serializer.IsReader)
             {
                 bones = new List<Bone>(b);
+
                 attachedBodyParts = new List<AttachedBodyPart>(a);
+                attachedBodyParts.AddRange(l);
+                attachedBodyParts.AddRange(e);
             }
         }
         #endregion
