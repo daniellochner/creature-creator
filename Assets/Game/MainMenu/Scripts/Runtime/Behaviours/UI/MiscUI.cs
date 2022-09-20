@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Update()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))//
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))
             {
                 m_IsVisible = !m_IsVisible;
                 StartCoroutine(m_UI.Fade(m_IsVisible, 0.25f));
