@@ -127,11 +127,6 @@ namespace DanielLochner.Assets
             {
                 if (Highlighted != null && hitInfo.collider == Highlighted.Col)
                 {
-                    // If we are highlighting the already highlighted object... just perform a quick check
-                    // to see if we can continue highlighting the object.
-
-                    // If we can, then check if we interact with it!
-
                     if (Highlighted.CanHighlight(Interactor))
                     {
                         if (Input.GetMouseButtonDown(0) && Highlighted.CanInteract(Interactor))
@@ -146,8 +141,6 @@ namespace DanielLochner.Assets
                 }
                 else
                 {
-                    // If not... then check the game object!
-
                     Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
                     if (interactable != null && interactable.CanHighlight(Interactor))
                     {

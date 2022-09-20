@@ -33,8 +33,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             Initialize();
         }
         private void LateUpdate()
