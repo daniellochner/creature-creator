@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,14 +15,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private IEnumerator Start()
-        {
-            yield return new WaitForSeconds(1f);
-            RoadmapMenu.Instance.Open();
-        }
         private void Update()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))//
             {
                 m_IsVisible = !m_IsVisible;
                 StartCoroutine(m_UI.Fade(m_IsVisible, 0.25f));
@@ -43,18 +39,17 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ViewGitHubSourceCode()
         {
             Application.OpenURL("https://github.com/daniellochner/creature-creator");
-            RoadmapMenu.Instance.Open();
 
-            //DateTime releaseDate = new DateTime(2022, 8, 7);
-            //TimeSpan diff = releaseDate - DateTime.Now;
-            //if (diff > TimeSpan.Zero)
-            //{
-            //    InformationDialog.Inform("Source Code", $"The source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
-            //}
-            //else
-            //{
-            //    Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
-            //}
+            DateTime releaseDate = new DateTime(2022, 9, 30);
+            TimeSpan diff = releaseDate - DateTime.Now;
+            if (diff > TimeSpan.Zero)
+            {
+                InformationDialog.Inform("Source Code", $"The source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
+            }
+            else
+            {
+                Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
+            }
         }
         public void Quit()
         {
