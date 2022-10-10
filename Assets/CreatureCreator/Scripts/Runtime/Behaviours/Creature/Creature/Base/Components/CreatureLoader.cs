@@ -12,8 +12,15 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureLoader : NetworkBehaviour
     {
         #region Fields
+        [SerializeField] private bool rateLimit;
+        [SerializeField, DrawIf("rateLimit", true)] private float loadCooldown;
+        [SerializeField, DrawIf("rateLimit", true)] private int warnAt;
+        [SerializeField, DrawIf("rateLimit", true)] private int kickAt;
         [SerializeField] private TextAsset cachedData;
         [SerializeField, ReadOnly] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
+
+        private float loadTimeLeft;
+        private int counter;
         #endregion
 
         #region Properties
@@ -23,12 +30,17 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnHide { get; set; }
 
         public bool IsHidden => isHidden.Value;
+        private bool RateLimit => rateLimit && GameSetup.Instance.IsMultiplayer;
         #endregion
 
         #region Methods
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
+        }
+        private void Update()
+        {
+            if (RateLimit) { loadTimeLeft = Mathf.Max(loadTimeLeft - Time.deltaTime, 0); }
         }
 
         #region Show
@@ -47,6 +59,24 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
             OnShow?.Invoke();
+
+            if (RateLimit)
+            {
+                if (loadTimeLeft > 0)
+                {
+                    counter++;
+                    if (counter >= kickAt)
+                    {
+                        NetworkConnectionManager.Instance.ForceDisconnect("You were kicked due to construction spam (i.e., constructing creatures too frequently).");
+                    }
+                    else
+                    if (counter >= warnAt)
+                    {
+                        InformationDialog.Inform("Slow Down!", $"Please wait at least {loadCooldown} seconds before constructing a new creature! ({(counter-warnAt)+1}/3)");
+                    }
+                }
+                loadTimeLeft = loadCooldown;
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
