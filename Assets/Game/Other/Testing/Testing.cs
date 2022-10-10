@@ -5,6 +5,12 @@ using UnityEditor;
 
 public class Testing : MonoBehaviour
 {
+    //[ContextMenu("TEST")]
+    //public void Test()
+    //{
+    //    Debug.Log(GetComponent<Camera>().cullingMask);
+    //}
+
 
     //[ContextMenu("SET ACTIVE")]
     //public void SetActive()

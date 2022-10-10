@@ -1,25 +1,38 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(Follower))]
     public class Holdable : CreatureInteractable
     {
         #region Fields
-        private Follower follower;
-        private Rigidbody rb;
+        [SerializeField] private HoldableDummy dummyPrefab;
+
+        private HoldableDummy dummy;
+        #endregion
+
+        #region Properties
+        public NetworkVariable<FixedString64Bytes> Hand { get; set; } = new NetworkVariable<FixedString64Bytes>();
         #endregion
 
         #region Methods
         protected override void Awake()
         {
             base.Awake();
-            rb = GetComponent<Rigidbody>();
-            follower = GetComponent<Follower>();
+        }
+        private void Start()
+        {
+            Hand.OnValueChanged += OnHandChanged;
+
+            if (!Hand.Value.IsEmpty)
+            {
+                OnHandChanged("", Hand.Value);
+            }
         }
 
         public override bool CanInteract(Interactor interactor)
@@ -29,26 +42,35 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void OnInteract(Interactor interactor)
         {
             base.OnInteract(interactor);
-            Player.Instance.Holder.Hold(this);
+            Player.Instance.Holder.TryHold(this);
         }
-
-        public void PickUp(Transform hand)
+        
+        public void Hold(LimbConstructor arm)
         {
-            follower.SetFollow(hand, true);
-            rb.isKinematic = true;
-            ToggleColliderClientRpc(false);
+            Hand.Value = arm.name;
         }
         public void Drop()
         {
-            follower.follow = null;
-            rb.isKinematic = false;
-            ToggleColliderClientRpc(true);
+            Hand.Value = "";
         }
 
-        [ClientRpc]
-        public void ToggleColliderClientRpc(bool isEnabled)
+        public void OnHandChanged(FixedString64Bytes oH, FixedString64Bytes nH)
         {
-            Col.enabled = isEnabled;
+            bool isHeld = !nH.IsEmpty;
+            if (isHeld)
+            {
+                dummy = Instantiate(dummyPrefab);
+                dummy.Setup(this, nH.ConvertToString());
+            }
+            else
+            {
+                if (IsServer)
+                {
+                    GetComponent<Unity.Netcode.Components.NetworkTransform>().Teleport(dummy.transform.position, dummy.transform.rotation, dummy.transform.localScale);
+                }
+                Destroy(dummy.gameObject);
+            }
+            gameObject.SetActive(!isHeld);
         }
         #endregion
     }

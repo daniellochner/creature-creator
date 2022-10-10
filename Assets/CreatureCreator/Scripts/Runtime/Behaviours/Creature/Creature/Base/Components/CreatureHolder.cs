@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator = GetComponent<CreatureAnimator>();
         }
 
-        public void Hold(Holdable holdable)
+        public void TryHold(Holdable holdable)
         {
             HoldServerRpc(holdable.NetworkObject);
         }
@@ -53,7 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (nearestArm != null)
                 {
-                    holdable.PickUp(nearestArm.LimbConstructor.Extremity);
+                    holdable.Hold(nearestArm.LimbConstructor);
                     held[nearestArm] = holdable;
                 }
             }
