@@ -730,7 +730,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Plane stretchPlane = new Plane(transform.right, Platform.transform.position);
 
-            Ray ray = Camera.Camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.MainCamera.ScreenPointToRay(Input.mousePosition);
             if (stretchPlane.Raycast(ray, out float distance))
             {
                 Vector3 pointerPos = ray.GetPoint(distance);

@@ -851,8 +851,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     bodyPartUI.DragUI.OnPointerUp(null);
                     editorAudioSource.PlayOneShot(createAudioClip);
 
-                    Ray ray = Creature.Camera.Camera.ScreenPointToRay(Input.mousePosition);
-                    Plane plane = new Plane(Creature.Camera.Camera.transform.forward, Creature.Editor.Platform.transform.position);
+                    Ray ray = Creature.Camera.MainCamera.ScreenPointToRay(Input.mousePosition);
+                    Plane plane = new Plane(Creature.Camera.MainCamera.transform.forward, Creature.Editor.Platform.transform.position);
 
                     if (plane.Raycast(ray, out float distance))
                     {
@@ -1164,6 +1164,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (InputUtility.GetKeyDown(KeybindingsManager.Data.ToggleUI))
             {
                 SetVisibility(!isVisible);
+                Creature.Camera.ToolCamera.cullingMask = isVisible ? LayerMask.GetMask("UI", "Tools") : 0;
             }
         }
         private void HandlePaintShortcuts()

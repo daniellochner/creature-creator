@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
 
-            interactionCamera = CreatureCamera.Camera;
+            interactionCamera = CreatureCamera.MainCamera;
 
             InteractionsManager.Instance.OnTarget += delegate (GameObject targeted)
             {

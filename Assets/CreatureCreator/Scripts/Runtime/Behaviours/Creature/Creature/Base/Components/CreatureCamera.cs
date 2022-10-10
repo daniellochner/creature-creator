@@ -13,7 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public Transform Root { get; private set; }
         public CameraOrbit CameraOrbit { get; private set; }
         public Follower Follower { get; private set; }
-        public Camera Camera { get; private set; }
+        public Camera MainCamera { get; private set; }
+        public Camera ToolCamera { get; private set; }
 
         public bool IsSetup { get; set; }
         #endregion
@@ -26,7 +27,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Root = camera.transform;
             CameraOrbit = camera.GetComponent<CameraOrbit>();
             Follower = camera.GetComponent<Follower>();
-            Camera = camera.GetComponentInChildren<Camera>();
+            MainCamera = Root.GetChild(0).GetChild(0).GetComponent<Camera>();
+            ToolCamera = Root.GetChild(0).GetChild(0).GetChild(0).GetComponent<Camera>();
 
             Follower.SetFollow(transform, true);
 

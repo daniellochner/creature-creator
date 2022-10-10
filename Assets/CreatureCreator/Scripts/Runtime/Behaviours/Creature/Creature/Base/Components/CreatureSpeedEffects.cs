@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup()
         {
             targetFOV = minMaxFOV.min;
-            cameras = Camera.Camera.GetComponentsInChildren<Camera>();
+            cameras = Camera.MainCamera.GetComponentsInChildren<Camera>();
 
             Speedup.OnSpeedUp += delegate (float s, float t)
             {

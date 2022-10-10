@@ -157,8 +157,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (!InputUtility.GetKey(KeybindingsManager.Data.FreeLook) || !kInput) // Free-look when holding ALT.
                     {
-                        keyboardForward = Vector3.ProjectOnPlane(Camera.Camera.transform.forward, transform.up);
-                        keyboardRight = Vector3.ProjectOnPlane(Camera.Camera.transform.right, transform.up);
+                        keyboardForward = Vector3.ProjectOnPlane(Camera.MainCamera.transform.forward, transform.up);
+                        keyboardRight = Vector3.ProjectOnPlane(Camera.MainCamera.transform.right, transform.up);
                     }
 
                     int vAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) ? -1 : 0);
@@ -177,7 +177,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 #region Pointer
                 case InputMode.Pointer:
 
-                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.Camera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
                     {
                         Vector3 position = raycastHit.point;
                         Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
