@@ -8,6 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class BirdSpawner : AnimalSpawner
     {
         [SerializeField] private Transform perchPoints;
+        [SerializeField] private Quest quest;
 
         public override void Setup(NetworkObject npc)
         {
@@ -20,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 flying.perchPoints = perchPoints;
             }
+
+            quest.transform.SetZeroParent(bird.transform);
         }
     }
 }

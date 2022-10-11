@@ -21,10 +21,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-        }
         private void Start()
         {
             Hand.OnValueChanged += OnHandChanged;
