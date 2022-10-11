@@ -8,6 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class DogSpawner : AnimalSpawner
     {
         [SerializeField] private GameObject doghouse;
+        [SerializeField] private Quest quest;
 
         public override void Setup(NetworkObject npc)
         {
@@ -20,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 scurrying.doghouse = doghouse;
             }
+
+            quest.transform.SetZeroParent(dog.transform);
         }
     }
 }
