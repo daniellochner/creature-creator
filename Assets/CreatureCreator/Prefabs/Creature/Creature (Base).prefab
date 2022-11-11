@@ -660,9 +660,12 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 1
-    _keyValues: []
-    _keys: []
-    _values: []
+    _keyValues:
+    - TakeDamage
+    _keys:
+    - TakeDamage
+    _values:
+    - {fileID: 8300000, guid: 9c86092de89f4474e89dc4a7d482d465, type: 3}
   particleFX:
     reorderableList:
       canAdd: 1
@@ -703,6 +706,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health:
     m_InternalValue: 100
+  takeDamageSounds:
+  - name: TakeDamage1
+    volume: 1
+  - name: TakeDamage2
+    volume: 1
+  - name: TakeDamage3
+    volume: 1
+  damageTime: 0.2
+  damageMaterial: {fileID: 2100000, guid: ec4ec1c6115779a46afc2d16482d2c22, type: 2}
 --- !u!114 &1902851174053681457
 MonoBehaviour:
   m_ObjectHideFlags: 0

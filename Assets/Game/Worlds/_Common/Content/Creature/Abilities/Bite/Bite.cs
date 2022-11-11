@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         [SerializeField] private PlayerEffects.Sound[] biteSounds;
         [SerializeField] private MinMax biteDamage;
+        [SerializeField] private MinMax biteForce;
         [SerializeField] private float biteRadius;
         private bool hasFoundCreature;
         
@@ -40,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
 
                         if (dealDamage)
                         {
-                            creature.Health.TakeDamage(biteDamage.Random);
+                            creature.Health.TakeDamage(biteDamage.Random, CreatureAbilities.transform.forward * biteForce.Random);
                         }
                         hasFoundCreature = true;
                     }
