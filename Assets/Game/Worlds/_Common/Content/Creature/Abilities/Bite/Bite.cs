@@ -11,19 +11,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [SerializeField] private PlayerEffects.Sound[] biteSounds;
         [SerializeField] private MinMax biteDamage;
         [SerializeField] private float biteRadius;
-        private bool hasDealtDamage;
-
-        private bool CanDealDamage
-        {
-            get
-            {
-                return !hasDealtDamage && ((WorldManager.Instance.World is WorldMP) && (WorldManager.Instance.World as WorldMP).EnablePVP);
-            }
-        }
-
+        private bool hasFoundCreature;
+        
         public override void OnPerform()
         {
-            hasDealtDamage = false;
+            hasFoundCreature = false;
 
             Player.Instance.Animator.Animator.GetBehaviour<Animations.Bite>().OnBite += OnBite;
             Player.Instance.Animator.Params.SetTrigger("Body_Strike");
@@ -31,8 +23,8 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         private void OnBite(MouthAnimator mouth)
         {
             CreatureAbilities.GetComponent<PlayerEffects>().PlaySound(biteSounds);
-            
-            if (CanDealDamage)
+
+            if (!hasFoundCreature)
             {
                 Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
                 foreach (Collider collider in colliders)
@@ -40,8 +32,17 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
                     if (creature != null && creature != Player.Instance)
                     {
-                        creature.Health.TakeDamage(biteDamage.Random);
-                        hasDealtDamage = true;
+                        bool dealDamage = true;
+                        if ((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP)
+                        {
+                            dealDamage = false;
+                        }
+
+                        if (dealDamage)
+                        {
+                            creature.Health.TakeDamage(biteDamage.Random);
+                        }
+                        hasFoundCreature = true;
                     }
                 }
             }
