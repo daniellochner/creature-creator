@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Material damageMaterial;
         private Rigidbody rb;
 
+        private Coroutine damageCoroutine;
+
         public CreatureConstructor Constructor { get; private set; }
         public PlayerEffects Effects { get; private set; }
 
@@ -37,7 +39,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     //rb.AddForce(force, ForceMode.Impulse);
                     Effects.PlaySound(takeDamageSounds);
-                    StartCoroutine(DamageRoutine());
+
+                    if (damageCoroutine == null)
+                    {
+                        damageCoroutine = StartCoroutine(DamageRoutine());
+                    }
                 }
             };
         }
@@ -64,6 +70,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 renderer.materials = rm[renderer];
             }
+
+            damageCoroutine = null;
         }
     }
 }

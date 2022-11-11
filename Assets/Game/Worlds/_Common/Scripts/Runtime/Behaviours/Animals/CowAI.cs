@@ -107,10 +107,10 @@ namespace DanielLochner.Assets.CreatureCreator
                             Vector3 force = dir * chargeForce.z + creature.transform.up * chargeForce.y;
 
                             creature.Health.TakeDamage(chargeDamage.Random);
-                            if (!creature.Health.IsDead)
-                            {
-                                creature.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
-                            }
+                            //if (!creature.Health.IsDead)
+                            //{
+                            //    creature.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                            //}
                             CowAI.Creature.Effects.PlaySound(impactSounds);
                         }
                     }

@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  region: {fileID: 0}
   trackable:
   - Player/Local
   - Player/Remote
@@ -123,6 +124,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+--- !u!114 &774523419493200033 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7156337843309773701, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+  m_PrefabInstance: {fileID: 7633535019909575460}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284196428221533937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &813556083253212842 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7108254001977394574, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
@@ -227,13 +239,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4492007780580638039 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6321104368959114867, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+  m_PrefabInstance: {fileID: 7633535019909575460}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284196428221533937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4723134126354174271 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2910507191371522587, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
   m_PrefabInstance: {fileID: 7633535019909575460}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8284196428221533937}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
@@ -266,7 +289,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 7633535019909575460}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8284196428221533937}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6331468b6e73c6e4e9d9905b2bc66a22, type: 3}
   m_Name: 
@@ -305,7 +328,6 @@ MonoBehaviour:
   - rid: 0
   - rid: 1
   - rid: 2
-  data: {fileID: 4900000, guid: 3f24ff9feb19df74fba212168454f7f1, type: 3}
   trackRegion: {fileID: 2082952735247441148}
   references:
     version: 2
@@ -348,7 +370,7 @@ MonoBehaviour:
         - name: Rest
           volume: 0.25
         hornDistance: 0.5
-        chargeForce: {x: 0, y: 5, z: 5}
+        chargeForce: {x: 0, y: 10, z: 20}
         chargeDamage:
           min: 25
           max: 50
@@ -430,16 +452,18 @@ MonoBehaviour:
   collider: {fileID: 7555085661020574945}
   cloner: {fileID: 6494741743607014546}
   photographer: {fileID: 7910841577491363071}
-  killer: {fileID: 2569213254376426871}
+  corpse: {fileID: 2569213254376426871}
   effects: {fileID: 1371504058859280125}
   scaler: {fileID: 1252046243048357285}
   health: {fileID: 7233630848935137613}
   hunger: {fileID: 1492278543116135484}
   age: {fileID: 813556083253212842}
-  hider: {fileID: 8296317713011848967}
+  loader: {fileID: 8296317713011848967}
   informer: {fileID: 2064050523526473291}
   spawner: {fileID: 3716236570872061318}
   rb: {fileID: 2475897302938805808}
+  velocity: {fileID: 774523419493200033}
+  holder: {fileID: 4492007780580638039}
   selectable: {fileID: 1012515090203389813}
   commandable: {fileID: 3977463559663823578}
   ai: {fileID: 4063777470767587221}

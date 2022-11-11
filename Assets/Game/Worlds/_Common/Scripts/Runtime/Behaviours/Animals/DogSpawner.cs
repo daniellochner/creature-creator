@@ -22,7 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 scurrying.doghouse = doghouse;
             }
 
-            quest.transform.SetZeroParent(dog.transform);
+            if (quest != null)
+            {
+                quest.transform.SetZeroParent(dog.transform);
+            }
         }
     }
 }

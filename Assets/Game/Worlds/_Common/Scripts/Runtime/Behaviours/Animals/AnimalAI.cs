@@ -16,8 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public AnimatorParams Params => Creature.Animator.Params;
         public Animator Animator => Creature.Animator.Animator;
 
-        protected CreatureNonPlayerLocal Creature { get; set; }
-        protected NavMeshAgent Agent { get; set; }
+        public CreatureNonPlayerLocal Creature { get; set; }
+        public NavMeshAgent Agent { get; set; }
 
         public bool PVE
         {
