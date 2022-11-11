@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)
             {
-                capT.localRotation = Quaternion.Slerp(Quaternion.identity, Quaternion.Euler(90f, 0f, 0f), p);
+                capT.localRotation = Quaternion.Slerp(Quaternion.Euler(90f, 0f, 0f), Quaternion.identity, p);
             },
             1f);
         }

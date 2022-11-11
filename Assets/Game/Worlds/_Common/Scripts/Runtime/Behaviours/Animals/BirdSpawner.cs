@@ -20,7 +20,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 flying.perchPoints = perchPoints;
             }
 
-            quest.transform.SetZeroParent(bird.transform);
+            if (quest != null)
+            {
+                quest.transform.SetZeroParent(bird.transform);
+            }
         }
     }
 }
