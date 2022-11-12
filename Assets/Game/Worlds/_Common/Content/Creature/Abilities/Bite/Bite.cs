@@ -13,7 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [SerializeField] private MinMax biteForce;
         [SerializeField] private float biteRadius;
         private bool hasFoundCreature;
-        
+
+        public override bool CanPerform => !Player.Instance.Animator.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike");
+
         public override void OnPerform()
         {
             hasFoundCreature = false;

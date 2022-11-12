@@ -21,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureConstructor CreatureConstructor { get; private set; }
+        public CreatureAnimator CreatureAnimator { get; private set; }
 
         public List<Ability> Abilities => abilities;
 
@@ -68,6 +69,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Initialize()
         {
             CreatureConstructor = GetComponent<CreatureConstructor>();
+            CreatureAnimator = GetComponent<CreatureAnimator>();
         }
 
         private void Setup()
