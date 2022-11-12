@@ -80,8 +80,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             LimbConstructor.OnSetAttached += delegate
             {
-                limb.name = name;
-                FlippedLimb.limb.name = FlippedLimb.name;
+                limb.name = $"{name} (Constraint)";
+                FlippedLimb.limb.name = $"{FlippedLimb.name} (Constraint)";
             };
         }
 
