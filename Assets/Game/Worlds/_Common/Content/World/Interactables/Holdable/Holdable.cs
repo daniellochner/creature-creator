@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public NetworkVariable<FixedString64Bytes> Hand { get; set; } = new NetworkVariable<FixedString64Bytes>();
+
+        public HoldableDummy Dummy => dummy;
         #endregion
 
         #region Methods

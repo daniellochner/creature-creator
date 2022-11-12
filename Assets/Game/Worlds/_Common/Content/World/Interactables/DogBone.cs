@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class NavigateTo : CreatureInteractable
+    public class DogBone : Holdable
     {
     }
 }

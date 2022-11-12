@@ -16,6 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureAnimator Animator { get; private set; }
+
+        public Dictionary<ArmAnimator, Holdable> Held => held;
         #endregion
 
         #region Methods

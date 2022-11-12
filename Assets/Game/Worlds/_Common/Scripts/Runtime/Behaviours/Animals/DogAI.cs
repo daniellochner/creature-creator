@@ -4,6 +4,7 @@
 using DanielLochner.Assets.CreatureCreator.Animations;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -12,6 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] protected TrackRegion trackRegion;
+
+        private DogBone dogBone;
         #endregion
 
         #region Methods
@@ -24,13 +27,23 @@ namespace DanielLochner.Assets.CreatureCreator
                 trackRegion.OnTrack += delegate (Collider col1, Collider col2)
                 {
                     CreatureBase creature = col2.GetComponent<CreatureBase>();
-                    if (HasWeapon(creature) || trackRegion.tracked.Count >= 3)
+
+                    List<Holdable> held = new List<Holdable>(creature.Holder.Held.Values);
+                    dogBone = held.Find(x => x is DogBone) as DogBone;
+                    if (dogBone != null)
                     {
-                        ChangeState("SCU");
+                        ChangeState("PAN");
                     }
-                    else if (currentStateId == "WAN")
+                    else
                     {
-                        ChangeState("BAR");
+                        if (HasWeapon(creature) || trackRegion.tracked.Count >= 3)
+                        {
+                            ChangeState("SCU");
+                        }
+                        else if (currentStateId == "WAN")
+                        {
+                            ChangeState("BAR");
+                        }
                     }
                 };
                 trackRegion.OnLoseTrackOf += delegate
@@ -65,10 +78,46 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             return false;
         }
-
         #endregion
 
         #region Nested
+        [Serializable]
+        public class Panting : BaseState
+        {
+            [SerializeField] private PlayerEffects.Sound[] pantSounds;
+            [SerializeField] private MinMax pantTime;
+            private float pantTimeLeft;
+
+            public DogAI DogAI => StateMachine as DogAI;
+
+            public override void UpdateLogic()
+            {
+                Transform targetBone = null;
+                if (DogAI.dogBone.Dummy == null)
+                {
+                    targetBone = DogAI.dogBone.transform;
+                }
+                else
+                {
+                    targetBone = DogAI.dogBone.Dummy.transform;
+                }
+
+                Vector3 lookDir = Vector3.ProjectOnPlane(targetBone.position - StateMachine.transform.position, StateMachine.transform.up).normalized;
+                Vector3 offset = lookDir * DogAI.Creature.Constructor.Dimensions.radius;
+                DogAI.Agent.SetDestination(targetBone.position - offset);
+
+
+                TimerUtility.OnTimer(ref pantTimeLeft, pantTime.Random, Time.deltaTime, delegate
+                {
+                    DogAI.Creature.Effects.PlaySound(pantSounds);
+                });
+            }
+            public override void Exit()
+            {
+                pantTimeLeft = 0;
+            }
+        }
+
         [Serializable]
         public class Barking : Targeting
         {
