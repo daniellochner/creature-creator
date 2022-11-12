@@ -19,6 +19,22 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public static List<string> Quests = new List<string>()
+        {
+            "quest_is75n9d",
+            "quest_07dm32j",
+            "quest_sl1c8xz",
+            "quest_8nsgy3m",
+            "quest_9js6hk4",
+            "quest_9n5pdf6",
+            "quest_j5pz7s0",
+            "quest_8s7s83i",
+            "quest_lo4zz8f",
+            "quest_01lfpx7",
+            "quest_mn72a0b",
+            "quest_f8s5x02"
+        };
+
         public static float MaxExperience = 100;
         public static int MaxLevel = 50;
 
@@ -78,6 +94,11 @@ namespace DanielLochner.Assets.CreatureCreator
             Cash = 500;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
+
+            foreach (string quest in Quests)
+            {
+                PlayerPrefs.SetInt(quest, 0);
+            }
 
             //// Supporter Perks
             //if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
