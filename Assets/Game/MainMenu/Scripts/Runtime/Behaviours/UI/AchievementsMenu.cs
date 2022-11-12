@@ -1,3 +1,4 @@
+using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
+            //SteamUserStats.GetAchievement()
+
 
             UpdateInfo();
         }
