@@ -10,9 +10,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class ProgressUI : MonoBehaviourSingleton<ProgressUI>
     {
         #region Fields
-        [Header("Level/Experience")]
-        [SerializeField] private TextMeshProUGUI levelText;
-        [SerializeField] private Slider experienceSlider;
+        [Header("Achievements")]
+        [SerializeField] private TextMeshProUGUI achievementsText;
+        [SerializeField] private Slider achievementsSlider;
 
         [Header("Cash")]
         [SerializeField] private TextMeshProUGUI cashText;
@@ -35,9 +35,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateInfo()
         {
-            // Level/Experience
-            levelText.text = ProgressManager.Data.Level.ToString();
-            experienceSlider.value = ProgressManager.Data.Experience;
+            // Achievements
+
 
             // Cash
             cashText.text = $"${ProgressManager.Data.Cash}";

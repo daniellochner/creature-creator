@@ -469,6 +469,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             UnlockablePatternsMenu.Instance.Open();
         }
+        public void ViewAchievements()
+        {
+            AchievementsMenu.Instance.Open();
+        }
         public void ViewRoadmap()
         {
             RoadmapMenu.Instance.Open();
