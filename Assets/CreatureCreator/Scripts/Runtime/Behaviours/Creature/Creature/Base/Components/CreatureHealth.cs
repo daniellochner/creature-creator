@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Dictionary<Renderer, Material[]> rm = new Dictionary<Renderer, Material[]>();
 
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            foreach (Renderer renderer in Constructor.Body.GetComponentsInChildren<Renderer>(true))
             {
                 rm[renderer] = renderer.materials;
 
