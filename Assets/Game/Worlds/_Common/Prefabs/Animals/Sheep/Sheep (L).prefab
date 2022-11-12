@@ -105,16 +105,18 @@ MonoBehaviour:
   collider: {fileID: 2101426410858707183}
   cloner: {fileID: 3445604983192733852}
   photographer: {fileID: 1745213913594550513}
-  killer: {fileID: 6221555317990826361}
+  corpse: {fileID: 6221555317990826361}
   effects: {fileID: 7419757224270789363}
   scaler: {fileID: 7246541536200905131}
   health: {fileID: 1266583106929442115}
   hunger: {fileID: 7009123994926563378}
   age: {fileID: 9131785724859144868}
-  hider: {fileID: 491661259859958537}
+  loader: {fileID: 491661259859958537}
   informer: {fileID: 7589745480576076357}
   spawner: {fileID: 5071742807215518088}
   rb: {fileID: 6317685185661880894}
+  velocity: {fileID: 9173659529009749167}
+  holder: {fileID: 5451074121726202201}
   selectable: {fileID: 8934551578054460283}
   commandable: {fileID: 4810407653451663060}
   ai: {fileID: 3780293573951464714}
@@ -135,7 +137,6 @@ MonoBehaviour:
   states:
   - rid: 0
   - rid: 1
-  data: {fileID: 4900000, guid: 4bff601703c8085439bf5596bedd5625, type: 3}
   references:
     version: 2
     RefIds:
@@ -164,6 +165,7 @@ MonoBehaviour:
         - name: Bleat6
           volume: 1
         actions: []
+        wanderFromState: Idling
         wanderCooldown:
           min: 10
           max: 25
@@ -230,7 +232,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1156357515665479465}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506561001603752703}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6331468b6e73c6e4e9d9905b2bc66a22, type: 3}
   m_Name: 
@@ -252,7 +254,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1156357515665479465}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506561001603752703}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
@@ -277,6 +279,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5451074121726202201 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6605142385175856752, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}
+  m_PrefabInstance: {fileID: 1156357515665479465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506561001603752703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6221555317990826361 stripped
@@ -359,5 +372,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9173659529009749167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8017348193993411462, guid: 909ca43eecd40b349ade2707b4e81a7e, type: 3}
+  m_PrefabInstance: {fileID: 1156357515665479465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506561001603752703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

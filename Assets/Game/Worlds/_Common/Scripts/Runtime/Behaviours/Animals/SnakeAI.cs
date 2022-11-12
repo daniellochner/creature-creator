@@ -56,12 +56,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
+                base.Enter();
                 strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
                 SnakeAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
-                if (!SnakeAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
+                if (!SnakeAI.IsAnimationState("Strike"))
                 {
                     UpdateLookDir();
                     HandleLookAt();
@@ -69,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
+                base.Exit();
                 SnakeAI.StopCoroutine(strikeCoroutine);
                 SnakeAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }

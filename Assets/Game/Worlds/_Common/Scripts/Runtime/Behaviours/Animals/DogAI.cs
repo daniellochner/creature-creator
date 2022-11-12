@@ -195,26 +195,25 @@ namespace DanielLochner.Assets.CreatureCreator
             
             public override void Enter()
             {
+                base.Enter();
                 bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
                 DogAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
-                if (!DogAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
+                if (!DogAI.IsAnimationState("Strike"))
                 {
                     UpdateLookDir();
 
                     Vector3 offset = lookDir * TargetDistance;
                     DogAI.Agent.SetDestination(target.transform.position - offset);
 
-                    if (!DogAI.IsMovingToPosition)
-                    {
-                        HandleLookAt();
-                    }
+                    HandleLookAt();
                 }
             }
             public override void Exit()
             {
+                base.Exit();
                 DogAI.StopCoroutine(bitingCoroutine);
                 DogAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }

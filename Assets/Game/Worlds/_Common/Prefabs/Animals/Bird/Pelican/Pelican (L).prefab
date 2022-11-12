@@ -163,6 +163,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &604532898773098274 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 84564208124840064, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
+  m_PrefabInstance: {fileID: 670989911311390626}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4954534582043061380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &1470791740476032069 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 2100534018078479335, guid: a14be0a7f6694b44cabf2dca367b3ab8, type: 3}
@@ -289,6 +300,7 @@ MonoBehaviour:
   spawner: {fileID: 407526605871775731}
   rb: {fileID: 1470791740476032069}
   velocity: {fileID: 4362513333962150612}
+  holder: {fileID: 604532898773098274}
   selectable: {fileID: 4051066123937860864}
   commandable: {fileID: 74204087754049711}
   ai: {fileID: 7993902849842800068}
@@ -310,7 +322,6 @@ MonoBehaviour:
   - rid: 0
   - rid: 1
   - rid: 2
-  data: {fileID: 4900000, guid: d7ba8106e39ffe84a88d84c0c7e376f5, type: 3}
   references:
     version: 2
     RefIds:
@@ -393,6 +404,8 @@ MonoBehaviour:
         - name: Flap6
           volume: 0.5
         frightenTrigger: {fileID: 7520613040023794868}
+        dilate: 0
+        flyFromState: Idling
     - rid: 2
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

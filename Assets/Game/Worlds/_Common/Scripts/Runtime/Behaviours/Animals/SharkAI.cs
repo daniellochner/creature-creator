@@ -81,22 +81,20 @@ namespace DanielLochner.Assets.CreatureCreator
             
             public override void Enter()
             {
+                base.Enter();
                 bitingCoroutine = SharkAI.StartCoroutine(BitingRoutine());
                 SharkAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
-                if (!SharkAI.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike"))
+                if (!SharkAI.IsAnimationState("Strike"))
                 {
                     UpdateLookDir();
 
                     Vector3 offset = lookDir * TargetDistance;
                     SharkAI.Agent.SetDestination(target.transform.position - offset);
 
-                    if (!SharkAI.IsMovingToPosition)
-                    {
-                        HandleLookAt();
-                    }
+                    HandleLookAt();
 
                     NavMeshPath path = new NavMeshPath();
                     SharkAI.Agent.CalculatePath(target.transform.position, path);
@@ -110,6 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
+                base.Exit();
                 SharkAI.StopCoroutine(bitingCoroutine);
                 SharkAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }

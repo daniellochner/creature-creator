@@ -69,6 +69,11 @@ namespace DanielLochner.Assets.CreatureCreator
             GetState<Following>("FOL").Target = null;
         }
 
+        public bool IsAnimationState(string state)
+        {
+            return Animator.GetCurrentAnimatorStateInfo(0).IsName(state);
+        }
+
         #region Debug
         [ContextMenu("Debug/Follow/Player")]
         public void FollowPlayer()
@@ -101,7 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     TimerUtility.OnTimer(ref silentTimeLeft, ambientCooldown.Random, Time.deltaTime, MakeSound);
                 }
-                if (actions.Length > 0)
+                if (actions.Length > 0 && AnimalAI.IsAnimationState("Idling"))
                 {
                     TimerUtility.OnTimer(ref actionTimeLeft, actionCooldown.Random, Time.deltaTime, PerformAction);
                 }
@@ -149,7 +154,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void UpdateLogic()
             {
                 base.UpdateLogic();
-                if (!AnimalAI.IsMovingToPosition)
+                if (!AnimalAI.IsMovingToPosition && AnimalAI.IsAnimationState("Idling"))
                 {
                     TimerUtility.OnTimer(ref idleTimeLeft, wanderCooldown.Random, Time.deltaTime, delegate
                     {
@@ -212,6 +217,8 @@ namespace DanielLochner.Assets.CreatureCreator
             protected CreatureBase target;
             protected Vector3 lookDir;
 
+            public AnimalAI AnimalAI => StateMachine as AnimalAI;
+
             protected void UpdateTarget()
             {
                 Transform nearest = trackRegion.Nearest.transform;
@@ -227,6 +234,18 @@ namespace DanielLochner.Assets.CreatureCreator
             protected void UpdateLookDir()
             {
                 lookDir = Vector3.ProjectOnPlane(target.transform.position - StateMachine.transform.position, StateMachine.transform.up).normalized;
+            }
+
+            public override void Enter()
+            {
+                base.Enter();
+                AnimalAI.Agent.updateRotation = false;
+            }
+
+            public override void Exit()
+            {
+                base.Exit();
+                AnimalAI.Agent.updateRotation = true;
             }
         }
         #endregion

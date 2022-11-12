@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  region: {fileID: 0}
   trackable:
   - Player/Local
   - Player/Remote
@@ -302,11 +303,12 @@ MonoBehaviour:
   health: {fileID: 2779661909320526503}
   hunger: {fileID: 6216639036777437142}
   age: {fileID: 5312567349705411904}
-  hider: {fileID: 3589969412129017069}
+  loader: {fileID: 3589969412129017069}
   informer: {fileID: 6797242636268527009}
   spawner: {fileID: 8170350308615579244}
   rb: {fileID: 6966070624903896538}
   velocity: {fileID: 5210660214972418891}
+  holder: {fileID: 8982009920733923005}
   selectable: {fileID: 5547729085694104735}
   commandable: {fileID: 8485513016199041328}
   ai: {fileID: 3650349913116807016}
@@ -331,7 +333,6 @@ MonoBehaviour:
   - rid: 3
   - rid: 4
   - rid: 5
-  data: {fileID: 4900000, guid: ed8fba822f388034eb2051a30201ed4d, type: 3}
   trackRegion: {fileID: 4190061369862593315}
   references:
     version: 2
@@ -352,6 +353,7 @@ MonoBehaviour:
           volume: 0.5
         actions:
         - Body_Shake
+        wanderFromState: Idling
         wanderCooldown:
           min: 10
           max: 15
@@ -639,5 +641,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af59326d33417f84887115b2b0abf33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8982009920733923005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6734226270755446622, guid: 61d13834a180caa43b627a9d22377bad, type: 3}
+  m_PrefabInstance: {fileID: 2437086704408599011}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3460791925049242907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

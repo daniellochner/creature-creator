@@ -94,16 +94,18 @@ MonoBehaviour:
   collider: {fileID: 2017697095205425436}
   cloner: {fileID: 3384656900608041327}
   photographer: {fileID: 1806425244505387266}
-  killer: {fileID: 6304739756234033290}
+  corpse: {fileID: 6304739756234033290}
   effects: {fileID: 7480985980419805952}
   scaler: {fileID: 7330008463701686360}
   health: {fileID: 1205353222833689776}
   hunger: {fileID: 6948176666654288321}
   age: {fileID: 9192715740135011159}
-  hider: {fileID: 575110213310608122}
+  loader: {fileID: 575110213310608122}
   informer: {fileID: 7529378334200357814}
   spawner: {fileID: 5137476640467376251}
   rb: {fileID: 6234501180019057613}
+  velocity: {fileID: 9108224867636163932}
+  holder: {fileID: 5372675569156978858}
   selectable: {fileID: 8850821952642902664}
   commandable: {fileID: 4894155746139926311}
   ai: {fileID: 9027422358427779439}
@@ -124,7 +126,6 @@ MonoBehaviour:
   states:
   - rid: 0
   - rid: 1
-  data: {fileID: 4900000, guid: e0e42a49874902642a6a004641770fd5, type: 3}
   references:
     version: 2
     RefIds:
@@ -145,6 +146,7 @@ MonoBehaviour:
         - name: Cluck2
           volume: 0.5
         actions: []
+        wanderFromState: Idling
         wanderCooldown:
           min: 10
           max: 25
@@ -222,7 +224,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 6346743688378544748}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445331289289886476}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6331468b6e73c6e4e9d9905b2bc66a22, type: 3}
   m_Name: 
@@ -244,7 +246,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 6346743688378544748}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445331289289886476}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
@@ -269,6 +271,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5372675569156978858 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1340870050789460678, guid: 0cae29d8014056f47b67835b296895a3, type: 3}
+  m_PrefabInstance: {fileID: 6346743688378544748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445331289289886476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &6234501180019057613 stripped
@@ -340,6 +353,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9108224867636163932 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2770491677114386224, guid: 0cae29d8014056f47b67835b296895a3, type: 3}
+  m_PrefabInstance: {fileID: 6346743688378544748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445331289289886476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1042aa9380010a04cbd8c5917a8cda4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &9192715740135011159 stripped
