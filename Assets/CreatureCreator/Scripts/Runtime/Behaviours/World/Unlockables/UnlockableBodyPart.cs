@@ -22,6 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void OnUnlock()
         {
             EditorManager.Instance.UnlockBodyPart(bodyPartID);
+
+#if USE_STATS
+            StatsManager.Instance.UnlockedBodyParts++;
+#endif
         }
         protected override void OnSpawn()
         {
