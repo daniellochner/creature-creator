@@ -3,7 +3,7 @@ using UnityEngine;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor))]
-    public class CreatureLookalike : MonoBehaviour
+    public class CreatureComparer : MonoBehaviour
     {
         #region Fields
         [SerializeField] private int maxBonesDiff;

@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureSpawner))]
     [RequireComponent(typeof(PlayerEffects))]
     [RequireComponent(typeof(CreatureHolder))]
+    [RequireComponent(typeof(CreatureComparer))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -42,6 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Rigidbody rb;
         [SerializeField] private CreatureVelocity velocity;
         [SerializeField] private CreatureHolder holder;
+        [SerializeField] private CreatureComparer comparer;
         #endregion
 
         #region Properties
@@ -62,6 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Rigidbody Rigidbody => rb;
         public CreatureVelocity Velocity => velocity;
         public CreatureHolder Holder => holder;
+        public CreatureComparer Comparer => comparer;
         #endregion
 
         #region Methods
@@ -85,6 +88,7 @@ namespace DanielLochner.Assets.CreatureCreator
             rb = GetComponent<Rigidbody>();
             velocity = GetComponent<CreatureVelocity>();
             holder = GetComponent<CreatureHolder>();
+            comparer = GetComponent<CreatureComparer>();
         }
 #endif
 
