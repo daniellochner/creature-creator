@@ -28,9 +28,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 Instantiate(splashPrefab, creature.transform.position, Quaternion.identity);
 
                 CreaturePlayerLocal player = creature as CreaturePlayerLocal;
-                if (player != null && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
+                if (player != null)
                 {
-                    player.Health.TakeDamage(player.Health.Health);
+                    if (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming)
+                    {
+                        player.Health.TakeDamage(player.Health.Health);
+                    }
+                    else
+                    {
+#if USE_STATS
+                        StatsManager.Instance.SetAchievement("ACH_PHELPS");
+#endif
+                    }
                 }
             }
         }
