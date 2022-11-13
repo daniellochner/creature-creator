@@ -62,7 +62,90 @@ MonoBehaviour:
   trackable:
   - Player/Local
   - Player/Remote
+  ignored: []
   tracked: []
+--- !u!1 &1563804943798084794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3679007375907466570}
+  - component: {fileID: 9102516233471410923}
+  - component: {fileID: 3232261352042304714}
+  m_Layer: 0
+  m_Name: IgnoreTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3679007375907466570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563804943798084794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3460791925049242904}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &9102516233471410923
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563804943798084794}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 12
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3232261352042304714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563804943798084794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerable:
+  - Player/Local
+  - Player/Remote
+  ignored: []
+  onEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3650349913116807016}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.AnimalAI,
+          Assembly-CSharp
+        m_MethodName: UpdateIgnored
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  entered: []
 --- !u!1 &7369157627417157624
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +207,7 @@ MonoBehaviour:
   triggerable:
   - Player/Local
   - Player/Remote
+  ignored: []
   onEnter:
     m_PersistentCalls:
       m_Calls:
@@ -213,6 +297,17 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1474234377626077022 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3866284381316865725, guid: 61d13834a180caa43b627a9d22377bad, type: 3}
+  m_PrefabInstance: {fileID: 2437086704408599011}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3460791925049242907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f649d304a7c14e843987578c09d066bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1788393172543807352 stripped
@@ -309,6 +404,7 @@ MonoBehaviour:
   rb: {fileID: 6966070624903896538}
   velocity: {fileID: 5210660214972418891}
   holder: {fileID: 8982009920733923005}
+  comparer: {fileID: 1474234377626077022}
   selectable: {fileID: 5547729085694104735}
   commandable: {fileID: 8485513016199041328}
   ai: {fileID: 3650349913116807016}
@@ -334,6 +430,7 @@ MonoBehaviour:
   - rid: 4
   - rid: 5
   - rid: 4512171707447377990
+  ignoreTrigger: {fileID: 3232261352042304714}
   trackRegion: {fileID: 4190061369862593315}
   references:
     version: 2

@@ -62,7 +62,90 @@ MonoBehaviour:
   trackable:
   - Player/Local
   - Player/Remote
+  ignored: []
   tracked: []
+--- !u!1 &6504072470239105101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6401417207488651825}
+  - component: {fileID: 7876804352719277741}
+  - component: {fileID: 630821494742610286}
+  m_Layer: 0
+  m_Name: IgnoreTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6401417207488651825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6504072470239105101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8284196428221533938}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7876804352719277741
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6504072470239105101}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 12
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &630821494742610286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6504072470239105101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerable:
+  - Player/Local
+  - Player/Remote
+  ignored: []
+  onEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4063777470767587221}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.AnimalAI,
+          Assembly-CSharp
+        m_MethodName: UpdateIgnored
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  entered: []
 --- !u!1001 &7633535019909575460
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -261,6 +344,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0040e1872509c42babd32ba4b7917b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6234630545960058036 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4569492100789915536, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
+  m_PrefabInstance: {fileID: 7633535019909575460}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284196428221533937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f649d304a7c14e843987578c09d066bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6494741743607014546 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3732981187156514742, guid: b98dfc2684b29234498bc86ab4f2ea81, type: 3}
@@ -328,6 +422,7 @@ MonoBehaviour:
   - rid: 0
   - rid: 1
   - rid: 2
+  ignoreTrigger: {fileID: 630821494742610286}
   trackRegion: {fileID: 2082952735247441148}
   references:
     version: 2
@@ -351,7 +446,6 @@ MonoBehaviour:
         - name: Moo3
           volume: 1
         actions: []
-        wanderFromState: Idling
         wanderCooldown:
           min: 10
           max: 25
@@ -465,6 +559,7 @@ MonoBehaviour:
   rb: {fileID: 2475897302938805808}
   velocity: {fileID: 774523419493200033}
   holder: {fileID: 4492007780580638039}
+  comparer: {fileID: 6234630545960058036}
   selectable: {fileID: 1012515090203389813}
   commandable: {fileID: 3977463559663823578}
   ai: {fileID: 4063777470767587221}

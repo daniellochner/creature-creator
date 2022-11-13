@@ -10,7 +10,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private List<string> triggerable = new List<string>();
-        [SerializeField] private List<string> ignored = new List<string>();
+        [SerializeField] public List<string> ignored = new List<string>();
         [Space]
         [SerializeField] private UnityEvent<Collider> onEnter = new UnityEvent<Collider>();
         [SerializeField] private UnityEvent<Collider> onExit = new UnityEvent<Collider>();

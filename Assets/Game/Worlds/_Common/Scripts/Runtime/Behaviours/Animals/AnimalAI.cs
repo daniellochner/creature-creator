@@ -3,15 +3,24 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using Unity.Netcode;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(NavMeshAgent))]
     public class AnimalAI : StateMachine
     {
+        #region Fields
+        [SerializeField] private TriggerRegion ignoreTrigger;
+
+        private List<TriggerRegion> triggerRegions;
+        private List<TrackRegion> trackRegions;
+        #endregion
+
         #region Properties
         public AnimatorParams Params => Creature.Animator.Params;
         public Animator Animator => Creature.Animator.Animator;
@@ -56,6 +65,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup()
         {
             Agent.speed *= Creature.Constructor.Statistics.Speed;
+
+            if (ignoreTrigger != null)
+            {
+                triggerRegions = new List<TriggerRegion>(GetComponentsInChildren<TriggerRegion>(true));
+                trackRegions = new List<TrackRegion>(GetComponentsInChildren<TrackRegion>(true));
+                triggerRegions.Remove(ignoreTrigger);
+            }
         }
 
         public virtual void Follow(Transform target)
@@ -72,6 +88,28 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsAnimationState(string state)
         {
             return Animator.GetCurrentAnimatorStateInfo(0).IsName(state);
+        }
+        
+        public void UpdateIgnored()
+        {
+            List<string> ignored = new List<string>();
+            foreach (var client in NetworkManager.Singleton.ConnectedClients)
+            {
+                CreaturePlayer player = client.Value.PlayerObject.GetComponent<CreaturePlayer>();
+                if (Creature.Comparer.CompareTo(player.Constructor))
+                {
+                    ignored.Add(player.name);
+                }
+            }
+
+            foreach (TriggerRegion region in triggerRegions)
+            {
+                region.ignored = ignored;
+            }
+            foreach (TrackRegion region in trackRegions)
+            {
+                region.ignored = ignored;
+            }
         }
 
         #region Debug

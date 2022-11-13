@@ -61,6 +61,7 @@ MonoBehaviour:
   triggerable:
   - Player/Local
   - Player/Remote
+  ignored: []
   onEnter:
     m_PersistentCalls:
       m_Calls:
@@ -68,6 +69,88 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.BirdAI, Assembly-CSharp
         m_MethodName: Frighten
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  entered: []
+--- !u!1 &2950853415844939345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6181681485082244874}
+  - component: {fileID: 3506739102350065147}
+  - component: {fileID: 8800687552752952756}
+  m_Layer: 0
+  m_Name: IgnoreTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6181681485082244874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2950853415844939345}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2959052427373306998}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3506739102350065147
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2950853415844939345}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 7
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8800687552752952756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2950853415844939345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerable:
+  - Player/Local
+  - Player/Remote
+  ignored: []
+  onEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2941841359456031920}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.AnimalAI,
+          Assembly-CSharp
+        m_MethodName: UpdateIgnored
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -152,6 +235,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ec86d7a4df8374cb259b3eed7f80f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &964352173324113456 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3448893029331271224, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
+  m_PrefabInstance: {fileID: 2503716476779784200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959052427373306997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f649d304a7c14e843987578c09d066bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1903961843424967611 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4094554826317124531, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
@@ -208,6 +302,7 @@ MonoBehaviour:
   rb: {fileID: 8771865530029067444}
   velocity: {fileID: 5861543429619538469}
   holder: {fileID: 7327667777352701907}
+  comparer: {fileID: 964352173324113456}
   selectable: {fileID: 6191015036835071473}
   commandable: {fileID: 7842174650274611294}
   ai: {fileID: 2941841359456031920}
@@ -229,6 +324,7 @@ MonoBehaviour:
   - rid: 0
   - rid: 1
   - rid: 2
+  ignoreTrigger: {fileID: 8800687552752952756}
   references:
     version: 2
     RefIds:
@@ -319,7 +415,6 @@ MonoBehaviour:
           volume: 0.5
         frightenTrigger: {fileID: 857639293}
         dilate: 1
-        flyFromState: Idling
     - rid: 2
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
       data:

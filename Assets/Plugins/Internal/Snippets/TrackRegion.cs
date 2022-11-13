@@ -13,7 +13,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private Collider region;
         [SerializeField] private List<string> trackable;
-        [SerializeField] private List<string> ignored;
+        [SerializeField] public List<string> ignored;
         [ReadOnly] public List<Collider> tracked = new List<Collider>();
 
         private List<Collider> toBeRemoved = new List<Collider>();
