@@ -18,6 +18,8 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
+        public int NumPlayers => playerNames.Count;
+
         public Keybind Keybind
         {
             get => keybind;
