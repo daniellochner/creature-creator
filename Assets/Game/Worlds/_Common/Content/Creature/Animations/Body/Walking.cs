@@ -101,6 +101,16 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 times[i] = maxTime / timesInMax;
             }
         }
+
+        public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+#if USE_STATS
+            if (animator.CompareTag("Player/Local"))
+            {
+                StatsManager.Instance.SetAchievement("ACH_BABY_STEPS");
+            }
+#endif
+        }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             HandleLegs();
