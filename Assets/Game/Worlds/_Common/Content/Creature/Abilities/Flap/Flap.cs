@@ -35,6 +35,10 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             rigidbody.AddForce(rigidbody.transform.up * force, ForceMode.Impulse);
             creatureAnimator.Params.SetTrigger("Wings_Flap");
             creatureEffector.PlaySound(flapSounds);
+
+#if USE_STATS
+            StatsManager.Instance.SetAchievement("ACH_I_BELIEVE_I_CAN_FLY");
+#endif
         }
     }
 }
