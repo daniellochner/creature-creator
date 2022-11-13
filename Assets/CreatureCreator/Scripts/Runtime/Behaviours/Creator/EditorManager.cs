@@ -363,9 +363,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Spawner.Spawn();
 
 
-
-
-
 #if USE_STATS
             if (Creature.Constructor.Statistics.Weight >= 500f)
             {
@@ -375,6 +372,11 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Creature.Abilities.Abilities.Count >= 10)
             {
                 StatsManager.Instance.SetAchievement("ACH_OLD");
+            }
+
+            if (Creature.Constructor.Statistics.Speed >= 3f)
+            {
+                StatsManager.Instance.SetAchievement("ACH_SPEED_DEMON");
             }
 #endif
         }
