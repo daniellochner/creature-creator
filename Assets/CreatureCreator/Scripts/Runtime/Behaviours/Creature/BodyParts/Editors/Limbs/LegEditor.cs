@@ -99,7 +99,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetFootOffset(float offset)
         {
             footBoneDrag.boundsOffset = Vector3.up * offset;
-            this.InvokeAtEndOfFrame(UpdateMeshCollider);
+            if (gameObject.activeSelf)
+            {
+                this.InvokeAtEndOfFrame(UpdateMeshCollider);
+            }
         }
 
         private void HandleFloor()

@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public static List<string> Quests = new List<string>()
+        public static string[] Quests = new string[]
         {
             "quest_is75n9d",
             "quest_07dm32j",
@@ -34,6 +34,13 @@ namespace DanielLochner.Assets.CreatureCreator
             "quest_mn72a0b",
             "quest_f8s5x02"
         };
+        public static string[] HighestPoints = new string[]
+        {
+            "HP_ISLAND",
+            "HP_SANDBOX",
+            "HP_FARM"
+        };
+
 
         public static float MaxExperience = 100;
         public static int MaxLevel = 50;
@@ -95,9 +102,13 @@ namespace DanielLochner.Assets.CreatureCreator
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
 
-            foreach (string quest in Quests)
+            foreach (string questId in Quests)
             {
-                PlayerPrefs.SetInt(quest, 0);
+                PlayerPrefs.SetInt(questId, 0);
+            }
+            foreach (string highestPointId in HighestPoints)
+            {
+                PlayerPrefs.SetInt(highestPointId, 0);
             }
 
             //// Supporter Perks
