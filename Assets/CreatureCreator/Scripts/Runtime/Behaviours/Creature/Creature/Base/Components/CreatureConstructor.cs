@@ -755,6 +755,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
             rb.mass = statistics.Weight;
         }
+
+        public bool Equals(CreatureConstructor other)
+        {
+
+
+
+            return base.Equals(other);
+        }
         #endregion
     }
 }
