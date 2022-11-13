@@ -102,6 +102,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 SteamUserStats.StoreStats();
             }
         }
+        
+        public void SetAchievement(string achievementId)
+        {
+            if (SteamManager.Initialized)
+            {
+                SteamUserStats.GetAchievement(achievementId, out bool achieved);
+                if (!achieved)
+                {
+                    SteamUserStats.SetAchievement(achievementId);
+                    SteamUserStats.StoreStats();
+                }
+            }
+        }
         #endregion
 
         #region Nested

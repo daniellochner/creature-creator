@@ -361,6 +361,17 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Interactor.enabled = true;
 
             Creature.Spawner.Spawn();
+
+
+
+
+
+#if USE_STATS
+            if (Creature.Abilities.Abilities.Count >= 10)
+            {
+                StatsManager.Instance.SetAchievement("ACH_OLD");
+            }
+#endif
         }
         public void Paint()
         {
@@ -424,9 +435,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature.Camera.CameraOrbit.SetOffset(new Vector3(x, 2f, Creature.Camera.CameraOrbit.OffsetPosition.z), instant);
         }
-        #endregion
+#endregion
 
-        #region Operations
+#region Operations
         public void TrySave()
         {
             string savedCreatureName = PreProcessName(creatureNameText.text);
@@ -710,9 +721,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return true;
         }
-        #endregion
+#endregion
 
-        #region Unlocks
+#region Unlocks
         public void UnlockPattern(string patternID, bool notify = true)
         {
             if (ProgressManager.Data.UnlockedPatterns.Contains(patternID) || CreativeMode) return;
@@ -760,9 +771,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Database patterns = DatabaseManager.GetDatabase("Patterns");
             UnlockPattern((patterns.Objects.ToArray()[UnityEngine.Random.Range(0, patterns.Objects.Count)]).Key);
         }
-        #endregion
+#endregion
 
-        #region UI
+#region UI
         public CreatureUI AddCreatureUI(string creatureName)
         {
             CreatureUI creatureUI = Instantiate(creatureUIPrefab, creaturesRT);
@@ -1132,9 +1143,9 @@ namespace DanielLochner.Assets.CreatureCreator
             isVisible = v;
             StartCoroutine(editorCanvasGroup.Fade(v, t));
         }
-        #endregion
+#endregion
 
-        #region Keyboard Shortcuts
+#region Keyboard Shortcuts
         private void HandleKeyboardShortcuts()
         {
             if (!Creature || Creature.Health.IsDead) return;
@@ -1197,9 +1208,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 TryClear();
             }
         }
-        #endregion
+#endregion
 
-        #region Helper
+#region Helper
         private bool CanWarn(Animator warnAnimator)
         {
             return warnAnimator.CanTransitionTo("Warn") && !warnAnimator.IsInTransition(0) && !warnAnimator.GetCurrentAnimatorStateInfo(0).IsName("Warn");
@@ -1272,19 +1283,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConfirmOperation(operation, Creature.Editor.IsDirty && !string.IsNullOrEmpty(Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{Creature.Editor.LoadedCreature}\" without saving. Are you sure you want to continue {operationPCN}?");
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
 
-        #region Enums
+#region Enums
         public enum EditorMode
         {
             Build,
             Play,
             Paint
         }
-        #endregion
+#endregion
 
-        #region Inner Classes
+#region Inner Classes
         [Serializable]
         public struct GridInfo
         {
@@ -1294,6 +1305,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Serializable]
         public class BodyPartGrids : SerializableDictionaryBase<string, GridInfo> { }
-        #endregion
+#endregion
     }
 }
