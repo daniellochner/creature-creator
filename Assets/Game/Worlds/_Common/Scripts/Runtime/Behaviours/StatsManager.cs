@@ -1,5 +1,4 @@
 using Steamworks;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -52,6 +51,23 @@ namespace DanielLochner.Assets.CreatureCreator
             get => GetStat("STA_KILLS");
             set => SetStat("STA_KILLS", value, new StatAchievement("ACH_RAMPAGE", 10));
         }
+
+        public int NumAchievementsUnlocked
+        {
+            get
+            {
+                int counter = 0;
+                foreach (string achievementId in DatabaseManager.GetDatabase("Achievements").Objects.Keys)
+                {
+                    SteamUserStats.GetAchievement(achievementId, out bool achieved);
+                    if (achieved)
+                    {
+                        counter++;
+                    }
+                }
+                return counter;
+            }
+        }
         #endregion
 
         #region Methods
@@ -103,6 +119,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
         
+        public bool GetAchievement(string achievementId)
+        {
+            if (SteamManager.Initialized && SteamUserStats.GetAchievement(achievementId, out bool achieved))
+            {
+                return achieved;
+            }
+            return false;
+        }
         public void SetAchievement(string achievementId)
         {
             if (SteamManager.Initialized)

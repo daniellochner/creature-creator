@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +37,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateInfo()
         {
             // Achievements
-
+            int unlocked = StatsManager.Instance.NumAchievementsUnlocked;
+            int total = (int)SteamUserStats.GetNumAchievements();
+            achievementsText.text = $"{unlocked}/{total}";
+            achievementsSlider.value = ((float)unlocked) / total;
 
             // Cash
             cashText.text = $"${ProgressManager.Data.Cash}";
