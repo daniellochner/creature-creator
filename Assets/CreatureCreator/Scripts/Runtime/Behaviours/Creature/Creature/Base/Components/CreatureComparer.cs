@@ -20,10 +20,27 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
         }
 
-        public bool Compare(CreatureConstructor other)
+        private void OnCollisionEnter(Collision collision)
+        {
+            CreatureNonPlayer npc = collision.collider.GetComponent<CreatureNonPlayer>();
+            if (npc != null && npc.Comparer.CompareTo(Constructor))
+            {
+#if USE_STATS
+                StatsManager.Instance.SetAchievement("ACH_WE_ARE_ALIKE");
+#endif
+            }
+        }
+
+        public bool CompareTo(CreatureConstructor other)
         {
             CreatureData c1 = Constructor.Data;
             CreatureData c2 = other.Data;
+
+            // Name
+            if (c1.Name != c2.Name)
+            {
+                return false;
+            }
 
             // Pattern
             if (c1.PatternID != c2.PatternID)
@@ -31,14 +48,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 return false;
             }
 
-            // Colours
-            if ((GetColourDistance(c1.PrimaryColour, c2.PrimaryColour) > maxColorDiff) || (GetColourDistance(c1.SecondaryColour, c2.SecondaryColour) > maxColorDiff))
+            // Bones
+            if (Mathf.Abs(c1.Bones.Count - c2.Bones.Count) > maxBonesDiff)
             {
                 return false;
             }
 
-            // Bones
-            if (Mathf.Abs(c1.Bones.Count - c2.Bones.Count) > maxBonesDiff)
+            // Colours
+            if ((GetColourDistance(c1.PrimaryColour, c2.PrimaryColour) > maxColorDiff) || (GetColourDistance(c1.SecondaryColour, c2.SecondaryColour) > maxColorDiff))
             {
                 return false;
             }
