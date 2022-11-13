@@ -52,6 +52,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Editor.Setup();
             Interactor.Setup();
 
+            Age.OnAgeChanged += OnAge;
+
             IsSetup = true;
         }
 
@@ -88,6 +90,16 @@ namespace DanielLochner.Assets.CreatureCreator
 #endif
         }
 
+        private void OnAge(int age)
+        {
+#if USE_STATS
+            if (age >= 3600)
+            {
+                StatsManager.Instance.SetAchievement("ACH_OLD");
+            }
+#endif
+        }
+
         private void Respawn()
         {
             ZoneManager.Instance.ExitCurrentZone(Editor.Platform.Position);
@@ -111,6 +123,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.SetVisibility(true);
         }
-#endregion
+        #endregion
     }
 }
