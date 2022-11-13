@@ -39,6 +39,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private Vector3 keyboardForward, keyboardRight, moveDisplacement, direction;
         private InputMode inputMode;
         private Vector3 targetPosition;
+
+#if USE_STATS
+        private float displacementBuffer = 0f;
+#endif
         #endregion
 
         #region Properties        
@@ -253,6 +257,15 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 displacement = direction * MoveSpeed * Time.fixedDeltaTime;
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
             rigidbody.position += moveDisplacement;
+
+#if USE_STAT
+            displacementBuffer += moveDisplacement.magnitude;
+            if (displacementBuffer >= 1)
+            {
+                StatsManager.Instance.DistanceTravelled++;
+                displacementBuffer -= 1;
+            }
+#endif
         }
         public void Turn(float angle)
         {
