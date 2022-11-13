@@ -74,6 +74,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 onComplete.Invoke();
 
                 IsCompleted = true;
+
+#if USE_STATS
+                StatsManager.Instance.CompletedQuests++;
+#endif
             }
         }
         #endregion
