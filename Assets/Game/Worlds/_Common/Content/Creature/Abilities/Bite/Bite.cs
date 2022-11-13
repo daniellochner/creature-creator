@@ -43,7 +43,15 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
 
                         if (dealDamage)
                         {
-                            creature.Health.TakeDamage(biteDamage.Random, CreatureAbilities.transform.forward * biteForce.Random);
+                            float damage = biteDamage.Random;
+                            creature.Health.TakeDamage(damage);
+
+#if USE_STATS
+                            if (creature.Health.Health - damage <= 0)
+                            {
+                                StatsManager.Instance.Kills++;
+                            }
+#endif
                         }
                         hasFoundCreature = true;
                     }
