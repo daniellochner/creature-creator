@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     else
                     {
 #if USE_STATS
-                        StatsManager.Instance.SetAchievement("ACH_PHELPS");
+                        StatsManager.Instance.SetAchievement("ACH_MAKE_A_SPLASH");
 #endif
                     }
                 }

@@ -371,7 +371,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (Creature.Abilities.Abilities.Count >= 10)
             {
-                StatsManager.Instance.SetAchievement("ACH_OLD");
+                StatsManager.Instance.SetAchievement("ACH_OVERPOWERED");
             }
 
             if (Creature.Constructor.Statistics.Speed >= 3f)
