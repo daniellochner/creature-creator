@@ -871,6 +871,10 @@ namespace DanielLochner.Assets.CreatureCreator
                             bpe.LDrag.Plane = plane;
                         }
                     }
+
+#if USE_STATS
+                    StatsManager.Instance.CashSpent += bodyPart.Price;
+#endif
                 }
             });
 
