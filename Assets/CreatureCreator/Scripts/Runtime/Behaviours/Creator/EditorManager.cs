@@ -367,6 +367,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
 
 #if USE_STATS
+            if (Creature.Constructor.Statistics.Weight >= 500f)
+            {
+                StatsManager.Instance.SetAchievement("ACH_HEAVYWEIGHT_CHAMPION");
+            }
+
             if (Creature.Abilities.Abilities.Count >= 10)
             {
                 StatsManager.Instance.SetAchievement("ACH_OLD");
