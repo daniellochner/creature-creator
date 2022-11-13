@@ -82,6 +82,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Respawn);
 
             }, 1f);
+
+#if USE_STATS
+            StatsManager.Instance.Deaths++;
+#endif
         }
 
         private void Respawn()
@@ -107,6 +111,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.SetVisibility(true);
         }
-        #endregion
+#endregion
     }
 }
