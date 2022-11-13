@@ -10,6 +10,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private List<string> triggerable = new List<string>();
+        [SerializeField] private List<string> ignored = new List<string>();
         [Space]
         [SerializeField] private UnityEvent<Collider> onEnter = new UnityEvent<Collider>();
         [SerializeField] private UnityEvent<Collider> onExit = new UnityEvent<Collider>();
@@ -36,7 +37,7 @@ namespace DanielLochner.Assets
 
         private void OnTriggerEnter(Collider other)
         {
-            if (CanEnter(other) && !entered.Contains(other))
+            if (CanEnter(other) && !entered.Contains(other) && !ignored.Contains(other.name))
             {
                 onEnter.Invoke(other);
                 entered.Add(other);
@@ -44,7 +45,7 @@ namespace DanielLochner.Assets
         }
         private void OnTriggerExit(Collider other)
         {
-            if (entered.Contains(other))
+            if (entered.Contains(other) && !ignored.Contains(other.name))
             {
                 onExit.Invoke(other);
                 entered.Remove(other);

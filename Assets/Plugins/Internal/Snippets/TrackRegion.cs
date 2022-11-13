@@ -13,6 +13,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private Collider region;
         [SerializeField] private List<string> trackable;
+        [SerializeField] private List<string> ignored;
         [ReadOnly] public List<Collider> tracked = new List<Collider>();
 
         private List<Collider> toBeRemoved = new List<Collider>();
@@ -74,11 +75,17 @@ namespace DanielLochner.Assets
         }
         private void OnTriggerEnter(Collider other)
         {
-            Track(other);
+            if (!ignored.Contains(other.name))
+            {
+                Track(other);
+            }
         }
         private void OnTriggerExit(Collider other)
         {
-            LoseTrackOf(other);
+            if (!ignored.Contains(other.name))
+            {
+                LoseTrackOf(other);
+            }
         }
 
         private void HandleTracked()
