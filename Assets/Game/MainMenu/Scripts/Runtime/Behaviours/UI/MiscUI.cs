@@ -50,6 +50,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
             }
+
+#if USE_STATS
+            StatsManager.Instance.SetAchievement("ACH_HACKERMAN");
+#endif
         }
         public void Quit()
         {
