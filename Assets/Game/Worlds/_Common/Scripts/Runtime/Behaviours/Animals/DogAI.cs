@@ -36,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
-                        if (HasWeapon(creature) || trackRegion.tracked.Count >= 3)
+                        if ((HasWeapon(creature) || trackRegion.tracked.Count >= 3) && (GetState("SCU") as Scurrying).doghouse != null)
                         {
                             ChangeState("SCU");
                         }
