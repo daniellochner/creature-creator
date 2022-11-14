@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -8,6 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Quest : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private TextMeshPro questText;
+        [SerializeField] private float disappearTime;
         [SerializeField] private QuestType type;
         [SerializeField] private string description;
         [SerializeField] private string id;
@@ -62,6 +66,23 @@ namespace DanielLochner.Assets.CreatureCreator
             region = GetComponent<TrackRegion>();
             source = GetComponent<AudioSource>();
         }
+        private void Start()
+        {
+            UpdateInfo();
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player/Local"))
+            {
+                questText.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+                questText.gameObject.SetActive(true);
+            }
+
+            if (other.CompareTag("Quest"))
+            {
+                UpdateInfo();
+            }
+        }
         private void OnTriggerStay(Collider other)
         {
             if (!IsCompleted && other.CompareTag("Player/Local") && (type == QuestType.All ? HasAll : HasAny))
@@ -79,6 +100,28 @@ namespace DanielLochner.Assets.CreatureCreator
                 StatsManager.Instance.CompletedQuests++;
 #endif
             }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player/Local"))
+            {
+                questText.gameObject.SetActive(false);
+            }
+        }
+
+        private void UpdateInfo()
+        {
+            int required = (type == QuestType.All) ? items.Length : 1;
+            int current = 0;
+            foreach (Holdable item in items)
+            {
+                if (region.tracked.Contains(item.Col))
+                {
+                    current++;
+                }
+            }
+
+            questText.text = $"{description} ({current}/{required})";
         }
         #endregion
 
