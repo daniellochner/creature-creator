@@ -686,6 +686,7 @@ Transform:
   - {fileID: 1526413308}
   - {fileID: 1928799617}
   - {fileID: 137272084}
+  - {fileID: 1178091165}
   - {fileID: 3451077633545723653}
   - {fileID: 791066548}
   m_Father: {fileID: 0}
@@ -5358,6 +5359,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 931e3efde70bd5943a5a2013cd9c7aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &747917641
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1178091165}
+    m_Modifications:
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -25.059
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.831
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 25.259
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.43190113
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.901921
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 128.823
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456666, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1190854127
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456669, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_Name
+      value: FoodCrateSpawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+--- !u!4 &747917642 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+  m_PrefabInstance: {fileID: 747917641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &791066547
 GameObject:
   m_ObjectHideFlags: 0
@@ -5388,7 +5455,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 402636345}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 60, y: 30, z: 0}
 --- !u!108 &791066549
 Light:
@@ -6325,6 +6392,39 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1798085664643234175, guid: ded07a9e9e7af834d93d98b1575d9dbd, type: 3}
   m_PrefabInstance: {fileID: 1143319970}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1178091164
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1178091165}
+  m_Layer: 0
+  m_Name: FoodCrates
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1178091165
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178091164}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 747917642}
+  - {fileID: 1498187171}
+  m_Father: {fileID: 402636345}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1183374467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7171,6 +7271,72 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5878438297496853676, guid: c0f67d48e7575144c8e048d80ca4038f, type: 3}
   m_PrefabInstance: {fileID: 1490982890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1498187170
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1178091165}
+    m_Modifications:
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 24.78849
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.786
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -24.784458
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9039463
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.427646
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -50.637
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456666, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1060694557
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456669, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_Name
+      value: FoodCrateSpawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+--- !u!4 &1498187171 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+  m_PrefabInstance: {fileID: 1498187170}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1501252386
 PrefabInstance:
@@ -9454,7 +9620,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 402636345}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3499828991743884683
 GameObject:
