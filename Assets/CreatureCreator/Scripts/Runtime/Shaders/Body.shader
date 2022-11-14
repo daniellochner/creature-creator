@@ -3,7 +3,6 @@
     Properties
     {
 		_TintColor ("Tint Color", Color) = (1,1,1,1)
-		_Color ("Color", Color) = (1,1,1,1)
 		_PrimaryCol ("Primary Color", Color) = (1,1,1,1)
         _SecondaryCol ("Secondary Color", Color) = (0,0,0,1)
         _PatternTex ("Pattern Texture", 2D) = "white" {}

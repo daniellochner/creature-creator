@@ -110,7 +110,7 @@ namespace DanielLochner.Assets.CreatureCreator
             rb = GetComponent<Rigidbody>();
 
             SkinnedMeshRenderer = Model.GetComponent<SkinnedMeshRenderer>();
-            SkinnedMeshRenderer.material = BodyMat = new Material(bodyMaterial);
+            SkinnedMeshRenderer.sharedMaterial = BodyMat = new Material(bodyMaterial);
             SkinnedMeshRenderer.sharedMesh = Mesh = new Mesh();
             Mesh.name = "Body";
 
@@ -600,7 +600,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetPrimaryColour(Color colour)
         {
             data.PrimaryColour = colour;
-            BodyMat.SetColor("_PrimaryCol", colour);
+            SkinnedMeshRenderer.sharedMaterial.SetColor("_PrimaryCol", colour);
             BodyPrimaryMat.color = colour;
 
             OnSetPrimaryColour?.Invoke(colour);
@@ -608,7 +608,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetSecondaryColour(Color colour)
         {
             data.SecondaryColour = colour;
-            BodyMat.SetColor("_SecondaryCol", colour);
+            SkinnedMeshRenderer.sharedMaterial.SetColor("_SecondaryCol", colour);
             BodySecondaryMat.color = colour;
 
             OnSetSecondaryColour?.Invoke(colour);
