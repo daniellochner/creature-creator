@@ -93,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnAge(int age)
         {
 #if USE_STATS
-            if (age >= 3600)
+            if (age > 3600)
             {
                 StatsManager.Instance.SetAchievement("ACH_GRAY_HAIRS");
             }
