@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int DistanceTravelled
         {
             get => GetStat("STA_DISTANCE_TRAVELLED");
-            set => SetStat("STA_DISTANCE_TRAVELLED", value, new StatAchievement("ACH_LONG_DISTANCE_RUNNER", 10000));
+            set => SetStat("STA_DISTANCE_TRAVELLED", value, new StatAchievement("ACH_GO_THE_DISTANCE", 10000));
         }
         public int Deaths
         {
@@ -39,12 +39,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int ReachedPeaks
         {
             get => GetStat("STA_REACHED_PEAKS");
-            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_HIGH_POINT", 3));
+            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 3));
         }
         public int CompletedQuests
         {
             get => GetStat("STA_COMPLETED_QUESTS");
-            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_LEAVE_YOUR_MARK", 5));
+            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 5));
         }
         public int Kills
         {

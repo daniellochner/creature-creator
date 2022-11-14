@@ -258,7 +258,7 @@ namespace DanielLochner.Assets.CreatureCreator
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
             rigidbody.position += moveDisplacement;
 
-#if USE_STAT
+#if USE_STATS
             displacementBuffer += moveDisplacement.magnitude;
             if (displacementBuffer >= 1)
             {

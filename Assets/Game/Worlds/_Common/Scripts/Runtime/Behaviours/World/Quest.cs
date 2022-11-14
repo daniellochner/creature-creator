@@ -72,15 +72,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player/Local"))
-            {
-                questText.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
-                questText.gameObject.SetActive(true);
-            }
-
-            if (other.CompareTag("Quest"))
+            if (other.CompareTag("Player/Local") || other.CompareTag("Quest"))
             {
                 UpdateInfo();
+                questText.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+                questText.gameObject.SetActive(true);
             }
         }
         private void OnTriggerStay(Collider other)
@@ -106,11 +102,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Player/Local"))
             {
                 questText.gameObject.SetActive(false);
-            }
-
-            if (other.CompareTag("Quest"))
-            {
-                UpdateInfo();
             }
         }
 

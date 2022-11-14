@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Speed
             speedText.transform.parent.gameObject.SetActive(bodyPart.Speed != 0);
-            speedText.text = $"{((bodyPart.Speed > 0) ? "+" : "-")}{Mathf.Abs(bodyPart.Speed)}";
+            speedText.text = $"{((bodyPart.Speed > 0) ? "+" : "-")}{Mathf.Abs(bodyPart.Speed)}m/s";
 
             // Diet
             bool isMouth = bodyPart is Mouth;
