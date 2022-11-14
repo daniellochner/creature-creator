@@ -65,11 +65,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private float MoveSpeed
+        public float MoveSpeed
         {
             get => baseMovementSpeed * Constructor.Statistics.Speed;
         }
-        private float TurnSpeed
+        public float TurnSpeed
         {
             get => baseTurnSpeed;
         }

@@ -1113,7 +1113,7 @@ namespace DanielLochner.Assets.CreatureCreator
             weightText.text = $"<b>Weight:</b> {Math.Round(statistics.Weight, 2)}kg";
             dietText.text = $"<b>Diet:</b> {statistics.Diet}";
             healthText.text = $"<b>Health:</b> {statistics.Health}";
-            speedText.text = $"<b>Speed:</b> {Math.Round(statistics.Speed, 2)}";
+            speedText.text = $"<b>Speed:</b> {Math.Round(Creature.Mover.MoveSpeed, 2)}m/s";
             bonesText.text = $"<b>Bones:</b> {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
