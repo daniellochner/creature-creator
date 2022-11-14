@@ -107,21 +107,33 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 questText.gameObject.SetActive(false);
             }
+
+            if (other.CompareTag("Quest"))
+            {
+                UpdateInfo();
+            }
         }
 
         private void UpdateInfo()
         {
-            int required = (type == QuestType.All) ? items.Length : 1;
-            int current = 0;
-            foreach (Holdable item in items)
+            if (!IsCompleted)
             {
-                if (region.tracked.Contains(item.Col))
+                int required = (type == QuestType.All) ? items.Length : 1;
+                int current = 0;
+                foreach (Holdable item in items)
                 {
-                    current++;
+                    if (region.tracked.Contains(item.Col))
+                    {
+                        current++;
+                    }
                 }
-            }
 
-            questText.text = $"{description} ({current}/{required})";
+                questText.text = $"{description} ({current}/{required})";
+            }
+            else
+            {
+                questText.text = "";
+            }
         }
         #endregion
 
