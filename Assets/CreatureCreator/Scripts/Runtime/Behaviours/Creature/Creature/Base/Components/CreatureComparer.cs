@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -36,12 +37,6 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureData c1 = Constructor.Data;
             CreatureData c2 = other.Data;
 
-            // Name
-            if (c1.Name != c2.Name)
-            {
-                return false;
-            }
-
             // Pattern
             if (c1.PatternID != c2.PatternID)
             {
@@ -63,9 +58,9 @@ namespace DanielLochner.Assets.CreatureCreator
             // Body Parts
             if (c1.AttachedBodyParts.Count == c2.AttachedBodyParts.Count)
             {
-                for (int i = 0; i < c1.AttachedBodyParts.Count; ++i)
+                foreach (AttachedBodyPart attachedBodyPart in c1.AttachedBodyParts)
                 {
-                    if (c1.AttachedBodyParts[i].bodyPartID != c2.AttachedBodyParts[i].bodyPartID)
+                    if (c2.AttachedBodyParts.Find((x) => x.bodyPartID == attachedBodyPart.bodyPartID) == null)
                     {
                         return false;
                     }
@@ -76,7 +71,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 return false;
             }
 
-            
             return true;
         }
 
