@@ -442,23 +442,37 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature.Camera.CameraOrbit.SetOffset(new Vector3(x, 2f, Creature.Camera.CameraOrbit.OffsetPosition.z), instant);
         }
-#endregion
+        #endregion
 
         #region Operations
         public void TrySave()
         {
-            string savedCreatureName = PreProcessName(creatureNameText.text);
-            if (IsValidName(savedCreatureName))
+            UnityAction<string> saveOperation = delegate (string input)
             {
-                Creature.Constructor.SetName(savedCreatureName);
-                if (!IsPlaying){ // Update only when the configuration could have changed (i.e., when building or painting).
-                    Creature.Constructor.UpdateConfiguration();
+                string savedCreatureName = PreProcessName(input);
+                if (IsValidName(savedCreatureName))
+                {
+                    Creature.Constructor.SetName(savedCreatureName);
+                    if (!IsPlaying) // Update only when the configuration could have changed (i.e., when building or painting).
+                    {
+                        Creature.Constructor.UpdateConfiguration();
+                    }
+
+                    bool exists = creaturesUI.Find(x => x.name == savedCreatureName) != null;
+                    bool isLoaded = savedCreatureName == Creature.Editor.LoadedCreature;
+
+                    ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, "Overwrite creature?", $"Are you sure you want to overwrite \"{savedCreatureName}\"?");
                 }
+            };
 
-                bool exists = creaturesUI.Find(x => x.name == savedCreatureName) != null;
-                bool isLoaded = savedCreatureName == Creature.Editor.LoadedCreature;
-
-                ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, "Overwrite creature?", $"Are you sure you want to overwrite \"{savedCreatureName}\"?");
+            CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
+            if (selectedCreatureUI != null)
+            {
+                saveOperation(selectedCreatureUI.name);
+            }
+            else
+            {
+                InputDialog.Input("Enter a name for your creature.", "Enter creature name...", maxCharacters: 16, onSubmit: saveOperation);
             }
         }
         public void Save(CreatureData creatureData)
@@ -788,17 +802,17 @@ namespace DanielLochner.Assets.CreatureCreator
             creatureUI.Setup(creatureName);
 
             creatureUI.SelectToggle.group = creaturesToggleGroup;
-            creatureUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)
-            {
-                if (isSelected)
-                {
-                    creatureNameText.text = creatureName;
-                }
-                else
-                {
-                    creatureNameText.text = "";
-                }
-            });
+            //creatureUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)
+            //{
+            //    if (isSelected)
+            //    {
+            //        creatureNameText.text = creatureName;
+            //    }
+            //    else
+            //    {
+            //        creatureNameText.text = "";
+            //    }
+            //});
 
             creatureUI.RemoveButton.onClick.AddListener((UnityAction)delegate
             {
@@ -1022,6 +1036,29 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetColourNoneUI()
         {
             noColoursText.gameObject.SetActive(!primaryColourPalette.gameObject.activeSelf && !secondaryColourPalette.gameObject.activeSelf);
+        }
+
+        public void FilterCreatures(string filterText)
+        {
+            filterText = filterText.ToLower();
+            foreach (CreatureUI creatureUI in creaturesUI)
+            {
+                bool filtered = false;
+                if (!string.IsNullOrEmpty(filterText))
+                {
+                    filtered = true;
+                    foreach (TextMeshProUGUI tmp in creatureUI.GetComponentsInChildren<TextMeshProUGUI>())
+                    {
+                        string text = tmp.text.ToLower();
+                        if (text.Contains(filterText.ToLower()))
+                        {
+                            filtered = false;
+                            break;
+                        }
+                    }
+                }
+                creatureUI.gameObject.SetActive(!filtered);
+            }
         }
 
         public void UpdateBodyPartTotals()
