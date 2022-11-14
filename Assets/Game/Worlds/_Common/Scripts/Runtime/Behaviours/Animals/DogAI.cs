@@ -60,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (PVE)
             {
-                if (currentStateId == "BAR")
+                if (currentStateId == "BAR" || currentStateId == "WAN")
                 {
                     ChangeState("BIT");
                 }

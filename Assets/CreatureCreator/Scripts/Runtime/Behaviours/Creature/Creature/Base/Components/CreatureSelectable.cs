@@ -50,6 +50,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SetSelected(false, true);
         }
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (informationMenu != null)
+            {
+                Destroy(informationMenu.gameObject);
+            }
+        }
 
         private void Initialize()
         {

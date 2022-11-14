@@ -53,7 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void OnDie()
         {
             base.OnDie();
-            OnHide();
+            Selectable.SetSelected(false, true);
         }
 
         public override void OnShow()

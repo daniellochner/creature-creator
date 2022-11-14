@@ -60,11 +60,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature = GetComponent<CreatureNonPlayerLocal>();
             Agent = GetComponent<NavMeshAgent>();
-        }
-
-        public void Setup()
-        {
-            Agent.speed *= Creature.Constructor.Statistics.Speed;
 
             if (ignoreTrigger != null)
             {
@@ -72,6 +67,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 trackRegions = new List<TrackRegion>(GetComponentsInChildren<TrackRegion>(true));
                 triggerRegions.Remove(ignoreTrigger);
             }
+        }
+
+        public void Setup()
+        {
+            Agent.speed *= Creature.Constructor.Statistics.Speed;
         }
 
         public virtual void Follow(Transform target)

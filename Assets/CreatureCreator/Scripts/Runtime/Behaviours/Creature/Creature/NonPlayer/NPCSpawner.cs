@@ -7,6 +7,7 @@ namespace DanielLochner.Assets
     public abstract class NPCSpawner : MonoBehaviour
     {
         [SerializeField] private NetworkObject npcPrefab;
+        [SerializeField] public bool spawnOnStart = true;
 
         public static List<NPCSpawner> Spawners { get; set; } = new List<NPCSpawner>();
 

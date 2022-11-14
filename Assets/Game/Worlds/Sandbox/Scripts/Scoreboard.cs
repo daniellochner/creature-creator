@@ -46,6 +46,9 @@ namespace DanielLochner.Assets.CreatureCreator
             if (RedScore.Value >= 10 || BlueScore.Value >= 10)
             {
                 winCoroutine = StartCoroutine(WinRoutine());
+#if USE_STATS
+                StatsManager.Instance.SetAchievement("ACH_FOOTBALL_FRENZY");
+#endif
             }
         }
 

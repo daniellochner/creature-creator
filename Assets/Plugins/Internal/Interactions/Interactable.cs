@@ -26,6 +26,18 @@ namespace DanielLochner.Assets
         {
             Col = GetComponent<Collider>();
         }
+        public override void OnDestroy()
+        {
+            if (IsHighlighted)
+            {
+                InteractionsManager.Instance.Highlighted = null;
+            }
+            if (gameObject == InteractionsManager.Instance.Targeted)
+            {
+                InteractionsManager.Instance.Targeted = null;
+            }
+            base.OnDestroy();
+        }
 
         public virtual bool CanInteract(Interactor interactor)
         {
