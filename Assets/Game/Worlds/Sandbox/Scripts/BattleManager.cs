@@ -72,9 +72,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     return (r == 0);
                 });
 
-                round.Value++;
-
                 yield return new WaitForSeconds(1f);
+
+                round.Value++;
             }
 
             WinClientRpc();

@@ -34,12 +34,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int CashSpent
         {
             get => GetStat("STA_CASH_SPENT");
-            set => SetStat("STA_CASH_SPENT", value, new StatAchievement("ACH_BIG_SPENDER", 10000));
+            set => SetStat("STA_CASH_SPENT", value, new StatAchievement("ACH_BIG_TIME_SPENDER", 100000));
         }
         public int ReachedPeaks
         {
             get => GetStat("STA_REACHED_PEAKS");
-            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_BIG_SPENDER", 3));
+            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_HIGH_POINT", 3));
         }
         public int CompletedQuests
         {
@@ -49,7 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int Kills
         {
             get => GetStat("STA_KILLS");
-            set => SetStat("STA_KILLS", value, new StatAchievement("ACH_RAMPAGE", 10));
+            set => SetStat("STA_KILLS", value, new StatAchievement("ACH_RAMPAGE", 100));
         }
 
         public int NumAchievementsUnlocked

@@ -369,12 +369,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 StatsManager.Instance.SetAchievement("ACH_HEAVYWEIGHT_CHAMPION");
             }
 
-            if (Creature.Abilities.Abilities.Count >= 10)
+            if (Creature.Abilities.Abilities.Count >= 15)
             {
                 StatsManager.Instance.SetAchievement("ACH_OVERPOWERED");
             }
 
-            if (Creature.Constructor.Statistics.Speed >= 3f)
+            if (Creature.Mover.MoveSpeed >= 4f)
             {
                 StatsManager.Instance.SetAchievement("ACH_SPEED_DEMON");
             }
