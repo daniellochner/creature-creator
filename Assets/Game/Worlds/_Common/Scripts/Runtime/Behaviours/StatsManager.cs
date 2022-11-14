@@ -75,6 +75,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntil(() => SteamManager.Initialized);
             SteamUserStats.StoreStats();
+
+            // Necessary initial synch with the number of parts and patterns (if you have already unlocked before).
+            UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts.Count;
+            UnlockedPatterns  = ProgressManager.Data.UnlockedPatterns.Count;
         }
 
         public void Revert(bool achievementsToo = false)
