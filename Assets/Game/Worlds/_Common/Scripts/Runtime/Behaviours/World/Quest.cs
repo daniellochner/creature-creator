@@ -72,7 +72,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player/Local") || other.CompareTag("Quest"))
+            if (other.CompareTag("Quest"))
+            {
+                UpdateInfo();
+            }
+            if (other.CompareTag("Player/Local"))
             {
                 UpdateInfo();
                 questText.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });

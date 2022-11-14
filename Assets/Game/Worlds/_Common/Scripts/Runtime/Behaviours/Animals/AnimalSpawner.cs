@@ -11,6 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override void Setup(NetworkObject npc)
         {
+            base.Setup(npc);
+
             AnimalAI animal = npc.GetComponent<AnimalAI>();
 
             animal.Creature.Scaler.Scale(scale);

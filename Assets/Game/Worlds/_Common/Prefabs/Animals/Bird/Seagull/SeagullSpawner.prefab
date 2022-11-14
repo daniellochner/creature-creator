@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3408223681116796114}
+  - component: {fileID: -5554490044159290271}
   - component: {fileID: 3408223681116796115}
   m_Layer: 0
   m_Name: SeagullSpawner
@@ -27,10 +28,27 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5554490044159290271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408223681116795948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &3408223681116796115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43,5 +61,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6514462c04ac64299db3f36b7bcc40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnerId: 0
   npcPrefab: {fileID: 8501117568840804733, guid: 03e36c7bb29eadc4d8a491efc0ccf8f8, type: 3}
-  bounds: {fileID: 0}
+  spawnOnStart: 1
+  wanderBounds: {fileID: 0}
+  scale: 1
+  perchPoints: {fileID: 0}

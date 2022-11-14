@@ -35,15 +35,13 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Start();
             OnTakeDamage += delegate (float damage, Vector3 force)
             {
-                if (IsOwner)
+                if (IsOwner) // only one source should play a sound
                 {
-                    //rb.AddForce(force, ForceMode.Impulse);
                     Effects.PlaySound(takeDamageSounds);
-
-                    if (damageCoroutine == null)
-                    {
-                        damageCoroutine = StartCoroutine(DamageRoutine());
-                    }
+                }
+                if (damageCoroutine == null)
+                {
+                    damageCoroutine = StartCoroutine(DamageRoutine());
                 }
             };
         }
