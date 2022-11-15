@@ -48,6 +48,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 };
                 trackRegion.OnLoseTrackOf += delegate
                 {
+                    if (Creature.Health.Health <= 0) return;
+
                     if (currentStateId != "HID" && currentStateId != "SCU" && trackRegion.tracked.Count == 0)
                     {
                         ChangeState("WAN");
