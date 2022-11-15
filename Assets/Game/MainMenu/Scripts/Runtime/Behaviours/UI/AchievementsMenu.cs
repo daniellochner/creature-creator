@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 achievementUI.canvasGroup.alpha = StatsManager.Instance.GetAchievement(achievementUI.name) ? 1f : 0.2f;
             }
-            titleText.text = $"Unlocked Achievements ({StatsManager.Instance.NumAchievementsUnlocked}/{SteamUserStats.GetNumAchievements()})";
+            titleText.text = $"Unlocked Achievements ({StatsManager.Instance.NumAchievementsUnlocked}/{DatabaseManager.GetDatabase("Achievements").Objects.Count})";
         }
 
         public override void Open(bool instant = false)

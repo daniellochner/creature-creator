@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             // Achievements
             int unlocked = StatsManager.Instance.NumAchievementsUnlocked;
-            int total = (int)SteamUserStats.GetNumAchievements();
+            int total = DatabaseManager.GetDatabase("Achievements").Objects.Count;
             achievementsText.text = $"{unlocked}/{total}";
             achievementsSlider.value = ((float)unlocked) / total;
 
