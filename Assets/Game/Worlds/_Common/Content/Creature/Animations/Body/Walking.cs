@@ -224,6 +224,10 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             }
             else
             {
+                if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                {
+                    return hitInfo.point + footOffset;
+                }
                 return worldPos;
             }
         }

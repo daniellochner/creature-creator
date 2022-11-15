@@ -4,7 +4,15 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class Swimming : CreatureAnimation
     {
+        public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            FreezeLegs();
+        }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            FreezeLegs();
+        }
+        private void FreezeLegs()
         {
             foreach (LegAnimator leg in Creature.Legs)
             {
