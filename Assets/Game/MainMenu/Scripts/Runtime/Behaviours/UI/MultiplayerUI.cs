@@ -158,7 +158,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Start()
         {
             Setup();
-            Debug.Log(SteamUser.GetSteamID().m_SteamID);
         }
 
         private void OnEnable()
@@ -183,7 +182,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string relay = $"relay_{relayServerOS.Options[relayServerOS.Selected].Name.ToLower()}";
                 relayTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
             });
-            relayServerOS.Select(RelayServer.Steam);
+            relayServerOS.Select(RelayServer.Unity);
 
             mapOS.SetupUsingEnum<Map>();
             mapOS.OnSelected.AddListener(delegate (int option)
@@ -274,24 +273,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 };
                 lobby = await LobbyHelper.Instance.JoinLobbyByIdAsync(id, options);
 
-                Debug.Log(lobby.Data["hostSteamId"].Value);
-
                 // Join Relay
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = relayTransport;
                 string joinCode = lobby.Data["joinCode"].Value;
                 string hostSteamId = lobby.Data["hostSteamId"].Value;
-                Debug.Log("join code"+joinCode);
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
-
 
                 await Lobbies.Instance.UpdatePlayerAsync(lobby.Id, player.Id, new UpdatePlayerOptions()
                 {
                     AllocationId = (UseSteam ? hostSteamId.ToString() : join.AllocationId.ToString()),
                     ConnectionInfo = joinCode
                 });
-                Debug.Log("test2");
-
                 if (!UseSteam)
                 {
                     UnityTransport unityTransport = relayTransport as UnityTransport;
@@ -302,7 +295,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     SteamNetworkingTransport steamTransport = relayTransport as SteamNetworkingTransport;
                     steamTransport.ConnectToSteamID = ulong.Parse(lobby.Data["hostSteamId"].Value);
                 }
-                Debug.Log("test3");
 
                 // Start Client
                 UpdateNetworkStatus("Starting Client...", Color.yellow, -1);
