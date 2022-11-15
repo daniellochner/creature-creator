@@ -64,7 +64,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
         private bool isConnecting, isRefreshing, isSortedByAscending = true;
-        private NetworkTransport relayTransport;
         private Coroutine updateNetStatusCoroutine;
         private int refreshCount;
         #endregion
@@ -150,7 +149,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool UseSteam
         {
-            get => relayTransport is SteamNetworkingTransport;
+            get => NetworkTransport is SteamNetworkingTransport;
+        }
+        private NetworkTransport NetworkTransport
+        {
+            get => NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+            set => NetworkManager.Singleton.NetworkConfig.NetworkTransport = value;
         }
         #endregion
 
@@ -180,7 +184,7 @@ namespace DanielLochner.Assets.CreatureCreator
             relayServerOS.OnSelected.AddListener(delegate (int option)
             {
                 string relay = $"relay_{relayServerOS.Options[relayServerOS.Selected].Name.ToLower()}";
-                relayTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
             });
             relayServerOS.Select(RelayServer.Unity);
 
@@ -259,7 +263,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     throw new Exception($"Version ({Application.version}) different to host ({version}).");
                 }
-
+                
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
                 SetConnectionData(username, password);
@@ -275,7 +279,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Join Relay
                 UpdateNetworkStatus("Joining Via Relay...", Color.yellow, -1);
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = relayTransport;
                 string joinCode = lobby.Data["joinCode"].Value;
                 string hostSteamId = lobby.Data["hostSteamId"].Value;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
@@ -287,12 +290,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
                 if (!UseSteam)
                 {
-                    UnityTransport unityTransport = relayTransport as UnityTransport;
+                    UnityTransport unityTransport = NetworkTransport as UnityTransport;
                     unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
                 }
                 else
                 {
-                    SteamNetworkingTransport steamTransport = relayTransport as SteamNetworkingTransport;
+                    SteamNetworkingTransport steamTransport = NetworkTransport as SteamNetworkingTransport;
                     steamTransport.ConnectToSteamID = ulong.Parse(lobby.Data["hostSteamId"].Value);
                 }
 
@@ -347,16 +350,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Allocate Relay
                 UpdateNetworkStatus("Allocating Relay...", Color.yellow, -1);
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = relayTransport;
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
                 if (!UseSteam)
                 {
-                    UnityTransport unityTransport = relayTransport as UnityTransport;
+                    UnityTransport unityTransport = NetworkTransport as UnityTransport;
                     unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
                 }
                 else
                 {
-                    SteamNetworkingTransport steamTransport = relayTransport as SteamNetworkingTransport;
+                    SteamNetworkingTransport steamTransport = NetworkTransport as SteamNetworkingTransport;
                     steamTransport.ConnectToSteamID = hostSteamId;
                 }
 

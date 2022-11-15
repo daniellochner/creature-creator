@@ -70,8 +70,6 @@ namespace DanielLochner.Assets
             var delay = new WaitForSecondsRealtime(waitTime);
             while (true)
             {
-                Debug.Log("SendHeartbeatPingAsync");
-
                 Lobbies.Instance.SendHeartbeatPingAsync(lobbyId);
                 yield return delay;
             }
