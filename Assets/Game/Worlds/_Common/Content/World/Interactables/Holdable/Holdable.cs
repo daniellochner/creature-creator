@@ -20,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<FixedString64Bytes> Hand { get; set; } = new NetworkVariable<FixedString64Bytes>();
 
         public HoldableDummy Dummy => dummy;
+
+        public bool IsHeld => !Hand.Value.IsEmpty;
         #endregion
 
         #region Methods
@@ -27,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Hand.OnValueChanged += OnHandChanged;
 
-            if (!Hand.Value.IsEmpty)
+            if (IsHeld)
             {
                 OnHandChanged("", Hand.Value);
             }

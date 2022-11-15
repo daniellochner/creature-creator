@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAnimator Animator { get; private set; }
 
         public Dictionary<ArmAnimator, Holdable> Held => held;
+
+        public bool IsHolding { get; private set; }
         #endregion
 
         #region Methods
@@ -38,27 +40,37 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 holdable = networkObject.GetComponent<Holdable>();
 
-                ArmAnimator nearestArm = null;
-                float minDistance = Mathf.Infinity;
-
-                foreach (ArmAnimator arm in Animator.Arms)
+                if (!holdable.IsHeld)
                 {
-                    if (held.ContainsKey(arm)) continue;
+                    ArmAnimator nearestArm = null;
+                    float minDistance = Mathf.Infinity;
 
-                    float d = Vector3.Distance(arm.LimbConstructor.Extremity.position, holdable.transform.position);
-                    if (d < minDistance)
+                    foreach (ArmAnimator arm in Animator.Arms)
                     {
-                        minDistance = d;
-                        nearestArm = arm;
-                    }
-                }
+                        if (held.ContainsKey(arm)) continue;
 
-                if (nearestArm != null)
-                {
-                    holdable.Hold(nearestArm.LimbConstructor);
-                    held[nearestArm] = holdable;
+                        float d = Vector3.Distance(arm.LimbConstructor.Extremity.position, holdable.transform.position);
+                        if (d < minDistance)
+                        {
+                            minDistance = d;
+                            nearestArm = arm;
+                        }
+                    }
+
+                    if (nearestArm != null)
+                    {
+                        holdable.Hold(nearestArm.LimbConstructor);
+                        held[nearestArm] = holdable;
+                    }
+
+                    HoldClientRpc();
                 }
             }
+        }
+        [ClientRpc]
+        private void HoldClientRpc()
+        {
+            IsHolding = true;
         }
 
         public void DropAll()
@@ -74,6 +86,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 h.Drop();
             }
             held.Clear();
+
+            DropClientRpc();
+        }
+        [ClientRpc]
+        private void DropClientRpc()
+        {
+            IsHolding = false;
         }
         #endregion
     }

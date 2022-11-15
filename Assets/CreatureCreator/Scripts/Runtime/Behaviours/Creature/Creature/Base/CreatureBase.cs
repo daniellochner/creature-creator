@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -23,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(PlayerEffects))]
     [RequireComponent(typeof(CreatureHolder))]
     [RequireComponent(typeof(CreatureComparer))]
+    [RequireComponent(typeof(CreatureUnderwater))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -44,6 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureVelocity velocity;
         [SerializeField] private CreatureHolder holder;
         [SerializeField] private CreatureComparer comparer;
+        [SerializeField] private CreatureUnderwater underwater;
         #endregion
 
         #region Properties
@@ -65,6 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureVelocity Velocity => velocity;
         public CreatureHolder Holder => holder;
         public CreatureComparer Comparer => comparer;
+        public CreatureUnderwater Underwater => underwater;
         #endregion
 
         #region Methods
@@ -89,6 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
             velocity = GetComponent<CreatureVelocity>();
             holder = GetComponent<CreatureHolder>();
             comparer = GetComponent<CreatureComparer>();
+            underwater = GetComponent<CreatureUnderwater>();
         }
 #endif
 
