@@ -23,13 +23,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-            CreatureNonPlayer npc = collision.collider.GetComponent<CreatureNonPlayer>();
-            if (npc != null && npc.Comparer.CompareTo(Constructor))
-            {
 #if USE_STATS
-                StatsManager.Instance.SetAchievement("ACH_WE_ARE_ALIKE");
-#endif
+            if (collision.collider.CompareTag("Player/Local"))
+            {
+                CreaturePlayerLocal player = collision.collider.GetComponent<CreaturePlayerLocal>();
+                if (player.Comparer.CompareTo(Constructor))
+                {
+                    StatsManager.Instance.SetAchievement("ACH_WE_ARE_ALIKE");
+                }
             }
+#endif
         }
 
         public bool CompareTo(CreatureConstructor other)
