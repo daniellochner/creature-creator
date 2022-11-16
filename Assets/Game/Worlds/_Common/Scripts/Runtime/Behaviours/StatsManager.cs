@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int CompletedQuests
         {
             get => GetStat("STA_COMPLETED_QUESTS");
-            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 5));
+            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 12));
         }
         public int Kills
         {
