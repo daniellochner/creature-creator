@@ -472,7 +472,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                InputDialog.Input("Name Your Creature", "Enter a name for your creature...", maxCharacters: 16, onSubmit: saveOperation);
+                InputDialog.Input("Name Your Creature", "Enter a name for your creature...", maxCharacters: 32, submit: "Save", onSubmit: saveOperation);
             }
         }
         public void Save(CreatureData creatureData)
