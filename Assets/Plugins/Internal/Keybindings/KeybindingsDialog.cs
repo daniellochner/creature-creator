@@ -40,38 +40,41 @@ namespace DanielLochner.Assets
 
             while (IsOpen)
             {
-                if (Input.anyKey)
+                if (!Input.GetMouseButton(0))
                 {
-                    if (!Input.GetKeyDown(KeyCode.Escape))
+                    if (Input.anyKey)
                     {
-                        foreach (KeyCode key in MODIFIER_KEYS)
+                        if (!Input.GetKeyDown(KeyCode.Escape))
                         {
-                            if (Input.GetKeyDown(key))
+                            foreach (KeyCode key in MODIFIER_KEYS)
                             {
-                                modifierKey = key;
-                                break;
+                                if (Input.GetKeyDown(key))
+                                {
+                                    modifierKey = key;
+                                    break;
+                                }
+                            }
+
+                            foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                            {
+                                if (Input.GetKeyDown(key) && key != modifierKey)
+                                {
+                                    keybindUI.Rebind(new Keybind(key, modifierKey));
+                                    Close();
+                                    break;
+                                }
                             }
                         }
-
-                        foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                        else
                         {
-                            if (Input.GetKeyDown(key) && key != modifierKey)
-                            {
-                                keybindUI.Rebind(new Keybind(key, modifierKey));
-                                Close();
-                                break;
-                            }
+                            Close();
                         }
                     }
-                    else
+                    else if (modifierKey != KeyCode.None)
                     {
+                        keybindUI.Rebind(new Keybind(modifierKey, KeyCode.None));
                         Close();
                     }
-                }
-                else if (modifierKey != KeyCode.None)
-                {
-                    keybindUI.Rebind(new Keybind(modifierKey, KeyCode.None));
-                    Close();
                 }
 
                 yield return null;
