@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -11,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Material gridMaterial;
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
+        [SerializeField] private TextMeshProUGUI startText;
 
         private bool isKeyPressed;
         #endregion
@@ -28,13 +30,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
 
-            if (Input.anyKeyDown && !isKeyPressed)
+            if (SteamManager.Initialized)
             {
-                LoadingManager.Instance.Load("MainMenu");
-                isKeyPressed = true;
+                if (Input.anyKeyDown && !isKeyPressed)
+                {
+                    LoadingManager.Instance.Load("MainMenu");
+                    isKeyPressed = true;
 
-                logoAnimator.SetTrigger("Hide");
-                enterAudioSource.Play();
+                    logoAnimator.SetTrigger("Hide");
+                    enterAudioSource.Play();
+                }
+                startText.text = "Press any button to start.";
+            }
+            else
+            {
+                startText.text = "[Error] Steam failed to initialize.";
             }
         }
         private void OnDestroy()
