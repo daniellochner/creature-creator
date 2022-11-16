@@ -47,7 +47,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void BattleServerRpc()
         {
-            StartCoroutine(BattleRoutine());
+            if (!InBattle)
+            {
+                StartCoroutine(BattleRoutine());
+            }
         }
         private IEnumerator BattleRoutine()
         {
