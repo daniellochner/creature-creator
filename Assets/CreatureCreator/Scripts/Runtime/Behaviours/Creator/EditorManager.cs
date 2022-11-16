@@ -466,13 +466,13 @@ namespace DanielLochner.Assets.CreatureCreator
             };
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
-            if (selectedCreatureUI != null)
+            if ((selectedCreatureUI != null) && (selectedCreatureUI.name == Creature.Editor.LoadedCreature))
             {
                 saveOperation(selectedCreatureUI.name);
             }
             else
             {
-                InputDialog.Input("Enter a name for your creature.", "Enter creature name...", maxCharacters: 16, onSubmit: saveOperation);
+                InputDialog.Input("Name Your Creature", "Enter a name for your creature...", maxCharacters: 16, onSubmit: saveOperation);
             }
         }
         public void Save(CreatureData creatureData)
