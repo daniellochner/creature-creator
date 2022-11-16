@@ -123,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                questText.text = $"{description} ({current}/{required})";
+                questText.text = $"<size=1>{description} (${reward})</size><br><size=2>{current}/{required}</size>";
             }
             else
             {
