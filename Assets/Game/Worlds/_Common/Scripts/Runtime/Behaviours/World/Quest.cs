@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ProgressManager.Data.Cash += reward;
                 ProgressManager.Instance.Save();
 
-                NotificationsManager.Notify($"Quest Complete: \"{description}\"! You earned ${reward}.");
+                NotificationsManager.Notify($"\"{description}\" quest complete! You earned ${reward}.");
                 source.Play();
                 onComplete.Invoke();
 
