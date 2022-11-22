@@ -111,6 +111,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SkinnedMeshRenderer = Model.GetComponent<SkinnedMeshRenderer>();
             SkinnedMeshRenderer.sharedMaterial = BodyMat = new Material(bodyMaterial);
+            BodyMat.name = "Body";
             SkinnedMeshRenderer.sharedMesh = Mesh = new Mesh();
             Mesh.name = "Body";
 
@@ -600,7 +601,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetPrimaryColour(Color colour)
         {
             data.PrimaryColour = colour;
-            SkinnedMeshRenderer.sharedMaterial.SetColor("_PrimaryCol", colour);
+            BodyMat.SetColor("_PrimaryCol", colour);
             BodyPrimaryMat.color = colour;
 
             OnSetPrimaryColour?.Invoke(colour);
@@ -608,7 +609,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetSecondaryColour(Color colour)
         {
             data.SecondaryColour = colour;
-            SkinnedMeshRenderer.sharedMaterial.SetColor("_SecondaryCol", colour);
+            BodyMat.SetColor("_SecondaryCol", colour);
             BodySecondaryMat.color = colour;
 
             OnSetSecondaryColour?.Invoke(colour);
@@ -617,7 +618,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.PatternID = patternID;
 
-            SkinnedMeshRenderer.sharedMaterial.SetTexture("_PatternTex", DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID));
+            BodyMat.SetTexture("_PatternTex", DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID));
 
             OnSetPattern?.Invoke(patternID);
         }
@@ -625,7 +626,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.Tiling = tiling;
 
-            SkinnedMeshRenderer.sharedMaterial.SetTextureScale("_PatternTex", tiling);
+            BodyMat.SetTextureScale("_PatternTex", tiling);
 
             OnSetTiling?.Invoke(tiling);
         }
@@ -633,7 +634,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.Offset = offset;
 
-            SkinnedMeshRenderer.sharedMaterial.SetTextureOffset("_PatternTex", offset);
+            BodyMat.SetTextureOffset("_PatternTex", offset);
 
             OnSetOffset?.Invoke(offset);
         }
@@ -641,7 +642,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.Shine = shine;
 
-            SkinnedMeshRenderer.sharedMaterial.SetFloat("_Glossiness", shine);
+            BodyMat.SetFloat("_Glossiness", shine);
 
             OnSetShine?.Invoke(shine);
         }
@@ -649,7 +650,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.Metallic = metallic;
 
-            SkinnedMeshRenderer.sharedMaterial.SetFloat("_Metallic", metallic);
+            BodyMat.SetFloat("_Metallic", metallic);
 
             OnSetMetallic?.Invoke(metallic);
         }
@@ -754,14 +755,6 @@ namespace DanielLochner.Assets.CreatureCreator
             statistics.HealthBody = (int)Mathf.Lerp(minMaxBodyHealth.min, minMaxBodyHealth.max, w);
 
             rb.mass = statistics.Weight;
-        }
-
-        public bool Equals(CreatureConstructor other)
-        {
-
-
-
-            return base.Equals(other);
         }
         #endregion
     }

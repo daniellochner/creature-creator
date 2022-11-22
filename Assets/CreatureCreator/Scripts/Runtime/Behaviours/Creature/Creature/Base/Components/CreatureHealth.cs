@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             foreach (Renderer renderer in Constructor.Body.GetComponentsInChildren<Renderer>(true))
             {
-                rm[renderer] = renderer.materials;
+                rm[renderer] = renderer.sharedMaterials;
 
                 Material[] placeholder = new Material[renderer.materials.Length];
                 for (int i = 0; i < placeholder.Length; ++i)
