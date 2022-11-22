@@ -10,7 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     {
         [SerializeField] private PlayerEffects.Sound[] biteSounds;
         [SerializeField] private MinMax biteDamage;
-        [SerializeField] private MinMax biteForce;
         [SerializeField] private float biteRadius;
         private bool hasFoundCreature;
 
