@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -56,7 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (InputUtility.GetKeyDown(ability.PerformKeybind))
                     {
-                        if (ability.OnTryPerform())
+                        if (abilitiesInfo[ability].isActive && ability.OnTryPerform())
                         {
                             break;
                         }
@@ -92,18 +93,25 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
                 Abilities.Sort();
+
+                UpdateActive();
             };
             CreatureConstructor.OnRemoveBodyPartData += delegate (BodyPart bodyPart)
             {
                 foreach (Ability ability in bodyPart.Abilities)
                 {
-                    abilitiesInfo[ability].count--;
-
-                    if (abilitiesInfo[ability].count == 0)
+                    if (abilitiesInfo.ContainsKey(ability))
                     {
-                        Remove(ability);
+                        abilitiesInfo[ability].count--;
+
+                        if (abilitiesInfo[ability].count == 0)
+                        {
+                            Remove(ability);
+                        }
                     }
                 }
+
+                UpdateActive();
             };
         }
 
@@ -133,6 +141,28 @@ namespace DanielLochner.Assets.CreatureCreator
             abilities.Remove(ability);
             ability.OnRemove();
         }
+
+        private void UpdateActive()
+        {
+            HashSet<Type> abilityTypes = new HashSet<Type>();
+            foreach (Ability ability in Abilities)
+            {
+                if (!ability.PerformKeybind.Equals(Keybind.None))
+                {
+                    AbilityInfo info = abilitiesInfo[ability];
+                    Type type = ability.GetType();
+                    if (abilityTypes.Contains(type))
+                    {
+                        info.SetActive(false);
+                    }
+                    else
+                    {
+                        abilityTypes.Add(type);
+                        info.SetActive(true);
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Inner Classes
@@ -140,11 +170,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             public int count;
             public AbilityUI abilityUI;
+            public bool isActive;
 
             public AbilityInfo(int count, AbilityUI abilityUI)
             {
                 this.count = count;
                 this.abilityUI = abilityUI;
+            }
+
+            public void SetActive(bool isActive)
+            {
+                this.isActive = isActive;
+                abilityUI.gameObject.SetActive(isActive);
             }
         }
         #endregion
