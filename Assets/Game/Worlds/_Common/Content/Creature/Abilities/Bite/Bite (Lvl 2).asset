@@ -9,14 +9,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bbbc46b70289de4db3bd68eeac4b7d6, type: 3}
-  m_Name: Strike3
+  m_Script: {fileID: 11500000, guid: 5ba703af4db382843a4994c97aced8a6, type: 3}
+  m_Name: Bite (Lvl 2)
   m_EditorClassIdentifier: 
   author: 
   icon: {fileID: 0}
-  level: 3
-  priority: 2
+  level: 2
+  priority: 1
   performKeybind:
     key: 102
     modifierKey: 0
-  cooldown: 5
+  cooldown: 2
+  biteSounds:
+  - name: Bite1
+    volume: 1
+  - name: Bite2
+    volume: 1
+  - name: Bite3
+    volume: 1
+  - name: Bite4
+    volume: 1
+  biteDamage:
+    min: 10
+    max: 15
+  biteForce:
+    min: 50
+    max: 75
+  biteRadius: 1
