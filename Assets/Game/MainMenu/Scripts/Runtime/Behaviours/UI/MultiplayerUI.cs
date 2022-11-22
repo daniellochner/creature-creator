@@ -114,6 +114,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     UpdateNetworkStatus("A world name must be provided.", Color.white);
                     return false;
                 }
+                if (worldName.Length > 32)
+                {
+                    UpdateNetworkStatus("World name cannot be longer than 32 characters.", Color.white);
+                    return false;
+                }
                 if (filter.ContainsProfanity(worldName))
                 {
                     UpdateNetworkStatus("Profanity detected in world name.", Color.white);
