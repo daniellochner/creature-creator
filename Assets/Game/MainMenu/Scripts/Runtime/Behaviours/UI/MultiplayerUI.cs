@@ -191,7 +191,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string relay = $"relay_{relayServerOS.Options[relayServerOS.Selected].Name.ToLower()}";
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
             });
-            relayServerOS.Select(RelayServer.Unity);
+            relayServerOS.Select(RelayServer.Steam);
 
             mapOS.SetupUsingEnum<Map>();
             mapOS.OnSelected.AddListener(delegate (int option)
