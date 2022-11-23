@@ -154,7 +154,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool UseSteam
         {
-            get => NetworkTransport is SteamNetworkingTransport;
+            get => NetworkTransport is SteamNetworkingSocketsTransport;
         }
         private NetworkTransport NetworkTransport
         {
@@ -300,7 +300,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 else
                 {
-                    SteamNetworkingTransport steamTransport = NetworkTransport as SteamNetworkingTransport;
+                    SteamNetworkingSocketsTransport steamTransport = NetworkTransport as SteamNetworkingSocketsTransport;
                     steamTransport.ConnectToSteamID = ulong.Parse(lobby.Data["hostSteamId"].Value);
                 }
 
@@ -363,7 +363,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 else
                 {
-                    SteamNetworkingTransport steamTransport = NetworkTransport as SteamNetworkingTransport;
+                    SteamNetworkingSocketsTransport steamTransport = NetworkTransport as SteamNetworkingSocketsTransport;
                     steamTransport.ConnectToSteamID = hostSteamId;
                 }
 
