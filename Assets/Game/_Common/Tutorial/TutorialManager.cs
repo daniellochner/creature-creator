@@ -36,6 +36,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         private string MoveKeys => $"{KeybindingsManager.Data.WalkForwards}{KeybindingsManager.Data.WalkLeft}{KeybindingsManager.Data.WalkBackwards}{KeybindingsManager.Data.WalkRight}";
         private string MoveToTargetButton => "right mouse button";
+
+        public bool IsComplete { get; private set; }
         #endregion
 
         #region Methods
@@ -46,6 +48,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator TutorialRoutine()
         {
+            IsComplete = false;
+            StartCoroutine(RemindTutorialRoutine());
             EditorManager.Instance.SetVisibility(false, 0f);
 
             yield return TutorialItemRoutine(
@@ -135,6 +139,7 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return new WaitForSeconds(1f);
 
             InformationDialog.Inform("Tutorial Complete!", "Great, you now know the basics! Go ahead and explore the world!");
+            IsComplete = true;
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
         {
@@ -148,6 +153,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitForSeconds(time);
             InformationDialog.Inform(title, message);
+        }
+        private IEnumerator RemindTutorialRoutine()
+        {
+            int remindTime = 600; // remind every 10 minutes if they still haven't completed the tutorial
+            yield return new WaitForSeconds(remindTime);
+            while (!IsComplete)
+            {
+                InformationDialog.Inform("Tutorial In Progress", "Looks like you're still busy with the tutorial! Head back to an editing platform to complete it!");
+                yield return new WaitForSeconds(remindTime);
+            }
         }
 
         private IEnumerator UnlockBodyPartRoutine()
