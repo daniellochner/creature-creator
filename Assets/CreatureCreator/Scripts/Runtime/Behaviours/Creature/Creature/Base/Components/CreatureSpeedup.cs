@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         public Action<float, float> OnSpeedUp { get; set; }
+        public Action OnSlowDown { get; set; }
         #endregion
 
         #region Methods
@@ -63,6 +64,27 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SpeedUpClientRpc(float s, float t)
         {
             OnSpeedUp?.Invoke(s, t);
+        }
+
+        public void SlowDown()
+        {
+            SlowDownServerRpc();
+        }
+        [ServerRpc]
+        private void SlowDownServerRpc()
+        {
+            if (speedUpCoroutine != null)
+            {
+                StopCoroutine(speedUpCoroutine);
+            }
+            speed.Value = 0f;
+
+            SlowDownClientRpc();
+        }
+        [ClientRpc]
+        private void SlowDownClientRpc()
+        {
+            OnSlowDown?.Invoke();
         }
         
         private void UpdateSpeed(float oldSpeed, float newSpeed)

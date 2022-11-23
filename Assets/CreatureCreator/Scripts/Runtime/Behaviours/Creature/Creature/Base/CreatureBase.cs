@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureHolder holder;
         [SerializeField] private CreatureComparer comparer;
         [SerializeField] private CreatureUnderwater underwater;
+        [SerializeField] private CreatureSpeedup speedUp;
         #endregion
 
         #region Properties
@@ -67,6 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureHolder Holder => holder;
         public CreatureComparer Comparer => comparer;
         public CreatureUnderwater Underwater => underwater;
+        public CreatureSpeedup SpeedUp => speedUp;
         #endregion
 
         #region Methods
@@ -92,6 +94,7 @@ namespace DanielLochner.Assets.CreatureCreator
             holder = GetComponent<CreatureHolder>();
             comparer = GetComponent<CreatureComparer>();
             underwater = GetComponent<CreatureUnderwater>();
+            speedUp = GetComponent<CreatureSpeedup>();
         }
 #endif
 

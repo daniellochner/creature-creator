@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private Camera[] cameras;
         private float targetFOV;
         private AudioSource audioSource;
+        private SpeedLines speedLines;
 
         public CreatureSpeedup Speedup { get; private set; }
         public CreatureCamera Camera { get; private set; }
@@ -33,7 +34,15 @@ namespace DanielLochner.Assets.CreatureCreator
             Speedup.OnSpeedUp += delegate (float s, float t)
             {
                 audioSource.PlayOneShot(speedUpSFX);
-                Instantiate(speedLinesPrefab).Setup(t);
+                speedLines = Instantiate(speedLinesPrefab);
+                speedLines.Setup(t);
+            };
+            Speedup.OnSlowDown += delegate
+            {
+                if (speedLines != null)
+                {
+                    Destroy(speedLines.gameObject);
+                }
             };
         }
         private void Update()

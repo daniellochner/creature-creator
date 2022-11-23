@@ -36,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 player.Editor.Platform = this;
                 player.Loader.HideFromOthers();
+                player.SpeedUp.SlowDown();
 
                 hasEntered = true;
             }
