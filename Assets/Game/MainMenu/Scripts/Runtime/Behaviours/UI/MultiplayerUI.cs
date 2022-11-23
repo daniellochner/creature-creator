@@ -271,7 +271,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
-                SetConnectionData(username, password);
+                SetConnectionData(AuthenticationService.Instance.PlayerId, username, password);
 
                 // Join Lobby
                 UpdateNetworkStatus("Joining Lobby...", Color.yellow, -1);
@@ -348,7 +348,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
-                SetConnectionData(username, password);
+                SetConnectionData(AuthenticationService.Instance.PlayerId, username, password);
                 
                 // Authenticate
                 await Authenticate();
@@ -522,9 +522,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 HideNetworkStatus();
             }
         }
-        private void SetConnectionData(string username, string password)
+        private void SetConnectionData(string playerId, string username, string password)
         {
-            ConnectionData data = new ConnectionData(username, password);
+            ConnectionData data = new ConnectionData(playerId, username, password);
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
         }
 

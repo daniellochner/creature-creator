@@ -43,7 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bool enablePVE = pveToggle.isOn;
 
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
-            NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData(usernameInputField.text, "")));
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
 
             WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE);
 

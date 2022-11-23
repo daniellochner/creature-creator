@@ -3,6 +3,8 @@ using System;
 using System.Text;
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Services.Lobbies;
+using Unity.Services.Authentication;
 
 namespace DanielLochner.Assets
 {
@@ -52,6 +54,18 @@ namespace DanielLochner.Assets
         {
             OnPlayerRemove?.Invoke(Players[clientId]);
             Players.Remove(clientId);
+
+            // Remove player from the lobby...
+            try
+            {                
+                var lobbyId = LobbyHelper.Instance.JoinedLobby.Id;
+                var playerId = Players[clientId].playerId;
+                LobbyService.Instance.RemovePlayerAsync(lobbyId, playerId);
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
         }
         private void Clear()
         {
@@ -85,6 +99,7 @@ namespace DanielLochner.Assets
 
             PlayerData playerData = new PlayerData()
             {
+                playerId = connectionData.playerId,
                 clientId = clientId,
                 username = connectionData.username
             };
