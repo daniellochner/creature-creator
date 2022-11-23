@@ -98,13 +98,33 @@ namespace DanielLochner.Assets
         }
         private void OnRotate()
         {
+            // if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen)
+            // {
+            //     float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
+            //     float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");
+
+            //     velocity.x += 0.25f * mouseSensitivity.x * mouseX;
+            //     velocity.y += 0.25f * mouseSensitivity.y * mouseY;
+            // }
+
+            // targetRotation.y += velocity.x;
+            // targetRotation.x -= velocity.y;
+            // targetRotation.x = ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
+
+            // rotationTransform.localRotation = Quaternion.Euler(targetRotation.x, targetRotation.y, 0);
+
+            // velocity.x = Mathf.Lerp(velocity.x, 0, Time.deltaTime * rotationSmoothing);
+            // velocity.y = Mathf.Lerp(velocity.y, 0, Time.deltaTime * rotationSmoothing);
+
+
+            Vector3 velocity = Vector3.zero;
             if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen)
             {
                 float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
                 float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");
-
-                velocity.x += 0.25f * mouseSensitivity.x * mouseX;
-                velocity.y += 0.25f * mouseSensitivity.y * mouseY;
+                
+                velocity.x += 5f * mouseX * mouseSensitivity.x;
+                velocity.y += 5f * mouseY * mouseSensitivity.y;
             }
 
             targetRotation.y += velocity.x;
@@ -112,9 +132,6 @@ namespace DanielLochner.Assets
             targetRotation.x = ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
 
             rotationTransform.localRotation = Quaternion.Euler(targetRotation.x, targetRotation.y, 0);
-
-            velocity.x = Mathf.Lerp(velocity.x, 0, Time.deltaTime * rotationSmoothing);
-            velocity.y = Mathf.Lerp(velocity.y, 0, Time.deltaTime * rotationSmoothing);
         }
 
         private void HandleClipping(float zoom)
