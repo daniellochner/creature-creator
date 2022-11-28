@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Pinwheel.Poseidon.FX;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Water : NetworkBehaviour
     {
         [SerializeField] private bool allowSwimming;
+        [SerializeField] private PWaterFX waterFX;
         [Space]
         [SerializeField] private Ability swimAbility;
         [SerializeField] private GameObject splashPrefab;
@@ -39,6 +41,10 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
                         StatsManager.Instance.SetAchievement("ACH_MAKE_A_SPLASH");
 #endif
+                    }
+                    if (waterFX != null)
+                    {
+                        waterFX.enabled = true;
                     }
                 }
             }
