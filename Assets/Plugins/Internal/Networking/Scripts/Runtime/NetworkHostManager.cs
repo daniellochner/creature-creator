@@ -55,17 +55,17 @@ namespace DanielLochner.Assets
             OnPlayerRemove?.Invoke(Players[clientId]);
             Players.Remove(clientId);
 
-            // Remove player from the lobby...
-            try
-            {                
-                var lobbyId = LobbyHelper.Instance.JoinedLobby.Id;
-                var playerId = Players[clientId].playerId;
-                LobbyService.Instance.RemovePlayerAsync(lobbyId, playerId);
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.Log(e);
-            }
+            //// Remove player from the lobby...
+            //try
+            //{                
+            //    var lobbyId = LobbyHelper.Instance.JoinedLobby.Id;
+            //    var playerId = Players[clientId].playerId;
+            //    LobbyService.Instance.RemovePlayerAsync(lobbyId, playerId);
+            //}
+            //catch (LobbyServiceException e)
+            //{
+            //    Debug.Log(e);
+            //}
         }
         private void Clear()
         {
