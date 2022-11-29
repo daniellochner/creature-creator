@@ -301,7 +301,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 {
                     SteamNetworkingSocketsTransport steamTransport = NetworkTransport as SteamNetworkingSocketsTransport;
-                    steamTransport.ConnectToSteamID = ulong.Parse(lobby.Data["hostSteamId"].Value);
+                    steamTransport.ConnectToSteamID = ulong.Parse(hostSteamId);
                 }
 
                 // Start Client
@@ -388,6 +388,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
                         { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
+                        { "useSteam", new DataObject(DataObject.VisibilityOptions.Public, UseSteam.ToString()) },
                         { "hostSteamId", new DataObject(DataObject.VisibilityOptions.Public, hostSteamId.ToString()) }
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, (UseSteam ? hostSteamId.ToString() : allocation.AllocationId.ToString()))

@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public string Version { get; private set; }
         public bool AllowProfanity { get; private set; }
         public bool EnablePVP { get; private set; }
+
+        public bool UseSteam { get; private set; }
         #endregion
 
         #region Methods
@@ -36,11 +38,12 @@ namespace DanielLochner.Assets.CreatureCreator
             EnablePVP = bool.Parse(lobby.Data["enablePVP"].Value);
             EnablePVE = bool.Parse(lobby.Data["enablePVE"].Value);
             SpawnNPC = bool.Parse(lobby.Data["spawnNPC"].Value);
+            CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
 
             // TODO: Remove check in next update...
-            if (lobby.Data.ContainsKey("creativeMode"))
+            if (lobby.Data.ContainsKey("useSteam"))
             {
-                CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
+                UseSteam = bool.Parse(lobby.Data["useSteam"].Value);
             }
         }
         #endregion
