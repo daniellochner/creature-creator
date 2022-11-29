@@ -72,6 +72,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerEnter(Collider other)
         {
+            if (WorldManager.Instance.World.CreativeMode) return;
+
             if (other.CompareTag("Quest"))
             {
                 UpdateInfo();
@@ -85,6 +87,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerStay(Collider other)
         {
+            if (WorldManager.Instance.World.CreativeMode) return;
+
             if (!IsCompleted && other.CompareTag("Player/Local") && (type == QuestType.All ? HasAll : HasAny))
             {
                 ProgressManager.Data.Cash += reward;
@@ -103,6 +107,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerExit(Collider other)
         {
+            if (WorldManager.Instance.World.CreativeMode) return;
+
             if (other.CompareTag("Player/Local"))
             {
                 questText.gameObject.SetActive(false);
