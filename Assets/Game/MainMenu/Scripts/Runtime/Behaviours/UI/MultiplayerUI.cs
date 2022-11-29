@@ -422,8 +422,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
+                    string version = Application.version;
+                    bool useSteam = false;
+                    if (lobby.Data.ContainsKey("useSteam"))
+                    {
+                        useSteam = bool.Parse(lobby.Data["useSteam"].Value);
+                    }
+
                     WorldMP world = new WorldMP(lobby);
-                    if (!world.IsPrivate)
+                    if (!world.IsPrivate && version.Equals(Application.version) && (UseSteam == useSteam))
                     {
                         Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
                     }
