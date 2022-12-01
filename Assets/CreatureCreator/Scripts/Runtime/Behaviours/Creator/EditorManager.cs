@@ -597,7 +597,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryExport()
         {
-            string exportedCreatureName = PreProcessName(creatureNameText.text);
+            string exportedCreatureName = PreProcessName(Creature.Editor.LoadedCreature);
             if (IsValidName(exportedCreatureName))
             {
                 Creature.Constructor.SetName(exportedCreatureName);
