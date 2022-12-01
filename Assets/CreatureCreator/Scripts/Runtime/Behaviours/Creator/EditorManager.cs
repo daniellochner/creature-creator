@@ -827,7 +827,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         Creature.Editor.LoadedCreature = "";
                         Creature.Editor.IsDirty = false;
                     }
-                    creatureNameText.text = "";
                 });
             });
 
