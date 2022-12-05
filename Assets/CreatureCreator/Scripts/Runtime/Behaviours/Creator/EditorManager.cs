@@ -597,21 +597,34 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryExport()
         {
-            string exportedCreatureName = PreProcessName(Creature.Editor.LoadedCreature);
-            if (IsValidName(exportedCreatureName))
+            UnityAction<string> exportOperation = delegate (string input)
             {
-                Creature.Constructor.SetName(exportedCreatureName);
-                if (!IsPlaying){
-                    Creature.Constructor.UpdateConfiguration();
-                }
+                string exportedCreatureName = PreProcessName(input);
+                if (IsValidName(exportedCreatureName))
+                {
+                    Creature.Constructor.SetName(exportedCreatureName);
+                    if (!IsPlaying){
+                        Creature.Constructor.UpdateConfiguration();
+                    }
 
-                FileBrowser.ShowSaveDialog(
-                    onSuccess: (path) => Export(Creature.Constructor.Data),
-                    onCancel: null,
-                    pickMode: FileBrowser.PickMode.Folders,
-                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    title: "Export Creature (Data, Screenshot and 3D Model)",
-                    saveButtonText: "Export");
+                    FileBrowser.ShowSaveDialog(
+                        onSuccess: (path) => Export(Creature.Constructor.Data),
+                        onCancel: null,
+                        pickMode: FileBrowser.PickMode.Folders,
+                        initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                        title: "Export Creature (Data, Screenshot and 3D Model)",
+                        saveButtonText: "Export");
+                }
+            };
+
+            CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
+            if ((selectedCreatureUI != null) && (selectedCreatureUI.name == Creature.Editor.LoadedCreature))
+            {
+                exportOperation(selectedCreatureUI.name);
+            }
+            else
+            {
+                InputDialog.Input("Name Your Creature", "Enter a name for your creature...", maxCharacters: 32, submit: "Save", onSubmit: exportOperation);
             }
         }
         public void Export(CreatureData creatureData)
