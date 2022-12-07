@@ -456,7 +456,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.SelectedPanel == 0)
             {
                 int numWorlds = await Refresh();
-                if (numWorlds == 0 && refreshCount == 3)
+                if (numWorlds == 0 && refreshCount == 2)
                 {
                     multiplayerHintMenu.Open();
                 }
