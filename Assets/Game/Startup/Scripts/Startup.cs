@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                startText.text = "[Error] Steam failed to initialize.";
+                startText.text = "Steam failed to initialize.";
             }
         }
         private void OnDestroy()
