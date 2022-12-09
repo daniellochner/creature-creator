@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get => complexity;
             set
             {
-                complexity = Mathf.Clamp(value, 0, 100);
+                complexity = value;//Mathf.Clamp(value, 0, 100);
             }
         }
         public List<Diet> Diets

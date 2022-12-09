@@ -125,6 +125,17 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => CreativeMode ? CreativeCash : ProgressManager.Data.Cash;
         }
+        public bool Unlimited 
+        {
+            get
+            {
+                if (WorldManager.Instance.World is WorldSP)
+                {
+                    return (WorldManager.Instance.World as WorldSP).Unlimited;
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region Methods
@@ -697,8 +708,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             totalComplexity += creatureData.Bones.Count;
 
-            bool creatureIsTooComplicated = totalComplexity > Creature.Constructor.MaxComplexity;
-            bool creatureIsTooExpensive = totalCost > BaseCash;
+            bool creatureIsTooComplicated = totalComplexity > Creature.Constructor.MaxComplexity && !Unlimited;
+            bool creatureIsTooExpensive = totalCost > BaseCash && !Unlimited;
 
             // Error Message
             List<string> errors = new List<string>();
@@ -734,8 +745,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
-            bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity;
-            bool notEnoughCash = Creature.Editor.Cash < bodyPart.Price;
+            bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity && !Unlimited;
+            bool notEnoughCash = Creature.Editor.Cash < bodyPart.Price && !Unlimited;
 
             if (notEnoughCash || tooComplicated)
             {
@@ -1120,7 +1131,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = Creature.Constructor.Statistics;
             CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            complexityText.text = $"<b>Complexity:</b> {statistics.Complexity}/{Creature.Constructor.MaxComplexity}";
+            complexityText.text = $"<b>Complexity:</b> {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity)}";
             heightText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
             weightText.text = $"<b>Weight:</b> {Math.Round(statistics.Weight, 2)}kg";
             dietText.text = $"<b>Diet:</b> {statistics.Diet}";
@@ -1131,7 +1142,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
 
-            cashText.text = $"${Creature.Editor.Cash}";
+            cashText.text = $"${(Unlimited ? "∞" : Creature.Editor.Cash)}";
         }
         public void UpdateCreaturesFormatting()
         {

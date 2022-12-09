@@ -461,7 +461,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanAddBone(int index)
         {
             bool tooManyBones = Bones.Count + 1 > MinMaxBones.max;
-            bool tooComplicated = Statistics.Complexity + 1 > MaxComplexity;
+            bool tooComplicated = Statistics.Complexity + 1 > MaxComplexity && !EditorManager.Instance.Unlimited;
 
             return !tooManyBones && !tooComplicated;
         }

@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector modeOS;
         [SerializeField] private Toggle npcToggle;
         [SerializeField] private Toggle pveToggle;
+        [SerializeField] private Toggle unlimitedToggle;
         #endregion
 
         #region Methods
@@ -32,6 +33,10 @@ namespace DanielLochner.Assets.CreatureCreator
             mapOS.Select(Map.Island);
 
             modeOS.SetupUsingEnum<Mode>();
+            modeOS.OnSelected.AddListener(delegate (int option)
+            {
+                unlimitedToggle.transform.parent.parent.gameObject.SetActive(option == 1); // only show unlimited toggle for creative mode
+            });
             modeOS.Select(Mode.Adventure);
         }
 
@@ -41,11 +46,12 @@ namespace DanielLochner.Assets.CreatureCreator
             bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
             bool spawnNPC = npcToggle.isOn;
             bool enablePVE = pveToggle.isOn;
+            bool unlimited = unlimitedToggle.isOn && creativeMode;
 
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
 
-            WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE);
+            WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
 
             NetworkManager.Singleton.StartHost();
         }
