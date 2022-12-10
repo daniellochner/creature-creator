@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle selectToggle;
         [SerializeField] private Button errorButton;
         [SerializeField] private Button removeButton;
+        [SerializeField] private Button shareButton;
         #endregion
 
         #region Properties
@@ -21,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Toggle SelectToggle => selectToggle;
         public Button ErrorButton => errorButton;
         public Button RemoveButton => removeButton;
+        public Button ShareButton => shareButton;
         #endregion
 
         #region Methods
