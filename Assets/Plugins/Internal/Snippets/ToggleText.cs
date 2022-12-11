@@ -11,13 +11,14 @@ namespace DanielLochner.Assets
     {
         [SerializeField] private Color onColor;
         [SerializeField] private Color offColor;
-        [SerializeField] private Toggle toggle;
+        private Toggle toggle;
         private TextMeshProUGUI text;
 
         private void Awake()
         {
             text = GetComponent<TextMeshProUGUI>();
-            
+            toggle = GetComponentInParent<Toggle>();
+
             toggle.onValueChanged.AddListener(OnToggleChanged);
             OnToggleChanged(toggle.isOn);
         }
