@@ -786,7 +786,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NotificationsManager.Notify(icon, title, description, onClose, iconScale);
             }
 
-            AddPatternUI(patternID);
+            AddPatternUI(patternID, false, true);
         }
         public void UnlockBodyPart(string bodyPartID, bool notify = true)
         {
@@ -804,7 +804,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NotificationsManager.Notify(icon, title, description, onClose);
             }
 
-            AddBodyPartUI(bodyPartID, true);
+            AddBodyPartUI(bodyPartID, true, true);
         }
         public void UnlockRandomBodyPart()
         {
@@ -856,7 +856,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return creatureUI;
         }
-        public BodyPartUI AddBodyPartUI(string bodyPartID, bool update = false)
+        public BodyPartUI AddBodyPartUI(string bodyPartID, bool update = false, bool isNew = false)
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
@@ -869,7 +869,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid as RectTransform);
-            bodyPartUI.Setup(bodyPart);
+            bodyPartUI.Setup(bodyPart, isNew);
             bodyPartUI.name = bodyPartID;
             noPartsText.SetActive(false);
 
@@ -888,9 +888,11 @@ namespace DanielLochner.Assets.CreatureCreator
             bodyPartUI.DragUI.OnPress.AddListener(delegate
             {
                 StatisticsMenu.Instance.Close();
+                bodyPartUI.Select();
             });
             bodyPartUI.DragUI.OnRelease.AddListener(delegate
             {
+                bodyPartUI.Deselect();
                 bodyPartGrids[bodyPart.PluralForm].grid.enabled = false;
                 bodyPartGrids[bodyPart.PluralForm].grid.enabled = true;
             });
@@ -954,13 +956,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return bodyPartUI;
         }
-        public PatternUI AddPatternUI(string patternID, bool update = false)
+        public PatternUI AddPatternUI(string patternID, bool update = false, bool isNew = false)
         {
             Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
 
             PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT.transform);
             patternsUI.Add(patternUI);
-            patternUI.Setup(pattern, patternMaterial);
+            patternUI.Setup(pattern, patternMaterial, isNew);
             patternUI.name = patternID;
             noPatternsText.SetActive(false);
 
