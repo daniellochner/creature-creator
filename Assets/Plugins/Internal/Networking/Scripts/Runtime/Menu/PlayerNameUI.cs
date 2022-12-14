@@ -14,7 +14,7 @@ namespace DanielLochner.Assets
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Button kickButton;
         [SerializeField] private GameObject hostGO;
-        [SerializeField] private RawImage backgroundImage;
+        [SerializeField] private Image backgroundImage;
 
         private PlayerData playerData;
         #endregion
