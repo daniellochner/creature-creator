@@ -81,6 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TMP_InputField creatureNameText;
         [SerializeField] private ToggleGroup creaturesToggleGroup;
         [SerializeField] private RectTransform creaturesRT;
+        [SerializeField] private GameObject noCreaturesText;
 
         [Header("Testing")]
         [SerializeField, Button("UnlockRandomBodyPart")] private bool unlockRandomBodyPart;
@@ -269,6 +270,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             UpdateLoadableCreatures();
+            UpdateNoCreatures();
         }
         public void SetupPlayer()
         {
@@ -838,21 +840,24 @@ namespace DanielLochner.Assets.CreatureCreator
             //    }
             //});
 
-            creatureUI.RemoveButton.onClick.AddListener((UnityAction)delegate
+            creatureUI.RemoveButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Remove Creature?", $"Are you sure you want to permanently remove \"{creatureName}\"?", onYes: (UnityAction)delegate
+                ConfirmationDialog.Confirm("Remove Creature?", $"Are you sure you want to permanently remove \"{creatureName}\"?", onYes: delegate
                 {
                     creaturesUI.Remove(creatureUI);
                     Destroy(creatureUI.gameObject);
                     File.Delete(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
 
-                    if (creatureName.Equals((string)Creature.Editor.LoadedCreature))
+                    if (creatureName.Equals(Creature.Editor.LoadedCreature))
                     {
                         Creature.Editor.LoadedCreature = "";
                         Creature.Editor.IsDirty = false;
                     }
+
+                    UpdateNoCreatures();
                 });
             });
+            UpdateNoCreatures();
 
             return creatureUI;
         }
@@ -1133,7 +1138,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = Creature.Constructor.Statistics;
             CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            complexityText.text = $"Complexity: {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity)}";
+            complexityText.text = $"Complexity: {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString())}";
             heightText.text = $"Height: {Math.Round(dimensions.height, 2)}m";
             weightText.text = $"Weight: {Math.Round(statistics.Weight, 2)}kg";
             dietText.text = $"Diet: {statistics.Diet}";
@@ -1144,7 +1149,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
 
-            cashText.text = $"${(Unlimited ? "∞" : Creature.Editor.Cash)}";
+            cashText.text = $"${(Unlimited ? "∞" : Creature.Editor.Cash.ToString())}";
         }
         public void UpdateCreaturesFormatting()
         {
@@ -1165,6 +1170,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateLoadableCreatures()
         {
             StartCoroutine(UpdateLoadableCreaturesRoutine());
+        }
+        public void UpdateNoCreatures()
+        {
+            noCreaturesText.SetActive(creaturesUI.Count == 0);
         }
 
         /// <summary>
