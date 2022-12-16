@@ -1133,13 +1133,13 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = Creature.Constructor.Statistics;
             CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            complexityText.text = $"<b>Complexity:</b> {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity)}";
-            heightText.text = $"<b>Height:</b> {Math.Round(dimensions.height, 2)}m";
-            weightText.text = $"<b>Weight:</b> {Math.Round(statistics.Weight, 2)}kg";
-            dietText.text = $"<b>Diet:</b> {statistics.Diet}";
-            healthText.text = $"<b>Health:</b> {statistics.Health}";
-            speedText.text = $"<b>Speed:</b> {Math.Round(Creature.Mover.MoveSpeed, 2)}m/s";
-            bonesText.text = $"<b>Bones:</b> {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
+            complexityText.text = $"Complexity: {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity)}";
+            heightText.text = $"Height: {Math.Round(dimensions.height, 2)}m";
+            weightText.text = $"Weight: {Math.Round(statistics.Weight, 2)}kg";
+            dietText.text = $"Diet: {statistics.Diet}";
+            healthText.text = $"Health: {statistics.Health}";
+            speedText.text = $"Speed: {Math.Round(Creature.Mover.MoveSpeed, 2)}m/s";
+            bonesText.text = $"Bones: {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
