@@ -206,14 +206,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 int count = Creature.Constructor.Data.AttachedBodyParts.Count;
                 string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : "None";
 
-                bodyPartsText.text = $"<b>Body Parts:</b> [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
+                bodyPartsText.text = $"Body Parts: [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
             });
             abilitiesToggle.onValueChanged.AddListener(delegate
             {
                 int count = Creature.Abilities.Abilities.Count;
                 string abilities = (count > 0) ? string.Join(", ", (IEnumerable<Ability>)Creature.Abilities.Abilities) : "None";
 
-                abilitiesText.text = $"<b>Abilities:</b> [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
+                abilitiesText.text = $"Abilities: [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
             });
 
             // Paint
