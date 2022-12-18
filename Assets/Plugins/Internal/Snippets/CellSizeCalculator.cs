@@ -9,6 +9,7 @@ namespace DanielLochner.Assets
     {
         [SerializeField] private int numberOfColumns = 1;
         [SerializeField] private float aspectRatio = 1f;
+        private float prevWidth;
 
         private GridLayoutGroup gridLayoutGroup;
         private RectTransform rectTransform;
@@ -28,11 +29,19 @@ namespace DanielLochner.Assets
             float cellHeight = cellWidth / aspectRatio;
 
             gridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
+            prevWidth = rectTransform.rect.width;
         }
 
         private void Start()
         {
             Calculate();
+        }
+        private void Update()
+        {
+            if (prevWidth != rectTransform.rect.width)
+            {
+                Calculate();
+            }
         }
     }
 }
