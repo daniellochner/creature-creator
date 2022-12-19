@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             tilingY.text = (1f).ToString();
             UpdateTiling(null);
 
-            offsetX.text = (0.25f).ToString();
+            offsetX.text = (0f).ToString();
             offsetY.text = (0f).ToString();
             UpdateOffset(null);
 

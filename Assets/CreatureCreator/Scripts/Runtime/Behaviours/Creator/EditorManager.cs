@@ -865,15 +865,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
-            Transform grid = bodyPartGrids[bodyPart.PluralForm].grid.transform;
+            GridLayoutGroup grid = bodyPartGrids[bodyPart.PluralForm].grid;
             if (!grid.gameObject.activeSelf)
             {
-                int index = grid.GetSiblingIndex();
-                grid.parent.GetChild(index).gameObject.SetActive(true);
-                grid.parent.GetChild(index - 1).gameObject.SetActive(true);
+                int index = grid.transform.GetSiblingIndex();
+                grid.transform.parent.GetChild(index).gameObject.SetActive(true);
+                grid.transform.parent.GetChild(index - 1).gameObject.SetActive(true);
             }
 
-            BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid as RectTransform);
+            BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid.transform as RectTransform);
             bodyPartUI.Setup(bodyPart, isNew);
             bodyPartUI.name = bodyPartID;
             noPartsText.SetActive(false);
