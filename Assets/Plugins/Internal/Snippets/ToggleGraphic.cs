@@ -1,22 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace DanielLochner.Assets
 {
-    [RequireComponent(typeof(TextMeshProUGUI))]
-    public class ToggleText : MonoBehaviour
+    public class ToggleGraphic : MonoBehaviour
     {
         [SerializeField] private Color onColor;
         [SerializeField] private Color offColor;
         private Toggle toggle;
-        private TextMeshProUGUI text;
+        private Graphic graphic;
 
         private void Awake()
         {
-            text = GetComponent<TextMeshProUGUI>();
+            graphic = GetComponent<Graphic>();
             toggle = GetComponentInParent<Toggle>();
 
             toggle.onValueChanged.AddListener(OnToggleChanged);
@@ -25,7 +21,7 @@ namespace DanielLochner.Assets
 
         private void OnToggleChanged(bool isOn)
         {
-            text.color = isOn ? onColor : offColor;
+            graphic.color = isOn ? onColor : offColor;
         }
     }
 }
