@@ -1202,7 +1202,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Background
                 Color colour = canLoadCreature ? Color.white : Color.black;
-                colour.a = 0.4f;
+                colour.a = 0.25f;
                 creatureUI.SelectToggle.targetGraphic.color = colour;
                 creatureUI.SelectToggle.interactable = canLoadCreature;
 
