@@ -12,8 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         private string SceneId => $"HP_{SceneManager.GetActiveScene().name.ToUpper()}";
 
-        private GameObject Flag => transform.GetChild(0).gameObject;
-
         private bool Reached
         {
             get => PlayerPrefs.GetInt(SceneId) == 1;
@@ -28,9 +26,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            if (Reached)
+            if (Reached || WorldManager.Instance.World.CreativeMode)
             {
-                Flag.SetActive(false);
+                gameObject.SetActive(false);
             }
         }
         private void OnTriggerEnter(Collider other)
@@ -41,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 StatsManager.Instance.ReachedPeaks++;
 #endif
                 Reached = true;
-                Flag.SetActive(false);
+                gameObject.SetActive(false);
 
                 audioSource.Play();
             }
