@@ -69,6 +69,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void StartDepletingHunger()
         {
+            if (WorldManager.Instance.World.CreativeMode) return;
+
             Hunger = 1f;
 
             StopDepletingHunger();
