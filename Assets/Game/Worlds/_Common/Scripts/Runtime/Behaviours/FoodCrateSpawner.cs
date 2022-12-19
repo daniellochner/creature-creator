@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Update()
         {
-            if (IsServer && foodCrate == null)
+            if (IsServer && foodCrate == null && !WorldManager.Instance.World.CreativeMode)
             {
                 TimerUtility.OnTimer(ref spawnTimeLeft, spawnCooldown.Random, Time.deltaTime, delegate
                 {
