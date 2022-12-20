@@ -38,17 +38,17 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ViewGitHubSourceCode()
         {
-            Application.OpenURL("https://github.com/daniellochner/creature-creator");
+            Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
 
-            //DateTime releaseDate = new DateTime(2022, 9, 30);
+            //DateTime releaseDate = new DateTime(2022, 12, 24);
             //TimeSpan diff = releaseDate - DateTime.Now;
             //if (diff > TimeSpan.Zero)
             //{
-            //    InformationDialog.Inform("Source Code", $"The source code to the game itself will release separately in:<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
+            //    InformationDialog.Inform("Source Code", $"The source code to the standalone plugin will be released with the devlog in...<br>{diff.Days} days, {diff.Hours} hours, {diff.Minutes} minutes and {diff.Seconds} seconds.");
             //}
             //else
             //{
-            //    Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
+            //    Application.OpenURL("https://github.com/daniellochner/creature-creator");
             //}
 
 #if USE_STATS
