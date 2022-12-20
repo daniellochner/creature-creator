@@ -1,16 +1,33 @@
-# SPORE Creature Creator
-![Cover Artwork](https://img.itch.zone/aW1hZ2UvNzY4NjAzLzQzMDIwMjYucG5n/original/ovyEHp.png)
+![Creature Creator Logo](./Logo.png)
 
-Procedurally generate creatures in Unity - inspired by the incredible game, [Spore!](https://www.spore.com/)
+Create creatures to explore online worlds with friends in this creative multiplayer experience!
 
-In [this](https://youtu.be/Br_SQAc87s8) video, I explain how I went about recreating the Spore creature creator in the Unity game engine! In short, the creator itself is divided into three sections, namely, building, painting and testing. Building lets you mold your creature's body, and attach different body parts to it, while painting lets you change the color and pattern of your creature’s skin! Because of the limited amount of time I had due to university, I was not able to implement the testing section, however this will definitely be added in a later update!
+---
 
-Try out the [demo](https://bit.ly/creature-creator-demo) for yourself!
+## Steam:
 
-<p align="middle">
-  <img src="https://img.itch.zone/aW1hZ2UvNzY4NjAzLzQzMDA0MjMucG5n/original/1fZLdQ.png" width="32%" />
-  <img src="https://img.itch.zone/aW1hZ2UvNzY4NjAzLzQzMDA0MjQucG5n/original/gzAD%2B0.png" width="32%" /> 
-  <img src="https://img.itch.zone/aW1hZ2UvNzY4NjAzLzQzMDA0MjUucG5n/original/yuJn7Y.png" width="32%" />
-</p>
+This game is available to download on [Steam](https://store.steampowered.com/app/1990050/Creature_Creator/).
 
-This project is licensed under the [MIT License](LICENSE.md).
+
+## Development Instructions:
+
+  1. Download the Unity project from this repository.
+  2. Start Unity Hub, and click "Open" in the top right corner.
+  3. Locate and open the project's root folder (containing the "Assets" folder).
+  4. Wait for the necessary packages to import (may take up to 5 minutes).
+
+Since our game uses Unity's Gaming Services (https://unity.com/solutions/gaming-services), additional steps
+are required to build and play the game:
+
+  5. Sign up for Gaming Services using your Unity account.
+  6. Log in to your account in the Unity editor
+  7. Go to Edit -> Project Settings -> Services
+  8. Create a Unity Project ID (https://docs.unity3d.com/Manual/SettingUpProjectServices.html) and link it to the project.
+  9. Go to Window -> Startup and drag the window into your editor. This force enters the startup scene on play.
+
+NOTE: Due to a bug in Unity's Netcode for GameObjects library (https://github.com/Unity-Technologies/com.unity.netcode.gameobjects), testing in the Unity editor may require the use of the "Network Prefab Fix" window, located in Window -> Networking. All network objects must be included in this list.
+
+## External libraries:
+
+All code which we did not implement ourselves can be found in the "Assets/Plugins/External/" folder.
+This contains assets downloaded from the Unity Asset Store (https://assetstore.unity.com/).
