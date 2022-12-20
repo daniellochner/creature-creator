@@ -266,7 +266,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string version = lobby.Data["version"].Value;
                 if (!version.Equals(Application.version))
                 {
-                    throw new Exception($"Version ({Application.version}) different to host ({version}).");
+                    throw new Exception($"Your version ({Application.version}) is different to the host ({version}).");
                 }
                 
                 // Set Up Connection Data

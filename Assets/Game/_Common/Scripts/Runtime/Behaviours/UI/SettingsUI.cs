@@ -473,10 +473,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             AchievementsMenu.Instance.Open();
         }
-        public void ViewRoadmap()
-        {
-            RoadmapMenu.Instance.Open();
-        }
 
         public void ResetProgress()
         {
