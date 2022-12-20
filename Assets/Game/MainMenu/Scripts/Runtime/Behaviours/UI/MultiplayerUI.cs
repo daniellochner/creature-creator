@@ -453,7 +453,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public async void TryRefresh()
         {
-            if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.SelectedPanel == 0)
+            if (multiplayerMenu.IsOpen && !IsRefreshing && multiplayerSSS.SelectedPanel == 0 && IsConnectedToInternet)
             {
                 int numWorlds = await Refresh();
                 if (numWorlds == 0 && refreshCount == 2)
