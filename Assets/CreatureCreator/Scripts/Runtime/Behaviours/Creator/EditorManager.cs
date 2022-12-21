@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Build")]
         [SerializeField] private Menu buildMenu;
+        [SerializeField] private Toggle buildToggle;
         [SerializeField] private BodyPartSettingsMenu bodyPartSettingsMenu;
         [SerializeField] private BodyPartUI bodyPartUIPrefab;
         [SerializeField] private TextMeshProUGUI cashText;
@@ -59,10 +60,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
+        [SerializeField] private Toggle playToggle;
         [SerializeField] private CreatureInformationMenu informationMenu;
 
         [Header("Paint")]
         [SerializeField] private Menu paintMenu;
+        [SerializeField] private Toggle paintToggle;
         [SerializeField] private PatternSettingsMenu patternSettingsMenu;
         [SerializeField] private ColourSettingsMenu colourSettingsMenu;
         [SerializeField] private PatternUI patternUIPrefab;
@@ -421,6 +424,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     paintMenu.Close(instant);
                     SetCameraOffset(-1.5f, instant);
                     bodyPartSettingsMenu.Close(true);
+                    buildToggle.SetIsOnWithoutNotify(true);
 
                     Build();
                     break;
@@ -430,7 +434,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     playMenu.Open(instant);
                     paintMenu.Close(instant);
                     SetCameraOffset(0f, instant);
-
+                    playToggle.SetIsOnWithoutNotify(true);
+                    
                     Play();
                     break;
 
@@ -441,6 +446,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     SetCameraOffset(1.5f, instant);
                     patternSettingsMenu.Close(true);
                     colourSettingsMenu.Close(true);
+                    paintToggle.SetIsOnWithoutNotify(true);
 
                     Paint();
                     break;
