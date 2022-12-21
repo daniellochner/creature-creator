@@ -9,19 +9,13 @@
 ---
 
 
-## Community
+## Getting Involved
 
 [![Discord](https://img.shields.io/discord/648800197702320137?logo=discord&style=flat)](https://discord.com/invite/CpugBB4r7W)
 [![YouTube](https://img.shields.io/youtube/channel/subscribers/UCGLR3v7NaV1t92dnzWZNSKA?logo=youtube&style=flat&label=subscribe)](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1)
 [![Twitter](https://img.shields.io/twitter/follow/daniellochner?logo=twitter&style=flat&label=follow)](https://twitter.com/daniellochner)
 
-This open-source project began with a small side-project I created a [devlog](https://youtu.be/Br_SQAc87s8) about on my [YouTube channel](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1). It has since grown to much more. I will be posting another devlog shortly discussing the implementation details of all the new additions since then as well as any future updates! In the meantime, you can join the [community Discord server](https://discord.com/invite/CpugBB4r7W), which I try to be as active as possible on!
-
-
-
-## Getting Involved
-
-There are a load of different ways to contribute to this open source project, regardless of your expertise!
+Join the community Discord server and follow on YouTube and Twitter to stay in the loop. Once you're a member, there are a load of different ways to contribute to this open source project, regardless of your expertise!
 
 ### Player
 
