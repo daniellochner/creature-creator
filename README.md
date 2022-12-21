@@ -15,9 +15,7 @@
 [![YouTube](https://img.shields.io/youtube/channel/subscribers/UCGLR3v7NaV1t92dnzWZNSKA?logo=youtube&style=flat)](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1)
 [![Twitter](https://img.shields.io/twitter/follow/daniellochner?logo=twitter&style=flat)](https://twitter.com/daniellochner)
 
-Looking to contribute to this open-source project?
-
-Firstly, a great start would be to join the [community Discord server](https://discord.com/invite/CpugBB4r7W) and subscribe to my [YouTube channel](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1). I'll be posting updates there, so that way you'll always stay in the loop!
+Join the [community Discord server](https://discord.com/invite/CpugBB4r7W) and subscribe to my [YouTube channel](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1). I'll be posting updates there, so that way you'll always stay in the loop!
 
 Posting bug reports or feedback and suggestions is the best way to get involved without any game-development experience. While you can send a message on the Discord server, I'd prefer if you created an "issue" in this GitHub repository!
 
@@ -33,8 +31,7 @@ For those interested in becoming developers, there are few steps required before
   6. Log in to your account in the Unity editor.
   7. Go to "Edit > Project Settings > Services" and then create a Unity Project ID and link it to the project.
   8. Go to "Window > Startup" and drag the window into your editor. This force enters the startup scene on play.
-
-NOTE: Due to a bug in Unity's Netcode for GameObjects library, testing in the Unity editor may require the use of the "Network Prefab Fix" window, located in "Window > Networking". All network objects must be included in this list.
+  9. Finally, due to a bug in Unity's Netcode for GameObjects library, testing in the Unity editor may require the use of the "Network Prefab Fix" window, located in "Window > Networking". All network objects must be included in this list.
 
 
 
@@ -50,7 +47,7 @@ Creature Creator and related products by Daniel Lochner have been open-sourced u
 ## Support
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/daniellochner?logo=github&style=flat)
 
-By purchasing the game on Steam, you are already supporting! If you'd like to further support the development of this project though, then you can donate through GitHub sponsorships or Ko-Fi!
+By purchasing the game on Steam, you are already supporting! If you'd like to further support the development of this project though, then you can donate through [Ko-Fi](https://ko-fi.com/daniellochner)!
 
 
 
