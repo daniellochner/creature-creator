@@ -12,8 +12,8 @@
 ## Community
 
 [![Discord](https://img.shields.io/discord/648800197702320137?logo=discord&style=flat)](https://discord.com/invite/CpugBB4r7W)
-[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCGLR3v7NaV1t92dnzWZNSKA?logo=youtube&style=flat)](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1)
-[![Twitter](https://img.shields.io/twitter/follow/daniellochner?logo=twitter&style=flat)](https://twitter.com/daniellochner)
+[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCGLR3v7NaV1t92dnzWZNSKA?logo=youtube&style=flat&label=subscribe)](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1)
+[![Twitter](https://img.shields.io/twitter/follow/daniellochner?logo=twitter&style=flat&label=follow)](https://twitter.com/daniellochner)
 
 This open-source project began with a small side-project I created a [devlog](https://youtu.be/Br_SQAc87s8) about on my [YouTube channel](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1). It has since grown to much more. I will be posting another devlog shortly discussing the implementation details of all the new additions since then as well as any future updates! In the meantime, you can join the [community Discord server](https://discord.com/invite/CpugBB4r7W), which I try to be as active as possible on!
 
@@ -21,10 +21,7 @@ This open-source project began with a small side-project I created a [devlog](ht
 
 ## Getting Involved
 
-![GitHub Repo stars](https://img.shields.io/github/stars/daniellochner/creature-creator?logo=github&style=flat)
-![Lines of code](https://img.shields.io/tokei/lines/github/daniellochner/creature-creator-game?logo=github&style=flat)
-
-There are a load of different ways to contribute to this open source project!
+There are a load of different ways to contribute to this open source project, regardless of your expertise!
 
 ### Player
 
@@ -36,19 +33,19 @@ As you may have noticed, some of the body parts in the editor were created by me
 
 ### Developer
 
-For those interested in becoming developers, there are few steps required before you can load the Unity project.
+For those interested in becoming developers, there are few steps required before you can load the project in Unity:
 
-  1. Clone this repository to your local hard drive using GitHub desktop.
-  2. Drag-and-drop the paid-for assets into the "Assets/Plugins/External/Paid/" directory. Yes, unfortunately this project uses several paid-for assets from the Unity Asset Store which cannot be freely included in this public repository. If you can confirm that you have purchased all the assets listed [here](https://assetstore.unity.com/lists/list-280315), however, then an existing developer will be able to send you a zip file of this directory.
-  3. Start Unity Hub, and locate and open the project's root folder.
-  4. Wait for the necessary packages to import (may take up to 5 minutes).
-  5. While you're waiting, sign up for Unity's Gaming Services.
+  1. Create a fork and clone this repository to your local hard drive using GitHub desktop.
+  2. Drag-and-drop the paid-for assets into the "Assets/Plugins/External/Paid/" directory. Yes, this project unfortunately uses several paid-for assets from the Unity Asset Store which cannot be freely included in this public repository. If you can confirm that you have purchased all the assets listed [here](https://assetstore.unity.com/lists/list-280315), then an existing developer will be able to send you a zip file of this directory.
+  3. Start Unity Hub, and open the project's root folder.
+  4. Wait for the necessary packages to import (this may take a while).
+  5. While you're waiting, sign up for Unity's Gaming Services, which will be necessary to test the multiplayer.
   6. Log in to your account in the Unity editor.
   7. Go to "Edit > Project Settings > Services" and then create a Unity Project ID and link it to the project.
   8. Go to "Window > Startup" and drag the window into your editor. This force enters the startup scene on play.
   9. Finally, due to a bug in Unity's Netcode for GameObjects library, testing in the Unity editor may require the use of the "Network Prefab Fix" window, located in "Window > Networking". All network objects must be included in this list.
 
-If you've made some changes, create a pull request, and I'll confirm the changes and then update the repository!
+Contributions are then managed through pull requests, which I'll first need to confirm before they're applied to the main branch.
 
 
 
