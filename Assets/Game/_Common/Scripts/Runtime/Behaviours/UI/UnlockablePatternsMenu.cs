@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 PatternUI patternUI = Instantiate(patternUIPrefab, patternGrid.transform);
                 patternUI.Setup(pattern, null);
                 patternUI.name = patternID;
-                patternUI.SelectToggle.targetGraphic.color = Color.white;
+                patternUI.SelectToggle.isOn = true;
 
                 patternUI.SelectToggle.enabled = false;
                 GameObject hiddenIconGO = Instantiate(hiddenIconPrefab, patternUI.transform);

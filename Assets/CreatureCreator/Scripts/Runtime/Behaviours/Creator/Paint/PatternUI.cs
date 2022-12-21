@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup(Texture pattern, Material material, bool isNew = false)
         {
             Image graphic = selectToggle.graphic as Image;
-            Image targetGraphic = selectToggle.targetGraphic as Image;
+            Image targetGraphic = transform.GetChild(0).GetComponent<Image>(); //selectToggle.targetGraphic as Image;
 
             graphic.sprite = targetGraphic.sprite = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
             graphic.material = targetGraphic.material = material;
