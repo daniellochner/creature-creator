@@ -309,15 +309,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 Play();
                 NetworkManager.Singleton.StartClient();
             }
-            catch (NullReferenceException)
-            {
-                UpdateNetworkStatus("Lobby error.", Color.red); // TODO: Bug with Lobby returning NullReferenceException?
-                IsConnecting = false;
-            }
             catch (Exception e)
             {
-                UpdateNetworkStatus(e.Message, Color.red);
+                if (e is NullReferenceException)
+                {
+                    UpdateNetworkStatus("Lobby error.", Color.red); // TODO: Bug with Lobby returning NullReferenceException?
+                }
+                else
+                {
+                    UpdateNetworkStatus(e.Message, Color.red);
+                }
                 IsConnecting = false;
+
+                if (LobbyHelper.Instance.JoinedLobby != null)
+                {
+                    await LobbyService.Instance.RemovePlayerAsync(id, AuthenticationService.Instance.PlayerId);
+                }
             }
         }
         public async void Create()
@@ -404,6 +411,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
+
+
             }
         }
         public async Task<int> Refresh()

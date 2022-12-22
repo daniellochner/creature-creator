@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ViewGitHubSourceCode()
         {
-            Application.OpenURL("https://github.com/daniellochner/creature-creator-demo");
+            Application.OpenURL("https://github.com/daniellochner/creature-creator-game");
 
             //DateTime releaseDate = new DateTime(2022, 12, 24);
             //TimeSpan diff = releaseDate - DateTime.Now;
