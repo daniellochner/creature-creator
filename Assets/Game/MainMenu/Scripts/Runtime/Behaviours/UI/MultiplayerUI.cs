@@ -320,11 +320,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     UpdateNetworkStatus(e.Message, Color.red);
                 }
                 IsConnecting = false;
-
-                if (LobbyHelper.Instance.JoinedLobby != null)
-                {
-                    await LobbyService.Instance.RemovePlayerAsync(id, AuthenticationService.Instance.PlayerId);
-                }
             }
         }
         public async void Create()
