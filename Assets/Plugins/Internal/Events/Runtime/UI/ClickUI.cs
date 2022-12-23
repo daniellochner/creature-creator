@@ -13,6 +13,7 @@ namespace DanielLochner.Assets
         [SerializeField] private float threshold = 0f;
         [SerializeField] private UnityEvent onLeftClick = new UnityEvent();
         [SerializeField] private UnityEvent onRightClick = new UnityEvent();
+        [SerializeField] private UnityEvent onMiddleClick = new UnityEvent();
 
         private Vector2 initialMousePosition;
         #endregion
@@ -26,6 +27,7 @@ namespace DanielLochner.Assets
 
         public UnityEvent OnLeftClick => onLeftClick;
         public UnityEvent OnRightClick => onRightClick;
+        public UnityEvent OnMiddleClick => onMiddleClick;
         #endregion
 
         #region Methods
@@ -46,6 +48,9 @@ namespace DanielLochner.Assets
                         break;
                     case PointerEventData.InputButton.Right:
                         OnRightClick.Invoke();
+                        break;
+                    case PointerEventData.InputButton.Middle:
+                        OnMiddleClick.Invoke();
                         break;
                 }
             }

@@ -58,7 +58,7 @@ namespace DanielLochner.Assets
                     {
                         SetColour(colour, true);
                     });
-                    colourUI.ClickUI.OnRightClick.AddListener(delegate
+                    colourUI.ClickUI.OnMiddleClick.AddListener(delegate
                     {
                         ColourPickerDialog.Pick(colour, delegate(Color c)
                         {
