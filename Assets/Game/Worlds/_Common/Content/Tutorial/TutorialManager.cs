@@ -298,7 +298,8 @@ namespace DanielLochner.Assets.CreatureCreator
             MouseHintClick hint = Instantiate(mouseHintClickPrefab, EditorManager.Instance.transform);
             hint.Setup(0, saveButtonRT, false);
 
-            yield return new WaitUntil(() => creaturesRT.childCount > 0);
+            int prevCount = creaturesRT.childCount;
+            yield return new WaitUntil(() => creaturesRT.childCount > prevCount);
 
             Destroy(hint.gameObject);
         }
