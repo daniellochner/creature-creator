@@ -62,8 +62,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void StartAging()
         {
-            Age = 0;
             StopAging();
+
+            Age = 0;
             agingRoutine = StartCoroutine(AgingRoutine());
         }
         public void StopAging()

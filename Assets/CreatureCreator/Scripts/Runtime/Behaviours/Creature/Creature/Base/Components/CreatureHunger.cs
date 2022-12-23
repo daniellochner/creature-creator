@@ -71,9 +71,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (WorldManager.Instance.World.CreativeMode) return;
 
-            Hunger = 1f;
-
             StopDepletingHunger();
+
+            Hunger = 1f;
             hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
         }
         public void StopDepletingHunger()
