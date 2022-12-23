@@ -406,8 +406,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateNetworkStatus(e.Message, Color.red);
                 IsConnecting = false;
-
-
             }
         }
         public async Task<int> Refresh()
