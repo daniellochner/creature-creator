@@ -167,12 +167,22 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator UnlockBodyPartRoutine()
         {
+            if (eye == null)
+            {
+                yield break;
+            }
+
             WorldHint hint = Instantiate(worldHintPrefab, eye.transform.position, Quaternion.identity, Dynamic.Transform);
             yield return new WaitUntil(() => eye.IsUnlocked);
             Destroy(hint.gameObject);
         }
         private IEnumerator UnlockPatternRoutine()
         {
+            if (pattern == null)
+            {
+                yield break;
+            }
+
             WorldHint hint = Instantiate(worldHintPrefab, pattern.transform.position, Quaternion.identity, Dynamic.Transform);
             yield return new WaitUntil(() => pattern.IsUnlocked);
             Destroy(hint.gameObject);
