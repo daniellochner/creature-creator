@@ -15,11 +15,11 @@
 [![YouTube](https://img.shields.io/youtube/channel/subscribers/UCGLR3v7NaV1t92dnzWZNSKA?logo=youtube&style=flat&label=subscribe)](https://www.youtube.com/channel/UCGLR3v7NaV1t92dnzWZNSKA?sub_confirmation=1)
 [![Twitter](https://img.shields.io/twitter/follow/daniellochner?logo=twitter&style=flat&label=follow)](https://twitter.com/daniellochner)
 
-Join the community Discord server and follow us on YouTube and Twitter to stay updated on the latest developments. Once you're a member, there are many ways you can get involved and contribute to this open source project:
+Join the community Discord server and follow me on YouTube and Twitter to stay updated on the latest developments. Once you're a member, there are many ways you can get involved and contribute to this open source project:
 
-1. If you're a player, you can contribute by submitting bug reports, feedback, and suggestions through [this](https://github.com/daniellochner/creature-creator-game/issues) GitHub repository. This is a great way to get involved even if you don't have any game development experience.
-2. If you're an artist, you can design new body parts for the game using any 3D modeling software and submit them on the Discord server. Our developers will then import your models into the game.
-3. If you're a developer, you can get started by following these steps:
+1. If you're a **player**, you can contribute by submitting bug reports, feedback, and suggestions through [this](https://github.com/daniellochner/creature-creator-game/issues) GitHub repository. This is a great way to get involved even if you don't have any game development experience.
+2. If you're an **artist**, you can design new body parts for the game using any 3D modeling software and submit them on the Discord server. Our developers will then import your models into the game.
+3. If you're a **developer**, you can get started by following these steps:
     1. Fork and clone this repository to your local hard drive using GitHub desktop.
     2. Drag and drop the paid-for assets into the "Assets/Plugins/External/Paid/" directory. Note that this project uses several paid assets from the Unity Asset Store that cannot be included in this public repository. If you can confirm that you have purchased all the assets listed [here](https://assetstore.unity.com/lists/list-280315), an existing developer can send you a zip file of this directory.
     3. Open the project in Unity Hub and wait for the necessary packages to import (this may take a while).
