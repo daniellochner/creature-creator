@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator Start()
         {
+            quest.gameObject.SetActive(false);
+
             SpawnedNPC npc = null;
             yield return new WaitUntil(() =>
             {
@@ -22,6 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 return (npc != null);
             });
             quest.transform.SetZeroParent(npc.transform);
+
+            quest.gameObject.SetActive(true);
         }
     }
 }
