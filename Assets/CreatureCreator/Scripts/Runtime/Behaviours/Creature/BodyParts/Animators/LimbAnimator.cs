@@ -16,9 +16,9 @@ namespace DanielLochner.Assets.CreatureCreator
         protected Transform target, limb;
         protected ChainIKConstraint limbIK; //protected TwoBoneIKConstraint limbIK;
         
-        protected Vector3[] defaultBonePositions;
-        protected Quaternion[] defaultBoneRotations;
-        protected Quaternion defaultExtremityRotation;
+        //protected Vector3[] defaultBonePositions;
+        //protected Quaternion[] defaultBoneRotations;
+        //protected Quaternion defaultExtremityRotation;
         #endregion
 
         #region Properties
@@ -27,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Transform Target => target;
         public ChainIKConstraint LimbIK => limbIK;
-        public Vector3[] DefaultPositions => defaultBonePositions;
+        //public Vector3[] DefaultPositions => defaultBonePositions;
         #endregion
 
         #region Methods
@@ -94,11 +94,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 LimbConstructor.Bones[i].rotation = CreatureAnimator.transform.rotation * LimbConstructor.AttachedLimb.bones[i].rotation;
             }
 
-            // Connected Extremity
-            if (LimbConstructor.ConnectedExtremity != null)
-            {
-                LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.Constructor.Body.rotation * defaultExtremityRotation;
-            }
+            //// Connected Extremity
+            //if (LimbConstructor.ConnectedExtremity != null)
+            //{
+            //    LimbConstructor.ConnectedExtremity.transform.rotation = CreatureAnimator.transform.rotation * defaultExtremityRotation;
+            //}
 
             LimbConstructor.Flip();
         }
