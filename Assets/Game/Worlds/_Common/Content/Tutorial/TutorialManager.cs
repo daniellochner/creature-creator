@@ -138,7 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return new WaitForSeconds(1f);
 
-            InformationDialog.Inform("Tutorial Complete!", "Great, you now know the basics! Go ahead and explore the world!");
+            InformationDialog.Inform("Tutorial Complete!", "Great, you now know the basics! Go ahead and explore for parts and patterns that have been scattered around the world!<br>Switch over to a <u>creative</u> world if you'd instead just like to create creatures with everything already unlocked!");
             IsComplete = true;
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
