@@ -34,7 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int CashSpent
         {
             get => GetStat("STA_CASH_SPENT");
-            set => SetStat("STA_CASH_SPENT", value, new StatAchievement("ACH_BIG_TIME_SPENDER", 100000));
+            set => SetStat("STA_CASH_SPENT", value, new StatAchievement("ACH_BIG_TIME_SPENDER", 10000));
         }
         public int ReachedPeaks
         {
