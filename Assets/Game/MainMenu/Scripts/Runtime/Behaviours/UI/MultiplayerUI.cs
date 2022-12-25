@@ -212,7 +212,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         break;
                 }
             });
-            mapOS.Select(Map.Island);
+            mapOS.Select(Map.Island, false);
 
             modeOS.SetupUsingEnum<Mode>();
             modeOS.Select(Mode.Adventure);
