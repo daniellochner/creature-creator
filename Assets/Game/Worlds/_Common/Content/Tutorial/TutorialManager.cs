@@ -37,6 +37,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private string MoveKeys => $"{KeybindingsManager.Data.WalkForwards}{KeybindingsManager.Data.WalkLeft}{KeybindingsManager.Data.WalkBackwards}{KeybindingsManager.Data.WalkRight}";
         private string MoveToTargetButton => "right mouse button";
 
+        private int UnlockedItems => ProgressManager.Data.UnlockedBodyParts.Count + ProgressManager.Data.UnlockedPatterns.Count;
+
         public bool IsComplete { get; private set; }
         #endregion
 
@@ -53,33 +55,33 @@ namespace DanielLochner.Assets.CreatureCreator
             EditorManager.Instance.SetVisibility(false, 0f);
 
             yield return TutorialItemRoutine(
-                UnlockBodyPartRoutine(), 
-                "(1/14) Unlock A Body Part", 
-                $"Move to the highlighted body part on the ground using {MoveKeys} or {MoveToTargetButton}.", 
+                UnlockBodyPartRoutine(),
+                "(1/14) Unlock A Body Part",
+                $"Move to the highlighted body part on the ground using {MoveKeys} or {MoveToTargetButton}.",
                 20f);
 
             yield return TutorialItemRoutine(
                 UnlockPatternRoutine(),
-                "(2/14) Unlock A Pattern", 
-                $"Move to the highlighted pattern on the ground using {MoveKeys} or {MoveToTargetButton}.", 
+                "(2/14) Unlock A Pattern",
+                $"Move to the highlighted pattern on the ground using {MoveKeys} or {MoveToTargetButton}.",
                 10f);
 
             yield return TutorialItemRoutine(
                 ReturnToEditingPlatformRoutine(),
-                "(3/14) Return To An Editing Platform", 
-                $"Move to the highlighted editing platform using {MoveKeys} or {MoveToTargetButton}.", 
+                "(3/14) Return To An Editing Platform",
+                $"Move to the highlighted editing platform using {MoveKeys} or {MoveToTargetButton}.",
                 20f);
 
             yield return TutorialItemRoutine(
                 SwitchToBuildModeRoutine(),
-                "(4/14) Switch To Build Mode", 
-                "Click on the 'Build' button at the top-center of your screen.", 
+                "(4/14) Switch To Build Mode",
+                "Click on the 'Build' button at the top-center of your screen.",
                 10f);
 
             yield return TutorialItemRoutine(
                 AttachBodyPartRoutine(),
-                "(5/14) Attach A Body Part", 
-                "Drag-and-drop a body part onto your creature's body.", 
+                "(5/14) Attach A Body Part",
+                "Drag-and-drop a body part onto your creature's body.",
                 15f);
 
             yield return TutorialItemRoutine(
@@ -140,6 +142,27 @@ namespace DanielLochner.Assets.CreatureCreator
 
             InformationDialog.Inform("Tutorial Complete!", "Great, you now know the basics! Go ahead and explore for parts and patterns that have been scattered around the world!<br>Switch over to a <u>creative</u> world if you'd instead just like to create creatures with everything already unlocked!");
             IsComplete = true;
+
+
+            yield return new WaitForSeconds(0.25f); // Wait until opened before invoking "FindObjectsOfType"
+
+            UnlockableItem[] items = FindObjectsOfType<UnlockableItem>();
+            int toUnlock = 0;
+            foreach (UnlockableItem item in items)
+            {
+                if (!item.IsUnlocked)
+                {
+                    toUnlock++;
+                }
+            }
+            int target = UnlockedItems + (int)(0.9f * toUnlock);
+
+            yield return new WaitUntil(() =>
+            {
+                return UnlockedItems >= target;
+            });
+
+            InformationDialog.Inform("Great work explorer!", "Looks like you've unlocked most of the parts and patterns on this map! When you're ready, head back to the main menu and create a new world on a different map. Remember to save your creature!");
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
         {

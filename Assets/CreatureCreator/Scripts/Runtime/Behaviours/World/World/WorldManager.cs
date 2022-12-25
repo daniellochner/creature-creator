@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,12 +9,15 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class WorldManager : MonoBehaviourSingleton<WorldManager>
     {
+        #region Properties
         public World World
         {
             get;
             set;
         }
+        #endregion
 
+        #region Methods
         private void Start()
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
@@ -37,5 +39,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
             }));
         }
+        #endregion
     }
 }
