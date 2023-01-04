@@ -405,6 +405,8 @@ MonoBehaviour:
   velocity: {fileID: 5210660214972418891}
   holder: {fileID: 8982009920733923005}
   comparer: {fileID: 1474234377626077022}
+  underwater: {fileID: 4342406071192380148}
+  speedUp: {fileID: 7520380612504829494}
   selectable: {fileID: 5547729085694104735}
   commandable: {fileID: 8485513016199041328}
   ai: {fileID: 3650349913116807016}
@@ -521,6 +523,7 @@ MonoBehaviour:
         id: SCU
         sm: {fileID: 3650349913116807016}
         doghouse: {fileID: 0}
+        distanceToDoghouse: 1
         whimperSounds:
         - name: Whimper
           volume: 0.5
@@ -636,6 +639,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970ffca359a2f054e915d710ef410561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4342406071192380148 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2130508436305214231, guid: 61d13834a180caa43b627a9d22377bad, type: 3}
+  m_PrefabInstance: {fileID: 2437086704408599011}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3460791925049242907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5bc3cd8e72e25e4f9bf95c139f882d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5210660214972418891 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7610448581365535400, guid: 61d13834a180caa43b627a9d22377bad, type: 3}
@@ -727,6 +741,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7520380612504829494 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5300603860347234261, guid: 61d13834a180caa43b627a9d22377bad, type: 3}
+  m_PrefabInstance: {fileID: 2437086704408599011}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3460791925049242907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87bbd3bb0da9320458c77f3e8c203d3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8170350308615579244 stripped

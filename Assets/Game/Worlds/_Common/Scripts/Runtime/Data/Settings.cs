@@ -251,7 +251,7 @@ namespace DanielLochner.Assets.CreatureCreator
             TextureQuality = TextureQualityType.VeryHigh;
             Antialiasing = AntialiasingType.FXAA;
             ScreenSpaceReflections = ScreenSpaceReflectionsType.None;
-            Foliage = FoliageType.Low;
+            Foliage = FoliageType.Medium;
             Reflections = false;
             AnisotropicFiltering = true;
             Bloom = true;
