@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
-            if (PlayerPrefs.GetInt("MAIN_MENU_TUTORIAL") == 0 && (ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0))
+            if (ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0)
             {
                 yield return new WaitForSeconds(0.5f);
                 playMenu.Open();
@@ -27,8 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 yield return new WaitForSeconds(0.5f);
                 createMenu.Open();
-
-                PlayerPrefs.SetInt("MAIN_MENU_TUTORIAL", 1);
             }
             else
             {
