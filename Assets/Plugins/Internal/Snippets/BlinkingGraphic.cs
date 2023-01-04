@@ -8,6 +8,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private MinMax range = new MinMax(0, 1);
         [SerializeField] private float speed = 1;
+        [SerializeField] private bool isGlobal = false;
 
         private Graphic graphic;
         private float timeElapsed;
@@ -26,7 +27,12 @@ namespace DanielLochner.Assets
         {
             if (IsBlinking)
             {
-                graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, range.min + Mathf.PingPong(timeElapsed, range.max - range.min));
+                //float a = range.min + Mathf.PingPong(timeElapsed, range.max - range.min);
+
+                float x = isGlobal ? Time.time : timeElapsed;
+                float a = (range.max - range.min) * 0.5f * (Mathf.Cos(Mathf.PI * x) + 1f) + range.min;
+
+                graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, a);
                 timeElapsed += Time.deltaTime * speed;
             }
         }
