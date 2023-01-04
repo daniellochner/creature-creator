@@ -162,7 +162,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 return UnlockedItems >= target;
             });
 
-            InformationDialog.Inform("Great work explorer!", "Looks like you've unlocked most of the parts and patterns on this map! When you're ready, head back to the main menu and create a new world on a different map. Remember to save your creature!");
+            InformationDialog.Inform("Great Work!", "Looks like you've unlocked most of the parts and patterns on this map! When you're ready, head back to the main menu and create a new world on a different map. Remember to save your creature!");
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
         {
