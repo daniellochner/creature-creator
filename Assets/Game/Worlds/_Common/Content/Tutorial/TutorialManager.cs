@@ -179,7 +179,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator RemindTutorialRoutine()
         {
-            int remindTime = 600; // remind every 10 minutes if they still haven't completed the tutorial
+            int remindTime = 300; // remind every 5 minutes if they still haven't completed the tutorial
             yield return new WaitForSeconds(remindTime);
             while (!IsComplete)
             {
@@ -268,7 +268,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Transform bone = Player.Instance.Constructor.Bones[i];
                 hint.Setup(1, bone, true);
 
-                yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 25f));
+                yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 15f));
 
                 Destroy(hint.gameObject);
             }
