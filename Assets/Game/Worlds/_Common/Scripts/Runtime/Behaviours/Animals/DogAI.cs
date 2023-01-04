@@ -180,6 +180,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public class Scurrying : BaseState
         {
             [SerializeField] public GameObject doghouse;
+            [SerializeField] private float distanceToDoghouse;
             [SerializeField] private PlayerEffects.Sound[] whimperSounds;
 
             public DogAI DogAI => StateMachine as DogAI;
@@ -191,7 +192,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                if (!DogAI.IsMovingToPosition)
+                if (!Vector3Utility.SqrDistanceComp(DogAI.transform.position, doghouse.transform.position, distanceToDoghouse))
                 {
                     DogAI.ChangeState("HID");
                 }
@@ -209,6 +210,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 DogAI.Creature.Loader.HideFromOthers();
+                DogAI.Creature.Constructor.Body.gameObject.SetActive(false);
                 hideTimeLeft = hideTime.Random;
             }
             public override void UpdateLogic()
@@ -224,6 +226,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 DogAI.Creature.Loader.ShowMeToOthers();
+                DogAI.Creature.Constructor.Body.gameObject.SetActive(true);
                 DogAI.Agent.SetDestination(DogAI.Creature.transform.position);
             }
         }
