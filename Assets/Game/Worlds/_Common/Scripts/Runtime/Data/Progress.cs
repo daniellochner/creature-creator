@@ -32,7 +32,8 @@ namespace DanielLochner.Assets.CreatureCreator
             "quest_lo4zz8f",
             "quest_01lfpx7",
             "quest_mn72a0b",
-            "quest_f8s5x02"
+            "quest_f8s5x02",
+            "quest_27dh3g2"
         };
         public static string[] HighestPoints = new string[]
         {
