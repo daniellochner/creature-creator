@@ -476,13 +476,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void ResetProgress()
         {
-#if USE_STATS
-            StatsManager.Instance.SetAchievement("ACH_BACK_TO_BASICS");
-#endif
-            //if (ProgressManager.Data.UnlockedBodyParts.Count == DatabaseManager.GetDatabase("Body Parts").Objects.Count && ProgressManager.Data.UnlockedPatterns.Count == DatabaseManager.GetDatabase("Patterns").Objects.Count)
-            //{
-            //}
-
             ProgressManager.Instance.Revert();
 #if USE_STATS
             StatsManager.Instance.Revert();

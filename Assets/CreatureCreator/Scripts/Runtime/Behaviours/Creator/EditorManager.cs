@@ -578,6 +578,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Clear()
         {
             Load(null);
+
+#if USE_STATS
+            StatsManager.Instance.SetAchievement("ACH_BACK_TO_BASICS");
+#endif
         }
         public void TryImport()
         {
