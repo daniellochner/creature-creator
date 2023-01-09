@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool hasEntered;
         [SerializeField] private Vector3 editOffset;
+        [SerializeField] private AudioSource teleportAS;
         [SerializeField] private UnityEvent onEnter;
         [SerializeField] private UnityEvent onExit;
         #endregion
@@ -62,6 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void TeleportTo()
         {
             Player.Instance.Mover.Teleport(this);
+            teleportAS.Play();
         }
         #endregion
     }
