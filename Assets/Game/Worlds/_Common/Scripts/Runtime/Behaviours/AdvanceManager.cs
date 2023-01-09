@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI questsText;
 
         private int unlockedBodyParts, unlockedPatterns, completedQuests;
+        private bool allowAdvance = false;
         #endregion
 
         #region Properties
@@ -27,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 bodyPartsText.text = $"Body Parts: {unlockedBodyParts = value}/{bodyParts.Length}";
-                Check();
+                TryAdvance();
             }
         }
         private int UnlockedPatterns
@@ -36,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 patternsText.text = $"Patterns: {unlockedPatterns = value}/{patterns.Length}";
-                Check();
+                TryAdvance();
             }
         }
         private int CompletedQuests
@@ -45,8 +46,13 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 questsText.text = $"Quests: {completedQuests = value}/{quests.Length}";
-                Check();
+                TryAdvance();
             }
+        }
+
+        private bool CanAdvance
+        {
+            get => (bodyParts.Length + patterns.Length + quests.Length) == (UnlockedBodyParts + UnlockedPatterns + CompletedQuests);
         }
         #endregion
 
@@ -98,12 +104,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 progress.SetActive(true);
+                allowAdvance = true;
             }
         }
 
-        private void Check()
+        private void TryAdvance()
         {
-            if ((bodyParts.Length + patterns.Length + quests.Length) == (UnlockedBodyParts + UnlockedPatterns + CompletedQuests))
+            if (allowAdvance && CanAdvance)
             {
                 ConfirmationDialog.Confirm("Ready To Advance?", "You've unlocked all the parts and patterns, and completed all quests on this map! When you're ready, head back to the main menu and create a new world on a different map.", "Let's Go!", "Not Yet...", onYes: delegate
                 {
