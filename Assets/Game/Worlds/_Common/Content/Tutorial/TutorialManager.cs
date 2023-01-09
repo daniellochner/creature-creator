@@ -37,8 +37,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private string MoveKeys => $"{KeybindingsManager.Data.WalkForwards}{KeybindingsManager.Data.WalkLeft}{KeybindingsManager.Data.WalkBackwards}{KeybindingsManager.Data.WalkRight}";
         private string MoveToTargetButton => "right mouse button";
 
-        private int UnlockedItems => ProgressManager.Data.UnlockedBodyParts.Count + ProgressManager.Data.UnlockedPatterns.Count;
-
         public bool IsComplete { get; private set; }
         #endregion
 
@@ -142,27 +140,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             InformationDialog.Inform("Tutorial Complete!", "Great, you now know the basics! Go ahead and explore for parts and patterns that have been scattered around the world!<br>Switch over to a <u>creative</u> world if you'd instead just like to create creatures with everything already unlocked!");
             IsComplete = true;
-
-
-            yield return new WaitForSeconds(0.25f); // Wait until opened before invoking "FindObjectsOfType"
-
-            UnlockableItem[] items = FindObjectsOfType<UnlockableItem>();
-            int toUnlock = 0;
-            foreach (UnlockableItem item in items)
-            {
-                if (!item.IsUnlocked)
-                {
-                    toUnlock++;
-                }
-            }
-            int target = UnlockedItems + (int)(0.9f * toUnlock);
-
-            yield return new WaitUntil(() =>
-            {
-                return UnlockedItems >= target;
-            });
-
-            InformationDialog.Inform("Great Work!", "Looks like you've unlocked most of the parts and patterns on this map! When you're ready, head back to the main menu and create a new world on a different map. Remember to save your creature!");
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
         {
