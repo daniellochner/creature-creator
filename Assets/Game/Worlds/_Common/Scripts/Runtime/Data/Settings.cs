@@ -347,8 +347,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             None,
             WistfulHarp,
-            Being,
-            Fun
+            Being
         }
         #endregion
     }
