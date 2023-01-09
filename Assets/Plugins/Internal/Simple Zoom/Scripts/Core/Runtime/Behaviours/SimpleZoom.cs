@@ -43,7 +43,7 @@ namespace DanielLochner.Assets.SimpleZoom
         [SerializeField] private float scrollWheelSmoothing = 0.1f;
 
         private float initialZoom = 1f, currentDistance = 1f, initialDistance = 1f, doubleTapTime, targetSmoothing, zoomViewScale;
-        private bool isInitialTouch = true;
+        private bool isInitialTouch = true, isActive = true;
         private int taps = 0;
         private Vector2 mouseLocalPosition, originalSize, originalScale;
         private RectTransform zoomViewViewport;
@@ -167,14 +167,24 @@ namespace DanielLochner.Assets.SimpleZoom
             get => scrollWheelSmoothing;
             set => scrollWheelSmoothing = value;
         }
-        
-        private RectTransform Content
+
+        public RectTransform Content
         {
             get => scrollRect.content;
         }
-        private RectTransform Viewport
+        public RectTransform Viewport
         {
             get => scrollRect.viewport;
+        }
+
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                scrollRect.velocity = Vector2.zero;
+                scrollRect.vertical = scrollRect.horizontal = isActive = value;
+            }
         }
 
         public float TargetZoom
@@ -258,11 +268,14 @@ namespace DanielLochner.Assets.SimpleZoom
         }
         private void Update()
         {
-            OnPivotZoomUpdate();
+            if (isActive && RectTransformUtility.RectangleContainsScreenPoint(Viewport, Input.mousePosition))
+            {
+                OnPivotZoomUpdate();
 
-            OnZoomSlider();
-            OnZoomView();
-            OnDoubleTap();
+                OnZoomSlider();
+                OnZoomView();
+                OnDoubleTap();
+            }
         }
 #if UNITY_EDITOR
         private void OnValidate()
@@ -341,15 +354,7 @@ namespace DanielLochner.Assets.SimpleZoom
                 CurrentZoom = TargetZoom;
             }
 
-            switch (zoomMode)
-            {
-                case ZoomMode.Scale:
-                    Content.localScale = originalScale * CurrentZoom;
-                    break;
-                case ZoomMode.Size:
-                    Content.sizeDelta = originalSize * CurrentZoom;
-                    break;
-            }
+            SetContent(CurrentZoom);
         }
         private void OnHandheldUpdate()
         {
@@ -541,10 +546,28 @@ namespace DanielLochner.Assets.SimpleZoom
             }
         }
 
-        public void SetZoom(float TargetZoom, float targetSmoothing = 0)
+        private void SetContent(float zoom)
+        {
+            switch (zoomMode)
+            {
+                case ZoomMode.Scale:
+                    Content.localScale = originalScale * zoom;
+                    break;
+                case ZoomMode.Size:
+                    Content.sizeDelta = originalSize * zoom;
+                    break;
+            }
+        }
+
+        public void SetZoom(float TargetZoom, float targetSmoothing = 0, bool update = false)
         {
             this.targetSmoothing = targetSmoothing;
             this.TargetZoom = TargetZoom;
+
+            if (update)
+            {
+                SetContent(TargetZoom);
+            }
         }
         public void SetPivot(Vector2 pivot)
         {
