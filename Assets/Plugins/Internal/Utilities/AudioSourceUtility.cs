@@ -16,7 +16,7 @@ namespace DanielLochner.Assets
                 audioSource.volume = Mathf.Lerp(start, targetVolume, currentTime / duration);
                 yield return null;
             }
-            yield break;
+            audioSource.volume = targetVolume;
         }
     }
 }
