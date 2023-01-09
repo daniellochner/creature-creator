@@ -61,7 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void TeleportTo()
         {
-            Player.Instance.Mover.Teleport(transform.position);
+            Player.Instance.Mover.Teleport(this);
         }
         #endregion
     }
