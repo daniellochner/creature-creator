@@ -145,6 +145,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             WorldManager.Instance.World = null;
+            MusicManager.Instance.FadeTo(null, 0f, 1f);
         }
         public void ShutdownMP()
         {
