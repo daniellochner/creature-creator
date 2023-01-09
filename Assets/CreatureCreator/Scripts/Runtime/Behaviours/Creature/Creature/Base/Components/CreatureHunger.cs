@@ -65,6 +65,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Hunger = newHunger;
             OnHungerChanged?.Invoke(Hunger);
+
+            if (newHunger >= 1f)
+            {
+                Health.HealthPercentage = 1f;
+            }
         }
 
         public void StartDepletingHunger()
