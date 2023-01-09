@@ -48,6 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool networkStats;
         [SerializeField] private bool tutorial;
         [SerializeField] private bool worldChat;
+        [SerializeField] private bool map;
 
         [Header("Controls")]
         [SerializeField, Range(0, 3)] private float sensitivityHorizontal;
@@ -215,6 +216,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => worldChat;
             set => worldChat = value;
         }
+        public bool Map
+        {
+            get => map;
+            set => map = value;
+        }
 
         public float SensitivityHorizontal
         {
@@ -272,6 +278,7 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkStats = true;
             Tutorial = true;
             WorldChat = true;
+            Map = true;
 
             SensitivityHorizontal = 1f;
             SensitivityVertical = 1f;

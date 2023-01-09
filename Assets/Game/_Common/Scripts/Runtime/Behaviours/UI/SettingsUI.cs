@@ -52,6 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle networkStatsToggle;
         [SerializeField] private Toggle tutorialToggle;
         [SerializeField] private Toggle worldChatToggle;
+        [SerializeField] private Toggle mapToggle;
         [SerializeField] private Button resetProgressButton;
 
         [Header("Controls")]
@@ -404,6 +405,17 @@ namespace DanielLochner.Assets.CreatureCreator
             worldChatToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetWorldChat(isOn);
+            });
+
+            // Map
+            mapToggle.SetIsOnWithoutNotify(SettingsManager.Data.Map);
+            mapToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetMap(isOn);
+                if (inGame)
+                {
+                    MapManager.Instance.SetVisibility(isOn);
+                }
             });
 
             // Reset Progress

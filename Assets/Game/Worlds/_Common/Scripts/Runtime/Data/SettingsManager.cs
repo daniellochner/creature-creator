@@ -46,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Revert();
                 PlayerPrefs.SetInt("REVERT_SETTINGS", 1);
             }
-            
+
 
 
             SetResolution(Data.Resolution);
@@ -79,6 +79,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetNetworkStats(Data.NetworkStats);
             SetTutorial(Data.Tutorial);
             SetWorldChat(Data.WorldChat);
+            SetMap(Data.Map);
 
             SetSensitivityHorizontal(Data.SensitivityHorizontal);
             SetSensitivityVertical(Data.SensitivityVertical);
@@ -430,7 +431,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Data.InGameMusic = type;
         }
         #endregion
-        
+
         #region Gameplay
         public void SetOnlineUsername(string username)
         {
@@ -485,6 +486,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetWorldChat(bool worldChat)
         {
             Data.WorldChat = worldChat;
+        }
+        public void SetMap(bool map)
+        {
+            Data.Map = map;
         }
         #endregion
 
