@@ -261,7 +261,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MasterVolume = 1f;
             MusicVolume = 0.75f;
             SoundEffectsVolume = 0.75f;
-            InGameMusic = InGameMusicType.None;
+            InGameMusic = InGameMusicType.WistfulHarp;
 
             OnlineUsername = "";
             CreaturePresets.Clear();
