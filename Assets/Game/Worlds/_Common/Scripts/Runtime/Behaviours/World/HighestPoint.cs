@@ -6,6 +6,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class HighestPoint : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private GameObject flag;
         private AudioSource audioSource;
         #endregion
 
@@ -28,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (Reached || WorldManager.Instance.World.CreativeMode)
             {
-                gameObject.SetActive(false);
+                flag.SetActive(false);
             }
         }
         private void OnTriggerEnter(Collider other)
@@ -39,7 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 StatsManager.Instance.ReachedPeaks++;
 #endif
                 Reached = true;
-                gameObject.SetActive(false);
+                flag.SetActive(false);
 
                 audioSource.Play();
             }
