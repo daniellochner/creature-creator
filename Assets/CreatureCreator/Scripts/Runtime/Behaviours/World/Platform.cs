@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -10,6 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool hasEntered;
         [SerializeField] private Vector3 editOffset;
+        [SerializeField] private UnityEvent onEnter;
+        [SerializeField] private UnityEvent onExit;
         #endregion
 
         #region Properties
@@ -39,6 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 player.SpeedUp.SlowDown();
 
                 hasEntered = true;
+                onEnter.Invoke();
             }
         }
         private void OnTriggerExit(Collider other)
@@ -51,6 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 player.Loader.ShowMeToOthers();
 
                 hasEntered = false;
+                onExit.Invoke();
             }
         }
         #endregion

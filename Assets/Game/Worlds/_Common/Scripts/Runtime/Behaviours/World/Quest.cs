@@ -17,14 +17,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string id;
         [SerializeField] private int reward;
         [SerializeField] private Holdable[] items;
-        [SerializeField] private UnityEvent onComplete;
+        [SerializeField] public UnityEvent onComplete;
 
         private TrackRegion region;
         private AudioSource source;
         #endregion
 
         #region Properties
-        private bool IsCompleted
+        public bool IsCompleted
         {
             get => PlayerPrefs.GetInt(id) == 1;
             set => PlayerPrefs.SetInt(id, value ? 1 : 0);

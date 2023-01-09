@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool isUnlockable = true;
         [SerializeField] private GameObject unlockFX;
-        [SerializeField] private UnityEvent onUnlock;
+        [SerializeField] public UnityEvent onUnlock;
         private bool hasSpawned = false;
         #endregion
 
