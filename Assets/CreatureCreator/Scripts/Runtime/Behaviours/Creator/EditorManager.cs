@@ -792,7 +792,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
                 Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
                 string title = pattern.name;
-                string description = $"You unlocked a new pattern! Click to view all. ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
+                string description = $"You unlocked a new pattern! Click here to view all. ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
                 UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
                 float iconScale = 0.8f;
                 NotificationsManager.Notify(icon, title, description, onClose, iconScale);
@@ -811,7 +811,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
                 Sprite icon = bodyPart.Icon;
                 string title = bodyPart.name;
-                string description = $"You unlocked a new body part! Click to view all. ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
+                string description = $"You unlocked a new body part! Click here to view all. ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
                 UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
                 NotificationsManager.Notify(icon, title, description, onClose);
             }
