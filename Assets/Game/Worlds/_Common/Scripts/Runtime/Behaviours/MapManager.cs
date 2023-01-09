@@ -18,6 +18,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image maskImage;
         #endregion
 
+        #region Properties
+        public Camera MapCamera => mapCamera;
+        #endregion
+
         #region Methods
         public void Setup()
         {
@@ -61,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         MapIcon mapIcon = hitInfo.collider.GetComponent<MapIcon>();
                         if (mapIcon != null)
                         {
-                            mapIcon.OnClick();
+                            mapIcon.Click();
                         }
                     }
                 }

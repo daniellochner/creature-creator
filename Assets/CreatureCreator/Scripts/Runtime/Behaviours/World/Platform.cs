@@ -58,6 +58,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 onExit.Invoke();
             }
         }
+
+        public void TeleportTo()
+        {
+            Player.Instance.Mover.Teleport(transform.position);
+        }
         #endregion
     }
 }

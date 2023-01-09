@@ -1,9 +1,20 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public abstract class MapIcon : MonoBehaviour
+    public class MapIcon : MonoBehaviour
     {
-        public abstract void OnClick();
+        [SerializeField] private UnityEvent onClick;
+        private static int DEFAULT_SIZE = 50;
+
+        private void Start()
+        {
+            transform.localScale *= MapManager.Instance.MapCamera.orthographicSize / DEFAULT_SIZE;
+        }
+        public void Click()
+        {
+            onClick.Invoke();
+        }
     }
 }
