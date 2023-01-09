@@ -136,16 +136,22 @@ namespace DanielLochner.Assets
 
         private void HandleClipping(float zoom)
         {
-            float offsetDistance = OffsetPosition.magnitude;
-
-            if (handleClipping && Physics.Raycast(transform.position, Camera.transform.position - transform.position, out RaycastHit hitInfo, offsetDistance * zoom))
+            if (handleClipping)
             {
-                float d = Mathf.Clamp(Vector3.Distance(hitInfo.point, transform.position), offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y);
+                float offsetDistance = OffsetPosition.magnitude;
+                if (Physics.Raycast(transform.position, Camera.transform.position - transform.position, out RaycastHit hitInfo, offsetDistance * zoom))
+                {
+                    float d = Mathf.Clamp(Vector3.Distance(hitInfo.point, transform.position), offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y);
 
-                float p = Mathf.InverseLerp(offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y, d);
-                float t = Mathf.Lerp(minMaxZoom.x, minMaxZoom.y, p);
+                    float p = Mathf.InverseLerp(offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y, d);
+                    float t = Mathf.Lerp(minMaxZoom.x, minMaxZoom.y, p);
 
-                targetZoom = t;
+                    targetZoom = t;
+                }
+                else
+                {
+                    targetZoom = zoom;
+                }
             }
             else
             {
