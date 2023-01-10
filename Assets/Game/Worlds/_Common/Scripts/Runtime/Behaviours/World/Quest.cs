@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private TextMeshPro questText;
-        [SerializeField] private GameObject mapIcon;
+        [SerializeField] private MinimapIcon minimapIcon;
         [SerializeField] private float disappearTime;
         [SerializeField] private QuestType type;
         [SerializeField] private string description;
@@ -70,7 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Start()
         {
             UpdateInfo();
-            mapIcon.SetActive(!IsCompleted);
+            minimapIcon.enabled = !IsCompleted;
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -99,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NotificationsManager.Notify($"\"{description}\" quest complete! You earned ${reward}.");
                 source.Play();
                 onComplete.Invoke();
-                mapIcon.SetActive(false);
+                minimapIcon.enabled = false;
 
                 IsCompleted = true;
 

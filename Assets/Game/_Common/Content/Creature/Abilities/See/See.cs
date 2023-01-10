@@ -16,12 +16,12 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         public override void OnAdd()
         {
             PostProcessManager.Instance.BlendToProfile(defaultProfile, 0.25f);
-            MapManager.Instance.SetVisibility(SettingsManager.Data.Map);
+            MinimapManager.Instance.SetVisibility(SettingsManager.Data.Map);
         }
         public override void OnRemove()
         {
             PostProcessManager.Instance.BlendToProfile(blindedProfile, 0.25f);
-            MapManager.Instance.SetVisibility(false);
+            MinimapManager.Instance.SetVisibility(false);
         }
     }
 }

@@ -52,7 +52,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Player.Instance.Editor.Platform = startingPlatform;
             EditorManager.Instance.Setup();
-            MapManager.Instance.Setup();
 
             if ((ProgressManager.Data.UnlockedBodyParts.Count == 0) && (ProgressManager.Data.UnlockedPatterns.Count == 0) && !EditorManager.Instance.CreativeMode && SettingsManager.Data.Tutorial)
             {

@@ -414,7 +414,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetMap(isOn);
                 if (inGame)
                 {
-                    MapManager.Instance.SetVisibility(isOn);
+                    MinimapManager.Instance.SetVisibility(isOn);
                 }
             });
 
