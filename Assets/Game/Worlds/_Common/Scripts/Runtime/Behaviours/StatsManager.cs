@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int CompletedQuests
         {
             get => GetStat("STA_COMPLETED_QUESTS");
-            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 12));
+            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 10));
         }
         public int Kills
         {
@@ -59,10 +59,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 int counter = 0;
                 foreach (string achievementId in DatabaseManager.GetDatabase("Achievements").Objects.Keys)
                 {
-                    SteamUserStats.GetAchievement(achievementId, out bool achieved);
+                    bool achieved = GetAchievement(achievementId);
                     if (achieved)
                     {
                         counter++;
+                    }
+                    if (SettingsManager.Data.DebugMode)
+                    {
+                        Debug.Log($"{achievementId}: {achieved} ({counter})");
                     }
                 }
                 return counter;
