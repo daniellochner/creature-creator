@@ -9,6 +9,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private Image iconImg;
         [SerializeField] private Button iconBtn;
+        [SerializeField] private CanvasGroup iconCG;
 
         private RectTransform content;
         #endregion
@@ -35,7 +36,7 @@ namespace DanielLochner.Assets
             }
             else
             {
-                iconBtn.interactable = false;
+                iconCG.interactable = iconCG.blocksRaycasts = false;
             }
         }
         #endregion

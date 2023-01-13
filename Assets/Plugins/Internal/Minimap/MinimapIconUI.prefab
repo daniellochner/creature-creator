@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5097902779327682090}
   - component: {fileID: 354636350351433969}
   - component: {fileID: -6399114604319087683}
+  - component: {fileID: 973954328239052086}
   - component: {fileID: -8036920726558517726}
   m_Layer: 5
   m_Name: MinimapIconUI
@@ -122,6 +123,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &973954328239052086
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397004781770980560}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &-8036920726558517726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,3 +149,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iconImg: {fileID: 354636350351433969}
   iconBtn: {fileID: -6399114604319087683}
+  iconCG: {fileID: 973954328239052086}
