@@ -467,12 +467,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetPreviewFeatures(bool previewFeatures)
         {
-            //if (previewFeatures)
-            //{
-            //    InformationDialog.Inform("Preview Features", "Due to several Unity-related issues, certain features have been disabled by default.");
-            //}
-
             Data.PreviewFeatures = previewFeatures;
+
+            cameraOrbitPrefab.HandleClipping = previewFeatures;
         }
         public void SetNetworkStats(bool networkStats)
         {

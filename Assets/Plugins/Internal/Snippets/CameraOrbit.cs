@@ -24,6 +24,7 @@ namespace DanielLochner.Assets
 
         [Header("Other")]
         [SerializeField] private bool handleClipping;
+        [SerializeField] private string[] ignoredLayers;
 
         private float targetZoom = 1f;
         private Vector3 targetRotation;
@@ -45,6 +46,11 @@ namespace DanielLochner.Assets
         {
             get => invertMouseY;
             set => invertMouseY = value;
+        }
+        public bool HandleClipping
+        {
+            get => handleClipping;
+            set => handleClipping = value;
         }
 
         public bool IsFrozen { get; private set; }
@@ -91,32 +97,13 @@ namespace DanielLochner.Assets
         {
             if (!freezeZoom && !IsFrozen)
             {
-                HandleClipping(Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y));
+                OnHandleClipping(Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y));
             }
 
             zoomTransform.localPosition = Vector3.Lerp(zoomTransform.localPosition, OffsetPosition * targetZoom, Time.deltaTime * zoomSmoothing);
         }
         private void OnRotate()
         {
-            // if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen)
-            // {
-            //     float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
-            //     float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");
-
-            //     velocity.x += 0.25f * mouseSensitivity.x * mouseX;
-            //     velocity.y += 0.25f * mouseSensitivity.y * mouseY;
-            // }
-
-            // targetRotation.y += velocity.x;
-            // targetRotation.x -= velocity.y;
-            // targetRotation.x = ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
-
-            // rotationTransform.localRotation = Quaternion.Euler(targetRotation.x, targetRotation.y, 0);
-
-            // velocity.x = Mathf.Lerp(velocity.x, 0, Time.deltaTime * rotationSmoothing);
-            // velocity.y = Mathf.Lerp(velocity.y, 0, Time.deltaTime * rotationSmoothing);
-
-
             Vector3 velocity = Vector3.zero;
             if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen)
             {
@@ -134,12 +121,16 @@ namespace DanielLochner.Assets
             rotationTransform.localRotation = Quaternion.Euler(targetRotation.x, targetRotation.y, 0);
         }
 
-        private void HandleClipping(float zoom)
+        private void OnHandleClipping(float zoom)
         {
             if (handleClipping)
             {
                 float offsetDistance = OffsetPosition.magnitude;
-                if (Physics.Raycast(transform.position, Camera.transform.position - transform.position, out RaycastHit hitInfo, offsetDistance * zoom))
+
+                Vector3 dir = (Camera.transform.position - transform.position).normalized;
+                Vector3 origin = transform.position + (dir * minMaxZoom.x);
+
+                if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, offsetDistance * zoom - minMaxZoom.x, ~LayerMask.GetMask(ignoredLayers)))
                 {
                     float d = Mathf.Clamp(Vector3.Distance(hitInfo.point, transform.position), offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y);
 
