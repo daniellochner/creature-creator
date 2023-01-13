@@ -346,17 +346,17 @@ namespace DanielLochner.Assets.CreatureCreator
             bool tryAttachToBody = collider.CompareTag("Body");
 
             // Body Parts
-            bool tryAttachEyeToMouth = false;
+            bool tryAttachToMouth = false;
             if (collider.CompareTag("Body Part"))
             {
                 BodyPartConstructor bpc = collider.GetComponentInParent<BodyPartConstructor>();
-                if (BodyPartConstructor.BodyPart is Eye && (bpc != null && bpc.BodyPart is Mouth))
+                if (bpc != null && bpc.BodyPart is Mouth && (BodyPartConstructor.BodyPart is Eye || BodyPartConstructor.BodyPart is Ear || BodyPartConstructor.BodyPart is Nose))
                 {
-                    tryAttachEyeToMouth = true;
+                    tryAttachToMouth = true;
                 }
             }
             
-            return tryAttachToBody || tryAttachEyeToMouth;
+            return tryAttachToBody || tryAttachToMouth;
         }
 
         public virtual void Deselect()
