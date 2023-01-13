@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 2757338903828349462}
   - component: {fileID: 706557371458035166}
   - component: {fileID: 4983626450540871949}
+  - component: {fileID: -6079726500049863195}
   - component: {fileID: 6499298445207232103}
   - component: {fileID: 4997559014948333181}
   - component: {fileID: 7880975102507979443}
@@ -161,6 +162,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 87384048681061273}
+  - {fileID: 1827567835680745616}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -180,21 +182,21 @@ MonoBehaviour:
   model: {fileID: 87384048681061273}
   stretchMap:
     reorderableList:
-      canAdd: 0
-      canRemove: 0
-      draggable: 0
-      expandable: 0
-      multipleSelection: 0
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
       isExpanded: 0
       label:
-        m_Text: 
+        m_Text: Keys
         m_Image: {fileID: 0}
         m_Tooltip: 
-      headerHeight: 0
-      footerHeight: 0
-      slideEasing: 0
-      verticalSpacing: 0
-      showDefaultBackground: 0
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
       elementDisplayType: 0
       elementNameProperty: 
       elementNameOverride: 
@@ -236,6 +238,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d541a87082d210409ea511d7d3def86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6079726500049863195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3697833037637670099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a369bd2bcf2060449f361d8e98e70da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileId: saliva
+  spawnPoints:
+  - {fileID: 1827567835680745616}
+  speed: 7.5
 --- !u!54 &6499298445207232103
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -430,3 +448,34 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &5914543377998585039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1827567835680745616}
+  m_Layer: 9
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1827567835680745616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5914543377998585039}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5500731617299052461}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

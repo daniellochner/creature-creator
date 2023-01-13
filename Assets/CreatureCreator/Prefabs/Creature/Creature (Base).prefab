@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 4291803478494652999}
   - component: {fileID: 3419583124823167692}
   - component: {fileID: 5163313818900779823}
+  - component: {fileID: -633627936575074229}
   - component: {fileID: 3575083059256352896}
   m_Layer: 18
   m_Name: Creature (Base)
@@ -1028,6 +1029,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxBonesDiff: 2
   maxColorDiff: 0.5
+--- !u!114 &-633627936575074229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b3d4dcdad4ecc4392865f832c85652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectiles:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - saliva
+    - spike
+    - thorn
+    _keys:
+    - saliva
+    - spike
+    - thorn
+    _values:
+    - {fileID: -4387404258738600928, guid: a7b6f98c7302aae438b568bcf13deadf, type: 3}
+    - {fileID: -3362489978962547556, guid: cbbcb57ef2197a343bf492669953e33b, type: 3}
+    - {fileID: -4694710930793222475, guid: 774b3e252b5f9544aa4f85581e4efc47, type: 3}
+  launchSounds: []
 --- !u!114 &3575083059256352896
 MonoBehaviour:
   m_ObjectHideFlags: 0
