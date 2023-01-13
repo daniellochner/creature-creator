@@ -86,7 +86,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     Name = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
                 });
 
-                if (resolution.Equals(SettingsManager.Data.Resolution))
+                Resolution current = SettingsManager.Data.Resolution;
+                if ((resolution.width == current.width) && (resolution.height == current.height) && (resolution.refreshRate == current.refreshRate))
                 {
                     resolutionOS.Select(i, false);
                 }
