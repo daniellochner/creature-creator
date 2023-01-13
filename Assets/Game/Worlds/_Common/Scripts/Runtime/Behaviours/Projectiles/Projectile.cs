@@ -38,7 +38,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 }
-                NetworkObject.Despawn();
+                if (NetworkObject.IsSpawned)
+                {
+                    NetworkObject.Despawn();
+                }
             }
         }
 
