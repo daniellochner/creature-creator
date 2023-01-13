@@ -48,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool networkStats;
         [SerializeField] private bool tutorial;
         [SerializeField] private bool worldChat;
-        [SerializeField] private bool map;
+        [SerializeField] private bool map = true;
 
         [Header("Controls")]
         [SerializeField, Range(0, 3)] private float sensitivityHorizontal;
