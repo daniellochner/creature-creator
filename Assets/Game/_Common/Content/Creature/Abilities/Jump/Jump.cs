@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [Header("Jump")]
         [SerializeField] private float jumpForce;
         [SerializeField] private float maxJumpForce;
+        [SerializeField] private float hungerCost;
 
         private CreatureAnimator creatureAnimator;
         private Rigidbody rigidbody;
@@ -31,6 +32,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             float force = Mathf.Min(jumpForce * pairs, maxJumpForce);
             
             rigidbody.AddForce(rigidbody.transform.up * force, ForceMode.Impulse);
+
+            if (!WorldManager.Instance.World.CreativeMode)
+            {
+                Player.Instance.Hunger.Hunger -= hungerCost;
+            }
         }
     }
 }

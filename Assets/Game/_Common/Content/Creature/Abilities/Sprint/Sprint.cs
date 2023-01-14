@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [Header("Sprint")]
         [SerializeField] private float speed;
         [SerializeField] private float duration;
+        [SerializeField] private float hungerCost;
         private CreatureSpeedup speedUp;
 
         public override bool CanPerform => Player.Instance.Hunger.Hunger > 0f;
@@ -24,6 +25,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         {
             base.OnPerform();
             speedUp.SpeedUp(speed, duration);
+
+            if (!WorldManager.Instance.World.CreativeMode)
+            {
+                Player.Instance.Hunger.Hunger -= hungerCost;
+            }
         }
     }
 }

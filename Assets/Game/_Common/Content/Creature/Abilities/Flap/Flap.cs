@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [SerializeField] private float flapForce;
         [SerializeField] private float maxFlapForce;
         [SerializeField] private PlayerEffects.Sound[] flapSounds;
+        [SerializeField] private float hungerCost;
 
         private CreatureAnimator creatureAnimator;
         private PlayerEffects creatureEffector;
@@ -37,6 +38,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             rigidbody.AddForce(rigidbody.transform.up * force, ForceMode.Impulse);
             creatureAnimator.Params.SetTrigger("Wings_Flap");
             creatureEffector.PlaySound(flapSounds);
+
+            if (!WorldManager.Instance.World.CreativeMode)
+            {
+                Player.Instance.Hunger.Hunger -= hungerCost;
+            }
 
 #if USE_STATS
             StatsManager.Instance.SetAchievement("ACH_I_BELIEVE_I_CAN_FLY");
