@@ -10,6 +10,7 @@ namespace DanielLochner.Assets
         [SerializeField] private Rect mapBounds;
         [Space]
         [SerializeField] private Menu minimap;
+        [SerializeField] private CanvasGroup minimapCG;
         [SerializeField] private SimpleZoom.SimpleZoom minimapZoom;
         [SerializeField] private RectTransform map;
         [SerializeField] private MinimapIconUI minimapIconPrefab;
@@ -57,7 +58,8 @@ namespace DanielLochner.Assets
 
         public void SetVisibility(bool isVisible)
         {
-            minimap.gameObject.SetActive(isVisible);
+            minimapCG.alpha = isVisible ? 1f : 0f;
+            minimapCG.blocksRaycasts = minimapCG.interactable = isVisible;
         }
         #endregion
     }
