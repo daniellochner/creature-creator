@@ -6552,7 +6552,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6600,7 +6600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2614322044861456669, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
       propertyPath: m_Name
-      value: FoodCrateSpawner
+      value: FoodSpawner
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
@@ -7667,7 +7667,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1178091165}
   m_Layer: 0
-  m_Name: FoodCrates
+  m_Name: Food
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7685,6 +7685,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2136846264}
   - {fileID: 747917642}
   m_Father: {fileID: 402636345}
   m_RootOrder: 6
@@ -10803,6 +10804,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a92c4c0cea88ae4f8c300ea055459f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &2136846263
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1178091165}
+    m_Modifications:
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.08778
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.95850086
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -27.812662
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456666, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3098074596
+      objectReference: {fileID: 0}
+    - target: {fileID: 2614322044861456669, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+      propertyPath: m_Name
+      value: FoodSpawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+--- !u!4 &2136846264 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2614322044861456664, guid: 522837900fdf372448ecd4a631c2ea08, type: 3}
+  m_PrefabInstance: {fileID: 2136846263}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &30743711771580841
 Transform:
   m_ObjectHideFlags: 0
