@@ -96,6 +96,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 ProgressManager.Data.Cash += reward;
                 ProgressManager.Instance.Save();
 
+                Player.Instance.Editor.Cash += reward; // Also update the player's current cash!
+
                 NotificationsManager.Notify($"\"{description}\" quest complete! You earned ${reward}.");
                 source.Play();
                 onComplete.Invoke();
