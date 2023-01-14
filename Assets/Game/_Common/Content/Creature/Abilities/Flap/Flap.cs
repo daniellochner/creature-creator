@@ -18,6 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         private PlayerEffects creatureEffector;
         private Rigidbody rigidbody;
 
+        public override bool CanPerform => Player.Instance.Hunger.Hunger > 0f;
+
         public override void Setup(CreatureAbilities creatureAbilities)
         {
             base.Setup(creatureAbilities);
