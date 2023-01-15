@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
             float s = 1f / scale;
             gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
-            MusicManager.Instance.FadeTo("Fun", 0f, 0.5f);
+            MusicManager.Instance.FadeTo("Fun", 0f, 1f);
         }
         private void Update()
         {
