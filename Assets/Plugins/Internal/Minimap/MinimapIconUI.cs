@@ -27,9 +27,10 @@ namespace DanielLochner.Assets
         {
             transform.localScale = new Vector3(1f / content.localScale.x, 1f / content.localScale.y, 1f);
         }
-        public void Setup(Sprite icon, UnityAction onClick, bool isButton)
+        public void Setup(Sprite icon, Color color, UnityAction onClick, bool isButton)
         {
             iconImg.sprite = icon;
+            iconImg.color = color;
             if (isButton)
             {
                 iconBtn.onClick.AddListener(onClick);
