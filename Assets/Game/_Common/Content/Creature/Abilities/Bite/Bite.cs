@@ -24,36 +24,34 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         }
         private void OnBite(MouthAnimator mouth)
         {
-            CreatureAbilities.GetComponent<PlayerEffects>().PlaySound(biteSounds);
+            Player.Instance.Effects.PlaySound(biteSounds);
 
-            if (!hasFoundCreature)
+            Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
+            foreach (Collider collider in colliders)
             {
-                Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
-                foreach (Collider collider in colliders)
+                Edible edible = collider.GetComponent<Edible>();
+                if (edible != null && edible.CanInteract(Player.Instance.Interactor))
                 {
-                    CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null && creature != Player.Instance)
-                    {
-                        bool dealDamage = true;
-                        if ((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP)
-                        {
-                            dealDamage = false;
-                        }
+                    edible.Interact(Player.Instance.Interactor);
+                }
 
-                        if (dealDamage)
-                        {
-                            float damage = biteDamage.Random;
-                            creature.Health.TakeDamage(damage);
+                CreatureBase creature = collider.GetComponent<CreatureBase>();
+                if (creature != null && creature != Player.Instance && !hasFoundCreature)
+                {
+                    bool ignorePVP = (creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP;
+                    if (!ignorePVP)
+                    {
+                        float damage = biteDamage.Random;
+                        creature.Health.TakeDamage(damage);
 
 #if USE_STATS
-                            if (creature.Health.Health - damage <= 0)
-                            {
-                                StatsManager.Instance.Kills++;
-                            }
-#endif
+                        if (creature.Health.Health - damage <= 0)
+                        {
+                            StatsManager.Instance.Kills++;
                         }
-                        hasFoundCreature = true;
+#endif
                     }
+                    hasFoundCreature = true;
                 }
             }
 
