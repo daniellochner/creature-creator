@@ -28,15 +28,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (Transform spawnPoint in bpl.SpawnPoints)
             {
-                LaunchServerRpc(bpl.ProjectileId, spawnPoint.position, spawnPoint.rotation, bpl.Speed);
+                LaunchServerRpc(bpl.ProjectileId, spawnPoint.position, spawnPoint.rotation, bpl.transform.localScale.x, bpl.Speed);
             }
         }
 
         [ServerRpc]
-        private void LaunchServerRpc(string projectileId, Vector3 position, Quaternion rotation, float speed)
+        private void LaunchServerRpc(string projectileId, Vector3 position, Quaternion rotation, float scale, float speed)
         {
             NetworkObject projectile = Instantiate(projectiles[projectileId], position, rotation, Dynamic.Transform);
+            projectile.transform.localScale *= scale;
+
             projectile.GetComponent<Rigidbody>().velocity = speed * projectile.transform.forward;
+            Physics.IgnoreCollision(projectile.GetComponent<Collider>(), GetComponent<Collider>()); // Ignore collision between this creature and the projectile!
 
             PlayerEffects.PlaySound(launchSounds);
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,21 +8,35 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private MinMax minMaxDamage;
-        private SelfDestructor selfDestructor;
+        [SerializeField] private float blastRadius;
+        [SerializeField] private GameObject collidePrefab;
+
+        private Rigidbody rb;
         #endregion
 
         #region Methods
         private void Awake()
         {
-            selfDestructor = GetComponent<SelfDestructor>();
+            rb = GetComponent<Rigidbody>();
         }
+        private void LateUpdate()
+        {
+            if (IsServer)
+            {
+                transform.forward = rb.velocity;
+            }
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (IsServer)
             {
-                foreach (var contactPoint in collision.contacts)
+                Vector3 point = collision.GetContact(0).point;
+
+                Collider[] colliders = Physics.OverlapSphere(point, blastRadius);
+                foreach (Collider collider in colliders)
                 {
-                    CreatureBase creature = contactPoint.otherCollider.GetComponent<CreatureBase>();
+                    CreatureBase creature = collider.GetComponent<CreatureBase>();
                     if (creature != null && creature != Player.Instance)
                     {
                         if (!((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
@@ -33,16 +48,24 @@ namespace DanielLochner.Assets.CreatureCreator
                             {
                                 KillClientRpc(NetworkUtils.SendTo(OwnerClientId));
                             }
-
-                            break;
                         }
                     }
                 }
-                if (NetworkObject.IsSpawned)
-                {
-                    NetworkObject.Despawn();
-                }
+
+                CollideClientRpc(point);
             }
+        }
+
+        [ClientRpc]
+        private void CollideClientRpc(Vector3 point)
+        {
+            Instantiate(collidePrefab, point, Quaternion.identity, Dynamic.Transform);
+
+            if (IsServer && NetworkObject.IsSpawned)
+            {
+                NetworkObject.Despawn();
+            }
+            gameObject.SetActive(false);
         }
 
         [ClientRpc]
