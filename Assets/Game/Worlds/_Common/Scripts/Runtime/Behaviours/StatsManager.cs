@@ -64,10 +64,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         counter++;
                     }
-                    if (SettingsManager.Data.DebugMode)
-                    {
-                        Debug.Log($"{achievementId}: {achieved} ({counter})");
-                    }
                 }
                 return counter;
             }
