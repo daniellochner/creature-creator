@@ -265,7 +265,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MotionBlur = false;
 
             MasterVolume = 1f;
-            MusicVolume = 0.75f;
+            MusicVolume = 0.5f;
             SoundEffectsVolume = 0.75f;
             InGameMusic = InGameMusicType.WistfulHarp;
 
