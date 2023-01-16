@@ -341,6 +341,17 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 7795154557652088817, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
   m_PrefabInstance: {fileID: 6577375817211508975}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4583483209169759474 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7267760610402964509, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87bbd3bb0da9320458c77f3e8c203d3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4878392046898910618 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1798079525807123829, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
@@ -436,6 +447,8 @@ MonoBehaviour:
   velocity: {fileID: 2272616012537092495}
   holder: {fileID: 3125653775624377465}
   comparer: {fileID: 4878392046898910618}
+  underwater: {fileID: 7747700661109239856}
+  speedUp: {fileID: 4583483209169759474}
   selectable: {fileID: 1962287229178218075}
   commandable: {fileID: 2451249857297187828}
   ai: {fileID: 2304548901012607126}
@@ -468,8 +481,8 @@ MonoBehaviour:
         id: WAN
         sm: {fileID: 2304548901012607126}
         ambientCooldown:
-          min: 10
-          max: 25
+          min: 20
+          max: 35
         actionCooldown:
           min: 0
           max: 0
@@ -562,6 +575,17 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &7747700661109239856 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3513604609666664671, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5bc3cd8e72e25e4f9bf95c139f882d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8166530411756370019 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3031714546072633484, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
