@@ -62,6 +62,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void TeleportTo()
         {
+            Player.Instance.Editor.Platform.hasEntered = false;
+
             Player.Instance.Mover.Teleport(this);
             teleportAS.Play();
         }
