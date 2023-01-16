@@ -12,8 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool hasEntered;
         [SerializeField] private Vector3 editOffset;
         [SerializeField] private AudioSource teleportAS;
-        [SerializeField] private UnityEvent onEnter;
-        [SerializeField] private UnityEvent onExit;
+        [SerializeField] private MinimapIcon minimapIcon;
         #endregion
 
         #region Properties
@@ -42,8 +41,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 player.Loader.HideFromOthers();
                 player.SpeedUp.SlowDown();
 
+                minimapIcon.enabled = false;
+
                 hasEntered = true;
-                onEnter.Invoke();
             }
         }
         private void OnTriggerExit(Collider other)
@@ -55,14 +55,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 
                 player.Loader.ShowMeToOthers();
 
+                minimapIcon.enabled = true;
+
                 hasEntered = false;
-                onExit.Invoke();
             }
         }
 
         public void TeleportTo()
         {
             Player.Instance.Editor.Platform.hasEntered = false;
+            Player.Instance.Editor.Platform.minimapIcon.enabled = true;
 
             Player.Instance.Mover.Teleport(this);
             teleportAS.Play();
