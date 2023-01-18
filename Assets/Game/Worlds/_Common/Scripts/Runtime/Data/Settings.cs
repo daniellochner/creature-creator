@@ -365,6 +365,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public enum LanguageType
         {
             English,
+            EnglishSimplified,
             ChineseSimplified,
             ChineseTraditional,
             Russian,
