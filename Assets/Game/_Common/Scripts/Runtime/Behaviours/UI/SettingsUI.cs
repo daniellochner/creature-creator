@@ -422,7 +422,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Language
             languageOS.SetupUsingEnum<LanguageType>();
-            languageOS.Options.RemoveAt(0);
             languageOS.Select(SettingsManager.Data.Language, false);
             languageOS.OnSelected.AddListener(delegate (int option)
             {
