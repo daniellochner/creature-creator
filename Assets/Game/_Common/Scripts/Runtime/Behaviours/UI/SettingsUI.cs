@@ -45,7 +45,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
-        [SerializeField] private OptionSelector languageOS;
         [SerializeField] private OptionSelector relayServerOS;
         [SerializeField] private Toggle cameraShakeToggle;
         [SerializeField] private Toggle debugModeToggle;
@@ -420,14 +419,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
-            // Language
-            languageOS.SetupUsingEnum<LanguageType>();
-            languageOS.Select(SettingsManager.Data.Language, false);
-            languageOS.OnSelected.AddListener(delegate (int option)
-            {
-                SettingsManager.Instance.SetLanguage((LanguageType)option);
-            });
-
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
@@ -494,6 +485,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ViewAchievements()
         {
             AchievementsMenu.Instance.Open();
+        }
+        public void ChooseLanguage()
+        {
+            LocalizationMenu.Instance.Open();
         }
 
         public void ResetProgress()

@@ -1,8 +1,6 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -16,48 +14,18 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
         [SerializeField] private TextMeshProUGUI startText;
-        [SerializeField] private Menu languageMenu;
-        [SerializeField] private Toggle[] languageToggles;
 
         private bool isKeyPressed;
         #endregion
 
-        #region Properties
-        public bool IsLanguageSetup
-        {
-            get => PlayerPrefs.GetInt("IS_LANGUAGE_SETUP") == 1;
-            set => PlayerPrefs.SetInt("IS_LANGUAGE_SETUP", value ? 1 : 0);
-        }
-        #endregion
-
         #region Methods
-        private IEnumerator Start()
+        private void Start()
         {
             float n = (float)baseWidth / Screen.width;
             float s = 1f / scale;
             gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
-
-            if (!IsLanguageSetup)
-            {
-                yield return new WaitForSeconds(1f);
-
-                for (int i = 0; i < languageToggles.Length; i++)
-                {
-                    int index = i;
-                    languageToggles[i].onValueChanged.AddListener(delegate (bool isOn)
-                    {
-                        if (isOn)
-                        {
-                            SettingsManager.Instance.SetLanguage((Settings.LanguageType)index);
-                        }
-                    });
-                }
-                SettingsManager.Instance.SetLanguage(Settings.LanguageType.English);
-
-                languageMenu.Open();
-            }
         }
         private void Update()
         {
@@ -65,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (SteamManager.Initialized)
             {
-                if (IsLanguageSetup && !languageMenu.IsOpen && Input.anyKeyDown && !isKeyPressed)
+                if (LocalizationMenu.IsLanguageSetup && Input.anyKeyDown && !isKeyPressed)
                 {
                     LoadingManager.Instance.Load("MainMenu");
                     isKeyPressed = true;
