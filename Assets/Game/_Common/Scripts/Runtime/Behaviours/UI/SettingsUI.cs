@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
+        [SerializeField] private OptionSelector languageOS;
         [SerializeField] private OptionSelector relayServerOS;
         [SerializeField] private Toggle cameraShakeToggle;
         [SerializeField] private Toggle debugModeToggle;
@@ -417,6 +418,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     MinimapManager.Instance.SetVisibility(isOn);
                 }
+            });
+
+            // Language
+            languageOS.SetupUsingEnum<LanguageType>();
+            languageOS.Options.RemoveAt(0);
+            languageOS.Select(SettingsManager.Data.Language, false);
+            languageOS.OnSelected.AddListener(delegate (int option)
+            {
+                SettingsManager.Instance.SetLanguage((LanguageType)option);
             });
 
             // Reset Progress
