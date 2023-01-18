@@ -73,11 +73,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     logoAnimator.SetTrigger("Hide");
                     enterAudioSource.Play();
                 }
-                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("startup", "press_any_button");
+                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui", "startup_press_any_button");
             }
             else
             {
-                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("startup", "failed_to_init");
+                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui", "startup_failed_to_init");
             }
         }
         private void OnDestroy()
