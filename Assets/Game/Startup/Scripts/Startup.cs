@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -32,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (SteamManager.Initialized)
             {
-                if (Input.anyKeyDown && !isKeyPressed)
+                if (LocalizationMenu.IsLanguageSetup && Input.anyKeyDown && !isKeyPressed)
                 {
                     LoadingManager.Instance.Load("MainMenu");
                     isKeyPressed = true;
@@ -40,11 +41,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     logoAnimator.SetTrigger("Hide");
                     enterAudioSource.Play();
                 }
-                startText.text = "Press any button to start.";
+                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui", "startup_press_any_button");
             }
             else
             {
-                startText.text = "Steam failed to initialize.";
+                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui", "startup_failed_to_init");
             }
         }
         private void OnDestroy()

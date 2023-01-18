@@ -7,6 +7,7 @@ using Pinwheel.Poseidon;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering.PostProcessing;
 using static DanielLochner.Assets.CreatureCreator.Settings;
 
@@ -487,6 +488,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetMap(bool map)
         {
             Data.Map = map;
+        }
+        public void SetLanguage(LanguageType type)
+        {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[(int)type];
+            Data.Language = type;
         }
         #endregion
 

@@ -486,6 +486,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             AchievementsMenu.Instance.Open();
         }
+        public void ChooseLanguage()
+        {
+            LocalizationMenu.Instance.Open();
+        }
 
         public void ResetProgress()
         {
