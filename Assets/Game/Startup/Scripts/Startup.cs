@@ -33,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (SteamManager.Initialized)
             {
-                if (LocalizationMenu.IsLanguageSetup && Input.anyKeyDown && !isKeyPressed)
+                if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
                 {
                     LoadingManager.Instance.Load("MainMenu");
                     isKeyPressed = true;

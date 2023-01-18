@@ -1,19 +1,17 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Steamworks;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class LocalizationMenu : MenuSingleton<LocalizationMenu>
     {
+        #region Fields
         [SerializeField] private Toggle[] languages;
+        #endregion
 
-        public static bool IsLanguageSetup
-        {
-            get => PlayerPrefs.GetInt("IS_LANGUAGE_SETUP") == 1;
-            set => PlayerPrefs.SetInt("IS_LANGUAGE_SETUP", value ? 1 : 0);
-        }
-
+        #region Methods
         private IEnumerator Start()
         {
             for (int i = 0; i < languages.Length; i++)
@@ -28,17 +26,71 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             }
 
-            if (!IsLanguageSetup)
+            yield return null;
+
+            AutoDetectLanguage();
+        }
+
+        private void AutoDetectLanguage()
+        {
+            if (PlayerPrefs.GetInt("AUTO_DETECT_LANG") == 0)
             {
-                yield return new WaitForEndOfFrame();
-                SettingsManager.Instance.SetLanguage(Settings.LanguageType.English);
-                yield return new WaitForSeconds(1f);
-                Open();
+                switch (Application.systemLanguage)
+                {
+                    case SystemLanguage.Chinese:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.ChineseSimplified);
+                        break;
+                    case SystemLanguage.Russian:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Russian);
+                        break;
+                    case SystemLanguage.Spanish:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Spanish);
+                        break;
+                    case SystemLanguage.Portuguese:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Portuguese);
+                        break;
+                    case SystemLanguage.German:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.German);
+                        break;
+                    case SystemLanguage.French:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.French);
+                        break;
+                    case SystemLanguage.Japanese:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Japanese);
+                        break;
+                    case SystemLanguage.Polish:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Polish);
+                        break;
+                    case SystemLanguage.Turkish:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Turkish);
+                        break;
+                    case SystemLanguage.Korean:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Korean);
+                        break;
+                    case SystemLanguage.Thai:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Thai);
+                        break;
+                    case SystemLanguage.Italian:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Italian);
+                        break;
+                    case SystemLanguage.Czech:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Czech);
+                        break;
+                    case SystemLanguage.Vietnamese:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Vietnamese);
+                        break;
+                    default:
+                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.English);
+                        break;
+                }
+                PlayerPrefs.SetInt("AUTO_DETECT_LANG", 1);
             }
             else
             {
-                languages[(int)SettingsManager.Data.Language].isOn = true;
+                SettingsManager.Instance.SetLanguage(SettingsManager.Data.Language);
             }
+            languages[(int)SettingsManager.Data.Language].SetIsOnWithoutNotify(true);
         }
+        #endregion
     }
 }
