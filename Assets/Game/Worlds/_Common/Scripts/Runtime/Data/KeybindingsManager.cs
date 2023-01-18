@@ -40,19 +40,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.Bite = key;
         }
-        public void RebindDig(Keybind key)
-        {
-            digAbility.PerformKeybind = key;
-        }
-        public void RebindDistract(Keybind key)
-        {
-            distractAbility.PerformKeybind = key;
-        }
         public void RebindDrop(Keybind key)
         {
             dropAbility.PerformKeybind = key;
         }
-        public void RebindEat(Keybind key)
+        public void RebindShoot(Keybind key)
         {
             eatAbility.PerformKeybind = key;
         }
@@ -72,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.Jump = key;
         }
-        public void RebindPing(Keybind key)
+        public void RebindSpit(Keybind key)
         {
             pingAbility.PerformKeybind = key;
         }
@@ -87,14 +79,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 sprintAbility.PerformKeybind = key;
             }
             Data.Sprint = key;
-        }
-        public void RebindStrike(Keybind key)
-        {
-            foreach (Strike strikeAbility in strikeAbilities)
-            {
-                strikeAbility.PerformKeybind = key;
-            }
-            Data.Strike = key;
         }
         #endregion
     }

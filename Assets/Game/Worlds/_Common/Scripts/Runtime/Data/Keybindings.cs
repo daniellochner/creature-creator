@@ -133,12 +133,12 @@ namespace DanielLochner.Assets.CreatureCreator
             get => distract;
             set => distract = value;
         }
-        public Keybind Eat
+        public Keybind Shoot
         {
             get => eat;
             set => eat = value;
         }
-        public Keybind Ping
+        public Keybind Spit
         {
             get => ping;
             set => ping = value;
@@ -208,8 +208,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Bite = new Keybind(KeyCode.F);
             Dig = new Keybind(KeyCode.F);
             Distract = new Keybind(KeyCode.F);
-            Eat = new Keybind(KeyCode.F);
-            Ping = new Keybind(KeyCode.F);
+            Shoot = new Keybind(KeyCode.F);
+            Spit = new Keybind(KeyCode.F);
             Growl = new Keybind(KeyCode.G);
             Strike = new Keybind(KeyCode.F);
 
