@@ -16,7 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI jumpKUI;
         [SerializeField] private KeybindUI flapKUI;
         [SerializeField] private KeybindUI sprintKUI;
-        [SerializeField] private KeybindUI interactKUI;
         [SerializeField] private KeybindUI dropKUI;
         [SerializeField] private KeybindUI talkKUI;
         [SerializeField] private KeybindUI viewPlayersKUI;
@@ -25,12 +24,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI respawnKUI;
         [SerializeField] private KeybindUI toggleUIKUI;
         [SerializeField] private KeybindUI biteKUI;
-        [SerializeField] private KeybindUI digKUI;
-        [SerializeField] private KeybindUI distractKUI;
-        [SerializeField] private KeybindUI eatKUI;
-        [SerializeField] private KeybindUI pingKUI;
+        [SerializeField] private KeybindUI shootKUI;
+        [SerializeField] private KeybindUI spitKUI;
         [SerializeField] private KeybindUI growlKUI;
-        [SerializeField] private KeybindUI strikeKUI;
 
         [Header("Build")]
         [SerializeField] private KeybindUI copyKUI;
@@ -105,13 +101,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 KeybindingsManager.Instance.RebindSprint(key);
             });
 
-            // Interact
-            interactKUI.Rebind(KeybindingsManager.Data.Interact, false);
-            interactKUI.OnRebind.AddListener(delegate (Keybind key)
-            {
-                KeybindingsManager.Data.Interact = key;
-            });
-
             // Drop
             dropKUI.Rebind(KeybindingsManager.Data.Drop, false);
             dropKUI.OnRebind.AddListener(delegate (Keybind key)
@@ -168,20 +157,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 KeybindingsManager.Instance.RebindBite(key);
             });
 
-            // Dig
-            digKUI.Rebind(KeybindingsManager.Data.Dig, false);
-            digKUI.OnRebind.AddListener(delegate (Keybind key)
-            {
-                KeybindingsManager.Instance.RebindDig(key);
-            });
-
-            // Distract
-            distractKUI.Rebind(KeybindingsManager.Data.Distract, false);
-            distractKUI.OnRebind.AddListener(delegate (Keybind key)
-            {
-                KeybindingsManager.Instance.RebindDistract(key);
-            });
-
             // Drop
             dropKUI.Rebind(KeybindingsManager.Data.Drop, false);
             dropKUI.OnRebind.AddListener(delegate (Keybind key)
@@ -189,18 +164,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 KeybindingsManager.Instance.RebindDrop(key);
             });
 
-            // Eat
-            eatKUI.Rebind(KeybindingsManager.Data.Eat, false);
-            eatKUI.OnRebind.AddListener(delegate (Keybind key)
+            // Shoot
+            shootKUI.Rebind(KeybindingsManager.Data.Shoot, false);
+            shootKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                KeybindingsManager.Instance.RebindEat(key);
+                KeybindingsManager.Instance.RebindShoot(key);
             });
 
-            // Ping
-            pingKUI.Rebind(KeybindingsManager.Data.Ping, false);
-            pingKUI.OnRebind.AddListener(delegate (Keybind key)
+            // Spit
+            spitKUI.Rebind(KeybindingsManager.Data.Spit, false);
+            spitKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                KeybindingsManager.Instance.RebindPing(key);
+                KeybindingsManager.Instance.RebindSpit(key);
             });
 
             // Growl
@@ -208,13 +183,6 @@ namespace DanielLochner.Assets.CreatureCreator
             growlKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Instance.RebindGrowl(key);
-            });
-
-            // Strike
-            strikeKUI.Rebind(KeybindingsManager.Data.Strike, false);
-            strikeKUI.OnRebind.AddListener(delegate (Keybind key)
-            {
-                KeybindingsManager.Instance.RebindStrike(key);
             });
             #endregion
 
