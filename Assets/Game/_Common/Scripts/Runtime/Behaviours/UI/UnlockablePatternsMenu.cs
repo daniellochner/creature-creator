@@ -69,7 +69,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 patternUI.CanvasGroup.alpha = ProgressManager.Data.UnlockedPatterns.Contains(patternUI.name) ? 1f : 0.2f;
             }
-            titleText.text = $"Unlocked Patterns ({ProgressManager.Data.UnlockedPatterns.Count}/{Patterns.Objects.Count})";
+            //titleText.text = $"Unlocked Patterns ({ProgressManager.Data.UnlockedPatterns.Count}/{Patterns.Objects.Count})";
+            titleText.SetArguments(ProgressManager.Data.UnlockedPatterns.Count, Patterns.Objects.Count);
         }
         #endregion
     }
