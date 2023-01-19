@@ -8,15 +8,14 @@ namespace DanielLochner.Assets
     [RequireComponent(typeof(LocalizeStringEvent))]
     public class LocalizedText : TextMeshProUGUI
     {
+        [SerializeField] private string[] defaultArgs;
         private LocalizeStringEvent localizedStringEvent;
-
-        private static readonly object[] ARG_BUFFER = new object[] { null, null, null, null, null };
 
         protected override void Awake()
         {
             base.Awake();
             localizedStringEvent = GetComponent<LocalizeStringEvent>();
-            SetArguments(ARG_BUFFER);
+            SetArguments(defaultArgs);
         }
 
         public void SetArguments(params object[] arguments)

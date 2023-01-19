@@ -15,6 +15,7 @@ using ProfanityDetector;
 using SimpleFileBrowser;
 using UnityEngine.EventSystems;
 using System.Collections;
+using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -72,6 +73,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Material patternMaterial;
         [SerializeField] private ColourPalette primaryColourPalette;
         [SerializeField] private ColourPalette secondaryColourPalette;
+        [SerializeField] private GameObject primaryColourOverride;
+        [SerializeField] private GameObject secondaryColourOverride;
         [SerializeField] private ToggleGroup patternsToggleGroup;
         [SerializeField] private RectTransform patternsRT;
         [SerializeField] private TextMeshProUGUI noColoursText;
@@ -209,14 +212,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 int count = Creature.Constructor.Data.AttachedBodyParts.Count;
                 string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : "None";
 
-                bodyPartsText.text = $"Body Parts: [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
+                //bodyPartsText.text = $"Body Parts: [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
+                bodyPartsText.SetArguments(bodyPartsToggle.isOn ? bodyParts : count.ToString());
             });
             abilitiesToggle.onValueChanged.AddListener(delegate
             {
                 int count = Creature.Abilities.Abilities.Count;
                 string abilities = (count > 0) ? string.Join(", ", (IEnumerable<Ability>)Creature.Abilities.Abilities) : "None";
 
-                abilitiesText.text = $"Abilities: [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
+                //abilitiesText.text = $"Abilities: [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
+                abilitiesText.SetArguments((abilitiesToggle.isOn ? abilities : count.ToString()));
             });
 
             // Paint
@@ -242,7 +247,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", onYes: (UnityAction)delegate
                     {
                         Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
-                        SetPrimaryColourUI((Color)Creature.Constructor.Data.PrimaryColour, false);
+                        SetPrimaryColourUI(Creature.Constructor.Data.PrimaryColour, false);
                     });
                 }
             });
@@ -253,7 +258,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", onYes: (UnityAction)delegate
                     {
                         Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
-                        SetSecondaryColourUI((Color)Creature.Constructor.Data.SecondaryColour, false);
+                        SetSecondaryColourUI(Creature.Constructor.Data.SecondaryColour, false);
                     });
                 }
             });
@@ -1055,7 +1060,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetPrimaryColourOverrideUI(bool isOverride)
         {
-            SetColourOverrideUI(primaryColourPalette, "Primary", isOverride);
+            primaryColourOverride.SetActive(isOverride);
         }
         public void SetSecondaryColourUI(Color colour, bool isOverride)
         {
@@ -1067,11 +1072,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetSecondaryColourOverrideUI(bool isOverride)
         {
-            SetColourOverrideUI(secondaryColourPalette, "Secondary", isOverride);
-        }
-        private void SetColourOverrideUI(ColourPalette colourPicker, string name, bool isOverride)
-        {
-            colourPicker.Name.text = isOverride ? $"{name}\n<size=20>(Override)</size>" : name;
+            secondaryColourOverride.SetActive(isOverride);
         }
         private void SetColourNoneUI()
         {
@@ -1148,13 +1149,20 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = Creature.Constructor.Statistics;
             CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            complexityText.text = $"Complexity: {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString())}";
-            heightText.text = $"Height: {Math.Round(dimensions.height, 2)}m";
-            weightText.text = $"Weight: {Math.Round(statistics.Weight, 2)}kg";
-            dietText.text = $"Diet: {statistics.Diet}";
-            healthText.text = $"Health: {statistics.Health}";
-            speedText.text = $"Speed: {Math.Round(Creature.Mover.MoveSpeed, 2)}m/s";
-            bonesText.text = $"Bones: {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
+            //complexityText.text = $"Complexity: {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString())}";
+            //heightText.text = $"Height: {Math.Round(dimensions.height, 2)}m";
+            //weightText.text = $"Weight: {Math.Round(statistics.Weight, 2)}kg";
+            //dietText.text = $"Diet: {statistics.Diet}";
+            //healthText.text = $"Health: {statistics.Health}";
+            //speedText.text = $"Speed: {Math.Round(Creature.Mover.MoveSpeed, 2)}m/s";
+            //bonesText.text = $"Bones: {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
+            complexityText.SetArguments(statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
+            heightText.SetArguments(Math.Round(dimensions.height, 2));
+            weightText.SetArguments(Math.Round(statistics.Weight, 2));
+            dietText.SetArguments(statistics.Diet);
+            healthText.SetArguments(statistics.Health);
+            speedText.SetArguments(Math.Round(Creature.Mover.MoveSpeed, 2));
+            bonesText.SetArguments(Creature.Constructor.Bones.Count, Creature.Constructor.MinMaxBones.max);
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
