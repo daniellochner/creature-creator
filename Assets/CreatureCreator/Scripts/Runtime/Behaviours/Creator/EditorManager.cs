@@ -1108,9 +1108,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 int count = bodyPartGrids[type].grid.transform.childCount;
                 TextMeshProUGUI title = bodyPartGrids[type].title;
-                title.gameObject.SetActive(count > 0);
                 //title.SetText($"{type.ToString()} ({count})");
                 title.SetArguments(count);
+                title.gameObject.SetActive(count > 0);
             }
         }
         public void UpdatePrimaryColour()

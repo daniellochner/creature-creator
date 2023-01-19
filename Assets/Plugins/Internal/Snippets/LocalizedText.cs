@@ -14,12 +14,20 @@ namespace DanielLochner.Assets
         protected override void Awake()
         {
             base.Awake();
+            Initialize();
+        }
+        
+        private void Initialize()
+        {
             localizedStringEvent = GetComponent<LocalizeStringEvent>();
             SetArguments(defaultArgs);
         }
-
         public void SetArguments(params object[] arguments)
         {
+            if (!localizedStringEvent)
+            {
+                Initialize();
+            }
             localizedStringEvent.StringReference.Arguments = arguments;
             localizedStringEvent.StringReference.RefreshString();
         }
