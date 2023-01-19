@@ -31,24 +31,27 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
 
-            string entry = "";
-            if (SteamManager.Initialized)
+            if (LocalizationSettings.InitializationOperation.IsDone)
             {
-                if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
+                string entry = "";
+                if (SteamManager.Initialized)
                 {
-                    LoadingManager.Instance.Load("MainMenu");
-                    isKeyPressed = true;
+                    if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
+                    {
+                        LoadingManager.Instance.Load("MainMenu");
+                        isKeyPressed = true;
 
-                    logoAnimator.SetTrigger("Hide");
-                    enterAudioSource.Play();
+                        logoAnimator.SetTrigger("Hide");
+                        enterAudioSource.Play();
+                    }
+                    entry = "startup_press-any-button";
                 }
-                entry = "startup_press-any-button";
+                else
+                {
+                    entry = "startup_failed-to-initialize";
+                }
+                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", entry);
             }
-            else
-            {
-                entry = "startup_failed-to-initialize";
-            }
-            //startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", entry);
         }
         private void OnDestroy()
         {
