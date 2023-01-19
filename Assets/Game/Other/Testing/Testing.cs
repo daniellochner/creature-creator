@@ -1,8 +1,9 @@
-using UnityEngine;
-using DanielLochner.Assets.CreatureCreator;
 using DanielLochner.Assets;
-using UnityEditor;
+using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
+    private void Update()
+    {
+    }
 }

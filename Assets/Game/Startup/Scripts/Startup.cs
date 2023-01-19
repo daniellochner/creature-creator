@@ -31,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
 
+            string entry = "";
             if (SteamManager.Initialized)
             {
                 if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
@@ -41,12 +42,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     logoAnimator.SetTrigger("Hide");
                     enterAudioSource.Play();
                 }
-                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui", "startup_press_any_button");
+                entry = "startup_press-any-button";
             }
             else
             {
-                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui", "startup_failed_to_init");
+                entry = "startup_failed-to-initialize";
             }
+            //startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", entry);
         }
         private void OnDestroy()
         {

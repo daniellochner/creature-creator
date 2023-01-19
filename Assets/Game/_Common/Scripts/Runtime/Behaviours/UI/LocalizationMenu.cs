@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using Steamworks;
+using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -26,12 +26,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             }
 
-            yield return null;
+            yield return LocalizationSettings.InitializationOperation;
 
-            AutoDetectLanguage();
+            SetupLanguage();
         }
 
-        private void AutoDetectLanguage()
+        private void SetupLanguage()
         {
             if (PlayerPrefs.GetInt("AUTO_DETECT_LANG") == 0)
             {
