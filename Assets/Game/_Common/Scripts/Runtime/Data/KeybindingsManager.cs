@@ -9,8 +9,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Keybindings")]
         [SerializeField] private NetworkPlayersMenu networkPlayersMenu;
         [Space]
-        [SerializeField] private Dig digAbility;
-        [SerializeField] private Distract distractAbility;
         [SerializeField] private Drop dropAbility;
         [SerializeField] private Eat eatAbility;
         [SerializeField] private Abilities.Ping pingAbility;
