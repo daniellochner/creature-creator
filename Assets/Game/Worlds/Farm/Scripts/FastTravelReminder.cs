@@ -17,13 +17,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitUntil(() => EditorManager.Instance.IsPlaying);
                 yield return new WaitForSeconds(1f);
 
-                InformationDialog.Inform("Fast Travel!", "Click on the minimap to view the entire world. You can pan and zoom using your cursor. Then, click on an editing platform to teleport to it!");
+                InformationDialog.Inform(LocalizeUtility.Localize("cc_fast-travel_title"), LocalizeUtility.Localize("cc_fast-travel_message"));
                 PlayerPrefs.SetInt("FAST_TRAVEL_REMINDER", 1);
 
                 yield return new WaitForSeconds(300f);
                 if (Remind)
                 {
-                    InformationDialog.Inform("Fast Travel!", "Remember, you can click on the minimap to view the entire world and then click on an editing platform to teleport to it!");
+                    InformationDialog.Inform(LocalizeUtility.Localize("cc_fast-travel_title"), LocalizeUtility.Localize("cc_fast-travel_message"));
                 }
             }
         }
