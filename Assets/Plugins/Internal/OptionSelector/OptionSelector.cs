@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets
 {
@@ -34,15 +36,25 @@ namespace DanielLochner.Assets
             {
                 Select(startOption);
             }
+            LocalizationSettings.Instance.OnSelectedLocaleChanged += UpdateName;
+        }
+        private void OnDestroy()
+        {
+            LocalizationSettings.Instance.OnSelectedLocaleChanged -= UpdateName;
         }
 
-        public void SetupUsingEnum<T>()
+        public void SetupUsingEnum<T>(bool localize)
         {
             foreach (var type in Enum.GetValues(typeof(T)))
             {
+                string id = type.ToString();
+                if (localize)
+                {
+                    id = $"option-{typeof(T).Name.ToLower()}-{id.ToLower()}";
+                }
                 options.Add(new Option()
                 {
-                    Name = type.ToString()
+                    Id = id
                 });
             }
         }
@@ -86,15 +98,37 @@ namespace DanielLochner.Assets
         {
             Select(Convert.ToInt32(option), notify);
         }
+
+        private void UpdateName(Locale locale = default)
+        {
+            Select(currentOptionIndex, false);
+        }
         #endregion
 
         #region Structs
         [Serializable]
         public struct Option
         {
-            public string Name;
+            public string Id;
+            public string Fallback;
             public UnityEvent OnSelected;
             public UnityEvent OnDeselected;
+
+            public string Name
+            {
+                get
+                {
+                    string name = LocalizeUtility.Localize(Id);
+                    if (LocalizationSettings.StringDatabase.GetTable("ui-static").GetEntry(name) != null)
+                    {
+                        return name;
+                    }
+                    else
+                    {
+                        return Id;
+                    }
+                }
+            }
         }
         #endregion
     }

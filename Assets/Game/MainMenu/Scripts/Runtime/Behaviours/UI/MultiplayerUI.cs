@@ -185,15 +185,15 @@ namespace DanielLochner.Assets.CreatureCreator
         
         private void Setup()
         {
-            relayServerOS.SetupUsingEnum<RelayServer>();
+            relayServerOS.SetupUsingEnum<RelayServer>(false);
             relayServerOS.OnSelected.AddListener(delegate (int option)
             {
-                string relay = $"relay_{relayServerOS.Options[relayServerOS.Selected].Name.ToLower()}";
+                string relay = $"relay_{((RelayServer)option).ToString().ToLower()}";
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
             });
             relayServerOS.Select(RelayServer.Unity);
 
-            mapOS.SetupUsingEnum<Map>();
+            mapOS.SetupUsingEnum<Map>(false);
             mapOS.OnSelected.AddListener(delegate (int option)
             {
                 Map map = (Map)option;
@@ -214,10 +214,10 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             mapOS.Select(Map.Island, false);
 
-            modeOS.SetupUsingEnum<Mode>();
+            modeOS.SetupUsingEnum<Mode>(true);
             modeOS.Select(Mode.Adventure);
 
-            visibilityOS.SetupUsingEnum<Visibility>();
+            visibilityOS.SetupUsingEnum<Visibility>(true);
             visibilityOS.OnSelected.AddListener(delegate (int option)
             {
                 passwordGO.gameObject.SetActive((Visibility)option == Visibility.Public);
