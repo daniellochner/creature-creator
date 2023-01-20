@@ -38,8 +38,21 @@ namespace DanielLochner.Assets
             }
         }
 
-        public static void Input(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null, int maxCharacters = -1)
+        public static void Input(string title, string placeholder = null, string submit = null, string cancel = null, bool closeable = true, UnityAction<string> onSubmit = null, UnityAction<string> onCancel = null, int maxCharacters = -1)
         {
+            if (placeholder == null)
+            {
+                placeholder = LocalizeUtility.Localize("input_placeholder");
+            }
+            if (submit == null)
+            {
+                submit = LocalizeUtility.Localize("input_submit");
+            }
+            if (cancel == null)
+            {
+                cancel = LocalizeUtility.Localize("input_cancel");
+            }
+
             if (Instance.IsOpen)
             {
                 Instance.ignoreButton.onClick.Invoke();
@@ -87,7 +100,7 @@ namespace DanielLochner.Assets
             Instance.Open();
         }
 
-        public static async Task<string> InputAsync(string title = "Title", string placeholder = "Enter text...", string submit = "Submit", string cancel = "Cancel", bool closeable = true, string error = "No input was provided.")
+        public static async Task<string> InputAsync(string title, string placeholder = null, string submit = null, string cancel = null, bool closeable = true, string error = "No input was provided.")
         {
             var promise = new TaskCompletionSource<string>();
 

@@ -19,8 +19,17 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Confirm(string title = "Title", string confirmationMessage = "Message", string yes = "Yes", string no = "No", bool closeable = true, UnityAction onYes = null, UnityAction onNo = null)
+        public static void Confirm(string title, string confirmationMessage, string yes = null, string no = null, bool closeable = true, UnityAction onYes = null, UnityAction onNo = null)
         {
+            if (yes == null)
+            {
+                yes = LocalizeUtility.Localize("confirm_yes");
+            }
+            if (no == null)
+            {
+                no = LocalizeUtility.Localize("confirm_no");
+            }
+
             if (Instance.IsOpen)
             {
                 Instance.ignoreButton.onClick.Invoke();
