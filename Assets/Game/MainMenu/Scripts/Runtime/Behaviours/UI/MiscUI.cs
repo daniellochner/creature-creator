@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Quit()
         {
-            ConfirmationDialog.Confirm("Quit", "Are you sure you want to exit this application?", onYes: Application.Quit);
+            ConfirmationDialog.Confirm(LocalizeUtility.Localize("mainmenu_quit_title"), LocalizeUtility.Localize("mainmenu_quit_message"), onYes: Application.Quit);
         }
         #endregion
     }
