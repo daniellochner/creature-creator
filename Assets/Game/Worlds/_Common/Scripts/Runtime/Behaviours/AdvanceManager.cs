@@ -48,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 completedQuests = value;
-                questsText.SetArguments(quests.Length);
+                questsText.SetArguments(completedQuests, quests.Length);
                 TryAdvance();
             }
         }
