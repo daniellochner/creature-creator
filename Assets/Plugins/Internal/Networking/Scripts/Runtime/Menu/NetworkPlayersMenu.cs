@@ -75,11 +75,11 @@ namespace DanielLochner.Assets
         {
             if (NetworkManager.Singleton.IsHost)
             {
-                connectionText.text = $"Connection: Host";
+                connectionText.text = LocalizeUtility.Localize("network_menu_host");
             }
             else
             {
-                connectionText.text = $"Connection: Client ({Mathf.RoundToInt(NetworkStatsManager.Instance.LastRTT * 1000f)} ms)";
+                connectionText.text = LocalizeUtility.Localize("network_menu_client", Mathf.RoundToInt(NetworkStatsManager.Instance.LastRTT * 1000f));
             }
         }
         #endregion
