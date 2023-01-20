@@ -65,24 +65,6 @@ namespace DanielLochner.Assets
                             colour = c;
                             colourUI.SetColour(c);
                         });
-
-                        //InputDialog.Input("Enter a hex colour!", "Format: #RRGGBB", onSubmit: delegate (string colourHEX)
-                        //{
-                        //    if (!colourHEX.StartsWith("#"))
-                        //    {
-                        //        colourHEX = colourHEX.Insert(0, "#");
-                        //    }
-
-                        //    if (ColorUtility.TryParseHtmlString(colourHEX, out colour))
-                        //    {
-                        //        colourUI.SetColour(colour);
-                        //        SetColour(colour, true);
-                        //    }
-                        //    else
-                        //    {
-                        //        InformationDialog.Inform("Error parsing colour!", "Please use the correct format for a hexadecimal colour (i.e., #RRGGBB).");
-                        //    }
-                        //});
                     });
 
                     colourIndex++;

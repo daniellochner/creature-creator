@@ -609,12 +609,12 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                         else
                         {
-                            InformationDialog.Inform("Creature unavailable!", errorMessage);
+                            InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-unavailable"), errorMessage);
                         }
                     }
                     else
                     {
-                        InformationDialog.Inform("Invalid creature!", "An error occurred while reading this file.");
+                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_invalid-creature"), "cc_cannot-load-creature_reason_invalid");
                     }
                 },
                 onCancel: null,
@@ -732,22 +732,22 @@ namespace DanielLochner.Assets.CreatureCreator
             List<string> errors = new List<string>();
             if (creatureIsTooComplicated)
             {
-                errors.Add($"is too complicated. ({totalComplexity}/{Creature.Constructor.MaxComplexity})");
+                errors.Add(string.Format(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_complicated"), totalComplexity, Creature.Constructor.MaxComplexity));
             }
             if (creatureIsTooExpensive)
             {
-                errors.Add($"is too expensive. ({totalCost}/{BaseCash})");
+                errors.Add(string.Format(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_expensive"), totalCost, BaseCash));
             }
             if (!patternIsUnlocked)
             {
-                errors.Add($"uses a pattern that has not yet been unlocked.");
+                errors.Add(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_patterns"));
             }
             if (!bodyPartsAreUnlocked)
             {
-                errors.Add($"uses body parts that have not yet been unlocked.");
+                errors.Add(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_body-parts"));
             }
 
-            errorMessage = $"\"{creatureData.Name}\" cannot be loaded because:\n";
+            errorMessage = string.Format($"{LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-cannot-be-loaded")}\n", creatureData.Name);
             if (errors.Count > 0)
             {
                 for (int i = 0; i < errors.Count; i++)
@@ -1215,7 +1215,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     creatureUI.ErrorButton.onClick.RemoveAllListeners();
                     creatureUI.ErrorButton.onClick.AddListener(delegate
                     {
-                        InformationDialog.Inform("Creature unavailable!", errorMessage);
+                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-unavailable"), errorMessage);
                     });
                 }
 
@@ -1327,7 +1327,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (string.IsNullOrEmpty(creatureName))
             {
-                InformationDialog.Inform("Creature Unnamed", "Please enter a name for your creature.");
+                InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-unnamed"), LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_enter-name"));
                 return false;
             }
 
@@ -1339,11 +1339,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     IReadOnlyCollection<string> profanities = filter.DetectAllProfanities(creatureName);
                     if (profanities.Count > 0)
                     {
-                        InformationDialog.Inform("Profanity Detected", $"Please remove the following from your creature's name:\n<i>{string.Join(", ", profanities)}</i>");
+                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", string.Format(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_remove-profanity"), string.Join(", ", profanities))));
                     }
                     else
                     {
-                        InformationDialog.Inform("Profanity Detected", $"Please don't include profane terms in your creature's name.");
+                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_profanity-detected"), LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_profane-terms"));
                     }
                     return false;
                 }
