@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -25,12 +26,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        private IEnumerator Start()
         {
             if (IsClient)
             {
                 round.OnValueChanged += OnRoundChanged;
                 remaining.OnValueChanged += OnRemainingChanged;
+
+                yield return null;
 
                 if (InBattle)
                 {
@@ -99,12 +102,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnRoundChanged(int oldRound, int newRound)
         {
-            roundText.text = $"Round: {newRound + 1}/{rounds.Length}";
             battleInfo.SetActive(InBattle);
+            roundText.SetArguments(newRound + 1, rounds.Length);
         }
         private void OnRemainingChanged(int oldRemaining, int newRemaining)
         {
-            remainingText.text = $"{newRemaining} remaining";
+            remainingText.SetArguments(newRemaining);
         }
 
         private List<CreatureNonPlayer> SpawnEnemies(int round)
