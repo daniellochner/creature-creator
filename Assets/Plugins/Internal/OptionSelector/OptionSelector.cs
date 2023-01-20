@@ -47,10 +47,10 @@ namespace DanielLochner.Assets
         {
             foreach (var type in Enum.GetValues(typeof(T)))
             {
-                string id = type.ToString();
-                if (localize)
+                string id = $"option-{typeof(T).Name.ToLower()}-{type.ToString().ToLower()}";
+                if (!localize || !LocalizeUtility.HasEntry(id))
                 {
-                    id = $"option-{typeof(T).Name.ToLower()}-{id.ToLower()}";
+                    id = type.ToString();
                 }
                 options.Add(new Option()
                 {
@@ -118,10 +118,9 @@ namespace DanielLochner.Assets
             {
                 get
                 {
-                    string name = LocalizeUtility.Localize(Id);
-                    if (LocalizationSettings.StringDatabase.GetTable("ui-static").GetEntry(name) != null)
+                    if (LocalizeUtility.HasEntry(Id))
                     {
-                        return name;
+                        return LocalizeUtility.Localize(Id);
                     }
                     else
                     {
