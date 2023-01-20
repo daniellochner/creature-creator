@@ -59,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Reset()
         {
-            name = "Unnamed";
+            name = LocalizeUtility.Localize("creature-unnamed");
             photo = null;
             health = 1f;
             hunger = 1f;

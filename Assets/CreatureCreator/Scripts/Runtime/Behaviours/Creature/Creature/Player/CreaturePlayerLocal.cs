@@ -79,9 +79,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.Invoke(delegate
             {
-                string name = Informer.Information.Name.Equals("Unnamed") ? "You" : Informer.Information.Name;
-                string age = Informer.Information.FormattedAge;
-                InformationDialog.Inform("You Died!", $"{name} died after {age}. Press the button below to respawn at your previous editing platform.", "Respawn", false, Respawn);
+                string name = Informer.Information.Name.Equals(LocalizeUtility.Localize("creature-unnamed")) ? LocalizeUtility.Localize("you-died_you") : Informer.Information.Name;
+                string age  = Informer.Information.FormattedAge;
+                InformationDialog.Inform(LocalizeUtility.Localize("you-died_title"), LocalizeUtility.Localize("you-died_message", name, age), LocalizeUtility.Localize("you-died_okay"), false, Respawn);
 
             }, 1f);
 
