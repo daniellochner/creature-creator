@@ -67,12 +67,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     counter++;
                     if (counter >= kickAt)
                     {
-                        NetworkConnectionManager.Instance.ForceDisconnect("You were kicked due to construction spam (i.e., constructing creatures too frequently).");
+                        NetworkConnectionManager.Instance.ForceDisconnect(LocalizeUtility.Localize("cc_kick_construct-spam"));
                     }
                     else
                     if (counter >= warnAt)
                     {
-                        InformationDialog.Inform("Slow Down!", $"Please wait at least {loadCooldown} seconds before constructing a new creature! ({(counter-warnAt)+1}/3)");
+                        InformationDialog.Inform(LocalizeUtility.Localize("cc_load-cooldown_title"), LocalizeUtility.Localize("cc_load-cooldown_message", loadCooldown, (counter - warnAt) + 1));
                     }
                 }
                 loadTimeLeft = loadCooldown;
