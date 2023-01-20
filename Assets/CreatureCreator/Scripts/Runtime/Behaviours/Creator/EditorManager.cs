@@ -720,7 +720,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (creatureIsTooExpensive)
             {
                 errors.Add(LocalizeUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, BaseCash));
-                Debug.Log(LocalizeUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, BaseCash));
             }
             if (!patternIsUnlocked)
             {

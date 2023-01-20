@@ -98,7 +98,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 Player.Instance.Editor.Cash += reward; // Also update the player's current cash!
 
-                NotificationsManager.Notify($"\"{description}\" quest complete! You earned ${reward}.");
+                NotificationsManager.Notify(LocalizeUtility.Localize("quest-complete", reward));
                 source.Play();
                 onComplete.Invoke();
                 minimapIcon.enabled = false;
@@ -134,7 +134,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                questText.text = $"<size=1>{description} (${reward})</size><br><size=2>{current}/{required}</size>";
+                questText.text = $"<size=1>{LocalizeUtility.Localize(description)} (${reward})</size><br><size=2>{current}/{required}</size>";
             }
             else
             {
