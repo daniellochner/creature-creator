@@ -335,7 +335,7 @@ namespace DanielLochner.Assets.CreatureCreator
             
             // Creature Preset(s)
             int presets = SettingsManager.Data.CreaturePresets.Count;
-            creaturePresetsText.text = (presets == 0) ? "None" : $"{presets} presets";
+            creaturePresetsText.text = presets.ToString();
             creaturePresetsButton.onClick.AddListener(delegate
             {
                 FileBrowser.ShowLoadDialog(
@@ -355,8 +355,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     pickMode: FileBrowser.PickMode.Files,
                     allowMultiSelection: true,
                     initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    title: "Select Creature Preset(s)",
-                    loadButtonText: "Select"
+                    title: LocalizeUtility.Localize("settings_gameplay_creature-presets_title"),
+                    loadButtonText: LocalizeUtility.Localize("settings_gameplay_creature-presets_load")
                 );
             });
 
@@ -422,7 +422,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your completed quests and cash. It will <u>not</u> remove your creatures or achievements.", onYes: ResetProgress);
+                ConfirmationDialog.Confirm(LocalizeUtility.Localize("settings_reset-progress_title"), LocalizeUtility.Localize("settings_reset-progress_message"), onYes: ResetProgress);
             });
             #endregion
 
