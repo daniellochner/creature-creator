@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {

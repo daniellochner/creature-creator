@@ -381,7 +381,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Italian,
             Czech,
             Dutch,
-            Vietnamese
+            Vietnamese,
+            Afrikaans
         }
         #endregion
     }
