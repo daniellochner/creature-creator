@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     entry = "startup_failed-to-initialize";
                 }
-                startText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", entry);
+                startText.text = LocalizeUtility.Localize(entry);
             }
         }
         private void OnDestroy()

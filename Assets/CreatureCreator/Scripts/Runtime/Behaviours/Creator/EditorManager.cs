@@ -15,7 +15,6 @@ using ProfanityDetector;
 using SimpleFileBrowser;
 using UnityEngine.EventSystems;
 using System.Collections;
-using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -210,17 +209,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 int count = Creature.Constructor.Data.AttachedBodyParts.Count;
-                string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : "None";
+                string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : LocalizeUtility.Localize("cc_build_statistics_none");
 
-                //bodyPartsText.text = $"Body Parts: [{(bodyPartsToggle.isOn ? bodyParts : count.ToString())}]";
                 bodyPartsText.SetArguments(bodyPartsToggle.isOn ? bodyParts : count.ToString());
             });
             abilitiesToggle.onValueChanged.AddListener(delegate
             {
                 int count = Creature.Abilities.Abilities.Count;
-                string abilities = (count > 0) ? string.Join(", ", (IEnumerable<Ability>)Creature.Abilities.Abilities) : "None";
+                string abilities = (count > 0) ? string.Join(", ", Creature.Abilities.Abilities) : LocalizeUtility.Localize("cc_build_statistics_none");
 
-                //abilitiesText.text = $"Abilities: [{(abilitiesToggle.isOn ? abilities : count.ToString())}]";
                 abilitiesText.SetArguments((abilitiesToggle.isOn ? abilities : count.ToString()));
             });
 
@@ -242,9 +239,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             primaryColourPalette.ClickUI.OnRightClick.AddListener(delegate
             {
-                if (primaryColourPalette.Name.text.Contains("Override"))
+                if (primaryColourOverride.activeSelf)
                 {
-                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's primary colour?", onYes: (UnityAction)delegate
+                    ConfirmationDialog.Confirm(LocalizeUtility.Localize("cc_revert-colour"), LocalizeUtility.Localize("cc_revert-colour-primary"), onYes: delegate
                     {
                         Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
                         SetPrimaryColourUI(Creature.Constructor.Data.PrimaryColour, false);
@@ -253,9 +250,9 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             secondaryColourPalette.ClickUI.OnRightClick.AddListener(delegate
             {
-                if (secondaryColourPalette.Name.text.Contains("Override"))
+                if (secondaryColourOverride.activeSelf)
                 {
-                    ConfirmationDialog.Confirm("Revert Colour", "Are you sure you want to revert to the body's secondary colour?", onYes: (UnityAction)delegate
+                    ConfirmationDialog.Confirm(LocalizeUtility.Localize("cc_revert-colour"), LocalizeUtility.Localize("cc_revert-colour-secondary"), onYes: delegate
                     {
                         Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
                         SetSecondaryColourUI(Creature.Constructor.Data.SecondaryColour, false);
@@ -485,7 +482,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     bool exists = creaturesUI.Find(x => x.name == savedCreatureName) != null;
                     bool isLoaded = savedCreatureName == Creature.Editor.LoadedCreature;
 
-                    ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, "Overwrite creature?", $"Are you sure you want to overwrite \"{savedCreatureName}\"?");
+                    ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, LocalizeUtility.Localize("cc_overwrite-creature"), LocalizeUtility.Localize("cc_confirm-overwrite", savedCreatureName));
                 }
             };
 
@@ -496,7 +493,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                InputDialog.Input("Name Your Creature", "Enter a name for your creature...", maxCharacters: 32, submit: "Save", onSubmit: saveOperation);
+                InputDialog.Input(LocalizeUtility.Localize("cc_name-your-creature"), LocalizeUtility.Localize("cc_enter-a-name"), maxCharacters: 32, submit: LocalizeUtility.Localize("cc_creature-name_save"), onSubmit: saveOperation);
             }
         }
         public void Save(CreatureData creatureData)
@@ -536,7 +533,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureName}.dat"), creatureEncryptionKey.Value);
-            ConfirmUnsavedChanges(() => Load(creatureData), "loading");
+            ConfirmUnsavedChanges(() => Load(creatureData));
         }
         public void Load(CreatureData creatureData)
         {
@@ -578,7 +575,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryClear()
         {
-            ConfirmUnsavedChanges(Clear, "clearing");
+            ConfirmUnsavedChanges(Clear);
         }
         public void Clear()
         {
@@ -590,7 +587,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryImport()
         {
-            ConfirmUnsavedChanges(Import, "importing");
+            ConfirmUnsavedChanges(Import);
         }
         public void Import()
         {
@@ -609,19 +606,19 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                         else
                         {
-                            InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-unavailable"), errorMessage);
+                            InformationDialog.Inform(LocalizeUtility.Localize("cc_creature-unavailable"), errorMessage);
                         }
                     }
                     else
                     {
-                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_invalid-creature"), "cc_cannot-load-creature_reason_invalid");
+                        InformationDialog.Inform(LocalizeUtility.Localize("cc_invalid-creature"), LocalizeUtility.Localize("cc_cannot-load-creature_reason_invalid"));
                     }
                 },
                 onCancel: null,
                 pickMode: FileBrowser.PickMode.Files,
                 initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                title: "Import Creature (Data)",
-                loadButtonText: "Import");
+                title: LocalizeUtility.Localize("cc_import"),
+                loadButtonText: LocalizeUtility.Localize("cc_import"));
         }
         public void TryExport()
         {
@@ -640,8 +637,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         onCancel: null,
                         pickMode: FileBrowser.PickMode.Folders,
                         initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                        title: "Export Creature (Data, Screenshot and 3D Model)",
-                        saveButtonText: "Export");
+                        title: LocalizeUtility.Localize("cc_export"),
+                        saveButtonText: LocalizeUtility.Localize("cc_export"));
                 }
             };
 
@@ -652,7 +649,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                InputDialog.Input("Name Your Creature", "Enter a name for your creature...", maxCharacters: 32, submit: "Export", onSubmit: exportOperation);
+                InputDialog.Input(LocalizeUtility.Localize("cc_name-your-creature"), LocalizeUtility.Localize("cc_enter-a-name"), maxCharacters: 32, submit: LocalizeUtility.Localize("cc_export"), onSubmit: exportOperation);
             }
         }
         public void Export(CreatureData creatureData)
@@ -673,20 +670,6 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // 3D Model
-            //PerformOperation(delegate
-            //{
-            //    List<GameObject> tools = player.Creature.gameObject.FindChildrenWithTag("Tool");
-            //    foreach (GameObject tool in tools)
-            //    {
-            //        tool.SetActive(false);
-            //    }
-            //    FBXExporter.ExportGameObjToFBX(player.Creature.Constructor.gameObject, Path.Combine(creaturePath, $"{creatureData.Name}.fbx"));
-            //    foreach (GameObject tool in tools)
-            //    {
-            //        tool.SetActive(true);
-            //    }
-            //}, true);
-            
             GameObject export = Creature.Cloner.Clone(creatureData).gameObject;
             export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
 
@@ -732,27 +715,27 @@ namespace DanielLochner.Assets.CreatureCreator
             List<string> errors = new List<string>();
             if (creatureIsTooComplicated)
             {
-                errors.Add(string.Format(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_complicated"), totalComplexity, Creature.Constructor.MaxComplexity));
+                errors.Add(LocalizeUtility.Localize("cc_cannot-load-creature_reason_complicated", totalComplexity, Creature.Constructor.MaxComplexity));
             }
             if (creatureIsTooExpensive)
             {
-                errors.Add(string.Format(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_expensive"), totalCost, BaseCash));
+                errors.Add(LocalizeUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, BaseCash));
             }
             if (!patternIsUnlocked)
             {
-                errors.Add(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_patterns"));
+                errors.Add(LocalizeUtility.Localize("cc_cannot-load-creature_reason_patterns"));
             }
             if (!bodyPartsAreUnlocked)
             {
-                errors.Add(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_cannot-load-creature_reason_body-parts"));
+                errors.Add(LocalizeUtility.Localize("cc_cannot-load-creature_reason_body-parts"));
             }
 
-            errorMessage = string.Format($"{LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-cannot-be-loaded")}\n", creatureData.Name);
+            errorMessage = LocalizeUtility.Localize("cc_creature-cannot-be-loaded", creatureData.Name) + "\n";
             if (errors.Count > 0)
             {
                 for (int i = 0; i < errors.Count; i++)
                 {
-                    errorMessage += $"{i + 1}. it {errors[i]}\n";
+                    errorMessage += $"{i + 1}. {errors[i]}\n";
                 }
             }
 
@@ -797,7 +780,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
                 Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
                 string title = pattern.name;
-                string description = $"You unlocked a new pattern! Click here to view all. ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
+                string description = $"{LocalizeUtility.Localize("cc_unlocked_pattern")} ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
                 UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
                 float iconScale = 0.8f;
                 NotificationsManager.Notify(icon, title, description, onClose, iconScale);
@@ -816,7 +799,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
                 Sprite icon = bodyPart.Icon;
                 string title = bodyPart.name;
-                string description = $"You unlocked a new body part! Click here to view all. ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
+                string description = $"{LocalizeUtility.Localize("cc_unlocked_body-part")} ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
                 UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
                 NotificationsManager.Notify(icon, title, description, onClose);
             }
@@ -843,21 +826,10 @@ namespace DanielLochner.Assets.CreatureCreator
             creatureUI.Setup(creatureName);
 
             creatureUI.SelectToggle.group = creaturesToggleGroup;
-            //creatureUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)
-            //{
-            //    if (isSelected)
-            //    {
-            //        creatureNameText.text = creatureName;
-            //    }
-            //    else
-            //    {
-            //        creatureNameText.text = "";
-            //    }
-            //});
 
             creatureUI.RemoveButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Remove Creature?", $"Are you sure you want to permanently remove \"{creatureName}\"?", onYes: delegate
+                ConfirmationDialog.Confirm(LocalizeUtility.Localize("cc_remove-creature"), LocalizeUtility.Localize("cc_remove-creature_message"), onYes: delegate
                 {
                     creaturesUI.Remove(creatureUI);
                     Destroy(creatureUI.gameObject);
@@ -962,7 +934,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Hide Body Part?", $"Are you sure you want to hide \"{bodyPart.name}\" from the editor?", onYes: delegate 
+                ConfirmationDialog.Confirm(LocalizeUtility.Localize("cc_hide-body-part"), LocalizeUtility.Localize("cc_hide-body-part_message", bodyPart.name), onYes: delegate 
                 {
                     RemoveBodyPartUI(bodyPartUI);
                     SettingsManager.Data.HiddenBodyParts.Add(bodyPartID);
@@ -987,7 +959,7 @@ namespace DanielLochner.Assets.CreatureCreator
             noPatternsText.SetActive(false);
 
             patternUI.SelectToggle.group = patternsToggleGroup;
-            patternUI.SelectToggle.onValueChanged.AddListener((UnityAction<bool>)delegate (bool isSelected)
+            patternUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)
             {
                 if (isSelected)
                 {
@@ -1001,7 +973,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             patternUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Hide Pattern?", $"Are you sure you want to hide \"{pattern.name}\" from the editor?", onYes: delegate
+                ConfirmationDialog.Confirm(LocalizeUtility.Localize("cc_hide-pattern"), LocalizeUtility.Localize("cc_hide-pattern_message", pattern.name), onYes: delegate
                 {
                     RemovePatternUI(patternUI);
                     SettingsManager.Data.HiddenPatterns.Add(patternID);
@@ -1108,7 +1080,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 int count = bodyPartGrids[type].grid.transform.childCount;
                 TextMeshProUGUI title = bodyPartGrids[type].title;
-                //title.SetText($"{type.ToString()} ({count})");
                 title.SetArguments(count);
                 title.gameObject.SetActive(count > 0);
             }
@@ -1150,13 +1121,6 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureStatistics statistics = Creature.Constructor.Statistics;
             CreatureDimensions dimensions = Creature.Constructor.Dimensions;
 
-            //complexityText.text = $"Complexity: {statistics.Complexity}/{(Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString())}";
-            //heightText.text = $"Height: {Math.Round(dimensions.height, 2)}m";
-            //weightText.text = $"Weight: {Math.Round(statistics.Weight, 2)}kg";
-            //dietText.text = $"Diet: {statistics.Diet}";
-            //healthText.text = $"Health: {statistics.Health}";
-            //speedText.text = $"Speed: {Math.Round(Creature.Mover.MoveSpeed, 2)}m/s";
-            //bonesText.text = $"Bones: {Creature.Constructor.Bones.Count}/{Creature.Constructor.MinMaxBones.max}";
             complexityText.SetArguments(statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
             heightText.SetArguments(Math.Round(dimensions.height, 2));
             weightText.SetArguments(Math.Round(statistics.Weight, 2));
@@ -1215,7 +1179,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     creatureUI.ErrorButton.onClick.RemoveAllListeners();
                     creatureUI.ErrorButton.onClick.AddListener(delegate
                     {
-                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-unavailable"), errorMessage);
+                        InformationDialog.Inform(LocalizeUtility.Localize("cc_creature-unavailable"), errorMessage);
                     });
                 }
 
@@ -1327,7 +1291,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (string.IsNullOrEmpty(creatureName))
             {
-                InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_creature-unnamed"), LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_enter-name"));
+                InformationDialog.Inform(LocalizeUtility.Localize("cc_creature-unnamed"), LocalizeUtility.Localize("cc_enter-name"));
                 return false;
             }
 
@@ -1339,11 +1303,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     IReadOnlyCollection<string> profanities = filter.DetectAllProfanities(creatureName);
                     if (profanities.Count > 0)
                     {
-                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", string.Format(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_remove-profanity"), string.Join(", ", profanities))));
+                        InformationDialog.Inform(LocalizeUtility.Localize("cc_profanity-detected"), LocalizeUtility.Localize("cc_remove-profanity", string.Join(", ", profanities)));
                     }
                     else
                     {
-                        InformationDialog.Inform(LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_profanity-detected"), LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", "cc_profane-terms"));
+                        InformationDialog.Inform(LocalizeUtility.Localize("cc_profanity-detected"), LocalizeUtility.Localize("cc_profane-terms"));
                     }
                     return false;
                 }
@@ -1381,9 +1345,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 operation();
             }
         }
-        private void ConfirmUnsavedChanges(UnityAction operation, string operationPCN)
+        private void ConfirmUnsavedChanges(UnityAction operation)
         {
-            ConfirmOperation(operation, Creature.Editor.IsDirty && !string.IsNullOrEmpty(Creature.Editor.LoadedCreature), "Unsaved changes!", $"You have made changes to \"{Creature.Editor.LoadedCreature}\" without saving. Are you sure you want to continue {operationPCN}?");
+            ConfirmOperation(operation, Creature.Editor.IsDirty && !string.IsNullOrEmpty(Creature.Editor.LoadedCreature), LocalizeUtility.Localize("cc_confirm-unsaved"), LocalizeUtility.Localize("cc_confirm-unsaved_message", Creature.Editor.LoadedCreature));
         }
         #endregion
         #endregion
