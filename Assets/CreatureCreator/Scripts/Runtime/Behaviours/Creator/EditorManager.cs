@@ -1289,7 +1289,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (string.IsNullOrEmpty(creatureName))
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unnamed"), LocalizationUtility.Localize("cc_enter-name"));
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unnamed_title"), LocalizationUtility.Localize("cc_creature-unnamed_message"));
                 return false;
             }
 
