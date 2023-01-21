@@ -932,7 +932,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_hide-body-part"), LocalizationUtility.Localize("cc_hide-body-part_message", bodyPart.name), onYes: delegate 
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_hide-body-part_title"), LocalizationUtility.Localize("cc_hide-body-part_message", bodyPart.name), onYes: delegate 
                 {
                     RemoveBodyPartUI(bodyPartUI);
                     SettingsManager.Data.HiddenBodyParts.Add(bodyPartID);
@@ -971,7 +971,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             patternUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_hide-pattern"), LocalizationUtility.Localize("cc_hide-pattern_message", pattern.name), onYes: delegate
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_hide-pattern_title"), LocalizationUtility.Localize("cc_hide-pattern_message", pattern.name), onYes: delegate
                 {
                     RemovePatternUI(patternUI);
                     SettingsManager.Data.HiddenPatterns.Add(patternID);
