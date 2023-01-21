@@ -40,13 +40,13 @@ namespace DanielLochner.Assets.CreatureCreator
             infoButton.onClick.AddListener(delegate
             {
                 InformationDialog.Inform(world.WorldName, 
-                    $"<b>{LocalizationUtility.Localize("world_version")}:</b> {world.Version}<br>" +
-                    $"<b>{LocalizationUtility.Localize("world_map")}:</b> {world.MapName}<br>" + 
-                    $"<b>{LocalizationUtility.Localize("world_mode")}:</b> {FormatMode(world.CreativeMode)}<br>" +
-                    $"<b>{LocalizationUtility.Localize("world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
-                    $"<b>{LocalizationUtility.Localize("world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
-                    $"<b>{LocalizationUtility.Localize("world_pve")}:</b> {FormatEnabled(world.EnablePVE)}<br>" +
-                    $"<b>{LocalizationUtility.Localize("world_profanity")}:</b> {FormatAllowed(world.AllowProfanity)}"
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_version")}:</b> {world.Version}<br>" +
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_map")}:</b> {world.MapName}<br>" + 
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_mode")}:</b> {FormatMode(world.CreativeMode)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pve")}:</b> {FormatEnabled(world.EnablePVE)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_profanity")}:</b> {FormatAllowed(world.AllowProfanity)}"
                     );
             });
 
@@ -55,15 +55,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private string FormatMode(bool isCreativeMode)
         {
-            return isCreativeMode ? LocalizationUtility.Localize("world_creative") : LocalizationUtility.Localize("world_adventure");
+            return isCreativeMode ? LocalizationUtility.Localize("mainmenu_multiplayer_world_creative") : LocalizationUtility.Localize("mainmenu_multiplayer_world_adventure");
         }
         private string FormatEnabled(bool isEnabled)
         {
-            return isEnabled ? LocalizationUtility.Localize("world_enabled") : LocalizationUtility.Localize("world_disabled");
+            return isEnabled ? LocalizationUtility.Localize("mainmenu_multiplayer_world_enabled") : LocalizationUtility.Localize("mainmenu_multiplayer_world_disabled");
         }
         private string FormatAllowed(bool isAllowed)
         {
-            return isAllowed ? LocalizationUtility.Localize("world_allowed") : LocalizationUtility.Localize("world_forbidden");
+            return isAllowed ? LocalizationUtility.Localize("mainmenu_multiplayer_world_allowed") : LocalizationUtility.Localize("mainmenu_multiplayer_world_forbidden");
         }
         #endregion
     }
