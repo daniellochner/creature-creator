@@ -67,7 +67,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     counter++;
                     if (counter >= kickAt)
                     {
-                        NetworkConnectionManager.Instance.ForceDisconnect(LocalizationUtility.Localize("cc_kick_construct-spam"));
+                        NetworkConnectionManager.Instance.ForceDisconnect(LocalizationUtility.Localize("disconnect_message_construct-spam"));
                     }
                     else
                     if (counter >= warnAt)
