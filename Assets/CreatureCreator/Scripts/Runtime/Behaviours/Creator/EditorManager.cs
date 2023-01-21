@@ -728,7 +728,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_body-parts"));
             }
 
-            errorMessage = LocalizationUtility.Localize("cc_cannot_load_creature_reason", creatureData.Name) + "\n";
+            errorMessage = LocalizationUtility.Localize("cc_cannot-load-creature_reason", creatureData.Name) + "\n";
             if (errors.Count > 0)
             {
                 for (int i = 0; i < errors.Count; i++)
