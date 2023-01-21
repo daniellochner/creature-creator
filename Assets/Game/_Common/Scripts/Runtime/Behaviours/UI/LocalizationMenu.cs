@@ -89,7 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SettingsManager.Instance.SetLanguage(SettingsManager.Data.Language);
             }
-            languages[(int)SettingsManager.Data.Language].SetIsOnWithoutNotify(true);
+            languages[(int)SettingsManager.Data.Language].isOn = true;
         }
         #endregion
     }
