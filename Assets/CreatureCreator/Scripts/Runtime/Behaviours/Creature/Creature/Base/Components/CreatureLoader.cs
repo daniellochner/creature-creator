@@ -67,12 +67,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     counter++;
                     if (counter >= kickAt)
                     {
-                        NetworkConnectionManager.Instance.ForceDisconnect(LocalizeUtility.Localize("cc_kick_construct-spam"));
+                        NetworkConnectionManager.Instance.ForceDisconnect(LocalizationUtility.Localize("cc_kick_construct-spam"));
                     }
                     else
                     if (counter >= warnAt)
                     {
-                        InformationDialog.Inform(LocalizeUtility.Localize("cc_load-cooldown_title"), LocalizeUtility.Localize("cc_load-cooldown_message", loadCooldown, (counter - warnAt) + 1));
+                        InformationDialog.Inform(LocalizationUtility.Localize("cc_load-cooldown_title"), LocalizationUtility.Localize("cc_load-cooldown_message", loadCooldown, (counter - warnAt) + 1));
                     }
                 }
                 loadTimeLeft = loadCooldown;

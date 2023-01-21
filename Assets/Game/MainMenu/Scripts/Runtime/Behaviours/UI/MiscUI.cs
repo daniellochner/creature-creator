@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Quit()
         {
-            ConfirmationDialog.Confirm(LocalizeUtility.Localize("mainmenu_quit_title"), LocalizeUtility.Localize("mainmenu_quit_message"), onYes: Application.Quit);
+            ConfirmationDialog.Confirm(LocalizationUtility.Localize("mainmenu_quit_title"), LocalizationUtility.Localize("mainmenu_quit_message"), onYes: Application.Quit);
         }
         #endregion
     }

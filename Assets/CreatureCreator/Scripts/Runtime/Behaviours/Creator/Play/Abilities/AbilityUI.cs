@@ -72,7 +72,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateName(Locale locale = default)
         {
-            nameText.text = LocalizeUtility.Localize(ability.Name);
+            nameText.text = LocalizationUtility.Localize(ability.Name);
         }
         #endregion
     }

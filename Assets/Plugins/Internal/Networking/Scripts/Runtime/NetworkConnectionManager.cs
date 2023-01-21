@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
         }
         public void ForceDisconnect(string reason)
         {
-            Leave(() => InformationDialog.Inform(LocalizeUtility.Localize("inform_disconnected_title"), reason));
+            Leave(() => InformationDialog.Inform(LocalizationUtility.Localize("inform_disconnected_title"), reason));
         }
 
         public void Leave(Action onLeave = null)
@@ -42,7 +42,7 @@ namespace DanielLochner.Assets
             // Disconnect all connected players before the host leaves the game.
             if (IsHost)
             {
-                ForceDisconnectClientRpc(LocalizeUtility.Localize("reason_host-left-game"));
+                ForceDisconnectClientRpc(LocalizationUtility.Localize("reason_host-left-game"));
                 while (NetworkManager.Singleton.ConnectedClients.Count > 1)
                 {
                     yield return null;

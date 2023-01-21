@@ -54,91 +54,91 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return TutorialItemRoutine(
                 UnlockBodyPartRoutine(),
-                $"(1/14) {LocalizeUtility.Localize("tutorial_1_title")}",
-                LocalizeUtility.Localize("tutorial_1_message", MoveKeys, MoveToTargetButton),
+                $"(1/14) {LocalizationUtility.Localize("tutorial_1_title")}",
+                LocalizationUtility.Localize("tutorial_1_message", MoveKeys, MoveToTargetButton),
                 20f);
 
             yield return TutorialItemRoutine(
                 UnlockPatternRoutine(),
-                $"(2/14) {LocalizeUtility.Localize("tutorial_2_title")}",
-                LocalizeUtility.Localize("tutorial_2_message", MoveKeys, MoveToTargetButton),
+                $"(2/14) {LocalizationUtility.Localize("tutorial_2_title")}",
+                LocalizationUtility.Localize("tutorial_2_message", MoveKeys, MoveToTargetButton),
                 10f);
 
             yield return TutorialItemRoutine(
                 ReturnToEditingPlatformRoutine(),
-                $"(3/14) {LocalizeUtility.Localize("tutorial_3_title")}",
-                LocalizeUtility.Localize("tutorial_3_message", MoveKeys, MoveToTargetButton),
+                $"(3/14) {LocalizationUtility.Localize("tutorial_3_title")}",
+                LocalizationUtility.Localize("tutorial_3_message", MoveKeys, MoveToTargetButton),
                 20f);
 
             yield return TutorialItemRoutine(
                 SwitchToBuildModeRoutine(),
-                $"(4/14) {LocalizeUtility.Localize("tutorial_4_title")}",
-                LocalizeUtility.Localize("tutorial_4_message"),
+                $"(4/14) {LocalizationUtility.Localize("tutorial_4_title")}",
+                LocalizationUtility.Localize("tutorial_4_message"),
                 10f);
 
             yield return TutorialItemRoutine(
                 AttachBodyPartRoutine(),
-                $"(5/14) {LocalizeUtility.Localize("tutorial_5_title")}",
-                LocalizeUtility.Localize("tutorial_5_message"),
+                $"(5/14) {LocalizationUtility.Localize("tutorial_5_title")}",
+                LocalizationUtility.Localize("tutorial_5_message"),
                 15f);
 
             yield return TutorialItemRoutine(
                 RevealToolsRoutine(),
-                $"(6/14) {LocalizeUtility.Localize("tutorial_6_title")}",
-                LocalizeUtility.Localize("tutorial_6_message"),
+                $"(6/14) {LocalizationUtility.Localize("tutorial_6_title")}",
+                LocalizationUtility.Localize("tutorial_6_message"),
                 10f);
 
             yield return TutorialItemRoutine(
                 AddBonesRoutine(),
-                $"(7/14) {LocalizeUtility.Localize("tutorial_7_title")}",
-                LocalizeUtility.Localize("tutorial_7_message"),
+                $"(7/14) {LocalizationUtility.Localize("tutorial_7_title")}",
+                LocalizationUtility.Localize("tutorial_7_message"),
                 10f);
 
             yield return TutorialItemRoutine(
                 AddWeightRoutine(),
-                $"(8/14) {LocalizeUtility.Localize("tutorial_8_title")}",
-                LocalizeUtility.Localize("tutorial_8_message"),
+                $"(8/14) {LocalizationUtility.Localize("tutorial_8_title")}",
+                LocalizationUtility.Localize("tutorial_8_message"),
                 20f);
 
             yield return TutorialItemRoutine(
                 SwitchToPaintModeRoutine(),
-                $"(9/14) {LocalizeUtility.Localize("tutorial_9_title")}",
-                LocalizeUtility.Localize("tutorial_9_message"),
+                $"(9/14) {LocalizationUtility.Localize("tutorial_9_title")}",
+                LocalizationUtility.Localize("tutorial_9_message"),
                 10f);
 
             yield return TutorialItemRoutine(
                 ApplyPatternRoutine(),
-                $"(10/14) {LocalizeUtility.Localize("tutorial_10_title")}",
-                LocalizeUtility.Localize("tutorial_10_message"),
+                $"(10/14) {LocalizationUtility.Localize("tutorial_10_title")}",
+                LocalizationUtility.Localize("tutorial_10_message"),
                 10f);
 
             yield return TutorialItemRoutine(
                 SetColourRoutine(),
-                $"(11/14) {LocalizeUtility.Localize("tutorial_11_title")}",
-                LocalizeUtility.Localize("tutorial_11_message"),
+                $"(11/14) {LocalizationUtility.Localize("tutorial_11_title")}",
+                LocalizationUtility.Localize("tutorial_11_message"),
                 30f);
 
             yield return TutorialItemRoutine(
                 ViewOptionsMenuRoutine(),
-                $"(12/14) {LocalizeUtility.Localize("tutorial_12_title")}",
-                LocalizeUtility.Localize("tutorial_12_message"),
+                $"(12/14) {LocalizationUtility.Localize("tutorial_12_title")}",
+                LocalizationUtility.Localize("tutorial_12_message"),
                 15f);
 
             yield return TutorialItemRoutine(
                 SaveCreatureRoutine(),
-                $"(13/14) {LocalizeUtility.Localize("tutorial_13_title")}",
-                LocalizeUtility.Localize("tutorial_13_message"),
+                $"(13/14) {LocalizationUtility.Localize("tutorial_13_title")}",
+                LocalizationUtility.Localize("tutorial_13_message"),
                 30f);
 
             yield return TutorialItemRoutine(
                 SwitchToPlayModeRoutine(),
-                $"(14/14) {LocalizeUtility.Localize("tutorial_14_title")}",
-                LocalizeUtility.Localize("tutorial_14_message"),
+                $"(14/14) {LocalizationUtility.Localize("tutorial_14_title")}",
+                LocalizationUtility.Localize("tutorial_14_message"),
                 10f);
 
             yield return new WaitForSeconds(1f);
 
-            InformationDialog.Inform(LocalizeUtility.Localize("tutorial_complete_title"), LocalizeUtility.Localize("tutorial_complete_message"));
+            InformationDialog.Inform(LocalizationUtility.Localize("tutorial_complete_title"), LocalizationUtility.Localize("tutorial_complete_message"));
             IsComplete = true;
         }
         private IEnumerator TutorialItemRoutine(IEnumerator tutorialRoutine, string textHintTitle, string textHintMessage, float textHintTime)
@@ -160,7 +160,7 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return new WaitForSeconds(remindTime);
             while (!IsComplete)
             {
-                InformationDialog.Inform(LocalizeUtility.Localize("tutorial-in-progress_title"), LocalizeUtility.Localize("tutorial-in-progress_message"));
+                InformationDialog.Inform(LocalizationUtility.Localize("tutorial-in-progress_title"), LocalizationUtility.Localize("tutorial-in-progress_message"));
                 yield return new WaitForSeconds(remindTime);
             }
         }

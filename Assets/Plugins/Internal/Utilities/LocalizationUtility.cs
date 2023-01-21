@@ -2,7 +2,7 @@ using UnityEngine.Localization.Settings;
 
 namespace DanielLochner.Assets
 {
-    public static class LocalizeUtility
+    public static class LocalizationUtility
     {
         public static bool HasEntry(string entry)
         {

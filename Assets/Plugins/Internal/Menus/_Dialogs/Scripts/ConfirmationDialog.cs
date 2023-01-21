@@ -23,11 +23,11 @@ namespace DanielLochner.Assets
         {
             if (yes == null)
             {
-                yes = LocalizeUtility.Localize("confirm_yes");
+                yes = LocalizationUtility.Localize("confirm_yes");
             }
             if (no == null)
             {
-                no = LocalizeUtility.Localize("confirm_no");
+                no = LocalizationUtility.Localize("confirm_no");
             }
 
             if (Instance.IsOpen)

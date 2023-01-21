@@ -32,7 +32,7 @@ namespace DanielLochner.Assets
         [ClientRpc]
         private void SendDeathMsgClientRpc(int message, string name)
         {
-            NotificationsManager.Notify(LocalizeUtility.Localize(deathMessages[message], name));
+            NotificationsManager.Notify(LocalizationUtility.Localize(deathMessages[message], name));
         }
     }
 }

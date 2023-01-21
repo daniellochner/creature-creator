@@ -42,15 +42,15 @@ namespace DanielLochner.Assets
         {
             if (placeholder == null)
             {
-                placeholder = LocalizeUtility.Localize("input_placeholder");
+                placeholder = LocalizationUtility.Localize("input_placeholder");
             }
             if (submit == null)
             {
-                submit = LocalizeUtility.Localize("input_submit");
+                submit = LocalizationUtility.Localize("input_submit");
             }
             if (cancel == null)
             {
-                cancel = LocalizeUtility.Localize("input_cancel");
+                cancel = LocalizationUtility.Localize("input_cancel");
             }
 
             if (Instance.IsOpen)

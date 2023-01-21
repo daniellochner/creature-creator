@@ -29,7 +29,7 @@ namespace DanielLochner.Assets
         #region Methods
         public static void Rebind(KeybindUI keybindUI)
         {
-            Instance.messageText.text = LocalizeUtility.Localize("keybindings_message", keybindUI.Action);
+            Instance.messageText.text = LocalizationUtility.Localize("keybindings_message", keybindUI.Action);
             Instance.StartCoroutine(Instance.RebindRoutine(keybindUI));
         }
         private IEnumerator RebindRoutine(KeybindUI keybindUI)

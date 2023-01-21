@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override string ToString()
         {
-            return LocalizeUtility.Localize(Name);
+            return LocalizationUtility.Localize(Name);
         }
         public int CompareTo(Ability other)
         {

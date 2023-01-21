@@ -21,7 +21,7 @@ namespace DanielLochner.Assets
         {
             if (okay == null)
             {
-                okay = LocalizeUtility.Localize("inform_okay");
+                okay = LocalizationUtility.Localize("inform_okay");
             }
 
             if (Instance.IsOpen)

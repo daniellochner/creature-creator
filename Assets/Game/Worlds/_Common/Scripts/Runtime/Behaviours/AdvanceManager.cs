@@ -115,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (allowAdvance && CanAdvance)
             {
-                ConfirmationDialog.Confirm(LocalizeUtility.Localize("cc_ready-to-advance_title"), LocalizeUtility.Localize("cc_ready-to-advance_message"), onYes: delegate
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onYes: delegate
                 {
                     PauseMenu.Instance.Leave();
                 });

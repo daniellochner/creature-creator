@@ -355,8 +355,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     pickMode: FileBrowser.PickMode.Files,
                     allowMultiSelection: true,
                     initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    title: LocalizeUtility.Localize("settings_gameplay_creature-presets_title"),
-                    loadButtonText: LocalizeUtility.Localize("settings_gameplay_creature-presets_load")
+                    title: LocalizationUtility.Localize("settings_gameplay_creature-presets_title"),
+                    loadButtonText: LocalizationUtility.Localize("settings_gameplay_creature-presets_load")
                 );
             });
 
@@ -422,7 +422,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm(LocalizeUtility.Localize("settings_reset-progress_title"), LocalizeUtility.Localize("settings_reset-progress_message"), onYes: ResetProgress);
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("settings_reset-progress_title"), LocalizationUtility.Localize("settings_reset-progress_message"), onYes: ResetProgress);
             });
             #endregion
 

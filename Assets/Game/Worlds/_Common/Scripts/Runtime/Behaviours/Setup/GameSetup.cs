@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (world.IsPrivate)
                 {
-                    InformationDialog.Inform(LocalizeUtility.Localize("cc_private-world_title"), LocalizeUtility.Localize("cc_private-world_message", world.Id, KeybindingsManager.Data.ViewPlayers), LocalizeUtility.Localize("cc_private-world_okay"), true, delegate
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_private-world_title"), LocalizationUtility.Localize("cc_private-world_message", world.Id, KeybindingsManager.Data.ViewPlayers), LocalizationUtility.Localize("cc_private-world_okay"), true, delegate
                     {
                         GUIUtility.systemCopyBuffer = world.Id;
                     });
@@ -168,11 +168,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnUncontrolledClientShutdown()
         {
-            InformationDialog.Inform(LocalizeUtility.Localize("disconnect_title"), LocalizeUtility.Localize("disconnect_message_you-lost-connection"));
+            InformationDialog.Inform(LocalizationUtility.Localize("disconnect_title"), LocalizationUtility.Localize("disconnect_message_you-lost-connection"));
         }
         private void OnUncontrolledHostShutdown()
         {
-            InformationDialog.Inform(LocalizeUtility.Localize("disconnect_title"), LocalizeUtility.Localize("disconnect_message_host-lost-connection"));
+            InformationDialog.Inform(LocalizationUtility.Localize("disconnect_title"), LocalizationUtility.Localize("disconnect_message_host-lost-connection"));
         }
         private void OnInactivityKick()
         {
@@ -180,7 +180,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnInactivityWarn(int warnTime)
         {
-            InformationDialog.Inform(LocalizeUtility.Localize("inactivity_title"), LocalizeUtility.Localize("inactivity_message"), LocalizeUtility.Localize("inactivity_cancel"));
+            InformationDialog.Inform(LocalizationUtility.Localize("inactivity_title"), LocalizationUtility.Localize("inactivity_message"), LocalizationUtility.Localize("inactivity_cancel"));
         }
         #endregion
     }

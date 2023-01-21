@@ -40,13 +40,13 @@ namespace DanielLochner.Assets.CreatureCreator
             infoButton.onClick.AddListener(delegate
             {
                 InformationDialog.Inform(world.WorldName, 
-                    $"<b>{LocalizeUtility.Localize("world_version")}:</b> {world.Version}<br>" +
-                    $"<b>{LocalizeUtility.Localize("world_map")}:</b> {world.MapName}<br>" + 
-                    $"<b>{LocalizeUtility.Localize("world_mode")}:</b> {FormatMode(world.CreativeMode)}<br>" +
-                    $"<b>{LocalizeUtility.Localize("world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
-                    $"<b>{LocalizeUtility.Localize("world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
-                    $"<b>{LocalizeUtility.Localize("world_pve")}:</b> {FormatEnabled(world.EnablePVE)}<br>" +
-                    $"<b>{LocalizeUtility.Localize("world_profanity")}:</b> {FormatAllowed(world.AllowProfanity)}"
+                    $"<b>{LocalizationUtility.Localize("world_version")}:</b> {world.Version}<br>" +
+                    $"<b>{LocalizationUtility.Localize("world_map")}:</b> {world.MapName}<br>" + 
+                    $"<b>{LocalizationUtility.Localize("world_mode")}:</b> {FormatMode(world.CreativeMode)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("world_pve")}:</b> {FormatEnabled(world.EnablePVE)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("world_profanity")}:</b> {FormatAllowed(world.AllowProfanity)}"
                     );
             });
 
@@ -55,15 +55,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private string FormatMode(bool isCreativeMode)
         {
-            return isCreativeMode ? LocalizeUtility.Localize("world_creative") : LocalizeUtility.Localize("world_adventure");
+            return isCreativeMode ? LocalizationUtility.Localize("world_creative") : LocalizationUtility.Localize("world_adventure");
         }
         private string FormatEnabled(bool isEnabled)
         {
-            return isEnabled ? LocalizeUtility.Localize("world_enabled") : LocalizeUtility.Localize("world_disabled");
+            return isEnabled ? LocalizationUtility.Localize("world_enabled") : LocalizationUtility.Localize("world_disabled");
         }
         private string FormatAllowed(bool isAllowed)
         {
-            return isAllowed ? LocalizeUtility.Localize("world_allowed") : LocalizeUtility.Localize("world_forbidden");
+            return isAllowed ? LocalizationUtility.Localize("world_allowed") : LocalizationUtility.Localize("world_forbidden");
         }
         #endregion
     }
