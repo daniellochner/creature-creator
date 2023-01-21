@@ -42,7 +42,7 @@ namespace DanielLochner.Assets
             // Disconnect all connected players before the host leaves the game.
             if (IsHost)
             {
-                ForceDisconnectClientRpc(LocalizationUtility.Localize("reason_host-left-game"));
+                ForceDisconnectClientRpc(LocalizationUtility.Localize("disconnect_message_host-left-game"));
                 while (NetworkManager.Singleton.ConnectedClients.Count > 1)
                 {
                     yield return null;
