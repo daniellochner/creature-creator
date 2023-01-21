@@ -64,7 +64,7 @@ namespace DanielLochner.Assets
             }
             if (message.Length > characterLimit)
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("too_long_message_title"), LocalizationUtility.Localize("too_long_message_message", characterLimit));
+                InformationDialog.Inform(LocalizationUtility.Localize("sent_message_too_long_title"), LocalizationUtility.Localize("sent_message_too_long_message", characterLimit));
                 return;
             }
             if (checkForProfanity && filter.ContainsProfanity(message))
