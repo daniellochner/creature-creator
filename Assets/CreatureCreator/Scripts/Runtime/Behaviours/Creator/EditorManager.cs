@@ -493,7 +493,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                InputDialog.Input(LocalizationUtility.Localize("cc_name-your-creature"), LocalizationUtility.Localize("cc_enter-a-name"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_save"), onSubmit: saveOperation);
+                InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: saveOperation);
             }
         }
         public void Save(CreatureData creatureData)
@@ -647,7 +647,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                InputDialog.Input(LocalizationUtility.Localize("cc_name-your-creature"), LocalizationUtility.Localize("cc_enter-a-name"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_export"), onSubmit: exportOperation);
+                InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: exportOperation);
             }
         }
         public void Export(CreatureData creatureData)
