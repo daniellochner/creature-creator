@@ -47,8 +47,8 @@ namespace DanielLochner.Assets
         {
             foreach (var type in Enum.GetValues(typeof(T)))
             {
-                string id = $"option-{typeof(T).Name.ToLower()}-{type.ToString().ToLower()}";
-                if (!localize || !LocalizeUtility.HasEntry(id))
+                string id = $"option_{typeof(T).Name}_{type.ToString()}".ToLower();
+                if (!localize || !LocalizationUtility.HasEntry(id))
                 {
                     id = type.ToString();
                 }
@@ -118,9 +118,9 @@ namespace DanielLochner.Assets
             {
                 get
                 {
-                    if (LocalizeUtility.HasEntry(Id))
+                    if (LocalizationUtility.HasEntry(Id))
                     {
-                        return LocalizeUtility.Localize(Id);
+                        return LocalizationUtility.Localize(Id);
                     }
                     else
                     {
