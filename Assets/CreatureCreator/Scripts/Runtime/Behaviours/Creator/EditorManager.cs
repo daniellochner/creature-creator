@@ -482,7 +482,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     bool exists = creaturesUI.Find(x => x.name == savedCreatureName) != null;
                     bool isLoaded = savedCreatureName == Creature.Editor.LoadedCreature;
 
-                    ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, LocalizationUtility.Localize("cc_confirm_overwrite_title"), LocalizationUtility.Localize("cc_confirm-overwrite_message", savedCreatureName));
+                    ConfirmOperation(() => Save(Creature.Constructor.Data), exists && !isLoaded, LocalizationUtility.Localize("cc_confirm-overwrite_title"), LocalizationUtility.Localize("cc_confirm-overwrite_message", savedCreatureName));
                 }
             };
 
