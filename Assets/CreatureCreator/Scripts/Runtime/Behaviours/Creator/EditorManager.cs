@@ -616,9 +616,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 },
                 onCancel: null,
                 pickMode: FileBrowser.PickMode.Files,
-                initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                title: LocalizationUtility.Localize("cc_import"),
-                loadButtonText: LocalizationUtility.Localize("cc_import"));
+                initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            );
         }
         public void TryExport()
         {
@@ -636,9 +635,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         onSuccess: (path) => Export(Creature.Constructor.Data),
                         onCancel: null,
                         pickMode: FileBrowser.PickMode.Folders,
-                        initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                        title: LocalizationUtility.Localize("cc_export"),
-                        saveButtonText: LocalizationUtility.Localize("cc_export"));
+                        initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                    );
                 }
             };
 

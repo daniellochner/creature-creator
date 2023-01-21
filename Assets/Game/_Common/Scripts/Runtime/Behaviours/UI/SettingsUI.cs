@@ -354,9 +354,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     onCancel: null,
                     pickMode: FileBrowser.PickMode.Files,
                     allowMultiSelection: true,
-                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    title: LocalizationUtility.Localize("settings_gameplay_creature-presets_title"),
-                    loadButtonText: LocalizationUtility.Localize("settings_gameplay_creature-presets_load")
+                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 );
             });
 
