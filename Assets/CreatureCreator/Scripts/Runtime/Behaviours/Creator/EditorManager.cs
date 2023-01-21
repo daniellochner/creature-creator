@@ -827,7 +827,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             creatureUI.RemoveButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_remove-creature"), LocalizationUtility.Localize("cc_remove-creature_message"), onYes: delegate
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_remove-creature_title"), LocalizationUtility.Localize("cc_remove-creature_message"), onYes: delegate
                 {
                     creaturesUI.Remove(creatureUI);
                     Destroy(creatureUI.gameObject);
