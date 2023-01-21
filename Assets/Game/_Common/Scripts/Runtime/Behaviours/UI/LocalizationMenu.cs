@@ -2,18 +2,23 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization;
+using System.Collections.Generic;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class LocalizationMenu : MenuSingleton<LocalizationMenu>
     {
         #region Fields
+        [SerializeField] private GameObject disclaimer;
         [SerializeField] private Toggle[] languages;
+        [SerializeField] private List<Settings.LanguageType> completeLanguages;
         #endregion
 
         #region Methods
         private IEnumerator Start()
         {
+            // Toggles
             for (int i = 0; i < languages.Length; i++)
             {
                 int index = i;
@@ -25,6 +30,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 });
             }
+
+            // Disclaimer
+            LocalizationSettings.SelectedLocaleChanged += delegate (Locale locale)
+            {
+                disclaimer.SetActive(!completeLanguages.Contains((Settings.LanguageType)locale.SortOrder));
+            };
 
             yield return LocalizationSettings.InitializationOperation;
 
