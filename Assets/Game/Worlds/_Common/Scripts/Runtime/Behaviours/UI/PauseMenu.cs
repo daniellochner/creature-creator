@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Leave()
         {
-            ConfirmationDialog.Confirm(LocalizationUtility.Localize("game_leave_title"), LocalizationUtility.Localize("game_leave_message"), onYes: delegate
+            ConfirmationDialog.Confirm(LocalizationUtility.Localize("leave_title"), LocalizationUtility.Localize("leave_message"), onYes: delegate
             {
                 if (GameSetup.Instance.IsMultiplayer)
                 {
