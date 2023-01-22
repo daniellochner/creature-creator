@@ -18,6 +18,10 @@ namespace DanielLochner.Assets
         private MinimapIconUI target;
         #endregion
 
+        #region Properties
+        public Menu Minimap => minimap;
+        #endregion
+
         #region Methods
         private void OnDrawGizmosSelected()
         {

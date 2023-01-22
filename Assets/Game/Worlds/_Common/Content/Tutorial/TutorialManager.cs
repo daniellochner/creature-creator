@@ -26,6 +26,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private RectTransform optionsHandleRT;
         [SerializeField] private RectTransform saveButtonRT;
         [SerializeField] private RectTransform creaturesRT;
+        [SerializeField] private RectTransform minimapRT;
+        [SerializeField] private RectTransform closeMinimapButtonRT;
         [SerializeField] private SimpleSideMenu optionsMenu;
         [SerializeField] private TextMeshProUGUI hintText;
         [Space]
@@ -176,9 +178,24 @@ namespace DanielLochner.Assets.CreatureCreator
                 "tutorial_14_message",
                 10f);
 
-            yield return new WaitForSeconds(1f);
+            yield return TutorialItemRoutine(
+                ViewMinimapRoutine(),
+                15,
+                "tutorial_15_title",
+                "tutorial_15_message",
+                10f);
+
+            yield return TutorialItemRoutine(
+                CloseMinimapRoutine(),
+                16,
+                "tutorial_16_title",
+                "tutorial_16_message",
+                20f);
 
             hintText.transform.parent.gameObject.SetActive(false);
+
+            yield return new WaitForSeconds(1f);
+
             InformationDialog.Inform(LocalizationUtility.Localize("tutorial_complete_title"), LocalizationUtility.Localize("tutorial_complete_message"));
             IsComplete = true;
         }
@@ -355,6 +372,22 @@ namespace DanielLochner.Assets.CreatureCreator
             hint.Setup(0, playButtonRT, false);
 
             yield return new WaitUntil(() => EditorManager.Instance.IsPlaying);
+            Destroy(hint.gameObject);
+        }
+        private IEnumerator ViewMinimapRoutine()
+        {
+            MouseHintClick hint = Instantiate(mouseHintClickPrefab, playMenuRT);
+            hint.Setup(0, minimapRT, false);
+
+            yield return new WaitUntil(() => MinimapManager.Instance.Minimap.IsOpen);
+            Destroy(hint.gameObject);
+        }
+        private IEnumerator CloseMinimapRoutine()
+        {
+            MouseHintClick hint = Instantiate(mouseHintClickPrefab, playMenuRT);
+            hint.Setup(0, closeMinimapButtonRT, false);
+
+            yield return new WaitUntil(() => !MinimapManager.Instance.Minimap.IsOpen);
             Destroy(hint.gameObject);
         }
         #endregion
