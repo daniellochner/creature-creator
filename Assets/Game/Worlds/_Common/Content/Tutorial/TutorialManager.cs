@@ -35,7 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private Coroutine tutorialCoroutine;
         private TutorialItem currentTutorialItem;
-        private readonly int TUTORIAL_ITEMS = 14;
         #endregion
 
         #region Properties
@@ -66,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsComplete)
             {
-                hintText.text = LocalizationUtility.Localize(currentTutorialItem.title, currentTutorialItem.messageArgs);
+                hintText.text = $"{currentTutorialItem.number}. {LocalizationUtility.Localize(currentTutorialItem.title, currentTutorialItem.titleArgs)}";
             }
         }
 

@@ -6,7 +6,7 @@ namespace DanielLochner.Assets
     {
         public static bool HasEntry(string entry)
         {
-            return LocalizationSettings.StringDatabase.GetTable("ui-static").GetEntry(entry) != null;
+            return LocalizationSettings.StringDatabase.GetLocalizedString("ui-static", entry) != "<empty>";
         }
 
         public static string Localize(string entry, params object[] arguments)
