@@ -90,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (world.IsPrivate)
                 {
-                    InformationDialog.Inform("Private World", $"The code to your private world is:\n<u><b>{world.Id}</b></u>\n\nPress the button below to copy it to your clipboard. Press {KeybindingsManager.Data.ViewPlayers} to view it again.", "Copy", true, delegate
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_private-world_title"), LocalizationUtility.Localize("cc_private-world_message", world.Id, KeybindingsManager.Data.ViewPlayers), LocalizationUtility.Localize("cc_private-world_okay"), true, delegate
                     {
                         GUIUtility.systemCopyBuffer = world.Id;
                     });
@@ -168,11 +168,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnUncontrolledClientShutdown()
         {
-            InformationDialog.Inform("Disconnected!", "You lost connection.");
+            InformationDialog.Inform(LocalizationUtility.Localize("disconnect_title"), LocalizationUtility.Localize("disconnect_message_you-lost-connection"));
         }
         private void OnUncontrolledHostShutdown()
         {
-            InformationDialog.Inform("Disconnected!", "The host lost connection.");
+            InformationDialog.Inform(LocalizationUtility.Localize("disconnect_title"), LocalizationUtility.Localize("disconnect_message_host-lost-connection"));
         }
         private void OnInactivityKick()
         {
@@ -180,7 +180,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnInactivityWarn(int warnTime)
         {
-            InformationDialog.Inform("Inactivity Warning!", $"You will be kicked due to inactivity in {warnTime} seconds.", "Cancel");
+            InformationDialog.Inform(LocalizationUtility.Localize("inactivity_title"), LocalizationUtility.Localize("inactivity_message"), LocalizationUtility.Localize("inactivity_cancel"));
         }
         #endregion
     }

@@ -18,8 +18,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(Achievement achievement)
         {
-            titleText.text = achievement.name;
-            descriptionText.text = achievement.description;
+            titleText.text = LocalizationUtility.Localize(achievement.name);
+            descriptionText.text = LocalizationUtility.Localize(achievement.description);
 
             ContentSizeFitter[] fitters = GetComponentsInChildren<ContentSizeFitter>(true);
             for (int i = 0; i < fitters.Length; ++i)

@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup(BodyPart bodyPart)
         {
             nameText.text = $"{bodyPart.name} (${bodyPart.Price})";
-            authorText.text = $"By {bodyPart.Author}";
+            authorText.text = $"{bodyPart.Author}";
             complexityText.text = bodyPart.Complexity.ToString();
             healthText.text = bodyPart.Health.ToString();
             weightText.text = $"{bodyPart.Weight}kg";

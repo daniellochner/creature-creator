@@ -17,8 +17,13 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Inform(string title = "Title", string informationMessage = "Message", string okay = "Okay", bool closeable = true, UnityAction onOkay = null)
+        public static void Inform(string title, string informationMessage, string okay = null, bool closeable = true, UnityAction onOkay = null)
         {
+            if (okay == null)
+            {
+                okay = LocalizationUtility.Localize("inform_okay");
+            }
+
             if (Instance.IsOpen)
             {
                 Instance.ignoreButton.onClick.Invoke();

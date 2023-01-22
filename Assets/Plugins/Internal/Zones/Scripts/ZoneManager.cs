@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
             zone.onEnter?.Invoke();
             currentZone = zone;
 
-            NotificationsManager.Notify($"You entered <b>{zone.name}</b>.");
+            NotificationsManager.Notify(LocalizationUtility.Localize("zone_enter", zone.name));
         }
         public void ExitCurrentZone(Vector3 exitPosition)
         {

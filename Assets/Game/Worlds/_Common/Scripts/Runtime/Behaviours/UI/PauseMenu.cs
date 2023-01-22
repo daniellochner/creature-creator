@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Leave()
         {
-            ConfirmationDialog.Confirm("Leave?", "Are you sure you want to leave the current game, and return to the main menu?", onYes: delegate
+            ConfirmationDialog.Confirm(LocalizationUtility.Localize("leave_title"), LocalizationUtility.Localize("leave_message"), onYes: delegate
             {
                 if (GameSetup.Instance.IsMultiplayer)
                 {

@@ -29,10 +29,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            mapOS.SetupUsingEnum<Map>();
+            mapOS.SetupUsingEnum<Map>(false);
             mapOS.Select(Map.Island, false);
 
-            modeOS.SetupUsingEnum<Mode>();
+            modeOS.SetupUsingEnum<Mode>(true);
             modeOS.OnSelected.AddListener(delegate (int option)
             {
                 unlimitedToggle.transform.parent.parent.gameObject.SetActive(option == 1); // only show unlimited toggle for creative mode

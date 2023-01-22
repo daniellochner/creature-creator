@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Ability")]
         [SerializeField] private int level;
+        [SerializeField] private new string name;
         [SerializeField] private int priority;
         [SerializeField] private Keybind performKeybind;
         [SerializeField] private float cooldown;
@@ -18,6 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public int Level => level;
+        public string Name => name;
         public int Priority => priority;
         public Keybind PerformKeybind
         {
@@ -73,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override string ToString()
         {
-            return name;
+            return LocalizationUtility.Localize(Name);
         }
         public int CompareTo(Ability other)
         {

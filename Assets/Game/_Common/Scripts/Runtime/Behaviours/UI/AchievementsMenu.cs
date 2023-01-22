@@ -11,6 +11,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GridLayoutGroup achievementsGrid;
         #endregion
 
+        #region Properties
+        private Database Achievements => DatabaseManager.GetDatabase("Achievements");
+        #endregion
+
         #region Methods
         private void Start()
         {
@@ -19,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
-            foreach (var achievement in DatabaseManager.GetDatabase("Achievements").Objects)
+            foreach (var achievement in Achievements.Objects)
             {
                 AchievementUI achievementUI = Instantiate(achievementUIPrefab, achievementsGrid.transform);
                 achievementUI.Setup(achievement.Value as Achievement);
@@ -32,7 +36,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 achievementUI.canvasGroup.alpha = StatsManager.Instance.GetAchievement(achievementUI.name) ? 1f : 0.2f;
             }
-            titleText.text = $"Unlocked Achievements ({StatsManager.Instance.NumAchievementsUnlocked}/{DatabaseManager.GetDatabase("Achievements").Objects.Count})";
+            //titleText.text = $"Unlocked Achievements ({StatsManager.Instance.NumAchievementsUnlocked}/{Achievements.Objects.Count})";
+            titleText.SetArguments(StatsManager.Instance.NumAchievementsUnlocked, Achievements.Objects.Count);
         }
 
         public override void Open(bool instant = false)

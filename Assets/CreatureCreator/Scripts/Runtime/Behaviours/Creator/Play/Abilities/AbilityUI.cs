@@ -1,9 +1,12 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -39,6 +42,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateUI();
             }
         }
+        private void OnDestroy()
+        {
+            LocalizationSettings.Instance.OnSelectedLocaleChanged -= UpdateName;
+        }
 
         public void Setup(Ability ability)
         {
@@ -50,15 +57,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 ability.OnTryPerform();
             });
 
-            nameText.text = ability.name;
+            LocalizationSettings.Instance.OnSelectedLocaleChanged += UpdateName;
+            UpdateName();
+
             cooldownImage.fillAmount = 0f;
         }
+
         public void UpdateUI()
         {
             performKeyText.text = $"[{ability.PerformKeybind.ToString()}]";
             cooldownImage.fillAmount = ability.CooldownTimeLeft / ability.Cooldown;
 
             IsInteractable = (ability.CooldownTimeLeft <= 0f) && ability.CanPerform;
+        }
+        private void UpdateName(Locale locale = default)
+        {
+            nameText.text = LocalizationUtility.Localize(ability.Name);
         }
         #endregion
     }

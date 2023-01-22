@@ -27,7 +27,8 @@ namespace DanielLochner.Assets.CreatureCreator
             get => unlockedBodyParts;
             set
             {
-                bodyPartsText.text = $"Body Parts: {unlockedBodyParts = value}/{bodyParts.Length}";
+                unlockedBodyParts = value;
+                bodyPartsText.SetArguments(unlockedBodyParts, bodyParts.Length);
                 TryAdvance();
             }
         }
@@ -36,7 +37,8 @@ namespace DanielLochner.Assets.CreatureCreator
             get => unlockedPatterns;
             set
             {
-                patternsText.text = $"Patterns: {unlockedPatterns = value}/{patterns.Length}";
+                unlockedPatterns = value;
+                patternsText.SetArguments(unlockedPatterns, patterns.Length);
                 TryAdvance();
             }
         }
@@ -45,7 +47,8 @@ namespace DanielLochner.Assets.CreatureCreator
             get => completedQuests;
             set
             {
-                questsText.text = $"Quests: {completedQuests = value}/{quests.Length}";
+                completedQuests = value;
+                questsText.SetArguments(completedQuests, quests.Length);
                 TryAdvance();
             }
         }
@@ -112,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (allowAdvance && CanAdvance)
             {
-                ConfirmationDialog.Confirm("Ready To Advance?", "You've unlocked all the parts and patterns, and completed all quests on this map! When you're ready, head back to the main menu and create a new world on a different map.", "Let's Go!", "Not Yet...", onYes: delegate
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onYes: delegate
                 {
                     PauseMenu.Instance.Leave();
                 });

@@ -83,7 +83,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Resolution resolution = Screen.resolutions[i];
                 resolutionOS.Options.Add(new OptionSelector.Option()
                 {
-                    Name = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
+                    Id = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
                 });
 
                 Resolution current = SettingsManager.Data.Resolution;
@@ -108,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Preset
-            presetOS.SetupUsingEnum<PresetType>();
+            presetOS.SetupUsingEnum<PresetType>(true);
             presetOS.Select(PresetType.Custom, false);
             presetOS.OnSelected.AddListener(delegate (int option)
             {
@@ -183,7 +183,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Creature Mesh Quality
-            creatureMeshQualityOS.SetupUsingEnum<CreatureMeshQualityType>();
+            creatureMeshQualityOS.SetupUsingEnum<CreatureMeshQualityType>(true);
             creatureMeshQualityOS.Select(SettingsManager.Data.CreatureMeshQuality, false);
             creatureMeshQualityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -191,7 +191,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Shadow Quality
-            shadowQualityOS.SetupUsingEnum<ShadowQualityType>();
+            shadowQualityOS.SetupUsingEnum<ShadowQualityType>(true);
             shadowQualityOS.Select(SettingsManager.Data.ShadowQuality, false);
             shadowQualityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -199,7 +199,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Texture Quality
-            textureQualityOS.SetupUsingEnum<TextureQualityType>();
+            textureQualityOS.SetupUsingEnum<TextureQualityType>(true);
             textureQualityOS.Select(SettingsManager.Data.TextureQuality, false);
             textureQualityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -207,7 +207,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Ambient Occlusion
-            ambientOcclusionOS.SetupUsingEnum<AmbientOcclusionType>();
+            ambientOcclusionOS.SetupUsingEnum<AmbientOcclusionType>(true);
             ambientOcclusionOS.Select(SettingsManager.Data.AmbientOcclusion, false);
             ambientOcclusionOS.OnSelected.AddListener(delegate (int option)
             {
@@ -215,7 +215,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Antialiasing
-            antialiasingOS.SetupUsingEnum<AntialiasingType>();
+            antialiasingOS.SetupUsingEnum<AntialiasingType>(true);
             antialiasingOS.Select(SettingsManager.Data.Antialiasing, false);
             antialiasingOS.OnSelected.AddListener(delegate (int option)
             {
@@ -223,7 +223,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Screen Space Reflections
-            screenSpaceReflectionsOS.SetupUsingEnum<ScreenSpaceReflectionsType>();
+            screenSpaceReflectionsOS.SetupUsingEnum<ScreenSpaceReflectionsType>(true);
             screenSpaceReflectionsOS.Select(SettingsManager.Data.ScreenSpaceReflections, false);
             screenSpaceReflectionsOS.OnSelected.AddListener(delegate (int option)
             {
@@ -231,7 +231,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Foliage
-            foliageOS.SetupUsingEnum<FoliageType>();
+            foliageOS.SetupUsingEnum<FoliageType>(true);
             foliageOS.Select(SettingsManager.Data.Foliage, false);
             foliageOS.OnSelected.AddListener(delegate (int option)
             {
@@ -297,7 +297,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Background Music
-            inGameMusicOS.SetupUsingEnum<InGameMusicType>();
+            inGameMusicOS.SetupUsingEnum<InGameMusicType>(false);
             inGameMusicOS.OnSelected.AddListener(delegate (int option)
             {
                 InGameMusicType type = (InGameMusicType)option;
@@ -335,7 +335,7 @@ namespace DanielLochner.Assets.CreatureCreator
             
             // Creature Preset(s)
             int presets = SettingsManager.Data.CreaturePresets.Count;
-            creaturePresetsText.text = (presets == 0) ? "None" : $"{presets} presets";
+            creaturePresetsText.text = presets.ToString();
             creaturePresetsButton.onClick.AddListener(delegate
             {
                 FileBrowser.ShowLoadDialog(
@@ -354,9 +354,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     onCancel: null,
                     pickMode: FileBrowser.PickMode.Files,
                     allowMultiSelection: true,
-                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    title: "Select Creature Preset(s)",
-                    loadButtonText: "Select"
+                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 );
             });
 
@@ -422,7 +420,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Reset Progress
             resetProgressButton.onClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm("Reset Progress?", "This will reset all your unlocked body parts and patterns, as well as your completed quests and cash. It will <u>not</u> remove your creatures or achievements.", onYes: ResetProgress);
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("settings_reset-progress_title"), LocalizationUtility.Localize("settings_reset-progress_message"), onYes: ResetProgress);
             });
             #endregion
 

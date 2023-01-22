@@ -49,7 +49,7 @@ namespace DanielLochner.Assets
         {
             if (CanSend && Input.GetKey(KeyCode.T))
             {
-                InputDialog.Input("Send Message", onSubmit: SendMessage, maxCharacters: characterLimit);
+                InputDialog.Input(LocalizationUtility.Localize("send_message_title"), onSubmit: SendMessage, maxCharacters: characterLimit);
             }
             cooldownTimeLeft -= Time.deltaTime;
         }
@@ -64,12 +64,12 @@ namespace DanielLochner.Assets
             }
             if (message.Length > characterLimit)
             {
-                InformationDialog.Inform("Too Long", $"Messages cannot be longer than {characterLimit} characters!");
+                InformationDialog.Inform(LocalizationUtility.Localize("sent_message_too_long_title"), LocalizationUtility.Localize("sent_message_too_long_message", characterLimit));
                 return;
             }
             if (checkForProfanity && filter.ContainsProfanity(message))
             {
-                InformationDialog.Inform("Profanity Detected", "Please do not send messages that contain profanity!");
+                InformationDialog.Inform(LocalizationUtility.Localize("profanity_detected_title"), LocalizationUtility.Localize("profanity_detected_message"));
                 return;
             }
             cooldownTimeLeft = sendCooldown;
