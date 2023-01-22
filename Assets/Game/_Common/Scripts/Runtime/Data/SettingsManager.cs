@@ -489,10 +489,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.Map = map;
         }
-        public void SetLanguage(LanguageType type)
+        public void SetLocale(string locale)
         {
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[(int)type];
-            Data.Language = type;
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(locale);
+            Data.Locale = locale;
         }
         #endregion
 

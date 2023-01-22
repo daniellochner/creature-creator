@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization;
 using System.Collections.Generic;
@@ -10,97 +9,93 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LocalizationMenu : MenuSingleton<LocalizationMenu>
     {
         #region Fields
+        [SerializeField] private LanguageUI languagePrefab;
+        [SerializeField] private RectTransform languagesRT;
+        [SerializeField] private RectTransform unofficialLanguagesRT;
         [SerializeField] private GameObject disclaimer;
-        [SerializeField] private Toggle[] languages;
-        [SerializeField] private List<Settings.LanguageType> completeLanguages;
+        [SerializeField] private List<string> officialLanguages;
         #endregion
 
         #region Methods
         private IEnumerator Start()
         {
-            // Toggles
-            for (int i = 0; i < languages.Length; i++)
-            {
-                int index = i;
-                languages[i].onValueChanged.AddListener(delegate (bool isOn)
-                {
-                    if (isOn)
-                    {
-                        SettingsManager.Instance.SetLanguage((Settings.LanguageType)index);
-                    }
-                });
-            }
-
-            // Disclaimer
             LocalizationSettings.SelectedLocaleChanged += delegate (Locale locale)
             {
-                disclaimer.SetActive(!completeLanguages.Contains((Settings.LanguageType)locale.SortOrder));
+                disclaimer.SetActive(!officialLanguages.Contains(locale.Identifier.Code));
             };
 
             yield return LocalizationSettings.InitializationOperation;
 
             SetupLanguage();
+
+            foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
+            {
+                LanguageUI languageUI = Instantiate(languagePrefab, languagesRT);
+                languageUI.Setup(locale);
+
+                if (officialLanguages.Contains(locale.Identifier.Code))
+                {
+                    languageUI.transform.SetSiblingIndex(unofficialLanguagesRT.GetSiblingIndex());
+                }
+                else
+                {
+                    unofficialLanguagesRT.gameObject.SetActive(true);
+                    languageUI.transform.SetAsLastSibling();
+                }
+            }
         }
 
         private void SetupLanguage()
         {
             if (PlayerPrefs.GetInt("AUTO_DETECT_LANG") == 0)
             {
+                ILocalesProvider locales = LocalizationSettings.AvailableLocales;
+
+                Locale locale = locales.GetLocale("en");
                 switch (Application.systemLanguage)
                 {
                     case SystemLanguage.Chinese:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.ChineseSimplified);
+                        locale = locales.GetLocale("zh-hans");
                         break;
                     case SystemLanguage.Russian:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Russian);
+                        locale = locales.GetLocale("ru");
                         break;
                     case SystemLanguage.Spanish:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Spanish);
+                        locale = locales.GetLocale("es");
                         break;
                     case SystemLanguage.Portuguese:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Portuguese);
+                        locale = locales.GetLocale("pt");
                         break;
                     case SystemLanguage.German:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.German);
+                        locale = locales.GetLocale("de");
                         break;
                     case SystemLanguage.French:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.French);
+                        locale = locales.GetLocale("fr");
                         break;
                     case SystemLanguage.Japanese:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Japanese);
+                        locale = locales.GetLocale("ja");
                         break;
                     case SystemLanguage.Polish:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Polish);
-                        break;
-                    case SystemLanguage.Turkish:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Turkish);
+                        locale = locales.GetLocale("pl");
                         break;
                     case SystemLanguage.Korean:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Korean);
+                        locale = locales.GetLocale("ko");
                         break;
                     case SystemLanguage.Thai:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Thai);
+                        locale = locales.GetLocale("th");
                         break;
                     case SystemLanguage.Italian:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Italian);
-                        break;
-                    case SystemLanguage.Czech:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Czech);
-                        break;
-                    case SystemLanguage.Vietnamese:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.Vietnamese);
-                        break;
-                    default:
-                        SettingsManager.Instance.SetLanguage(Settings.LanguageType.English);
+                        locale = locales.GetLocale("it");
                         break;
                 }
+                SettingsManager.Instance.SetLocale(locale.Identifier.Code);
+
                 PlayerPrefs.SetInt("AUTO_DETECT_LANG", 1);
             }
             else
             {
-                SettingsManager.Instance.SetLanguage(SettingsManager.Data.Language);
+                SettingsManager.Instance.SetLocale(SettingsManager.Data.Locale);
             }
-            languages[(int)SettingsManager.Data.Language].isOn = true;
         }
         #endregion
     }

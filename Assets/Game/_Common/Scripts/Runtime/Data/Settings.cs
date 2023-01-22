@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int exportPrecision;
         [SerializeField] private List<string> hiddenBodyParts;
         [SerializeField] private List<string> hiddenPatterns;
-        [SerializeField] private LanguageType language;
+        [SerializeField] private string locale;
         [SerializeField] private bool cameraShake;
         [SerializeField] private bool debugMode;
         [SerializeField] private bool previewFeatures;
@@ -187,10 +187,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => hiddenPatterns;
         }
-        public LanguageType Language
+        public string Locale
         {
-            get => language;
-            set => language = value;
+            get => locale;
+            set => locale = value;
         }
         public bool CameraShake
         {
@@ -361,27 +361,6 @@ namespace DanielLochner.Assets.CreatureCreator
             None,
             WistfulHarp,
             Being
-        }
-        public enum LanguageType
-        {
-            English,
-            ChineseSimplified,
-            ChineseTraditional,
-            Russian,
-            Spanish,
-            Portuguese,
-            German,
-            French,
-            Japanese,
-            Polish,
-            Turkish,
-            Korean,
-            Thai,
-            Italian,
-            Czech,
-            Dutch,
-            Vietnamese,
-            Afrikaans
         }
         #endregion
     }
