@@ -28,6 +28,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public HoverUI HoverUI => hoverUI;
         public ClickUI ClickUI => clickUI;
         public CanvasGroup CanvasGroup => canvasGroup;
+
+        public BodyPart BodyPart => bodyPart;
         #endregion
 
         #region Methods

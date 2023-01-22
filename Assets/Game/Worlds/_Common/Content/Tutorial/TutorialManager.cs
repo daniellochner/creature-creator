@@ -205,7 +205,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator AttachBodyPartRoutine()
         {
-            BodyPartUI bodyPartUI = bodyPartsRT.GetComponentInChildren<BodyPartUI>();
+            BodyPartUI bodyPartUI = System.Array.Find(bodyPartsRT.GetComponentsInChildren<BodyPartUI>(), x => x.BodyPart is Eye);
             MouseHintDrag hint = Instantiate(mouseHintDragPrefab, buildMenuRT);
             hint.Setup(0, bodyPartUI.transform, Player.Instance.Constructor.Body, false, true, 1f, 1f, 1f);
 
