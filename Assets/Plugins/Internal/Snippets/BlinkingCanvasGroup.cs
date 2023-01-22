@@ -3,14 +3,14 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
-    public class BlinkingGraphic : MonoBehaviour
+    public class BlinkingCanvasGroup : MonoBehaviour
     {
         #region Fields
         [SerializeField] private MinMax range = new MinMax(0, 1);
         [SerializeField] private float speed = 1;
         [SerializeField] private bool isGlobal = false;
 
-        private Graphic graphic;
+        private CanvasGroup canvasGroup;
         private float timeElapsed;
         #endregion
 
@@ -21,7 +21,7 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            graphic = GetComponent<Graphic>();
+            canvasGroup = GetComponent<CanvasGroup>();
         }
         private void Update()
         {
@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
                 float x = isGlobal ? Time.time : timeElapsed;
                 float a = (range.max - range.min) * 0.5f * (Mathf.Cos(Mathf.PI * x) + 1f) + range.min;
 
-                graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, a);
+                canvasGroup.alpha = a;
                 timeElapsed += Time.deltaTime * speed;
             }
         }
