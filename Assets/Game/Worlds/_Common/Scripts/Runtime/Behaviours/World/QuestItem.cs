@@ -20,6 +20,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             startPosition = transform.position;
             startRotation = transform.rotation;
+
+            if (WorldManager.Instance.World.CreativeMode)
+            {
+                NetworkObject.Despawn();
+            }
         }
         private void OnCollisionEnter(Collision collision)
         {
