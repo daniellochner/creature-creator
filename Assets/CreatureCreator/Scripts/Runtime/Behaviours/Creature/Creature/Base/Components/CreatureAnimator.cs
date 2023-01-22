@@ -317,13 +317,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         float a = Vector3.ProjectOnPlane(mostExtendedLeg.transform.position - mostExtendedLeg.LegConstructor.Extremity.position, transform.up).magnitude;
                         float c = targetLength;
-                        float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
 
-                        float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
-                        float targetHeight = b;
+                        if (c > a)
+                        {
+                            float b = Mathf.Sqrt(Mathf.Pow(c, 2) - Mathf.Pow(a, 2));
 
-                        offset = Vector3.up * (targetHeight - currentHeight);
-                        function = EasingFunction.EaseOutExpo;
+                            float currentHeight = transform.InverseTransformPoint(mostExtendedLeg.transform.position).y;
+                            float targetHeight = b;
+
+                            offset = Vector3.up * (targetHeight - currentHeight);
+                            function = EasingFunction.EaseOutExpo;
+                        }
                     }
                 }
 
