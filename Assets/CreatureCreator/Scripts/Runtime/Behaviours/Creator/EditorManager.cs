@@ -1069,6 +1069,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
                 creatureUI.gameObject.SetActive(!filtered);
+
+                if (filtered)
+                {
+                    creatureUI.SelectToggle.SetIsOnWithoutNotify(false);
+                }
             }
         }
 
