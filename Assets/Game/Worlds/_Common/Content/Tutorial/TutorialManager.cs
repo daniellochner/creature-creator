@@ -245,7 +245,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Transform bone = Player.Instance.Constructor.Bones[i];
                 hint.Setup(1, bone, true);
 
-                yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 15f));
+                yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 10f));
 
                 Destroy(hint.gameObject);
             }
