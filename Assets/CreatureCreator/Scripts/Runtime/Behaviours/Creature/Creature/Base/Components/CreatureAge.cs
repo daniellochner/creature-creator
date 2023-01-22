@@ -56,7 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateAge(int oldAge, int newAge)
         {
-            Age = newAge;
+            //Age = newAge;
             OnAgeChanged?.Invoke(Age);
         }
 

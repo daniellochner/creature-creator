@@ -63,7 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateHunger(float oldHunger, float newHunger)
         {
-            Hunger = newHunger;
+            //Hunger = newHunger;
             OnHungerChanged?.Invoke(Hunger);
 
             if (newHunger >= 1f)
