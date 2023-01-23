@@ -2,8 +2,8 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public enum Map
     {
-        Farm,
         Island,
+        Farm,
         Sandbox
     }
 }

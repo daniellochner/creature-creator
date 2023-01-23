@@ -39,7 +39,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Join")]
         [SerializeField] private WorldUI worldUIPrefab;
-        [SerializeField] private RectTransform joinOffsetRT;
         [SerializeField] private RectTransform worldsRT;
         [SerializeField] private GameObject noneGO;
         [SerializeField] private GameObject refreshGO;
