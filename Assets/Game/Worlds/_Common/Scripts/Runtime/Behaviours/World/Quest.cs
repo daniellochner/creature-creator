@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -11,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private TextMeshPro questText;
+        [SerializeField] private LookAtConstraint questLAS;
         [SerializeField] private MinimapIcon minimapIcon;
         [SerializeField] private float disappearTime;
         [SerializeField] private QuestType type;
@@ -67,12 +69,15 @@ namespace DanielLochner.Assets.CreatureCreator
             region = GetComponent<TrackRegion>();
             source = GetComponent<AudioSource>();
         }
-        private void Start()
+        private IEnumerator Start()
         {
             if (!WorldManager.Instance.World.CreativeMode)
             {
                 UpdateInfo();
                 minimapIcon.enabled = !IsCompleted;
+
+                yield return new WaitUntil(() => Player.Instance.IsSetup);
+                questLAS.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
             }
             else
             {
@@ -88,7 +93,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Player/Local"))
             {
                 UpdateInfo();
-                questText.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
                 questText.gameObject.SetActive(true);
             }
         }
