@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Update()
         {
-            if (ability != null)
+            if (ability != null && Player.Instance)
             {
                 UpdateUI();
             }

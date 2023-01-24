@@ -16,8 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioSource victoryAS;
         [SerializeField] private Transform[] rounds;
 
-        private NetworkVariable<int> round = new NetworkVariable<int>(-1);
-        private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
+        [SerializeField] private NetworkVariable<int> round = new NetworkVariable<int>(-1);
+        [SerializeField] private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
         #endregion
 
         #region Properties
@@ -25,20 +25,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        private void Start()
         {
             if (IsClient)
             {
                 round.OnValueChanged += OnRoundChanged;
+                round.SetDirty(true);
+
                 remaining.OnValueChanged += OnRemainingChanged;
-
-                yield return null;
-
-                if (InBattle)
-                {
-                    OnRoundChanged(default, round.Value);
-                    OnRemainingChanged(default, remaining.Value);
-                }
+                remaining.SetDirty(true);
             }
         }
 
@@ -56,7 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator BattleRoutine()
         {
-            round.Value = 0;
+            round.Value = remaining.Value = 0;
 
             for (int i = 0; i < rounds.Length; ++i)
             {
