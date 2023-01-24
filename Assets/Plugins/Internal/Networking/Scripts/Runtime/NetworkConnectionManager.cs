@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
         }
         public void ForceDisconnect(string reason)
         {
-            Leave(() => InformationDialog.Inform(LocalizationUtility.Localize("inform_disconnected_title"), reason));
+            Leave(() => InformationDialog.Inform(LocalizationUtility.Localize("disconnect_title"), reason));
         }
 
         public void Leave(Action onLeave = null)
