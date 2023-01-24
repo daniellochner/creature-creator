@@ -4,16 +4,30 @@ namespace DanielLochner.Assets
 {
     public class WaitUntilSetup : CustomYieldInstruction
     {
-        private ISetupable setupable;
+        private ISetupable[] setupable;
 
-        public WaitUntilSetup(ISetupable setupable)
+        public WaitUntilSetup(params ISetupable[] setupable)
         {
             this.setupable = setupable;
         }
 
         public override bool keepWaiting
         {
-            get => setupable == null || !setupable.IsSetup;
+            get
+            {
+                if (setupable == null || setupable.Length == 0)
+                {
+                    return true;
+                }
+                foreach (ISetupable s in setupable)
+                {
+                    if (!s.IsSetup)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
     }
 }
