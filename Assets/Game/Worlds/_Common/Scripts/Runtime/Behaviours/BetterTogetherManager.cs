@@ -7,6 +7,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         private IEnumerator Start()
         {
+            yield return new WaitUntilSetup(GameSetup.Instance);
+
             if (GameSetup.Instance.IsMultiplayer)
             {
                 yield return new WaitUntil(() => NetworkPlayersMenu.Instance.NumPlayers > 1);

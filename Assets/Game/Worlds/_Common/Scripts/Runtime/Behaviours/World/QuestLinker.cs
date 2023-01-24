@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator Start()
         {
+            yield return new WaitUntilSetup(GameSetup.Instance);
+
             quest.gameObject.SetActive(false);
 
             SpawnedNPC npc = null;
