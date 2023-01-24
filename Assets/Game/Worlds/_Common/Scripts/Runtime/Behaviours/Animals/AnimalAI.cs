@@ -92,9 +92,15 @@ namespace DanielLochner.Assets.CreatureCreator
         
         public void UpdateIgnored()
         {
+            StartCoroutine(UpdateIgnoredRoutine());
+        }
+        private IEnumerator UpdateIgnoredRoutine()
+        {
             List<string> ignored = new List<string>();
             foreach (var client in NetworkManager.Singleton.ConnectedClients)
             {
+                yield return new WaitUntil(() => client.Value.PlayerObject != null);
+
                 CreaturePlayer player = client.Value.PlayerObject.GetComponent<CreaturePlayer>();
                 if (Creature.Comparer.CompareTo(player.Constructor))
                 {
