@@ -108,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Preset
-            presetOS.SetupUsingEnum<PresetType>(true);
+            presetOS.SetupUsingEnum<PresetType>();
             presetOS.Select(PresetType.Custom, false);
             presetOS.OnSelected.AddListener(delegate (int option)
             {
@@ -183,7 +183,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Creature Mesh Quality
-            creatureMeshQualityOS.SetupUsingEnum<CreatureMeshQualityType>(true);
+            creatureMeshQualityOS.SetupUsingEnum<CreatureMeshQualityType>();
             creatureMeshQualityOS.Select(SettingsManager.Data.CreatureMeshQuality, false);
             creatureMeshQualityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -191,7 +191,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Shadow Quality
-            shadowQualityOS.SetupUsingEnum<ShadowQualityType>(true);
+            shadowQualityOS.SetupUsingEnum<ShadowQualityType>();
             shadowQualityOS.Select(SettingsManager.Data.ShadowQuality, false);
             shadowQualityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -199,7 +199,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Texture Quality
-            textureQualityOS.SetupUsingEnum<TextureQualityType>(true);
+            textureQualityOS.SetupUsingEnum<TextureQualityType>();
             textureQualityOS.Select(SettingsManager.Data.TextureQuality, false);
             textureQualityOS.OnSelected.AddListener(delegate (int option)
             {
@@ -207,7 +207,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Ambient Occlusion
-            ambientOcclusionOS.SetupUsingEnum<AmbientOcclusionType>(true);
+            ambientOcclusionOS.SetupUsingEnum<AmbientOcclusionType>();
             ambientOcclusionOS.Select(SettingsManager.Data.AmbientOcclusion, false);
             ambientOcclusionOS.OnSelected.AddListener(delegate (int option)
             {
@@ -215,7 +215,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Antialiasing
-            antialiasingOS.SetupUsingEnum<AntialiasingType>(true);
+            antialiasingOS.SetupUsingEnum<AntialiasingType>();
             antialiasingOS.Select(SettingsManager.Data.Antialiasing, false);
             antialiasingOS.OnSelected.AddListener(delegate (int option)
             {
@@ -223,7 +223,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Screen Space Reflections
-            screenSpaceReflectionsOS.SetupUsingEnum<ScreenSpaceReflectionsType>(true);
+            screenSpaceReflectionsOS.SetupUsingEnum<ScreenSpaceReflectionsType>();
             screenSpaceReflectionsOS.Select(SettingsManager.Data.ScreenSpaceReflections, false);
             screenSpaceReflectionsOS.OnSelected.AddListener(delegate (int option)
             {
@@ -231,7 +231,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Foliage
-            foliageOS.SetupUsingEnum<FoliageType>(true);
+            foliageOS.SetupUsingEnum<FoliageType>();
             foliageOS.Select(SettingsManager.Data.Foliage, false);
             foliageOS.OnSelected.AddListener(delegate (int option)
             {
@@ -297,7 +297,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Background Music
-            inGameMusicOS.SetupUsingEnum<InGameMusicType>(true);
+            inGameMusicOS.SetupUsingEnum<InGameMusicType>();
             inGameMusicOS.OnSelected.AddListener(delegate (int option)
             {
                 InGameMusicType type = (InGameMusicType)option;

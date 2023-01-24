@@ -43,12 +43,12 @@ namespace DanielLochner.Assets
             LocalizationSettings.Instance.OnSelectedLocaleChanged -= UpdateName;
         }
 
-        public void SetupUsingEnum<T>(bool localize)
+        public void SetupUsingEnum<T>()
         {
             foreach (var type in Enum.GetValues(typeof(T)))
             {
                 string id = $"option_{typeof(T).Name}_{type.ToString()}".ToLower();
-                if (!localize || !LocalizationUtility.HasEntry(id))
+                if (!LocalizationUtility.HasEntry(id))
                 {
                     id = type.ToString();
                 }
