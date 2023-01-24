@@ -13,7 +13,7 @@ namespace DanielLochner.Assets
 
         public override bool keepWaiting
         {
-            get => !setupable.IsSetup;
+            get => setupable == null || !setupable.IsSetup;
         }
     }
 }
