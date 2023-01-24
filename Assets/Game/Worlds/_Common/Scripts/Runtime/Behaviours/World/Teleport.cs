@@ -10,14 +10,14 @@ using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Warp : MonoBehaviour
+    public class Teleport : MonoBehaviour
     {
         #region Fields
         [SerializeField] private string targetScene;
-        [SerializeField] private Keybind leaveKeybind;
+        [SerializeField] private Keybind keybind;
         [Space]
         [SerializeField] private TextMeshPro teleportText;
-        [SerializeField] private LookAtConstraint teleportLAS;
+        [SerializeField] private LookAtConstraint teleportConstraint;
 
         private TrackRegion region;
         #endregion
@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntil(() => SetupUtility.IsSetup(GameSetup.Instance, Player.Instance));
 
-            teleportLAS.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+            teleportConstraint.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
         }
 
         private void OnTriggerEnter(Collider other)
@@ -61,7 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateInfo();
 
-                if (!IsChanging && CanChange && InputUtility.GetKeyDown(leaveKeybind))
+                if (!IsChanging && CanChange && InputUtility.GetKeyDown(keybind))
                 {
                     ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", targetScene), LocalizationUtility.Localize("teleport_message", targetScene), onYes: delegate
                     {
@@ -109,7 +109,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             if (CanChange)
             {
-                text += $"<size=1>[{leaveKeybind.ToString()}]</size>";
+                text += $"<size=1>[{keybind.ToString()}]</size>";
             }
             teleportText.text = text;
         }

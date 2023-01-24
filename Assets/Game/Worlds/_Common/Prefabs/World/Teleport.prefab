@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1235528997531529341}
   - component: {fileID: 4619811412301984777}
   m_Layer: 11
-  m_Name: Warp
+  m_Name: Teleport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,11 +61,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScene: 
-  leaveKeybind:
-    key: 13
-    modifierKey: 306
+  keybind:
+    key: 101
+    modifierKey: 0
   teleportText: {fileID: 2748414457130996291}
-  teleportLAS: {fileID: 287135382125016555}
+  teleportConstraint: {fileID: 287135382125016555}
 --- !u!114 &4619811412301984777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
 
     0/0
 
-    [Enter]'
+    [E]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
