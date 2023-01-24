@@ -43,7 +43,7 @@ namespace DanielLochner.Assets
         }
         private void Update()
         {
-            if (track)
+            if (minimapIconUI != null && track)
             {
                 MinimapManager.Instance.Track(this, minimapIconUI, lockPos, lockRot);
             }
