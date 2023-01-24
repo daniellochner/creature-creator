@@ -43,7 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             PlayerEffects.PlaySound(launchSounds);
 
-            projectile.SpawnWithOwnership(OwnerClientId);
+            projectile.SpawnWithOwnership(OwnerClientId, true);
         }
         #endregion
     }

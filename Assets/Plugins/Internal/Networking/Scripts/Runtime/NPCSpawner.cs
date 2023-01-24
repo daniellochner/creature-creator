@@ -25,7 +25,7 @@ namespace DanielLochner.Assets
         public void Spawn()
         {
             SpawnedNPC = Instantiate(npcPrefab, transform.position, transform.rotation);
-            SpawnedNPC.Spawn();
+            SpawnedNPC.Spawn(true);
             Setup(SpawnedNPC);
         }
         public virtual void Setup(NetworkObject npc)

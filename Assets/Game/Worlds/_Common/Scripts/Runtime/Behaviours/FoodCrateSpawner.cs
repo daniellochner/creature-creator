@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 TimerUtility.OnTimer(ref spawnTimeLeft, spawnCooldown.Random, Time.deltaTime, delegate
                 {
                     foodCrate = Instantiate(foodCratePrefabs[Random.Range(0, foodCratePrefabs.Length)], transform.position, transform.rotation);
-                    foodCrate.Spawn();
+                    foodCrate.Spawn(true);
                 });
             }
         }
