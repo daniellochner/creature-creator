@@ -64,6 +64,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!WorldManager.Instance.World.CreativeMode)
             {
+                progress.SetActive(true);
+
                 // Body Parts
                 UnlockedBodyParts = 0;
                 foreach (UnlockableBodyPart bodyPart in bodyParts)
@@ -106,7 +108,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                progress.SetActive(true);
                 allowAdvance = true;
             }
         }
