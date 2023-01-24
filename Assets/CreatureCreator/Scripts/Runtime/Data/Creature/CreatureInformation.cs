@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public string Name
         {
             get => name;
-            set => name = string.IsNullOrEmpty(value) ? "Unnamed" : value;
+            set => name = string.IsNullOrEmpty(value) ? LocalizationUtility.Localize("creature-unnamed") : value;
         }
         public Texture2D Photo
         {

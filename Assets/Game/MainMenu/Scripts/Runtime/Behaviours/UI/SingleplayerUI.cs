@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            mapOS.SetupUsingEnum<Map>(false);
+            mapOS.SetupUsingEnum<Map>(true);
             mapOS.Select(Map.Island, false);
 
             modeOS.SetupUsingEnum<Mode>(true);

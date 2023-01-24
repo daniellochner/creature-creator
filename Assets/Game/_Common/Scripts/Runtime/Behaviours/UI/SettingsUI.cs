@@ -297,7 +297,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Background Music
-            inGameMusicOS.SetupUsingEnum<InGameMusicType>(false);
+            inGameMusicOS.SetupUsingEnum<InGameMusicType>(true);
             inGameMusicOS.OnSelected.AddListener(delegate (int option)
             {
                 InGameMusicType type = (InGameMusicType)option;

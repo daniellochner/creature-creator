@@ -63,7 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (!IsChanging && CanChange && InputUtility.GetKeyDown(leaveKeybind))
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("change-scene_title", targetScene), LocalizationUtility.Localize("change-scene_message", targetScene), onYes: delegate
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", targetScene), LocalizationUtility.Localize("teleport_message", targetScene), onYes: delegate
                     {
                         ChangeScene();
                     });

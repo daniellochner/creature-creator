@@ -58,12 +58,12 @@ namespace DanielLochner.Assets
         }
         private void OnPlayerJoin(PlayerData playerData)
         {
-            NotificationsManager.Notify($"{playerData.username} has joined the game.");
+            NotificationsManager.Notify(LocalizationUtility.Localize("player-join", playerData.username));
             NetworkPlayersMenu.Instance.AddPlayer(playerData);
         }
         private void OnPlayerLeave(PlayerData playerData)
         {
-            NotificationsManager.Notify($"{playerData.username} has left the game.");
+            NotificationsManager.Notify(LocalizationUtility.Localize("player-leave", playerData.username));
             NetworkPlayersMenu.Instance.RemovePlayer(playerData.clientId);
         }
 

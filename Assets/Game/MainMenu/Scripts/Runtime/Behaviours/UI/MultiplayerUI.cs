@@ -184,7 +184,7 @@ namespace DanielLochner.Assets.CreatureCreator
         
         private void Setup()
         {
-            relayServerOS.SetupUsingEnum<RelayServer>(false);
+            relayServerOS.SetupUsingEnum<RelayServer>(true);
             relayServerOS.OnSelected.AddListener(delegate (int option)
             {
                 string relay = $"relay_{((RelayServer)option).ToString().ToLower()}";
@@ -192,7 +192,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             relayServerOS.Select(RelayServer.Unity);
 
-            mapOS.SetupUsingEnum<Map>(false);
+            mapOS.SetupUsingEnum<Map>(true);
             mapOS.OnSelected.AddListener(delegate (int option)
             {
                 Map map = (Map)option;
