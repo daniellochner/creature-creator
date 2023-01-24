@@ -11,16 +11,13 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void Setup(string code)
+        private void Start()
         {
             if (IsServer)
             {
                 NetworkHostManager.Instance.OnPlayerAdd += PlayerJoinClientRpc;
                 NetworkHostManager.Instance.OnPlayerRemove += PlayerLeaveClientRpc;
             }
-            
-            Instantiate(networkMenuPrefab, Dynamic.OverlayCanvas).Setup(code);
-            HandleExistingPlayers();
         }
         public override void OnDestroy()
         {
@@ -31,6 +28,12 @@ namespace DanielLochner.Assets
                 NetworkHostManager.Instance.OnPlayerAdd -= PlayerJoinClientRpc;
                 NetworkHostManager.Instance.OnPlayerRemove -= PlayerLeaveClientRpc;
             }
+        }
+
+        public void Setup(string code)
+        {
+            Instantiate(networkMenuPrefab, Dynamic.OverlayCanvas).Setup(code);
+            HandleExistingPlayers();
         }
 
         [ClientRpc]

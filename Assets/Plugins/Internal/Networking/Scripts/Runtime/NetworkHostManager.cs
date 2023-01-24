@@ -105,7 +105,7 @@ namespace DanielLochner.Assets
             };
             Add(playerData);
 
-            response.CreatePlayerObject = NetworkManager.Singleton.LocalClientId != clientId && NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null;
+            response.CreatePlayerObject = NetworkManager.Singleton.NetworkConfig.PlayerPrefab != null;
             response.Position = SpawnPosition;
             response.Rotation = SpawnRotation;
             response.Approved = true;
