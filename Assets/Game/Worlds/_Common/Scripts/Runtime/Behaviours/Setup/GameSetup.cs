@@ -9,36 +9,53 @@ using UnityEngine.SceneManagement;
 namespace DanielLochner.Assets.CreatureCreator
 {
     [DefaultExecutionOrder(-1)]
-    public class GameSetup : MonoBehaviourSingleton<GameSetup>
+    public class GameSetup : MonoBehaviourSingleton<GameSetup>, ISetupable
     {
         #region Fields
-        [SerializeField] private NetworkObject playerPrefab;
+        [SerializeField] private NetworkObject playerPrefabL;
+        [SerializeField] private NetworkObject playerPrefabR;
         [SerializeField] private Platform startingPlatform;
-
-        [Header("Multiplayer")]
         [SerializeField] private NetworkObject[] helpers;
         #endregion
 
         #region Properties
         public bool IsMultiplayer => WorldManager.Instance.World is WorldMP;
+
+        public bool IsSetup { get; set; }
         #endregion
 
         #region Methods
-        private void Start()
+        private IEnumerator Start()
         {
-            Setup();            
+            if (!NetworkManager.Singleton.IsHost)
+            {
+                yield return new WaitUntil(() => Player.Instance); // wait until the player has been replicated...
+            }
+            Setup();
         }
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            Shutdown();
+            base.OnDestroy();
+
+            if (!NetworkConnectionManager.IsConnected)
+            {
+                Shutdown();
+            }
+            if (NetworkManager.Singleton)
+            {
+                NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            }
         }
 
         public void Setup()
         {
             if (NetworkManager.Singleton.IsHost)
             {
-                NetworkObject obj = Instantiate(playerPrefab, startingPlatform.Position, startingPlatform.Rotation);
-                obj.SpawnAsPlayerObject(NetworkManager.Singleton.LocalClientId);
+                foreach (var cc in NetworkManager.Singleton.ConnectedClientsIds)
+                {
+                    OnClientConnected(cc);
+                }
+                NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             }
 
             if (IsMultiplayer)
@@ -62,6 +79,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
             }
+
+            IsSetup = true;
         }
         public void SetupMP()
         {
@@ -72,10 +91,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 foreach (NetworkObject helper in helpers)
                 {
-                    Instantiate(helper).Spawn();
+                    Instantiate(helper).Spawn(true);
                 }
             }
-            
+
             NetworkShutdownManager.Instance.OnUncontrolledShutdown += OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown += OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown += OnUncontrolledHostShutdown;
@@ -153,15 +172,17 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkShutdownManager.Instance.OnUncontrolledShutdown -= OnUncontrolledShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledClientShutdown -= OnUncontrolledClientShutdown;
             NetworkShutdownManager.Instance.OnUncontrolledHostShutdown -= OnUncontrolledHostShutdown;
-
-            NetworkInactivityManager.Instance.OnInactivityKick -= OnInactivityKick;
-            NetworkInactivityManager.Instance.OnInactivityWarn -= OnInactivityWarn;
         }
         public void ShutdownSP()
         {
 
         }
 
+        private void OnClientConnected(ulong clientId)
+        {
+            NetworkObject obj = Instantiate(clientId == NetworkManager.Singleton.LocalClientId ? playerPrefabL : playerPrefabR, startingPlatform.Position, startingPlatform.Rotation);
+            obj.SpawnAsPlayerObject(clientId, true);
+        }
         private void OnUncontrolledShutdown()
         {
             SceneManager.LoadScene("MainMenu");

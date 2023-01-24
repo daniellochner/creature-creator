@@ -16,5 +16,10 @@ namespace DanielLochner.Assets
         {
             SetSingleton(this as T);
         }
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            SetSingleton(null);
+        }
     }
 }

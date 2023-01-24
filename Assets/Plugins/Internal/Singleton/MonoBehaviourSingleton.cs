@@ -14,4 +14,8 @@ public class MonoBehaviourSingleton<T> : MonoBehaviour, ISingleton<T> where T : 
     {
         SetSingleton(this as T);
     }
+    protected virtual void OnDestroy()
+    {
+        SetSingleton(null);
+    }
 }

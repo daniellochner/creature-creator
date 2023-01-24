@@ -47,8 +47,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
         }
 

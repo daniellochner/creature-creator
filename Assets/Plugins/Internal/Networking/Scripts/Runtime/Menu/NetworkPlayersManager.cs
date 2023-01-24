@@ -8,6 +8,8 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private NetworkPlayersMenu networkMenuPrefab;
+
+        private NetworkPlayersMenu networkMenu;
         #endregion
 
         #region Methods
@@ -28,11 +30,17 @@ namespace DanielLochner.Assets
                 NetworkHostManager.Instance.OnPlayerAdd -= PlayerJoinClientRpc;
                 NetworkHostManager.Instance.OnPlayerRemove -= PlayerLeaveClientRpc;
             }
+            if (networkMenu != null)
+            {
+                Destroy(networkMenu.gameObject);
+            }
         }
 
         public void Setup(string code)
         {
-            Instantiate(networkMenuPrefab, Dynamic.OverlayCanvas).Setup(code);
+            networkMenu = Instantiate(networkMenuPrefab, Dynamic.OverlayCanvas);
+            networkMenu.Setup(code);
+
             HandleExistingPlayers();
         }
 

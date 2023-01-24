@@ -28,13 +28,16 @@ namespace DanielLochner.Assets
         }
         public override void OnDestroy()
         {
-            if (IsHighlighted)
+            if (InteractionsManager.Instance)
             {
-                InteractionsManager.Instance.Highlighted = null;
-            }
-            if (gameObject == InteractionsManager.Instance.Targeted)
-            {
-                InteractionsManager.Instance.Targeted = null;
+                if (IsHighlighted)
+                {
+                    InteractionsManager.Instance.Highlighted = null;
+                }
+                if (gameObject == InteractionsManager.Instance.Targeted)
+                {
+                    InteractionsManager.Instance.Targeted = null;
+                }
             }
             base.OnDestroy();
         }

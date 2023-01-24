@@ -15,5 +15,9 @@ namespace DanielLochner.Assets
             base.Awake();
             SetSingleton(this as T);
         }
+        protected virtual void OnDestroy()
+        {
+            SetSingleton(null);
+        }
     }
 }
