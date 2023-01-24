@@ -21,7 +21,7 @@ namespace DanielLochner.Assets
                 }
                 foreach (ISetupable s in setupable)
                 {
-                    if (!s.IsSetup)
+                    if (s == null || !s.IsSetup)
                     {
                         return true;
                     }
