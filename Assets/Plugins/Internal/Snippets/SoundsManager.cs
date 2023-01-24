@@ -12,7 +12,7 @@ namespace DanielLochner.Assets
         [SerializeField] private AudioMixerGroup audioMixer;
         [SerializeField] private bool useTimeScaledPitch;
         [SerializeField] private string startSound;
-       
+
         private AudioSource[] sources = new AudioSource[2];
         private int current;
         #endregion
@@ -50,6 +50,8 @@ namespace DanielLochner.Assets
         }
         public void FadeTo(string sound, float time, float volume)
         {
+            if (sources[0] == null || sources[current] == null) return;
+
             int next = (current + 1) % 2;
             sources[next].clip = (sound != null) ? sounds[sound] : null;
             sources[next].volume = volume;

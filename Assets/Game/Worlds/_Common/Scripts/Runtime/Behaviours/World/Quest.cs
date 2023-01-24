@@ -71,7 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator Start()
         {
-            yield return new WaitUntilSetup(GameSetup.Instance);
+            yield return new WaitUntil(() => SetupUtility.IsSetup(GameSetup.Instance));
 
             if (!WorldManager.Instance.World.CreativeMode)
             {

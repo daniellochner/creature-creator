@@ -23,6 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHolder))]
     [RequireComponent(typeof(CreatureComparer))]
     [RequireComponent(typeof(CreatureUnderwater))]
+    [RequireComponent(typeof(MinimapIcon))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -46,6 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureComparer comparer;
         [SerializeField] private CreatureUnderwater underwater;
         [SerializeField] private CreatureSpeedup speedUp;
+        [SerializeField] private MinimapIcon minimapIcon;
         #endregion
 
         #region Properties
@@ -69,6 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureComparer Comparer => comparer;
         public CreatureUnderwater Underwater => underwater;
         public CreatureSpeedup SpeedUp => speedUp;
+        public MinimapIcon MinimapIcon => minimapIcon;
         #endregion
 
         #region Methods
@@ -95,12 +98,15 @@ namespace DanielLochner.Assets.CreatureCreator
             comparer = GetComponent<CreatureComparer>();
             underwater = GetComponent<CreatureUnderwater>();
             speedUp = GetComponent<CreatureSpeedup>();
+            minimapIcon = GetComponent<MinimapIcon>();
         }
 #endif
 
         public virtual void Setup()
         {
             Animator.Setup();
+
+            MinimapIcon.enabled = true;
 
             Spawner.OnSpawn += OnSpawn;
             Spawner.OnDespawn += OnDespawn;

@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
     public class NetworkConnectionManager : NetworkSingleton<NetworkConnectionManager>
     {
         #region Properties
-        public static bool IsConnected => NetworkManager.Singleton.IsListening;
+        public static bool IsConnected => NetworkManager.Singleton && NetworkManager.Singleton.IsListening;
         #endregion
 
         #region Methods
