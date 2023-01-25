@@ -4,6 +4,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         Island,
         Farm,
-        Sandbox
+        Sandbox,
+        Cave
     }
 }
