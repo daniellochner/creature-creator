@@ -16,38 +16,29 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<string> officialLanguages;
         #endregion
 
+        #region Properties
+        private bool AutoDetectLanguage
+        {
+            get => PlayerPrefs.GetInt("AUTO_DETECT_LANGUAGE", 1) == 1;
+            set => PlayerPrefs.SetInt("AUTO_DETECT_LANGUAGE", value ? 1 : 0);
+        }
+        #endregion
+
         #region Methods
         private IEnumerator Start()
         {
-            yield return new WaitUntil (() => LocalizationSettings.InitializationOperation.IsDone);
+            yield return LocalizationSettings.InitializationOperation;
+            Setup();
+        }
 
+        private void Setup()
+        {
             LocalizationSettings.SelectedLocaleChanged += delegate (Locale locale)
             {
                 disclaimer.SetActive(!officialLanguages.Contains(locale.Identifier.Code));
             };
 
-            SetupLanguage();
-
-            foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
-            {
-                LanguageUI languageUI = Instantiate(languagePrefab, languagesRT);
-                languageUI.Setup(locale);
-
-                if (officialLanguages.Contains(locale.Identifier.Code))
-                {
-                    languageUI.transform.SetSiblingIndex(unofficialLanguagesRT.GetSiblingIndex());
-                }
-                else
-                {
-                    unofficialLanguagesRT.gameObject.SetActive(true);
-                    languageUI.transform.SetAsLastSibling();
-                }
-            }
-        }
-
-        private void SetupLanguage()
-        {
-            if (PlayerPrefs.GetInt("AUTO_DETECT_LANG") == 0)
+            if (AutoDetectLanguage)
             {
                 ILocalesProvider locales = LocalizationSettings.AvailableLocales;
 
@@ -90,11 +81,27 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 SettingsManager.Instance.SetLocale(locale.Identifier.Code);
 
-                PlayerPrefs.SetInt("AUTO_DETECT_LANG", 1);
+                AutoDetectLanguage = false;
             }
             else
             {
                 SettingsManager.Instance.SetLocale(SettingsManager.Data.Locale);
+            }
+
+            foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
+            {
+                LanguageUI languageUI = Instantiate(languagePrefab, languagesRT);
+                languageUI.Setup(locale);
+
+                if (officialLanguages.Contains(locale.Identifier.Code))
+                {
+                    languageUI.transform.SetSiblingIndex(unofficialLanguagesRT.GetSiblingIndex());
+                }
+                else
+                {
+                    unofficialLanguagesRT.gameObject.SetActive(true);
+                    languageUI.transform.SetAsLastSibling();
+                }
             }
         }
         #endregion

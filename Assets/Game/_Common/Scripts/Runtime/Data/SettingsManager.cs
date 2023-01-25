@@ -494,7 +494,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(locale);
             Data.Locale = locale;
-            Save();
         }
         #endregion
 
