@@ -57,30 +57,30 @@ namespace DanielLochner.Assets.CreatureCreator
                     //case SystemLanguage.Chinese:
                     //    locale = locales.GetLocale("zh-hans");
                     //    break;
-                    //case SystemLanguage.Russian:
-                    //    locale = locales.GetLocale("ru");
-                    //    break;
+                    case SystemLanguage.Russian:
+                        locale = locales.GetLocale("ru");
+                        break;
                     //case SystemLanguage.Spanish:
                     //    locale = locales.GetLocale("es");
                     //    break;
                     case SystemLanguage.Portuguese:
                         locale = locales.GetLocale("pt-BR");
                         break;
-                    //case SystemLanguage.German:
-                    //    locale = locales.GetLocale("de");
-                    //    break;
+                    case SystemLanguage.German:
+                        locale = locales.GetLocale("de");
+                        break;
                     case SystemLanguage.French:
                         locale = locales.GetLocale("fr");
                         break;
                     case SystemLanguage.Japanese:
                         locale = locales.GetLocale("ja");
                         break;
-                    //case SystemLanguage.Polish:
-                    //    locale = locales.GetLocale("pl");
-                    //    break;
-                    //case SystemLanguage.Korean:
-                    //    locale = locales.GetLocale("ko");
-                    //    break;
+                    case SystemLanguage.Polish:
+                        locale = locales.GetLocale("pl");
+                        break;
+                    case SystemLanguage.Korean:
+                        locale = locales.GetLocale("ko");
+                        break;
                     case SystemLanguage.Thai:
                         locale = locales.GetLocale("th");
                         break;
