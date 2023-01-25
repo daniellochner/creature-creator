@@ -87,8 +87,9 @@ namespace DanielLochner.Assets.CreatureCreator
             SetInvertHorizontal(Data.InvertHorizontal);
             SetInvertVertical(Data.InvertVertical);
         }
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             Save();
         }
 
@@ -493,6 +494,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(locale);
             Data.Locale = locale;
+            Save();
         }
         #endregion
 

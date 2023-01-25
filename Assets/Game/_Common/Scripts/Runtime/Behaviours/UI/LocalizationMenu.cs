@@ -17,6 +17,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
+        }
         private IEnumerator Start()
         {
             LocalizationSettings.SelectedLocaleChanged += delegate (Locale locale)
