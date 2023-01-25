@@ -17,19 +17,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
-        }
         private IEnumerator Start()
         {
+            yield return new WaitUntil (() => LocalizationSettings.InitializationOperation.IsDone);
+
             LocalizationSettings.SelectedLocaleChanged += delegate (Locale locale)
             {
                 disclaimer.SetActive(!officialLanguages.Contains(locale.Identifier.Code));
             };
-
-            yield return LocalizationSettings.InitializationOperation;
 
             SetupLanguage();
 
