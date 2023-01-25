@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             nameText.text = LocalizationSettings.StringDatabase.GetLocalizedString("ui-misc", "language", locale);
             nameText.font = LocalizationSettings.AssetDatabase. GetLocalizedAsset<TMP_FontAsset>("fonts", "regular", locale);
+            nameText.UpdateFontAsset();
 
             toggle.onValueChanged.AddListener(delegate (bool isOn)
             {
