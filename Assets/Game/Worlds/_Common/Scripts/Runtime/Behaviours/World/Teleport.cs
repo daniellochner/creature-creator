@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Teleport : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private string targetScene;
+        [SerializeField] private string targetSceneId;
         [SerializeField] private Keybind keybind;
         [Space]
         [SerializeField] private TextMeshPro teleportText;
@@ -63,7 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (!IsChanging && CanChange && InputUtility.GetKeyDown(keybind))
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", targetScene), LocalizationUtility.Localize("teleport_message", targetScene), onYes: delegate
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetSceneId)), LocalizationUtility.Localize("teleport_message", targetSceneId), onYes: delegate
                     {
                         ChangeScene();
                     });
@@ -89,7 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Data = new System.Collections.Generic.Dictionary<string, DataObject>()
                     {
-                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetScene) }
+                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetSceneId) }
                     }
                 };
                 options.HostId = AuthenticationService.Instance.PlayerId;
@@ -97,12 +97,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Scene
-            NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(targetSceneId, LoadSceneMode.Single);
         }
 
         private void UpdateInfo()
         {
-            string text = $"{targetScene}<br>";
+            string text = $"{LocalizationUtility.Localize(targetSceneId)}<br>";
             if (ShowCount)
             {
                 text += $"{region.tracked.Count}/{NetworkPlayersMenu.Instance.NumPlayers}<br>";

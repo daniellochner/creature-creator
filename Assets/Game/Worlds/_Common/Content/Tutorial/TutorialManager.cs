@@ -179,19 +179,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 "tutorial_14_message",
                 10f);
 
-            yield return TutorialItemRoutine(
-                ViewMinimapRoutine(),
-                15,
-                "tutorial_15_title",
-                "tutorial_15_message",
-                10f);
+            if (SettingsManager.Data.Map) // Minimap could be disabled...
+            {
+                yield return TutorialItemRoutine(
+                    ViewMinimapRoutine(),
+                    15,
+                    "tutorial_15_title",
+                    "tutorial_15_message",
+                    10f);
 
-            yield return TutorialItemRoutine(
-                CloseMinimapRoutine(),
-                16,
-                "tutorial_16_title",
-                "tutorial_16_message",
-                20f);
+                yield return TutorialItemRoutine(
+                    CloseMinimapRoutine(),
+                    16,
+                    "tutorial_16_title",
+                    "tutorial_16_message",
+                    20f);
+            }
 
             hintText.transform.parent.gameObject.SetActive(false);
 

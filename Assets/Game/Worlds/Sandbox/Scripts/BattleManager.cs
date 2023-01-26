@@ -16,8 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioSource victoryAS;
         [SerializeField] private Transform[] rounds;
 
-        [SerializeField] private NetworkVariable<int> round = new NetworkVariable<int>(-1);
-        [SerializeField] private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
+        private NetworkVariable<int> round = new NetworkVariable<int>(-1);
+        private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
         #endregion
 
         #region Properties
