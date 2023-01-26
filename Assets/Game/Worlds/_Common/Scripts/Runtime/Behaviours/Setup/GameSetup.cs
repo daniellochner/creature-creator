@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class GameSetup : MonoBehaviourSingleton<GameSetup>, ISetupable
     {
         #region Fields
+        [SerializeField] private AudioListener tmpListener;
         [SerializeField] private NetworkObject playerPrefabL;
         [SerializeField] private NetworkObject playerPrefabR;
         [SerializeField] private Platform startingPlatform;
@@ -30,8 +31,8 @@ namespace DanielLochner.Assets.CreatureCreator
             if (!NetworkManager.Singleton.IsHost)
             {
                 yield return new WaitUntil(() => Player.Instance); // wait until the player has been replicated...
+                Setup();
             }
-            Setup();
         }
         protected override void OnDestroy()
         {
@@ -45,10 +46,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             }
+
+            IsSetup = false;
         }
 
         public void Setup()
         {
+            Destroy(tmpListener);
+
             if (NetworkManager.Singleton.IsHost)
             {
                 foreach (var cc in NetworkManager.Singleton.ConnectedClientsIds)

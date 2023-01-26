@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,8 +25,16 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkManager.Singleton.OnServerStarted += OnServerStarted;
         }
 
+        private void OnLoadCompleted(string sceneName, LoadSceneMode loadSceneMode, System.Collections.Generic.List<ulong> clientsCompleted, System.Collections.Generic.List<ulong> clientsTimedOut)
+        {
+            if (GameSetup.Instance && !GameSetup.Instance.IsSetup)
+            {
+                GameSetup.Instance.Setup();
+            }
+        }
         private void OnServerStarted()
         {
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadCompleted;
             NetworkManager.Singleton.SceneManager.LoadScene(World.MapName, LoadSceneMode.Single);
         }
         private void OnClientConnect(ulong clientID)

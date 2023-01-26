@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #endif
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => SetupUtility.IsSetup(GameSetup.Instance, Player.Instance));
+            yield return new WaitUntilSetup(GameSetup.Instance);
             Setup();
         }
 

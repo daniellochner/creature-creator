@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Teleport : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private string targetScene;
         [SerializeField] private string targetSceneId;
         [SerializeField] private Keybind keybind;
         [Space]
@@ -42,7 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => SetupUtility.IsSetup(GameSetup.Instance, Player.Instance));
+            yield return new WaitUntilSetup(GameSetup.Instance);
 
             teleportConstraint.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
         }
@@ -63,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (!IsChanging && CanChange && InputUtility.GetKeyDown(keybind))
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetSceneId)), LocalizationUtility.Localize("teleport_message", targetSceneId), onYes: delegate
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetSceneId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
                     {
                         ChangeScene();
                     });
@@ -89,7 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Data = new System.Collections.Generic.Dictionary<string, DataObject>()
                     {
-                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetSceneId) }
+                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetScene) }
                     }
                 };
                 options.HostId = AuthenticationService.Instance.PlayerId;
@@ -97,7 +98,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Scene
-            NetworkManager.Singleton.SceneManager.LoadScene(targetSceneId, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
         }
 
         private void UpdateInfo()
