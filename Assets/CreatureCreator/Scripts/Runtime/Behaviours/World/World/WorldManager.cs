@@ -41,11 +41,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
         }
+        //private void OnClientDisconnect(ulong clientId)
+        //{
+        //    NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
+        //}
+
         private void OnLoad(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
             LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate
             {
-                NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
             }));
         }
         #endregion
