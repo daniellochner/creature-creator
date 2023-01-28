@@ -55,7 +55,14 @@ namespace DanielLochner.Assets
 
             StopCoroutine(fadeIn);
             canvasGroup.alpha = 1f;
+            yield return WaitUntilRoutine();
+
             yield return StartCoroutine(canvasGroup.Fade(false, 1f));
+        }
+
+        public virtual IEnumerator WaitUntilRoutine()
+        {
+            yield return null;
         }
         #endregion
     }

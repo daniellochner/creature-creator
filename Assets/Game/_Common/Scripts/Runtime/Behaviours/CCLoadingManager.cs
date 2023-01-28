@@ -1,0 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace DanielLochner.Assets.CreatureCreator
+{
+    public class CCLoadingManager : LoadingManager
+    {
+        public override IEnumerator WaitUntilRoutine()
+        {
+            if (GameSetup.Instance)
+            {
+                yield return new WaitUntilSetup(GameSetup.Instance);
+            }
+        }
+    }
+}
