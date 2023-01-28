@@ -335,7 +335,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool isPrivate = (Visibility)visibilityOS.Selected == Visibility.Private;
                 bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
                 string worldName = worldNameInputField.text;
-                string mapName = ((Map)mapOS.Selected).ToString();
+                string mapName = mapOS.Options[mapOS.Selected].Id;
                 string version = Application.version;
                 int maxPlayers = (int)maxPlayersSlider.value;
                 bool enablePVP = pvpToggle.isOn;

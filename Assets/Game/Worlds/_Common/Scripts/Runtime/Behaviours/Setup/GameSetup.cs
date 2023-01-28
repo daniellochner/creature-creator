@@ -38,12 +38,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnDestroy();
 
-            if (!NetworkConnectionManager.IsConnected)
-            {
-                Shutdown();
-            }
             if (NetworkManager.Singleton)
             {
+                if (!NetworkConnectionManager.IsConnected)
+                {
+                    Shutdown();
+                }
+
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             }
 

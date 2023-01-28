@@ -6,25 +6,24 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Animations;
-using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Teleport : MonoBehaviour
+    public class Teleport : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private string targetScene;
         [SerializeField] private string targetSceneId;
+        [SerializeField] private string targetSceneName;
         [SerializeField] private Keybind keybind;
         [Space]
         [SerializeField] private TextMeshPro teleportText;
-        [SerializeField] private LookAtConstraint teleportConstraint;
+        [SerializeField] private LookAtConstraint teleportLookAtConstraint;
 
         private TrackRegion region;
         #endregion
 
         #region Properties
-        private bool CanChange
+        private bool CanTeleport
         {
             get => (WorldManager.Instance.World is WorldSP) || (NetworkManager.Singleton.IsServer && (region.tracked.Count == NetworkPlayersMenu.Instance.NumPlayers));
         }
@@ -33,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get => (WorldManager.Instance.World is WorldMP) && (NetworkPlayersMenu.Instance.NumPlayers > 1);
         }
 
-        public bool IsChanging { get; private set; }
+        public bool IsTeleporting { get; private set; }
         #endregion
 
         #region Methods
@@ -45,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
 
-            teleportConstraint.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+            teleportLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
         }
 
         private void OnTriggerEnter(Collider other)
@@ -62,11 +61,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateInfo();
 
-                if (!IsChanging && CanChange && InputUtility.GetKeyDown(keybind))
+                if (!IsTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetSceneId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetSceneName)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
                     {
-                        ChangeScene();
+                        TeleportAsync();
                     });
                 }
             }
@@ -79,42 +78,44 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private async void ChangeScene()
+        private async void TeleportAsync()
         {
-            IsChanging = true;
+            IsTeleporting = true;
 
-            // Lobby
             if (WorldManager.Instance.World is WorldMP)
             {
                 UpdateLobbyOptions options = new UpdateLobbyOptions()
                 {
                     Data = new System.Collections.Generic.Dictionary<string, DataObject>()
                     {
-                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetScene) }
+                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetSceneName) }
                     }
                 };
                 options.HostId = AuthenticationService.Instance.PlayerId;
                 await LobbyService.Instance.UpdateLobbyAsync(LobbyHelper.Instance.JoinedLobby.Id, options);
             }
 
-            // Scene
-            NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
+            TeleportClientRpc();
+        }
+        [ClientRpc]
+        private void TeleportClientRpc()
+        {
+            TeleportManager.Instance.TeleportTo(targetSceneId);
         }
 
         private void UpdateInfo()
         {
-            string text = $"{LocalizationUtility.Localize(targetSceneId)}<br>";
+            string text = $"{LocalizationUtility.Localize(targetSceneName)}<br>";
             if (ShowCount)
             {
                 text += $"{region.tracked.Count}/{NetworkPlayersMenu.Instance.NumPlayers}<br>";
             }
-            if (CanChange)
+            if (CanTeleport)
             {
                 text += $"<size=1>[{keybind.ToString()}]</size>";
             }
             teleportText.text = text;
         }
-
         private void SetVisibility(bool isVisible)
         {
             teleportText.gameObject.SetActive(isVisible);

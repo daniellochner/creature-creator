@@ -40,16 +40,30 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnClientConnect(ulong clientID)
         {
             NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
+            TeleportManager.IsUsingTeleport = false;
         }
-        //private void OnClientDisconnect(ulong clientId)
-        //{
-        //    NetworkManager.Singleton.SceneManager.OnLoad -= OnLoad;
-        //}
 
-        private void OnLoad(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation operation)
+        private void OnLoad(ulong clientId, string nextScene, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
+            string prevScene = SceneManager.GetActiveScene().name;
+
+            CreatureData creature = null;
+            if (Player.Instance != null)
+            {
+                creature = JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data));
+            }
+
+            if (TeleportManager.IsUsingTeleport)
+            {
+                TeleportManager.Instance.OnLeave(prevScene, nextScene, creature);
+            }
+
             LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate
             {
+                if (TeleportManager.IsUsingTeleport)
+                {
+                    TeleportManager.Instance.OnEnter(prevScene, nextScene, creature);
+                }
             }));
         }
         #endregion

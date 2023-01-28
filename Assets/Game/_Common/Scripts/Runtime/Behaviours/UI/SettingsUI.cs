@@ -71,7 +71,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            SettingsManager.Instance.Save();
+            if (SettingsManager.Instance)
+            {
+                SettingsManager.Instance.Save();
+            }
         }
 
         private void Setup()
