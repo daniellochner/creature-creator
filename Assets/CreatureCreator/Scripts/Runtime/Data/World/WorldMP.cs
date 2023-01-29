@@ -40,12 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SpawnNPC = bool.Parse(lobby.Data["spawnNPC"].Value);
             CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
             UseSteam = bool.Parse(lobby.Data["useSteam"].Value);
-
-            // TODO: Remove check in next update...
-            if (lobby.Data.ContainsKey("mapId"))
-            {
-                MapId = lobby.Data["mapId"].Value;
-            }
+            MapId = lobby.Data["mapId"].Value;
         }
         #endregion
     }

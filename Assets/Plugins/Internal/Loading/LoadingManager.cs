@@ -51,10 +51,10 @@ namespace DanielLochner.Assets
             }
             Progress = 1f;
 
-            onLoad?.Invoke();
-
             StopCoroutine(fadeIn);
             canvasGroup.alpha = 1f;
+
+            onLoad?.Invoke();
 
             yield return WaitUntilRoutine();
 

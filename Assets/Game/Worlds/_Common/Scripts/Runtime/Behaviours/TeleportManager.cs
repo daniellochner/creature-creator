@@ -1,24 +1,33 @@
+using System.Collections;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class TeleportManager : MonoBehaviourSingleton<TeleportManager>
     {
-        public static bool IsUsingTeleport { get; set; }
+        #region Fields
+        private static CreatureData dataBuffer;
+        #endregion
 
-        public virtual void TeleportTo(string targetScene)
+        #region Methods
+        public virtual void TeleportTo(string targetScene, CreatureData data)
         {
-            IsUsingTeleport = true;
+            WorldManager.Instance.IsUsingTeleport = true;
+
+            dataBuffer = data;
+
             LoadScene(targetScene);
         }
-        public virtual void OnLeave(string prevScene, string nextScene, CreatureData data)
+
+        public virtual void OnLeave(string prevScene, string nextScene)
         {
         }
-        public virtual void OnEnter(string prevScene, string nextScene, CreatureData data)
+        public virtual void OnEnter(string prevScene, string nextScene)
         {
-            IsUsingTeleport = false;
-            EditorManager.Instance.Load(data);
+            WorldManager.Instance.IsUsingTeleport = false;
+            StartCoroutine(LoadRoutine());
         }
 
         protected void LoadScene(string targetScene)
@@ -28,5 +37,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
             }
         }
+
+        private IEnumerator LoadRoutine()
+        {
+            yield return new WaitUntil(() => Player.Instance != null && Player.Instance.IsSetup);
+            EditorManager.Instance.Load(dataBuffer);
+            dataBuffer = null;
+        }
+        #endregion
     }
 }

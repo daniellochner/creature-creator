@@ -16,6 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
             get;
             set;
         }
+
+        public bool IsUsingTeleport { get; set; }
         #endregion
 
         #region Methods
@@ -40,29 +42,23 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnClientConnect(ulong clientID)
         {
             NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
-            TeleportManager.IsUsingTeleport = false;
+            IsUsingTeleport = false;
         }
 
         private void OnLoad(ulong clientId, string nextScene, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
             string prevScene = SceneManager.GetActiveScene().name;
 
-            CreatureData creature = null;
-            if (Player.Instance != null)
+            if (IsUsingTeleport)
             {
-                creature = JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data));
-            }
-
-            if (TeleportManager.IsUsingTeleport)
-            {
-                TeleportManager.Instance.OnLeave(prevScene, nextScene, creature);
+                TeleportManager.Instance.OnLeave(prevScene, nextScene);
             }
 
             LoadingManager.Instance.StartCoroutine(LoadingManager.Instance.LoadRoutine(operation, delegate
             {
-                if (TeleportManager.IsUsingTeleport)
+                if (IsUsingTeleport)
                 {
-                    TeleportManager.Instance.OnEnter(prevScene, nextScene, creature);
+                    TeleportManager.Instance.OnEnter(prevScene, nextScene);
                 }
             }));
         }
