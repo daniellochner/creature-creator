@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioListener tmpListener;
         [SerializeField] private NetworkObject playerPrefabL;
         [SerializeField] private NetworkObject playerPrefabR;
-        [SerializeField] private Platform startingPlatform;
+        [SerializeField] public Platform startingPlatform;
         [SerializeField] private NetworkObject[] helpers;
         #endregion
 
