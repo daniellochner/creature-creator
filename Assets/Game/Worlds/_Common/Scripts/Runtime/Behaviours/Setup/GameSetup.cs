@@ -12,7 +12,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class GameSetup : MonoBehaviourSingleton<GameSetup>, ISetupable
     {
         #region Fields
-        [SerializeField] private AudioListener tmpListener;
+        [SerializeField] private GameObject[] toEnable;
+        [SerializeField] private GameObject[] toDisable;
+        [Space]
         [SerializeField] private NetworkObject playerPrefabL;
         [SerializeField] private NetworkObject playerPrefabR;
         [SerializeField] public Platform startingPlatform;
@@ -53,8 +55,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            Destroy(tmpListener);
-
             if (NetworkManager.Singleton.IsHost)
             {
                 foreach (var cc in NetworkManager.Singleton.ConnectedClientsIds)
@@ -86,6 +86,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
             }
 
+            foreach (GameObject go in toEnable)
+            {
+                go.SetActive(true);
+            }
+            foreach (GameObject go in toDisable)
+            {
+                go.SetActive(false);
+            }
+            
             IsSetup = true;
         }
         public void SetupMP()
