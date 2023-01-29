@@ -12,8 +12,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Teleport : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private string targetSceneId;
-        [SerializeField] private string targetSceneName;
+        [SerializeField] private string targetMapName;
+        [SerializeField] private string targetMapId;
         [SerializeField] private Keybind keybind;
         [Space]
         [SerializeField] private TextMeshPro teleportText;
@@ -63,7 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (!IsTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetSceneName)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
                     {
                         TeleportAsync();
                     });
@@ -88,7 +88,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Data = new System.Collections.Generic.Dictionary<string, DataObject>()
                     {
-                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetSceneName) }
+                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetMapName) },
+                        { "mapId", new DataObject(DataObject.VisibilityOptions.Public, targetMapId) }
                     }
                 };
                 options.HostId = AuthenticationService.Instance.PlayerId;
@@ -100,12 +101,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void TeleportClientRpc()
         {
-            TeleportManager.Instance.TeleportTo(targetSceneId);
+            TeleportManager.Instance.TeleportTo(targetMapName);
         }
 
         private void UpdateInfo()
         {
-            string text = $"{LocalizationUtility.Localize(targetSceneName)}<br>";
+            string text = $"{LocalizationUtility.Localize(targetMapId)}<br>";
             if (ShowCount)
             {
                 text += $"{region.tracked.Count}/{NetworkPlayersMenu.Instance.NumPlayers}<br>";

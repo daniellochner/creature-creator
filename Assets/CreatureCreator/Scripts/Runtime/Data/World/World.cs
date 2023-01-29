@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool EnablePVE { get; protected set; }
         public bool SpawnNPC { get; protected set; }
         public string MapName { get; protected set; }
+        public string MapId { get; protected set; }
         #endregion
     }
 }

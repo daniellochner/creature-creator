@@ -335,7 +335,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool isPrivate = (Visibility)visibilityOS.Selected == Visibility.Private;
                 bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
                 string worldName = worldNameInputField.text;
-                string mapName = mapOS.Options[mapOS.Selected].Id;
+                string mapId = mapOS.Options[mapOS.Selected].Id;
+                string mapName = ((Map)mapOS.Selected).ToString();
                 string version = Application.version;
                 int maxPlayers = (int)maxPlayersSlider.value;
                 bool enablePVP = pvpToggle.isOn;
@@ -383,6 +384,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode) },
                         { "version", new DataObject(DataObject.VisibilityOptions.Public, version) },
                         { "mapName", new DataObject(DataObject.VisibilityOptions.Public, mapName) },
+                        { "mapId", new DataObject(DataObject.VisibilityOptions.Public, mapId) },
                         { "passwordHash", new DataObject(DataObject.VisibilityOptions.Public, passwordHash) },
                         { "enablePVP", new DataObject(DataObject.VisibilityOptions.Public, enablePVP.ToString()) },
                         { "enablePVE", new DataObject(DataObject.VisibilityOptions.Public, enablePVE.ToString()) },

@@ -35,13 +35,13 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             WorldMP world = new WorldMP(lobby);
-            mapText.text = $"{FormatMap(world.MapName)} ({FormatMode(world.CreativeMode)})";
+            mapText.text = $"{FormatMap(world.MapId)} ({FormatMode(world.CreativeMode)})";
 
             infoButton.onClick.AddListener(delegate
             {
                 InformationDialog.Inform(world.WorldName, 
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_version")}:</b> {world.Version}<br>" +
-                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_map")}:</b> {FormatMap(world.MapName)}<br>" + 
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_map")}:</b> {FormatMap(world.MapId)}<br>" + 
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_mode")}:</b> {FormatMode(world.CreativeMode)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
@@ -53,9 +53,9 @@ namespace DanielLochner.Assets.CreatureCreator
             padlockIcon.SetActive(world.IsPasswordProtected);
         }
 
-        private string FormatMap(string mapName)
+        private string FormatMap(string mapId)
         {
-            return LocalizationUtility.Localize(mapName);
+            return LocalizationUtility.Localize(mapId);
         }
         private string FormatMode(bool isCreativeMode)
         {
