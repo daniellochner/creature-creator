@@ -12,6 +12,10 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureHealth))]
     public class CreatureCorpse : NetworkBehaviour
     {
+        #region Fields
+        [SerializeField] private MinimapIcon iconPrefab;
+        #endregion
+
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
         public CreatureRagdoll Ragdoll { get; private set; }
@@ -34,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {            
             Corpse = Ragdoll.Generate(Constructor.Body.position).gameObject;
             Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
+            Instantiate(iconPrefab, Corpse.transform, false);
         }
         #endregion
     }
