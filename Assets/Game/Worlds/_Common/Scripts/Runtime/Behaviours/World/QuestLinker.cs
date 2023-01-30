@@ -17,17 +17,20 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
 
-            quest.gameObject.SetActive(false);
-
-            SpawnedNPC npc = null;
-            yield return new WaitUntil(() =>
+            if (!WorldManager.Instance.World.CreativeMode)
             {
-                npc = SpawnedNPC.spawned.Find(x => x.spawnerId.Value == spawner.NetworkObjectId);
-                return (npc != null);
-            });
-            quest.transform.SetZeroParent(npc.transform);
+                quest.gameObject.SetActive(false);
 
-            quest.gameObject.SetActive(true);
+                SpawnedNPC npc = null;
+                yield return new WaitUntil(() =>
+                {
+                    npc = SpawnedNPC.spawned.Find(x => x.spawnerId.Value == spawner.NetworkObjectId);
+                    return (npc != null);
+                });
+                quest.transform.SetZeroParent(npc.transform);
+
+                quest.gameObject.SetActive(true);
+            }
         }
     }
 }

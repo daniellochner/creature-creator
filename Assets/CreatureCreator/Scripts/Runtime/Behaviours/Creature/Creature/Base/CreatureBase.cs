@@ -118,9 +118,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public virtual void OnDie()
         {
             Collider.enabled = false;
+            MinimapIcon.enabled = false;
         }
         public virtual void OnSpawn()
         {
+            MinimapIcon.enabled = true;
         }
         public virtual void OnDespawn()
         {

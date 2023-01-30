@@ -21,9 +21,16 @@ namespace DanielLochner.Assets.CreatureCreator
             startPosition = transform.position;
             startRotation = transform.rotation;
 
-            if (IsServer && WorldManager.Instance.World.CreativeMode)
+            if (WorldManager.Instance.World.CreativeMode)
             {
-                NetworkObject.Despawn();
+                if (IsServer)
+                {
+                    NetworkObject.Despawn();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
         private void OnCollisionEnter(Collision collision)
@@ -33,6 +40,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 networkTransform.Teleport(startPosition, startRotation, transform.localScale);
             }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            gameObject.SetActive(false);
+            base.OnNetworkDespawn();
         }
         #endregion
     }
