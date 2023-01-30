@@ -32,6 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             Creature.Constructor.Root.localPosition = Vector3.zero;
+            Creature.Effector.StopMySounds();
         }
         #endregion
     }

@@ -5,12 +5,14 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     [CreateAssetMenu(menuName = "Creature Creator/Ability/StickBug")]
     public class StickBug : Ability
     {
-        public override bool CanPerform => !EditorManager.Instance.IsEditing && CreatureAbilities.CreatureConstructor.Legs.Count > 0 && !Player.Instance.Underwater.IsUnderwater;
+        public override bool CanPerform => !EditorManager.Instance.IsEditing && Player.Instance.Constructor.Legs.Count > 0 && !Player.Instance.Underwater.IsUnderwater;
 
         public override void OnPerform()
         {
-            CreatureAbilities.GetComponent<PlayerEffects>().PlaySound("GetStickBugged");
-            CreatureAbilities.GetComponent<AnimatorParams>().SetTrigger("Body_StickBug");
+            Player.Instance.Effects.PlaySound("GetStickBugged");
+            Player.Instance.Animator.Params.SetTrigger("Body_StickBug");
+
+            Player.Instance.Mover.StopMoving();
         }
     }
 }

@@ -94,8 +94,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnEnable()
         {
-            moveDisplacement = Vector3.zero;
-            targetPosition = transform.position;
+            StopMoving();
 
             foreach (Transform bone in Constructor.Bones)
             {
@@ -288,6 +287,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 transform.rotation = platform.Rotation;
                 Camera.Root.SetPositionAndRotation(platform.Position, platform.Rotation);
             }
+        }
+
+        public void StopMoving()
+        {
+            targetPosition = transform.position;
+            moveDisplacement = Vector3.zero;
+            rigidbody.velocity = Vector3.zero;
         }
         #endregion
 

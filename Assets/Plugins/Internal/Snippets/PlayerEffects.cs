@@ -57,6 +57,25 @@ namespace DanielLochner.Assets.CreatureCreator
             OnPlaySound?.Invoke(sound);
         }
 
+        public void StopMySounds()
+        {
+            audioSource.Stop();
+        }
+        public void StopSounds()
+        {
+            StopSoundsServerRpc();
+        }
+        [ServerRpc]
+        private void StopSoundsServerRpc()
+        {
+            StopSoundsClientRpc();
+        }
+        [ClientRpc]
+        private void StopSoundsClientRpc()
+        {
+            StopMySounds();
+        }
+
         public void SpawnParticle(string particle, Vector3 position)
         {
             SpawnParticleServerRpc(particle, position);
