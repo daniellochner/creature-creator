@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -2189183390111092779}
   - component: {fileID: 4619811412301984777}
   - component: {fileID: 1235528997531529341}
+  - component: {fileID: 5388878727284725806}
   m_Layer: 11
   m_Name: Teleport
   m_TagString: Untagged
@@ -95,13 +96,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76bc1b8eeeff6454ca13003cd83685e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneId: 
-  targetSceneName: 
+  targetMapName: 
+  targetMapId: 
   keybind:
     key: 102
     modifierKey: 0
   teleportText: {fileID: 2748414457130996291}
   teleportLookAtConstraint: {fileID: 287135382125016555}
+--- !u!114 &5388878727284725806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853597940699568921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5b753a4f5a83942bba288613a30455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isVisible: 1
+  track: 0
+  lockPos: 0
+  lockRot: 0
+  isButton: 0
+  isTarget: 0
+  isImportant: 0
+  icon: {fileID: 21300000, guid: 49bb90319a7353242bba0bfd4b273491, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3906511454085225635
 GameObject:
   m_ObjectHideFlags: 0

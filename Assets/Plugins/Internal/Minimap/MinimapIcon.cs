@@ -7,12 +7,12 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private bool isVisible = true;
-        [SerializeField] private bool track = true;
-        [SerializeField] private bool lockPos = false;
-        [SerializeField] private bool lockRot = false;
-        [SerializeField] private bool isButton = true;
-        [SerializeField] private bool isTarget = false;
-        [SerializeField] private bool isImportant = false;
+        [SerializeField] private bool track;
+        [SerializeField] private bool lockPos;
+        [SerializeField] private bool lockRot;
+        [SerializeField] private bool isButton;
+        [SerializeField] private bool isTarget;
+        [SerializeField] private bool isImportant;
         [Space]
         [SerializeField] private Sprite icon;
         [SerializeField] private Color color = Color.white;
@@ -40,6 +40,13 @@ namespace DanielLochner.Assets
             if (minimapIconUI != null)
             {
                 minimapIconUI.gameObject.SetActive(false);
+            }
+        }
+        private void OnDestroy()
+        {
+            if (minimapIconUI != null)
+            {
+                Destroy(minimapIconUI.gameObject);
             }
         }
         private void Update()
