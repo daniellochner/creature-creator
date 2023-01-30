@@ -199,15 +199,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 switch (map)
                 {
                     case Map.Island:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 10;
                         break;
 
                     case Map.Sandbox:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 8;
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 10;
                         break;
 
                     case Map.Farm:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 16;
+                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 10;
                         break;
                 }
             });
