@@ -28,13 +28,21 @@ namespace DanielLochner.Assets
             Gizmos.DrawWireCube(new Vector3(mapBounds.x, 0f, mapBounds.y), new Vector3(mapBounds.size.x, 0f, mapBounds.size.y));
         }
 
-        public MinimapIconUI Add(Sprite icon, Color color, UnityAction onClick, bool isButton, bool isTarget)
+        public MinimapIconUI Add(Sprite icon, Color color, UnityAction onClick, bool isButton, bool isTarget, bool isImportant)
         {
             MinimapIconUI minimapIconUI = Instantiate(minimapIconPrefab, map);
             minimapIconUI.Setup(icon, color, onClick, isButton);
             if (isTarget)
             {
                 target = minimapIconUI;
+            }
+            if (isImportant)
+            {
+                minimapIconUI.transform.SetAsLastSibling();
+            }
+            else
+            {
+                minimapIconUI.transform.SetAsFirstSibling();
             }
             return minimapIconUI;
         }

@@ -12,6 +12,7 @@ namespace DanielLochner.Assets
         [SerializeField] private bool lockRot = false;
         [SerializeField] private bool isButton = true;
         [SerializeField] private bool isTarget = false;
+        [SerializeField] private bool isImportant = false;
         [Space]
         [SerializeField] private Sprite icon;
         [SerializeField] private Color color = Color.white;
@@ -25,7 +26,7 @@ namespace DanielLochner.Assets
         {
             if (minimapIconUI == null)
             {
-                minimapIconUI = MinimapManager.Instance.Add(icon, color, () => onClick.Invoke(), isButton, isTarget);
+                minimapIconUI = MinimapManager.Instance.Add(icon, color, () => onClick.Invoke(), isButton, isTarget, isImportant);
                 MinimapManager.Instance.Track(this, minimapIconUI, lockPos, lockRot);
                 enabled = isVisible;
             }
