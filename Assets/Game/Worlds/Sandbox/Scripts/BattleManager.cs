@@ -31,6 +31,12 @@ namespace DanielLochner.Assets.CreatureCreator
             round.OnValueChanged += OnRoundChanged;
             remaining.OnValueChanged += OnRemainingChanged;
         }
+        private void Start()
+        {
+            battleInfo.SetActive(InBattle);
+            OnRoundChanged(0, round.Value);
+            OnRemainingChanged(0, remaining.Value);
+        }
 
         public void TryBattle()
         {
@@ -46,7 +52,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator BattleRoutine()
         {
-            round.Value = remaining.Value = 0;
+            battleInfo.SetActive(true);
+            round.Value = 0;
 
             for (int i = 0; i < rounds.Length; ++i)
             {
@@ -78,6 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void WinClientRpc()
         {
+            battleInfo.SetActive(false);
             victoryAS.Play();
 #if USE_STATS
             StatsManager.Instance.SetAchievement("ACH_GLADIATOR");
@@ -86,12 +94,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void StartRoundClientRpc()
         {
+            battleInfo.SetActive(true);
             bellAS.Play();
         }
 
         private void OnRoundChanged(int oldRound, int newRound)
         {
-            battleInfo.SetActive(InBattle);
             roundText.SetArguments(newRound + 1, rounds.Length);
         }
         private void OnRemainingChanged(int oldRemaining, int newRemaining)
