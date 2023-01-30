@@ -25,16 +25,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        protected override void Awake()
         {
-            if (IsClient)
-            {
-                round.OnValueChanged += OnRoundChanged;
-                round.SetDirty(true);
-
-                remaining.OnValueChanged += OnRemainingChanged;
-                remaining.SetDirty(true);
-            }
+            base.Awake();
+            round.OnValueChanged += OnRoundChanged;
+            remaining.OnValueChanged += OnRemainingChanged;
         }
 
         public void TryBattle()
