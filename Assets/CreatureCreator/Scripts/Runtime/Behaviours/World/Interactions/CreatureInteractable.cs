@@ -9,9 +9,17 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Ability reqAbility;
+
+        private Outline outline;
         #endregion
 
         #region Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            outline = GetComponent<Outline>();
+        }
+
         public override bool CanInteract(Interactor interactor)
         {
             bool hasReqAbility = (reqAbility == null);
@@ -24,6 +32,23 @@ namespace DanielLochner.Assets.CreatureCreator
         public override bool CanHighlight(Interactor interactor)
         {
             return base.CanHighlight(interactor) && EditorManager.Instance.IsPlaying;
+        }
+
+        protected override void OnInteract(Interactor interactor)
+        {
+            base.OnInteract(interactor);
+            if (outline != null)
+            {
+                outline.enabled = false;
+            }
+        }
+        protected override void OnHighlight(Interactor interactor, bool isHighlighted)
+        {
+            base.OnHighlight(interactor, isHighlighted);
+            if (outline != null)
+            {
+                outline.enabled = isHighlighted;
+            }
         }
         #endregion
     }
