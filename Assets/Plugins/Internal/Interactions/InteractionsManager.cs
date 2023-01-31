@@ -141,15 +141,15 @@ namespace DanielLochner.Assets
                 }
                 else
                 {
-                    Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
-                    if (interactable != null && interactable.CanHighlight(Interactor))
+                    GameObject t = null;
+                    foreach (Interactable interactable in hitInfo.collider.GetComponents<Interactable>())
                     {
-                        Targeted = interactable.gameObject;
+                        if (interactable != null && interactable.CanHighlight(Interactor))
+                        {
+                            t = interactable.gameObject;
+                        }
                     }
-                    else
-                    {
-                        Targeted = null;
-                    }
+                    Targeted = t;
                 }
             }
             else
