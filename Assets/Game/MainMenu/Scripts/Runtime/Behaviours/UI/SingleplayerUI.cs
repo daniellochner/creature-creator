@@ -26,6 +26,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
+        private void OnDestroy()
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnFailed;
+        }
 
         public void Setup()
         {
@@ -38,6 +42,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 unlimitedToggle.transform.parent.parent.gameObject.SetActive(option == 1); // only show unlimited toggle for creative mode
             });
             modeOS.Select(Mode.Adventure);
+
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnFailed;
         }
 
         public void Play()
@@ -54,6 +60,15 @@ namespace DanielLochner.Assets.CreatureCreator
             WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
 
             NetworkManager.Singleton.StartHost();
+        }
+
+        private void OnFailed(ulong clientId)
+        {
+            if (WorldManager.Instance.World is WorldSP)
+            {
+                NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost").ConnectionData.Port++;
+                SettingsManager.Instance.SetDebugMode(true); // TODO: remove this if port increment works...
+            }
         }
         #endregion
     }
