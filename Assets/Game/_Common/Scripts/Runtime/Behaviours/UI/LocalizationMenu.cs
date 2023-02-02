@@ -46,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 switch (Application.systemLanguage)
                 {
                     case SystemLanguage.Chinese:
-                        locale = locales.GetLocale("zh-hans");
+                        locale = locales.GetLocale("zh-Hans");
                         break;
                     case SystemLanguage.Russian:
                         locale = locales.GetLocale("ru");

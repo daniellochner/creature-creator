@@ -28,7 +28,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnFailed;
+            if (NetworkManager.Singleton)
+            {
+                NetworkManager.Singleton.OnClientDisconnectCallback -= OnFailed;
+            }
         }
 
         public void Setup()

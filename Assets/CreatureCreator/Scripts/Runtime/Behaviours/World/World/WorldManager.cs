@@ -25,6 +25,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
             NetworkManager.Singleton.OnServerStarted += OnServerStarted;
+
+            NetworkShutdownManager.Instance.OnShutdown += OnShutdown;
         }
 
         private void OnLoadCompleted(string sceneName, LoadSceneMode loadSceneMode, System.Collections.Generic.List<ulong> clientsCompleted, System.Collections.Generic.List<ulong> clientsTimedOut)
@@ -39,12 +41,17 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadCompleted;
             NetworkManager.Singleton.SceneManager.LoadScene(World.MapName, LoadSceneMode.Single);
         }
-        private void OnClientConnect(ulong clientID)
+        private void OnShutdown()
         {
-            NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
             IsUsingTeleport = false;
         }
-
+        private void OnClientConnect(ulong clientID)
+        {
+            if (NetworkManager.Singleton.IsHost && NetworkUtils.IsPlayer(clientID))
+            {
+                SetupSceneManager();
+            }
+        }
         private void OnLoad(ulong clientId, string nextScene, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
             string prevScene = SceneManager.GetActiveScene().name;
@@ -61,6 +68,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     TeleportManager.Instance.OnEnter(prevScene, nextScene);
                 }
             }));
+        }
+
+        public void SetupSceneManager()
+        {
+            NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
         }
         #endregion
     }

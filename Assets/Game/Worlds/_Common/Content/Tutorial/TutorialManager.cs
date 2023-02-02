@@ -41,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         private string MoveKeys => $"{KeybindingsManager.Data.WalkForwards}{KeybindingsManager.Data.WalkLeft}{KeybindingsManager.Data.WalkBackwards}{KeybindingsManager.Data.WalkRight}";
-        private string MoveToTargetButton => $"{KeyCode.Mouse1}";
+        private string MoveToTargetButton => "RMB";
 
         public bool IsComplete { get; private set; }
         #endregion

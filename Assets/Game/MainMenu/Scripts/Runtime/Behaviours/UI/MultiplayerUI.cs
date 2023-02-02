@@ -307,6 +307,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateNetworkStatus(LocalizationUtility.Localize("network_status_starting-client"), Color.yellow, -1);
                 Play();
                 NetworkManager.Singleton.StartClient();
+                WorldManager.Instance.SetupSceneManager();
             }
             catch (Exception e)
             {
