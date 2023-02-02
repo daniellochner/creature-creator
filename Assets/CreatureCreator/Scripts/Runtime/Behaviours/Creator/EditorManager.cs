@@ -1127,7 +1127,7 @@ namespace DanielLochner.Assets.CreatureCreator
             complexityText.SetArguments(statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
             heightText.SetArguments(Math.Round(dimensions.height, 2));
             weightText.SetArguments(Math.Round(statistics.Weight, 2));
-            dietText.SetArguments(statistics.Diet);
+            dietText.SetArguments(LocalizationUtility.Localize($"diet_{statistics.Diet}".ToLower()));
             healthText.SetArguments(statistics.Health);
             speedText.SetArguments(Math.Round(Creature.Mover.MoveSpeed, 2));
             bonesText.SetArguments(Creature.Constructor.Bones.Count, Creature.Constructor.MinMaxBones.max);

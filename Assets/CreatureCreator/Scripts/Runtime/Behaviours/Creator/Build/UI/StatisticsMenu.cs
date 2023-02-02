@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             dietText.transform.parent.gameObject.SetActive(isMouth);
             if (isMouth)
             {
-                dietText.text = (bodyPart as Mouth).Diet.ToString();
+                dietText.text = LocalizationUtility.Localize($"diet_{(bodyPart as Mouth).Diet}".ToLower());
             }
 
             // Abilities
