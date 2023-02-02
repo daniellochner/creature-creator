@@ -45,15 +45,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 Locale locale = locales.GetLocale("en");
                 switch (Application.systemLanguage)
                 {
-                    //case SystemLanguage.Chinese:
-                    //    locale = locales.GetLocale("zh-hans");
-                    //    break;
+                    case SystemLanguage.Chinese:
+                        locale = locales.GetLocale("zh-hans");
+                        break;
                     case SystemLanguage.Russian:
                         locale = locales.GetLocale("ru");
                         break;
-                    //case SystemLanguage.Spanish:
-                    //    locale = locales.GetLocale("es");
-                    //    break;
+                    case SystemLanguage.Spanish:
+                        locale = locales.GetLocale("es");
+                        break;
                     case SystemLanguage.Portuguese:
                         locale = locales.GetLocale("pt-BR");
                         break;
@@ -75,9 +75,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     case SystemLanguage.Thai:
                         locale = locales.GetLocale("th");
                         break;
-                    //case SystemLanguage.Italian:
-                    //    locale = locales.GetLocale("it");
-                    //    break;
+                    case SystemLanguage.Italian:
+                        locale = locales.GetLocale("it");
+                        break;
                 }
                 SettingsManager.Instance.SetLocale(locale.Identifier.Code);
 
