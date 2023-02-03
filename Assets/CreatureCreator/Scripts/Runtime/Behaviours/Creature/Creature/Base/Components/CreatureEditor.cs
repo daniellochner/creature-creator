@@ -3,6 +3,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -19,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private AudioClip stretchAudioClip;
         [SerializeField] private AudioClip resizeAudioClip;
+        [SerializeField] private AudioMixerGroup audioMixer;
 
         [Header("Settings")]
         [SerializeField] private float addOrRemoveCooldown = 0.05f;
@@ -254,6 +256,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Interact
             toolsAudioSource = gameObject.AddComponent<AudioSource>();
+            toolsAudioSource.outputAudioMixerGroup = audioMixer;
             toolsAudioSource.volume = 0.25f;
 
             Hover hover = Constructor.Body.GetComponent<Hover>();
