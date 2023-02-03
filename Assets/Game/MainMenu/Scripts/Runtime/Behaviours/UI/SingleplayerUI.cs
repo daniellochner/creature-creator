@@ -21,6 +21,19 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle unlimitedToggle;
         #endregion
 
+        #region Properties
+        private ushort Port
+        {
+            get => (ushort)PlayerPrefs.GetInt("LOCALHOST_PORT", 7771);
+            set
+            {
+                PlayerPrefs.SetInt("LOCALHOST_PORT", NetworkTransport.ConnectionData.Port = value);
+            }
+        }
+
+        private UnityTransport NetworkTransport => NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
+        #endregion
+
         #region Methods
         private void Start()
         {
@@ -57,8 +70,9 @@ namespace DanielLochner.Assets.CreatureCreator
             bool enablePVE = pveToggle.isOn;
             bool unlimited = unlimitedToggle.isOn && creativeMode;
 
-            NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
+            NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
+            NetworkTransport.ConnectionData.Port = Port;
 
             WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
 
@@ -69,8 +83,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (WorldManager.Instance.World is WorldSP)
             {
-                NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost").ConnectionData.Port++;
-                SettingsManager.Instance.SetDebugMode(true); // TODO: remove this if port increment works...
+                Port++;
+                Play();
             }
         }
         #endregion
