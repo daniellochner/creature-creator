@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
@@ -14,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MouseHintDrag mouseHintDragPrefab;
         [SerializeField] private MouseHintScroll mouseHintScrollPrefab;
         [Space]
+        [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private RectTransform buildMenuRT;
         [SerializeField] private RectTransform buildButtonRT;
         [SerializeField] private RectTransform bodyPartsRT;
@@ -47,6 +49,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void Start()
+        {
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -56,8 +62,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Begin()
         {
             tutorialCoroutine = StartCoroutine(TutorialRoutine());
-
-            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+        }
+        public void SetVisibility(bool v, float t = 0.25f)
+        {
+            StartCoroutine(canvasGroup.Fade(v, t));
         }
 
         public void Hint()

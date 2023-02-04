@@ -4,6 +4,7 @@
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -19,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private NetworkObject playerPrefabR;
         [SerializeField] public Platform startingPlatform;
         [SerializeField] private NetworkObject[] helpers;
+        [SerializeField] private UnityEvent onTutorial;
         #endregion
 
         #region Properties
@@ -79,7 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if ((ProgressManager.Data.UnlockedBodyParts.Count == 0) && (ProgressManager.Data.UnlockedPatterns.Count == 0) && !EditorManager.Instance.CreativeMode && SettingsManager.Data.Tutorial)
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Play, true);
-                TutorialManager.Instance.Begin();
+                onTutorial.Invoke();
             }
             else
             {

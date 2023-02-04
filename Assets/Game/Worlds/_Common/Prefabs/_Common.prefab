@@ -227,6 +227,7 @@ GameObject:
   - component: {fileID: 6287067826934162899}
   - component: {fileID: 6623710434972084130}
   - component: {fileID: 2715222068645879118}
+  - component: {fileID: 49920143280715535}
   m_Layer: 0
   m_Name: Tutorial
   m_TagString: Untagged
@@ -316,6 +317,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &49920143280715535
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590399643380054944}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1615202160284491623
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,6 +676,7 @@ MonoBehaviour:
   mouseHintClickPrefab: {fileID: 1911695704370351627, guid: b652b7ffe5f384340a8caf02a6ab49b3, type: 3}
   mouseHintDragPrefab: {fileID: -2769310942883667528, guid: 3f6855e1d5681c24bbb2f531081200b0, type: 3}
   mouseHintScrollPrefab: {fileID: -3783578666604819058, guid: e6d7edeb5766d8041950b462c4eac7d5, type: 3}
+  canvasGroup: {fileID: 49920143280715535}
   buildMenuRT: {fileID: 9065828311881023366}
   buildButtonRT: {fileID: 9065828312146461266}
   bodyPartsRT: {fileID: 9065828312746384515}
@@ -1422,6 +1436,22 @@ MonoBehaviour:
   - {fileID: 7265491829816527811, guid: de8a86576f20d284dba243e0dc53a881, type: 3}
   - {fileID: -8638041438984211807, guid: d997a0b1aee464e4db3ad81c909e492c, type: 3}
   - {fileID: 4433383066789701670, guid: ee495a3e0952f5544bdb6f563177d144, type: 3}
+  onTutorial:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4497391541527317405}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.TutorialManager,
+          Assembly-CSharp
+        m_MethodName: Begin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7621796056208541200
 MonoBehaviour:
   m_ObjectHideFlags: 0

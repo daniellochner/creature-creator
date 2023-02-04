@@ -44,7 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
 
-            teleportLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+            teleportLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
         }
 
         private void OnTriggerEnter(Collider other)

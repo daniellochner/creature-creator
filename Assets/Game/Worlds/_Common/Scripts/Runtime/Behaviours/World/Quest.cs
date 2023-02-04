@@ -79,7 +79,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 minimapIcon.enabled = !IsCompleted;
 
                 yield return new WaitUntil(() => Player.Instance.IsSetup);
-                questLAS.AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
+                questLAS.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
             }
             else
             {
