@@ -19,13 +19,20 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
         {
             base.End();
 
-            BlackBars.Instance.SetVisibility(false, 1f);
-            TutorialManager.Instance.SetVisibility(true, 1f);
+            BlackBars.Instance.SetVisibility(false, 0.25f);
+            TutorialManager.Instance.SetVisibility(true, 0.25f);
 
             gameObject.SetActive(false);
             Player.Instance.Constructor.Body.gameObject.SetActive(true);
 
             TutorialManager.Instance.Begin();
+
+            string music = SettingsManager.Data.InGameMusic.ToString();
+            if (SettingsManager.Data.InGameMusic == Settings.InGameMusicType.None)
+            {
+                music = null;
+            }
+            MusicManager.Instance.FadeTo(music, 0f, 1f);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureAbilities CreatureAbilities { get; private set; }
 
         public float CooldownTimeLeft { get; set; }
-        public virtual bool CanPerform => true;
+        public virtual bool CanPerform => !CinematicManager.Instance.IsInCinematic;
         #endregion
 
         #region Methods

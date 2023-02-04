@@ -53,6 +53,7 @@ namespace DanielLochner.Assets
             set => handleClipping = value;
         }
 
+        public virtual bool CanInput { get; set; } = true;
         public bool IsFrozen { get; private set; }
         public bool HasInteractedWithUI { get; private set; }
         public Vector3 OffsetPosition { get; set; }
@@ -95,7 +96,7 @@ namespace DanielLochner.Assets
 
         private void OnZoom()
         {
-            if (!freezeZoom && !IsFrozen)
+            if (!freezeZoom && !IsFrozen && CanInput)
             {
                 OnHandleClipping(Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y));
             }
@@ -105,7 +106,7 @@ namespace DanielLochner.Assets
         private void OnRotate()
         {
             Vector3 velocity = Vector3.zero;
-            if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen)
+            if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen && CanInput)
             {
                 float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
                 float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");

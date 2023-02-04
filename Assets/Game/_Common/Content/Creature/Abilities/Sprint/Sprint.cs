@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [SerializeField] private float hungerCost;
         private CreatureSpeedup speedUp;
 
-        public override bool CanPerform => Player.Instance.Hunger.Hunger > 0f;
+        public override bool CanPerform => base.CanPerform && Player.Instance.Hunger.Hunger > 0f;
 
         public override void Setup(CreatureAbilities creatureAbilities)
         {

@@ -1,11 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
     public class Cinematic : MonoBehaviour
     {
+        private void OnDestroy()
+        {
+            if (CinematicManager.Instance)
+            {
+                CinematicManager.Instance.IsInCinematic = false;
+            }
+        }
+
         public virtual void Begin()
         {
             CinematicManager.Instance.IsInCinematic = true;

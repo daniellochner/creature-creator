@@ -13,8 +13,16 @@ namespace DanielLochner.Assets
         [SerializeField] private bool useTimeScaledPitch;
         [SerializeField] private string startSound;
 
+        private Coroutine fadeFromCoroutine, fadeToCoroutine;
         private AudioSource[] sources = new AudioSource[2];
         private int current;
+        #endregion
+
+        #region Properties
+        public string CurrentSound
+        {
+            get; set;
+        }
         #endregion
 
         #region Methods
@@ -51,14 +59,24 @@ namespace DanielLochner.Assets
         public void FadeTo(string sound, float time, float volume)
         {
             if (sources[0] == null || sources[current] == null) return;
+            CurrentSound = sound;
 
             int next = (current + 1) % 2;
             sources[next].clip = (sound != null) ? sounds[sound] : null;
             sources[next].volume = volume;
             sources[next].Play();
 
-            StartCoroutine(sources[current].FadeRoutine(time, 0f));
-            StartCoroutine(sources[next].FadeRoutine(time, 1f));
+            if (fadeFromCoroutine != null)
+            {
+                StopCoroutine(fadeFromCoroutine);
+            }
+            fadeFromCoroutine = StartCoroutine(sources[current].FadeRoutine(time, 0f));
+
+            if (fadeToCoroutine != null)
+            {
+                StopCoroutine(fadeToCoroutine);
+            }
+            fadeToCoroutine = StartCoroutine(sources[next].FadeRoutine(time, 1f));
 
             current = next;
         }

@@ -325,7 +325,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(music));
                 }
             });
-            inGameMusicOS.Select(SettingsManager.Data.InGameMusic, inGame);
+            inGameMusicOS.Select(SettingsManager.Data.InGameMusic, false);
             #endregion
 
             #region Gameplay

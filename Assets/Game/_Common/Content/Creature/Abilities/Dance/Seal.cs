@@ -5,7 +5,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     [CreateAssetMenu(menuName = "Creature Creator/Ability/Seal")]
     public class Seal : Ability
     {
-        public override bool CanPerform => !EditorManager.Instance.IsEditing && Player.Instance.Underwater.IsUnderwater;
+        public override bool CanPerform => base.CanPerform && !EditorManager.Instance.IsEditing && Player.Instance.Underwater.IsUnderwater;
 
         public override void OnPerform()
         {
