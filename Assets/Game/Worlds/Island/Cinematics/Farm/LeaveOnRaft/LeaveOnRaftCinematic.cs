@@ -13,20 +13,25 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
         #endregion
 
         #region Methods
-        public override void BeginFade()
+        public override void Begin()
         {
-            base.BeginFade();
-            SpawnCreature(spawnPoint);
-            StartCoroutine(MoveRoutine());
+            base.Begin();
 
+            Fader.FadeInOut(1f, delegate
+            {
+                SetVisibility(true);
 
-            //Player.Instance.Loader.HideFromOthers();
+                BlackBars.Instance.SetVisibility(true, 0f);
+                EditorManager.Instance.SetVisibility(false, 0f);
 
+                SpawnCreature(spawnPoint);
+                StartCoroutine(MoveRoutine());
+            });
+            SetMusic(false, 1f);
         }
 
         private IEnumerator MoveRoutine()
         {
-
             while (true)
             {
                 raft.position += direction * speed * Time.fixedDeltaTime;

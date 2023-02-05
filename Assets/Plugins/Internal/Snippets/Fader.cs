@@ -17,7 +17,16 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public static void Fade(bool targetVisibility, float fadeDuration, UnityAction endFadeEvent = null)
+        public static void FadeInOut(float fadeDuration, UnityAction onFade = null)
+        {
+            Fade(true, fadeDuration, delegate
+            {
+                onFade?.Invoke();
+                Fade(false, fadeDuration);
+            });
+        }
+
+        public static void Fade(bool targetVisibility, float fadeDuration, UnityAction onFade = null)
         {
             if (Instance == null)
             {
@@ -42,14 +51,14 @@ namespace DanielLochner.Assets
             }
 
             // Fade CanvasGroup In/Out
-            Instance.StartCoroutine(FadeRoutine(targetVisibility, fadeDuration, endFadeEvent));
+            Instance.StartCoroutine(FadeRoutine(targetVisibility, fadeDuration, onFade));
         }
 
-        private static IEnumerator FadeRoutine(bool targetVisibility, float fadeDuration, UnityAction endFadeEvent = null)
+        private static IEnumerator FadeRoutine(bool targetVisibility, float fadeDuration, UnityAction onFade = null)
         {
             yield return new WaitForEndOfFrame(); // Start fading on next frame.
 
-            yield return Instance.StartCoroutine(Instance.fadeCanvasGroup.Fade(targetVisibility, fadeDuration, true, endFadeEvent));
+            yield return Instance.StartCoroutine(Instance.fadeCanvasGroup.Fade(targetVisibility, fadeDuration, true, onFade));
         }
         #endregion
     }

@@ -5,6 +5,8 @@ namespace DanielLochner.Assets
     public class BlackBars : MonoBehaviourSingleton<BlackBars>
     {
         private CanvasGroup canvasGroup;
+        private Coroutine coroutine;
+
         protected override void Awake()
         {
             base.Awake();
@@ -12,7 +14,11 @@ namespace DanielLochner.Assets
         }
         public void SetVisibility(bool isVisible, float time = 0f)
         {
-            StartCoroutine(canvasGroup.Fade(isVisible, time));
+            if (coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+            coroutine = StartCoroutine(canvasGroup.Fade(isVisible, time));
         }
     }
 }

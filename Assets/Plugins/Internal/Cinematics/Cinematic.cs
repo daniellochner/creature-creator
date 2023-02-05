@@ -7,9 +7,7 @@ namespace DanielLochner.Assets
     {
         #region Properties
         public UnityAction OnBegin { get; set; }
-        public UnityAction OnBeginFade { get; set; }
         public UnityAction OnEnd { get; set; }
-        public UnityAction OnEndFade { get; set; }
         #endregion
 
         #region Methods
@@ -21,53 +19,15 @@ namespace DanielLochner.Assets
             }
         }
 
-        public virtual void Begin(bool fade)
+        public virtual void Begin()
         {
             CinematicManager.Instance.IsInCinematic = true;
             OnBegin?.Invoke();
-
-            if (fade)
-            {
-                Fader.Fade(true, 1f, delegate
-                {
-                    BlackBars.Instance.SetVisibility(true);
-                    BeginFade();
-                    Fader.Fade(false, 1f);
-                });
-            }
-            else
-            {
-                BlackBars.Instance.SetVisibility(true);
-                BeginFade();
-            }
         }
-        public virtual void BeginFade()
-        {
-            OnBeginFade?.Invoke();
-        }
-        public virtual void End(bool fade)
+        public virtual void End()
         {
             CinematicManager.Instance.IsInCinematic = false;
             OnEnd?.Invoke();
-
-            if (fade)
-            {
-                Fader.Fade(true, 1f, delegate
-                {
-                    BlackBars.Instance.SetVisibility(false);
-                    EndFade();
-                    Fader.Fade(false, 1f);
-                });
-            }
-            else
-            {
-                BlackBars.Instance.SetVisibility(false);
-                EndFade();
-            }
-        }
-        public virtual void EndFade()
-        {
-            OnEndFade?.Invoke();
         }
         #endregion
     }

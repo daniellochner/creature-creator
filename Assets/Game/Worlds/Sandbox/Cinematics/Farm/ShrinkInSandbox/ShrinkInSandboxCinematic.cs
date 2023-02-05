@@ -1,15 +1,12 @@
-using System.Collections;
 using UnityEngine;
 
-namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
+namespace DanielLochner.Assets.CreatureCreator.Cinematics.Sandbox
 {
-    public class ArriveOnRaftCinematic : CCCinematic
+    public class ShrinkInSandboxCinematic : CCCinematic
     {
         #region Fields
-        [SerializeField] private Transform raft;
         [SerializeField] private Transform spawnPoint;
-        [SerializeField] private Vector3 direction;
-        [SerializeField] private float speed;
+        [SerializeField] private Transform target;
         #endregion
 
         #region Methods
@@ -22,8 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
             BlackBars.Instance.SetVisibility(true, 0f);
             EditorManager.Instance.SetVisibility(false, 0f);
 
-            SpawnCreature(spawnPoint, TeleportManager.dataBuffer);
-            StartCoroutine(MoveRoutine());
+            target.position = SpawnCreature(spawnPoint, TeleportManager.dataBuffer).Body.position;
         }
         public override void End()
         {
@@ -37,15 +33,6 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
                 EditorManager.Instance.SetVisibility(true, 0f);
             });
             SetMusic(true, 1f);
-        }
-
-        private IEnumerator MoveRoutine()
-        {
-            while (true)
-            {
-                raft.position += direction * speed * Time.fixedDeltaTime;
-                yield return new WaitForFixedUpdate();
-            }
         }
         #endregion
     }

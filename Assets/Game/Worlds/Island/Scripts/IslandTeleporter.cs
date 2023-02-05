@@ -1,6 +1,4 @@
 using DanielLochner.Assets.CreatureCreator.Cinematics.Island;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -17,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (prevScene == "Sandbox" && nextScene == "Island")
                 {
-                    cinematic.Begin(false);
+                    cinematic.Begin();
                 }
             }
         }

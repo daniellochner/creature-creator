@@ -117,7 +117,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 cinematic.OnEnd = InitializeTeleport;
             }
-            cinematic.Begin(true);
+            cinematic.Begin();
         }
 
         private void UpdateInfo()
