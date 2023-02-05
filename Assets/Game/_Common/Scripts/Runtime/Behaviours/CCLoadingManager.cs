@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (GameSetup.Instance)
             {
                 yield return new WaitUntilSetup(GameSetup.Instance);
-                yield return null;
+                yield return new WaitUntil(() => Player.Instance && Player.Instance.IsSetup);
             }
         }
     }

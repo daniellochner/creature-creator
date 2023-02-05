@@ -44,7 +44,20 @@ namespace DanielLochner.Assets.CreatureCreator
         protected void SetVisibility(bool isVisible)
         {
             gameObject.SetActive(isVisible);
-            Player.Instance.Camera.enabled = !isVisible;
+
+            if (Player.Instance)
+            {
+                Player.Instance.Camera.enabled = !isVisible;
+
+                if (isVisible)
+                {
+                    Player.Instance.Loader.HideFromOthers();
+                }
+                else
+                {
+                    Player.Instance.Loader.ShowMeToOthers();
+                }
+            }
 
             foreach (GameObject go in toHide)
             {
