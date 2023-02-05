@@ -2,21 +2,25 @@
 // Copyright (c) Daniel Lochner
 
 using Pinwheel.Poseidon.FX;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Water : NetworkBehaviour
+    public class Water : MonoBehaviour
     {
+        #region Fields
         [SerializeField] private bool allowSwimming;
         [SerializeField] private PWaterFX waterFX;
         [Space]
         [SerializeField] private Ability swimAbility;
         [SerializeField] private GameObject splashPrefab;
+        #endregion
 
+        #region Properties
         public BoxCollider Collider { get; private set; }
+        #endregion
 
+        #region Methods
         private void Awake()
         {
             Collider = GetComponent<BoxCollider>();
@@ -49,5 +53,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
+        #endregion
     }
 }

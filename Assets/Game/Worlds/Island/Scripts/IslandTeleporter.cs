@@ -1,4 +1,5 @@
 using DanielLochner.Assets.CreatureCreator.Cinematics.Island;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -7,6 +8,9 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private ArriveOnRaftCinematic arriveOnRaftCinematic;
+
+        [SerializeField] private Unity.Netcode.Components.NetworkTransform raft;
+        [SerializeField] private Transform shore;
         #endregion
 
         #region Methods
@@ -18,6 +22,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (prevScene == "Farm")
                 {
+                    if (NetworkManager.Singleton.IsHost)
+                    {
+                        raft.Teleport(shore.position, shore.rotation, Vector3.one);
+                    }
                     arriveOnRaftCinematic.Begin();
                 }
             }

@@ -4,6 +4,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CCCinematic : Cinematic
     {
+        #region Fields
+        [SerializeField] protected GameObject[] toHide;
+        #endregion
+
         #region Methods
         protected virtual CreatureConstructor SpawnCreature(Transform parent, CreatureData data = null)
         {
@@ -37,10 +41,15 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             MusicManager.Instance.FadeTo(music, time, 1f);
         }
-        protected virtual void SetVisibility(bool isVisible)
+        protected void SetVisibility(bool isVisible)
         {
             gameObject.SetActive(isVisible);
             Player.Instance.Camera.enabled = !isVisible;
+
+            foreach (GameObject go in toHide)
+            {
+                go.SetActive(!isVisible);
+            }
         }
         #endregion
     }
