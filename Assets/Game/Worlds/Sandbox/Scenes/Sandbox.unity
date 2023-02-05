@@ -372,7 +372,7 @@ PrefabInstance:
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: cinematic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1108518746}
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: targetMapId
       value: option_map_farm
@@ -506,6 +506,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
       propertyPath: m_Name
       value: Ball_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
       propertyPath: m_TagString
@@ -880,8 +884,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370594776}
-  m_LocalRotation: {x: -0.43674347, y: 0.55610716, z: 0.4367436, w: 0.55610704}
-  m_LocalPosition: {x: -11.94, y: 1.06, z: 0}
+  m_LocalRotation: {x: -0.0894857, y: -0.89804196, z: 0.21548745, w: -0.37293184}
+  m_LocalPosition: {x: -30.902792, y: 16.750204, z: 30.629179}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1189,6 +1193,10 @@ PrefabInstance:
       value: Ball_3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
       propertyPath: m_TagString
       value: Ball
       objectReference: {fileID: 0}
@@ -1439,6 +1447,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
       propertyPath: m_Name
       value: Ball_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a9eed0c4bec6e2041a6efdd64c17dcc1, type: 3}
       propertyPath: m_TagString
@@ -3643,7 +3655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3304570033926424110, guid: d1e1f6a055042bb4f8db39d09a42bda2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 370
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3304570033926424110, guid: d1e1f6a055042bb4f8db39d09a42bda2, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3651,7 +3663,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3304570033926424110, guid: d1e1f6a055042bb4f8db39d09a42bda2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 385
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3304570033926424110, guid: d1e1f6a055042bb4f8db39d09a42bda2, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -6795,7 +6807,7 @@ PrefabInstance:
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: cinematic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1108518746}
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: targetMapId
       value: option_map_farm
@@ -6889,7 +6901,7 @@ PrefabInstance:
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: cinematic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1108518746}
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: targetMapId
       value: option_map_farm
@@ -8293,6 +8305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93f7ef15036c2748a56ca59c1146759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  balls: {fileID: 1903602493}
   spawnPoint: {fileID: 852755641}
   target: {fileID: 22372328}
 --- !u!4 &1043624031 stripped
@@ -8474,6 +8487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee89faef79287c4aba485762019bda0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  balls: {fileID: 1903602493}
   spawnPoint: {fileID: 884795819}
   target: {fileID: 1109496586}
 --- !u!4 &1108518747 stripped
@@ -11541,8 +11555,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862107125}
-  m_LocalRotation: {x: -0.43674347, y: 0.55610716, z: 0.4367436, w: 0.55610704}
-  m_LocalPosition: {x: -11.94, y: 1.06, z: 0}
+  m_LocalRotation: {x: -0.0894857, y: -0.89804196, z: 0.21548745, w: -0.37293184}
+  m_LocalPosition: {x: -30.902792, y: 16.750204, z: 30.629179}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11799,7 +11813,7 @@ PrefabInstance:
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: cinematic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1108518746}
     - target: {fileID: 1235528997531529341, guid: f50323961c3985b48bed148aca14e177, type: 3}
       propertyPath: targetMapId
       value: option_map_farm

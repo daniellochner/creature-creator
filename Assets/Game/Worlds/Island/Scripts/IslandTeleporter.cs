@@ -5,19 +5,23 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class IslandTeleporter : TeleportManager
     {
-        [SerializeField] private ArriveOnRaftCinematic cinematic;
+        #region Fields
+        [SerializeField] private ArriveOnRaftCinematic arriveOnRaftCinematic;
+        #endregion
 
+        #region Methods
         public override void OnEnter(string prevScene, string nextScene)
         {
             base.OnEnter(prevScene, nextScene);
 
             if (!GameSetup.Instance.DoTutorial)
             {
-                if (prevScene == "Sandbox" && nextScene == "Island")
+                if (prevScene == "Farm")
                 {
-                    cinematic.Begin();
+                    arriveOnRaftCinematic.Begin();
                 }
             }
         }
+        #endregion
     }
 }

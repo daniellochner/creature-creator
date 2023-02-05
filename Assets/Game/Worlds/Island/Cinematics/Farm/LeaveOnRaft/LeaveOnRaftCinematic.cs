@@ -6,6 +6,7 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
     public class LeaveOnRaftCinematic : CCCinematic
     {
         #region Fields
+        [SerializeField] private Transform prevRaft;
         [SerializeField] private Transform raft;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Vector3 direction;
@@ -28,6 +29,12 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
                 StartCoroutine(MoveRoutine());
             });
             SetMusic(false, 1f);
+        }
+
+        protected override void SetVisibility(bool isVisible)
+        {
+            base.SetVisibility(isVisible);
+            prevRaft.gameObject.SetActive(!isVisible);
         }
 
         private IEnumerator MoveRoutine()

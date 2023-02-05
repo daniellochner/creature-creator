@@ -5,6 +5,7 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Sandbox
     public class ShrinkInSandboxCinematic : CCCinematic
     {
         #region Fields
+        [SerializeField] private GameObject balls;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Transform target;
         #endregion
@@ -13,6 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Sandbox
         public override void Begin()
         {
             base.Begin();
+
+            balls.SetActive(false);
 
             SetVisibility(true);
 
@@ -27,6 +30,8 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Sandbox
 
             Fader.FadeInOut(1f, delegate
             {
+                balls.SetActive(true);
+
                 SetVisibility(false);
 
                 BlackBars.Instance.SetVisibility(false, 0f);

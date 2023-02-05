@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             MusicManager.Instance.FadeTo(music, time, 1f);
         }
-        protected void SetVisibility(bool isVisible)
+        protected virtual void SetVisibility(bool isVisible)
         {
             gameObject.SetActive(isVisible);
             Player.Instance.Camera.enabled = !isVisible;
