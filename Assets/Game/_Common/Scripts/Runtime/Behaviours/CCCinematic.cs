@@ -48,15 +48,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Player.Instance)
             {
                 Player.Instance.Camera.enabled = !isVisible;
-
-                if (isVisible)
-                {
-                    Player.Instance.Loader.HideFromOthers();
-                }
-                else
-                {
-                    Player.Instance.Loader.ShowMeToOthers();
-                }
             }
 
             foreach (GameObject go in toHide)

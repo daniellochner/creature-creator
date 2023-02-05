@@ -108,6 +108,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void TeleportClientRpc()
         {
+            Player.Instance.Loader.HideFromOthers();
+
             TeleportManager.Instance.TeleportTo(targetMapName, JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data)));
         }
         [ClientRpc]
