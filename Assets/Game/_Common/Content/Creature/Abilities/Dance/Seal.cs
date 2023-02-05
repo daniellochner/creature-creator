@@ -9,7 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
 
         public override void OnPerform()
         {
-            Player.Instance.Effects.PlaySound("SealVibing");
+            //Player.Instance.Effects.PlaySound("SealVibing");
             Player.Instance.Animator.Params.SetTrigger("Body_Seal");
 
             Player.Instance.Mover.StopMoving();

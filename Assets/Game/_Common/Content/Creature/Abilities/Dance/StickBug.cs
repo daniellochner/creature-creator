@@ -9,7 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
 
         public override void OnPerform()
         {
-            Player.Instance.Effects.PlaySound("GetStickBugged");
+            //Player.Instance.Effects.PlaySound("GetStickBugged");
             Player.Instance.Animator.Params.SetTrigger("Body_StickBug");
 
             Player.Instance.Mover.StopMoving();

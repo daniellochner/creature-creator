@@ -6,16 +6,26 @@ namespace DanielLochner.Assets
     [RequireComponent(typeof(TranslucentImageSource))]
     public class TranslucentImageAssigner : MonoBehaviour
     {
+        private TranslucentImageSource source;
+
+        private void Awake()
+        {
+            source = GetComponent<TranslucentImageSource>();
+        }
         private void OnEnable()
         {
-            TranslucentImageSource source = GetComponent<TranslucentImageSource>();
-            foreach (TranslucentImage image in FindObjectsOfType<TranslucentImage>())
+            foreach (TranslucentImage image in FindObjectsOfType<TranslucentImage>(true))
             {
                 if (image.source == null)
                 {
                     image.source = source;
                 }
             }
+            source.enabled = true;
+        }
+        private void OnDisable()
+        {
+            source.enabled = false;
         }
     }
 }

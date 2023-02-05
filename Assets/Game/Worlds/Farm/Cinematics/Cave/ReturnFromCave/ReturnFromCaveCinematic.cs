@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Farm
 {
-    public class ReturnFromCaveCinematic : Cinematic
+    public class ReturnFromCaveCinematic : CCCinematic
     {
 
     }

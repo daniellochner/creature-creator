@@ -15,11 +15,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string targetMapName;
         [SerializeField] private string targetMapId;
         [SerializeField] private Keybind keybind;
+        [SerializeField] private Cinematic cinematic;
         [Space]
         [SerializeField] private TextMeshPro teleportText;
         [SerializeField] private LookAtConstraint teleportLookAtConstraint;
 
         private TrackRegion region;
+        private bool isTeleporting;
         #endregion
 
         #region Properties
@@ -31,8 +33,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => (WorldManager.Instance.World is WorldMP) && (NetworkPlayersMenu.Instance.NumPlayers > 1);
         }
-
-        public bool IsTeleporting { get; private set; }
         #endregion
 
         #region Methods
@@ -61,11 +61,18 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateInfo();
 
-                if (!IsTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
+                if (!isTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
                 {
                     ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
                     {
-                        TeleportAsync();
+                        if (cinematic != null)
+                        {
+                            TeleportCinematicClientRpc();
+                        }
+                        else
+                        {
+                            InitializeTeleport();
+                        }
                     });
                 }
             }
@@ -78,9 +85,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private async void TeleportAsync()
+        private async void InitializeTeleport()
         {
-            IsTeleporting = true;
+            isTeleporting = true;
 
             if (WorldManager.Instance.World is WorldMP)
             {
@@ -102,6 +109,15 @@ namespace DanielLochner.Assets.CreatureCreator
         private void TeleportClientRpc()
         {
             TeleportManager.Instance.TeleportTo(targetMapName, JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data)));
+        }
+        [ClientRpc]
+        private void TeleportCinematicClientRpc()
+        {
+            if (IsHost)
+            {
+                cinematic.OnEnd = InitializeTeleport;
+            }
+            cinematic.Begin(true);
         }
 
         private void UpdateInfo()

@@ -15,10 +15,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Load()
+        public CreatureConstructor Load()
         {
             CreatureConstructor creature = Instantiate(creaturePrefab, transform.position, transform.rotation, transform);
             creature.Construct(JsonUtility.FromJson<CreatureData>(data.text));
+            return creature;
         }
         #endregion
     }

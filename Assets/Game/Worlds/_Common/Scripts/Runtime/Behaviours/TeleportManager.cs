@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class TeleportManager : MonoBehaviourSingleton<TeleportManager>
     {
         #region Fields
-        private static CreatureData dataBuffer;
+        public static CreatureData dataBuffer;
         #endregion
 
         #region Methods
@@ -18,7 +18,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             dataBuffer = data;
 
-            LoadScene(targetScene);
+            if (NetworkManager.Singleton.IsHost)
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
+            }
         }
 
         public virtual void OnLeave(string prevScene, string nextScene)
@@ -26,16 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public virtual void OnEnter(string prevScene, string nextScene)
         {
-            WorldManager.Instance.IsUsingTeleport = false;
             StartCoroutine(LoadRoutine());
-        }
-
-        protected void LoadScene(string targetScene)
-        {
-            if (NetworkManager.Singleton.IsHost)
-            {
-                NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
-            }
         }
 
         private IEnumerator LoadRoutine()

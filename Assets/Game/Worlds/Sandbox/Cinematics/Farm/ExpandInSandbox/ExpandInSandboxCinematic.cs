@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Sandbox
 {
-    public class ExpandInSandboxCinematic : Cinematic
+    public class ExpandInSandboxCinematic : CCCinematic
     {
 
     }

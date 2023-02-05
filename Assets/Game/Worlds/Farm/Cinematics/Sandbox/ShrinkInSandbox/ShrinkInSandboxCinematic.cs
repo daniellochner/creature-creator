@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Farm
 {
-    public class ShrinkInSandboxCinematic : Cinematic
+    public class ShrinkInSandboxCinematic : CCCinematic
     {
 
     }

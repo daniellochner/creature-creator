@@ -66,6 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (IsUsingTeleport)
                 {
                     TeleportManager.Instance.OnEnter(prevScene, nextScene);
+                    IsUsingTeleport = false;
                 }
             }));
         }

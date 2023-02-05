@@ -98,7 +98,7 @@ namespace DanielLochner.Assets
         {
             if (IsPressing && draggable)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(Input.mousePosition);
 
                 Vector3? targetWorldPosition = null;
                 if (customCollider != null)
@@ -160,7 +160,7 @@ namespace DanielLochner.Assets
                 UpdatePlane();
             }
 
-            Ray ray = Camera.main.ScreenPointToRay(initialMousePosition = Input.mousePosition);
+            Ray ray = CameraUtility.MainCamera.ScreenPointToRay(initialMousePosition = Input.mousePosition);
             if (Plane.Raycast(ray, out float distance))
             {
                 ClampFromPosition = startWorldPosition = transform.position;
@@ -246,7 +246,7 @@ namespace DanielLochner.Assets
         {
             if (mousePlaneAlignment == MousePlaneAlignment.WithCamera)
             {
-                Plane = new Plane(Camera.main.transform.forward, transform.position);
+                Plane = new Plane(CameraUtility.MainCamera.transform.forward, transform.position);
             }
             else if (mousePlaneAlignment == MousePlaneAlignment.ToLocalDirection)
             {

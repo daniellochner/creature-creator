@@ -20,6 +20,21 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void OnEnable()
+        {
+            if (IsSetup)
+            {
+                MainCamera.gameObject.SetActive(true);
+            }
+        }
+        private void OnDisable()
+        {
+            if (IsSetup)
+            {
+                MainCamera.gameObject.SetActive(false);
+            }
+        }
+
         public void Setup()
         {
             GameObject camera = Instantiate(cameraPrefab);

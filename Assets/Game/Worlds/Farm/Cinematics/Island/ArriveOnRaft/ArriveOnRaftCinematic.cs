@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Farm
 {
-    public class ArriveOnRaftCinematic : Cinematic
+    public class ArriveOnRaftCinematic : CCCinematic
     {
-
     }
 }

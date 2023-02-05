@@ -24,8 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public bool DoTutorial => ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0 && !EditorManager.Instance.CreativeMode && SettingsManager.Data.Tutorial;
         public bool IsMultiplayer => WorldManager.Instance.World is WorldMP;
-
         public bool IsSetup { get; set; }
         #endregion
 
@@ -78,7 +78,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Player.Instance.Editor.Platform = startingPlatform;
             EditorManager.Instance.Setup();
 
-            if ((ProgressManager.Data.UnlockedBodyParts.Count == 0) && (ProgressManager.Data.UnlockedPatterns.Count == 0) && !EditorManager.Instance.CreativeMode && SettingsManager.Data.Tutorial)
+            if (DoTutorial)
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Play, true);
                 onTutorial.Invoke();
