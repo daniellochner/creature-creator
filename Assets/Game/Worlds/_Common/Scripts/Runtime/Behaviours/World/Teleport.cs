@@ -73,6 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             InitializeTeleport();
                         }
+                        HideClientRpc();
                     });
                 }
             }
@@ -108,8 +109,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void TeleportClientRpc()
         {
-            Player.Instance.Loader.HideFromOthers();
-
             TeleportManager.Instance.TeleportTo(targetMapName, JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data)));
         }
         [ClientRpc]
@@ -120,6 +119,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 cinematic.OnEnd = InitializeTeleport;
             }
             cinematic.Begin();
+        }
+        [ClientRpc]
+        private void HideClientRpc()
+        {
+            Player.Instance.Loader.HideFromOthers();
         }
 
         private void UpdateInfo()
