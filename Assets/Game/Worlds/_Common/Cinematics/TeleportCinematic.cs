@@ -48,8 +48,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Hide();
             EditorManager.Instance.SetVisibility(true, 0f);
-
-            Player.Instance.Loader.ShowMeToOthers();
         }
 
         public void Teleport()
