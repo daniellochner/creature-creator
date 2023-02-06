@@ -61,13 +61,17 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public void TeleportTo()
+        public void TeleportTo(bool sfx = true)
         {
             Player.Instance.Editor.Platform.hasEntered = false;
             Player.Instance.Editor.Platform.minimapIcon.enabled = true;
+            Player.Instance.Editor.Platform = this;
 
             Player.Instance.Mover.Teleport(this);
-            teleportAS.Play();
+            if (sfx)
+            {
+                teleportAS.Play();
+            }
         }
         #endregion
     }

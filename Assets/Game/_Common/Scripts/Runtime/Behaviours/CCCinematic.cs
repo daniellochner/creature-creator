@@ -12,20 +12,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 Player.Instance.Camera.enabled = !isVisible;
             }
         }
-
         public override void Show()
         {
             base.Show();
             SetVisibility(true);
         }
-
         public override void Hide()
         {
             base.Hide();
             SetVisibility(false);
 
         }
-
         #endregion
     }
 }

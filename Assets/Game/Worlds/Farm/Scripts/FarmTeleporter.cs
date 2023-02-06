@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (prevScene == "Island")
             {
                 arriveOnRaftCinematic.Begin();
-                Player.Instance.Mover.Teleport(raftPlatform, true);
+                raftPlatform.TeleportTo(false);
             }
             else
             if (prevScene == "Sandbox")
