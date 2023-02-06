@@ -29,12 +29,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public virtual void OnEnter(string prevScene, string nextScene)
         {
-            StartCoroutine(LoadRoutine());
-        }
-
-        private IEnumerator LoadRoutine()
-        {
-            yield return new WaitUntil(() => Player.Instance != null && Player.Instance.IsSetup);
             EditorManager.Instance.Load(dataBuffer);
             dataBuffer = null;
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Farm
 {
-    public class EnterCrackCinematic : CCCinematic
+    public class EnterCrackCinematic : TeleportCinematic
     {
 
     }

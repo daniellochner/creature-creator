@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private ArriveOnRaftCinematic arriveOnRaftCinematic;
         [SerializeField] private ExpandInSandboxCinematic expandInSandboxCinematic;
+        [SerializeField] private Platform raftPlatform;
         #endregion
 
         #region Methods
@@ -19,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (prevScene == "Island")
             {
                 arriveOnRaftCinematic.Begin();
+                Player.Instance.Mover.Teleport(raftPlatform, true);
             }
             else
             if (prevScene == "Sandbox")

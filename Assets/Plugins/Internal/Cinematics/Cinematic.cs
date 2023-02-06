@@ -15,19 +15,28 @@ namespace DanielLochner.Assets
         {
             if (CinematicManager.Instance)
             {
-                CinematicManager.Instance.IsInCinematic = false;
+                End();
             }
         }
 
         public virtual void Begin()
         {
             CinematicManager.Instance.IsInCinematic = true;
+            gameObject.SetActive(true);
             OnBegin?.Invoke();
         }
         public virtual void End()
         {
             CinematicManager.Instance.IsInCinematic = false;
+            gameObject.SetActive(false);
             OnEnd?.Invoke();
+        }
+
+        public virtual void Show()
+        {
+        }
+        public virtual void Hide()
+        {
         }
         #endregion
     }

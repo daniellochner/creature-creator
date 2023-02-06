@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class PauseMenu : Dialog<PauseMenu>
     {
         #region Properties
-        private bool CanToggle => !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !InputDialog.Instance.IsOpen && !UnlockableBodyPartsMenu.Instance.IsOpen && !UnlockablePatternsMenu.Instance.IsOpen && !KeybindingsDialog.Instance.IsOpen;
+        private bool CanToggle => !CinematicManager.Instance.IsInCinematic && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !InputDialog.Instance.IsOpen && !UnlockableBodyPartsMenu.Instance.IsOpen && !UnlockablePatternsMenu.Instance.IsOpen && !KeybindingsDialog.Instance.IsOpen;
         #endregion
 
         #region Methods
@@ -36,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     NetworkShutdownManager.Instance.Shutdown();
                     SceneManager.LoadScene("MainMenu");
                 }
+                MusicManager.Instance.FadeTo(null, 0f, 1f);
             });
         }
         #endregion

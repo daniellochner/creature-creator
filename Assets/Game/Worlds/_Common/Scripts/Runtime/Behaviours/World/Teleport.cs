@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string targetMapName;
         [SerializeField] private string targetMapId;
         [SerializeField] private Keybind keybind;
-        [SerializeField] private Cinematic cinematic;
+        [SerializeField] private TeleportCinematic cinematic;
         [Space]
         [SerializeField] private TextMeshPro teleportText;
         [SerializeField] private LookAtConstraint teleportLookAtConstraint;
@@ -116,7 +116,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsHost)
             {
-                cinematic.OnEnd = InitializeTeleport;
+                cinematic.OnTeleport = InitializeTeleport;
             }
             cinematic.Begin();
         }

@@ -4,30 +4,19 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
 {
     public class PitifulWormCinematic : CCCinematic
     {
-        public override void Begin()
+        public override void Show()
         {
-            base.Begin();
-
-            SetVisibility(true);
-
-            BlackBars.Instance.SetVisibility(true, 0f);
-            EditorManager.Instance.SetVisibility(false, 0f);
+            base.Show();
 
             TutorialManager.Instance.SetVisibility(false, 0f);
         }
 
-        public override void End()
+        public override void Hide()
         {
-            base.End();
-
-            SetVisibility(false);
-
-            BlackBars.Instance.SetVisibility(false, 0.25f);
+            base.Hide();
 
             TutorialManager.Instance.SetVisibility(true, 0.25f);
             TutorialManager.Instance.Begin();
-
-            SetMusic(true, 0.25f);
         }
     }
 }

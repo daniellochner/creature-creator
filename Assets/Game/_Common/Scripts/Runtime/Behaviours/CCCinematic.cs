@@ -4,57 +4,28 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CCCinematic : Cinematic
     {
-        #region Fields
-        [SerializeField] protected GameObject[] toHide;
-        #endregion
-
         #region Methods
-        protected virtual CreatureConstructor SpawnCreature(Transform parent, CreatureData data = null)
+        private void SetVisibility(bool isVisible)
         {
-            CreatureConstructor creature = Player.Instance.Cloner.Clone(data);
-            creature.transform.SetZeroParent(parent);
-
-            if (creature.Legs.Count == 0)
-            {
-                Mesh bodyMesh = new Mesh();
-                creature.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-                float minY = Mathf.Infinity;
-                foreach (Vector3 vertex in bodyMesh.vertices)
-                {
-                    if (vertex.y < minY)
-                    {
-                        minY = vertex.y;
-                    }
-                }
-                creature.Body.localPosition = Vector3.up * -minY;
-            }
-
-            return creature;
-        }
-
-        protected void SetMusic(bool isEnabled, float time)
-        {
-            string music = SettingsManager.Data.InGameMusic.ToString();
-            if (!isEnabled || music == "None")
-            {
-                music = null;
-            }
-            MusicManager.Instance.FadeTo(music, time, 1f);
-        }
-        protected void SetVisibility(bool isVisible)
-        {
-            gameObject.SetActive(isVisible);
-
             if (Player.Instance)
             {
                 Player.Instance.Camera.enabled = !isVisible;
             }
-
-            foreach (GameObject go in toHide)
-            {
-                go.SetActive(!isVisible);
-            }
         }
+
+        public override void Show()
+        {
+            base.Show();
+            SetVisibility(true);
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            SetVisibility(false);
+
+        }
+
         #endregion
     }
 }

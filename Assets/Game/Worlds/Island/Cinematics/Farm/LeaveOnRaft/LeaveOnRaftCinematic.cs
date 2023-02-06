@@ -3,31 +3,20 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
 {
-    public class LeaveOnRaftCinematic : CCCinematic
+    public class LeaveOnRaftCinematic : TeleportCinematic
     {
         #region Fields
         [SerializeField] private Transform raft;
-        [SerializeField] private Transform spawnPoint;
         [SerializeField] private Vector3 direction;
         [SerializeField] private float speed;
         #endregion
 
         #region Methods
-        public override void Begin()
+        public override void Show()
         {
-            base.Begin();
-
-            Fader.FadeInOut(1f, delegate
-            {
-                SetVisibility(true);
-
-                BlackBars.Instance.SetVisibility(true, 0f);
-                EditorManager.Instance.SetVisibility(false, 0f);
-
-                SpawnCreature(spawnPoint);
-                StartCoroutine(MoveRoutine());
-            });
-            SetMusic(false, 1f);
+            base.Show();
+            SpawnCreature(spawnPoint);
+            StartCoroutine(MoveRoutine());
         }
 
         private IEnumerator MoveRoutine()

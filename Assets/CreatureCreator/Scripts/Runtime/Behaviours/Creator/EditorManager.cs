@@ -97,6 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private string creaturesDirectory = null; // null because Application.persistentDataPath cannot be called during serialization.
         private bool isVisible = true, isEditing = true;
         private bool isUpdatingLoadableCreatures;
+        private Coroutine visibleCoroutine;
         #endregion
 
         #region Properties
@@ -1210,7 +1211,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetVisibility(bool v, float t = 0.25f)
         {
             isVisible = v;
-            StartCoroutine(editorCanvasGroup.Fade(v, t));
+            if (visibleCoroutine != null)
+            {
+                StopCoroutine(visibleCoroutine);
+            }
+            visibleCoroutine = StartCoroutine(editorCanvasGroup.Fade(v, t));
         }
         #endregion
 
