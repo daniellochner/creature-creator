@@ -15,6 +15,10 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            foreach (LegAnimator leg in Creature.Legs)
+            {
+                leg.Anchor.SetParent(Creature.Constructor.Root);
+            }
             x = 0f;
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -26,6 +30,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         {
             Creature.Constructor.Root.localRotation = Quaternion.identity;
             Creature.Effector.StopMySounds();
+
+            foreach (LegAnimator leg in Creature.Legs)
+            {
+                leg.Anchor.SetParent(Dynamic.Transform);
+            }
         }
         #endregion
     }

@@ -47,6 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureComparer comparer;
         [SerializeField] private CreatureUnderwater underwater;
         [SerializeField] private CreatureSpeedup speedUp;
+        [SerializeField] private CreatureGrounded grounded;
         [SerializeField] private MinimapIcon minimapIcon;
         #endregion
 
@@ -71,6 +72,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureComparer Comparer => comparer;
         public CreatureUnderwater Underwater => underwater;
         public CreatureSpeedup SpeedUp => speedUp;
+        public CreatureGrounded Grounded => grounded;
         public MinimapIcon MinimapIcon => minimapIcon;
         #endregion
 
@@ -98,6 +100,7 @@ namespace DanielLochner.Assets.CreatureCreator
             comparer = GetComponent<CreatureComparer>();
             underwater = GetComponent<CreatureUnderwater>();
             speedUp = GetComponent<CreatureSpeedup>();
+            grounded = GetComponent<CreatureGrounded>();
             minimapIcon = GetComponent<MinimapIcon>();
         }
 #endif
