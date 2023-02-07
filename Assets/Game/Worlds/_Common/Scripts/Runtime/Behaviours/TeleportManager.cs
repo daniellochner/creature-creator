@@ -1,6 +1,5 @@
-using System.Collections;
+using System;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -12,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public virtual void TeleportTo(string targetScene, CreatureData data)
+        public virtual void TeleportTo(string map, CreatureData data)
         {
             WorldManager.Instance.IsUsingTeleport = true;
 
@@ -20,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (NetworkManager.Singleton.IsHost)
             {
-                NetworkManager.Singleton.SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
+                NetworkManager.Singleton.SceneManager.LoadScene(map, LoadSceneMode.Single);
             }
         }
 

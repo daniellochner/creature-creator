@@ -125,9 +125,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void UnlockMapClientRpc()
         {
-            if (ProgressManager.Instance.UnlockMap(Enum.Parse<Map>(targetMapName)))
+            if (!WorldManager.Instance.World.CreativeMode)
             {
-                NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(targetMapId)));
+                if (ProgressManager.Instance.UnlockMap(Enum.Parse<Map>(targetMapName)))
+                {
+                    NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(targetMapId)));
+                }
             }
             Player.Instance.Loader.HideFromOthers();
         }

@@ -215,6 +215,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnInactivityKick()
         {
             InformationDialog.Instance.Close(true);
+            InformationDialog.Inform(LocalizationUtility.Localize("disconnect_title"), LocalizationUtility.Localize("disconnect_message_inactivity"));
         }
         private void OnInactivityWarn(int warnTime)
         {
