@@ -15,6 +15,8 @@ using ProfanityDetector;
 using SimpleFileBrowser;
 using UnityEngine.EventSystems;
 using System.Collections;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -277,6 +279,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             UpdateLoadableCreatures();
             UpdateNoCreatures();
+
+            // Other
+            LocalizationSettings.SelectedLocaleChanged += delegate
+            {
+                UpdateStatistics();
+            };
         }
         public void SetupPlayer()
         {
