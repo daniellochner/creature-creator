@@ -19,12 +19,14 @@ namespace DanielLochner.Assets.CreatureCreator
             UnlockMap(Map.Island);
         }
 
-        public void UnlockMap(Map map)
+        public bool UnlockMap(Map map)
         {
             if (!IsMapUnlocked(map))
             {
                 PlayerPrefs.SetInt(MapId(map), 1);
+                return true;
             }
+            return false;
         }
         public bool IsMapUnlocked(Map map)
         {

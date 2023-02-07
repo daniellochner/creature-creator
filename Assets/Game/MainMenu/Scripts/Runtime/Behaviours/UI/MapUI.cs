@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Menu mapMenu;
         [SerializeField] private Image screenshotImg;
         [SerializeField] private Sprite[] screenshots;
+        [SerializeField] private GameObject lockedIcon;
         #endregion
 
         #region Methods
@@ -22,9 +23,13 @@ namespace DanielLochner.Assets.CreatureCreator
             mapMenu.Close();
         }
 
+        
         public void OnMapChanged(int option)
         {
             screenshotImg.sprite = screenshots[option];
+
+            string mapId = $"map_unlocked_{(Map)option}".ToLower();
+            lockedIcon.SetActive(PlayerPrefs.GetInt(mapId) == 0);
         }
         #endregion
     }

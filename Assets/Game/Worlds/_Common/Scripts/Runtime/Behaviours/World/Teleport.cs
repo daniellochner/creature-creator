@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using Unity.Netcode;
@@ -65,6 +66,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
                     {
+                        UnlockMapClientRpc();
+
                         if (cinematic != null)
                         {
                             TeleportCinematicClientRpc();
@@ -73,7 +76,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             InitializeTeleport();
                         }
-                        HideClientRpc();
                     });
                 }
             }
@@ -121,8 +123,12 @@ namespace DanielLochner.Assets.CreatureCreator
             cinematic.Begin();
         }
         [ClientRpc]
-        private void HideClientRpc()
+        private void UnlockMapClientRpc()
         {
+            if (ProgressManager.Instance.UnlockMap(Enum.Parse<Map>(targetMapName)))
+            {
+                NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(targetMapId)));
+            }
             Player.Instance.Loader.HideFromOthers();
         }
 

@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Text;
 using TMPro;
 using Unity.Netcode;
@@ -19,18 +20,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle npcToggle;
         [SerializeField] private Toggle pveToggle;
         [SerializeField] private Toggle unlimitedToggle;
+        [SerializeField] private TextMeshProUGUI statusText;
+        [SerializeField] private BlinkingText statusBT;
+
+        private Coroutine updateStatusCoroutine;
         #endregion
 
         #region Properties
-        private ushort Port
-        {
-            get => (ushort)PlayerPrefs.GetInt("LOCALHOST_PORT", 7771);
-            set
-            {
-                PlayerPrefs.SetInt("LOCALHOST_PORT", NetworkTransport.ConnectionData.Port = value);
-            }
-        }
-
         private UnityTransport NetworkTransport => NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
         #endregion
 
@@ -70,9 +66,14 @@ namespace DanielLochner.Assets.CreatureCreator
             bool enablePVE = pveToggle.isOn;
             bool unlimited = unlimitedToggle.isOn && creativeMode;
 
+            if (!ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
+            {
+                UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())), Color.white);
+                return;
+            }
+
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
-            NetworkTransport.ConnectionData.Port = Port;
 
             WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
 
@@ -81,11 +82,34 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnFailed(ulong clientId)
         {
-            if (WorldManager.Instance.World is WorldSP)
+            UpdateStatus("Failed to create world...", Color.red);
+        }
+
+        private void UpdateStatus(string status, Color color, float duration = 5)
+        {
+            if (updateStatusCoroutine != null)
             {
-                Port++;
-                Play();
+                StopCoroutine(updateStatusCoroutine);
             }
+
+            statusText.CrossFadeAlpha(0f, 0f, true);
+            statusText.CrossFadeAlpha(1f, 0.25f, true);
+            statusText.text = status;
+            statusText.color = color;
+            statusBT.IsBlinking = false;
+
+            if (duration == -1)
+            {
+                statusBT.IsBlinking = true;
+            }
+            else
+            {
+                updateStatusCoroutine = this.Invoke(HideNetworkStatus, duration);
+            }
+        }
+        private void HideNetworkStatus()
+        {
+            statusText.CrossFadeAlpha(0, 0.25f, true);
         }
         #endregion
     }

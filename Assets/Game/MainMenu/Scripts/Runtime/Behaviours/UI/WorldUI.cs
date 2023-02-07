@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(MultiplayerUI multiplayerUI, Lobby lobby)
+        public void Setup(MultiplayerUI multiplayerUI, Lobby lobby, Func<Lobby, bool> isAllowedToJoin)
         {
             Players = lobby.Players.Count;
 
@@ -31,7 +32,10 @@ namespace DanielLochner.Assets.CreatureCreator
             nameText.text = lobby.Name;
             joinButton.onClick.AddListener(delegate 
             {
-                multiplayerUI.Join(lobby.Id);
+                if (isAllowedToJoin(lobby))
+                {
+                    multiplayerUI.Join(lobby.Id);
+                }
             });
 
             WorldMP world = new WorldMP(lobby);

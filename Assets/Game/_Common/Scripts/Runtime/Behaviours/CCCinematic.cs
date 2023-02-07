@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -16,11 +17,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Show();
             SetVisibility(true);
+            SetNotificationsHeight(150);
         }
         public override void Hide()
         {
             base.Hide();
             SetVisibility(false);
+            SetNotificationsHeight(0);
+        }
+
+        private void SetNotificationsHeight(int height)
+        {
+            var group = NotificationsManager.Instance.GetComponent<VerticalLayoutGroup>();
+            group.padding.top = height + 10;
+            group.enabled = false;
+            group.enabled = true;
         }
         #endregion
     }

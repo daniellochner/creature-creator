@@ -199,15 +199,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 switch (map)
                 {
                     case Map.Island:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 10;
                         break;
 
                     case Map.Sandbox:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 10;
                         break;
 
                     case Map.Farm:
-                        maxPlayersSlider.value = maxPlayersSlider.maxValue = 10;
                         break;
                 }
             });
@@ -267,7 +264,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     throw new Exception(LocalizationUtility.Localize("network_status_incorrect-version", Application.version, version));
                 }
-                
+
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
                 SetConnectionData(AuthenticationService.Instance.PlayerId, username, password);
@@ -324,7 +321,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public async void Create()
         {
-            if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName)
+            if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName || !IsMapUnlocked((Map)mapOS.Selected))
             {
                 return;
             }
@@ -436,7 +433,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     WorldMP world = new WorldMP(lobby);
                     if (!world.IsPrivate && version.Equals(Application.version) && (UseSteam == useSteam))
                     {
-                        Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
+                        Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby, IsAllowedToJoin);
                     }
                 }
                 noneGO.SetActive(worldsRT.childCount == 0);
@@ -538,6 +535,20 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConnectionData data = new ConnectionData(playerId, username, password);
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
+        }
+
+        private bool IsAllowedToJoin(Lobby lobby)
+        {
+            return IsMapUnlocked(Enum.Parse<Map>(lobby.Data["mapName"].Value));
+        }
+        private bool IsMapUnlocked(Map map)
+        {
+            if (!ProgressManager.Instance.IsMapUnlocked(map))
+            {
+                UpdateNetworkStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{map}".ToLower())), Color.white);
+                return false;
+            }
+            return true;
         }
 
         private void UpdateNetworkStatus(string status, Color color, float duration = 5)
