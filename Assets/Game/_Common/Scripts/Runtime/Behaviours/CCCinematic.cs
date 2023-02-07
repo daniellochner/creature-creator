@@ -21,7 +21,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Hide();
             SetVisibility(false);
-
         }
         #endregion
     }

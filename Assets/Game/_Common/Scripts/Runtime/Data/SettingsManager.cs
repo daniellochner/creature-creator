@@ -38,18 +38,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
-
-
-            // TODO: Revert settings back to defaults for everyone!
-            // Remove this in the next update...
-            if (PlayerPrefs.GetInt("REVERT_SETTINGS") == 0)
-            {
-                Revert();
-                PlayerPrefs.SetInt("REVERT_SETTINGS", 1);
-            }
-
-
-
             SetResolution(Data.Resolution);
             SetFullscreen(Data.Fullscreen);
             SetVSync(Data.VSync);

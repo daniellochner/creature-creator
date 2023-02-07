@@ -111,20 +111,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 PlayerPrefs.SetInt(highestPointId, 0);
             }
-
-            //// Supporter Perks
-            //if (PlayerPrefs.GetString("IsSupporter") == "TRUE") // TODO: Use Steam API
-            //{
-            //    GrantSupporterPerks();
-            //}
         }
-
-        //public void GrantSupporterPerks()
-        //{
-        //    UnlockedBodyParts.AddRange(SupporterPerks.BODY_PARTS);
-        //    UnlockedPatterns.AddRange(SupporterPerks.PATTERNS);
-        //    Cash += 100;
-        //}
         #endregion
     }
 }
