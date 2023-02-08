@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class SingleplayerUI : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private Menu singleplayerMenu;
         [SerializeField] private TMP_InputField usernameInputField;
         [SerializeField] private OptionSelector mapOS;
         [SerializeField] private OptionSelector modeOS;
@@ -22,6 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle unlimitedToggle;
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private BlinkingText statusBT;
+        [SerializeField] private MapUI mapUI;
 
         private Coroutine updateStatusCoroutine;
         #endregion
@@ -47,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             mapOS.SetupUsingEnum<Map>();
             mapOS.Select(Map.Island, false);
+            singleplayerMenu.OnOpen += UpdateMap;
 
             modeOS.SetupUsingEnum<Mode>();
             modeOS.OnSelected.AddListener(delegate (int option)
@@ -66,7 +69,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bool enablePVE = pveToggle.isOn;
             bool unlimited = unlimitedToggle.isOn && creativeMode;
 
-            if (!ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
+            if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
             {
                 UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())), Color.white);
                 return;
@@ -85,6 +88,10 @@ namespace DanielLochner.Assets.CreatureCreator
             UpdateStatus("Failed to create world...", Color.red);
         }
 
+        private void UpdateMap()
+        {
+            mapUI.UpdatePadlock(mapOS, modeOS);
+        }
         private void UpdateStatus(string status, Color color, float duration = 5)
         {
             if (updateStatusCoroutine != null)

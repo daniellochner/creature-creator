@@ -29,8 +29,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private TMP_InputField onlineUsernameInputField;
-        [SerializeField] private TextMeshProUGUI networkStatusText;
-        [SerializeField] private BlinkingText networkStatusBT;
+        [SerializeField] private TextMeshProUGUI statusText;
+        [SerializeField] private BlinkingText statusBT;
         [SerializeField] private Button createButton;
         [SerializeField] private Menu multiplayerMenu;
         [SerializeField] private Menu multiplayerHintMenu;
@@ -59,11 +59,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle npcToggle;
         [SerializeField] private Toggle profanityToggle;
         [SerializeField] private Image sortByIcon;
+        [SerializeField] private MapUI mapUI;
 
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
         private bool isConnecting, isRefreshing, isSortedByAscending = true;
-        private Coroutine updateNetStatusCoroutine;
+        private Coroutine updateStatusCoroutine;
         private int refreshCount;
         #endregion
 
@@ -74,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (Application.internetReachability == NetworkReachability.NotReachable)
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_internet"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_internet"), Color.white);
                     return false;
                 }
                 return true;
@@ -87,17 +88,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 string username = onlineUsernameInputField.text;
                 if (string.IsNullOrEmpty(username))
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_username"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_username"), Color.white);
                     return false;
                 }
                 if (filter.ContainsProfanity(username))
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_profanity"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_profanity"), Color.white);
                     return false;
                 }
                 if (username.Length > 16)
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_username-length"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_username-length"), Color.white);
                     return false;
                 }
                 return true;
@@ -110,21 +111,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 string worldName = worldNameInputField.text;
                 if (string.IsNullOrEmpty(worldName))
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_world-name"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_world-name"), Color.white);
                     return false;
                 }
                 if (worldName.Length > 32)
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_world-name-length"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_world-name-length"), Color.white);
                     return false;
                 }
                 if (filter.ContainsProfanity(worldName))
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_world-name-profanity"), Color.white);
+                    UpdateStatus(LocalizationUtility.Localize("network_status_world-name-profanity"), Color.white);
                     return false;
                 }
                 return true;
             }
+        }
+        public bool IsValidMap
+        {
+            get => (Mode)modeOS.Selected == Mode.Creative || IsMapUnlocked((Map)mapOS.Selected);
         }
 
         private bool IsConnecting
@@ -209,6 +214,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
             mapOS.Select(Map.Island, false);
+            multiplayerMenu.OnOpen += UpdateMap;
 
             modeOS.SetupUsingEnum<Mode>();
             modeOS.Select(Mode.Adventure);
@@ -223,12 +229,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnClientDisconnect(ulong clientID)
         {
-            UpdateNetworkStatus(LocalizationUtility.Localize("network_status_connection-failed"), Color.red);
+            UpdateStatus(LocalizationUtility.Localize("network_status_connection-failed"), Color.red);
             IsConnecting = false;
         }
         private void OnClientConnect(ulong clientID)
         {
-            UpdateNetworkStatus(LocalizationUtility.Localize("network_status_connected"), Color.green);
+            UpdateStatus(LocalizationUtility.Localize("network_status_connected"), Color.green);
         }
 
         public async void Join(string id)
@@ -270,7 +276,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetConnectionData(AuthenticationService.Instance.PlayerId, username, password);
 
                 // Join Lobby
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_joining-lobby"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_joining-lobby"), Color.yellow, -1);
                 LobbyPlayer player = new LobbyPlayer(AuthenticationService.Instance.PlayerId);
                 JoinLobbyByIdOptions options = new JoinLobbyByIdOptions()
                 {
@@ -279,7 +285,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 lobby = await LobbyHelper.Instance.JoinLobbyByIdAsync(id, options);
 
                 // Join Relay
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_joining-via-relay"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_joining-via-relay"), Color.yellow, -1);
                 string joinCode = lobby.Data["joinCode"].Value;
                 string hostSteamId = lobby.Data["hostSteamId"].Value;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
@@ -301,7 +307,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Start Client
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_starting-client"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_starting-client"), Color.yellow, -1);
                 Play();
                 NetworkManager.Singleton.StartClient();
                 WorldManager.Instance.SetupSceneManager();
@@ -310,18 +316,18 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (e is NullReferenceException)
                 {
-                    UpdateNetworkStatus(LocalizationUtility.Localize("network_status_lobby-error"), Color.red); // TODO: Bug with Lobby returning NullReferenceException?
+                    UpdateStatus(LocalizationUtility.Localize("network_status_lobby-error"), Color.red); // TODO: Bug with Lobby returning NullReferenceException?
                 }
                 else
                 {
-                    UpdateNetworkStatus(e.Message, Color.red);
+                    UpdateStatus(e.Message, Color.red);
                 }
                 IsConnecting = false;
             }
         }
         public async void Create()
         {
-            if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName || !IsMapUnlocked((Map)mapOS.Selected))
+            if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName || !IsValidMap)
             {
                 return;
             }
@@ -354,7 +360,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 await Authenticate();
 
                 // Allocate Relay
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
                 if (!UseSteam)
                 {
@@ -368,11 +374,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Generate Join Code
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_generating-join-code"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_generating-join-code"), Color.yellow, -1);
                 string joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
                 // Create Lobby
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_creating-lobby"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_creating-lobby"), Color.yellow, -1);
                 CreateLobbyOptions options = new CreateLobbyOptions()
                 {
                     IsPrivate = false,
@@ -397,13 +403,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 await LobbyHelper.Instance.CreateLobbyAsync(worldName, maxPlayers, options);
 
                 // Start Host
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_starting-host"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_starting-host"), Color.yellow, -1);
                 Play();
                 NetworkManager.Singleton.StartHost();
             }
             catch (Exception e)
             {
-                UpdateNetworkStatus(e.Message, Color.red);
+                UpdateStatus(e.Message, Color.red);
                 IsConnecting = false;
             }
         }
@@ -440,7 +446,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (LobbyServiceException e)
             {
-                UpdateNetworkStatus(e.Message, Color.red);
+                UpdateStatus(e.Message, Color.red);
                 noneGO.SetActive(true);
             }
 
@@ -466,9 +472,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Cancel()
         {
             if (!IsConnecting) return;
-            if (updateNetStatusCoroutine != null) StopCoroutine(updateNetStatusCoroutine);
+            if (updateStatusCoroutine != null) StopCoroutine(updateStatusCoroutine);
             NetworkShutdownManager.Instance.Shutdown();
-            HideNetworkStatus();
+            HideStatus();
             IsConnecting = false;
         }
         public void Join()
@@ -526,9 +532,9 @@ namespace DanielLochner.Assets.CreatureCreator
             await UnityServices.InitializeAsync();
             if (!AuthenticationService.Instance.IsSignedIn)
             {
-                UpdateNetworkStatus(LocalizationUtility.Localize("network_status_authenticating"), Color.yellow, -1);
+                UpdateStatus(LocalizationUtility.Localize("network_status_authenticating"), Color.yellow, -1);
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                HideNetworkStatus();
+                HideStatus();
             }
         }
         private void SetConnectionData(string playerId, string username, string password)
@@ -539,43 +545,55 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool IsAllowedToJoin(Lobby lobby)
         {
-            return IsMapUnlocked(Enum.Parse<Map>(lobby.Data["mapName"].Value));
+            bool creativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
+            if (!creativeMode)
+            {
+                return IsMapUnlocked(Enum.Parse<Map>(lobby.Data["mapName"].Value));
+            }
+            else
+            {
+                return true;
+            }
         }
         private bool IsMapUnlocked(Map map)
         {
             if (!ProgressManager.Instance.IsMapUnlocked(map))
             {
-                UpdateNetworkStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{map}".ToLower())), Color.white);
+                UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{map}".ToLower())), Color.white);
                 return false;
             }
             return true;
         }
-
-        private void UpdateNetworkStatus(string status, Color color, float duration = 5)
+        
+        private void UpdateMap()
         {
-            if (updateNetStatusCoroutine != null)
+            mapUI.UpdatePadlock(mapOS, modeOS);
+        }
+        private void UpdateStatus(string status, Color color, float duration = 5)
+        {
+            if (updateStatusCoroutine != null)
             {
-                StopCoroutine(updateNetStatusCoroutine);
+                StopCoroutine(updateStatusCoroutine);
             }
 
-            networkStatusText.CrossFadeAlpha(0f, 0f, true);
-            networkStatusText.CrossFadeAlpha(1f, 0.25f, true);
-            networkStatusText.text = status;
-            networkStatusText.color = color;
-            networkStatusBT.IsBlinking = false;
+            statusText.CrossFadeAlpha(0f, 0f, true);
+            statusText.CrossFadeAlpha(1f, 0.25f, true);
+            statusText.text = status;
+            statusText.color = color;
+            statusBT.IsBlinking = false;
 
             if (duration == -1)
             {
-                networkStatusBT.IsBlinking = true;
+                statusBT.IsBlinking = true;
             }
             else
             {
-                updateNetStatusCoroutine = this.Invoke(HideNetworkStatus, duration);
+                updateStatusCoroutine = this.Invoke(HideStatus, duration);
             }
         }
-        private void HideNetworkStatus()
+        private void HideStatus()
         {
-            networkStatusText.CrossFadeAlpha(0, 0.25f, true);
+            statusText.CrossFadeAlpha(0, 0.25f, true);
         }
         #endregion
 

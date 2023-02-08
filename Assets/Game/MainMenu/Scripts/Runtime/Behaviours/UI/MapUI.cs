@@ -10,6 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image screenshotImg;
         [SerializeField] private Sprite[] screenshots;
         [SerializeField] private GameObject lockedIcon;
+
+        private OptionSelector mapOS, modeOS;
         #endregion
 
         #region Methods
@@ -26,9 +28,39 @@ namespace DanielLochner.Assets.CreatureCreator
         public void OnMapChanged(int option)
         {
             screenshotImg.sprite = screenshots[option];
+            UpdatePadlock(mapOS, modeOS);
+        }
+        public void OnModeChanged(int option)
+        {
+            UpdatePadlock(mapOS, modeOS);
+        }
 
-            string mapId = $"map_unlocked_{(Map)option}".ToLower();
-            lockedIcon.SetActive(PlayerPrefs.GetInt(mapId) == 0);
+        public void UpdatePadlock(OptionSelector mapOS, OptionSelector modeOS)
+        {
+            if (!mapOS)
+            {
+                return;
+            }
+            this.mapOS = mapOS;
+
+            if (!modeOS)
+            {
+                return;
+            }
+            this.modeOS = modeOS;
+
+            bool unlocked = true;
+            Mode mode = (Mode)modeOS.Selected;
+            if (mode == Mode.Adventure)
+            {
+                Map map = (Map)mapOS.Selected;
+                string mapId = $"map_unlocked_{map}".ToLower();
+                if (PlayerPrefs.GetInt(mapId) == 0)
+                {
+                    unlocked = false;
+                }
+            }
+            lockedIcon.SetActive(!unlocked);
         }
         #endregion
     }
