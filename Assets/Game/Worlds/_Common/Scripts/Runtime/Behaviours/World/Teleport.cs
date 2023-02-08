@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private LookAtConstraint teleportLookAtConstraint;
 
         private TrackRegion region;
-        private bool isTeleporting;
+        private bool isTeleporting, isVisible;
         #endregion
 
         #region Properties
@@ -34,6 +34,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => (WorldManager.Instance.World is WorldMP) && (NetworkPlayersMenu.Instance.NumPlayers > 1);
         }
+
+        private bool IsVisible
+        {
+            get => isVisible;
+            set
+            {
+                isVisible = value;
+                teleportText.gameObject.SetActive(isVisible);
+            }
+        }
         #endregion
 
         #region Methods
@@ -44,47 +54,50 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator Start()
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
-
-            teleportLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
+            Setup();
         }
-
-        private void OnTriggerEnter(Collider other)
+        private void Update()
         {
-            if (other.CompareTag("Player/Local"))
+            if (IsVisible && !isTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
             {
-                UpdateInfo();
-                SetVisibility(true);
-            }
-        }
-        private void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag("Player/Local"))
-            {
-                UpdateInfo();
-
-                if (!isTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
-                    {
-                        UnlockMapClientRpc();
+                    UnlockMapClientRpc();
 
-                        if (cinematic != null)
-                        {
-                            TeleportCinematicClientRpc();
-                        }
-                        else
-                        {
-                            InitializeTeleport();
-                        }
-                    });
-                }
+                    if (cinematic != null)
+                    {
+                        TeleportCinematicClientRpc();
+                    }
+                    else
+                    {
+                        InitializeTeleport();
+                    }
+                });
+                UpdateInfo();
             }
         }
-        private void OnTriggerExit(Collider other)
+
+        private void Setup()
         {
-            if (other.CompareTag("Player/Local"))
+            teleportLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
+
+            region.OnTrack += OnTrack;
+            region.OnLoseTrackOf += OnLoseTrackOf;
+        }
+
+        private void OnTrack(Collider col1, Collider col2)
+        {
+            if (col1.CompareTag("Player/Local"))
             {
-                SetVisibility(false);
+                UpdateInfo();
+                IsVisible = true;
+            }
+        }
+        private void OnLoseTrackOf(Collider col1, Collider col2)
+        {
+            if (col1.CompareTag("Player/Local"))
+            {
+                IsVisible = false;
             }
         }
 
@@ -132,7 +145,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(targetMapId)));
                 }
             }
-            Player.Instance.Loader.HideFromOthers();
         }
 
         private void UpdateInfo()
@@ -147,10 +159,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 text += $"<size=1>[{keybind.ToString()}]</size>";
             }
             teleportText.text = text;
-        }
-        private void SetVisibility(bool isVisible)
-        {
-            teleportText.gameObject.SetActive(isVisible);
         }
         #endregion
     }

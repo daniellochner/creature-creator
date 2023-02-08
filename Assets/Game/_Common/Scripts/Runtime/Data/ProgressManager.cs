@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Start();
             UnlockMap(Map.Island);
             
-            // TODO: Quick fix for if existing player... unlock all maps
+            // Quick fix to unlock existing maps for returning players...
             if (PlayerPrefs.GetInt("REVERT_SETTINGS") == 1)
             {
                 UnlockMap(Map.Farm);
