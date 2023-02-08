@@ -21,12 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
 
             Player.Instance.Mover.StopMoving();
 
-            string music = $"music_{soundId}".ToLower();
-            if (PlayerPrefs.GetInt(music) == 0)
-            {
-                NotificationsManager.Notify($"{this.music} ~ {composer}", () => Application.OpenURL(url));
-                PlayerPrefs.SetInt(music, 1);
-            }
+            NotificationsManager.Notify($"{music} ~ {composer}", () => Application.OpenURL(url));
         }
     }
 }

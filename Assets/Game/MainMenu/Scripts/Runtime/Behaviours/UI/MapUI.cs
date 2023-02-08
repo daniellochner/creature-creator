@@ -23,7 +23,6 @@ namespace DanielLochner.Assets.CreatureCreator
             mapMenu.Close();
         }
 
-        
         public void OnMapChanged(int option)
         {
             screenshotImg.sprite = screenshots[option];
