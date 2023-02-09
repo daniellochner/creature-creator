@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private UnlockableBodyPart[] bodyParts;
         [SerializeField] private UnlockablePattern[] patterns;
         [SerializeField] private Quest[] quests;
+        [SerializeField] private Map nextMap;
         [Space]
         [SerializeField] private GameObject progress;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
@@ -120,6 +121,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     PauseMenu.Instance.Leave();
                 });
+                ProgressManager.Instance.UnlockMap(nextMap);
             }
         }
         #endregion
