@@ -51,11 +51,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector mapOS;
         [SerializeField] private OptionSelector modeOS;
         [SerializeField] private OptionSelector visibilityOS;
-        [SerializeField] private GameObject passwordGO;
+        [SerializeField] private CanvasGroup passwordCG;
         [SerializeField] private Toggle passwordToggle;
         [SerializeField] private Slider maxPlayersSlider;
         [SerializeField] private Toggle pvpToggle;
         [SerializeField] private Toggle pveToggle;
+        [SerializeField] private CanvasGroup pveCG;
         [SerializeField] private Toggle npcToggle;
         [SerializeField] private Toggle profanityToggle;
         [SerializeField] private Image sortByIcon;
@@ -217,14 +218,22 @@ namespace DanielLochner.Assets.CreatureCreator
             multiplayerMenu.OnOpen += UpdateMap;
 
             modeOS.SetupUsingEnum<Mode>();
-            modeOS.Select(Mode.Adventure);
-
+            modeOS.Select(Mode.Adventure, false);
+            
             visibilityOS.SetupUsingEnum<Visibility>();
             visibilityOS.OnSelected.AddListener(delegate (int option)
             {
-                passwordGO.gameObject.SetActive((Visibility)option == Visibility.Public);
+                bool show = (Visibility)option == Visibility.Public;
+                passwordCG.interactable = show;
+                passwordCG.alpha = show ? 1f : 0.25f;
             });
             visibilityOS.Select(Visibility.Public);
+
+            npcToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                pveCG.interactable = isOn;
+                pveCG.alpha = isOn ? 1f : 0.25f;
+            });
         }
 
         private void OnClientDisconnect(ulong clientID)

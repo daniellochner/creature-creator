@@ -20,7 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector modeOS;
         [SerializeField] private Toggle npcToggle;
         [SerializeField] private Toggle pveToggle;
+        [SerializeField] private CanvasGroup pveCG;
         [SerializeField] private Toggle unlimitedToggle;
+        [SerializeField] private CanvasGroup unlimitedCG;
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private BlinkingText statusBT;
         [SerializeField] private MapUI mapUI;
@@ -54,9 +56,17 @@ namespace DanielLochner.Assets.CreatureCreator
             modeOS.SetupUsingEnum<Mode>();
             modeOS.OnSelected.AddListener(delegate (int option)
             {
-                unlimitedToggle.transform.parent.parent.gameObject.SetActive(option == 1); // only show unlimited toggle for creative mode
+                bool show = option == 1;
+                unlimitedCG.interactable = show;
+                unlimitedCG.alpha = show ? 1f : 0.25f;
             });
-            modeOS.Select(Mode.Adventure);
+            modeOS.Select(Mode.Adventure, false);
+
+            npcToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                pveCG.interactable = isOn;
+                pveCG.alpha = isOn ? 1f : 0.25f;
+            });
 
             NetworkManager.Singleton.OnClientDisconnectCallback += OnFailed;
         }
