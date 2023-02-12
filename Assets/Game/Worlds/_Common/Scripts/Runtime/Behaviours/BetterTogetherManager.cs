@@ -9,7 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (GameSetup.Instance.IsMultiplayer)
             {
-                yield return new WaitUntil(() => GameSetup.Instance && GameSetup.Instance.IsSetup && NetworkPlayersMenu.Instance.NumPlayers > 1);
+                yield return new WaitUntil(() => GameSetup.Instance && GameSetup.Instance.IsSetup && NetworkPlayersMenu.Instance && NetworkPlayersMenu.Instance.NumPlayers > 1);
 #if USE_STATS
                 StatsManager.Instance.SetAchievement("ACH_BETTER_TOGETHER");
 #endif
