@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int UnlockedPatterns
         {
             get => GetStat("STA_UNLOCKED_PATTERNS");
-            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 37));
+            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 50));
         }
         public int DistanceTravelled
         {
