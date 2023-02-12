@@ -1,36 +1,24 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class Breakable : CreatureInteractable
     {
         #region Fields
-        [SerializeField] private GameObject hidden;
         [SerializeField] private int hitsToBreak;
         [SerializeField] private float mineCooldown;
-
-        [SerializeField] private AudioClip[] mineSFX;
-        [SerializeField] private AudioClip breakSFX;
+        [SerializeField] private GameObject mineFX;
         [SerializeField] private GameObject breakFX;
+        [SerializeField] private UnityEvent onBreak;
 
         private NetworkVariable<int> hits = new NetworkVariable<int>();
-
-        private AudioSource audioSource;
-        private Animator animator;
-
         private float mineTimeLeft;
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-            audioSource = GetComponent<AudioSource>();
-            animator = GetComponent<Animator>();
-        }
-
         private void Start()
         {
             if (WorldManager.Instance.World.CreativeMode || hits.Value >= hitsToBreak)
@@ -80,27 +68,29 @@ namespace DanielLochner.Assets.CreatureCreator
                     mineTimeLeft = mineCooldown;
                 }
             }
-
         }
 
         [ClientRpc]
         private void MineClientRpc()
         {
-            audioSource.PlayOneShot(mineSFX[Random.Range(0, mineSFX.Length)]);
-            animator.SetTrigger("Wobble");
-
-            Instantiate(breakFX, transform.GetChild(Random.Range(0, transform.childCount)).position, Quaternion.identity, Dynamic.Transform);
+            List<Transform> points = new List<Transform>(GetComponentsInChildren<Transform>());
+            if (points.Count > 1)
+            {
+                points.Remove(transform);
+            }
+            Instantiate(mineFX, points[Random.Range(0, points.Count)].position, Quaternion.identity, Dynamic.Transform);
         }
 
         [ClientRpc]
         private void BreakClientRpc()
         {
-            audioSource.PlayOneShot(breakSFX);
-
             Instantiate(breakFX, transform.position, Quaternion.identity, Dynamic.Transform);
 
+            if (IsServer)
+            {
+                onBreak.Invoke();
+            }
             gameObject.SetActive(false);
-            hidden.SetActive(true);
         }
 
         public override bool CanHighlight(Interactor interactor)
