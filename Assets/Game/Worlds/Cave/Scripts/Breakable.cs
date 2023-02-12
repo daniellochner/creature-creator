@@ -4,19 +4,16 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CoalDeposit : CreatureInteractable
+    public class Breakable : CreatureInteractable
     {
         #region Fields
-        [SerializeField] private QuestItem coal;
+        [SerializeField] private GameObject hidden;
         [SerializeField] private int hitsToBreak;
         [SerializeField] private float mineCooldown;
-        [SerializeField] private Transform[] coalT;
 
-        [SerializeField] private AudioClip mineSFX;
+        [SerializeField] private AudioClip[] mineSFX;
         [SerializeField] private AudioClip breakSFX;
-
         [SerializeField] private GameObject breakFX;
-        [SerializeField] private GameObject mineFX;
 
         private NetworkVariable<int> hits = new NetworkVariable<int>();
 
@@ -25,7 +22,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private float mineTimeLeft;
         #endregion
-
 
         #region Methods
         protected override void Awake()
@@ -90,10 +86,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void MineClientRpc()
         {
-            audioSource.PlayOneShot(mineSFX);
+            audioSource.PlayOneShot(mineSFX[Random.Range(0, mineSFX.Length)]);
             animator.SetTrigger("Wobble");
 
-            Instantiate(mineFX, coalT[Random.Range(0, coalT.Length)].position, Quaternion.identity, Dynamic.Transform);
+            Instantiate(breakFX, transform.GetChild(Random.Range(0, transform.childCount)).position, Quaternion.identity, Dynamic.Transform);
         }
 
         [ClientRpc]
@@ -104,7 +100,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Instantiate(breakFX, transform.position, Quaternion.identity, Dynamic.Transform);
 
             gameObject.SetActive(false);
-            coal.gameObject.SetActive(true);
+            hidden.SetActive(true);
         }
 
         public override bool CanHighlight(Interactor interactor)
