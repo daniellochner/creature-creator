@@ -39,12 +39,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int ReachedPeaks
         {
             get => GetStat("STA_REACHED_PEAKS");
-            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 3));
+            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 4));
         }
         public int CompletedQuests
         {
             get => GetStat("STA_COMPLETED_QUESTS");
-            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 10));
+            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 11));
         }
         public int Kills
         {
