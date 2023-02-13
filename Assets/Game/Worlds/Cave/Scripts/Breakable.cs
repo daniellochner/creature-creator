@@ -69,7 +69,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
         [ClientRpc]
         private void MineClientRpc()
         {
@@ -80,7 +79,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Instantiate(mineFX, points[Random.Range(0, points.Count)].position, Quaternion.identity, Dynamic.Transform);
         }
-
         [ClientRpc]
         private void BreakClientRpc()
         {
