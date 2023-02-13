@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Heal(CreaturePlayerLocal player)
         {
             player.Health.HealthPercentage = 1f;
-            Instantiate(healFX, player.Constructor.Body.position, Quaternion.identity, Dynamic.Transform);
+            Instantiate(healFX, player.transform.position, Quaternion.identity, Dynamic.Transform);
         }
     }
 }

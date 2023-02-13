@@ -13,6 +13,7 @@ namespace DanielLochner.Assets
         [SerializeField] private CanvasGroup minimapCG;
         [SerializeField] private SimpleZoom.SimpleZoom minimapZoom;
         [SerializeField] private RectTransform map;
+        [SerializeField] private RectTransform icons;
         [SerializeField] private MinimapIconUI minimapIconPrefab;
 
         private MinimapIconUI target;
@@ -30,7 +31,7 @@ namespace DanielLochner.Assets
 
         public MinimapIconUI Add(Sprite icon, Color color, UnityAction onClick, bool isButton, bool isTarget, bool isImportant)
         {
-            MinimapIconUI minimapIconUI = Instantiate(minimapIconPrefab, map);
+            MinimapIconUI minimapIconUI = Instantiate(minimapIconPrefab, icons);
             minimapIconUI.Setup(icon, color, onClick, isButton);
             if (isTarget)
             {

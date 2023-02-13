@@ -23,7 +23,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void EnterZone(Zone zone, bool notify = true)
+        public void EnterZone(Zone zone, bool notify)
         {
             if (zone == null || currentZone == zone) return;
 
@@ -58,7 +58,7 @@ namespace DanielLochner.Assets
                     {
                         currentZone.onExit?.Invoke();
                     }
-                    EnterZone(zoneToEnter);
+                    EnterZone(zoneToEnter, zoneToEnter.notify);
                 }
                 else
                 {
