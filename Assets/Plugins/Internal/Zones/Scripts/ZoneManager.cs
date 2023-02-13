@@ -23,14 +23,17 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void EnterZone(Zone zone)
+        public void EnterZone(Zone zone, bool notify = true)
         {
             if (zone == null || currentZone == zone) return;
 
             zone.onEnter?.Invoke();
             currentZone = zone;
 
-            NotificationsManager.Notify(LocalizationUtility.Localize("zone_enter", zone.name));
+            if (notify)
+            {
+                NotificationsManager.Notify(LocalizationUtility.Localize("zone_enter", zone.name));
+            }
         }
         public void ExitCurrentZone(Vector3 exitPosition)
         {

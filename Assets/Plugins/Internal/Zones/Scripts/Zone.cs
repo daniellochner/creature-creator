@@ -9,6 +9,7 @@ namespace DanielLochner.Assets
     public class Zone : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private bool notify = true;
         [SerializeField] private float entryDelay;
         public UnityEvent onEnter;
         public UnityEvent onExit;
@@ -19,7 +20,7 @@ namespace DanielLochner.Assets
         {
             if (other.CompareTag(ZoneManager.Instance.PlayerTag))
             {
-                ZoneManager.Instance.EnterZone(this);
+                ZoneManager.Instance.EnterZone(this, notify);
             }
         }
         public void OnTriggerExit(Collider other)
