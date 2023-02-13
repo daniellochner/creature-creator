@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (WorldManager.Instance.World.CreativeMode || hits.Value >= hitsToBreak)
+            if (hits.Value >= hitsToBreak)
             {
                 if (IsServer)
                 {
