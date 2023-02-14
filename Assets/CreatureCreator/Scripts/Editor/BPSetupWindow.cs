@@ -159,6 +159,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public BodyPart AddToDatabase(SaveType type, Database database)
         {
+            Debug.Log(type);
             BodyPart bodyPart = ScriptableObject.CreateInstance(type.ToString()) as BodyPart;
             database.Objects.Add(Guid.NewGuid().ToString().Substring(0, 8), bodyPart);
 
