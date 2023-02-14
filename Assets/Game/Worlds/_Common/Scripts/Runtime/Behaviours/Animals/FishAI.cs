@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SharkAI : AnimalAI
+    public class FishAI : AnimalAI
     {
         #region Fields
         [SerializeField] protected TrackRegion trackRegion;
@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public Transform[] waypoints;
             public int current;
 
-            public SharkAI SharkAI => StateMachine as SharkAI;
+            public FishAI FishAI => StateMachine as FishAI;
 
             public override void UpdateLogic()
             {
@@ -60,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (!AnimalAI.IsMovingToPosition)
                 {
                     current = (current + 1) % waypoints.Length;
-                    SharkAI.Agent.SetDestination(waypoints[current].position);
+                    FishAI.Agent.SetDestination(waypoints[current].position);
                 }
             }
         }
@@ -77,42 +77,42 @@ namespace DanielLochner.Assets.CreatureCreator
             private Coroutine bitingCoroutine;
             private bool hasDealtDamage;
 
-            public SharkAI SharkAI => StateMachine as SharkAI;
+            public FishAI FishAI => StateMachine as FishAI;
 
-            private float TargetDistance => SharkAI.Creature.Constructor.Dimensions.radius + target.Constructor.Dimensions.radius;
+            private float TargetDistance => FishAI.Creature.Constructor.Dimensions.radius + target.Constructor.Dimensions.radius;
             
             public override void Enter()
             {
                 base.Enter();
-                bitingCoroutine = SharkAI.StartCoroutine(BitingRoutine());
-                SharkAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
+                bitingCoroutine = FishAI.StartCoroutine(BitingRoutine());
+                FishAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
-                if (!SharkAI.IsAnimationState("Strike"))
+                if (!FishAI.IsAnimationState("Strike"))
                 {
                     UpdateLookDir();
 
                     Vector3 offset = lookDir * TargetDistance;
-                    SharkAI.Agent.SetDestination(target.transform.position - offset);
+                    FishAI.Agent.SetDestination(target.transform.position - offset);
 
                     HandleLookAt();
 
                     NavMeshPath path = new NavMeshPath();
-                    SharkAI.Agent.CalculatePath(target.transform.position, path);
+                    FishAI.Agent.CalculatePath(target.transform.position, path);
                     if (path.status != NavMeshPathStatus.PathComplete)
                     {
-                        SharkAI.trackRegion.enabled = false;
-                        SharkAI.ChangeState("SWI");
-                        SharkAI.Invoke(delegate { SharkAI.trackRegion.enabled = true; }, 5f);
+                        FishAI.trackRegion.enabled = false;
+                        FishAI.ChangeState("SWI");
+                        FishAI.Invoke(delegate { FishAI.trackRegion.enabled = true; }, 5f);
                     }
                 }
             }
             public override void Exit()
             {
                 base.Exit();
-                SharkAI.StopCoroutine(bitingCoroutine);
-                SharkAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
+                FishAI.StopCoroutine(bitingCoroutine);
+                FishAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }
 
             private IEnumerator BitingRoutine()
@@ -124,17 +124,17 @@ namespace DanielLochner.Assets.CreatureCreator
                     while (angle > minBiteAngle || distance > (TargetDistance + biteOffset))
                     {
                         UpdateTarget();
-                        angle = Vector3.Angle(SharkAI.transform.forward, lookDir);
-                        distance = Vector3.Distance(target.transform.position, SharkAI.transform.position);
+                        angle = Vector3.Angle(FishAI.transform.forward, lookDir);
+                        distance = Vector3.Distance(target.transform.position, FishAI.transform.position);
                         yield return null;
                     }
 
                     // Strike!
                     hasDealtDamage = false;
-                    Vector3 head = SharkAI.Creature.Animator.Mouths[0].transform.position;
-                    Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, SharkAI.Creature.transform.up);
+                    Vector3 head = FishAI.Creature.Animator.Mouths[0].transform.position;
+                    Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, FishAI.Creature.transform.up);
                     float d = displacement.magnitude;
-                    SharkAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
+                    FishAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
                     
                     // Wait...
                     yield return new WaitForSeconds(biteDelay.Random);
@@ -143,14 +143,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void OnBite(MouthAnimator mouth)
             {
-                SharkAI.Creature.Effects.PlaySound(biteSounds);
+                FishAI.Creature.Effects.PlaySound(biteSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
                     foreach (Collider collider in colliders)
                     {
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
-                        if (creature != null && creature != SharkAI.Creature)
+                        if (creature != null && creature != FishAI.Creature)
                         {
                             creature.Health.TakeDamage(biteDamage.Random);
                             hasDealtDamage = true;

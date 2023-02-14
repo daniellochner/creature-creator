@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class SharkSpawner : AnimalSpawner
+    public class FishSpawner : AnimalSpawner
     {
         [SerializeField] private Transform[] waypoints;
         [SerializeField] private int start;
@@ -12,9 +12,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup(npc);
 
-            SharkAI shark = npc.GetComponent<SharkAI>();
+            FishAI fish = npc.GetComponent<FishAI>();
 
-            SharkAI.Swimming swimming = shark.GetState("SWI") as SharkAI.Swimming;
+            FishAI.Swimming swimming = fish.GetState("SWI") as FishAI.Swimming;
             if (swimming != null)
             {
                 swimming.current = start;

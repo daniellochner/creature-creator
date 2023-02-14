@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ArriveOnRaftCinematic arriveOnRaftCinematic;
         [SerializeField] private ExpandInSandboxCinematic expandInSandboxCinematic;
         [SerializeField] private ExitCrackCinematic exitCrackCinematic;
+        [Space]
         [SerializeField] private Platform raftPlatform;
         #endregion
 
