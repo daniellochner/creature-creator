@@ -35,6 +35,7 @@ namespace DanielLochner.Assets
 
             sources[0].playOnAwake = sources[1].playOnAwake = false;
             sources[0].loop = sources[1].loop = true;
+            sources[0].dopplerLevel = sources[1].dopplerLevel = 0f;
             sources[0].outputAudioMixerGroup = sources[1].outputAudioMixerGroup = audioMixer;
         }
         private void Start()

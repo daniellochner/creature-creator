@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class PlayerFootsteps : MonoBehaviour
+namespace DanielLochner.Assets
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PlayerFootsteps : MonoBehaviour
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        private void Awake()
+        {
+            
+        }
+
+        [Serializable]
+        public class TextureSound
+        {
+
+        }
     }
 }
