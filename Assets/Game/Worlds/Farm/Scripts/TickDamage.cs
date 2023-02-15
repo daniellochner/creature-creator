@@ -3,12 +3,15 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Bees : NetworkBehaviour
+    public class TickDamage : NetworkBehaviour
     {
-        [SerializeField] private MinMax stingDamage;
-        [SerializeField] private float stingCooldown;
-        private float stingTimeLeft;
+        #region Fields
+        [SerializeField] private MinMax damage;
+        [SerializeField] private float cooldown;
+        private float timeLeft;
+        #endregion
 
+        #region Methods
         private void OnTriggerStay(Collider other)
         {
             if (IsServer)
@@ -16,12 +19,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureBase creature = other.GetComponent<CreatureBase>();
                 if (creature != null)
                 {
-                    TimerUtility.OnTimer(ref stingTimeLeft, stingCooldown, Time.deltaTime, delegate
+                    TimerUtility.OnTimer(ref timeLeft, cooldown, Time.deltaTime, delegate
                     {
-                        creature.Health.TakeDamage(stingDamage.Random);
+                        creature.Health.TakeDamage(damage.Random);
                     });
                 }
             }
         }
+        #endregion
     }
 }
