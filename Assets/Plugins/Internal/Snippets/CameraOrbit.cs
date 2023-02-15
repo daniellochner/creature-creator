@@ -24,11 +24,13 @@ namespace DanielLochner.Assets
 
         [Header("Other")]
         [SerializeField] private bool handleClipping;
-        [SerializeField] private string[] ignoredLayers;
+        [SerializeField] private bool snapClipping;
+        [SerializeField] private LayerMask clippingMask;
 
         private float targetZoom = 1f;
         private Vector3 targetRotation;
         private Vector2 velocity;
+        private float prevClippingZoom = -1;
         #endregion
 
         #region Properties
@@ -131,18 +133,43 @@ namespace DanielLochner.Assets
                 Vector3 dir = (Camera.transform.position - transform.position).normalized;
                 Vector3 origin = transform.position + (dir * minMaxZoom.x);
 
-                if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, offsetDistance * zoom - minMaxZoom.x, ~LayerMask.GetMask(ignoredLayers)))
+                float maxDistance = offsetDistance * zoom - minMaxZoom.x;
+
+                if (prevClippingZoom != -1)
+                {
+                    maxDistance = offsetDistance * prevClippingZoom - minMaxZoom.x;
+                }
+
+                if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, maxDistance, clippingMask))
                 {
                     float d = Mathf.Clamp(Vector3.Distance(hitInfo.point, transform.position), offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y);
 
                     float p = Mathf.InverseLerp(offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y, d);
                     float t = Mathf.Lerp(minMaxZoom.x, minMaxZoom.y, p);
 
+                    if (prevClippingZoom == -1)
+                    {
+                        prevClippingZoom = targetZoom;
+                    }
+
                     targetZoom = t;
+                    if (snapClipping)
+                    {
+                        zoomTransform.localPosition = OffsetPosition * targetZoom;
+                    }
                 }
                 else
                 {
-                    targetZoom = zoom;
+                    if (prevClippingZoom != -1)
+                    {
+                        targetZoom = prevClippingZoom;
+                        prevClippingZoom = -1;
+                    }
+                    else
+                    {
+                        targetZoom = zoom;
+                    }
+
                 }
             }
             else

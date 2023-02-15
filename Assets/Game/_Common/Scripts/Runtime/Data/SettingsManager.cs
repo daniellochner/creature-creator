@@ -458,8 +458,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetPreviewFeatures(bool previewFeatures)
         {
             Data.PreviewFeatures = previewFeatures;
-
-            cameraOrbitPrefab.HandleClipping = previewFeatures;
         }
         public void SetNetworkStats(bool networkStats)
         {

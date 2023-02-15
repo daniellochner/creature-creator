@@ -277,6 +277,13 @@ namespace DanielLochner.Assets.CreatureCreator
             transform.position = targetPosition = position;
 
             moveDisplacement = Vector3.zero;
+
+            Camera.CameraOrbit.HandleClipping = false;
+            this.Invoke(delegate
+            {
+                Camera.CameraOrbit.HandleClipping = true;
+            },
+            1f);
         }
         public void Teleport(Platform platform, bool start = false)
         {
