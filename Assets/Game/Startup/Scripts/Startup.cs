@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -19,13 +20,23 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        private IEnumerator Start()
         {
             float n = (float)baseWidth / Screen.width;
             float s = 1f / scale;
             gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
+
+
+            yield return new WaitUntil(() => SteamManager.Initialized);
+            //if (ProgressManager.Data.UnlockedBodyParts.Count > 0 && !StatsManager.Instance.GetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW"))
+            {
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("welcome_back_title"), LocalizationUtility.Localize("welcome_back_message"), onYes: delegate
+                {
+                    ProgressManager.Instance.Revert();
+                });
+            }
         }
         private void Update()
         {
