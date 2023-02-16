@@ -56,7 +56,7 @@ namespace DanielLochner.Assets
             }
         }
         [ContextMenu("Revert")]
-        public void Revert()
+        public virtual void Revert()
         {
             data.Revert();
             Save();

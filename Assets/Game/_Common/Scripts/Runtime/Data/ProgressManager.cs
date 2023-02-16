@@ -26,6 +26,17 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public override void Revert()
+        {
+            base.Revert();
+
+#if USE_STATS
+            StatsManager.Instance.Revert();
+#endif
+
+            UnlockMap(Map.Island);
+        }
+
         public bool UnlockMap(Map map)
         {
             if (!IsMapUnlocked(map))

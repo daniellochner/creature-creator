@@ -79,11 +79,11 @@ namespace DanielLochner.Assets.CreatureCreator
             bool enablePVE = pveToggle.isOn;
             bool unlimited = unlimitedToggle.isOn && creativeMode;
 
-            //if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
-            //{
-            //    UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())), Color.white);
-            //    return;
-            //}
+            if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
+            {
+                UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())), Color.white);
+                return;
+            }
 
             NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));

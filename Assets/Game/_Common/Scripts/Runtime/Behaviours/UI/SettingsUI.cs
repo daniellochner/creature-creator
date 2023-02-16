@@ -495,9 +495,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ResetProgress()
         {
             ProgressManager.Instance.Revert();
-#if USE_STATS
-            StatsManager.Instance.Revert();
-#endif
 
             ProgressUI.Instance.UpdateInfo();
             UnlockableBodyPartsMenu.Instance.UpdateInfo();
