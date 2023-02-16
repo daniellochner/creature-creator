@@ -14,12 +14,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int UnlockedBodyParts
         {
             get => GetStat("STA_UNLOCKED_BODY_PARTS");
-            set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", 103));
+            set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", 117));
         }
         public int UnlockedPatterns
         {
             get => GetStat("STA_UNLOCKED_PATTERNS");
-            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 50));
+            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 49));
         }
         public int DistanceTravelled
         {
