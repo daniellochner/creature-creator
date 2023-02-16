@@ -41,6 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureVelocity Velocity { get; private set; }
         public CreatureGrounded Grounded { get; private set; }
         public CreatureUnderwater Underwater { get; private set; }
+        public PlayerFootsteps Footsteps { get; private set; }
 
         public Action OnBuild { get; set; }
 
@@ -94,6 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Params = GetComponent<AnimatorParams>();
             Grounded = GetComponent<CreatureGrounded>();
             Underwater = GetComponent<CreatureUnderwater>();
+            Footsteps = GetComponent<PlayerFootsteps>();
 
             tailDynamicBone = tail.GetComponent<DynamicBone>();
 

@@ -49,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureSpeedup speedUp;
         [SerializeField] private CreatureGrounded grounded;
         [SerializeField] private MinimapIcon minimapIcon;
+        [SerializeField] private PlayerFootsteps footsteps;
         #endregion
 
         #region Properties
@@ -74,6 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureSpeedup SpeedUp => speedUp;
         public CreatureGrounded Grounded => grounded;
         public MinimapIcon MinimapIcon => minimapIcon;
+        public PlayerFootsteps Footsteps => footsteps;
         #endregion
 
         #region Methods
@@ -102,6 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
             speedUp = GetComponent<CreatureSpeedup>();
             grounded = GetComponent<CreatureGrounded>();
             minimapIcon = GetComponent<MinimapIcon>();
+            footsteps = GetComponent<PlayerFootsteps>();
         }
 #endif
 

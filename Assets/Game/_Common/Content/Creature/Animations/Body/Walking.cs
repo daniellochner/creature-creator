@@ -160,18 +160,18 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 float liftHeight = Creature.Constructor.transform.W2LSpace(leg1.transform.position).y * liftHeightFactor;
 
                 Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove);
-                //float t1 = Mathf.Clamp01(Vector3.Distance(leg1.Anchor.position, pos1) / leg1.MaxDistance);
                 float t1 = Mathf.Clamp01(LSpeed + ASpeed);
                 Coroutine moveFoot1 = leg1.StartCoroutine(leg1.MoveFootRoutine(pos1, rot, timeToMove, liftHeight * t1));
                 moveFeet[pair][0] = moveFoot1;
                 yield return moveFoot1;
+                //Creature.Footsteps.Step(pos1);
 
                 Vector3 pos2 = GetTargetFootPosition(leg2, timeToMove);
-                //float t2 = Mathf.Clamp01(Vector3.Distance(leg2.Anchor.position, pos2) / leg2.MaxDistance);
                 float t2 = Mathf.Clamp01(LSpeed + ASpeed);
                 Coroutine moveFoot2 = leg2.StartCoroutine(leg2.MoveFootRoutine(pos2, rot, timeToMove, liftHeight * t2));
                 moveFeet[pair][1] = moveFoot2;
                 yield return moveFoot2;
+                //Creature.Footsteps.Step(pos2);
             }
         }
 
