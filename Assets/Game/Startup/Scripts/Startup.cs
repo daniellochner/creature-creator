@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
 
             yield return new WaitUntil(() => SteamManager.Initialized);
-            //if (ProgressManager.Data.UnlockedBodyParts.Count > 0 && !StatsManager.Instance.GetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW"))
+            if (ProgressManager.Data.UnlockedBodyParts.Count > 0 && !StatsManager.Instance.GetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW"))
             {
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("welcome_back_title"), LocalizationUtility.Localize("welcome_back_message"), onYes: delegate
                 {
