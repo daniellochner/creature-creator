@@ -19,6 +19,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             foreach (LegAnimator leg in Creature.Legs)
             {
                 leg.Anchor.SetParent(Dynamic.Transform);
+
+                if (Creature.Grounded.IsGrounded)
+                {
+                    //Creature.Footsteps.Step(leg.LegConstructor.Extremity.position);
+                }
             }
 
             Walking walking = animator.GetBehaviour<Walking>();
