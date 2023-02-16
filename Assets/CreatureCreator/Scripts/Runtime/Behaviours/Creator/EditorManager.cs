@@ -677,15 +677,18 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // 3D Model
-            GameObject export = Creature.Cloner.Clone(creatureData).gameObject;
-            export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
-
-            foreach (GameObject tool in export.FindChildrenWithTag("Tool"))
+            if (SettingsManager.Data.PreviewFeatures)
             {
-                tool.SetActive(false);
+                GameObject export = Creature.Cloner.Clone(creatureData).gameObject;
+                export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
+
+                foreach (GameObject tool in export.FindChildrenWithTag("Tool"))
+                {
+                    tool.SetActive(false);
+                }
+                FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{creatureData.Name}.fbx"));
+                Destroy(export);
             }
-            FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{creatureData.Name}.fbx"));
-            Destroy(export);
         }
 
         public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
