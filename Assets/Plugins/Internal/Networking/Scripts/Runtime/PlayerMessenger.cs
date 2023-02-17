@@ -78,7 +78,7 @@ namespace DanielLochner.Assets
         }
         protected virtual void ReceiveMessage(string message)
         {
-            if (!CanReceive) return;
+            if (!CanReceive || !Camera.main) return;
 
             if (messageGO != null)
             {
