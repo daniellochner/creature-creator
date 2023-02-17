@@ -27,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            if (Reached || WorldManager.Instance.World.CreativeMode)
+            if (Reached)
             {
                 flag.SetActive(false);
             }
