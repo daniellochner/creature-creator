@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,6 +12,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private HoldableDummy dummyPrefab;
 
+        private Unity.Netcode.Components.NetworkTransform networkTransform;
+        private Vector3 startPosition;
+        private Quaternion startRotation;
         private HoldableDummy dummy;
         #endregion
 
@@ -25,13 +27,30 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            networkTransform = GetComponent<Unity.Netcode.Components.NetworkTransform>();
+        }
         private void Start()
         {
+            startPosition = transform.position;
+            startRotation = transform.rotation;
+
             Hand.OnValueChanged += OnHandChanged;
 
             if (IsHeld)
             {
                 OnHandChanged("", Hand.Value);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!IsServer) return;
+            if (collision.collider.CompareTag("WorldBorder"))
+            {
+                networkTransform.Teleport(startPosition, startRotation, transform.localScale);
             }
         }
 
