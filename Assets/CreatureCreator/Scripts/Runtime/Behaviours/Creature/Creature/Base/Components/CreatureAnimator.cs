@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -186,6 +187,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Rebuild()
         {
+            AnimatorJobExtensions.UnbindAllStreamHandles(Animator);
+
             rigBuilder.Build();
             Animator.Rebind();
             CreatureAnimation.Initialize(Animator, this);
