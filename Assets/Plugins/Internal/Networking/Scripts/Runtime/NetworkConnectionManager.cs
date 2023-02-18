@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
@@ -56,9 +60,21 @@ namespace DanielLochner.Assets
             onLeave?.Invoke();
         }
 
-        public void Kick(ulong clientId, string reason = default)
+        public void Kick(ulong clientId, string playerId, string reason = default)
         {
             ForceDisconnectClientRpc(reason, NetworkUtils.SendTo(clientId));
+
+            List<string> kickedPlayers = new List<string>(LobbyHelper.Instance.JoinedLobby.Data["kickedPlayers"].Value.Split(","));
+            kickedPlayers.Add(playerId);
+            UpdateLobbyOptions options = new UpdateLobbyOptions()
+            {
+                Data = new System.Collections.Generic.Dictionary<string, DataObject>()
+                {
+                    { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, string.Join(",", kickedPlayers)) },
+                }
+            };
+            options.HostId = AuthenticationService.Instance.PlayerId;
+            LobbyService.Instance.UpdateLobbyAsync(LobbyHelper.Instance.JoinedLobby.Id, options);
         }
         #endregion
     }

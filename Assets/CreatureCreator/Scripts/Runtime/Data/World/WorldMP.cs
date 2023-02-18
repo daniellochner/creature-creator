@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using Unity.Services.Lobbies.Models;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -20,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool EnablePVP { get; private set; }
 
         public bool UseSteam { get; private set; }
+
+        public List<string> KickedPlayers { get; private set; }
         #endregion
 
         #region Methods
@@ -41,6 +44,8 @@ namespace DanielLochner.Assets.CreatureCreator
             CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
             UseSteam = bool.Parse(lobby.Data["useSteam"].Value);
             MapId = lobby.Data["mapId"].Value;
+
+            KickedPlayers = new List<string>(lobby.Data["kickedPlayers"].Value.Split(","));
         }
         #endregion
     }

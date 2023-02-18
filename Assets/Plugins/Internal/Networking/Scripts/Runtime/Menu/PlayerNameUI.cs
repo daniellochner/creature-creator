@@ -32,7 +32,13 @@ namespace DanielLochner.Assets
             else if (NetworkManager.Singleton.IsHost)
             {
                 kickButton.gameObject.SetActive(true);
-                kickButton.onClick.AddListener(() => NetworkConnectionManager.Instance.Kick(playerData.clientId, "You were kicked by the host."));
+                kickButton.onClick.AddListener(delegate
+                {
+                    InputDialog.Input(LocalizationUtility.Localize("kick_title", playerData.username), onSubmit: delegate (string reason)
+                    {
+                        NetworkConnectionManager.Instance.Kick(playerData.clientId, playerData.playerId, reason);
+                    });
+                });
             }
 
             this.playerData = playerData;
