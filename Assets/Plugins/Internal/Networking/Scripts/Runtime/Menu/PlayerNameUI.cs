@@ -34,7 +34,7 @@ namespace DanielLochner.Assets
                 kickButton.gameObject.SetActive(true);
                 kickButton.onClick.AddListener(delegate
                 {
-                    InputDialog.Input(LocalizationUtility.Localize("kick_title", playerData.username), onSubmit: delegate (string reason)
+                    InputDialog.Input(LocalizationUtility.Localize("kick_title", playerData.username), placeholder: LocalizationUtility.Localize("kick_input"), onSubmit: delegate (string reason)
                     {
                         NetworkConnectionManager.Instance.Kick(playerData.clientId, playerData.playerId, reason);
                     });

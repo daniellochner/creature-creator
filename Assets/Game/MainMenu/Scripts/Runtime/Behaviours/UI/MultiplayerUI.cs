@@ -284,7 +284,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string steamId = SteamUser.GetSteamID().m_SteamID.ToString();
                 if (world.KickedPlayers.Contains(steamId))
                 {
-                    throw new Exception(LocalizationUtility.Localize("mainmenu_multiplayer_kicked"));
+                    throw new Exception(LocalizationUtility.Localize("network_status_kicked"));
                 }
 
                 // Set Up Connection Data
