@@ -260,8 +260,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 await Authenticate();
 
                 // Confirm Password
-                Lobby lobby = await Lobbies.Instance.GetLobbyAsync(id);
-                string passwordHash = lobby.Data["passwordHash"].Value;
+                WorldMP world = new WorldMP(await Lobbies.Instance.GetLobbyAsync(id));
+                string passwordHash = world.PasswordHash;
                 string password = "";
                 if (!string.IsNullOrEmpty(passwordHash))
                 {
@@ -274,10 +274,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Version
-                string version = lobby.Data["version"].Value;
+                string version = world.Version;
                 if (!version.Equals(Application.version))
                 {
                     throw new Exception(LocalizationUtility.Localize("network_status_incorrect-version", Application.version, version));
+                }
+
+                // Kicked
+                string steamId = SteamUser.GetSteamID().m_SteamID.ToString();
+                if (world.KickedPlayers.Contains(steamId))
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_multiplayer_kicked"));
                 }
 
                 // Set Up Connection Data
@@ -291,15 +298,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Player = player
                 };
-                lobby = await LobbyHelper.Instance.JoinLobbyByIdAsync(id, options);
+                world = new WorldMP(await LobbyHelper.Instance.JoinLobbyByIdAsync(id, options));
 
                 // Join Relay
                 UpdateStatus(LocalizationUtility.Localize("network_status_joining-via-relay"), Color.yellow, -1);
-                string joinCode = lobby.Data["joinCode"].Value;
-                string hostSteamId = lobby.Data["hostSteamId"].Value;
+                string joinCode = world.JoinCode;
+                string hostSteamId = world.HostSteamId;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
 
-                await Lobbies.Instance.UpdatePlayerAsync(lobby.Id, player.Id, new UpdatePlayerOptions()
+                await Lobbies.Instance.UpdatePlayerAsync(world.Id, player.Id, new UpdatePlayerOptions()
                 {
                     AllocationId = (UseSteam ? hostSteamId.ToString() : join.AllocationId.ToString()),
                     ConnectionInfo = joinCode
@@ -363,7 +370,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
-                SetConnectionData(AuthenticationService.Instance.PlayerId, username, password);
+                SetConnectionData(hostSteamId.ToString(), username, password);
                 
                 // Authenticate
                 await Authenticate();
@@ -438,22 +445,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
-                    string version = Application.version;
-                    bool useSteam = false;
-                    if (lobby.Data.ContainsKey("useSteam"))
-                    {
-                        useSteam = bool.Parse(lobby.Data["useSteam"].Value);
-                    }
+                    string version = lobby.Data["version"].Value;
+                    bool useSteam = bool.Parse(lobby.Data["useSteam"].Value);
 
-                    WorldMP world = new WorldMP(lobby);
-                    if (!world.IsPrivate && version.Equals(Application.version) && (UseSteam == useSteam))
+                    if (version.Equals(Application.version) && (UseSteam == useSteam))
                     {
-                        Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby, IsAllowedToJoin);
+                        WorldMP world = new WorldMP(lobby);
+                        if (!world.IsPrivate)
+                        {
+                            Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby, IsAllowedToJoin);
+                        }
                     }
                 }
                 noneGO.SetActive(worldsRT.childCount == 0);
             }
-            catch (LobbyServiceException e)
+            catch (Exception e)
             {
                 UpdateStatus(e.Message, Color.red);
                 noneGO.SetActive(true);
