@@ -1,5 +1,7 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -9,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Diet diet;
         [SerializeField] private MinMax minMaxHunger;
         [SerializeField] private AudioClip eatSound;
+        [SerializeField] private AudioMixerGroup soundEffectsMixer;
 
         private bool hasEaten;
         #endregion
@@ -27,9 +30,10 @@ namespace DanielLochner.Assets.CreatureCreator
             if (!hasEaten && hunger.Hunger < 1f)
             {
                 hunger.Hunger += minMaxHunger.Random;
-                AudioSource.PlayClipAtPoint(eatSound, transform.position);
-                DisposeServerRpc();
+                AudioSourceUtility.PlayClipAtPoint(eatSound, transform.position, 1f, soundEffectsMixer);
                 hasEaten = true;
+
+                DisposeServerRpc();
             }
         }
 
