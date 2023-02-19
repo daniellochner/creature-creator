@@ -1,6 +1,4 @@
-using System.Collections;
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -11,12 +9,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private UnlockableBodyPart[] bodyParts;
         [SerializeField] private UnlockablePattern[] patterns;
         [SerializeField] private Quest[] quests;
+        [SerializeField] private Teleport[] teleports;
         [SerializeField] private Map nextMap;
         [Space]
         [SerializeField] private GameObject progress;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
         [SerializeField] private TextMeshProUGUI patternsText;
         [SerializeField] private TextMeshProUGUI questsText;
+        [SerializeField] private WorldHint worldHintPrefab;
 
         private int unlockedBodyParts, unlockedPatterns, completedQuests;
         private bool allowAdvance = false;
@@ -117,9 +117,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (allowAdvance && CanAdvance)
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onYes: delegate
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onOkay: delegate
                 {
-                    PauseMenu.Instance.Leave();
+                    foreach (Teleport teleport in teleports)
+                    {
+                        teleport.GetComponent<MinimapIcon>().MinimapIconUI.gameObject.AddComponent<BlinkingGraphic>();
+                        Instantiate(worldHintPrefab, teleport.transform, false).transform.localScale *= 3f;
+                    }
                 });
                 ProgressManager.Instance.UnlockMap(nextMap);
             }
