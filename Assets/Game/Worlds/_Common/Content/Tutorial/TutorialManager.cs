@@ -356,7 +356,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             RectTransform pos1 = optionsHandleRT;
             RectTransform pos2 = new GameObject("TMP", typeof(RectTransform)).transform as RectTransform;
-            pos2.parent = EditorManager.Instance.transform;
+            pos2.SetParent(EditorManager.Instance.transform);
             pos2.anchorMin = pos2.anchorMax = new Vector2(0.5f, 0f);
             pos2.anchoredPosition = Vector2.up * ((optionsMenu.transform as RectTransform).rect.height + (45f / 2f));
 
