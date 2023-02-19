@@ -17,43 +17,45 @@ namespace DanielLochner.Assets
         [SerializeField] private Sprite icon;
         [SerializeField] private Color color = Color.white;
         [SerializeField] private UnityEvent onClick;
+        #endregion
 
-        private MinimapIconUI minimapIconUI;
+        #region Properties
+        public MinimapIconUI MinimapIconUI { get; private set; }
         #endregion
 
         #region Methods
         private void OnEnable()
         {
-            if (minimapIconUI == null)
+            if (MinimapIconUI == null)
             {
-                minimapIconUI = MinimapManager.Instance.Add(icon, color, () => onClick.Invoke(), isButton, isTarget, isImportant);
-                MinimapManager.Instance.Track(this, minimapIconUI, lockPos, lockRot);
+                MinimapIconUI = MinimapManager.Instance.Add(icon, color, () => onClick.Invoke(), isButton, isTarget, isImportant);
+                MinimapManager.Instance.Track(this, MinimapIconUI, lockPos, lockRot);
                 enabled = isVisible;
             }
             else
             {
-                minimapIconUI.gameObject.SetActive(true);
+                MinimapIconUI.gameObject.SetActive(true);
             }
         }
         private void OnDisable()
         {
-            if (minimapIconUI != null)
+            if (MinimapIconUI != null)
             {
-                minimapIconUI.gameObject.SetActive(false);
+                MinimapIconUI.gameObject.SetActive(false);
             }
         }
         private void OnDestroy()
         {
-            if (minimapIconUI != null)
+            if (MinimapIconUI != null)
             {
-                Destroy(minimapIconUI.gameObject);
+                Destroy(MinimapIconUI.gameObject);
             }
         }
         private void Update()
         {
-            if (minimapIconUI != null && track)
+            if (MinimapIconUI != null && track)
             {
-                MinimapManager.Instance.Track(this, minimapIconUI, lockPos, lockRot);
+                MinimapManager.Instance.Track(this, MinimapIconUI, lockPos, lockRot);
             }
         }
         #endregion
