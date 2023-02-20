@@ -28,8 +28,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
 
-
+            #region Welcome Back
             yield return new WaitUntil(() => SteamManager.Initialized);
+            yield return LocalizationSettings.InitializationOperation;
+
             if (ProgressManager.Data.UnlockedBodyParts.Count > 0 && !StatsManager.Instance.GetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW"))
             {
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("welcome_back_title"), LocalizationUtility.Localize("welcome_back_message"), onYes: delegate
@@ -37,6 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     ProgressManager.Instance.Revert();
                 });
             }
+            #endregion
         }
         private void Update()
         {
