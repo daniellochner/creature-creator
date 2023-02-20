@@ -3,17 +3,20 @@ using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class LocalizationMenu : MenuSingleton<LocalizationMenu>
     {
         #region Fields
+        [SerializeField] private List<string> officialLanguages;
+        [Space]
         [SerializeField] private LanguageUI languagePrefab;
         [SerializeField] private RectTransform languagesRT;
+        [SerializeField] private ToggleGroup languagesTG;
         [SerializeField] private RectTransform unofficialLanguagesRT;
         [SerializeField] private GameObject disclaimer;
-        [SerializeField] private List<string> officialLanguages;
         #endregion
 
         #region Properties
@@ -103,6 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     languageUI.transform.SetAsLastSibling();
                 }
             }
+            languagesTG.allowSwitchOff = false;
         }
         #endregion
     }
