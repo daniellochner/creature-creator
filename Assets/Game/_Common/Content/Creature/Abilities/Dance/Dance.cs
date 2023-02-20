@@ -21,12 +21,19 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         #region Methods
         public override void OnPerform()
         {
-            Player.Instance.Animator.Params.SetTrigger(animationTrigger);
-            Player.Instance.Effects.PlaySound(soundId);
+            // Animation
+            if (!string.IsNullOrEmpty(animationTrigger))
+            {
+                Player.Instance.Animator.Params.SetTrigger(animationTrigger);
+                Player.Instance.Mover.StopMoving();
+            }
 
-            Player.Instance.Mover.StopMoving();
-
-            NotificationsManager.Notify($"{music} ~ {composer}", () => Application.OpenURL(url));
+            // Music
+            if (!string.IsNullOrEmpty(soundId))
+            {
+                Player.Instance.Effects.PlaySound(soundId);
+                NotificationsManager.Notify($"{music} ~ {composer}", () => Application.OpenURL(url));
+            }
         }
         #endregion
     }
