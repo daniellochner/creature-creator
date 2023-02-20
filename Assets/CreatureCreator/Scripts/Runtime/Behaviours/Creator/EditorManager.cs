@@ -152,6 +152,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             HandleKeyboardShortcuts();
         }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            LocalizationSettings.SelectedLocaleChanged -= OnLocalChanged;
+        }
 
         #region Setup
         public void Setup()
@@ -281,10 +286,7 @@ namespace DanielLochner.Assets.CreatureCreator
             UpdateNoCreatures();
 
             // Other
-            LocalizationSettings.SelectedLocaleChanged += delegate
-            {
-                UpdateStatistics();
-            };
+            LocalizationSettings.SelectedLocaleChanged += OnLocalChanged;
         }
         public void SetupPlayer()
         {
@@ -322,6 +324,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     bonesWarningAnimator.SetTrigger("Warn");
                 }
             };
+        }
+
+        private void OnLocalChanged(Locale locale)
+        {
+            UpdateStatistics();
         }
         #endregion
 
