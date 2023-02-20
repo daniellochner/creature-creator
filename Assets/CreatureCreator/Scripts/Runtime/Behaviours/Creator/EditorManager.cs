@@ -874,6 +874,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bodyPartUI.Setup(bodyPart, isNew);
             bodyPartUI.name = bodyPartID;
             noPartsText.SetActive(false);
+            grid.CalculateLayoutInputVertical();
 
             bodyPartUI.HoverUI.OnEnter.AddListener(delegate
             {
@@ -895,8 +896,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bodyPartUI.DragUI.OnRelease.AddListener(delegate
             {
                 bodyPartUI.Deselect();
-                bodyPartGrids[bodyPart.PluralForm].grid.enabled = false;
-                bodyPartGrids[bodyPart.PluralForm].grid.enabled = true;
+                grid.CalculateLayoutInputVertical();
             });
             bodyPartUI.DragUI.OnDrag.AddListener(delegate
             {
