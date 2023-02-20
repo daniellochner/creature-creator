@@ -43,7 +43,6 @@ namespace DanielLochner.Assets
         }
         private void OnMouseUp()
         {
-            if (CanvasUtility.IsPointerOverUI) return;
             IsPressing = false;
             onRelease.Invoke();
         }
