@@ -39,6 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider musicVolumeSlider;
         [SerializeField] private Slider soundEffectsVolumeSlider;
         [SerializeField] private OptionSelector inGameMusicOS;
+        [SerializeField] private Toggle footstepsToggle;
 
         [Header("Gameplay")]
         [SerializeField] private TMP_InputField onlineUsernameTextField;
@@ -326,6 +327,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
             inGameMusicOS.Select(SettingsManager.Data.InGameMusic, inGame && !WorldManager.Instance.IsUsingTeleport);
+
+            // Footsteps
+            footstepsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Footsteps);
+            footstepsToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetFootsteps(isOn);
+            });
             #endregion
 
             #region Gameplay

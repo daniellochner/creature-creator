@@ -35,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 1)] private float musicVolume;
         [SerializeField, Range(0, 1)] private float soundEffectsVolume;
         [SerializeField] private InGameMusicType inGameMusic;
+        [SerializeField] private bool footsteps = true;
 
         [Header("Gameplay")]
         [SerializeField] private string onlineUsername;
@@ -164,6 +165,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => inGameMusic;
             set => inGameMusic = value;
         }
+        public bool Footsteps
+        {
+            get => footsteps;
+            set => footsteps = value;
+        }
 
         public string OnlineUsername
         {
@@ -274,6 +280,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MusicVolume = 0.5f;
             SoundEffectsVolume = 0.75f;
             InGameMusic = InGameMusicType.WistfulHarp;
+            Footsteps = true;
 
             OnlineUsername = "";
             CreaturePresets.Clear();

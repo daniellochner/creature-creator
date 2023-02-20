@@ -420,6 +420,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.InGameMusic = type;
         }
+        public void SetFootsteps(bool footsteps)
+        {
+            Data.Footsteps = footsteps;
+        }
         #endregion
 
         #region Gameplay
