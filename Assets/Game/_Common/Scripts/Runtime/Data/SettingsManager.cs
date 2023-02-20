@@ -327,10 +327,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetReflections(bool reflections)
         {
-            //foreach (PWaterProfile waterProfile in waterProfiles)
-            //{
-            //    waterProfile.EnableReflection = reflections;
-            //}
+            foreach (PWaterProfile waterProfile in waterProfiles)
+            {
+                waterProfile.EnableReflection = reflections;
+            }
             Data.Reflections = reflections;
         }
         public void SetAnisotropicFiltering(bool anisotropicFiltering)

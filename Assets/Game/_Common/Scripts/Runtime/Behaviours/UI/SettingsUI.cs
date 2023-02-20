@@ -152,7 +152,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         antialiasingOS.Select(AntialiasingType.MediumSMAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.Medium);
                         foliageOS.Select(FoliageType.Medium);
-                        reflectionsToggle.isOn = true;
+                        reflectionsToggle.isOn = false;
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
                         break;
@@ -165,7 +165,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         antialiasingOS.Select(AntialiasingType.HighSMAA);
                         screenSpaceReflectionsOS.Select(ScreenSpaceReflectionsType.High);
                         foliageOS.Select(FoliageType.High);
-                        reflectionsToggle.isOn = true;
+                        reflectionsToggle.isOn = false;
                         anisotropicFilteringToggle.isOn = true;
                         bloomToggle.isOn = true;
                         break;
