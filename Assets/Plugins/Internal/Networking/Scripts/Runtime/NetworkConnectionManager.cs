@@ -64,15 +64,16 @@ namespace DanielLochner.Assets
         {
             ForceDisconnectClientRpc(reason, NetworkUtils.SendTo(clientId));
 
-            List<string> kickedPlayers = new List<string>(LobbyHelper.Instance.JoinedLobby.Data["kickedPlayers"].Value.Split(","));
+            List<string> kickedPlayers = new List<string>(LobbyHelper.Instance.JoinedLobby.TryGetValue("kickedPlayers", "").Split(","));
             kickedPlayers.Add(playerId);
             UpdateLobbyOptions options = new UpdateLobbyOptions()
             {
-                Data = new System.Collections.Generic.Dictionary<string, DataObject>()
+                Data = new Dictionary<string, DataObject>()
                 {
                     { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, string.Join(",", kickedPlayers)) },
                 }
             };
+
             options.HostId = AuthenticationService.Instance.PlayerId;
             LobbyService.Instance.UpdateLobbyAsync(LobbyHelper.Instance.JoinedLobby.Id, options);
         }

@@ -291,7 +291,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
-                SetConnectionData(AuthenticationService.Instance.PlayerId, username, password);
+                SetConnectionData(steamId, username, password);
 
                 // Join Lobby
                 UpdateStatus(LocalizationUtility.Localize("network_status_joining-lobby"), Color.yellow, -1);
@@ -367,6 +367,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool allowProfanity = profanityToggle.isOn;
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 ulong hostSteamId = SteamUser.GetSteamID().m_SteamID;
+                string kickedPlayers = "";
 
                 // Check Unlocked Map
                 if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked((Map)mapOS.Selected))
@@ -420,7 +421,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
                         { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
                         { "useSteam", new DataObject(DataObject.VisibilityOptions.Public, UseSteam.ToString()) },
-                        { "hostSteamId", new DataObject(DataObject.VisibilityOptions.Public, hostSteamId.ToString()) }
+                        { "hostSteamId", new DataObject(DataObject.VisibilityOptions.Public, hostSteamId.ToString()) },
+                        { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) }
                     },
                     Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, (UseSteam ? hostSteamId.ToString() : allocation.AllocationId.ToString()))
                 };
