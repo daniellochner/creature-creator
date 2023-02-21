@@ -39,7 +39,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider musicVolumeSlider;
         [SerializeField] private Slider soundEffectsVolumeSlider;
         [SerializeField] private OptionSelector inGameMusicOS;
-        [SerializeField] private Toggle footstepsToggle;
 
         [Header("Gameplay")]
         [SerializeField] private TMP_InputField onlineUsernameTextField;
@@ -54,6 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle tutorialToggle;
         [SerializeField] private Toggle worldChatToggle;
         [SerializeField] private Toggle mapToggle;
+        [SerializeField] private Toggle footstepsToggle;
         [SerializeField] private Button resetProgressButton;
 
         [Header("Controls")]
@@ -327,13 +327,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
             inGameMusicOS.Select(SettingsManager.Data.InGameMusic, inGame && !WorldManager.Instance.IsUsingTeleport);
-
-            // Footsteps
-            footstepsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Footsteps);
-            footstepsToggle.onValueChanged.AddListener(delegate (bool isOn)
-            {
-                SettingsManager.Instance.SetFootsteps(isOn);
-            });
             #endregion
 
             #region Gameplay
@@ -426,6 +419,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     MinimapManager.Instance.SetVisibility(isOn);
                 }
+            });
+
+            // Footsteps
+            footstepsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Footsteps);
+            footstepsToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetFootsteps(isOn);
             });
 
             // Reset Progress

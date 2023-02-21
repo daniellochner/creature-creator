@@ -68,6 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetNetworkStats(Data.NetworkStats);
             SetTutorial(Data.Tutorial);
             SetWorldChat(Data.WorldChat);
+            SetFootsteps(Data.Footsteps);
             SetMap(Data.Map);
 
             SetSensitivityHorizontal(Data.SensitivityHorizontal);
@@ -420,10 +421,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.InGameMusic = type;
         }
-        public void SetFootsteps(bool footsteps)
-        {
-            Data.Footsteps = footsteps;
-        }
         #endregion
 
         #region Gameplay
@@ -479,6 +476,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetMap(bool map)
         {
             Data.Map = map;
+        }
+        public void SetFootsteps(bool footsteps)
+        {
+            Data.Footsteps = footsteps;
         }
         public void SetLocale(string locale)
         {

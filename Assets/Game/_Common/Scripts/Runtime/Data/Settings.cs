@@ -35,7 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 1)] private float musicVolume;
         [SerializeField, Range(0, 1)] private float soundEffectsVolume;
         [SerializeField] private InGameMusicType inGameMusic;
-        [SerializeField] private bool footsteps = true;
 
         [Header("Gameplay")]
         [SerializeField] private string onlineUsername;
@@ -50,6 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool networkStats;
         [SerializeField] private bool tutorial;
         [SerializeField] private bool worldChat;
+        [SerializeField] private bool footsteps = true;
         [SerializeField] private bool map = true;
 
         [Header("Controls")]
@@ -165,11 +165,6 @@ namespace DanielLochner.Assets.CreatureCreator
             get => inGameMusic;
             set => inGameMusic = value;
         }
-        public bool Footsteps
-        {
-            get => footsteps;
-            set => footsteps = value;
-        }
 
         public string OnlineUsername
         {
@@ -228,6 +223,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => worldChat;
             set => worldChat = value;
         }
+        public bool Footsteps
+        {
+            get => footsteps;
+            set => footsteps = value;
+        }
         public bool Map
         {
             get => map;
@@ -280,7 +280,6 @@ namespace DanielLochner.Assets.CreatureCreator
             MusicVolume = 0.5f;
             SoundEffectsVolume = 0.75f;
             InGameMusic = InGameMusicType.WistfulHarp;
-            Footsteps = true;
 
             OnlineUsername = "";
             CreaturePresets.Clear();
@@ -292,6 +291,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Tutorial = true;
             WorldChat = true;
             Map = true;
+            Footsteps = true;
 
             SensitivityHorizontal = 1f;
             SensitivityVertical = 1f;
