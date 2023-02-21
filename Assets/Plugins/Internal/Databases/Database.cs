@@ -21,7 +21,7 @@ namespace DanielLochner.Assets
         #region Methods
         public T GetEntry<T>(string key) where T : UnityEngine.Object
         {
-            if (objects.ContainsKey(key))
+            if (key != null && objects.ContainsKey(key))
             {
                 return objects[key] as T;
             }
