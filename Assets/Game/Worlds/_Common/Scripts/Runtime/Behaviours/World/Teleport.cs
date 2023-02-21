@@ -58,21 +58,26 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
-            if (IsVisible && !isTeleporting && CanTeleport && InputUtility.GetKeyDown(keybind))
+            if (IsVisible)
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
+                if (!isTeleporting && InputUtility.GetKeyDown(keybind) && CanTeleport)
                 {
-                    UnlockMapClientRpc();
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
+                    {
+                        UnlockMapClientRpc();
 
-                    if (cinematic != null)
-                    {
-                        TeleportCinematicClientRpc();
-                    }
-                    else
-                    {
-                        InitializeTeleport();
-                    }
-                });
+                        if (cinematic != null)
+                        {
+                            TeleportCinematicClientRpc();
+                        }
+                        else
+                        {
+                            InitializeTeleport();
+                        }
+
+                        isTeleporting = true;
+                    });
+                }
                 UpdateInfo();
             }
         }
@@ -103,8 +108,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private async void InitializeTeleport()
         {
-            isTeleporting = true;
-
             if (WorldManager.Instance.World is WorldMP)
             {
                 UpdateLobbyOptions options = new UpdateLobbyOptions()
