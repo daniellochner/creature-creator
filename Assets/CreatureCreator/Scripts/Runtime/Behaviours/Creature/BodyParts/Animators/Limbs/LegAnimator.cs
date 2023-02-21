@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Pinwheel.Griffin;
 using System.Collections;
 using UnityEngine;
 
@@ -12,6 +13,10 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(LegConstructor))]
     public class LegAnimator : LimbAnimator
     {
+        #region Fields
+        private AudioSource footstepAS;
+        #endregion
+
         #region Properties
         public LegConstructor LegConstructor => LimbConstructor as LegConstructor;
         public LegAnimator FlippedLeg => Flipped as LegAnimator;
@@ -81,6 +86,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup(creatureAnimator);
 
+            footstepAS = LegConstructor.Extremity.GetComponent<AudioSource>();
+
             Anchor = new GameObject("Anchor").transform;
             Anchor.SetParent(LimbConstructor.Extremity, false);
         }
@@ -147,6 +154,30 @@ namespace DanielLochner.Assets.CreatureCreator
             timeToMove, MovementTimeScale);
 
             IsMovingFoot = false;
+        }
+
+        public void Step(RaycastHit? hit, float intensity)
+        {
+            if (SettingsManager.Data.Footsteps && hit != null)
+            {
+                FootstepEffects effects = DatabaseManager.GetDatabaseEntry<FootstepEffects>("Footsteps", "");
+
+
+
+                if (hit.Value.collider.TryGetComponent(out GTerrainChunk terrain))
+                {
+                    //Vector3 terrainPos = hit.Value.point - terrain.transform.position;
+                    //Vector3 splatMatPos = new Vector3(terrainPos.x / terrain.Terrain.)
+
+
+                }
+
+
+
+                footstepAS.PlayOneShot(effects.GetSound(FootstepEffects.StepType.Walk), intensity);
+
+
+            }
         }
         #endregion
     }

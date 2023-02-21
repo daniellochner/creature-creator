@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 
                 if (Creature.Grounded.IsGrounded)
                 {
-                    //Creature.Footsteps.Step(leg.LegConstructor.Extremity.position);
+                    // step
                 }
             }
 

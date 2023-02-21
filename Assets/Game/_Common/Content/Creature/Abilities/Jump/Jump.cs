@@ -33,6 +33,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             
             rigidbody.AddForce(rigidbody.transform.up * force, ForceMode.Impulse);
 
+            foreach (LegAnimator leg in creatureAnimator.Legs)
+            {
+                // step
+            }
+
             if (!WorldManager.Instance.World.CreativeMode)
             {
                 Player.Instance.Hunger.Hunger -= hungerCost;

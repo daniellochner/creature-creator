@@ -159,19 +159,21 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 Quaternion rot = Creature.Constructor.Body.rotation;
                 float liftHeight = Creature.Constructor.transform.W2LSpace(leg1.transform.position).y * liftHeightFactor;
 
-                Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove);
-                float t1 = Mathf.Clamp01(LSpeed + ASpeed);
-                Coroutine moveFoot1 = leg1.StartCoroutine(leg1.MoveFootRoutine(pos1, rot, timeToMove, liftHeight * t1));
+                RaycastHit? hit1;
+                Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove, out hit1);
+                float i1 = Mathf.Clamp01(LSpeed + ASpeed);
+                Coroutine moveFoot1 = leg1.StartCoroutine(leg1.MoveFootRoutine(pos1, rot, timeToMove, liftHeight * i1));
                 moveFeet[pair][0] = moveFoot1;
                 yield return moveFoot1;
-                //Creature.Footsteps.Step(pos1);
+                leg1.Step(hit1, i1);
 
-                Vector3 pos2 = GetTargetFootPosition(leg2, timeToMove);
-                float t2 = Mathf.Clamp01(LSpeed + ASpeed);
-                Coroutine moveFoot2 = leg2.StartCoroutine(leg2.MoveFootRoutine(pos2, rot, timeToMove, liftHeight * t2));
+                RaycastHit? hit2;
+                Vector3 pos2 = GetTargetFootPosition(leg2, timeToMove, out hit2);
+                float i2 = Mathf.Clamp01(LSpeed + ASpeed);
+                Coroutine moveFoot2 = leg2.StartCoroutine(leg2.MoveFootRoutine(pos2, rot, timeToMove, liftHeight * i2));
                 moveFeet[pair][1] = moveFoot2;
                 yield return moveFoot2;
-                //Creature.Footsteps.Step(pos2);
+                leg2.Step(hit2, i2);
             }
         }
 
@@ -199,7 +201,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 
             foreach (LegAnimator leg in Creature.Legs)
             {
-                Vector3 pos = GetTargetFootPosition(leg, 0f);
+                Vector3 pos = GetTargetFootPosition(leg, 0f, out RaycastHit? hit);
                 Quaternion rot = Creature.Constructor.Body.rotation;
                 if (Creature.enabled)
                 {
@@ -207,7 +209,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 }
             }
         }
-        private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove)
+        private Vector3 GetTargetFootPosition(LegAnimator leg, float timeToMove, out RaycastHit? footstepHit)
         {
             Vector3 localPos = Vector3Utility.RotatePointAroundPivot(leg.DefaultFootLocalPos, Vector3.zero, Creature.Velocity.Angular * timeToMove);
             Vector3 worldPos = Creature.transform.L2WSpace(localPos);
@@ -217,16 +219,17 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             Vector3 footOffset = Creature.transform.up * ((leg.LegConstructor.ConnectedFoot != null) ? leg.LegConstructor.ConnectedFoot.Offset : 0f);
 
             Vector3 origin = worldPos + bodyOffset;
-            Vector3? foothold = PhysicsUtility.RaycastCone(origin, -Creature.transform.up, leg.MaxLength, 15f, 3, 10, LayerMask.GetMask("Ground"), Creature.transform.up, 0.5f);
+            Vector3? foothold = PhysicsUtility.RaycastCone(origin, -Creature.transform.up, leg.MaxLength, 15f, 3, 10, LayerMask.GetMask("Ground"), Creature.transform.up, 0.5f, out footstepHit);
             if (foothold != null)
             {
                 return (Vector3)foothold + footOffset;
             }
             else
             {
-                if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                if (Physics.Raycast(origin, -Creature.transform.up, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
                 {
-                    return hitInfo.point + footOffset;
+                    footstepHit = hit;
+                    return hit.point + footOffset;
                 }
                 return worldPos;
             }

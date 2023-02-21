@@ -4,11 +4,14 @@ namespace DanielLochner.Assets
 {
     public static class PhysicsUtility
     {
-        public static Vector3? RaycastCone(Vector3 origin, Vector3 dir, float length, float angle, int n, int m, int layerMask, Vector3 normal, float alignmentThreshold)
+        public static Vector3? RaycastCone(Vector3 origin, Vector3 dir, float length, float angle, int n, int m, int layerMask, Vector3 normal, float alignmentThreshold, out RaycastHit? hit)
         {
+            hit = null;
+
             // Center
             if (Physics.Raycast(origin, dir, out RaycastHit hitInfo1, length, layerMask) && Vector3.Dot(hitInfo1.normal, normal) > alignmentThreshold)
             {
+                hit = hitInfo1;
                 return hitInfo1.point;
             }
 
@@ -21,10 +24,12 @@ namespace DanielLochner.Assets
 
                     if (Physics.Raycast(origin, dir, out RaycastHit hitInfo2, length, layerMask) && Vector3.Dot(hitInfo2.normal, normal) > alignmentThreshold)
                     {
+                        hit = hitInfo2;
                         return hitInfo2.point;
                     }
                 }
             }
+
             return null;
         }
     }

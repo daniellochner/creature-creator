@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool CheckLeg(LegAnimator leg)
         {
-            return PhysicsUtility.RaycastCone(leg.transform.position, -transform.up, leg.MaxLength, 15f, 3, 10, LayerMask.GetMask("Ground"), transform.up, 0.5f) != null;
+            return PhysicsUtility.RaycastCone(leg.transform.position, -transform.up, leg.MaxLength, 15f, 3, 10, LayerMask.GetMask("Ground"), transform.up, 0.5f, out RaycastHit? hitInfo) != null;
         }
         #endregion
     }
