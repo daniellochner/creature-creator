@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
-            if (ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0)
+            if (SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0)
             {
                 yield return new WaitForSeconds(0.5f);
                 playMenu.Open();
