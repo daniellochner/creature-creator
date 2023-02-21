@@ -2,11 +2,14 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
+using static DanielLochner.Assets.FootstepEffects;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
     public class Falling : CreatureAnimation
     {
+        [SerializeField] private float maxFallSpeed;
+
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             foreach (LegAnimator leg in Creature.Legs)
@@ -20,10 +23,8 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             {
                 leg.Anchor.SetParent(Dynamic.Transform);
 
-                if (Creature.Grounded.IsGrounded)
-                {
-                    // step
-                }
+                float i = Mathf.Clamp01(Vector3.Project(Creature.Velocity.Linear, -Creature.transform.up).magnitude / maxFallSpeed);
+                leg.Step(StepType.JumpEnd, i);
             }
 
             Walking walking = animator.GetBehaviour<Walking>();

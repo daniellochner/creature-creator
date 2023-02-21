@@ -3,6 +3,7 @@
 
 using System.Collections;
 using UnityEngine;
+using static DanielLochner.Assets.FootstepEffects;
 
 namespace DanielLochner.Assets.CreatureCreator.Animations
 {
@@ -159,13 +160,15 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 Quaternion rot = Creature.Constructor.Body.rotation;
                 float liftHeight = Creature.Constructor.transform.W2LSpace(leg1.transform.position).y * liftHeightFactor;
 
+                StepType stepType = (Creature.Velocity.Linear.magnitude > 3f) ? StepType.Run : StepType.Walk;
+
                 RaycastHit? hit1;
                 Vector3 pos1 = GetTargetFootPosition(leg1, timeToMove, out hit1);
                 float i1 = Mathf.Clamp01(LSpeed + ASpeed);
                 Coroutine moveFoot1 = leg1.StartCoroutine(leg1.MoveFootRoutine(pos1, rot, timeToMove, liftHeight * i1));
                 moveFeet[pair][0] = moveFoot1;
                 yield return moveFoot1;
-                leg1.Step(hit1, i1);
+                leg1.Step(stepType, hit1, i1);
 
                 RaycastHit? hit2;
                 Vector3 pos2 = GetTargetFootPosition(leg2, timeToMove, out hit2);
@@ -173,7 +176,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 Coroutine moveFoot2 = leg2.StartCoroutine(leg2.MoveFootRoutine(pos2, rot, timeToMove, liftHeight * i2));
                 moveFeet[pair][1] = moveFoot2;
                 yield return moveFoot2;
-                leg2.Step(hit2, i2);
+                leg2.Step(stepType, hit2, i2);
             }
         }
 

@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
+using static DanielLochner.Assets.FootstepEffects;
 
 namespace DanielLochner.Assets.CreatureCreator.Abilities
 {
@@ -35,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
 
             foreach (LegAnimator leg in creatureAnimator.Legs)
             {
-                // step
+                leg.Step(StepType.JumpStart, 1f);
             }
 
             if (!WorldManager.Instance.World.CreativeMode)

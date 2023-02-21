@@ -4,6 +4,7 @@
 using Pinwheel.Griffin;
 using System.Collections;
 using UnityEngine;
+using static DanielLochner.Assets.FootstepEffects;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -156,28 +157,68 @@ namespace DanielLochner.Assets.CreatureCreator
             IsMovingFoot = false;
         }
 
-        public void Step(RaycastHit? hit, float intensity)
+        public void Step(StepType stepType, float intensity)
+        {
+            if (Physics.Raycast(LegConstructor.Extremity.position + CreatureAnimator.transform.up, -CreatureAnimator.transform.up, out RaycastHit hit, 2f, LayerMask.GetMask("Ground")))
+            {
+                Step(stepType, hit, intensity);
+            }
+        }
+        public void Step(StepType stepType, RaycastHit? hit, float intensity)
         {
             if (SettingsManager.Data.Footsteps && hit != null)
             {
-                FootstepEffects effects = DatabaseManager.GetDatabaseEntry<FootstepEffects>("Footsteps", "");
+                FootstepEffects effects = null;
 
-
-
-                if (hit.Value.collider.TryGetComponent(out GTerrainChunk terrain))
+                if (hit.Value.collider.TryGetComponent(out GTerrainChunk chunk))
                 {
-                    //Vector3 terrainPos = hit.Value.point - terrain.transform.position;
-                    //Vector3 splatMatPos = new Vector3(terrainPos.x / terrain.Terrain.)
+                    Vector2 uv = chunk.Terrain.WorldPointToUV(hit.Value.point);
+                    int size = chunk.Terrain.TerrainData.Shading.SplatControlResolution;
+                    int x = Mathf.FloorToInt(uv.x * size);
+                    int y = Mathf.FloorToInt(uv.y * size);
 
+                    Texture2D splatControl = chunk.Terrain.TerrainData.Shading.GetSplatControl(0);
+                    int index = GetDominantTextureIndex(splatControl.GetPixel(x, y));
+                    Texture texture = chunk.Terrain.TerrainData.Shading.Splats.Prototypes[index].Texture;
 
+                    effects = DatabaseManager.GetDatabaseEntry<FootstepEffects>("Footsteps", texture.name);
+                }
+                else
+                if (hit.Value.collider.TryGetComponent(out MeshRenderer renderer))
+                {
+                    effects = DatabaseManager.GetDatabaseEntry<FootstepEffects>("Footsteps", renderer.material.mainTexture?.name);
                 }
 
+                if (effects)
+                {
+                    AudioClip sound = effects.GetSound(stepType);
+                    if (sound)
+                    {
+                        footstepAS.PlayOneShot(sound, intensity);
+                    }
 
-
-                footstepAS.PlayOneShot(effects.GetSound(FootstepEffects.StepType.Walk), intensity);
-
-
+                    GameObject particle = effects.GetParticle(stepType);
+                    if (particle)
+                    {
+                        Instantiate(particle, hit.Value.point, Quaternion.identity, Dynamic.Transform).transform.localScale *= intensity;
+                    }
+                }
             }
+        }
+
+        private int GetDominantTextureIndex(Color splat)
+        {
+            float maxValue = 0;
+            int maxIndex = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                if (splat[i] > maxValue)
+                {
+                    maxValue = splat[i];
+                    maxIndex = i;
+                }
+            }
+            return maxIndex;
         }
         #endregion
     }
