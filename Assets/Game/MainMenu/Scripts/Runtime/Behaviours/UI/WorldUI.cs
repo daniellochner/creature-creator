@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(MultiplayerUI multiplayerUI, Lobby lobby, Func<Lobby, bool> isAllowedToJoin)
+        public void Setup(MultiplayerUI multiplayerUI, Lobby lobby)
         {
             Players = lobby.Players.Count;
 
@@ -32,10 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
             nameText.text = lobby.Name;
             joinButton.onClick.AddListener(delegate 
             {
-                if (isAllowedToJoin(lobby))
-                {
-                    multiplayerUI.Join(lobby.Id);
-                }
+                multiplayerUI.Join(lobby.Id);
             });
 
             WorldMP world = new WorldMP(lobby);

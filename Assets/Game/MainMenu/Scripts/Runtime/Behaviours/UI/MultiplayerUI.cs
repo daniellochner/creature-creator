@@ -128,10 +128,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 return true;
             }
         }
-        public bool IsValidMap
-        {
-            get => (Mode)modeOS.Selected == Mode.Creative || IsMapUnlocked((Map)mapOS.Selected);
-        }
 
         private bool IsConnecting
         {
@@ -259,8 +255,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Authenticate
                 await Authenticate();
 
-                // Confirm Password
+                // Check Unlocked Map
                 WorldMP world = new WorldMP(await Lobbies.Instance.GetLobbyAsync(id));
+                if (!world.CreativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(world.MapName)))
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(world.MapId)));
+                }
+
+                // Check Version
+                string version = world.Version;
+                if (!version.Equals(Application.version))
+                {
+                    throw new Exception(LocalizationUtility.Localize("network_status_incorrect-version", Application.version, version));
+                }
+
+                // Check Password
                 string passwordHash = world.PasswordHash;
                 string password = "";
                 if (!string.IsNullOrEmpty(passwordHash))
@@ -273,14 +282,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                // Version
-                string version = world.Version;
-                if (!version.Equals(Application.version))
-                {
-                    throw new Exception(LocalizationUtility.Localize("network_status_incorrect-version", Application.version, version));
-                }
-
-                // Kicked
+                // Check Kicked
                 string steamId = SteamUser.GetSteamID().m_SteamID.ToString();
                 if (world.KickedPlayers.Contains(steamId))
                 {
@@ -343,7 +345,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public async void Create()
         {
-            if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName || !IsValidMap)
+            if (!IsConnectedToInternet || !IsValidPlayer || !IsValidWorldName)
             {
                 return;
             }
@@ -365,7 +367,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool allowProfanity = profanityToggle.isOn;
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 ulong hostSteamId = SteamUser.GetSteamID().m_SteamID;
-                
+
+                // Check Unlocked Map
+                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked((Map)mapOS.Selected))
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(mapId)));
+                }
+
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
@@ -445,16 +453,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 List<Lobby> lobbies = (await Lobbies.Instance.QueryLobbiesAsync()).Results;
                 foreach (Lobby lobby in lobbies)
                 {
-                    string version = lobby.Data["version"].Value;
-                    bool useSteam = bool.Parse(lobby.Data["useSteam"].Value);
-
-                    if (version.Equals(Application.version) && (UseSteam == useSteam))
+                    WorldMP world = new WorldMP(lobby);
+                    if (!world.IsPrivate && UseSteam == world.UseSteam)
                     {
-                        WorldMP world = new WorldMP(lobby);
-                        if (!world.IsPrivate)
-                        {
-                            Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby, IsAllowedToJoin);
-                        }
+                        Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
                     }
                 }
                 noneGO.SetActive(worldsRT.childCount == 0);
@@ -556,28 +558,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConnectionData data = new ConnectionData(playerId, username, password);
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
-        }
-
-        private bool IsAllowedToJoin(Lobby lobby)
-        {
-            bool creativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
-            if (!creativeMode)
-            {
-                return IsMapUnlocked(Enum.Parse<Map>(lobby.Data["mapName"].Value));
-            }
-            else
-            {
-                return true;
-            }
-        }
-        private bool IsMapUnlocked(Map map)
-        {
-            if (!ProgressManager.Instance.IsMapUnlocked(map))
-            {
-                UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{map}".ToLower())), Color.white);
-                return false;
-            }
-            return true;
         }
         
         private void UpdateMap()

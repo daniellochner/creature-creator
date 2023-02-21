@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections.Generic;
 using Unity.Services.Lobbies.Models;
 
@@ -31,25 +32,24 @@ namespace DanielLochner.Assets.CreatureCreator
         public WorldMP(Lobby lobby)
         {
             Id = lobby.Id;
-            IsPrivate = bool.Parse(lobby.Data["isPrivate"].Value);
-            JoinCode = lobby.Data["joinCode"].Value;
-            PasswordHash = lobby.Data["passwordHash"].Value;
+            IsPrivate = lobby.TryGetValue<bool>("isPrivate");
+            JoinCode = lobby.TryGetValue<string>("joinCode");
+            PasswordHash = lobby.TryGetValue<string>("passwordHash");
             IsPasswordProtected = !string.IsNullOrEmpty(PasswordHash);
 
             WorldName = lobby.Name;
-            MapName = lobby.Data["mapName"].Value;
-            Version = lobby.Data["version"].Value;
-            AllowProfanity = bool.Parse(lobby.Data["allowProfanity"].Value);
-            EnablePVP = bool.Parse(lobby.Data["enablePVP"].Value);
-            EnablePVE = bool.Parse(lobby.Data["enablePVE"].Value);
-            SpawnNPC = bool.Parse(lobby.Data["spawnNPC"].Value);
-            CreativeMode = bool.Parse(lobby.Data["creativeMode"].Value);
-            UseSteam = bool.Parse(lobby.Data["useSteam"].Value);
-            MapId = lobby.Data["mapId"].Value;
+            MapName = lobby.TryGetValue<string>("mapName");
+            Version = lobby.TryGetValue<string>("version");
+            AllowProfanity = lobby.TryGetValue<bool>("allowProfanity");
+            EnablePVP = lobby.TryGetValue<bool>("enablePVP");
+            EnablePVE = lobby.TryGetValue<bool>("enablePVE");
+            SpawnNPC = lobby.TryGetValue<bool>("spawnNPC");
+            CreativeMode = lobby.TryGetValue<bool>("creativeMode");
+            UseSteam = lobby.TryGetValue<bool>("useSteam");
+            MapId = lobby.TryGetValue<string>("mapId");
 
-            HostSteamId = lobby.Data["hostSteamId"].Value;
-
-            KickedPlayers = new List<string>(lobby.Data["kickedPlayers"].Value.Split(","));
+            HostSteamId = lobby.TryGetValue<string>("hostSteamId");
+            KickedPlayers = new List<string>(lobby.TryGetValue("kickedPlayers", "").Split(","));
         }
         #endregion
     }

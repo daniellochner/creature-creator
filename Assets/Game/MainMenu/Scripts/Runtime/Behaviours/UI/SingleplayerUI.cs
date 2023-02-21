@@ -73,24 +73,33 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Play()
         {
-            string mapName = ((Map)mapOS.Selected).ToString();
-            bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
-            bool spawnNPC = npcToggle.isOn;
-            bool enablePVE = pveToggle.isOn;
-            bool unlimited = unlimitedToggle.isOn && creativeMode;
-
-            if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
+            try
             {
-                UpdateStatus(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())), Color.white);
-                return;
+                // Set Up World
+                string mapName = ((Map)mapOS.Selected).ToString();
+                bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
+                bool spawnNPC = npcToggle.isOn;
+                bool enablePVE = pveToggle.isOn;
+                bool unlimited = unlimitedToggle.isOn && creativeMode;
+                WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
+
+                // Check Unlocked Map
+                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())));
+                }
+
+                // Set Up Connection Data
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
+                NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
+
+                // Start Host
+                NetworkManager.Singleton.StartHost();
             }
-
-            NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
-            NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
-
-            WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
-
-            NetworkManager.Singleton.StartHost();
+            catch (Exception e)
+            {
+                UpdateStatus(e.Message, Color.red);
+            }
         }
 
         private void OnFailed(ulong clientId)
@@ -121,10 +130,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                updateStatusCoroutine = this.Invoke(HideNetworkStatus, duration);
+                updateStatusCoroutine = this.Invoke(HideStatus, duration);
             }
         }
-        private void HideNetworkStatus()
+        private void HideStatus()
         {
             statusText.CrossFadeAlpha(0, 0.25f, true);
         }
