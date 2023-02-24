@@ -1,6 +1,9 @@
-using Steamworks;
 using System.Collections;
 using UnityEngine;
+
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -73,8 +76,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
+#if UNITY_STANDALONE
             yield return new WaitUntil(() => SteamManager.Initialized);
             SteamUserStats.StoreStats();
+#elif UNITY_IOS || UNITY_ANDROID
+            yield return null;
+#endif
 
             // Necessary initial synch with the number of parts and patterns (if you have already unlocked before).
             UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts.Count;
@@ -83,23 +90,28 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Revert(bool achievementsToo = false)
         {
+#if UNITY_STANDALONE
             if (SteamManager.Initialized)
             {
                 SteamUserStats.ResetAllStats(achievementsToo);
             }
+#endif
         }
 
         public int GetStat(string statId)
         {
             int intValue = 0;
+#if UNITY_STANDALONE
             if (SteamManager.Initialized)
             {
                 SteamUserStats.GetStat(statId, out intValue);
             }
+#endif
             return intValue;
         }
         public void SetStat(string statId, int value, params StatAchievement[] statAchievements)
         {
+#if UNITY_STANDALONE
             if (SteamManager.Initialized)
             {
                 SteamUserStats.SetStat(statId, value);
@@ -121,18 +133,22 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 SteamUserStats.StoreStats();
             }
+#endif
         }
         
         public bool GetAchievement(string achievementId)
         {
+#if UNITY_STANDALONE
             if (SteamManager.Initialized && SteamUserStats.GetAchievement(achievementId, out bool achieved))
             {
                 return achieved;
             }
+#endif
             return false;
         }
         public void SetAchievement(string achievementId)
         {
+#if UNITY_STANDALONE
             if (SteamManager.Initialized)
             {
                 SteamUserStats.GetAchievement(achievementId, out bool achieved);
@@ -142,6 +158,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     SteamUserStats.StoreStats();
                 }
             }
+#endif
         }
         #endregion
 

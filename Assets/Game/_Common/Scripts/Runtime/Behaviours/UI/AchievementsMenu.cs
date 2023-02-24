@@ -1,4 +1,3 @@
-using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,7 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 achievementUI.canvasGroup.alpha = StatsManager.Instance.GetAchievement(achievementUI.name) ? 1f : 0.2f;
             }
-            //titleText.text = $"Unlocked Achievements ({StatsManager.Instance.NumAchievementsUnlocked}/{Achievements.Objects.Count})";
             titleText.SetArguments(StatsManager.Instance.NumAchievementsUnlocked, Achievements.Objects.Count);
         }
 

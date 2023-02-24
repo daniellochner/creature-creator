@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
