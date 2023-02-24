@@ -6,17 +6,26 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private float threshold;
-        [SerializeField] private FloatingJoystick joystick;
-        [SerializeField] private GameObject[] focus;
+        [Space]
+        [SerializeField] private GameObject top;
+        [SerializeField] private GameObject right;
+        [SerializeField] private GameObject bottom;
+        [SerializeField] private GameObject left;
+
+        private Joystick joystick;
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            joystick = GetComponent<Joystick>();
+        }
         private void Update()
         {
-            focus[0].SetActive(joystick.Vertical   > +threshold);
-            focus[1].SetActive(joystick.Horizontal > +threshold);
-            focus[2].SetActive(joystick.Vertical   < -threshold);
-            focus[3].SetActive(joystick.Horizontal < -threshold);
+            top.SetActive(joystick.Vertical > +threshold);
+            right.SetActive(joystick.Horizontal > +threshold);
+            bottom.SetActive(joystick.Vertical < -threshold);
+            left.SetActive(joystick.Horizontal < -threshold);
         }
         #endregion
     }
