@@ -35,8 +35,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private GameObject targetGO;
         private new Rigidbody rigidbody;
 
-        private bool isMovable, canMove, canTurn;
-        private Vector3 keyboardForward, keyboardRight, moveDisplacement, direction;
+        private bool isMovable;
+        private Vector3 keyboardForward, keyboardRight, moveDisplacement;
         private InputMode inputMode;
         private Vector3 targetPosition;
 
@@ -56,6 +56,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
+
+        public bool CanMove = true, CanTurn = true;
+        public Vector3 Direction { get; set; } = Vector3.zero;
 
         public bool CanInput
         {
@@ -82,10 +85,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
+#if UNITY_STANDALONE
             if (CanInput)
             {
                 HandleInput();
             }
+#endif
         }
         private void FixedUpdate()
         {
@@ -149,9 +154,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 inputMode = InputMode.Pointer;
             }
 
-            direction = Vector3.zero;
-            canTurn = false;
-            canMove = false;
+            Direction = Vector3.zero;
+            CanTurn = false;
+            CanMove = false;
 
             switch (inputMode)
             {
@@ -170,9 +175,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 vertical = keyboardForward * vAxisRaw;
                     Vector3 horizontal = keyboardRight * hAxisRaw;
 
-                    direction = (vertical + horizontal).normalized;
-                    canTurn = true;
-                    canMove = kInput && !InputUtility.GetKey(KeybindingsManager.Data.StopMove);
+                    Direction = (vertical + horizontal).normalized;
+                    CanTurn = true;
+                    CanMove = kInput && !InputUtility.GetKey(KeybindingsManager.Data.StopMove);
 
                     break;
                 #endregion
@@ -197,9 +202,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
 
-                    direction = displacement.normalized;
-                    canTurn = displacement.magnitude > MoveSpeed * moveSmoothTime;
-                    canMove = canTurn;
+                    Direction = displacement.normalized;
+                    CanTurn = displacement.magnitude > MoveSpeed * moveSmoothTime;
+                    CanMove = CanTurn;
 
                     break;
                     #endregion
@@ -212,16 +217,16 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandleMovement()
         {
-            if (direction != Vector3.zero)
+            if (Direction != Vector3.zero)
             {
-                float angle = Vector3.SignedAngle(transform.forward, direction, transform.up);
-                if (canTurn)
+                float angle = Vector3.SignedAngle(transform.forward, Direction, transform.up);
+                if (CanTurn)
                 {
                     RequestTurn(angle);
                 }
-                canMove &= Mathf.Abs(angle) < angleToMove;
+                CanMove &= Mathf.Abs(angle) < angleToMove;
             }
-            RequestMove(canMove && CanInput ? direction : Vector3.zero);
+            RequestMove(CanMove && CanInput ? Direction : Vector3.zero);
         }
         private void HandleGliding()
         {
