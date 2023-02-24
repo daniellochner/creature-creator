@@ -45,7 +45,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
-        [SerializeField] private OptionSelector relayServerOS;
         [SerializeField] private Toggle cameraShakeToggle;
         [SerializeField] private Toggle debugModeToggle;
         [SerializeField] private Toggle previewFeaturesToggle;

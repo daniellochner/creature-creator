@@ -10,7 +10,6 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
@@ -20,8 +19,10 @@ using System.Text;
 using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
 using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
+
+#if UNITY_STANDALONE
 using Steamworks;
-using Netcode.Transports;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -35,7 +36,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Menu multiplayerMenu;
         [SerializeField] private Menu multiplayerHintMenu;
         [SerializeField] private SimpleScrollSnap.SimpleScrollSnap multiplayerSSS;
-        [SerializeField] private OptionSelector relayServerOS;
 
         [Header("Join")]
         [SerializeField] private WorldUI worldUIPrefab;
@@ -152,16 +152,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 refreshGO.SetActive(isRefreshing);
             }
         }
-
-        private bool UseSteam
-        {
-            get => NetworkTransport is SteamNetworkingSocketsTransport;
-        }
-        private NetworkTransport NetworkTransport
-        {
-            get => NetworkManager.Singleton.NetworkConfig.NetworkTransport;
-            set => NetworkManager.Singleton.NetworkConfig.NetworkTransport = value;
-        }
         #endregion
 
         #region Methods
@@ -186,14 +176,6 @@ namespace DanielLochner.Assets.CreatureCreator
         
         private void Setup()
         {
-            relayServerOS.SetupUsingEnum<RelayServer>();
-            relayServerOS.OnSelected.AddListener(delegate (int option)
-            {
-                string relay = $"relay_{((RelayServer)option).ToString().ToLower()}";
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<NetworkTransport>(relay);
-            });
-            relayServerOS.Select(RelayServer.Unity);
-
             mapOS.SetupUsingEnum<Map>();
             mapOS.OnSelected.AddListener(delegate (int option)
             {
@@ -283,15 +265,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Check Kicked
-                string steamId = SteamUser.GetSteamID().m_SteamID.ToString();
-                if (world.KickedPlayers.Contains(steamId))
+                string playerId = AuthenticationService.Instance.PlayerId;
+                if (world.KickedPlayers.Contains(playerId))
                 {
                     throw new Exception(LocalizationUtility.Localize("network_status_kicked"));
                 }
 
                 // Set Up Connection Data
                 string username = onlineUsernameInputField.text;
-                SetConnectionData(steamId, username, password);
+                SetConnectionData(playerId, username, password);
 
                 // Join Lobby
                 UpdateStatus(LocalizationUtility.Localize("network_status_joining-lobby"), Color.yellow, -1);
@@ -305,24 +287,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Join Relay
                 UpdateStatus(LocalizationUtility.Localize("network_status_joining-via-relay"), Color.yellow, -1);
                 string joinCode = world.JoinCode;
-                string hostSteamId = world.HostSteamId;
                 JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
 
                 await Lobbies.Instance.UpdatePlayerAsync(world.Id, player.Id, new UpdatePlayerOptions()
                 {
-                    AllocationId = (UseSteam ? hostSteamId.ToString() : join.AllocationId.ToString()),
+                    AllocationId = join.AllocationId.ToString(),
                     ConnectionInfo = joinCode
                 });
-                if (!UseSteam)
-                {
-                    UnityTransport unityTransport = NetworkTransport as UnityTransport;
-                    unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
-                }
-                else
-                {
-                    SteamNetworkingSocketsTransport steamTransport = NetworkTransport as SteamNetworkingSocketsTransport;
-                    steamTransport.ConnectToSteamID = ulong.Parse(hostSteamId);
-                }
+                UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+                unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
 
                 // Start Client
                 UpdateStatus(LocalizationUtility.Localize("network_status_starting-client"), Color.yellow, -1);
@@ -366,7 +339,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool enablePVE = pveToggle.isOn;
                 bool allowProfanity = profanityToggle.isOn;
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
-                ulong hostSteamId = SteamUser.GetSteamID().m_SteamID;
+                string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
 
                 // Check Unlocked Map
@@ -379,7 +352,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
-                SetConnectionData(hostSteamId.ToString(), username, password);
+                SetConnectionData(hostPlayerId.ToString(), username, password);
                 
                 // Authenticate
                 await Authenticate();
@@ -387,16 +360,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Allocate Relay
                 UpdateStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
-                if (!UseSteam)
-                {
-                    UnityTransport unityTransport = NetworkTransport as UnityTransport;
-                    unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
-                }
-                else
-                {
-                    SteamNetworkingSocketsTransport steamTransport = NetworkTransport as SteamNetworkingSocketsTransport;
-                    steamTransport.ConnectToSteamID = hostSteamId;
-                }
+                UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+                unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
 
                 // Generate Join Code
                 UpdateStatus(LocalizationUtility.Localize("network_status_generating-join-code"), Color.yellow, -1);
@@ -420,11 +385,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
                         { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
-                        { "useSteam", new DataObject(DataObject.VisibilityOptions.Public, UseSteam.ToString()) },
-                        { "hostSteamId", new DataObject(DataObject.VisibilityOptions.Public, hostSteamId.ToString()) },
+                        { "hostPlayerId", new DataObject(DataObject.VisibilityOptions.Public, hostPlayerId) },
                         { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) }
                     },
-                    Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, (UseSteam ? hostSteamId.ToString() : allocation.AllocationId.ToString()))
+                    Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
                 };
                 await LobbyHelper.Instance.CreateLobbyAsync(worldName, maxPlayers, options);
 
@@ -456,7 +420,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (Lobby lobby in lobbies)
                 {
                     WorldMP world = new WorldMP(lobby);
-                    if (!world.IsPrivate && UseSteam == world.UseSteam)
+                    if (!world.IsPrivate)
                     {
                         Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
                     }
