@@ -720,6 +720,7 @@ MonoBehaviour:
   comparer: {fileID: 2134280685613725843}
   underwater: {fileID: 3866524939012152633}
   speedUp: {fileID: 7040875473051337211}
+  grounded: {fileID: 4630285723951257493}
   minimapIcon: {fileID: 7756471173767236412}
   namer: {fileID: 4012423436152039703}
   deathMessenger: {fileID: 7151558922526411801}
@@ -752,8 +753,12 @@ MonoBehaviour:
   thresholdWalkSpeed: 0.01
   targetPrefab: {fileID: 2874054129870821986, guid: 94f1e040132570740868668e17e9a6e2, type: 3}
   airDrag: 3
+  joystickThreshold: 0.25
+  touchThreshold: 10
   velocity: {x: 0, y: 0, z: 0}
   angularVelocity: {x: 0, y: 0, z: 0}
+  CanMove: 1
+  CanTurn: 1
 --- !u!114 &1922529363214902832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,6 +926,17 @@ MonoBehaviour:
   includeSubMeshes: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &4630285723951257493 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8121009730630237181, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 3526752849064750184}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4634753195551126157 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8115619012852293349, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}

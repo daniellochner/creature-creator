@@ -25,6 +25,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float thresholdWalkSpeed;
         [SerializeField] private GameObject targetPrefab;
         [SerializeField] private float airDrag;
+        [SerializeField] private float joystickThreshold;
+        [SerializeField] private float touchThreshold;
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private Vector3 velocity;
@@ -36,9 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
         private new Rigidbody rigidbody;
 
         private bool isMovable;
-        private Vector3 keyboardForward, keyboardRight, moveDisplacement;
+        private Vector3 keyboardForward, keyboardRight, moveDisplacement, targetPosition;
+        private Vector2 prevTouchPosition;
         private InputMode inputMode;
-        private Vector3 targetPosition;
 
 #if USE_STATS
         private float displacementBuffer = 0f;
@@ -64,7 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return !CinematicManager.Instance.IsInCinematic && EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen;
+                return !CinematicManager.Instance.IsInCinematic && EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !PauseMenu.Instance.IsOpen;
             }
         }
 
@@ -85,12 +87,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
-#if UNITY_STANDALONE
             if (CanInput)
             {
+                Direction = Vector3.zero;
+                CanTurn = false;
+                CanMove = false;
+
                 HandleInput();
             }
-#endif
         }
         private void FixedUpdate()
         {
@@ -139,82 +143,146 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleInput()
         {
-            bool kInput = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) || InputUtility.GetKey(KeybindingsManager.Data.WalkRight);
-            bool pInput = Input.GetMouseButton(1);
-
-            bool setK = kInput || (!pInput && inputMode == InputMode.Keyboard);
-            bool setP = pInput || (!kInput && inputMode == InputMode.Pointer);
-
-            if (setK)
+            if (SystemInfo.deviceType == DeviceType.Desktop)
             {
-                inputMode = InputMode.Keyboard;
+                if (InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) || InputUtility.GetKey(KeybindingsManager.Data.WalkRight))
+                {
+                    inputMode = InputMode.Keyboard;
+                }
+                else
+                if (Input.GetMouseButton(1))
+                {
+                    inputMode = InputMode.Pointer;
+                }
             }
-            else if (setP)
+            else
+            if (SystemInfo.deviceType == DeviceType.Handheld)
             {
-                inputMode = InputMode.Pointer;
+                if (MobileControlsManager.Instance.Joystick.IsPressed)
+                {
+                    inputMode = InputMode.Joystick;
+                }
+                else
+                if (Input.GetMouseButton(0))
+                {
+                    inputMode = InputMode.Touch;
+                }
             }
-
-            Direction = Vector3.zero;
-            CanTurn = false;
-            CanMove = false;
 
             switch (inputMode)
             {
-                #region Keyboard
                 case InputMode.Keyboard:
-
-                    if (!InputUtility.GetKey(KeybindingsManager.Data.FreeLook) || !kInput) // Free-look when holding ALT.
-                    {
-                        keyboardForward = Vector3.ProjectOnPlane(Camera.MainCamera.transform.forward, transform.up);
-                        keyboardRight = Vector3.ProjectOnPlane(Camera.MainCamera.transform.right, transform.up);
-                    }
-
-                    int vAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) ? -1 : 0);
-                    int hAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkRight) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) ? -1 : 0);
-
-                    Vector3 vertical = keyboardForward * vAxisRaw;
-                    Vector3 horizontal = keyboardRight * hAxisRaw;
-
-                    Direction = (vertical + horizontal).normalized;
-                    CanTurn = true;
-                    CanMove = kInput && !InputUtility.GetKey(KeybindingsManager.Data.StopMove);
-
+                    HandleKeyboard();
                     break;
-                #endregion
 
-                #region Pointer
                 case InputMode.Pointer:
-
-                    if (pInput && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-                    {
-                        Vector3 position = raycastHit.point;
-                        Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
-
-                        if (Input.GetMouseButtonDown(1) || targetGO == null)
-                        {
-                            targetGO = Instantiate(targetPrefab, position, rotation, Dynamic.WorldCanvas);
-                            targetAnimator = targetGO.GetComponent<Animator>();
-                        }
-
-                        targetGO.transform.SetPositionAndRotation(position, rotation);
-                        targetPosition = position;
-                    }
-
-                    Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
-
-                    Direction = displacement.normalized;
-                    CanTurn = displacement.magnitude > MoveSpeed * moveSmoothTime;
-                    CanMove = CanTurn;
-
+                    HandlePointer();
                     break;
-                    #endregion
+
+                case InputMode.Joystick:
+                    HandleJoystick();
+                    break;
+
+                case InputMode.Touch:
+                    HandleTouch();
+                    break;
             }
+        }
+        private void HandleKeyboard()
+        {
+            if (!InputUtility.GetKey(KeybindingsManager.Data.FreeLook))
+            {
+                keyboardForward = Vector3.ProjectOnPlane(Camera.MainCamera.transform.forward, transform.up);
+                keyboardRight = Vector3.ProjectOnPlane(Camera.MainCamera.transform.right, transform.up);
+            }
+
+            int vAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) ? -1 : 0);
+            int hAxisRaw = InputUtility.GetKey(KeybindingsManager.Data.WalkRight) ? 1 : (InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) ? -1 : 0);
+
+            Vector3 vertical = keyboardForward * vAxisRaw;
+            Vector3 horizontal = keyboardRight * hAxisRaw;
+
+            Direction = (vertical + horizontal).normalized;
+            CanMove = !InputUtility.GetKey(KeybindingsManager.Data.StopMove);
+            CanTurn = true;
+
+            targetPosition = transform.position;
 
             if (targetAnimator != null)
             {
-                targetAnimator.SetBool("IsHolding", pInput && !kInput);
+                targetAnimator.SetBool("IsHolding", false);
             }
         }
+        private void HandlePointer()
+        {
+            if (Input.GetMouseButton(1) && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                Vector3 position = raycastHit.point;
+                Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
+
+                if (Input.GetMouseButtonDown(1) || targetGO == null)
+                {
+                    targetGO = Instantiate(targetPrefab, position, rotation, Dynamic.WorldCanvas);
+                    targetAnimator = targetGO.GetComponent<Animator>();
+                }
+
+                targetGO.transform.SetPositionAndRotation(position, rotation);
+                targetPosition = position;
+            }
+
+            Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
+
+            Direction = displacement.normalized;
+            CanMove = CanTurn = displacement.magnitude > MoveSpeed * moveSmoothTime;
+
+            if (targetAnimator != null)
+            {
+                targetAnimator.SetBool("IsHolding", Input.GetMouseButton(1));
+            }
+        }
+        private void HandleJoystick()
+        {
+            Joystick joystick = MobileControlsManager.Instance.Joystick;
+
+            Vector3 keyboardForward = Vector3.ProjectOnPlane(Camera.MainCamera.transform.forward, transform.up);
+            Vector3 keyboardRight   = Vector3.ProjectOnPlane(Camera.MainCamera.transform.right,   transform.up);
+
+            float v = Mathf.Abs(joystick.Vertical)   > joystickThreshold ? joystick.Vertical   : 0f;
+            float h = Mathf.Abs(joystick.Horizontal) > joystickThreshold ? joystick.Horizontal : 0f;
+
+            Vector3 vertical   = keyboardForward * v;
+            Vector3 horizontal = keyboardRight * h;
+
+            Direction = (vertical + horizontal).normalized;
+            CanMove = CanTurn = true;
+
+            targetPosition = transform.position;
+        }
+        private void HandleTouch()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                prevTouchPosition = Input.mousePosition;
+            }
+
+            if (Input.GetMouseButtonUp(0)
+                    && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity, LayerMask.GetMask("Ground"))
+                    && Vector2.Distance(Input.mousePosition, prevTouchPosition) <= touchThreshold)
+            {
+                Vector3 position = raycastHit.point;
+                Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
+
+                targetGO = Instantiate(targetPrefab, position, rotation, Dynamic.WorldCanvas);
+
+                targetPosition = position;
+            }
+
+            Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
+
+            Direction = displacement.normalized;
+            CanMove = CanTurn = displacement.magnitude > MoveSpeed * moveSmoothTime;
+        }
+
         private void HandleMovement()
         {
             if (Direction != Vector3.zero)
@@ -314,7 +382,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             None,
             Pointer,
-            Keyboard
+            Keyboard,
+            Touch,
+            Joystick
         }
         #endregion
     }
