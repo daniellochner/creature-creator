@@ -4,20 +4,15 @@ using UnityEngine.Events;
 namespace DanielLochner.Assets
 {
     [DefaultExecutionOrder(-1)]
-    public class PlatformSpecific : MonoBehaviour
+    public class PlatformSpecificEvent : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private DeviceType targetPlatform;
         [SerializeField] private UnityEvent onStandalone;
         [SerializeField] private UnityEvent onHandheld;
         [SerializeField] private UnityEvent onConsole;
         #endregion
 
         #region Methods
-        private void Awake()
-        {
-            gameObject.SetActive(SystemInfo.deviceType == targetPlatform);
-        }
         private void Start()
         {
             switch (SystemInfo.deviceType)
