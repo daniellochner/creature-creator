@@ -1,4 +1,5 @@
-﻿using UnityEngine.EventSystems;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DanielLochner.Assets
 {
@@ -8,7 +9,14 @@ namespace DanielLochner.Assets
         {
             get
             {
-                return EventSystem.current.IsPointerOverGameObject();
+                for (int i = -1; i < Input.touchCount; ++i)
+                {
+                    if (EventSystem.current.IsPointerOverGameObject(i))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     }
