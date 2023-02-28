@@ -57,6 +57,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 3)] private float sensitivityVertical;
         [SerializeField] private bool invertHorizontal;
         [SerializeField] private bool invertVertical;
+        [SerializeField] private JoystickType joystick;
+        [SerializeField] private float joystickPositionHorizontal;
+        [SerializeField] private float joystickPositionVertical;
         #endregion
 
         #region Properties
@@ -254,6 +257,22 @@ namespace DanielLochner.Assets.CreatureCreator
             get => invertVertical;
             set => invertVertical = value;
         }
+
+        public JoystickType Joystick
+        {
+            get => joystick;
+            set => joystick = value;
+        }
+        public float JoystickPositionHorizontal
+        {
+            get => joystickPositionHorizontal;
+            set => joystickPositionHorizontal = value;
+        }
+        public float JoystickPositionVertical
+        {
+            get => joystickPositionVertical;
+            set => joystickPositionVertical = value;
+        }
         #endregion
 
         #region Methods
@@ -297,6 +316,10 @@ namespace DanielLochner.Assets.CreatureCreator
             SensitivityVertical = 1f;
             InvertHorizontal = false;
             InvertVertical = false;
+
+            Joystick = JoystickType.Fixed;
+            JoystickPositionHorizontal = 0.2f;
+            JoystickPositionVertical = 0.33f;
         }
         #endregion
 
@@ -368,6 +391,11 @@ namespace DanielLochner.Assets.CreatureCreator
             None,
             WistfulHarp,
             Being
+        }
+        public enum JoystickType
+        {
+            Fixed,
+            Floating
         }
         #endregion
     }

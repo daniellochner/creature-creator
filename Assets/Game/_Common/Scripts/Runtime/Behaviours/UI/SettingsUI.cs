@@ -60,6 +60,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider sensitivityVerticalSlider;
         [SerializeField] private Toggle invertHorizontalToggle;
         [SerializeField] private Toggle invertVerticalToggle;
+        [SerializeField] private OptionSelector joystickOS;
+        [SerializeField] private Slider joystickHorizontalSlider;
+        [SerializeField] private Slider joystickVerticalSlider;
 
         private Coroutine previewMusicCoroutine;
         #endregion
@@ -462,9 +465,55 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SettingsManager.Instance.SetInvertVertical(isOn, inGame);
             });
+
+
+            // Joystick
+            joystickOS.SetupUsingEnum<JoystickType>();
+            joystickOS.OnSelected.AddListener(delegate (int option)
+            {
+                Settings.JoystickType type = (Settings.JoystickType)option;
+
+                joystickHorizontalSlider.gameObject.SetActive(type == Settings.JoystickType.Fixed);
+                joystickVerticalSlider  .gameObject.SetActive(type == Settings.JoystickType.Fixed);
+
+                if (inGame)
+                {
+                    MobileControlsManager.Instance.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
+                    MobileControlsManager.Instance.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
+                }
+
+                SettingsManager.Instance.SetJoystick(type);
+            });
+            joystickOS.Select(SettingsManager.Data.Joystick);
+
+            // Joystick Position (Horizontal)
+            joystickHorizontalSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                if (inGame)
+                {
+                    RectTransform rt = MobileControlsManager.Instance.FixedJoystick.transform as RectTransform;
+                    rt.anchoredPosition = new Vector2(value * Screen.width, rt.anchoredPosition.y);
+                }
+
+                SettingsManager.Instance.SetJoystickPositionHorizontal(value);
+            });
+            joystickHorizontalSlider.value = SettingsManager.Data.JoystickPositionHorizontal;
+
+            // Joystick Position (Vertical)
+            joystickVerticalSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                if (inGame)
+                {
+                    RectTransform rt = MobileControlsManager.Instance.FixedJoystick.transform as RectTransform;
+                    rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, value * Screen.height);
+                }
+
+                SettingsManager.Instance.SetJoystickPositionVertical(value);
+            });
+            joystickVerticalSlider.value = SettingsManager.Data.JoystickPositionVertical;
             #endregion
         }
-        
+
         #region Video
         public void ApplyResolution()
         {

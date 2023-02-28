@@ -533,6 +533,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Data.InvertVertical = invert;
         }
+
+        public void SetJoystick(Settings.JoystickType type)
+        {
+            Data.Joystick = type;
+        }
+        public void SetJoystickPositionHorizontal(float position)
+        {
+            Data.JoystickPositionHorizontal = position;
+        }
+        public void SetJoystickPositionVertical(float position)
+        {
+            Data.JoystickPositionVertical = position;
+        }
         #endregion
         #endregion
     }
