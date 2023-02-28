@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void SetNotificationsHeight(int height)
         {
-            var group = NotificationsManager.Instance.GetComponent<VerticalLayoutGroup>();
+            var group = NotificationsManager.Instance.GetComponentInChildren<VerticalLayoutGroup>();
             group.padding.top = height + 10;
             group.enabled = false;
             group.enabled = true;

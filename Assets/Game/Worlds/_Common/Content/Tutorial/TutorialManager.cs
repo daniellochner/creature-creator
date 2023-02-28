@@ -15,8 +15,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MouseHintDrag mouseHintDragPrefab;
         [SerializeField] private MouseHintScroll mouseHintScrollPrefab;
         [Space]
-        [SerializeField] private CanvasGroup joystickCG;
         [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private RectTransform tutorialRT;
+        [SerializeField] private RectTransform controlsRT;
+        [SerializeField] private RectTransform joystickRT;
         [SerializeField] private RectTransform buildMenuRT;
         [SerializeField] private RectTransform buildButtonRT;
         [SerializeField] private RectTransform bodyPartsRT;
@@ -86,7 +88,7 @@ namespace DanielLochner.Assets.CreatureCreator
             IsComplete = false;
             EditorManager.Instance.SetVisibility(false, 0f);
             hintText.transform.parent.gameObject.SetActive(true);
-            joystickCG.ignoreParentGroups = true;
+            controlsRT.SetParent(tutorialRT);
 
             yield return TutorialItemRoutine(
                 UnlockBodyPartRoutine(),
@@ -206,7 +208,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     20f);
             }
 
-            joystickCG.ignoreParentGroups = false;
+            controlsRT.SetParent(playMenuRT);
             hintText.transform.parent.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(1f);
