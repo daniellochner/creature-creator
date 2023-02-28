@@ -30,12 +30,17 @@ namespace DanielLochner.Assets
 
         public virtual bool CanSend => !InputDialog.Instance.IsOpen && cooldownTimeLeft < 0;
         public virtual bool CanReceive => true;
+
+        public virtual bool TryOpen => Input.GetKeyDown(KeyCode.T);
         #endregion
 
         #region Methods
         private void Update()
         {
-            if (IsOwner) HandleInput();
+            if (IsOwner)
+            {
+                HandleInput();
+            }
         }
         private void OnDisable()
         {
@@ -45,15 +50,23 @@ namespace DanielLochner.Assets
             }
         }
 
-        private void HandleInput()
+        protected void HandleInput()
         {
-            if (CanSend && Input.GetKey(KeyCode.T))
+            if (TryOpen)
             {
-                InputDialog.Input(LocalizationUtility.Localize("send_message_title"), onSubmit: SendMessage, maxCharacters: characterLimit);
+                Open();
             }
             cooldownTimeLeft -= Time.deltaTime;
         }
-        
+
+        public void Open()
+        {
+            if (CanSend)
+            {
+                InputDialog.Input(LocalizationUtility.Localize("send_message_title"), onSubmit: SendMessage, maxCharacters: characterLimit);
+            }
+        }
+
         public new void SendMessage(string message)
         {
             if (!CanSend) return;
