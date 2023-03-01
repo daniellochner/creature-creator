@@ -63,6 +63,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector joystickOS;
         [SerializeField] private Slider joystickHorizontalSlider;
         [SerializeField] private Slider joystickVerticalSlider;
+        [SerializeField] private CanvasGroup joystickHorizontalCG;
+        [SerializeField] private CanvasGroup joystickVerticalCG;
 
         private Coroutine previewMusicCoroutine;
         #endregion
@@ -468,19 +470,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
 
             // Joystick
-            joystickOS.SetupUsingEnum<JoystickType>();
+            joystickOS.SetupUsingEnum<Settings.JoystickType>();
             joystickOS.OnSelected.AddListener(delegate (int option)
             {
                 Settings.JoystickType type = (Settings.JoystickType)option;
-
-                joystickHorizontalSlider.gameObject.SetActive(type == Settings.JoystickType.Fixed);
-                joystickVerticalSlider  .gameObject.SetActive(type == Settings.JoystickType.Fixed);
 
                 if (inGame)
                 {
                     MobileControlsManager.Instance.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
                     MobileControlsManager.Instance.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
                 }
+
+                bool show = type == Settings.JoystickType.Fixed;
+                joystickHorizontalCG.interactable = joystickVerticalCG.interactable = show;
+                joystickHorizontalCG.alpha = joystickVerticalCG.alpha = show ? 1f : 0.25f;
 
                 SettingsManager.Instance.SetJoystick(type);
             });
