@@ -68,6 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetVisibility(bool v, float t = 0.25f)
         {
+            controlsRT.SetParent(v ? tutorialRT : playMenuRT);
             StartCoroutine(canvasGroup.Fade(v, t));
         }
 
@@ -87,7 +88,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             IsComplete = false;
             EditorManager.Instance.SetVisibility(false, 0f);
-            controlsRT.SetParent(tutorialRT);
 
             yield return TutorialItemRoutine(
                 UnlockBodyPartRoutine(),
@@ -207,6 +207,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     20f);
             }
 
+            SetVisibility(false);
+
             yield return new WaitForSeconds(1f);
 
             InformationDialog.Inform(LocalizationUtility.Localize("tutorial_complete_title"), LocalizationUtility.Localize("tutorial_complete_message"));
@@ -269,7 +271,6 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return new WaitUntil(() => EditorManager.Instance.IsEditing);
             Destroy(hint.gameObject);
 
-            controlsRT.SetParent(playMenuRT);
             EditorManager.Instance.SetVisibility(true);
         }
         private IEnumerator SwitchToBuildModeRoutine()

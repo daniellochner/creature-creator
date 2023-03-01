@@ -8,12 +8,11 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
         {
             base.Show();
 
-            TutorialManager.Instance.SetVisibility(false, 0f);
+            EditorManager.Instance.SetVisibility(false, 0f);
         }
-
-        public override void Hide()
+        public override void End()
         {
-            base.Hide();
+            base.End();
 
             TutorialManager.Instance.SetVisibility(true, 0.25f);
             TutorialManager.Instance.Begin();
