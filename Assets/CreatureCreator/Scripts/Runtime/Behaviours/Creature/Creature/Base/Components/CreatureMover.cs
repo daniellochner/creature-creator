@@ -89,10 +89,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (CanInput)
             {
-                Direction = Vector3.zero;
-                CanTurn = false;
-                CanMove = false;
-
                 HandleInput();
             }
         }
@@ -143,6 +139,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleInput()
         {
+            Direction = Vector3.zero;
+            CanTurn = false;
+            CanMove = false;
+
             if (SystemInfo.deviceType == DeviceType.Desktop)
             {
                 if (InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) || InputUtility.GetKey(KeybindingsManager.Data.WalkRight))

@@ -73,7 +73,7 @@ namespace DanielLochner.Assets
         }
         private void LateUpdate()
         {
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (CanvasUtility.IsPointerOverUI)
             {
                 if (Input.GetMouseButtonDown(0) || Input.mouseScrollDelta.magnitude > 0)
                 {
