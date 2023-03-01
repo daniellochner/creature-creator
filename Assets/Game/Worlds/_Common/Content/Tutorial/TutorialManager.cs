@@ -87,7 +87,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             IsComplete = false;
             EditorManager.Instance.SetVisibility(false, 0f);
-            hintText.transform.parent.gameObject.SetActive(true);
             controlsRT.SetParent(tutorialRT);
 
             yield return TutorialItemRoutine(
@@ -113,7 +112,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 "tutorial_3_message",
                 20f,
                 messageArgs: new string[] { MoveKeys, MoveToTargetButton });
-
+            
             yield return TutorialItemRoutine(
                 SwitchToBuildModeRoutine(),
                 4,
@@ -208,9 +207,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     20f);
             }
 
-            controlsRT.SetParent(playMenuRT);
-            hintText.transform.parent.gameObject.SetActive(false);
-
             yield return new WaitForSeconds(1f);
 
             InformationDialog.Inform(LocalizationUtility.Localize("tutorial_complete_title"), LocalizationUtility.Localize("tutorial_complete_message"));
@@ -272,6 +268,8 @@ namespace DanielLochner.Assets.CreatureCreator
             hint.transform.localScale = Vector3.one * 2.5f;
             yield return new WaitUntil(() => EditorManager.Instance.IsEditing);
             Destroy(hint.gameObject);
+
+            controlsRT.SetParent(playMenuRT);
             EditorManager.Instance.SetVisibility(true);
         }
         private IEnumerator SwitchToBuildModeRoutine()

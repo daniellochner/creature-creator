@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
-            if (PlayerPrefs.GetInt("FAST_TRAVEL_REMINDER") == 0)
+            if (SettingsManager.Data.Map && PlayerPrefs.GetInt("FAST_TRAVEL_REMINDER") == 0)
             {
                 yield return new WaitUntil(() => EditorManager.Instance.IsPlaying);
                 yield return new WaitForSeconds(1f);
