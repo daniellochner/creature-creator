@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 3598916374515860375}
   - component: {fileID: 1257471989696206141}
   - component: {fileID: 8924129589086455836}
+  - component: {fileID: 5138848791983197819}
   m_Layer: 5
   m_Name: InformationMenu
   m_TagString: Untagged
@@ -206,7 +207,7 @@ CanvasRenderer:
   m_CullTransparentMesh: 1
 --- !u!95 &3380669352330904051
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -223,7 +224,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!225 &3598916374515860375
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -288,6 +289,20 @@ MonoBehaviour:
   brightness: 0
   flatten: 0.15
   m_spriteBlending: 0.65
+--- !u!114 &5138848791983197819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764623671706084192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c29ac70f5637964aa01be3d4667a627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPlatform: 1
+  scale: 1.25
 --- !u!1 &3764623671946263219
 GameObject:
   m_ObjectHideFlags: 0
