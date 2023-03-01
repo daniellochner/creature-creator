@@ -13,7 +13,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void Start()
+        private void Awake()
         {
             switch (SystemInfo.deviceType)
             {

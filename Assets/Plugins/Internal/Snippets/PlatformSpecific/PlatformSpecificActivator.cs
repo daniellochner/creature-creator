@@ -3,7 +3,7 @@ using UnityEngine;
 namespace DanielLochner.Assets
 {
     [DefaultExecutionOrder(-1)]
-    public class PlatformSpecificToggle : MonoBehaviour
+    public class PlatformSpecificActivator : MonoBehaviour
     {
         #region Fields
         [SerializeField] private DeviceType targetPlatform;
