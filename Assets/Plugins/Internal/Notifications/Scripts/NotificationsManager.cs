@@ -12,20 +12,24 @@ namespace DanielLochner.Assets
         [SerializeField] private RectTransform notificationsRT;
         [SerializeField] private NotificationUI notificationPrefab;
         [SerializeField] private TextOnlyNotificationUI notificationTextOnlyPrefab;
-        [SerializeField] private float mobileOffset;
         [Space]
         [SerializeField, Button("TestNotify")] private bool testNotify;
         #endregion
 
-        #region Methods
-        private void Start()
+        #region Properties
+        public float OffsetX
         {
-            if (SystemInfo.deviceType == DeviceType.Handheld)
-            {
-                notificationsRT.offsetMax = Vector2.up * mobileOffset;
-            }
+            get => notificationsRT.offsetMin.x;
+            set => notificationsRT.offsetMin = new Vector2(value, 0);
         }
+        public float OffsetY
+        {
+            get => notificationsRT.offsetMax.y;
+            set => notificationsRT.offsetMax = new Vector2(0, value);
+        }
+        #endregion
 
+        #region Methods
         public static void Notify(string message, UnityAction onClose = null)
         {
             Instantiate(Instance.notificationTextOnlyPrefab, Instance.notificationsRT).Setup(message, onClose);
