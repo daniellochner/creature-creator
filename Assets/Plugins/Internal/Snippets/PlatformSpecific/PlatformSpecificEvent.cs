@@ -15,17 +15,19 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            switch (SystemInfo.deviceType)
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
             {
-                case DeviceType.Desktop:
-                    onStandalone.Invoke();
-                    break;
-                case DeviceType.Handheld:
-                    onHandheld.Invoke();
-                    break;
-                case DeviceType.Console:
-                    onConsole.Invoke();
-                    break;
+                onStandalone.Invoke();
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                onHandheld.Invoke();
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Console))
+            {
+                onConsole.Invoke();
             }
         }
         #endregion

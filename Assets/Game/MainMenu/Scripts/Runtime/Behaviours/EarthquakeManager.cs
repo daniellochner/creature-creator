@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Update()
         {
-            if (Input.GetMouseButtonDown((SystemInfo.deviceType == DeviceType.Desktop) ? 1 : 0) && !CanvasUtility.IsPointerOverUI)
+            if (Input.GetMouseButtonDown(1) && !CanvasUtility.IsPointerOverUI)
             {
                 receiver.InduceStress(stress);
                 audioSource.PlayOneShot(rumble);

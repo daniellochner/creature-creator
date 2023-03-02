@@ -12,7 +12,7 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            gameObject.SetActive(SystemInfo.deviceType == targetPlatform);
+            gameObject.SetActive(SystemUtility.IsDevice(targetPlatform));
         }
         #endregion
     }

@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             cooldownImage.fillAmount = 0f;
 
-            if (SystemInfo.deviceType == DeviceType.Handheld)
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
                 performKeyText.gameObject.SetActive(false);
                 nameText.rectTransform.anchorMin = Vector2.zero;

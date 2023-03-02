@@ -8,15 +8,27 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private DeviceType targetPlatform;
         [SerializeField] private float scale;
+
+        private Vector3 initialScale;
+        #endregion
+
+        #region Properties
+        public float Scale => scale;
         #endregion
 
         #region Methods
         private void Awake()
         {
-            if (SystemInfo.deviceType == targetPlatform)
+            initialScale = transform.localScale;
+            if (SystemUtility.IsDevice(targetPlatform))
             {
-                transform.localScale *= scale;
+                SetScale(scale);
             }
+        }
+
+        public void SetScale(float scale)
+        {
+            transform.localScale = initialScale * scale;
         }
         #endregion
     }
