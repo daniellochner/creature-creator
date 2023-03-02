@@ -11,31 +11,33 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button networkButton;
         [SerializeField] private Button talkButton;
+        [SerializeField] private PlatformSpecificScaler[] scalers;
         #endregion
 
         #region Properties
         public Joystick FixedJoystick => fixedJoystick;
         public Joystick FloatJoystick => floatJoystick;
+        public Button SettingsButton => settingsButton;
+        public Button NetworkButton => networkButton;
+        public Button TalkButton => talkButton;
+        public PlatformSpecificScaler[] Scalers => scalers;
         #endregion
 
         #region Methods
         private void Start()
         {
-            fixedJoystick.gameObject.SetActive(SettingsManager.Data.Joystick == Settings.JoystickType.Fixed);
-            floatJoystick.gameObject.SetActive(SettingsManager.Data.Joystick == Settings.JoystickType.Floating);
-
             settingsButton.onClick.AddListener(delegate
             {
                 PauseMenu.Instance.Open();
             });
 
-            networkButton.gameObject.SetActive(WorldManager.Instance.World is WorldMP);
+            networkButton.gameObject.SetActive(GameSetup.Instance.IsMultiplayer);
             networkButton.onClick.AddListener(delegate
             {
                 NetworkPlayersMenu.Instance.Toggle();
             });
 
-            talkButton.gameObject.SetActive(WorldManager.Instance.World is WorldMP);
+            talkButton.gameObject.SetActive(GameSetup.Instance.IsMultiplayer);
             talkButton.onClick.AddListener(delegate
             {
                 Player.Instance.Messenger.Open();

@@ -60,6 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider sensitivityVerticalSlider;
         [SerializeField] private Toggle invertHorizontalToggle;
         [SerializeField] private Toggle invertVerticalToggle;
+        [SerializeField] private Slider interfaceScaleSlider;
         [SerializeField] private OptionSelector joystickOS;
         [SerializeField] private Slider joystickHorizontalSlider;
         [SerializeField] private Slider joystickVerticalSlider;
@@ -469,6 +470,21 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
 
+            // Interface Scale
+            interfaceScaleSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                if (inGame)
+                {
+                    foreach (PlatformSpecificScaler scaler in MobileControlsManager.Instance.MobileControlsUI.Scalers)
+                    {
+                        scaler.SetScale(scaler.Scale * value);
+                    }
+                }
+
+                SettingsManager.Data.InterfaceScale = value;
+            });
+            interfaceScaleSlider.value = SettingsManager.Data.InterfaceScale;
+
             // Joystick
             joystickOS.SetupUsingEnum<Settings.JoystickType>();
             joystickOS.OnSelected.AddListener(delegate (int option)
@@ -477,8 +493,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (inGame)
                 {
-                    MobileControlsManager.Instance.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
-                    MobileControlsManager.Instance.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
+                    MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
+                    MobileControlsManager.Instance.MobileControlsUI.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
                 }
 
                 bool show = type == Settings.JoystickType.Fixed;
@@ -494,7 +510,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (inGame)
                 {
-                    RectTransform rt = MobileControlsManager.Instance.FixedJoystick.transform as RectTransform;
+                    RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
                     rt.anchoredPosition = new Vector2(value * Screen.width, rt.anchoredPosition.y);
                 }
 
@@ -507,7 +523,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (inGame)
                 {
-                    RectTransform rt = MobileControlsManager.Instance.FixedJoystick.transform as RectTransform;
+                    RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
                     rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, value * Screen.height);
                 }
 

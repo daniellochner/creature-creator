@@ -546,6 +546,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.JoystickPositionVertical = position;
         }
+        public void SetInterfaceScale(float scale)
+        {
+            Data.InterfaceScale = scale;
+        }
         #endregion
         #endregion
     }

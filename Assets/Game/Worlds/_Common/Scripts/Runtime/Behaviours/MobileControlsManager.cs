@@ -9,10 +9,22 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public Joystick FixedJoystick => mobileControlsUI.FixedJoystick;
-        public Joystick FloatJoystick => mobileControlsUI.FloatJoystick;
+        public MobileControlsUI MobileControlsUI => mobileControlsUI;
 
-        public Joystick Joystick => (SettingsManager.Data.Joystick == Settings.JoystickType.Fixed) ? mobileControlsUI.FixedJoystick : mobileControlsUI.FloatJoystick;
+        public Joystick Joystick
+        {
+            get
+            {
+                switch (SettingsManager.Data.Joystick)
+                {
+                    case Settings.JoystickType.Fixed:
+                        return MobileControlsUI.FixedJoystick;
+                    case Settings.JoystickType.Floating:
+                        return MobileControlsUI.FloatJoystick;
+                }
+                return null;
+            }
+        }
         #endregion
     }
 }
