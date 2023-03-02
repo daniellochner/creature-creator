@@ -31,6 +31,9 @@ namespace DanielLochner.Assets
         private Vector3 targetRotation;
         private Vector2 velocity;
         private float prevClippingZoom = -1;
+
+        private float currentDistance, initialDistance, initialZoom;
+        private bool isInitialTouch = true, isPressing;
         #endregion
 
         #region Properties
@@ -57,7 +60,6 @@ namespace DanielLochner.Assets
 
         public virtual bool CanInput { get; set; } = true;
         public bool IsFrozen { get; private set; }
-        public bool HasInteractedWithUI { get; private set; }
         public Vector3 OffsetPosition { get; set; }
 
         public Camera Camera { get; private set; }
@@ -71,36 +73,87 @@ namespace DanielLochner.Assets
             OffsetPosition = zoomTransform.localPosition;
             targetRotation = rotationTransform.localEulerAngles;
         }
-        private void LateUpdate()
+        private void Update()
         {
-            if (CanvasUtility.IsPointerOverUI)
-            {
-                if (Input.GetMouseButtonDown(0) || Input.mouseScrollDelta.magnitude > 0)
-                {
-                    Freeze();
-                    HasInteractedWithUI = true;
-                }
-                else if (Input.GetMouseButtonUp(0))
-                {
-                    Unfreeze();
-                    HasInteractedWithUI = false;
-                }
-            }
-            else if ((Input.GetMouseButtonUp(0) || Input.mouseScrollDelta.magnitude > 0) && HasInteractedWithUI)
-            {
-                Unfreeze();
-                HasInteractedWithUI = false;
-            }
+            HandlePressed();
 
             OnRotate();
             OnZoom();
+        }
+
+        private void HandlePressed()
+        {
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                if (Input.GetMouseButtonDown(0) && !CanvasUtility.IsPointerOverUI)
+                {
+                    isPressing = true;
+                }
+                else
+                if (Input.GetMouseButtonUp(0))
+                {
+                    isPressing = false;
+                }
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                int hasEnded = 0;
+                foreach (Touch touch in Input.touches)
+                {
+                    if (touch.phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                    {
+                        isPressing = true;
+                    }
+                    else
+                    if (touch.phase == TouchPhase.Ended)
+                    {
+                        if ((++hasEnded) == Input.touchCount)
+                        {
+                            isPressing = false;
+                        }
+                    }
+                }
+            }
         }
 
         private void OnZoom()
         {
             if (!freezeZoom && !IsFrozen && CanInput)
             {
-                OnHandleClipping(Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y));
+                float zoom = targetZoom;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    if (Input.mouseScrollDelta != Vector2.zero && !CanvasUtility.IsPointerOverUI)
+                    {
+                        zoom = Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y);
+                    }
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    if (Input.touchCount >= 2 && !CanvasUtility.IsPointerOverUI)
+                    {
+                        Vector2 pos1 = Input.touches[0].position;
+                        Vector2 pos2 = Input.touches[1].position;
+
+                        currentDistance = Vector2.Distance(pos1, pos2);
+
+                        if (isInitialTouch)
+                        {
+                            initialZoom = targetZoom;
+                            initialDistance = currentDistance;
+                            isInitialTouch = false;
+                        }
+
+                        zoom = Mathf.Clamp(initialZoom * (initialDistance / currentDistance), minMaxZoom.x, minMaxZoom.y);
+                    }
+                    else
+                    {
+                        isInitialTouch = true;
+                    }
+                }
+                OnHandleClipping(zoom);
             }
 
             zoomTransform.localPosition = Vector3.Lerp(zoomTransform.localPosition, OffsetPosition * targetZoom, Time.deltaTime * zoomSmoothing);
@@ -108,13 +161,28 @@ namespace DanielLochner.Assets
         private void OnRotate()
         {
             Vector3 velocity = Vector3.zero;
-            if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen && CanInput)
+            if (isPressing && Input.GetMouseButton(0) && !freezeRotation && !IsFrozen && CanInput)
             {
-                float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
-                float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");
+                float pointerX = Input.GetAxis("Mouse X");
+                float pointerY = Input.GetAxis("Mouse Y");
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    foreach (Touch touch in Input.touches)
+                    {
+                        if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                        {
+                            pointerX = touch.deltaPosition.x / 5f;
+                            pointerY = touch.deltaPosition.y / 5f;
+                            break;
+                        }
+                    }
+                }
+
+                float x = (invertMouseX ? -1f : 1f) * pointerX;
+                float y = (invertMouseY ? -1f : 1f) * pointerY;
                 
-                velocity.x += 5f * mouseX * mouseSensitivity.x;
-                velocity.y += 5f * mouseY * mouseSensitivity.y;
+                velocity.x += 5f * x * mouseSensitivity.x;
+                velocity.y += 5f * y * mouseSensitivity.y;
             }
 
             targetRotation.y += velocity.x;

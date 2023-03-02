@@ -143,7 +143,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CanTurn = false;
             CanMove = false;
 
-            if (SystemInfo.deviceType == DeviceType.Desktop)
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
             {
                 if (InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) || InputUtility.GetKey(KeybindingsManager.Data.WalkRight))
                 {
@@ -156,7 +156,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             else
-            if (SystemInfo.deviceType == DeviceType.Handheld)
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
                 if (MobileControlsManager.Instance.Joystick.IsPressed)
                 {
@@ -260,7 +260,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandleTouch()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !CanvasUtility.IsPointerOverUI)
             {
                 prevTouchPosition = Input.mousePosition;
             }

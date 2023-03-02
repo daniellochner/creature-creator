@@ -57,7 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 3)] private float sensitivityVertical;
         [SerializeField] private bool invertHorizontal;
         [SerializeField] private bool invertVertical;
-        [SerializeField] private JoystickType joystick;
+        [SerializeField] private JoystickType joystick = JoystickType.Floating;
         [SerializeField] private float joystickPositionHorizontal = 0.2f;
         [SerializeField] private float joystickPositionVertical = 0.4f;
         [SerializeField] private float interfaceScale = 1f;
@@ -323,7 +323,7 @@ namespace DanielLochner.Assets.CreatureCreator
             InvertHorizontal = false;
             InvertVertical = false;
 
-            Joystick = JoystickType.Fixed;
+            Joystick = JoystickType.Floating;
             JoystickPositionHorizontal = 0.2f;
             JoystickPositionVertical = 0.4f;
             InterfaceScale = 1f;
