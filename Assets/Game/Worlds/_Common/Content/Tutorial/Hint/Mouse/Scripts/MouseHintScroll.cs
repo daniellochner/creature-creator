@@ -6,14 +6,30 @@ namespace DanielLochner.Assets
     public class MouseHintScroll : MouseHint
     {
         #region Fields
+        [Header("Desktop")]
+        [SerializeField] private Hint scroll;
         [SerializeField] private RectTransform arrow;
+
+        [Header("Handheld")]
+        [SerializeField] private Hint pinch;
         #endregion
 
         #region Methods
         public void Setup(int dir, Transform pos, bool inWorld, float t1 = 2f)
         {
-            arrow.localScale = new Vector3(1, dir, 1);
-            StartCoroutine(AnimateRoutine(dir, pos, inWorld, t1));
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                Setup(scroll);
+                arrow.localScale = new Vector3(1, dir, 1);
+
+                StartCoroutine(AnimateRoutine(dir, pos, inWorld, t1));
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                Setup(pinch);
+            }
+
         }
 
         private IEnumerator AnimateRoutine(int dir, Transform pos, bool inWorld, float t1)

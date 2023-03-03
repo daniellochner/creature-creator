@@ -6,14 +6,27 @@ namespace DanielLochner.Assets
     public class MouseHintDrag : MouseHint
     {
         #region Fields
-        [SerializeField] private Sprite left;
-        [SerializeField] private Sprite right;
+        [Header("Desktop")]
+        [SerializeField] private Hint lmb;
+        [SerializeField] private Hint rmb;
+
+        [Header("Handheld")]
+        [SerializeField] private Hint finger;
         #endregion
 
         #region Methods
         public void Setup(int button, Transform sT, Transform eT, bool sInWorld, bool eInWorld, float t1 = 1f, float t2 = 2f, float t3 = 1f)
         {
-            icon.sprite = (button == 0) ? left : right;
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                Setup(button == 0 ? lmb : rmb);
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                Setup(finger);
+            }
+
             StartCoroutine(AnimateRoutine(sT, eT, sInWorld, eInWorld, t1, t2, t3));
         }
 

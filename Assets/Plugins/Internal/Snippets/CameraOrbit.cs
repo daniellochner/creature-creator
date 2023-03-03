@@ -163,24 +163,30 @@ namespace DanielLochner.Assets
             Vector3 velocity = Vector3.zero;
             if (isPressing && Input.GetMouseButton(0) && !freezeRotation && !IsFrozen && CanInput)
             {
-                float pointerX = Input.GetAxis("Mouse X");
-                float pointerY = Input.GetAxis("Mouse Y");
+                float deltaX = 0f;
+                float deltaY = 0f;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    deltaX = Input.GetAxis("Mouse X");
+                    deltaY = Input.GetAxis("Mouse Y");
+                }
+                else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
                     foreach (Touch touch in Input.touches)
                     {
                         if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                         {
-                            pointerX = touch.deltaPosition.x / 5f;
-                            pointerY = touch.deltaPosition.y / 5f;
+                            deltaX = touch.deltaPosition.x;
+                            deltaY = touch.deltaPosition.y;
                             break;
                         }
                     }
                 }
 
-                float x = (invertMouseX ? -1f : 1f) * pointerX;
-                float y = (invertMouseY ? -1f : 1f) * pointerY;
-                
+                float x = (invertMouseX ? -1f : 1f) * deltaX;
+                float y = (invertMouseY ? -1f : 1f) * deltaY;
+
                 velocity.x += 5f * x * mouseSensitivity.x;
                 velocity.y += 5f * y * mouseSensitivity.y;
             }
