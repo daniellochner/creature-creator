@@ -12,11 +12,11 @@ using UnityEngine.UI;
 using RotaryHeart.Lib.SerializableDictionary;
 using UnityFBXExporter;
 using ProfanityDetector;
-using SimpleFileBrowser;
 using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization;
+using Crosstales.FB;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -607,33 +607,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Import()
         {
-            FileBrowser.ShowLoadDialog(
-                onSuccess: delegate (string[] paths)
-                {
-                    string creaturePath = paths[0];
-
-                    CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath);
-                    if (creatureData != null && IsValidName(creatureData.Name))
-                    {
-                        if (CanLoadCreature(creatureData, out string errorMessage))
-                        {
-                            Save(creatureData);
-                            Load(creatureData);
-                        }
-                        else
-                        {
-                            InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
-                        }
-                    }
-                    else
-                    {
-                        InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
-                    }
-                },
-                onCancel: null,
-                pickMode: FileBrowser.PickMode.Files,
-                initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            );
+            FileBrowser.Instance.OpenSingleFileAsync();
+            FileBrowser.Instance.OnOpenFilesComplete += OnImport;
         }
         public void TryExport()
         {
@@ -643,16 +618,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (IsValidName(exportedCreatureName))
                 {
                     Creature.Constructor.SetName(exportedCreatureName);
-                    if (!IsPlaying){
+                    if (!IsPlaying)
+                    {
                         Creature.Constructor.UpdateConfiguration();
                     }
 
-                    FileBrowser.ShowSaveDialog(
-                        onSuccess: (path) => Export(Creature.Constructor.Data),
-                        onCancel: null,
-                        pickMode: FileBrowser.PickMode.Folders,
-                        initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                    );
+                    FileBrowser.Instance.OpenSingleFolderAsync();
+                    FileBrowser.Instance.OnOpenFoldersComplete += OnExport;
                 }
             };
 
@@ -666,9 +638,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: exportOperation);
             }
         }
-        public void Export(CreatureData creatureData)
+        public void Export(CreatureData creatureData, string folderPath)
         {
-            string creaturePath = Path.Combine(FileBrowser.Result[0], creatureData.Name);
+            string creaturePath = Path.Combine(folderPath, creatureData.Name);
             if (!Directory.Exists(creaturePath))
             {
                 Directory.CreateDirectory(creaturePath);
@@ -678,7 +650,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), creatureData);
 
             // Screenshot
-            Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)
+            Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
             {
                 File.WriteAllBytes(Path.Combine(creaturePath, $"{creatureData.Name}.png"), photo.EncodeToPNG());
             });
@@ -782,6 +754,37 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             return true;
+        }
+
+        private void OnExport(bool selected, string singleFolder, string[] folders)
+        {
+            Export(Creature.Constructor.Data, singleFolder);
+
+            FileBrowser.Instance.OnOpenFoldersComplete -= OnExport;
+        }
+        private void OnImport(bool selected, string singleFile, string[] files)
+        {
+            string creaturePath = singleFile;
+
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath);
+            if (creatureData != null && IsValidName(creatureData.Name))
+            {
+                if (CanLoadCreature(creatureData, out string errorMessage))
+                {
+                    Save(creatureData);
+                    Load(creatureData);
+                }
+                else
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
+                }
+            }
+            else
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
+            }
+
+            FileBrowser.Instance.OnOpenFilesComplete -= OnImport;
         }
         #endregion
 
