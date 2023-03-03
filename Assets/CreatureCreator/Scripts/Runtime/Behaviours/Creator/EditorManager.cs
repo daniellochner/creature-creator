@@ -608,7 +608,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
                     FileBrowser.Instance.OpenSingleFileAsync(".dat");
-                    FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
+                    FileBrowser.Instance.OnOpenFilesComplete += OnImport;
                 }
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
@@ -639,9 +639,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryExport()
         {
-            UnityAction<string> exportDesktopOperation = delegate (string input)
+            UnityAction<string, bool> exportDesktopOperation = delegate (string creatureName, bool exportAll)
             {
-                string exportedCreatureName = PreProcessName(input);
+                string exportedCreatureName = PreProcessName(creatureName);
                 if (IsValidName(exportedCreatureName))
                 {
                     Creature.Constructor.SetName(exportedCreatureName);
@@ -650,18 +650,25 @@ namespace DanielLochner.Assets.CreatureCreator
                         Creature.Constructor.UpdateConfiguration();
                     }
 
+                    if (exportAll)
+                    {
+                        FileBrowser.Instance.OnOpenFoldersComplete += OnExportAll;
+                    }
+                    else
+                    {
+                        FileBrowser.Instance.OnOpenFoldersComplete += OnExportDat;
+                    }
                     FileBrowser.Instance.OpenSingleFolderAsync();
-                    FileBrowser.Instance.OnOpenFoldersComplete += OnOpenFoldersComplete;
                 }
             };
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
-            if (selectedCreatureUI != null && (selectedCreatureUI.name == Creature.Editor.LoadedCreature))
+            if (selectedCreatureUI != null)
             {
                 string creatureName = selectedCreatureUI.name;
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    exportDesktopOperation(creatureName);
+                    exportDesktopOperation(creatureName, creatureName == Creature.Editor.LoadedCreature);
                 }
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
@@ -673,15 +680,15 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: exportDesktopOperation);
+                    InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: (string input) => exportDesktopOperation(input, true));
                 }
             }
         }
-        public void Export(string folderPath)
+        public void Export(string folderPath, bool exportAll)
         {
             CreatureData data = Creature.Constructor.Data;
 
-            if (SettingsManager.Data.PreviewFeatures)
+            if (exportAll && SettingsManager.Data.PreviewFeatures)
             {
                 string creaturePath = Path.Combine(folderPath, data.Name);
                 if (!Directory.Exists(creaturePath))
@@ -801,15 +808,29 @@ namespace DanielLochner.Assets.CreatureCreator
             return true;
         }
 
-        private void OnOpenFoldersComplete(bool selected, string singleFolder, string[] folders)
+        private void OnExportDat(bool selected, string singleFolder, string[] folders)
         {
-            Export(singleFolder);
-            FileBrowser.Instance.OnOpenFoldersComplete -= OnOpenFoldersComplete;
+            if (selected)
+            {
+                Export(singleFolder, false);
+            }
+            FileBrowser.Instance.OnOpenFoldersComplete -= OnExportDat;
         }
-        private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
+        private void OnExportAll(bool selected, string singleFolder, string[] folders)
         {
-            Import(singleFile);
-            FileBrowser.Instance.OnOpenFilesComplete -= OnOpenFilesComplete;
+            if (selected)
+            {
+                Export(singleFolder, true);
+            }
+            FileBrowser.Instance.OnOpenFoldersComplete -= OnExportAll;
+        }
+        private void OnImport(bool selected, string singleFile, string[] files)
+        {
+            if (selected)
+            {
+                Import(singleFile);
+            }
+            FileBrowser.Instance.OnOpenFilesComplete -= OnImport;
         }
         #endregion
 

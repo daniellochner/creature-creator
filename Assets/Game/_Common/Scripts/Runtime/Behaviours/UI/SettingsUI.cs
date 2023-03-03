@@ -584,7 +584,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
         {
-            SelectFiles(files);
+            if (selected)
+            {
+                SelectFiles(files);
+            }
         }
         #endregion
         #endregion
