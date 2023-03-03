@@ -681,33 +681,37 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureData data = Creature.Constructor.Data;
 
-            string creaturePath = Path.Combine(folderPath, data.Name);
-            if (!Directory.Exists(creaturePath))
-            {
-                Directory.CreateDirectory(creaturePath);
-            }
-
-            // Data
-            SaveUtility.Save(Path.Combine(creaturePath, $"{data.Name}.dat"), data);
-
-            // Screenshot
-            Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
-            {
-                File.WriteAllBytes(Path.Combine(creaturePath, $"{data.Name}.png"), photo.EncodeToPNG());
-            });
-
-            // 3D Model
             if (SettingsManager.Data.PreviewFeatures)
             {
+                string creaturePath = Path.Combine(folderPath, data.Name);
+                if (!Directory.Exists(creaturePath))
+                {
+                    Directory.CreateDirectory(creaturePath);
+                }
+
+                // Data
+                SaveUtility.Save(Path.Combine(creaturePath, $"{data.Name}.dat"), data);
+
+                // Screenshot
+                Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
+                {
+                    File.WriteAllBytes(Path.Combine(creaturePath, $"{data.Name}.png"), photo.EncodeToPNG());
+                });
+
+                // 3D Model
                 GameObject export = Creature.Cloner.Clone(data).gameObject;
                 export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
-
                 foreach (GameObject tool in export.FindChildrenWithTag("Tool"))
                 {
                     tool.SetActive(false);
                 }
                 FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{data.Name}.fbx"));
                 Destroy(export);
+            }
+            else
+            {
+                // Data
+                SaveUtility.Save(Path.Combine(folderPath, $"{data.Name}.dat"), data);
             }
         }
 
