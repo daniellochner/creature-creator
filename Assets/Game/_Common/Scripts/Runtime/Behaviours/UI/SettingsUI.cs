@@ -1,7 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using SimpleFileBrowser;
+using Crosstales.FB;
 using System;
 using System.Collections;
 using TMPro;
@@ -347,24 +347,16 @@ namespace DanielLochner.Assets.CreatureCreator
             creaturePresetsText.text = presets.ToString();
             creaturePresetsButton.onClick.AddListener(delegate
             {
-                FileBrowser.ShowLoadDialog(
-                    onSuccess: delegate (string[] paths)
-                    {
-                        SettingsManager.Data.CreaturePresets.Clear();
-                        foreach (string path in paths)
-                        {
-                            CreatureData creature = SaveUtility.Load<CreatureData>(path);
-                            if (creature != null)
-                            {
-                                SettingsManager.Data.CreaturePresets.Add(creature);
-                            }
-                        }
-                    },
-                    onCancel: null,
-                    pickMode: FileBrowser.PickMode.Files,
-                    allowMultiSelection: true,
-                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                );
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    FileBrowser.Instance.OpenFilesAsync(extensions: ".dat");
+                    FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+
+                }
             });
 
             exportPrecisionSlider.value = SettingsManager.Data.ExportPrecision;
@@ -469,67 +461,69 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetInvertVertical(isOn, inGame);
             });
 
-
-            // Interface Scale
-            interfaceScaleSlider.onValueChanged.AddListener(delegate (float value)
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                if (inGame)
+                // Scale
+                interfaceScaleSlider.onValueChanged.AddListener(delegate (float value)
                 {
-                    foreach (PlatformSpecificScaler scaler in MobileControlsManager.Instance.MobileControlsUI.Scalers)
+                    if (inGame)
                     {
-                        scaler.SetScale(scaler.Scale * value);
+                        foreach (PlatformSpecificScaler scaler in MobileControlsManager.Instance.MobileControlsUI.Scalers)
+                        {
+                            scaler.SetScale(scaler.Scale * value);
+                        }
                     }
-                }
 
-                SettingsManager.Data.InterfaceScale = value;
-            });
-            interfaceScaleSlider.value = SettingsManager.Data.InterfaceScale;
+                    SettingsManager.Data.InterfaceScale = value;
+                });
+                interfaceScaleSlider.value = SettingsManager.Data.InterfaceScale;
 
-            // Joystick
-            joystickOS.SetupUsingEnum<Settings.JoystickType>();
-            joystickOS.OnSelected.AddListener(delegate (int option)
-            {
-                Settings.JoystickType type = (Settings.JoystickType)option;
-
-                if (inGame)
+                // Joystick
+                joystickOS.SetupUsingEnum<Settings.JoystickType>();
+                joystickOS.OnSelected.AddListener(delegate (int option)
                 {
-                    MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
-                    MobileControlsManager.Instance.MobileControlsUI.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
-                }
+                    Settings.JoystickType type = (Settings.JoystickType)option;
 
-                bool show = type == Settings.JoystickType.Fixed;
-                joystickHorizontalCG.interactable = joystickVerticalCG.interactable = show;
-                joystickHorizontalCG.alpha = joystickVerticalCG.alpha = show ? 1f : 0.25f;
+                    if (inGame)
+                    {
+                        MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
+                        MobileControlsManager.Instance.MobileControlsUI.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
+                    }
 
-                SettingsManager.Instance.SetJoystick(type);
-            });
-            joystickOS.Select(SettingsManager.Data.Joystick);
+                    bool show = type == Settings.JoystickType.Fixed;
+                    joystickHorizontalCG.interactable = joystickVerticalCG.interactable = show;
+                    joystickHorizontalCG.alpha = joystickVerticalCG.alpha = show ? 1f : 0.25f;
 
-            // Joystick Position (Horizontal)
-            joystickHorizontalSlider.onValueChanged.AddListener(delegate (float value)
-            {
-                if (inGame)
+                    SettingsManager.Instance.SetJoystick(type);
+                });
+                joystickOS.Select(SettingsManager.Data.Joystick);
+
+                // Joystick Position (Horizontal)
+                joystickHorizontalSlider.onValueChanged.AddListener(delegate (float value)
                 {
-                    RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
-                    rt.anchoredPosition = new Vector2(value * Screen.width, rt.anchoredPosition.y);
-                }
+                    if (inGame)
+                    {
+                        RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
+                        rt.anchoredPosition = new Vector2(value * Screen.width, rt.anchoredPosition.y);
+                    }
 
-                SettingsManager.Instance.SetJoystickPositionHorizontal(value);
-            });
-            joystickHorizontalSlider.value = SettingsManager.Data.JoystickPositionHorizontal;
+                    SettingsManager.Instance.SetJoystickPositionHorizontal(value);
+                });
+                joystickHorizontalSlider.value = SettingsManager.Data.JoystickPositionHorizontal;
 
-            // Joystick Position (Vertical)
-            joystickVerticalSlider.onValueChanged.AddListener(delegate (float value)
-            {
-                if (inGame)
+                // Joystick Position (Vertical)
+                joystickVerticalSlider.onValueChanged.AddListener(delegate (float value)
                 {
-                    RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
-                    rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, value * Screen.height);
-                }
+                    if (inGame)
+                    {
+                        RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
+                        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, value * Screen.height);
+                    }
 
-                SettingsManager.Instance.SetJoystickPositionVertical(value);
-            });
-            joystickVerticalSlider.value = SettingsManager.Data.JoystickPositionVertical;
+                    SettingsManager.Instance.SetJoystickPositionVertical(value);
+                });
+                joystickVerticalSlider.value = SettingsManager.Data.JoystickPositionVertical;
+            }
             #endregion
         }
 
@@ -574,6 +568,19 @@ namespace DanielLochner.Assets.CreatureCreator
             ProgressUI.Instance.UpdateInfo();
             UnlockableBodyPartsMenu.Instance.UpdateInfo();
             UnlockablePatternsMenu.Instance.UpdateInfo();
+        }
+
+        private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
+        {
+            SettingsManager.Data.CreaturePresets.Clear();
+            foreach (string path in files)
+            {
+                CreatureData creature = SaveUtility.Load<CreatureData>(path);
+                if (creature != null)
+                {
+                    SettingsManager.Data.CreaturePresets.Add(creature);
+                }
+            }
         }
         #endregion
         #endregion

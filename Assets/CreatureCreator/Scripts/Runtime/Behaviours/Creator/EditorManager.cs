@@ -603,12 +603,31 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryImport()
         {
-            ConfirmUnsavedChanges(Import);
+            ConfirmUnsavedChanges(delegate
+            {
+                FileBrowser.Instance.OpenSingleFileAsync(extension: ".dat");
+                FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
+            });
         }
-        public void Import()
+        public void Import(string filePath)
         {
-            FileBrowser.Instance.OpenSingleFileAsync();
-            FileBrowser.Instance.OnOpenFilesComplete += OnImport;
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(filePath);
+            if (creatureData != null && IsValidName(creatureData.Name))
+            {
+                if (CanLoadCreature(creatureData, out string errorMessage))
+                {
+                    Save(creatureData);
+                    Load(creatureData);
+                }
+                else
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
+                }
+            }
+            else
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
+            }
         }
         public void TryExport()
         {
@@ -624,7 +643,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
 
                     FileBrowser.Instance.OpenSingleFolderAsync();
-                    FileBrowser.Instance.OnOpenFoldersComplete += OnExport;
+                    FileBrowser.Instance.OnOpenFoldersComplete += OnOpenFoldersComplete;
                 }
             };
 
@@ -756,35 +775,15 @@ namespace DanielLochner.Assets.CreatureCreator
             return true;
         }
 
-        private void OnExport(bool selected, string singleFolder, string[] folders)
+        private void OnOpenFoldersComplete(bool selected, string singleFolder, string[] folders)
         {
             Export(Creature.Constructor.Data, singleFolder);
-
-            FileBrowser.Instance.OnOpenFoldersComplete -= OnExport;
+            FileBrowser.Instance.OnOpenFoldersComplete -= OnOpenFoldersComplete;
         }
-        private void OnImport(bool selected, string singleFile, string[] files)
+        private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
         {
-            string creaturePath = singleFile;
-
-            CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath);
-            if (creatureData != null && IsValidName(creatureData.Name))
-            {
-                if (CanLoadCreature(creatureData, out string errorMessage))
-                {
-                    Save(creatureData);
-                    Load(creatureData);
-                }
-                else
-                {
-                    InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
-                }
-            }
-            else
-            {
-                InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
-            }
-
-            FileBrowser.Instance.OnOpenFilesComplete -= OnImport;
+            Import(singleFile);
+            FileBrowser.Instance.OnOpenFilesComplete -= OnOpenFilesComplete;
         }
         #endregion
 
