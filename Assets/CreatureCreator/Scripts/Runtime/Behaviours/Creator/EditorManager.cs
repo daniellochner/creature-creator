@@ -605,8 +605,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConfirmUnsavedChanges(delegate
             {
-                FileBrowser.Instance.OpenSingleFileAsync(extension: ".dat");
-                FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    FileBrowser.Instance.OpenSingleFileAsync(".dat");
+                    FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    NativeFilePicker.PickFile(Import);
+                }
             });
         }
         public void Import(string filePath)
@@ -631,7 +639,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryExport()
         {
-            UnityAction<string> exportOperation = delegate (string input)
+            UnityAction<string> exportDesktopOperation = delegate (string input)
             {
                 string exportedCreatureName = PreProcessName(input);
                 if (IsValidName(exportedCreatureName))
@@ -648,43 +656,57 @@ namespace DanielLochner.Assets.CreatureCreator
             };
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
-            if ((selectedCreatureUI != null) && (selectedCreatureUI.name == Creature.Editor.LoadedCreature))
+            if (selectedCreatureUI != null && (selectedCreatureUI.name == Creature.Editor.LoadedCreature))
             {
-                exportOperation(selectedCreatureUI.name);
+                string creatureName = selectedCreatureUI.name;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    exportDesktopOperation(creatureName);
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    NativeFilePicker.ExportFile(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
+                }
             }
             else
             {
-                InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: exportOperation);
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: exportDesktopOperation);
+                }
             }
         }
-        public void Export(CreatureData creatureData, string folderPath)
+        public void Export(string folderPath)
         {
-            string creaturePath = Path.Combine(folderPath, creatureData.Name);
+            CreatureData data = Creature.Constructor.Data;
+
+            string creaturePath = Path.Combine(folderPath, data.Name);
             if (!Directory.Exists(creaturePath))
             {
                 Directory.CreateDirectory(creaturePath);
             }
 
             // Data
-            SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), creatureData);
+            SaveUtility.Save(Path.Combine(creaturePath, $"{data.Name}.dat"), data);
 
             // Screenshot
             Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
             {
-                File.WriteAllBytes(Path.Combine(creaturePath, $"{creatureData.Name}.png"), photo.EncodeToPNG());
+                File.WriteAllBytes(Path.Combine(creaturePath, $"{data.Name}.png"), photo.EncodeToPNG());
             });
 
             // 3D Model
             if (SettingsManager.Data.PreviewFeatures)
             {
-                GameObject export = Creature.Cloner.Clone(creatureData).gameObject;
+                GameObject export = Creature.Cloner.Clone(data).gameObject;
                 export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
 
                 foreach (GameObject tool in export.FindChildrenWithTag("Tool"))
                 {
                     tool.SetActive(false);
                 }
-                FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{creatureData.Name}.fbx"));
+                FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{data.Name}.fbx"));
                 Destroy(export);
             }
         }
@@ -777,7 +799,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnOpenFoldersComplete(bool selected, string singleFolder, string[] folders)
         {
-            Export(Creature.Constructor.Data, singleFolder);
+            Export(singleFolder);
             FileBrowser.Instance.OnOpenFoldersComplete -= OnOpenFoldersComplete;
         }
         private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)

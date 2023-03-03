@@ -349,13 +349,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    FileBrowser.Instance.OpenFilesAsync(extensions: ".dat");
+                    FileBrowser.Instance.OpenFilesAsync(true, ".dat");
                     FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
                 }
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-
+                    NativeFilePicker.PickMultipleFiles(SelectFiles, ".dat");
                 }
             });
 
@@ -570,7 +570,7 @@ namespace DanielLochner.Assets.CreatureCreator
             UnlockablePatternsMenu.Instance.UpdateInfo();
         }
 
-        private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
+        private void SelectFiles(string[] files)
         {
             SettingsManager.Data.CreaturePresets.Clear();
             foreach (string path in files)
@@ -581,6 +581,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     SettingsManager.Data.CreaturePresets.Add(creature);
                 }
             }
+        }
+        private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
+        {
+            SelectFiles(files);
         }
         #endregion
         #endregion
