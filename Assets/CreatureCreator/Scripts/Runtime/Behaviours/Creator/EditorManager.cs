@@ -607,7 +607,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    FileBrowser.Instance.OpenSingleFileAsync(".dat");
+                    FileBrowser.Instance.OpenSingleFileAsync("dat");
                     FileBrowser.Instance.OnOpenFilesComplete += OnImport;
                 }
                 else

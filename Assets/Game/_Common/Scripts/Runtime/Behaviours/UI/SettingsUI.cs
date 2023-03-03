@@ -349,13 +349,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    FileBrowser.Instance.OpenFilesAsync(true, ".dat");
+                    FileBrowser.Instance.OpenFilesAsync(true, "dat");
                     FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
                 }
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    NativeFilePicker.PickMultipleFiles(SelectFiles, ".dat");
+                    NativeFilePicker.PickMultipleFiles(SelectFiles, "dat");
                 }
             });
 
