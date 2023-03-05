@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -52,6 +53,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public float HoldTime => holdTime;
+        public float HoldThreshold => holdThreshold;
         public float AddOrRemoveCooldown => addOrRemoveCooldown;
         public AudioClip StretchAudioClip => stretchAudioClip;
         public AudioClip ResizeAudioClip => resizeAudioClip;
@@ -300,6 +303,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding)
                 {
                     Camera.CameraOrbit.Freeze();
+
+                    if (SystemUtility.IsDevice(DeviceType.Handheld))
+                    {
+                        Drag bone = GetNearestBone().GetComponent<Drag>();
+                        StartCoroutine(HoldDraggableRoutine(bone, onPress: delegate
+                        {
+                            drag.draggable = false;
+                            bone.IsPressing = true;
+                        }, 
+                        onRelease: delegate
+                        {
+                            drag.draggable = true;
+                            bone.IsPressing = false;
+                        }));
+                    }
                 }
             });
             drag.OnRelease.AddListener(delegate
@@ -480,7 +498,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Tools
-                addedBoneGO.AddComponent<Scroll>();
+                Scroll scroll = addedBoneGO.AddComponent<Scroll>();
 
                 Hover hover = addedBoneGO.AddComponent<Hover>();
                 hover.OnEnter.AddListener(delegate
@@ -515,6 +533,36 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
 
                         Camera.CameraOrbit.Freeze();
+
+                        if (SystemUtility.IsDevice(DeviceType.Handheld))
+                        {
+                            StartCoroutine(HoldDraggableRoutine(drag));
+                        }
+                    }
+                });
+                drag.OnHold.AddListener(delegate
+                {
+                    if (EditorManager.Instance.IsBuilding)
+                    {
+                        if (!drag.draggable)
+                        {
+                            if (Time.time > addedOrRemovedTime + AddOrRemoveCooldown)
+                            {
+                                InputUtility.GetDelta(out float deltaX, out float deltaY);
+
+                                if (deltaY > 0)
+                                {
+                                    scroll.OnScrollUp.Invoke();
+                                }
+                                else
+                                if (deltaY < 0)
+                                {
+                                    scroll.OnScrollDown.Invoke();
+                                }
+
+                                addedOrRemovedTime = Time.time;
+                            }
+                        }
                     }
                 });
                 drag.OnRelease.AddListener(delegate
@@ -551,7 +599,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 drag.cylinderHeight = Constructor.MaxHeight;
                 drag.cylinderRadius = Constructor.MaxRadius;
                 drag.updatePlaneOnPress = true;
-
+                
                 Click click = addedBoneGO.AddComponent<Click>();
                 click.OnClick.AddListener(delegate
                 {
@@ -813,6 +861,35 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Platform != null) transform.LerpTo(Platform.Position, positionSmoothing);
         }
 
+        public IEnumerator HoldDraggableRoutine(Drag draggable, UnityAction onPress = default, UnityAction onHold = default, UnityAction onRelease = default)
+        {
+            Vector2 initialPos = Input.mousePosition;
+
+            bool held = true;
+            yield return InvokeUtility.InvokeOverTimeRoutine(delegate
+            {
+                if (Vector2.Distance(initialPos, Input.mousePosition) > holdThreshold)
+                {
+                    held = false;
+                }
+            },
+            holdTime);
+
+            if (held && Input.GetMouseButton(0))
+            {
+                onPress?.Invoke();
+
+                draggable.draggable = false;
+                while (draggable.IsPressing)
+                {
+                    onHold?.Invoke();
+                    yield return null;
+                }
+                draggable.draggable = true;
+
+                onRelease?.Invoke();
+            }
+        }
         private Transform GetNearestBone()
         {
             int nearestBoneIndex = -1;
