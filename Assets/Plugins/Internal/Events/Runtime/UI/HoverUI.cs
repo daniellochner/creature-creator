@@ -26,23 +26,32 @@ namespace DanielLochner.Assets
         #region Methods
         private void Update()
         {
-            if (IsOver && onHover != null) { onHover.Invoke(); }
+            if (IsOver)
+            {
+                onHover?.Invoke();
+            }
         }
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (onEnter != null)
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
             {
-                onEnter.Invoke();
+                if (onEnter != null)
+                {
+                    onEnter.Invoke();
+                }
+                IsOver = true;
             }
-            IsOver = true;
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (onExit != null)
+            if (IsOver)
             {
-                onExit.Invoke();
+                if (onExit != null)
+                {
+                    onExit.Invoke();
+                }
+                IsOver = false;
             }
-            IsOver = false;
         }
         #endregion
     }
