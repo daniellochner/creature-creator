@@ -27,24 +27,25 @@ namespace DanielLochner.Assets
         {
             if (IsPressing)
             {
-                OnMouseHold();
+                OnHold.Invoke();
             }
         }
 
-        private void OnMouseHold()
-        {
-            OnHold.Invoke();
-        }
         private void OnMouseDown()
         {
-            if (CanvasUtility.IsPointerOverUI) return;
-            OnPress.Invoke();
-            IsPressing = true;
+            if (!CanvasUtility.IsPointerOverUI)
+            {
+                OnPress.Invoke();
+                IsPressing = true;
+            }
         }
         private void OnMouseUp()
         {
-            IsPressing = false;
-            onRelease.Invoke();
+            if (IsPressing)
+            {
+                IsPressing = false;
+                onRelease.Invoke();
+            }
         }
         #endregion
     }
