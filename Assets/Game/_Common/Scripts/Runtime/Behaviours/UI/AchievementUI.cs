@@ -12,9 +12,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(Achievement achievement)
+        public void Setup(string achievementId)
         {
-            name = achievement.id;
+            Achievement achievement = StatsManager.Instance.GetAchievement(achievementId);
+
+            name = achievementId;
             icon.sprite = achievement.unlockedIcon;
 
             hoverUI.OnEnter.AddListener(delegate

@@ -16,42 +16,42 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public int UnlockedBodyParts
         {
-            get => GetStat("STA_UNLOCKED_BODY_PARTS");
+            get => GetStat("STA_UNLOCKED_BODY_PARTS", ProgressManager.Data.UnlockedBodyParts.Count);
             set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", 117));
         }
         public int UnlockedPatterns
         {
-            get => GetStat("STA_UNLOCKED_PATTERNS");
-            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 49));
+            get => GetStat("STA_UNLOCKED_PATTERNS1", ProgressManager.Data.UnlockedPatterns.Count);
+            set => SetStat("STA_UNLOCKED_PATTERNS1", value, new StatAchievement("ACH_PAINTER", 49));
         }
         public int DistanceTravelled
         {
-            get => GetStat("STA_DISTANCE_TRAVELLED");
+            get => GetStat("STA_DISTANCE_TRAVELLED", 0);
             set => SetStat("STA_DISTANCE_TRAVELLED", value, new StatAchievement("ACH_GO_THE_DISTANCE", 10000));
         }
         public int Deaths
         {
-            get => GetStat("STA_DEATHS");
+            get => GetStat("STA_DEATHS", 0);
             set => SetStat("STA_DEATHS", value, new StatAchievement("ACH_A_PART_OF_LIFE", 10));
         }
         public int CashSpent
         {
-            get => GetStat("STA_CASH_SPENT");
+            get => GetStat("STA_CASH_SPENT", 0);
             set => SetStat("STA_CASH_SPENT", value, new StatAchievement("ACH_BIG_TIME_SPENDER", 10000));
         }
         public int ReachedPeaks
         {
-            get => GetStat("STA_REACHED_PEAKS");
+            get => GetStat("STA_REACHED_PEAKS", 0);
             set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 4));
         }
         public int CompletedQuests
         {
-            get => GetStat("STA_COMPLETED_QUESTS");
+            get => GetStat("STA_COMPLETED_QUESTS", 0);
             set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 11));
         }
         public int Kills
         {
-            get => GetStat("STA_KILLS");
+            get => GetStat("STA_KILLS", 0);
             set => SetStat("STA_KILLS", value, new StatAchievement("ACH_RAMPAGE", 100));
         }
 
@@ -62,8 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 int counter = 0;
                 foreach (string achievementId in DatabaseManager.GetDatabase("Achievements").Objects.Keys)
                 {
-                    bool achieved = GetAchievement(achievementId);
-                    if (achieved)
+                    if (IsAchievementUnlocked(achievementId))
                     {
                         counter++;
                     }
@@ -71,94 +70,109 @@ namespace DanielLochner.Assets.CreatureCreator
                 return counter;
             }
         }
+
+        public bool Initialized
+        {
+            get; set;
+        }
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        private void Start()
         {
 #if UNITY_STANDALONE
-            yield return new WaitUntil(() => SteamManager.Initialized);
-            SteamUserStats.StoreStats();
-#elif UNITY_IOS || UNITY_ANDROID
-            yield return null;
-#endif
+            this.InvokeUntil(() => SteamManager.Initialized, delegate
+            {
+                SteamUserStats.StoreStats();
 
-            // Necessary initial synch with the number of parts and patterns (if you have already unlocked before).
-            UnlockedBodyParts = ProgressManager.Data.UnlockedBodyParts.Count;
-            UnlockedPatterns  = ProgressManager.Data.UnlockedPatterns.Count;
+                Initialized = true;
+            });
+#elif UNITY_IOS || UNITY_ANDROID
+            GameServices.Instance.LogIn(delegate (bool success)
+            {
+                Initialized = success;
+            });
+#endif
         }
 
         public void Revert(bool achievementsToo = false)
         {
-#if UNITY_STANDALONE
-            if (SteamManager.Initialized)
+            if (Initialized)
             {
+#if UNITY_STANDALONE
                 SteamUserStats.ResetAllStats(achievementsToo);
-            }
+#elif UNITY_IOS || UNITY_ANDROID
 #endif
+            }
         }
 
-        public int GetStat(string statId)
+        public int GetStat(string statId, int defaultValue = 0)
         {
-            int intValue = 0;
-#if UNITY_STANDALONE
-            if (SteamManager.Initialized)
+            int value = 0;
+            if (Initialized)
             {
-                SteamUserStats.GetStat(statId, out intValue);
-            }
+#if UNITY_STANDALONE
+                if (!SteamUserStats.GetStat(statId, out value))
+                {
+                    value = defaultValue;
+                }
+#elif UNITY_IOS || UNITY_ANDROID
+            value = PlayerPrefs.GetInt(statId);
 #endif
-            return intValue;
+            }
+            return value;
         }
         public void SetStat(string statId, int value, params StatAchievement[] statAchievements)
         {
-#if UNITY_STANDALONE
-            if (SteamManager.Initialized)
+            if (Initialized)
             {
+#if UNITY_STANDALONE
                 SteamUserStats.SetStat(statId, value);
-
-                if (statAchievements.Length > 0)
-                {
-                    foreach (StatAchievement statAchievement in statAchievements)
-                    {
-                        if (statAchievement.achievementId != null)
-                        {
-                            SteamUserStats.GetAchievement(statAchievement.achievementId, out bool achieved);
-                            if (!achieved && value >= statAchievement.target)
-                            {
-                                SteamUserStats.SetAchievement(statAchievement.achievementId);
-                            }
-                        }
-                    }
-                }
-
                 SteamUserStats.StoreStats();
-            }
+#elif UNITY_IOS || UNITY_ANDROID
+            PlayerPrefs.SetInt(statId, value);
 #endif
-        }
-        
-        public bool GetAchievement(string achievementId)
-        {
-#if UNITY_STANDALONE
-            if (SteamManager.Initialized && SteamUserStats.GetAchievement(achievementId, out bool achieved))
+            }
+
+            foreach (StatAchievement statAchievement in statAchievements)
             {
-                return achieved;
+                if (!IsAchievementUnlocked(statAchievement.achievementId) && value >= statAchievement.target)
+                {
+                    UnlockAchievement(statAchievement.achievementId);
+                }
             }
+        }
+
+        public Achievement GetAchievement(string achievementId)
+        {
+            return DatabaseManager.GetDatabaseEntry<Achievement>("Achievements", achievementId);
+        }
+        public bool IsAchievementUnlocked(string achievementId)
+        {
+            if (Initialized)
+            {
+#if UNITY_STANDALONE
+                if (SteamUserStats.GetAchievement(achievementId, out bool achieved))
+                {
+                    return achieved;
+                }
+#elif UNITY_IOS || UNITY_ANDROID
+                return GameServices.Instance.achievementsManager.IsComplete(GetAchievement(achievementId).gameServicesId);
 #endif
+            }
             return false;
         }
-        public void SetAchievement(string achievementId)
+        public void UnlockAchievement(string achievementId)
         {
-#if UNITY_STANDALONE
-            if (SteamManager.Initialized)
+            if (Initialized && !IsAchievementUnlocked(achievementId))
             {
-                SteamUserStats.GetAchievement(achievementId, out bool achieved);
-                if (!achieved)
-                {
-                    SteamUserStats.SetAchievement(achievementId);
-                    SteamUserStats.StoreStats();
-                }
-            }
+#if UNITY_STANDALONE
+                SteamUserStats.SetAchievement(achievementId);
+                SteamUserStats.StoreStats();
+#elif UNITY_IOS || UNITY_ANDROID
+                GameServices.Instance.SubmitAchievement(GetAchievement(achievementId).gameServicesId);
 #endif
+            }
         }
         #endregion
 
