@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -23,6 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioMixerGroup audioMixer;
 
         [Header("Settings")]
+        [SerializeField] private float holdTime = 0.5f;
+        [SerializeField] private float holdThreshold = 10f;
         [SerializeField] private float addOrRemoveCooldown = 0.05f;
         [SerializeField] private int angleLimit = 30;
         [SerializeField] private float positionSmoothing;
@@ -279,6 +282,16 @@ namespace DanielLochner.Assets.CreatureCreator
                         SetBonesVisibility(false);
                     }
                 }
+            });
+
+            Scroll scroll = Constructor.Body.GetComponent<Scroll>();
+            scroll.OnScrollUp.AddListener(delegate
+            {
+                GetNearestBone().GetComponent<Scroll>().OnScrollUp.Invoke();
+            });
+            scroll.OnScrollDown.AddListener(delegate
+            {
+                GetNearestBone().GetComponent<Scroll>().OnScrollDown.Invoke();
             });
 
             drag = Constructor.Body.GetComponent<Drag>();
@@ -798,6 +811,28 @@ namespace DanielLochner.Assets.CreatureCreator
         private void HandlePlatform()
         {
             if (Platform != null) transform.LerpTo(Platform.Position, positionSmoothing);
+        }
+
+        private Transform GetNearestBone()
+        {
+            int nearestBoneIndex = -1;
+            float min = Mathf.Infinity;
+
+            Ray ray = Camera.MainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Body")))
+            {
+                for (int boneIndex = 0; boneIndex < Constructor.Bones.Count; boneIndex++)
+                {
+                    float sqr = Vector3.SqrMagnitude(Constructor.Bones[boneIndex].position - hitInfo.point);
+                    if (sqr < min)
+                    {
+                        nearestBoneIndex = boneIndex;
+                        min = sqr;
+                    }
+                }
+            }
+
+            return Constructor.Bones[nearestBoneIndex];
         }
         #endregion
     }
