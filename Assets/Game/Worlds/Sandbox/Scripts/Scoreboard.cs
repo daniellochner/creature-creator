@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 winCoroutine = StartCoroutine(WinRoutine());
 #if USE_STATS
-                StatsManager.Instance.SetAchievement("ACH_FOOTBALL_FRENZY");
+                StatsManager.Instance.UnlockAchievement("ACH_FOOTBALL_FRENZY");
 #endif
             }
         }

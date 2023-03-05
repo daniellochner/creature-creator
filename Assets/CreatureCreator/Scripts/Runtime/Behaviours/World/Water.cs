@@ -45,7 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     else
                     {
 #if USE_STATS
-                        StatsManager.Instance.SetAchievement("ACH_MAKE_A_SPLASH");
+                        StatsManager.Instance.UnlockAchievement("ACH_MAKE_A_SPLASH");
 #endif
                         onPlayerEnter.Invoke(player);
                     }

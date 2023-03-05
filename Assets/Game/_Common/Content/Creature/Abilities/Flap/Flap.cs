@@ -45,7 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             }
 
 #if USE_STATS
-            StatsManager.Instance.SetAchievement("ACH_I_BELIEVE_I_CAN_FLY");
+            StatsManager.Instance.UnlockAchievement("ACH_I_BELIEVE_I_CAN_FLY");
 #endif
         }
     }

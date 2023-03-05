@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreaturePlayerLocal player = collision.collider.GetComponent<CreaturePlayerLocal>();
                 if (player.Comparer.CompareTo(Constructor))
                 {
-                    StatsManager.Instance.SetAchievement("ACH_WE_ARE_ALIKE");
+                    StatsManager.Instance.UnlockAchievement("ACH_WE_ARE_ALIKE");
                 }
             }
 #endif

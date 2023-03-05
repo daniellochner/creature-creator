@@ -95,7 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
             if (age > 3600)
             {
-                StatsManager.Instance.SetAchievement("ACH_GRAY_HAIRS");
+                StatsManager.Instance.UnlockAchievement("ACH_GRAY_HAIRS");
             }
 #endif
         }

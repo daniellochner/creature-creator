@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Application.OpenURL("https://github.com/daniellochner/creature-creator-game");
 
 #if USE_STATS
-            StatsManager.Instance.SetAchievement("ACH_HACKERMAN");
+            StatsManager.Instance.UnlockAchievement("ACH_HACKERMAN");
 #endif
         }
         public void Quit()

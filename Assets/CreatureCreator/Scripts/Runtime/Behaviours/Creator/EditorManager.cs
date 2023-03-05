@@ -400,17 +400,17 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
             if (Creature.Constructor.Statistics.Weight >= 500f)
             {
-                StatsManager.Instance.SetAchievement("ACH_HEAVYWEIGHT_CHAMPION");
+                StatsManager.Instance.UnlockAchievement("ACH_HEAVYWEIGHT_CHAMPION");
             }
 
             if (Creature.Abilities.Abilities.Count >= 15)
             {
-                StatsManager.Instance.SetAchievement("ACH_OVERPOWERED");
+                StatsManager.Instance.UnlockAchievement("ACH_OVERPOWERED");
             }
 
             if (Creature.Mover.MoveSpeed >= 4f)
             {
-                StatsManager.Instance.SetAchievement("ACH_SPEED_DEMON");
+                StatsManager.Instance.UnlockAchievement("ACH_SPEED_DEMON");
             }
 #endif
         }
@@ -598,7 +598,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Load(null);
 
 #if USE_STATS
-            StatsManager.Instance.SetAchievement("ACH_BACK_TO_BASICS");
+            StatsManager.Instance.UnlockAchievement("ACH_BACK_TO_BASICS");
 #endif
         }
         public void TryImport()
@@ -992,7 +992,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (bodyPart is Eye)
                     {
-                        StatsManager.Instance.SetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW");
+                        StatsManager.Instance.UnlockAchievement("ACH_I_CAN_SEE_CLEARLY_NOW");
                     }
 #endif
                 }

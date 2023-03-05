@@ -108,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 #if USE_STATS
             if (animator.CompareTag("Player/Local"))
             {
-                StatsManager.Instance.SetAchievement("ACH_BABY_STEPS");
+                StatsManager.Instance.UnlockAchievement("ACH_BABY_STEPS");
             }
 #endif
         }

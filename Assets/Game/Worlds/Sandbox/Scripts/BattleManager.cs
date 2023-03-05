@@ -88,7 +88,7 @@ namespace DanielLochner.Assets.CreatureCreator
             battleInfo.SetActive(false);
             victoryAS.Play();
 #if USE_STATS
-            StatsManager.Instance.SetAchievement("ACH_GLADIATOR");
+            StatsManager.Instance.UnlockAchievement("ACH_GLADIATOR");
 #endif
         }
         [ClientRpc]
