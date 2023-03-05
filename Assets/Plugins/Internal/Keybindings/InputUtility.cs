@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DanielLochner.Assets
 {
@@ -25,6 +26,30 @@ namespace DanielLochner.Assets
                 m = Input.GetKey(keybind.ModifierKey);
             }
             return m;
+        }
+
+        public static void GetDelta(out float deltaX, out float deltaY)
+        {
+            deltaX = deltaY = 0;
+
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                deltaX = Input.GetAxis("Mouse X");
+                deltaY = Input.GetAxis("Mouse Y");
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                foreach (Touch touch in Input.touches)
+                {
+                    if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                    {
+                        deltaX = touch.deltaPosition.x;
+                        deltaY = touch.deltaPosition.y;
+                        break;
+                    }
+                }
+            }
         }
     }
 }
