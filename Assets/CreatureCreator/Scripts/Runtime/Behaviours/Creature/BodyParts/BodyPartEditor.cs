@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -14,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool isInteractable;
         private Transform connectionPoint;
+
+        private float addedOrRemovedTime;
         #endregion
 
         #region Properties
@@ -149,6 +152,36 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding)
                 {
                     CreatureEditor.Camera.CameraOrbit.Freeze();
+
+                    if (SystemUtility.IsDevice(DeviceType.Handheld))
+                    {
+                        StartCoroutine(CreatureEditor.HoldDraggableRoutine(LDrag));
+                    }
+                }
+            });
+            LDrag.OnHold.AddListener(delegate
+            {
+                if (EditorManager.Instance.IsBuilding)
+                {
+                    if (!LDrag.draggable)
+                    {
+                        if (Time.time > addedOrRemovedTime + CreatureEditor.AddOrRemoveCooldown)
+                        {
+                            InputUtility.GetDelta(out float deltaX, out float deltaY);
+
+                            if (deltaY > 0)
+                            {
+                                Scroll.OnScrollUp.Invoke();
+                            }
+                            else
+                            if (deltaY < 0)
+                            {
+                                Scroll.OnScrollDown.Invoke();
+                            }
+
+                            addedOrRemovedTime = Time.time;
+                        }
+                    }
                 }
             });
             LDrag.OnRelease.AddListener(delegate
