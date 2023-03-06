@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         private Drag drag;
-        private SerializedProperty customCollider, draggable, controlDrag, mouseButton, mousePlaneAlignment, localDirection, worldDirection, isBounded, world, boundsShape, boxSize, sphereRadius, cylinderRadius, cylinderHeight, boundsOffset, smoothing, maxDistance, localMovement, resetOnRelease, useOffsetPosition, updatePlaneOnPress, onPress, onRelease, onDrag, onBeginDrag, onEndDrag, dragThreshold;
+        private SerializedProperty touchOffset, customCollider, draggable, controlDrag, mouseButton, mousePlaneAlignment, localDirection, worldDirection, isBounded, world, boundsShape, boxSize, sphereRadius, cylinderRadius, cylinderHeight, boundsOffset, smoothing, maxDistance, localMovement, resetOnRelease, useOffsetPosition, updatePlaneOnPress, onPress, onRelease, onDrag, onBeginDrag, onEndDrag, dragThreshold;
         private bool showMovement = true, showBounds = true, showOther = true, showEvents = false;
         #endregion
 
@@ -48,6 +48,7 @@ namespace DanielLochner.Assets
             onEndDrag = serializedObject.FindProperty("onEndDrag");
             dragThreshold = serializedObject.FindProperty("dragThreshold");
             customCollider = serializedObject.FindProperty("customCollider");
+            touchOffset = serializedObject.FindProperty("touchOffset");
         }
         public override void OnInspectorGUI()
         {
@@ -153,6 +154,7 @@ namespace DanielLochner.Assets
                 EditorGUILayout.PropertyField(updatePlaneOnPress, new GUIContent("Update Plane On Press", ""));
                 EditorGUILayout.PropertyField(dragThreshold, new GUIContent("Drag Threshold", ""));
                 EditorGUILayout.PropertyField(customCollider, new GUIContent("Custom Collider", ""));
+                EditorGUILayout.PropertyField(touchOffset, new GUIContent("Touch Offset", ""));
             }
         }
         private void Events()

@@ -549,6 +549,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1078009660281691031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074065545388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onScrollUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onScrollDown:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3881683653543598530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +621,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  touchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -655,24 +677,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1078009660281691031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4173930074065545388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onScrollUp:
-    m_PersistentCalls:
-      m_Calls: []
-  onScrollDown:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &4173930074114902741 stripped
@@ -796,6 +800,9 @@ MonoBehaviour:
   stretchAudioClip: {fileID: 8300000, guid: a69d527929ec3ce45b4544108a3bfb7d, type: 3}
   resizeAudioClip: {fileID: 8300000, guid: ae20ed479c5a1434187633fecb940edc, type: 3}
   audioMixer: {fileID: -5561601583770752817, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
+  touchOffset: 150
+  holdTime: 0.5
+  holdThreshold: 10
   addOrRemoveCooldown: 0.02
   angleLimit: 30
   positionSmoothing: 2

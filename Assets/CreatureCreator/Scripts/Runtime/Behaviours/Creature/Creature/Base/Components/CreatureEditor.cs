@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioMixerGroup audioMixer;
 
         [Header("Settings")]
+        [SerializeField] private float touchOffset = 150f;
         [SerializeField] private float holdTime = 0.5f;
         [SerializeField] private float holdThreshold = 10f;
         [SerializeField] private float addOrRemoveCooldown = 0.05f;
@@ -53,6 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public float TouchOffset => touchOffset;
         public float HoldTime => holdTime;
         public float HoldThreshold => holdThreshold;
         public float AddOrRemoveCooldown => addOrRemoveCooldown;

@@ -266,6 +266,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureEditor.IsDirty = true;
                 }
             });
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                LDrag.touchOffset = CreatureEditor.TouchOffset;
+            }
 
             RDrag.world = connectionPoint;
             RDrag.OnDrag.AddListener(delegate
@@ -360,7 +364,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual bool CanAttach(out Vector3 aPosition, out Quaternion aRotation)
         {
-            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit raycastHit) && CanAttachToCollider(raycastHit.collider))
+            Vector3 origin = Input.mousePosition;
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                origin += Vector3.up * CreatureEditor.TouchOffset;
+            }
+
+            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, origin), out RaycastHit raycastHit) && CanAttachToCollider(raycastHit.collider))
             {
                 aPosition = raycastHit.point;
                 aRotation = Quaternion.LookRotation(raycastHit.normal, CreatureEditor.transform.up);

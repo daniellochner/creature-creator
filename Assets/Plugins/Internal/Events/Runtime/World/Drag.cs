@@ -43,6 +43,7 @@ namespace DanielLochner.Assets
         public bool updatePlaneOnPress = false;
         public float dragThreshold = 0f;
         public Collider customCollider;
+        public float touchOffset = 0f;
 
         // Events
         public UnityEvent onPress = new UnityEvent();
@@ -104,7 +105,7 @@ namespace DanielLochner.Assets
         {
             if (IsPressing && draggable)
             {
-                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(Input.mousePosition + Vector3.up * touchOffset);
 
                 Vector3? targetWorldPosition = null;
                 if (customCollider != null)
