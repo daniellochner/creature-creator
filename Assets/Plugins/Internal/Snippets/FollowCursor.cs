@@ -6,7 +6,10 @@ namespace DanielLochner.Assets
     {
         private void LateUpdate()
         {
-            transform.position = Input.mousePosition;
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                transform.position = Input.mousePosition;
+            }
         }
     }
 }

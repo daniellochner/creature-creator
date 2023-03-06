@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,9 +40,40 @@ namespace DanielLochner.Assets.CreatureCreator
 
             icon.sprite = bodyPart.Icon;
 
+            hoverUI.OnEnter.AddListener(delegate
+            {
+                if (!Input.GetMouseButton(0))
+                {
+                    StatisticsMenu.Instance.Setup(bodyPart, Input.mousePosition);
+                }
+            });
+            hoverUI.OnExit.AddListener(delegate
+            {
+                StatisticsMenu.Instance.Clear();
+            });
+
             dragUI.OnPress.AddListener(delegate
             {
+                Select();
+
                 animator.SetBool("Expanded", false);
+
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    StatisticsMenu.Instance.Close();
+                }
+            });
+            dragUI.OnRelease.AddListener(delegate
+            {
+                Deselect();
+            });
+
+            clickUI.OnLeftClick.AddListener(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    StartCoroutine(ClickToOpenRoutine(bodyPart));
+                }
             });
 
             if (isNew)
@@ -74,6 +106,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 
                 Destroy(tmp);
             }
+        }
+
+        private IEnumerator ClickToOpenRoutine(BodyPart bodyPart)
+        {
+            StatisticsMenu.Instance.Setup(bodyPart, transform.position);
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            StatisticsMenu.Instance.Close();
         }
         #endregion
     }

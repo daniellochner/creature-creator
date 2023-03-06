@@ -1,3 +1,7 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private Image icon;
         [SerializeField] private HoverUI hoverUI;
+        [SerializeField] private ClickUI clickUI;
         [SerializeField] public CanvasGroup canvasGroup;
         #endregion
 
@@ -23,13 +28,28 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!Input.GetMouseButton(0))
                 {
-                    AchievementMenu.Instance.Setup(achievement);
+                    AchievementMenu.Instance.Setup(achievement, Input.mousePosition);
                 }
             });
             hoverUI.OnExit.AddListener(delegate
             {
                 AchievementMenu.Instance.Clear();
             });
+
+            clickUI.OnLeftClick.AddListener(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    StartCoroutine(ClickToOpenRoutine(achievement));
+                }
+            });
+        }
+
+        private IEnumerator ClickToOpenRoutine(Achievement achievement)
+        {
+            AchievementMenu.Instance.Setup(achievement, transform.position);
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            AchievementMenu.Instance.Close();
         }
         #endregion
     }

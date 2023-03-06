@@ -1,3 +1,6 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI descriptionText;
+        [SerializeField] private Transform dialog;
         #endregion
 
         #region Properties
@@ -16,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(Achievement achievement)
+        public void Setup(Achievement achievement, Vector3 position)
         {
             titleText.text = LocalizationUtility.Localize(achievement.name);
             descriptionText.text = LocalizationUtility.Localize(achievement.description);
@@ -28,7 +32,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 fitter.SetLayoutVertical();
             }
 
-            Open();
+            dialog.position = position;
+            Open(HasEntered);
+
             HasEntered = true;
         }
         public void Clear()

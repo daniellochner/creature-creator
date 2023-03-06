@@ -44,8 +44,8 @@ namespace DanielLochner.Assets
                 {
                     if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                     {
-                        deltaX = touch.deltaPosition.x;
-                        deltaY = touch.deltaPosition.y;
+                        deltaX = touch.deltaPosition.x * 0.1f;
+                        deltaY = touch.deltaPosition.y * 0.1f;
                         break;
                     }
                 }

@@ -932,26 +932,8 @@ namespace DanielLochner.Assets.CreatureCreator
             noPartsText.SetActive(false);
             grid.CalculateLayoutInputVertical();
 
-            bodyPartUI.HoverUI.OnEnter.AddListener(delegate
-            {
-                if (!Input.GetMouseButton(0))
-                {
-                    StatisticsMenu.Instance.Setup(bodyPart);
-                }
-            });
-            bodyPartUI.HoverUI.OnExit.AddListener(delegate
-            {
-                StatisticsMenu.Instance.Clear();
-            });
-
-            bodyPartUI.DragUI.OnPress.AddListener(delegate
-            {
-                StatisticsMenu.Instance.Close();
-                bodyPartUI.Select();
-            });
             bodyPartUI.DragUI.OnRelease.AddListener(delegate
             {
-                bodyPartUI.Deselect();
                 grid.CalculateLayoutInputVertical();
             });
             bodyPartUI.DragUI.OnDrag.AddListener(delegate
