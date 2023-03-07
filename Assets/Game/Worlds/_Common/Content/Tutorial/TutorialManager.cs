@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsComplete)
             {
-                hintText.text = $"{currentTutorialItem.number}. {LocalizationUtility.Localize(currentTutorialItem.title, currentTutorialItem.titleArgs)}";
+                hintText.text = $"{currentTutorialItem.number}. {LocalizationUtility.Localize(currentTutorialItem.title, currentTutorialItem.titleArgs)} [...]";
             }
         }
 
@@ -219,6 +219,8 @@ namespace DanielLochner.Assets.CreatureCreator
             titleArgs   = titleArgs   ?? new string[] { };
             messageArgs = messageArgs ?? new string[] { };
 
+            title += $"_{SystemUtility.DeviceType}".ToLower();
+
             currentTutorialItem = new TutorialItem()
             {
                 number = number,
@@ -229,8 +231,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 messageArgs = messageArgs
             };
             
-            string hintTitle = hintText.text = $"{number}. {LocalizationUtility.Localize(title, titleArgs)}";
+            string hintTitle = $"{number}. {LocalizationUtility.Localize(title, titleArgs)}";
             string hintMessage = LocalizationUtility.Localize(message, messageArgs);
+            hintText.text = $"{hintTitle} [...]";
 
             Coroutine hintCoroutine = StartCoroutine(ShowHintRoutine(hintTitle, hintMessage, time));
             yield return tutorialRoutine;
