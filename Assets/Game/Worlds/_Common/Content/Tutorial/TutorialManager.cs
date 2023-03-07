@@ -219,7 +219,7 @@ namespace DanielLochner.Assets.CreatureCreator
             titleArgs   = titleArgs   ?? new string[] { };
             messageArgs = messageArgs ?? new string[] { };
 
-            title += $"_{SystemUtility.DeviceType}".ToLower();
+            message += $"_{SystemUtility.DeviceType}".ToLower();
 
             currentTutorialItem = new TutorialItem()
             {
