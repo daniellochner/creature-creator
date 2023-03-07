@@ -6,27 +6,14 @@ namespace DanielLochner.Assets
     public class MouseHintClick : MouseHint
     {
         #region Fields
-        [Header("Desktop")]
-        [SerializeField] private Hint lmb;
-        [SerializeField] private Hint rmb;
-
-        [Header("Handheld")]
-        [SerializeField] private Hint finger;
+        [SerializeField] protected Sprite left;
+        [SerializeField] protected Sprite right;
         #endregion
 
         #region Methods
-        public void Setup(int button, Transform pos, bool inWorld, float t1 = 0.5f, float t2 = 0.5f, float t3 = 1f)
+        public virtual void Setup(int button, Transform pos, bool inWorld, float t1 = 0.5f, float t2 = 0.5f, float t3 = 1f)
         {
-            if (SystemUtility.IsDevice(DeviceType.Desktop))
-            {
-                Setup(button == 0 ? lmb : rmb);
-            }
-            else
-            if (SystemUtility.IsDevice(DeviceType.Handheld))
-            {
-                Setup(finger);
-            }
-
+            icon.sprite = (button == 0) ? left : right;
             StartCoroutine(AnimateRoutine(pos, inWorld, t1, t2, t3));
         }
 

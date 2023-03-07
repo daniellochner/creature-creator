@@ -1,7 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
@@ -11,6 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private WorldHint worldHintPrefab;
+        [SerializeField] private FingerHintTap fingerHintTapPrefab;
+        [SerializeField] private FingerHintDrag fingerHintDragPrefab;
         [SerializeField] private MouseHintClick mouseHintClickPrefab;
         [SerializeField] private MouseHintDrag mouseHintDragPrefab;
         [SerializeField] private MouseHintScroll mouseHintScrollPrefab;
@@ -48,6 +50,9 @@ namespace DanielLochner.Assets.CreatureCreator
         private string MoveKeys => $"{KeybindingsManager.Data.WalkForwards}{KeybindingsManager.Data.WalkLeft}{KeybindingsManager.Data.WalkBackwards}{KeybindingsManager.Data.WalkRight}";
         private string MoveToTargetButton => "RMB";
 
+        private MouseHintClick ClickHintPrefab => SystemUtility.IsDevice(DeviceType.Desktop) ? mouseHintClickPrefab : fingerHintTapPrefab;
+        private MouseHintDrag DragHintPrefab => SystemUtility.IsDevice(DeviceType.Desktop) ? mouseHintDragPrefab : fingerHintDragPrefab;
+
         public bool IsComplete { get; private set; } = true;
         #endregion
 
@@ -68,7 +73,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetVisibility(bool v, float t = 0.25f)
         {
-            controlsRT.SetParent(v ? tutorialRT : playMenuRT);
             StartCoroutine(canvasGroup.Fade(v, t));
         }
 
@@ -88,6 +92,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             IsComplete = false;
             EditorManager.Instance.SetVisibility(false, 0f);
+
+            controlsRT.SetParent(tutorialRT);
 
             yield return TutorialItemRoutine(
                 UnlockBodyPartRoutine(),
@@ -119,6 +125,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 "tutorial_4_title",
                 "tutorial_4_message",
                 10f);
+
+            controlsRT.SetParent(playMenuRT);
 
             yield return TutorialItemRoutine(
                 AttachBodyPartRoutine(),
@@ -278,7 +286,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator SwitchToBuildModeRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, buildButtonRT);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, buildButtonRT);
             hint.Setup(0, buildButtonRT, false);
 
             yield return new WaitUntil(() => EditorManager.Instance.IsBuilding);
@@ -287,7 +295,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator AttachBodyPartRoutine()
         {
             BodyPartUI bodyPartUI = System.Array.Find(bodyPartsRT.GetComponentsInChildren<BodyPartUI>(), x => x.BodyPart is Eye);
-            MouseHintDrag hint = Instantiate(mouseHintDragPrefab, buildMenuRT);
+            MouseHintDrag hint = Instantiate(DragHintPrefab, buildMenuRT);
             hint.Setup(0, bodyPartUI.transform, Player.Instance.Constructor.Body, false, true, 1f, 1f, 1f);
 
             yield return new WaitUntil(() => Player.Instance.Constructor.Data.AttachedBodyParts.Count > 0);
@@ -295,7 +303,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator RevealToolsRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, buildMenuRT);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, buildMenuRT);
             hint.Setup(0, Player.Instance.Constructor.Body, true);
 
             yield return new WaitUntil(() => Player.Instance.Editor.IsSelected);
@@ -309,7 +317,7 @@ namespace DanielLochner.Assets.CreatureCreator
             pos1.localPosition = 0.5f * Vector3.forward;
             pos2.localPosition = 1.0f * Vector3.forward;
 
-            MouseHintDrag hint = Instantiate(mouseHintDragPrefab, buildMenuRT);
+            MouseHintDrag hint = Instantiate(DragHintPrefab, buildMenuRT);
             hint.Setup(0, pos1, pos2, true, true, 0.5f, 1f, 0.5f);
 
             yield return new WaitUntil(() => Player.Instance.Constructor.Bones.Count > 2);
@@ -322,18 +330,44 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             for (int i = 0; i < Player.Instance.Constructor.Bones.Count; i++)
             {
-                MouseHintScroll hint = Instantiate(mouseHintScrollPrefab, buildMenuRT);
                 Transform bone = Player.Instance.Constructor.Bones[i];
-                hint.Setup(1, bone, true);
+
+                List<GameObject> hints = new List<GameObject>();
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    MouseHintScroll scrollHint = Instantiate(mouseHintScrollPrefab, buildMenuRT);
+                    scrollHint.Setup(1, bone, true);
+                    hints.Add(scrollHint.gameObject);
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    Transform end = new GameObject().transform;
+                    end.position = bone.position + Vector3.up;
+                    hints.Add(end.gameObject);
+
+                    Follower follow = end.gameObject.AddComponent<Follower>();
+                    follow.useOffsetPosition = true;
+                    follow.useOffsetRotation = false;
+                    follow.followRotation = false;
+                    follow.SetFollow(bone);
+
+                    FingerHintDrag dragHint = Instantiate(fingerHintDragPrefab, buildMenuRT);
+                    dragHint.Setup(0, bone, end, true, true, 1f, 1f, 0.5f);
+                    hints.Add(dragHint.gameObject);
+                }
 
                 yield return new WaitUntil(() => (bone == null) || (Player.Instance.Constructor.GetWeight(i) > 10f));
 
-                Destroy(hint.gameObject);
+                foreach (GameObject hint in hints)
+                {
+                    Destroy(hint);
+                }
             }
         }
         private IEnumerator SwitchToPaintModeRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, paintButtonRT);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, paintButtonRT);
             hint.Setup(0, paintButtonRT, false);
 
             yield return new WaitUntil(() => EditorManager.Instance.IsPainting);
@@ -342,7 +376,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator ApplyPatternRoutine()
         {
             PatternUI patternUI = patternsRT.GetComponentInChildren<PatternUI>();
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, paintMenuRT.transform);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, paintMenuRT.transform);
             hint.Setup(0, patternUI.transform, false);
 
             yield return new WaitUntil(() => !string.IsNullOrEmpty(Player.Instance.Constructor.Data.PatternID));
@@ -351,7 +385,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator SetColourRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, paintMenuRT.transform);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, paintMenuRT.transform);
             hint.Setup(0, secondaryColourButtonRT, false);
 
             yield return new WaitUntil(() => ColourPickerDialog.Instance.IsOpen);
@@ -367,7 +401,7 @@ namespace DanielLochner.Assets.CreatureCreator
             pos2.anchorMin = pos2.anchorMax = new Vector2(0.5f, 0f);
             pos2.anchoredPosition = Vector2.up * ((optionsMenu.transform as RectTransform).rect.height + (45f / 2f));
 
-            MouseHintDrag hint = Instantiate(mouseHintDragPrefab, EditorManager.Instance.transform);
+            MouseHintDrag hint = Instantiate(DragHintPrefab, EditorManager.Instance.transform);
             hint.Setup(0, pos1, pos2, false, false, 0.5f, 1f, 0.5f);
 
             yield return new WaitUntil(() => optionsMenu.CurrentState == SimpleSideMenu.State.Open);
@@ -377,7 +411,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator SaveCreatureRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, EditorManager.Instance.transform);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, EditorManager.Instance.transform);
             hint.Setup(0, saveButtonRT, false);
 
             int prevCount = creaturesRT.childCount;
@@ -387,7 +421,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator SwitchToPlayModeRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, playButtonRT);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, playButtonRT);
             hint.Setup(0, playButtonRT, false);
 
             yield return new WaitUntil(() => EditorManager.Instance.IsPlaying);
@@ -395,7 +429,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator ViewMinimapRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, playMenuRT);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, playMenuRT);
             hint.Setup(0, minimapRT, false);
 
             yield return new WaitUntil(() => MinimapManager.Instance.Minimap.IsOpen);
@@ -403,7 +437,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator CloseMinimapRoutine()
         {
-            MouseHintClick hint = Instantiate(mouseHintClickPrefab, playMenuRT);
+            MouseHintClick hint = Instantiate(ClickHintPrefab, playMenuRT);
             hint.Setup(0, closeMinimapButtonRT, false);
 
             yield return new WaitUntil(() => !MinimapManager.Instance.Minimap.IsOpen);

@@ -1039,6 +1039,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldHintPrefab: {fileID: -437626245117491937, guid: af47cb35044d30043b45fb83c619f333, type: 3}
+  fingerHintTapPrefab: {fileID: 5140601261134427154, guid: 3456026bcd27c414a983f25b46f7e0fb, type: 3}
+  fingerHintDragPrefab: {fileID: -4934180171178952837, guid: c2495d2915a781d44bc602b921bbaf83, type: 3}
   mouseHintClickPrefab: {fileID: 1911695704370351627, guid: b652b7ffe5f384340a8caf02a6ab49b3, type: 3}
   mouseHintDragPrefab: {fileID: -2769310942883667528, guid: 3f6855e1d5681c24bbb2f531081200b0, type: 3}
   mouseHintScrollPrefab: {fileID: -3783578666604819058, guid: e6d7edeb5766d8041950b462c4eac7d5, type: 3}
@@ -4781,6 +4783,14 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8934269896704737122, guid: 0897cc4430c83164fa315f37e487721b, type: 3}
+      propertyPath: m_CellSize.x
+      value: 150.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934269896704737122, guid: 0897cc4430c83164fa315f37e487721b, type: 3}
+      propertyPath: m_CellSize.y
+      value: 150.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8934269896704737127, guid: 0897cc4430c83164fa315f37e487721b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -5074,6 +5084,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 190b06ff4a9418848ae9320a01c38075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &9065828312872294784 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8934269897934303676, guid: 0897cc4430c83164fa315f37e487721b, type: 3}
+  m_PrefabInstance: {fileID: 444921725591251004}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6728986208301880940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9065828312872294784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c29ac70f5637964aa01be3d4667a627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPlatform: 1
+  scale: 1.25
 --- !u!224 &9065828312872294785 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8934269897934303677, guid: 0897cc4430c83164fa315f37e487721b, type: 3}
