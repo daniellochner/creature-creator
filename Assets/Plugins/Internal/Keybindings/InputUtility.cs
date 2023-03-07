@@ -28,7 +28,7 @@ namespace DanielLochner.Assets
             return m;
         }
 
-        public static void GetDelta(out float deltaX, out float deltaY)
+        public static bool GetDelta(out float deltaX, out float deltaY)
         {
             deltaX = deltaY = 0;
 
@@ -50,6 +50,8 @@ namespace DanielLochner.Assets
                     }
                 }
             }
+
+            return deltaX != 0 || deltaY != 0;
         }
     }
 }

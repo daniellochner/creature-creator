@@ -49,6 +49,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 outline.enabled = isHighlighted;
             }
+
+            (interactor as CreatureInteractor).CreatureCamera.CameraOrbit.SetFrozen(isHighlighted);
         }
         #endregion
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3037395091085092853}
   - component: {fileID: 3037395091085092852}
   - component: {fileID: 8059639011874822132}
+  - component: {fileID: 3780854704749245739}
   m_Layer: 5
   m_Name: Cursor
   m_TagString: Untagged
@@ -103,6 +104,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db513fdd5d5a554facdadaacc631904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3780854704749245739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037395091085092854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c29ac70f5637964aa01be3d4667a627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPlatform: 1
+  scale: 5
 --- !u!1 &3037395092027179445
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +214,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f262cbd4abdef7489e95e5209232112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchOffset: 100
+  changeCooldown: 0.5
+  changeThreshold: 1
   defaultCursor: {fileID: 2800000, guid: 4422d2893aa03c745ad1ea1c34265aed, type: 3}
   interactionPrefab: {fileID: 1550893826349285682, guid: a97174a3c90eed94595d4255d1ef60ac, type: 3}
   grid: {fileID: 3037395091085092810}
