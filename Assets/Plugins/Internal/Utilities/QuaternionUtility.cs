@@ -22,5 +22,13 @@ namespace DanielLochner.Assets
 
             return Quaternion.Euler(x, y, z);
         }
+
+        public static float ClampAngle(float angle, float min, float max)
+        {
+            if (angle < -360f) { angle += 360f; }
+            if (angle > 360f)  { angle -= 360f; }
+
+            return Mathf.Clamp(angle, min, max);
+        }
     }
 }

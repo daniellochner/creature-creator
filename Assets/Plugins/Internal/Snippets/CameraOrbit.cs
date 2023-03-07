@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DanielLochner.Assets
@@ -34,6 +35,8 @@ namespace DanielLochner.Assets
 
         private float currentDistance, initialDistance, initialZoom;
         private bool isInitialTouch = true, isPressing;
+
+        private List<int> pressed = new List<int>();
         #endregion
 
         #region Properties
@@ -104,6 +107,7 @@ namespace DanielLochner.Assets
                     if (touch.phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(touch.fingerId))
                     {
                         isPressing = true;
+                        pressed.Add(touch.fingerId);
                     }
                     else
                     if (touch.phase == TouchPhase.Ended)
@@ -112,6 +116,7 @@ namespace DanielLochner.Assets
                         {
                             isPressing = false;
                         }
+                        pressed.Remove(touch.fingerId);
                     }
                 }
             }
@@ -161,20 +166,32 @@ namespace DanielLochner.Assets
         private void OnRotate()
         {
             Vector3 velocity = Vector3.zero;
-            if (isPressing && Input.GetMouseButton(0) && !freezeRotation && !IsFrozen && CanInput)
+            if (isPressing && !freezeRotation && !IsFrozen && CanInput && pressed.Count < 2)
             {
-                InputUtility.GetDelta(out float deltaX, out float deltaY);
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    float deltaX = Input.GetAxis("Mouse X");
+                    float deltaY = Input.GetAxis("Mouse Y");
+                    AddVelocity(deltaX, deltaY, ref velocity);
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    foreach (int fingerId in pressed)
+                    {
+                        if (fingerId > Input.touchCount - 1) continue;
 
-                float x = (invertMouseX ? -1f : 1f) * deltaX;
-                float y = (invertMouseY ? -1f : 1f) * deltaY;
-
-                velocity.x += 5f * x * mouseSensitivity.x;
-                velocity.y += 5f * y * mouseSensitivity.y;
+                        Touch touch = Input.GetTouch(fingerId);
+                        float deltaX = touch.deltaPosition.x * 0.1f;
+                        float deltaY = touch.deltaPosition.y * 0.1f;
+                        AddVelocity(deltaX, deltaY, ref velocity);
+                    }
+                }
             }
 
             targetRotation.y += velocity.x;
             targetRotation.x -= velocity.y;
-            targetRotation.x = ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
+            targetRotation.x = QuaternionUtility.ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
 
             rotationTransform.localRotation = Quaternion.Euler(targetRotation.x, targetRotation.y, 0);
         }
@@ -255,12 +272,13 @@ namespace DanielLochner.Assets
             }
         }
 
-        public static float ClampAngle(float angle, float min, float max)
+        private void AddVelocity(float deltaX, float deltaY, ref Vector3 velocity)
         {
-            if (angle < -360f) { angle += 360f; }
-            if (angle > 360f) { angle -= 360f; }
+            float x = (invertMouseX ? -1f : 1f) * deltaX;
+            float y = (invertMouseY ? -1f : 1f) * deltaY;
 
-            return Mathf.Clamp(angle, min, max);
+            velocity.x += 5f * x * mouseSensitivity.x;
+            velocity.y += 5f * y * mouseSensitivity.y;
         }
         #endregion
     }
