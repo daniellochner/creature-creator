@@ -613,7 +613,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    NativeFilePicker.PickFile(Import);
+                    NativeFilePicker.PickFile(Import, "dat");
                 }
             });
         }
@@ -911,6 +911,35 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             });
             UpdateNoCreatures();
+
+            creatureUI.ShareButton.onClick.AddListener(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    NativeShare share = new NativeShare();
+                    share.AddFile(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
+
+                    string link = "";
+                    if (Application.platform == RuntimePlatform.Android)
+                    {
+                        link = "https://play.google.com/store/apps/details?id=com.daniellochner.creaturecreator";
+                    }
+                    else
+                    if (Application.platform == RuntimePlatform.IPhonePlayer)
+                    {
+                        link = "https://apps.apple.com/us/app/creature-creator/id1564115819";
+                    }
+                    else
+                    {
+                        link = "https://store.steampowered.com/app/1990050/Creature_Creator/";
+                    }
+
+                    share.SetTitle(creatureName);
+                    share.SetSubject(LocalizationUtility.Localize("share_subject", link));
+
+                    share.Share();
+                }
+            });
 
             return creatureUI;
         }
