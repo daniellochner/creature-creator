@@ -48,7 +48,7 @@ namespace DanielLochner.Assets
             onEndDrag = serializedObject.FindProperty("onEndDrag");
             dragThreshold = serializedObject.FindProperty("dragThreshold");
             customCollider = serializedObject.FindProperty("customCollider");
-            touchOffset = serializedObject.FindProperty("touchOffset");
+            touchOffset = serializedObject.FindProperty("mobileTouchOffset");
         }
         public override void OnInspectorGUI()
         {

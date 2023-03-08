@@ -43,7 +43,7 @@ namespace DanielLochner.Assets
         public bool updatePlaneOnPress = false;
         public float dragThreshold = 0f;
         public Collider customCollider;
-        public float touchOffset = 0f;
+        public float mobileTouchOffset = 0f;
 
         // Events
         public UnityEvent onPress = new UnityEvent();
@@ -108,7 +108,7 @@ namespace DanielLochner.Assets
                 Vector3 origin = Input.mousePosition;
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    origin += Vector3.up * touchOffset;
+                    origin += Vector3.up * mobileTouchOffset;
                 }
 
                 Ray ray = CameraUtility.MainCamera.ScreenPointToRay(origin);

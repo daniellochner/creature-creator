@@ -268,7 +268,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                LDrag.touchOffset = CreatureEditor.TouchOffset;
+                LDrag.mobileTouchOffset = CreatureEditor.TouchOffset;
             }
 
             RDrag.world = connectionPoint;
