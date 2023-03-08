@@ -137,7 +137,7 @@ namespace DanielLochner.Assets
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    if (Input.touchCount >= 2 && !CanvasUtility.IsPointerOverUI)
+                    if (pressed.Count >= 2 && !CanvasUtility.IsPointerOverUI)
                     {
                         Vector2 pos1 = Input.touches[0].position;
                         Vector2 pos2 = Input.touches[1].position;
