@@ -327,6 +327,17 @@ namespace DanielLochner.Assets.CreatureCreator
             JoystickPositionHorizontal = 0.2f;
             JoystickPositionVertical = 0.4f;
             InterfaceScale = 1f;
+
+
+            // ...overrides
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                ShadowQuality = ShadowQualityType.None;
+                AmbientOcclusion = AmbientOcclusionType.SAO;
+                TextureQuality = TextureQualityType.High;
+                Foliage = FoliageType.VeryLow;
+                Bloom = false;
+            }
         }
         #endregion
 
