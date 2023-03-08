@@ -13,6 +13,20 @@ public static class NativeFilePicker
 
 	public enum Permission { Denied = 0, Granted = 1, ShouldAsk = 2 };
 
+    public static string[] AllFileTypes
+    {
+        get
+        {
+#if UNITY_ANDROID
+			// Use MIMEs on Android
+			return new string[] { "*/*" };
+#else
+            // Use UTIs on iOS
+            return new string[] { "public.item", "public.content" };
+#endif
+        }
+    }
+
 	#region Platform Specific Elements
 #if !UNITY_EDITOR && UNITY_ANDROID
 	private static AndroidJavaClass m_ajc = null;

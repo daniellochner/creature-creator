@@ -613,7 +613,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    NativeFilePicker.PickFile(Import, "dat");
+                    NativeFilePicker.PickFile(Import, NativeFilePicker.AllFileTypes);
                 }
             });
         }

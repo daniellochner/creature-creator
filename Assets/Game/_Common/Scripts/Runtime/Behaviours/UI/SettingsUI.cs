@@ -355,7 +355,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    NativeFilePicker.PickMultipleFiles(SelectFiles, "dat");
+                    NativeFilePicker.PickMultipleFiles(SelectFiles, NativeFilePicker.AllFileTypes);
                 }
             });
 
