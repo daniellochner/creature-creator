@@ -105,7 +105,13 @@ namespace DanielLochner.Assets
         {
             if (IsPressing && draggable)
             {
-                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(Input.mousePosition + Vector3.up * touchOffset);
+                Vector3 origin = Input.mousePosition;
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    origin += Vector3.up * touchOffset;
+                }
+
+                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(origin);
 
                 Vector3? targetWorldPosition = null;
                 if (customCollider != null)
