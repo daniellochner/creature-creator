@@ -7,6 +7,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -62,21 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!isTeleporting && InputUtility.GetKeyDown(keybind) && CanTeleport)
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
-                    {
-                        UnlockMapClientRpc();
-
-                        if (cinematic != null)
-                        {
-                            TeleportCinematicClientRpc();
-                        }
-                        else
-                        {
-                            InitializeTeleport();
-                        }
-
-                        isTeleporting = true;
-                    });
+                    RequestTeleport();
                 }
                 UpdateInfo();
             }
@@ -96,6 +83,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateInfo();
                 IsVisible = true;
+
+                if (SystemUtility.IsDevice(DeviceType.Handheld) && CanTeleport)
+                {
+                    this.Invoke(RequestTeleport, 1f);
+                }
             }
         }
         private void OnLoseTrackOf(Collider col1, Collider col2)
@@ -104,6 +96,25 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 IsVisible = false;
             }
+        }
+
+        private void RequestTeleport()
+        {
+            ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
+            {
+                UnlockMapClientRpc();
+
+                if (cinematic != null)
+                {
+                    TeleportCinematicClientRpc();
+                }
+                else
+                {
+                    InitializeTeleport();
+                }
+
+                isTeleporting = true;
+            });
         }
 
         private async void InitializeTeleport()
@@ -150,14 +161,16 @@ namespace DanielLochner.Assets.CreatureCreator
         private void UpdateInfo()
         {
             string text = $"{LocalizationUtility.Localize(targetMapId)}<br>";
+
             if (ShowCount)
             {
                 text += $"{region.tracked.Count}/{NetworkPlayersMenu.Instance.NumPlayers}<br>";
             }
-            if (CanTeleport)
+            if (SystemUtility.IsDevice(DeviceType.Desktop) && CanTeleport)
             {
                 text += $"<size=1>[{keybind.ToString()}]</size>";
             }
+
             teleportText.text = text;
         }
         #endregion
