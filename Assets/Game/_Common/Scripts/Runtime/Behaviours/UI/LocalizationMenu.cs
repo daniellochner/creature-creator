@@ -33,13 +33,15 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return LocalizationSettings.InitializationOperation;
             Setup();
         }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
+        }
 
         private void Setup()
         {
-            LocalizationSettings.SelectedLocaleChanged += delegate (Locale locale)
-            {
-                disclaimer.SetActive(!officialLanguages.Contains(locale.Identifier.Code));
-            };
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
 
             if (AutoDetectLanguage)
             {
@@ -107,6 +109,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             languagesTG.allowSwitchOff = false;
+        }
+
+        private void OnLocaleChanged(Locale locale)
+        {
+            disclaimer.SetActive(!officialLanguages.Contains(locale.Identifier.Code));
         }
         #endregion
     }
