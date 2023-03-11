@@ -20,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector resolutionOS;
         [SerializeField] private Toggle fullscreenToggle;
         [SerializeField] private Toggle vSyncToggle;
+        [SerializeField] private Slider targetFrameRateSlider;
+        [SerializeField] private Slider screenScaleSlider;
         [SerializeField] private OptionSelector presetOS;
         [SerializeField] private OptionSelector creatureMeshQualityOS;
         [SerializeField] private OptionSelector shadowQualityOS;
@@ -114,6 +116,20 @@ namespace DanielLochner.Assets.CreatureCreator
             vSyncToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetVSync(isOn);
+            });
+
+            // Screen Scale
+            screenScaleSlider.value = (SettingsManager.Data.Resolution.width / Screen.width);
+            screenScaleSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                SettingsManager.Instance.SetScreenScale(value);
+            });
+
+            // Target Frame Rate
+            targetFrameRateSlider.value = SettingsManager.Data.TargetFrameRate;
+            targetFrameRateSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                SettingsManager.Instance.SetTargetFrameRate((int)value);
             });
 
             // Preset

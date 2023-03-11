@@ -27,10 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
             gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
-
-#if UNITY_IOS || UNITY_ANDROID
-            Application.targetFrameRate = 60;
-#endif
         }
         private void Update()
         {

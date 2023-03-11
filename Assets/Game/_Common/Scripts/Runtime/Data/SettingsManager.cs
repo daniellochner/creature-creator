@@ -41,6 +41,8 @@ namespace DanielLochner.Assets.CreatureCreator
             SetResolution(Data.Resolution);
             SetFullscreen(Data.Fullscreen);
             SetVSync(Data.VSync);
+            SetTargetFrameRate(Data.TargetFrameRate);
+
             SetCreatureMeshQuality(Data.CreatureMeshQuality);
             SetShadowQuality(Data.ShadowQuality);
             SetTextureQuality(Data.TextureQuality);
@@ -97,6 +99,19 @@ namespace DanielLochner.Assets.CreatureCreator
             QualitySettings.vSyncCount = vSync ? 1 : 0;
             Data.VSync = vSync;
         }
+        public void SetScreenScale(float screenScale)
+        {
+            int height = (int)(Screen.currentResolution.height * screenScale);
+            int width = (int)(Screen.currentResolution.width * screenScale);
+            int refreshRate = Screen.currentResolution.refreshRate;
+            SetResolution(new Resolution() { width = width, height = height, refreshRate = refreshRate });
+        }
+        public void SetTargetFrameRate(int targetFrameRate)
+        {
+            Application.targetFrameRate = targetFrameRate;
+            Data.TargetFrameRate = targetFrameRate;
+        }
+
         public void SetCreatureMeshQuality(CreatureMeshQualityType type)
         {
             switch (type)

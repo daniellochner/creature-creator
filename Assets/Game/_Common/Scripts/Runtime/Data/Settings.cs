@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int refreshRate;
         [SerializeField] private bool fullscreen;
         [SerializeField] private bool vSync;
+        [SerializeField] private int targetFrameRate = 120;
         [Space]
         [SerializeField] private CreatureMeshQualityType creatureMeshQuality;
         [SerializeField] private ShadowQualityType shadowQuality;
@@ -88,6 +89,12 @@ namespace DanielLochner.Assets.CreatureCreator
             get => vSync;
             set => vSync = value;
         }
+        public int TargetFrameRate
+        {
+            get => targetFrameRate;
+            set => targetFrameRate = value;
+        }
+
         public CreatureMeshQualityType CreatureMeshQuality
         {
             get => creatureMeshQuality;
@@ -287,6 +294,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Resolution = Screen.currentResolution;
             Fullscreen = true;
             VSync = false;
+            TargetFrameRate = 120;
 
             CreatureMeshQuality = CreatureMeshQualityType.High;
             ShadowQuality = ShadowQualityType.Medium;
@@ -332,6 +340,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // ...overrides
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
+                TargetFrameRate = 60;
                 ShadowQuality = ShadowQualityType.None;
                 AmbientOcclusion = AmbientOcclusionType.SAO;
                 TextureQuality = TextureQualityType.High;
