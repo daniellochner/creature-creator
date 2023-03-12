@@ -265,10 +265,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 prevTouchPosition = Input.mousePosition;
             }
 
-            if (Input.GetMouseButtonUp(0)
+            if (Input.GetMouseButtonUp(0) && !CanvasUtility.IsPointerOverUI
                     && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity)
                     && Vector2.Distance(Input.mousePosition, prevTouchPosition) <= touchThreshold
-                    && raycastHit.collider.GetComponent<Interactable>() == null)
+                    && raycastHit.collider.GetComponent<Interactable>() == null
+                    && raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
                 Vector3 position = raycastHit.point;
                 Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
