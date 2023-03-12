@@ -1,0 +1,203 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: 'Open Sans', sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Nav Bar */
+nav {
+    top: 0;
+    right: 0;
+    position: absolute;
+    display: flex;
+    padding: 16px;
+    z-index: 1;
+}
+
+nav>* {
+    margin: 0 8px;
+    color: white;
+    text-decoration: none;
+    opacity: 50%;
+
+    transition: opacity ease-out 0.2s;
+}
+
+nav>*:hover {
+    opacity: 1;
+}
+
+
+/* Background Video */
+video {
+    position: absolute;
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1000;
+
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+
+
+/* Content */
+.content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Main */
+#main {
+    position: relative;
+    flex-direction: column;
+}
+
+#logo {
+    height: 50%;
+    width: auto;
+
+    animation: rotation 4s infinite ease-in-out;
+    -webkit-animation: rotation 4s infinite ease-in-out;
+}
+
+@keyframes rotation {
+
+    0% {
+        transform: rotate(-2deg);
+        -webkit-transform: rotate(-2deg);
+    }
+
+    50% {
+        transform: rotate(2deg);
+        -webkit-transform: rotate(2deg);
+    }
+
+    100% {
+        transform: rotate(-2deg);
+        -webkit-transform: rotate(-2deg);
+    }
+}
+
+#links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.icons {
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    opacity: 50%;
+    margin: 0 4px;
+
+    transition: opacity ease-out 0.2s;
+}
+
+.icons:hover {
+    opacity: 1;
+}
+
+#ios {
+    background-image: url("../graphics/apple.png");
+}
+
+#steam {
+    background-image: url("../graphics/steam.png");
+}
+
+#android {
+    background-image: url("../graphics/android.png");
+}
+
+
+/* Dialog */
+.dialog {
+    position: absolute;
+    z-index: 1001;
+    width: 50%;
+    height: auto;
+    min-height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.background {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+
+/* Support */
+#support {
+    position: absolute;
+    display: none;
+}
+
+#discord {
+    background-color: #313338;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+#discord>img {
+    width: 25%;
+    border-radius: 25px;
+    margin-bottom: 16px;
+}
+
+#discord>p {
+    color: white;
+    text-align: center;
+}
+
+#discord>h1 {
+    color: white;
+    text-align: center;
+}
+
+#discord>button {
+    margin-top: 16px;
+    color: white;
+    background-color: #5865F2;
+    border: none;
+    width: 75%;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Privacy Policy */
+#privacy-policy {
+    position: absolute;
+    display: none;
+}
