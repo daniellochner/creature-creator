@@ -29,11 +29,11 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             }
 
             // Music
-            if (!string.IsNullOrEmpty(soundId))
-            {
-                Player.Instance.Effects.PlaySound(soundId);
-                NotificationsManager.Notify($"{music} ~ {composer}", () => Application.OpenURL(url));
-            }
+            //if (!string.IsNullOrEmpty(soundId))
+            //{
+            //    Player.Instance.Effects.PlaySound(soundId);
+            //    NotificationsManager.Notify($"{music} ~ {composer}", () => Application.OpenURL(url));
+            //}
         }
         #endregion
     }
