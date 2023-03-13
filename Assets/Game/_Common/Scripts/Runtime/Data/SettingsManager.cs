@@ -101,10 +101,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetScreenScale(float screenScale)
         {
-            Resolution baseResolution = Screen.resolutions[0];
-            int height = (int)(baseResolution.height * screenScale);
-            int width = (int)(baseResolution.width * screenScale);
-            int refreshRate = baseResolution.refreshRate;
+            int width = Mathf.FloorToInt(Display.main.systemWidth * screenScale);
+            int height = Mathf.FloorToInt(Display.main.systemHeight * screenScale);
+            int refreshRate = Data.Resolution.refreshRate;
 
             Resolution targetResolution = new Resolution()
             {

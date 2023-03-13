@@ -121,7 +121,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
                 // Screen Scale
-                screenScaleSlider.value = (SettingsManager.Data.Resolution.width / Screen.resolutions[0].width);
+                screenScaleSlider.value = (SettingsManager.Data.Resolution.width / Display.main.systemWidth);
                 screenScaleSlider.onValueChanged.AddListener(delegate (float value)
                 {
                     SettingsManager.Instance.SetScreenScale(value);
