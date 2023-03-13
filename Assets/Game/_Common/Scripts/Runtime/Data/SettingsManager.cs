@@ -101,10 +101,18 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetScreenScale(float screenScale)
         {
-            int height = (int)(Screen.currentResolution.height * screenScale);
-            int width = (int)(Screen.currentResolution.width * screenScale);
-            int refreshRate = Screen.currentResolution.refreshRate;
-            SetResolution(new Resolution() { width = width, height = height, refreshRate = refreshRate });
+            Resolution baseResolution = Screen.resolutions[0];
+            int height = (int)(baseResolution.height * screenScale);
+            int width = (int)(baseResolution.width * screenScale);
+            int refreshRate = baseResolution.refreshRate;
+
+            Resolution targetResolution = new Resolution()
+            {
+                width = width,
+                height = height,
+                refreshRate = refreshRate
+            };
+            SetResolution(targetResolution);
         }
         public void SetTargetFrameRate(int targetFrameRate)
         {

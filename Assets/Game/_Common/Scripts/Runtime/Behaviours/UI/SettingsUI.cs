@@ -118,19 +118,23 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetVSync(isOn);
             });
 
-            // Screen Scale
-            screenScaleSlider.value = (SettingsManager.Data.Resolution.width / Screen.width);
-            screenScaleSlider.onValueChanged.AddListener(delegate (float value)
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                SettingsManager.Instance.SetScreenScale(value);
-            });
+                // Screen Scale
+                screenScaleSlider.value = (SettingsManager.Data.Resolution.width / Screen.resolutions[0].width);
+                screenScaleSlider.onValueChanged.AddListener(delegate (float value)
+                {
+                    SettingsManager.Instance.SetScreenScale(value);
+                });
 
-            // Target Frame Rate
-            targetFrameRateSlider.value = SettingsManager.Data.TargetFrameRate;
-            targetFrameRateSlider.onValueChanged.AddListener(delegate (float value)
-            {
-                SettingsManager.Instance.SetTargetFrameRate((int)value);
-            });
+                // Target Frame Rate
+                targetFrameRateSlider.value = SettingsManager.Data.TargetFrameRate;
+                targetFrameRateSlider.onValueChanged.AddListener(delegate (float value)
+                {
+                    SettingsManager.Instance.SetTargetFrameRate((int)value);
+                });
+            }
+
 
             // Preset
             presetOS.SetupUsingEnum<PresetType>();
