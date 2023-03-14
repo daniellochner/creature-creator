@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(playerTag))
             {
@@ -27,7 +27,7 @@ namespace DanielLochner.Assets
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void SetParentServerRpc(NetworkObjectReference networkObjectRef, bool isParented)
+        private void SetParentServerRpc(NetworkObjectReference networkObjectRef, bool isParented)
         {
             if (networkObjectRef.TryGet(out NetworkObject networkObject))
             {

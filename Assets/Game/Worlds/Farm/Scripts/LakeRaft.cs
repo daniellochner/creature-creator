@@ -33,25 +33,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             OnCreature(other, delegate (CreatureBase creature)
             {
-                HandleCreatureOnPlatform(creature, isMoving.Value);
-            });
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            OnCreature(other, delegate (CreatureBase creature)
-            {
-                HandleCreatureOnPlatform(creature, false);
-            });
-        }
-
-        private void HandleCreatureOnPlatform(CreatureBase creature, bool isOnMovingPlatform)
-        {
-            // TODO: Fix this to allow creatures to walk on the platform instead of disabling animations entirely.
-            // Need to invoke at the end of frame to ensure rig weight gets updated.
-            this.InvokeAtEndOfFrame(delegate
-            {
-                creature.Animator.Rig.weight = isOnMovingPlatform ? 0f : 1f;
-                creature.Animator.Animator.enabled = !isOnMovingPlatform;
+                foreach (LegAnimator leg in creature.Animator.Legs)
+                {
+                    Vector3 pos = creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos);
+                    leg.Target.position = leg.Anchor.position = pos;
+                    leg.Target.rotation = leg.Anchor.rotation = Quaternion.identity;
+                }
             });
         }
 
