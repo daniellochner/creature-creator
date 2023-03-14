@@ -18,7 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MouseHintScroll mouseHintScrollPrefab;
         [Space]
         [SerializeField] private CanvasGroup canvasGroup;
-        [SerializeField] private RectTransform paginationRT;
         [SerializeField] private RectTransform tutorialRT;
         [SerializeField] private RectTransform controlsRT;
         [SerializeField] private RectTransform joystickRT;
@@ -402,7 +401,7 @@ namespace DanielLochner.Assets.CreatureCreator
             pos2.anchorMin = pos2.anchorMax = new Vector2(0.5f, 0f);
             pos2.anchoredPosition = Vector2.up * ((optionsMenu.transform as RectTransform).rect.height + (45f / 2f));
 
-            MouseHintDrag hint = Instantiate(DragHintPrefab, paginationRT);
+            MouseHintDrag hint = Instantiate(DragHintPrefab, optionsMenu.transform);
             hint.Setup(0, pos1, pos2, false, false, 0.5f, 1f, 0.5f);
 
             yield return new WaitUntil(() => optionsMenu.CurrentState == SimpleSideMenu.State.Open);
