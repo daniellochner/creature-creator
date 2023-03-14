@@ -40,7 +40,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming)
                     {
-                        player.Health.TakeDamage(player.Health.Health);
+                        bool isOnRaft = Physics.Raycast(transform.position + transform.up * player.Grounded.ContactDistance, -transform.up, 2f * player.Grounded.ContactDistance);
+                        if (!isOnRaft)
+                        {
+                            player.Health.TakeDamage(player.Health.Health);
+                        }
                     }
                     else
                     {

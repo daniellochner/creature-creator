@@ -11,6 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public float ContactDistance => contactDistance;
+
         public CreatureCollider Collider { get; private set; }
         public CreatureAnimator Animator { get; private set; }
 
