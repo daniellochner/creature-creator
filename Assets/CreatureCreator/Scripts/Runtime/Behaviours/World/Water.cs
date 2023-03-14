@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Collider = GetComponent<BoxCollider>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             CreatureBase creature = other.GetComponent<CreatureBase>();
             if (creature != null)
@@ -38,13 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreaturePlayerLocal player = creature as CreaturePlayerLocal;
                 if (player != null)
                 {
-                    if (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming)
+                    if (!player.Underwater.IsOnRaft && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
                     {
-                        bool isOnRaft = Physics.Raycast(transform.position + transform.up * player.Grounded.ContactDistance, -transform.up, 2f * player.Grounded.ContactDistance);
-                        if (!isOnRaft)
-                        {
-                            player.Health.TakeDamage(player.Health.Health);
-                        }
+                        player.Health.TakeDamage(player.Health.Health);
                     }
                     else
                     {

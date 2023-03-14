@@ -10,6 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isUnderwater;
         private Water water;
 
+        public bool IsOnRaft { get; set; }
+
         public bool IsUnderwater
         {
             get => isUnderwater;
@@ -21,11 +23,17 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public Animator Animator { get; private set; }
         public CreatureConstructor Constructor { get; private set; }
+        public CreatureCollider Collider { get; private set; }
 
         private void Awake()
         {
             Animator = GetComponent<Animator>();
             Constructor = GetComponent<CreatureConstructor>();
+            Collider = GetComponent<CreatureCollider>();
+        }
+        private void OnDisable()
+        {
+            IsOnRaft = false;
         }
         private void FixedUpdate()
         {
@@ -41,6 +49,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTriggerEnter(Collider other)
         {
+            if (other.CompareTag("Raft"))
+            {
+                IsOnRaft = true;
+            }
+
             if (other.CompareTag("Water"))
             {
                 water = other.GetComponent<Water>();
@@ -48,9 +61,23 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Water"))
+            if (water != null)
             {
-                water = null;
+                if (IsOnRaft && other.CompareTag("Raft"))
+                {
+                    IsOnRaft = false;
+                    water.OnTriggerEnter(Collider.Capsule);
+                }
+
+                if (other.CompareTag("Water"))
+                {
+                    water = null;
+                }
+            }
+
+            if (other.CompareTag("Raft"))
+            {
+                IsOnRaft = false;
             }
         }
     }

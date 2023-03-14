@@ -20,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float Radius => capsule.radius;
         public float Height => capsule.height;
+
+        public CapsuleCollider Capsule => capsule;
         #endregion
 
         #region Methods
