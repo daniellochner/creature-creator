@@ -129,7 +129,7 @@ namespace DanielLochner.Assets.CreatureCreator
             for (int i = 0; i < data.Bones.Count; i++)
             {
                 Bone bone = data.Bones[i];
-                AddBone(i, bone.position, bone.rotation, bone.weight);
+                AddBone(i, bone.position, bone.rotation, bone.weight, i == data.Bones.Count - 1);
             }
             for (int i = 0; i < data.AttachedBodyParts.Count; i++)
             {
@@ -411,12 +411,15 @@ namespace DanielLochner.Assets.CreatureCreator
             OnConstructBody?.Invoke();
         }
 
-        public void AddBone(int index, Vector3 position, Quaternion rotation, float weight)
+        public void AddBone(int index, Vector3 position, Quaternion rotation, float weight, bool apply = true)
         {
             if (CanAddBone(index))
             {
-                // Detach body parts
-                DetachBodyParts();
+                if (apply)
+                {
+                    // Detach body parts
+                    DetachBodyParts();
+                }
 
                 // Add bone
                 Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
@@ -431,11 +434,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     weight = weight
                 });
 
-                // Reconstruct body
-                ConstructBody();
+                if (apply)
+                {
+                    // Reconstruct body
+                    ConstructBody();
 
-                // Reattach body parts
-                ReattachBodyParts();
+                    // Reattach body parts
+                    ReattachBodyParts();
+                }
             }
         }
         public void AddBoneToFront()
