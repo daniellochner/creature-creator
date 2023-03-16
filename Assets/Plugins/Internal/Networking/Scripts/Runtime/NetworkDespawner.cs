@@ -4,8 +4,11 @@ namespace DanielLochner.Assets
 {
     public class NetworkDespawner : NetworkBehaviour
     {
+        #region Fields
         private bool despawn;
+        #endregion
 
+        #region Methods
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -14,16 +17,31 @@ namespace DanielLochner.Assets
                 Despawn();
             }
         }
+
         public void Despawn()
         {
-            if (NetworkObject.IsSpawned)
+            if (IsServer)
             {
-                NetworkObject.Despawn(true);
+                if (NetworkObject.IsSpawned)
+                {
+                    NetworkObject.Despawn(true);
+                }
+                else
+                {
+                    despawn = true;
+                }
             }
             else
             {
-                despawn = true;
+                DespawnServerRpc();
             }
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DespawnServerRpc()
+        {
+            Despawn();
+        }
+        #endregion
     }
 }
