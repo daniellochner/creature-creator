@@ -8,9 +8,9 @@ namespace DanielLochner.Assets
     public static class ComponentUtility
     {
         private static Dictionary<string, object> copy = new Dictionary<string, object>();
-        private static readonly BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        private const BindingFlags FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         
-        public static void CopyValues(this Component component, bool debug = false)
+        public static void CopyValues(this Component component, bool debug = false, BindingFlags flags = FLAGS, Type root = null)
         {
             copy.Clear();
             Type type = component.GetType();
@@ -22,11 +22,16 @@ namespace DanielLochner.Assets
                     if (copy.ContainsKey(field.Name)) continue;
                     copy.Add(field.Name, field.GetValue(component));
                 }
+
+                if (type == root)
+                {
+                    break;
+                }
                 type = type.BaseType;
             }
             if (debug) Debug.Log($"Copied {copy.Count} fields from '{component.name}'.");
         }
-        public static void PasteValues(this Component component, bool debug = false)
+        public static void PasteValues(this Component component, bool debug = false, BindingFlags flags = FLAGS, Type root = null)
         {
             int count = 0;
             Type type = component.GetType();
@@ -39,6 +44,11 @@ namespace DanielLochner.Assets
                     {
                         field.SetValue(component, copy[name]);
                         count++;
+                        break;
+                    }
+
+                    if (type == root)
+                    {
                         break;
                     }
                     type = type.BaseType;
