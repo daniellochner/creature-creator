@@ -28,9 +28,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator = GetComponent<CreatureAnimator>();
         }
 
-        public void TryHold(Holdable holdable)
+        public void TryHold(Holder holder)
         {
-            HoldServerRpc(holdable.NetworkObject);
+            HoldServerRpc(holder.NetworkObject);
         }
         [ServerRpc(RequireOwnership = false)]
         private void HoldServerRpc(NetworkObjectReference networkObjectRef)

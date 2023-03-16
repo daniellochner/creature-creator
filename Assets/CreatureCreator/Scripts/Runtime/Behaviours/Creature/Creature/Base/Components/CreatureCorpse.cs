@@ -1,6 +1,8 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System;
+using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureCorpse : NetworkBehaviour
     {
         #region Fields
+        [SerializeField] private Edible fleshPrefab;
         [SerializeField] private MinimapIcon iconPrefab;
         #endregion
 
@@ -35,10 +38,27 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         public void Kill()
-        {            
-            Corpse = Ragdoll.Generate(Constructor.Body.position).gameObject;
-            Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
-            Instantiate(iconPrefab, Corpse.transform, false);
+        {
+            CreatureConstructor creature = Ragdoll.Generate(Constructor.Body.position);
+
+            Corpse = creature.gameObject;
+            Corpse.AddComponent<SelfDestructor>().Lifetime = 30f;
+
+            foreach (Transform bone in creature.Bones)
+            {
+                SphereCollider prev = bone.GetComponent<SphereCollider>();
+
+                Edible flesh = Instantiate(fleshPrefab, bone);
+                flesh.GetComponent<SphereCollider>().radius = prev.radius;
+                flesh.OnEat.AddListener(delegate
+                {
+                    Destroy(bone.gameObject);
+                });
+
+                Destroy(prev);
+            }
+
+            Instantiate(iconPrefab, Corpse.transform);
         }
         #endregion
     }

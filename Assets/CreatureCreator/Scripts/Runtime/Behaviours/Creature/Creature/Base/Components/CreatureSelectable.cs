@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SetSelected(false, true);
         }
-        public override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
             if (informationMenu != null)
