@@ -316,6 +316,7 @@ MonoBehaviour:
   comparer: {fileID: 964352173324113456}
   underwater: {fileID: 2689997231068918682}
   speedUp: {fileID: 8163437573782105944}
+  grounded: {fileID: 5818221486326610230}
   minimapIcon: {fileID: 8888109669165540767}
   selectable: {fileID: 6191015036835071473}
   commandable: {fileID: 7842174650274611294}
@@ -503,7 +504,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -613,6 +614,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5818221486326610230 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8214712244303991102, guid: 32920e6e0c382b2499daedb0d8877e78, type: 3}
+  m_PrefabInstance: {fileID: 2503716476779784200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959052427373306997}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5861543429619538469 stripped
