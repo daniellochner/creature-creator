@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 2132262878428099673}
   - component: {fileID: 2132262878428099672}
   - component: {fileID: 5643833368186973406}
+  - component: {fileID: 8134317544615309757}
+  - component: {fileID: 7150568124083499741}
   m_Layer: 0
   m_Name: Meat
   m_TagString: Untagged
@@ -173,7 +175,6 @@ MonoBehaviour:
   cursor: {fileID: 2800000, guid: f30d83630c20b964594daf46734a99a8, type: 3}
   interactionRange: 5
   reqAbility: {fileID: 11400000, guid: 8908108a863934a4cbefe7500c4f10a6, type: 2}
-  dummyPrefab: {fileID: 2024434147430545539, guid: 7ebd7e408adb72b42b88001e88f8618f, type: 3}
 --- !u!114 &2132262878428099673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -691,3 +692,28 @@ MonoBehaviour:
     - {x: -0.0000008765451, y: -0.0010453028, z: 0.9999994}
     - {x: -0.0000024189774, y: -0.0010494664, z: 0.9999994}
     - {x: 0.0000049119767, y: -0.0010467764, z: 0.9999994}
+--- !u!114 &8134317544615309757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132262878425032797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a291a55747f2b954cb1642e28b7f8daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7150568124083499741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132262878425032797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b64e472ca3046469d5a86d86370504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dummyPrefab: {fileID: 2024434147430545539, guid: 7ebd7e408adb72b42b88001e88f8618f, type: 3}

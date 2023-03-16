@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Breakable : CreatureInteractable
+    public class Miner : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private int hitsToBreak;
@@ -89,16 +89,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 onBreak.Invoke();
             }
             gameObject.SetActive(false);
-        }
-
-        public override bool CanHighlight(Interactor interactor)
-        {
-            return base.CanHighlight(interactor) && Player.Instance.Holder.IsHolding;
-        }
-        protected override void OnInteract(Interactor interactor)
-        {
-            base.OnInteract(interactor);
-            TryMineServerRpc(interactor.NetworkObject);
         }
         #endregion
     }

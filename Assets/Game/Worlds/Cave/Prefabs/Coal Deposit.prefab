@@ -264,6 +264,7 @@ GameObject:
   - component: {fileID: 2672244308491756743}
   - component: {fileID: 2672244308491756742}
   - component: {fileID: 1946506532773077355}
+  - component: {fileID: 318222211912473457}
   m_Layer: 0
   m_Name: Coal Deposit
   m_TagString: Untagged
@@ -2735,6 +2736,25 @@ MonoBehaviour:
     - {x: 0.9771642, y: -0.06330452, z: 0.20283636}
     - {x: 0.19312635, y: 0.41133907, z: 0.89078754}
     - {x: 0.29623103, y: -0.20825861, z: 0.9321349}
+--- !u!114 &318222211912473457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3014264792311978386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705a81dc95f70de42800830c5ac91a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitsToBreak: 5
+  mineCooldown: 0.5
+  mineFX: {fileID: 8878714999600423144, guid: 61d9ea18b8f397548ac173d2c3e226ae, type: 3}
+  breakFX: {fileID: 1539248886857124290, guid: 76edf59f672efa24981ec808f0e93e86, type: 3}
+  onBreak:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3789489122567632328
 GameObject:
   m_ObjectHideFlags: 0
