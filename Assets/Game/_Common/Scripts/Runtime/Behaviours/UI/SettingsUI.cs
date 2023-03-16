@@ -18,10 +18,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Video")]
         [SerializeField] private OptionSelector resolutionOS;
+        [SerializeField] private GameObject resolutionApply;
         [SerializeField] private Toggle fullscreenToggle;
         [SerializeField] private Toggle vSyncToggle;
         [SerializeField] private Slider targetFrameRateSlider;
         [SerializeField] private Slider screenScaleSlider;
+        [SerializeField] private GameObject screenScaleApply;
         [SerializeField] private OptionSelector presetOS;
         [SerializeField] private OptionSelector creatureMeshQualityOS;
         [SerializeField] private OptionSelector shadowQualityOS;
@@ -79,10 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            if (SettingsManager.Instance)
-            {
-                SettingsManager.Instance.Save();
-            }
+            Shutdown();
         }
 
         private void Setup()
@@ -95,6 +94,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 resolutionOS.Options.Add(new OptionSelector.Option()
                 {
                     Id = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
+                });
+                resolutionOS.OnSelected.AddListener(delegate
+                {
+                    resolutionApply.SetActive(true);
                 });
 
                 Resolution current = SettingsManager.Data.Resolution;
@@ -121,10 +124,10 @@ namespace DanielLochner.Assets.CreatureCreator
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
                 // Screen Scale
-                screenScaleSlider.value = (SettingsManager.Data.Resolution.width / Display.main.systemWidth);
-                screenScaleSlider.onValueChanged.AddListener(delegate (float value)
+                screenScaleSlider.value = (float)SettingsManager.Data.Resolution.width / Display.main.systemWidth;
+                screenScaleSlider.onValueChanged.AddListener(delegate
                 {
-                    SettingsManager.Instance.SetScreenScale(value);
+                    screenScaleApply.SetActive(true);
                 });
 
                 // Target Frame Rate
@@ -545,12 +548,34 @@ namespace DanielLochner.Assets.CreatureCreator
                 joystickVerticalSlider.value = SettingsManager.Data.JoystickPositionVertical;
             }
             #endregion
+
+            Application.lowMemory += OnLowMemory;
+        }
+        private void Shutdown()
+        {
+            if (SettingsManager.Instance)
+            {
+                SettingsManager.Instance.Save();
+            }
+            Application.lowMemory -= OnLowMemory;
         }
 
         #region Video
         public void ApplyResolution()
         {
             SettingsManager.Instance.SetResolution(Screen.resolutions[resolutionOS.Selected]);
+        }
+        public void AppleScreenScale()
+        {
+            SettingsManager.Instance.SetScreenScale(screenScaleSlider.value);
+        }
+
+        private void OnLowMemory()
+        {
+            Resources.UnloadUnusedAssets();
+            presetOS.Select(PresetType.VeryLow);
+
+            InformationDialog.Inform(LocalizationUtility.Localize("low-memory_title"), LocalizationUtility.Localize("low-memory_message"));
         }
         #endregion
 

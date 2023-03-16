@@ -77,6 +77,11 @@ namespace DanielLochner.Assets.CreatureCreator
             SetSensitivityVertical(Data.SensitivityVertical);
             SetInvertHorizontal(Data.InvertHorizontal);
             SetInvertVertical(Data.InvertVertical);
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                OptimizeForMobile();
+            }
         }
         protected override void OnDestroy()
         {
@@ -195,8 +200,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                AmbientOcclusion ao = profile.GetSetting<AmbientOcclusion>();
-                if (ao != null)
+                if (profile.TryGetSettings(out AmbientOcclusion ao))
                 {
                     if (type == AmbientOcclusionType.None)
                     {
@@ -264,8 +268,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                ScreenSpaceReflections ssr = profile.GetSetting<ScreenSpaceReflections>();
-                if (ssr != null)
+                if (profile.TryGetSettings(out ScreenSpaceReflections ssr))
                 {
                     if (type == ScreenSpaceReflectionsType.None)
                     {
@@ -365,8 +368,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                Bloom b = profile.GetSetting<Bloom>();
-                if (b != null)
+                if (profile.TryGetSettings(out Bloom b))
                 {
                     b.active = bloom;
                 }
@@ -377,8 +379,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                DepthOfField dof = profile.GetSetting<DepthOfField>();
-                if (dof != null)
+                if (profile.TryGetSettings(out DepthOfField dof))
                 {
                     dof.active = depthOfField;
                 }
@@ -389,13 +390,42 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                MotionBlur mb = profile.GetSetting<MotionBlur>();
-                if (mb != null)
+                if (profile.TryGetSettings(out MotionBlur mb))
                 {
                     mb.active = motionBlur;
                 }
             }
             Data.MotionBlur = motionBlur;
+        }
+
+        private void OptimizeForMobile()
+        {
+            //foreach (Material material in standardMaterials)
+            //{
+            //    material.shader = Shader.Find("Mobile/Diffuse");
+            //}
+
+            foreach (PostProcessProfile profile in profiles)
+            {
+                if (profile.TryGetSettings(out Blur blur))
+                {
+                    blur.active = false;
+                }
+            }
+
+            foreach (PostProcessProfile profile in profiles)
+            {
+                if (profile.TryGetSettings(out Bloom bloom))
+                {
+                    bloom.fastMode.value = true;
+                }
+            }
+
+            foreach (PWaterProfile waterProfile in waterProfiles)
+            {
+                waterProfile.LightingModel = PLightingModel.BlinnPhong;
+                waterProfile.EnableFoamHQ = false;
+            }
         }
         #endregion
 
@@ -573,6 +603,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Data.InterfaceScale = scale;
         }
         #endregion
+
         #endregion
     }
 }

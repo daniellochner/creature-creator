@@ -291,6 +291,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void Revert()
         {
+            // Defaults
             Resolution = Screen.currentResolution;
             Fullscreen = true;
             VSync = false;
@@ -336,16 +337,26 @@ namespace DanielLochner.Assets.CreatureCreator
             JoystickPositionVertical = 0.4f;
             InterfaceScale = 1f;
 
-
-            // ...overrides
+            // Overrides
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
                 TargetFrameRate = 60;
-                ShadowQuality = ShadowQualityType.None;
-                AmbientOcclusion = AmbientOcclusionType.SAO;
-                TextureQuality = TextureQualityType.Medium;
-                Foliage = FoliageType.Low;
                 Bloom = false;
+
+                if (SystemUtility.IsLowEndDevice)
+                {
+                    ShadowQuality = ShadowQualityType.None;
+                    AmbientOcclusion = AmbientOcclusionType.None;
+                    TextureQuality = TextureQualityType.Medium;
+                    Foliage = FoliageType.VeryLow;
+                }
+                else
+                {
+                    ShadowQuality = ShadowQualityType.Low;
+                    AmbientOcclusion = AmbientOcclusionType.MSVO;
+                    TextureQuality = TextureQualityType.High;
+                    Foliage = FoliageType.Low;
+                }
             }
         }
         #endregion
