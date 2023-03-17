@@ -561,6 +561,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     return typeof(ExtremityConstructor);
                 case "Foot":
                     return typeof(FootConstructor);
+                case "Wing":
+                    return typeof(WingConstructor);
             }
             return typeof(BodyPartConstructor);
         }
