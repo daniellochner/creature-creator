@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureQuality boneSettings;
         [SerializeField] private MinMax minMaxBones = new MinMax(2, 20);
         [SerializeField] private float density = 500f;
+        [SerializeField] private int maxLightSources = 3;
         [SerializeField] private MinMax minMaxBodySpeed = new MinMax(-1f, 0f);
         [SerializeField] private MinMax minMaxBodyHealth = new MinMax(0, 250);
         [SerializeField] private MinMax minMaxBodyWeight = new MinMax(10f, 1000f);
@@ -55,6 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureStatistics Statistics => statistics;
         public CreatureDimensions Dimensions => dimensions;
         public float Density => density;
+        public int MaxLightSources => maxLightSources;
 
         public Mesh Mesh { get; private set; }
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
@@ -96,6 +98,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 isTextured = value;
                 Mesh.uv = isTextured ? Mesh.uv8 : null;
             }
+        }
+        public int LightSources
+        {
+            get; set;
         }
         #endregion
 

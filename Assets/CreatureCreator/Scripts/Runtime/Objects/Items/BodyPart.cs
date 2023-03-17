@@ -19,6 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float weight;
         [SerializeField] private float speed;
         [SerializeField, Range(1, 5)] private int appeal = 1;
+        [SerializeField] private bool isLightSource;
 
         [SerializeField] private Transformation transformations;
         [SerializeField, HasFlag("transformations", Transformation.Pivot | Transformation.PivotXY)] public float pivotOffset = 0.5f;
@@ -70,6 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set => speed = value;
         }
 
+        public bool IsLightSource => isLightSource;
         public int Appeal => appeal;
         public float PivotOffset => pivotOffset;
         public float RotateScaleFactor => rotateScaleFactor;

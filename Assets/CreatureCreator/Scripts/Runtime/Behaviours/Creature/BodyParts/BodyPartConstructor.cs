@@ -175,10 +175,28 @@ namespace DanielLochner.Assets.CreatureCreator
         public virtual void Add()
         {
             CreatureConstructor.BodyParts.Add(this);
+
+            if (bodyPart.IsLightSource)
+            {
+                CreatureConstructor.LightSources++;
+
+                if (CreatureConstructor.LightSources > CreatureConstructor.MaxLightSources)
+                {
+                    foreach (Light light in GetComponentsInChildren<Light>())
+                    {
+                        light.enabled = false;
+                    }
+                }
+            }
         }
         public virtual void Remove()
         {
             CreatureConstructor.BodyParts.Remove(this);
+
+            if (bodyPart.IsLightSource)
+            {
+                CreatureConstructor.LightSources--;
+            }
         }
 
         public virtual void Attach(AttachedBodyPart attachedBodyPart)
