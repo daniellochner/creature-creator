@@ -32,11 +32,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector antialiasingOS;
         [SerializeField] private OptionSelector screenSpaceReflectionsOS;
         [SerializeField] private OptionSelector foliageOS;
+        [SerializeField] private Toggle ambientParticlesToggle;
         [SerializeField] private Toggle reflectionsToggle;
         [SerializeField] private Toggle anisotropicFilteringToggle;
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Toggle depthOfFieldToggle;
         [SerializeField] private Toggle motionBlurToggle;
+        [SerializeField] private ParticleSystem[] ambientParticles;
 
         [Header("Audio")]
         [SerializeField] private Slider masterVolumeSlider;
@@ -268,6 +270,25 @@ namespace DanielLochner.Assets.CreatureCreator
             foliageOS.OnSelected.AddListener(delegate (int option)
             {
                 SettingsManager.Instance.SetFoliage((FoliageType)option);
+            });
+
+            // Ambient Particles
+            ambientParticlesToggle.SetIsOnWithoutNotify(SettingsManager.Data.AmbientParticles);
+            ambientParticlesToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                foreach (ParticleSystem system in ambientParticles)
+                {
+                    if (isOn)
+                    {
+                        system.Play(true);
+                    }
+                    else
+                    {
+                        system.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
+                }
+
+                SettingsManager.Instance.SetAmbientParticles(isOn);
             });
 
             // Reflections

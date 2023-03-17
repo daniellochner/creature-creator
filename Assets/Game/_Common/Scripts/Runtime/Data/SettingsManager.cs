@@ -351,6 +351,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.Foliage = type;
         }
+        public void SetAmbientParticles(bool ambientParticles)
+        {
+            Data.AmbientParticles = ambientParticles;
+        }
         public void SetReflections(bool reflections)
         {
             //foreach (PWaterProfile waterProfile in waterProfiles)
