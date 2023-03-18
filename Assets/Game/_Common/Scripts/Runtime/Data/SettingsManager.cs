@@ -50,6 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetAntialiasing(Data.Antialiasing);
             SetScreenSpaceReflections(Data.ScreenSpaceReflections);
             SetFoliage(Data.Foliage);
+            SetAmbientParticles(Data.AmbientParticles);
             SetReflections(Data.Reflections);
             SetAnisotropicFiltering(Data.AnisotropicFiltering);
             SetBloom(Data.Bloom);
@@ -404,11 +405,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OptimizeForMobile()
         {
-            //foreach (Material material in standardMaterials)
-            //{
-            //    material.shader = Shader.Find("Mobile/Diffuse");
-            //}
-
             foreach (PostProcessProfile profile in profiles)
             {
                 if (profile.TryGetSettings(out Blur blur))
