@@ -300,6 +300,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 Flipped.Select.Outline.enabled = IsSelected;
             });
+			
+			Click.OnRightClick.AddListener(delegate 
+			{
+                transform.localRotation *= Quaternion.Euler(0, 0f, 180f);
+                BodyPartConstructor.Flip(false);
+            });
         }
         private void SetupConstruction()
         {

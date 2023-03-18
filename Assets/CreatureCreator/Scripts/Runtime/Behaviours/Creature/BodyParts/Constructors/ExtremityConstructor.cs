@@ -42,9 +42,9 @@ namespace DanielLochner.Assets.CreatureCreator
             ConnectToLimb(distance < distanceF ? connectedLimb : connectedLimbF); // Connect to whichever is closer.
         }
 
-        public override void Flip()
+        public override void Flip(bool align = true)
         {
-            base.Flip();
+            base.Flip(align);
 
             // Connected Limb
             FlippedExtremity.ConnectToLimb(ConnectedLimb.FlippedLimb);
