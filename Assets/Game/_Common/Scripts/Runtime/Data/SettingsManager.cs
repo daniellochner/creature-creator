@@ -157,19 +157,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     case ShadowQualityType.Low:
                         QualitySettings.shadowResolution = ShadowResolution.Low;
-                        QualitySettings.shadowDistance = 50;
+                        QualitySettings.shadowDistance = 10;
                         break;
                     case ShadowQualityType.Medium:
                         QualitySettings.shadowResolution = ShadowResolution.Medium;
-                        QualitySettings.shadowDistance = 100;
+                        QualitySettings.shadowDistance = 25;
                         break;
                     case ShadowQualityType.High:
                         QualitySettings.shadowResolution = ShadowResolution.High;
-                        QualitySettings.shadowDistance = 150;
+                        QualitySettings.shadowDistance = 50;
                         break;
                     case ShadowQualityType.VeryHigh:
                         QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
-                        QualitySettings.shadowDistance = 200;
+                        QualitySettings.shadowDistance = 100;
                         break;
                 }
             }
