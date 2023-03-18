@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -74,6 +75,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureSpeedup SpeedUp => speedUp;
         public CreatureGrounded Grounded => grounded;
         public MinimapIcon MinimapIcon => minimapIcon;
+
+        public static List<CreatureBase> Creatures { get; set; } = new List<CreatureBase>();
         #endregion
 
         #region Methods
@@ -104,6 +107,14 @@ namespace DanielLochner.Assets.CreatureCreator
             minimapIcon = GetComponent<MinimapIcon>();
         }
 #endif
+        private void OnEnable()
+        {
+            Creatures.Add(this);
+        }
+        private void OnDisable()
+        {
+            Creatures.Remove(this);
+        }
 
         public virtual void Setup()
         {
