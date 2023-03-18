@@ -11,6 +11,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private float threshold = 0f;
         [SerializeField] private UnityEvent onClick = new UnityEvent();
+        [SerializeField] private UnityEvent onRightClick = new UnityEvent();
 
         private Vector2 initialMousePosition;
         private bool pressed;
@@ -22,29 +23,39 @@ namespace DanielLochner.Assets
             get => threshold;
             set => threshold = value;
         }
-        public UnityEvent OnClick
-        {
-            get => onClick;
-        }
+
+        public UnityEvent OnLeftClick => onClick;
+        public UnityEvent OnRightClick => onRightClick;
         #endregion
 
         #region Methods
-        private void OnMouseDown()
+        private void OnMouseOver()
         {
-            if (CanvasUtility.IsPointerOverUI) return;
-            initialMousePosition = Input.mousePosition;
-            pressed = true;
+            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && !CanvasUtility.IsPointerOverUI)
+            {
+                initialMousePosition = Input.mousePosition;
+                pressed = true;
+            }
         }
         private void Update()
         {
-            if (Input.GetMouseButtonUp(0) && pressed)
+            if (pressed)
             {
-                if (CanvasUtility.IsPointerOverUI || !isActiveAndEnabled) return;
-                if (Vector2.Distance(Input.mousePosition, initialMousePosition) <= threshold)
+                if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
                 {
-                    OnClick.Invoke();
+                    if (Vector2.Distance(Input.mousePosition, initialMousePosition) <= threshold)
+                    {
+                        if (Input.GetMouseButtonUp(0))
+                        {
+                            OnLeftClick.Invoke();
+                        }
+                        if (Input.GetMouseButtonUp(1))
+                        {
+                            OnRightClick.Invoke();
+                        }
+                    }
+                    pressed = false;
                 }
-                pressed = false;
             }
         }
         #endregion
