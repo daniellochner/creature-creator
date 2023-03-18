@@ -3,6 +3,7 @@
 
 using IngameDebugConsole;
 using Pinwheel.Griffin;
+using Pinwheel.Jupiter;
 using Pinwheel.Poseidon;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PostProcessProfile[] profiles;
         [SerializeField] private PWaterProfile[] waterProfiles;
         [SerializeField] private GRendering[] renderingProfiles;
+        [SerializeField] private JSkyProfile[] skyProfiles;
         [SerializeField] private Material[] windMaterials;
         [Space]
         [SerializeField] private AudioMixer masterAudioMixer;
@@ -354,6 +356,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetAmbientParticles(bool ambientParticles)
         {
+            foreach (JSkyProfile profile in skyProfiles)
+            {
+                profile.EnableOverheadCloud = ambientParticles;
+            }
             Data.AmbientParticles = ambientParticles;
         }
         public void SetReflections(bool reflections)
