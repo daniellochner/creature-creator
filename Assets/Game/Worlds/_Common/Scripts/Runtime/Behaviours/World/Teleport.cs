@@ -148,6 +148,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 cinematic.OnTeleport = InitializeTeleport;
             }
             cinematic.Begin();
+
+            Player.Instance.gameObject.SetActive(false);
         }
         [ClientRpc]
         private void UnlockMapClientRpc()
