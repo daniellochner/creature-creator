@@ -603,7 +603,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 drag.updatePlaneOnPress = true;
                 
                 Click click = addedBoneGO.AddComponent<Click>();
-                click.OnClick.AddListener(delegate
+                click.OnLeftClick.AddListener(delegate
                 {
                     if (EditorManager.Instance.IsBuilding)
                     {
