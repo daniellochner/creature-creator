@@ -4,6 +4,20 @@ namespace DanielLochner.Assets
 {
     public static class PhysicsUtility
     {
+        public static Collider[] Overlap(Collider collider)
+        {
+            if (collider is SphereCollider)
+            {
+                return Physics.OverlapSphere(collider.transform.position, (collider as SphereCollider).radius);
+            }
+            else
+            if (collider is BoxCollider)
+            {
+                return Physics.OverlapBox(collider.transform.position, (collider as BoxCollider).size);
+            }
+            return null;
+        }
+
         public static Vector3? RaycastCone(Vector3 origin, Vector3 dir, float length, float angle, int n, int m, int layerMask, Vector3 normal, float alignmentThreshold, out RaycastHit? hit)
         {
             hit = null;
