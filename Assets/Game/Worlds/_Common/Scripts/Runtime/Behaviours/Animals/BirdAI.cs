@@ -45,7 +45,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     foreach (Transform point in perchPoints)
                     {
                         bool isFarEnough = true;
-                        Debug.Log(CreatureBase.Creatures.Count);
                         foreach (CreatureBase creature in CreatureBase.Creatures)
                         {
                             if (!Vector3Utility.SqrDistanceComp(creature.transform.position, point.position, minDistanceFromCreature))
