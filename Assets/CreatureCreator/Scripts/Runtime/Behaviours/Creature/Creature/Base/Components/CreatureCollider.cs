@@ -11,17 +11,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private MinMax minMaxRadius;
         [SerializeField] private MinMax minMaxHeight;
-
-        private CapsuleCollider capsule;
         #endregion
 
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
 
-        public float Radius => capsule.radius;
-        public float Height => capsule.height;
+        public float Radius => Hitbox.radius;
+        public float Height => Hitbox.height;
 
-        public CapsuleCollider Capsule => capsule;
+        public CapsuleCollider Hitbox { get; private set; }
         #endregion
 
         #region Methods
@@ -31,25 +29,25 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnEnable()
         {
-            capsule.enabled = true;
+            Hitbox.enabled = true;
             UpdateCollider();
         }
         private void OnDisable()
         {
-            capsule.enabled = false;
+            Hitbox.enabled = false;
         }
 
         private void Initialize()
         {
-            capsule = GetComponent<CapsuleCollider>();
+            Hitbox = GetComponent<CapsuleCollider>();
             Constructor = GetComponent<CreatureConstructor>();
         }
 
         public void UpdateCollider()
         {
-            capsule.height = minMaxHeight.Clamp(Constructor.Dimensions.height);
-            capsule.radius = minMaxRadius.Clamp(Constructor.Dimensions.radius);
-            capsule.center = Vector3.up * Mathf.Max(capsule.radius, capsule.height / 2f);
+            Hitbox.height = minMaxHeight.Clamp(Constructor.Dimensions.height);
+            Hitbox.radius = minMaxRadius.Clamp(Constructor.Dimensions.radius);
+            Hitbox.center = Vector3.up * Mathf.Max(Hitbox.radius, Hitbox.height / 2f);
         }
         #endregion
     }

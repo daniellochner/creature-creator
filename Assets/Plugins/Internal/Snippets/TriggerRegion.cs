@@ -35,7 +35,7 @@ namespace DanielLochner.Assets
             region = GetComponent<Collider>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             if (CanEnter(other) && !entered.Contains(other) && !ignored.Contains(other.name))
             {
@@ -43,7 +43,7 @@ namespace DanielLochner.Assets
                 entered.Add(other);
             }
         }
-        private void OnTriggerExit(Collider other)
+        public void OnTriggerExit(Collider other)
         {
             if (entered.Contains(other) && !ignored.Contains(other.name))
             {

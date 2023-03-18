@@ -66,7 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (IsOnRaft && other.CompareTag("Raft"))
                 {
                     IsOnRaft = false;
-                    water.OnTriggerEnter(Collider.Capsule);
+                    water.OnTriggerEnter(Collider.Hitbox);
                 }
 
                 if (other.CompareTag("Water"))

@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ExitCrackCinematic exitCrackCinematic;
         [Space]
         [SerializeField] private Platform raftPlatform;
+        [SerializeField] private TriggerRegion water;
         #endregion
 
         #region Methods
@@ -23,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 arriveOnRaftCinematic.Begin();
                 raftPlatform.TeleportTo(false);
+                water.OnTriggerEnter(Player.Instance.Collider.Hitbox);
             }
             else
             if (prevScene == "Sandbox")
