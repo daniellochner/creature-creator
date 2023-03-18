@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<string> hiddenBodyParts;
         [SerializeField] private List<string> hiddenPatterns;
         [SerializeField] private string locale;
+        [SerializeField] private int touchOffset = 100;
         [SerializeField] private bool cameraShake;
         [SerializeField] private bool vibrations = true;
         [SerializeField] private bool debugMode;
@@ -211,6 +212,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => locale;
             set => locale = value;
         }
+        public int TouchOffset
+        {
+            get => touchOffset;
+            set => touchOffset = value;
+        }
         public bool CameraShake
         {
             get => cameraShake;
@@ -331,6 +337,7 @@ namespace DanielLochner.Assets.CreatureCreator
             OnlineUsername = "";
             CreaturePresets.Clear();
             ExportPrecision = 3;
+            TouchOffset = 100;
             CameraShake = true;
             Vibrations = true;
             DebugMode = false;

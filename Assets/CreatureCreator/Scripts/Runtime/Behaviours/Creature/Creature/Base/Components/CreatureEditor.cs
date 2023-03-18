@@ -54,7 +54,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public float TouchOffset => touchOffset;
+        public float TouchOffset
+        {
+            get => touchOffset;
+            set => touchOffset = value;
+        }
         public float HoldTime => holdTime;
         public float HoldThreshold => holdThreshold;
         public float AddOrRemoveCooldown => addOrRemoveCooldown;

@@ -32,6 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private NetworkStatsManager statsManagerPrefab;
         [SerializeField] private GameObject creatureBasePrefab;
+        [SerializeField] private GameObject creaturePlayerPrefab;
         [Space]
         [SerializeField] private CameraOrbit cameraOrbitPrefab;
         #endregion
@@ -68,6 +69,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SetOnlineUsername(Data.OnlineUsername);
             SetExportPrecision(Data.ExportPrecision);
+            SetTouchOffset(Data.TouchOffset);
             SetCameraShake(Data.CameraShake);
             SetDebugMode(Data.DebugMode);
             SetPreviewFeatures(Data.PreviewFeatures);
@@ -490,6 +492,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetExportPrecision(int precision)
         {
             Data.ExportPrecision = precision;
+        }
+        public void SetTouchOffset(int touchOffset)
+        {
+            CreatureEditor editor = creaturePlayerPrefab.GetComponent<CreatureEditor>();
+            editor.TouchOffset = Data.TouchOffset = touchOffset;
         }
         public void SetCameraShake(bool cameraShake, bool updateMain = false)
         {

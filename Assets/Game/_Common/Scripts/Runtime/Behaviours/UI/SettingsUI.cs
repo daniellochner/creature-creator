@@ -73,6 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider joystickVerticalSlider;
         [SerializeField] private CanvasGroup joystickHorizontalCG;
         [SerializeField] private CanvasGroup joystickVerticalCG;
+        [SerializeField] private Slider touchOffsetSlider;
 
         private Coroutine previewMusicCoroutine;
         #endregion
@@ -408,6 +409,17 @@ namespace DanielLochner.Assets.CreatureCreator
             exportPrecisionSlider.onValueChanged.AddListener(delegate (float precision)
             {
                 SettingsManager.Instance.SetExportPrecision((int)precision);
+            });
+
+            // Touch Offset
+            touchOffsetSlider.value = SettingsManager.Data.TouchOffset;
+            touchOffsetSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                if (inGame)
+                {
+                    Player.Instance.Editor.TouchOffset = value;
+                }
+                SettingsManager.Instance.SetTouchOffset((int)value);
             });
 
             // Camera Shake
