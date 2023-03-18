@@ -17,15 +17,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitUntil(() => EditorManager.Instance.IsPlaying);
                 yield return new WaitForSeconds(1f);
 
-                InformationDialog.Inform(LocalizationUtility.Localize("cc_fast-travel_title"), LocalizationUtility.Localize("cc_fast-travel_message"));
+                Show();
                 PlayerPrefs.SetInt("FAST_TRAVEL_REMINDER", 1);
 
                 yield return new WaitForSeconds(300f);
                 if (Remind)
                 {
-                    InformationDialog.Inform(LocalizationUtility.Localize("cc_fast-travel_title"), LocalizationUtility.Localize("cc_fast-travel_message"));
+                    Show();
                 }
             }
+        }
+
+        private void Show()
+        {
+            string title = LocalizationUtility.Localize("cc_fast-travel_title");
+            string message = LocalizationUtility.Localize("cc_fast-travel_message") + $"_{SystemUtility.DeviceType}".ToLower();
+            InformationDialog.Inform(title, message);
         }
         #endregion
     }
