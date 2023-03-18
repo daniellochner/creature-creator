@@ -46,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<string> hiddenPatterns;
         [SerializeField] private string locale;
         [SerializeField] private bool cameraShake;
+        [SerializeField] private bool vibrations = true;
         [SerializeField] private bool debugMode;
         [SerializeField] private bool previewFeatures;
         [SerializeField] private bool networkStats;
@@ -215,6 +216,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => cameraShake;
             set => cameraShake = value;
         }
+        public bool Vibrations
+        {
+            get => vibrations;
+            set => vibrations = value;
+        }
         public bool DebugMode
         {
             get => debugMode;
@@ -326,6 +332,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreaturePresets.Clear();
             ExportPrecision = 3;
             CameraShake = true;
+            Vibrations = true;
             DebugMode = false;
             PreviewFeatures = false;
             NetworkStats = true;

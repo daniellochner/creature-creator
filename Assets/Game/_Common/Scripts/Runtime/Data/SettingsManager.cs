@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using IngameDebugConsole;
+using MoreMountains.NiceVibrations;
 using Pinwheel.Griffin;
 using Pinwheel.Jupiter;
 using Pinwheel.Poseidon;
@@ -509,6 +510,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.CameraShake = cameraShake;
         }
+        public void SetVibrations(bool vibrations)
+        {
+            MMVibrationManager.SetHapticsActive(vibrations);
+            Data.Vibrations = vibrations;
+        }
         public void SetDebugMode(bool debugMode)
         {
             DebugLogManager.Instance.gameObject.SetActive(debugMode);
@@ -609,7 +615,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Data.InterfaceScale = scale;
         }
         #endregion
-
         #endregion
     }
 }

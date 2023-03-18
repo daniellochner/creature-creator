@@ -52,6 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
         [SerializeField] private Toggle cameraShakeToggle;
+        [SerializeField] private Toggle vibrationsToggle;
         [SerializeField] private Toggle debugModeToggle;
         [SerializeField] private Toggle previewFeaturesToggle;
         [SerializeField] private Toggle networkStatsToggle;
@@ -414,6 +415,13 @@ namespace DanielLochner.Assets.CreatureCreator
             cameraShakeToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetCameraShake(isOn, true);
+            });
+
+            // Vibrations
+            vibrationsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Vibrations);
+            vibrationsToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetVibrations(isOn);
             });
 
             // Debug Mode
