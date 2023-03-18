@@ -15,6 +15,12 @@ namespace DanielLochner.Assets
         #region Properties
         public UnityEvent OnShow => onShow;
         public UnityEvent OnHide => onHide;
+
+        public float Radius
+        {
+            get => radius;
+            set => radius = value;
+        }
         #endregion
 
         #region Methods
