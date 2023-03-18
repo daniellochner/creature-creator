@@ -1,3 +1,4 @@
+using MoreMountains.NiceVibrations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,6 +44,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 flag.SetActive(false);
 
                 audioSource.Play();
+
+                MMVibrationManager.Haptic(HapticTypes.Success);
             }
         }
         #endregion

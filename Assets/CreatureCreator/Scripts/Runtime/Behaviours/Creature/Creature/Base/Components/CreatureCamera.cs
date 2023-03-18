@@ -1,3 +1,4 @@
+using MoreMountains.NiceVibrations;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -61,6 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Health.OnTakeDamage += delegate (float damage, Vector3 point)
             {
                 StressReceiver.InduceStress(Mathf.Lerp(minMaxStress.min, minMaxStress.max, Mathf.InverseLerp(minMaxDamage.min, minMaxDamage.max, damage)));
+                MMVibrationManager.Haptic(HapticTypes.LightImpact);
             };
 
             IsSetup = true;

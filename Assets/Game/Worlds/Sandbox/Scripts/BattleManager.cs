@@ -1,3 +1,4 @@
+using MoreMountains.NiceVibrations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -90,6 +91,8 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
             StatsManager.Instance.UnlockAchievement("ACH_GLADIATOR");
 #endif
+
+            MMVibrationManager.Haptic(HapticTypes.Success);
         }
         [ClientRpc]
         private void StartRoundClientRpc()

@@ -1,3 +1,4 @@
+using MoreMountains.NiceVibrations;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -113,10 +114,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 minimapIcon.enabled = false;
 
                 IsCompleted = true;
-
+                
 #if USE_STATS
                 StatsManager.Instance.CompletedQuests++;
 #endif
+
+                MMVibrationManager.Haptic(HapticTypes.Success);
             }
         }
         private void OnTriggerExit(Collider other)

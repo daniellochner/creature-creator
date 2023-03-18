@@ -1,3 +1,4 @@
+using MoreMountains.NiceVibrations;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -31,6 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Input.GetMouseButtonDown(1) && !CanvasUtility.IsPointerOverUI)
             {
                 receiver.InduceStress(stress);
+
                 audioSource.PlayOneShot(rumble);
                 foreach (Transform spawnPoint in impactSpawnPoints)
                 {
@@ -46,6 +48,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     nest.SetActive(true);
                 }
+
+                MMVibrationManager.Haptic(HapticTypes.LightImpact);
             }
         }
         #endregion
