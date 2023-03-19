@@ -28,16 +28,19 @@ namespace DanielLochner.Assets
         {
             Gizmos.DrawWireSphere(transform.position, radius);
         }
-        private void OnEnable()
+        private void Start()
         {
             if (!VisibilityManager.Instance.Objects.Contains(this))
             {
                 VisibilityManager.Instance.Objects.Add(this);
             }
         }
-        private void OnDisable()
+        private void OnDestroy()
         {
-            VisibilityManager.Instance.Objects.Remove(this);
+            if (VisibilityManager.Instance)
+            {
+                VisibilityManager.Instance.Objects.Remove(this);
+            }
         }
 
         public void Show()
