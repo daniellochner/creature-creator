@@ -9,54 +9,27 @@ using static DanielLochner.Assets.CreatureCreator.Settings;
 
 public class Testing : MonoBehaviour
 {
-    //public Database bodyparts;
+    public Database bodyparts;
 
-    //[ContextMenu("UPDATE")]
-    //public void UpdateSMR()
-    //{
-    //    foreach (var bp in bodyparts.Objects.Values)
-    //    {
-    //        DanielLochner.Assets.CreatureCreator.BodyPart bodypart = bp as DanielLochner.Assets.CreatureCreator.BodyPart;
+    [ContextMenu("UPDATE")]
+    public void UpdateSMR()
+    {
+        foreach (var bp in bodyparts.Objects.Values)
+        {
+            DanielLochner.Assets.CreatureCreator.BodyPart bodypart = bp as DanielLochner.Assets.CreatureCreator.BodyPart;
 
-    //        foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Animatable).GetComponentsInChildren<SkinnedMeshRenderer>())
-    //        {
-    //            r.updateWhenOffscreen = false;
-    //        }
-    //        foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Constructible).GetComponentsInChildren<SkinnedMeshRenderer>())
-    //        {
-    //            r.updateWhenOffscreen = false;
-    //        }
-    //    }
-    //}
-
-
-
-    //[ContextMenu("ADD OPTIONS")]
-    //public void AddOptions()
-    //{
-    //    var table = LocalizationSettings.StringDatabase.GetTable("ui-static");
-
-    //    AddAll<Mode>(table);
-    //    AddAll<PresetType>(table);
-    //    AddAll<CreatureMeshQualityType>(table);
-    //    AddAll<ShadowQualityType>(table);
-    //    AddAll<TextureQualityType>(table);
-    //    AddAll<AmbientOcclusionType>(table);
-    //    AddAll<AntialiasingType>(table);
-    //    AddAll<ScreenSpaceReflectionsType>(table);
-    //    AddAll<FoliageType>(table);
-
-    //    EditorUtility.SetDirty(table);
-
-    //    EditorUtility.SetDirty(table.SharedData);
-    //}
-
-    //public void AddAll<T>(StringTable table)
-    //{
-    //    foreach (var type in Enum.GetValues(typeof(T)))
-    //    {
-    //        string id = $"option-{typeof(T).Name.ToLower()}-{type.ToString().ToLower()}";
-    //        table.AddEntry(id, type.ToString());
-    //    }
-    //}
+            foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Animatable).GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                r.allowOcclusionWhenDynamic = false;
+            }
+            foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Constructible).GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                r.allowOcclusionWhenDynamic = false;
+            }
+            foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Editable).GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                r.allowOcclusionWhenDynamic = false;
+            }
+        }
+    }
 }

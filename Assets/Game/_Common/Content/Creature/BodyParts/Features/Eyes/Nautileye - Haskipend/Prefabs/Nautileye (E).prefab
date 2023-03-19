@@ -203,7 +203,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -232,6 +236,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: 0
   onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1766256044066065186
@@ -292,7 +299,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -351,7 +362,7 @@ SkinnedMeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
