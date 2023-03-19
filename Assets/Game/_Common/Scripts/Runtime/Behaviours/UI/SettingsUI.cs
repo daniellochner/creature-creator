@@ -275,7 +275,6 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Ambient Particles
-            ambientParticlesToggle.SetIsOnWithoutNotify(SettingsManager.Data.AmbientParticles);
             ambientParticlesToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 foreach (ParticleSystem system in ambientParticles)
@@ -292,6 +291,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 SettingsManager.Instance.SetAmbientParticles(isOn);
             });
+            ambientParticlesToggle.isOn = SettingsManager.Data.AmbientParticles;
 
             // Reflections
             reflectionsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Reflections);
