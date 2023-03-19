@@ -21,14 +21,19 @@ public class Testing : MonoBehaviour
             foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Animatable).GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 r.allowOcclusionWhenDynamic = false;
+                r.skinnedMotionVectors = false;
             }
             foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Constructible).GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 r.allowOcclusionWhenDynamic = false;
+                r.skinnedMotionVectors = false;
+
             }
             foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Editable).GetComponentsInChildren<SkinnedMeshRenderer>())
             {
                 r.allowOcclusionWhenDynamic = false;
+                r.skinnedMotionVectors = false;
+
             }
         }
     }
