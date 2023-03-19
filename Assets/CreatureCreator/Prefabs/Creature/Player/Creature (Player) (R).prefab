@@ -248,14 +248,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 931e3efde70bd5943a5a2013cd9c7aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isVisible: 0
+  isVisible: 1
   radius: 50
   onShow:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4288748506731609680}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHide:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4288748506731609680}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7967759381274843253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +312,8 @@ MonoBehaviour:
   comparer: {fileID: 3209544874862531547}
   underwater: {fileID: 341221358533015153}
   speedUp: {fileID: 5810437394869824179}
+  grounded: {fileID: 8166979559846952157}
+  minimapIcon: {fileID: 6534830369455530100}
   namer: {fileID: 484727593248719455}
   deathMessenger: {fileID: 5920988887648741201}
   messenger: {fileID: 4886571779201347070}
@@ -441,6 +467,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6534830369455530100 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6581182270410712916, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 136638444904974112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646305851666112926}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5b753a4f5a83942bba288613a30455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &6768347154810087137 stripped
 CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 6631708856504426945, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
@@ -510,5 +547,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89c26be046fb93b48b92c194344c7f32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8166979559846952157 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8121009730630237181, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 136638444904974112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646305851666112926}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
