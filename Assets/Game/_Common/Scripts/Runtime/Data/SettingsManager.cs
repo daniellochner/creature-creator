@@ -420,20 +420,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     blur.active = false;
                 }
-            }
-
-            foreach (PostProcessProfile profile in profiles)
-            {
                 if (profile.TryGetSettings(out Bloom bloom))
                 {
                     bloom.fastMode.value = true;
                 }
             }
 
-            foreach (PWaterProfile waterProfile in waterProfiles)
+            // Can't change water at runtime...
+            //foreach (PWaterProfile waterProfile in waterProfiles)
+            //{
+            //    waterProfile.LightingModel = PLightingModel.BlinnPhong;
+            //    waterProfile.EnableFoamHQ = false;
+            //}
+
+            foreach (GRendering renderingProfile in renderingProfiles)
             {
-                waterProfile.LightingModel = PLightingModel.BlinnPhong;
-                waterProfile.EnableFoamHQ = false;
+                foreach (GGrassPrototype grassPrototype in renderingProfile.TerrainData.Foliage.Grasses.Prototypes)
+                {
+                    grassPrototype.ShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
             }
         }
         #endregion
