@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Show()
         {
             string title = LocalizationUtility.Localize("cc_fast-travel_title");
-            string message = LocalizationUtility.Localize("cc_fast-travel_message") + $"_{SystemUtility.DeviceType}".ToLower();
+            string message = LocalizationUtility.Localize($"cc_fast-travel_message_{SystemUtility.DeviceType}".ToLower());
             InformationDialog.Inform(title, message);
         }
         #endregion
