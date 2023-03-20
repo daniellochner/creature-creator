@@ -1,40 +1,36 @@
-using DanielLochner.Assets;
-using DanielLochner.Assets.CreatureCreator;
-using System;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
-using UnityEngine.Localization.Tables;
-using static DanielLochner.Assets.CreatureCreator.Settings;
-
 public class Testing : MonoBehaviour
 {
-    public Database bodyparts;
 
-    [ContextMenu("UPDATE")]
-    public void UpdateSMR()
+    public GameObject[] terrains;
+
+    public void Update()
     {
-        foreach (var bp in bodyparts.Objects.Values)
+        if (Input.GetKeyUp(KeyCode.I))
         {
-            DanielLochner.Assets.CreatureCreator.BodyPart bodypart = bp as DanielLochner.Assets.CreatureCreator.BodyPart;
-
-            foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Animatable).GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (var smr in FindObjectsOfType<SkinnedMeshRenderer>(true))
             {
-                r.allowOcclusionWhenDynamic = false;
-                r.skinnedMotionVectors = false;
+                smr.enabled = !smr.enabled;
             }
-            foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Constructible).GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                r.allowOcclusionWhenDynamic = false;
-                r.skinnedMotionVectors = false;
+        }
 
+
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            foreach (var t in terrains)
+            {
+                t.SetActive(!t.activeSelf);
             }
-            foreach (SkinnedMeshRenderer r in bodypart.GetPrefab(DanielLochner.Assets.CreatureCreator.BodyPart.PrefabType.Editable).GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                r.allowOcclusionWhenDynamic = false;
-                r.skinnedMotionVectors = false;
+        }
 
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            foreach (var c in FindObjectsOfType< DanielLochner.Assets.CreatureCreator.CreatureNonPlayer>(true))
+            {
+                c.gameObject.SetActive(!c.gameObject.activeSelf);
             }
         }
     }
+
+
 }
