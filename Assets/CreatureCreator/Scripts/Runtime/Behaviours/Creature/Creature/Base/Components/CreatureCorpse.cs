@@ -44,6 +44,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
             foreach (Transform bone in corpse.Bones)
             {
+                BuoyantObject buoyantObject = bone.gameObject.AddComponent<BuoyantObject>();
+                buoyantObject.floatingPoints = new Transform[]
+                {
+                    bone
+                };
+                buoyantObject.floatingPower = 100;
+                buoyantObject.underwaterAngularDrag = 3;
+                buoyantObject.underwaterDrag = 1;
+                buoyantObject.airAngularDrag = 0;
+                buoyantObject.airDrag = 0.05f;
+
                 Edible flesh = Instantiate(fleshPrefab, bone);
                 flesh.GetComponent<SphereCollider>().radius = bone.GetComponent<SphereCollider>().radius;
                 flesh.OnEat.AddListener(delegate
