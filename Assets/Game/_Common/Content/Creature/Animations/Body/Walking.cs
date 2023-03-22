@@ -114,8 +114,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            HandleLegs();
-            HandleBody();
+            if (!Creature.IsOptimized)
+            {
+                HandleLegs();
+                HandleBody();
+            }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

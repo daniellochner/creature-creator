@@ -4,6 +4,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class Swimming : CreatureAnimation
     {
+        #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             FreezeLegs();
@@ -19,5 +20,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 leg.Anchor.SetPositionAndRotation(Creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos), Quaternion.identity);
             }
         }
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 {
     public class Gliding : CreatureAnimation
     {
+        #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             foreach (LegAnimator leg in Creature.Legs)
@@ -24,5 +25,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 walking.StopMovingLegs();
             }
         }
+        #endregion
     }
 }

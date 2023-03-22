@@ -20,7 +20,10 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            TimerUtility.OnTimer(ref blinkTimeLeft, blinkCooldown.Random, Time.deltaTime, Blink);
+            if (!Creature.IsOptimized)
+            {
+                TimerUtility.OnTimer(ref blinkTimeLeft, blinkCooldown.Random, Time.deltaTime, Blink);
+            }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
