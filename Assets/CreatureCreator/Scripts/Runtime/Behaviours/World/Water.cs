@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Pinwheel.Poseidon;
 using Pinwheel.Poseidon.FX;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Ability swimAbility;
         [SerializeField] private GameObject splashPrefab;
         [SerializeField] private UnityEvent<CreaturePlayerLocal> onPlayerEnter;
+
+        private PWater water;
         #endregion
 
         #region Properties
@@ -26,6 +29,11 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Collider = GetComponent<BoxCollider>();
+            water = GetComponent<PWater>();
+        }
+        private void Update()
+        {
+            water.ManualTimeSeconds += Time.deltaTime;
         }
 
         public void OnTriggerEnter(Collider other)
