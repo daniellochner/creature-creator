@@ -124,7 +124,11 @@ namespace DanielLochner.Assets.CreatureCreator
             return (base.CanInteract(interactor) && !IsBehindPlayer) || IsSelected;
         }
 
-        public void SetSelected(bool isSelected, bool instant = false)
+        public void SetSelected(bool isSelected)
+        {
+            SetSelected(isSelected, false);
+        }
+        public void SetSelected(bool isSelected, bool instant)
         {
             if (IsSelected != isSelected)
             {
