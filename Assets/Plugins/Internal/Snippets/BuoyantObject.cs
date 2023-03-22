@@ -9,13 +9,13 @@ namespace DanielLochner.Assets
     public class BuoyantObject : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private Transform[] floatingPoints;
-        [SerializeField] private float floatingPower;
+        [SerializeField] public Transform[] floatingPoints;
+        [SerializeField] public float floatingPower;
         [Space]
-        [SerializeField] private float underwaterAngularDrag;
-        [SerializeField] private float underwaterDrag;
-        [SerializeField] private float airAngularDrag;
-        [SerializeField] private float airDrag;
+        [SerializeField] public float underwaterAngularDrag;
+        [SerializeField] public float underwaterDrag;
+        [SerializeField] public float airAngularDrag;
+        [SerializeField] public float airDrag;
         [Header("Debug")]
         [SerializeField, ReadOnly] private bool isUnderwater;
         [SerializeField, ReadOnly] private int pointsUnderwater;
