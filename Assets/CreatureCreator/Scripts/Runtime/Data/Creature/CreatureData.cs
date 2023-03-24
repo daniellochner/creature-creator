@@ -74,6 +74,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => attachedBodyParts;
         }
+
+        public string Summary
+        {
+            get
+            {
+                return
+                    $"Name: {Name}\n" +
+                    $"Bones: {Bones.Count}\n" +
+                    $"Body Parts: {AttachedBodyParts.Count}\n" +
+                    $"Pattern: {PatternID} ({Tiling}, {Offset})\n" +
+                    $"Colours: #{ColorUtility.ToHtmlStringRGB(PrimaryColour)}/#{ColorUtility.ToHtmlStringRGB(SecondaryColour)} ({Metallic}, {Shine})";
+            }
+        }
         #endregion
 
         #region Methods

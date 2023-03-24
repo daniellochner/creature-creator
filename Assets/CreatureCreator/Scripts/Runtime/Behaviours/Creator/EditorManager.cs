@@ -521,8 +521,13 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             creatureUI.SelectToggle.SetIsOnWithoutNotify(true);
 
-            string path = Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat");
-            SaveUtility.Save(path, creatureData, creatureEncryptionKey.Value);
+            // Data
+            SaveUtility.Save(Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat"), creatureData, creatureEncryptionKey.Value);
+            // Screenshot
+            Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
+            {
+                File.WriteAllBytes(Path.Combine(creaturesDirectory, $"{creatureData.Name}.png"), photo.EncodeToPNG());
+            });
 
             Creature.Editor.LoadedCreature = creatureData.Name;
             Creature.Editor.IsDirty = false;
@@ -721,6 +726,67 @@ namespace DanielLochner.Assets.CreatureCreator
                 SaveUtility.Save(Path.Combine(folderPath, $"{data.Name}.dat"), data);
             }
         }
+        public void TryShare(string creatureName)
+        {
+            string data = Path.Combine(creaturesDirectory, $"{creatureName}.dat");
+            string preview = Path.Combine(creaturesDirectory, $"{creatureName}.png");
+
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(data, creatureEncryptionKey.Value);
+
+            Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
+            {
+                File.WriteAllBytes(preview, photo.EncodeToPNG());
+                Share(data, preview, creatureData.Name, creatureData.Summary);
+            },
+            creatureData);
+
+            //if (!File.Exists(preview))
+            //{
+                
+            //}
+            //else
+            //{
+            //    Share(data, preview, creatureData.Name, creatureData.Summary);
+            //}
+        }
+        public void Share(string data, string preview, string title, string description)
+        {
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                NativeShare share = new NativeShare();
+                share.AddFile(data);
+
+                string link = "";
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    link = "https://play.google.com/store/apps/details?id=com.daniellochner.creaturecreator";
+                }
+                else
+                if (Application.platform == RuntimePlatform.IPhonePlayer)
+                {
+                    link = "https://apps.apple.com/us/app/creature-creator/id1564115819";
+                }
+                else
+                {
+                    link = "https://store.steampowered.com/app/1990050/Creature_Creator/";
+                }
+
+                share.SetTitle(title);
+                share.SetText(LocalizationUtility.Localize("share_subject", link));
+
+                share.Share();
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+#if UNITY_STANDALONE
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("share_title"), LocalizationUtility.Localize("share_message"), onYes: delegate
+                {
+                    SteamWorkshopManager.Instance.SubmitToWorkshop(data, preview, title, description);
+                });
+#endif
+            }
+        }
 
         public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
         {
@@ -914,31 +980,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             creatureUI.ShareButton.onClick.AddListener(delegate
             {
-                if (SystemUtility.IsDevice(DeviceType.Handheld))
-                {
-                    NativeShare share = new NativeShare();
-                    share.AddFile(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
-
-                    string link = "";
-                    if (Application.platform == RuntimePlatform.Android)
-                    {
-                        link = "https://play.google.com/store/apps/details?id=com.daniellochner.creaturecreator";
-                    }
-                    else
-                    if (Application.platform == RuntimePlatform.IPhonePlayer)
-                    {
-                        link = "https://apps.apple.com/us/app/creature-creator/id1564115819";
-                    }
-                    else
-                    {
-                        link = "https://store.steampowered.com/app/1990050/Creature_Creator/";
-                    }
-
-                    share.SetTitle(creatureName);
-                    share.SetSubject(LocalizationUtility.Localize("share_subject", link));
-
-                    share.Share();
-                }
+                TryShare(creatureName);
             });
 
             return creatureUI;

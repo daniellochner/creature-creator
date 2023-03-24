@@ -30,7 +30,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             nameText.text = name = creatureName;
             transform.SetAsFirstSibling();
-            shareButton.gameObject.SetActive(SystemUtility.IsDevice(DeviceType.Handheld));
         }
         #endregion
     }
