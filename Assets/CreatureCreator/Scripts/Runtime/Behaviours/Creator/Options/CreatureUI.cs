@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button errorButton;
         [SerializeField] private Button removeButton;
         [SerializeField] private Button shareButton;
+        [SerializeField] private GameObject progress;
         #endregion
 
         #region Properties
@@ -23,6 +24,16 @@ namespace DanielLochner.Assets.CreatureCreator
         public Button ErrorButton => errorButton;
         public Button RemoveButton => removeButton;
         public Button ShareButton => shareButton;
+        public GameObject Progress => progress;
+
+        public bool IsLoading
+        {
+            set
+            {
+                progress.SetActive(value);
+                shareButton.gameObject.SetActive(!value);
+            }
+        }
         #endregion
 
         #region Methods

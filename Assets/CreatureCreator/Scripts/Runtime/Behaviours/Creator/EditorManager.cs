@@ -18,6 +18,10 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.Localization;
 using Crosstales.FB;
 
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
+
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class EditorManager : MonoBehaviourSingleton<EditorManager>
@@ -100,6 +104,9 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isVisible = true, isEditing = true;
         private bool isUpdatingLoadableCreatures;
         private Coroutine visibleCoroutine;
+        private WorkshopData currentWorkshopData;
+        private UGCUpdateHandle_t handle;
+        private CreatureUI currentCreatureUI;
         #endregion
 
         #region Properties
@@ -521,13 +528,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             creatureUI.SelectToggle.SetIsOnWithoutNotify(true);
 
-            // Data
             SaveUtility.Save(Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat"), creatureData, creatureEncryptionKey.Value);
-            // Screenshot
-            Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
-            {
-                File.WriteAllBytes(Path.Combine(creaturesDirectory, $"{creatureData.Name}.png"), photo.EncodeToPNG());
-            });
 
             Creature.Editor.LoadedCreature = creatureData.Name;
             Creature.Editor.IsDirty = false;
@@ -726,28 +727,32 @@ namespace DanielLochner.Assets.CreatureCreator
                 SaveUtility.Save(Path.Combine(folderPath, $"{data.Name}.dat"), data);
             }
         }
-        public void TryShare(string creatureName)
+        public void TryShare(string name)
         {
-            string data = Path.Combine(creaturesDirectory, $"{creatureName}.dat");
-            string preview = Path.Combine(creaturesDirectory, $"{creatureName}.png");
+            string data = Path.Combine(creaturesDirectory, $"{name}.dat");
+            string preview = Path.Combine(creaturesDirectory, $"{name}.png");
 
             CreatureData creatureData = SaveUtility.Load<CreatureData>(data, creatureEncryptionKey.Value);
+
+            string bodyParts = "";
+            foreach (AttachedBodyPart abp in creatureData.AttachedBodyParts)
+            {
+                bodyParts += (DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", abp.bodyPartID).name + ", ");
+            }
+            bodyParts = bodyParts.Substring(0, bodyParts.Length - 2);
+
+            string description = 
+                $"Bones: {creatureData.Bones.Count}\n" +
+                $"Body Parts: {creatureData.AttachedBodyParts.Count} ({bodyParts})\n" +
+                $"Pattern: {DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID).name} (Tiling: {creatureData.Tiling}, Offset: {creatureData.Offset})\n" +
+                $"Colours: #{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)}/#{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)} (Metallic: {creatureData.Metallic}, Shine: {creatureData.Shine})";
 
             Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
             {
                 File.WriteAllBytes(preview, photo.EncodeToPNG());
-                Share(data, preview, creatureData.Name, creatureData.Summary);
+                Share(data, preview, base.name, description);
             },
             creatureData);
-
-            //if (!File.Exists(preview))
-            //{
-                
-            //}
-            //else
-            //{
-            //    Share(data, preview, creatureData.Name, creatureData.Summary);
-            //}
         }
         public void Share(string data, string preview, string title, string description)
         {
@@ -780,10 +785,24 @@ namespace DanielLochner.Assets.CreatureCreator
             if (SystemUtility.IsDevice(DeviceType.Desktop))
             {
 #if UNITY_STANDALONE
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("share_title"), LocalizationUtility.Localize("share_message"), onYes: delegate
+                if (SteamManager.Initialized)
                 {
-                    SteamWorkshopManager.Instance.SubmitToWorkshop(data, preview, title, description);
-                });
+                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("share_title"), LocalizationUtility.Localize("share_message"), onYes: delegate
+                    {
+                        currentWorkshopData = new WorkshopData()
+                        {
+                            dataPath = data,
+                            previewPath = preview,
+                            title = title,
+                            description = description
+                        };
+
+                        CallResult<CreateItemResult_t> item = CallResult<CreateItemResult_t>.Create(OnCreateItem);
+
+                        SteamAPICall_t handle = SteamUGC.CreateItem(SteamUtils.GetAppID(), EWorkshopFileType.k_EWorkshopFileTypeCommunity);
+                        item.Set(handle);
+                    });
+                }
 #endif
             }
         }
@@ -898,6 +917,48 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             FileBrowser.Instance.OnOpenFilesComplete -= OnImport;
         }
+
+#if UNITY_STANDALONE
+        private void OnCreateItem(CreateItemResult_t item, bool hasFailed)
+        {
+            if (hasFailed)
+            {
+                return;
+            }
+            if (item.m_bUserNeedsToAcceptWorkshopLegalAgreement)
+            {
+                SteamFriends.ActivateGameOverlayToWebPage("https://steamcommunity.com/workshop/workshoplegalagreement/");
+                return;
+            }
+
+            handle = SteamUGC.StartItemUpdate(SteamUtils.GetAppID(), item.m_nPublishedFileId);
+            SteamUGC.SetItemTitle(handle, currentWorkshopData.title);
+            SteamUGC.SetItemDescription(handle, currentWorkshopData.description);
+            SteamUGC.SetItemContent(handle, currentWorkshopData.dataPath);
+            SteamUGC.SetItemPreview(handle, currentWorkshopData.previewPath);
+            SteamUGC.SetItemVisibility(handle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic);
+            SteamUGC.SubmitItemUpdate(handle, null);
+
+            StartCoroutine(UploadRoutine(item.m_nPublishedFileId));
+        }
+        private IEnumerator UploadRoutine(PublishedFileId_t pf)
+        {
+            currentCreatureUI.IsLoading = true;
+
+            while (true)
+            {
+                EItemUpdateStatus status = SteamUGC.GetItemUpdateProgress(handle, out ulong p, out ulong t);
+                if (status == EItemUpdateStatus.k_EItemUpdateStatusInvalid)
+                {
+                    break;
+                }
+                yield return null;
+            }
+            SteamFriends.ActivateGameOverlayToWebPage($"steam://url/CommunityFilePage/{pf}");
+
+            currentCreatureUI.IsLoading = false;
+        }
+#endif
         #endregion
 
         #region Unlocks
@@ -980,6 +1041,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             creatureUI.ShareButton.onClick.AddListener(delegate
             {
+                currentCreatureUI = creatureUI;
                 TryShare(creatureName);
             });
 
@@ -1495,6 +1557,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             public TextMeshProUGUI title;
             public GridLayoutGroup grid;
+        }
+
+        [Serializable]
+        public struct WorkshopData
+        {
+            public string dataPath;
+            public string previewPath;
+            public string title;
+            public string description;
         }
 
         [Serializable]
