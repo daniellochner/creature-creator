@@ -734,18 +734,25 @@ namespace DanielLochner.Assets.CreatureCreator
 
             CreatureData creatureData = SaveUtility.Load<CreatureData>(data, creatureEncryptionKey.Value);
 
-            string bodyParts = "";
-            foreach (AttachedBodyPart abp in creatureData.AttachedBodyParts)
+            List<BodyPart> bodyParts = new List<BodyPart>();
+            foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
             {
-                bodyParts += (DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", abp.bodyPartID).name + ", ");
+                BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", attachedBodyPart.bodyPartID);
+                if (!bodyParts.Contains(bodyPart))
+                {
+                    bodyParts.Add(bodyPart);
+                }
             }
-            bodyParts = bodyParts.Substring(0, bodyParts.Length - 2);
 
-            string description = 
+            string description =
                 $"Bones: {creatureData.Bones.Count}\n" +
-                $"Body Parts: {creatureData.AttachedBodyParts.Count} ({bodyParts})\n" +
-                $"Pattern: {DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID).name} (Tiling: {creatureData.Tiling}, Offset: {creatureData.Offset})\n" +
-                $"Colours: #{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)}/#{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)} (Metallic: {creatureData.Metallic}, Shine: {creatureData.Shine})";
+                $"Body Parts: {bodyParts.Count} ({string.Join(", ", bodyParts)})\n" +
+                $"Pattern: {DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID).name}\n" +
+                $"Tiling: {creatureData.Tiling}\n" +
+                $"Offset: {creatureData.Offset}\n" +
+                $"Colors: #{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)} and #{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)}\n" +
+                $"Metallic: {creatureData.Metallic}\n" +
+                $"Shine: {creatureData.Shine}";
 
             Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
             {
@@ -787,7 +794,9 @@ namespace DanielLochner.Assets.CreatureCreator
 #if UNITY_STANDALONE
                 if (SteamManager.Initialized)
                 {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("share_title"), LocalizationUtility.Localize("share_message"), onYes: delegate
+                    string t = LocalizationUtility.Localize("share_title");
+                    string m = LocalizationUtility.Localize("share_message", title);
+                    ConfirmationDialog.Confirm(t, m, onYes: delegate
                     {
                         currentWorkshopData = new WorkshopData()
                         {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class FactoryUI : MonoBehaviour, IPointerEnterHandler
+    public class FactoryUI : MonoBehaviour, IPointerDownHandler
     {
         #region Fields
         [SerializeField] private GameObject factoryCreatureUIPrefab;
@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int maxCreatures;
         [SerializeField] private RectTransform pagination;
         [SerializeField] private ToggleGroup toggleGroup;
+        [SerializeField] private CanvasGroup canvasGroup;
 
         private bool hasEntered;
         #endregion
@@ -23,17 +24,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0)
-            {
-                gameObject.SetActive(false);
-            }
-            else
+            if (!(SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0))
             {
                 Setup();
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
             hasEntered = true;
         }
@@ -73,7 +70,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     factoryCreatureUI.SetPreview(url);
                 }
+            }
 
+            if (param.m_unNumResultsReturned > 0)
+            {
+                StartCoroutine(canvasGroup.Fade(true, 0.25f));
             }
         }
 

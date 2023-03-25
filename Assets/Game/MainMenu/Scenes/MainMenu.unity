@@ -15478,6 +15478,7 @@ GameObject:
   - component: {fileID: 1002518997}
   - component: {fileID: 1002518998}
   - component: {fileID: 1002518999}
+  - component: {fileID: 1002519000}
   m_Layer: 5
   m_Name: Factory
   m_TagString: Untagged
@@ -15569,6 +15570,7 @@ MonoBehaviour:
   maxCreatures: 5
   pagination: {fileID: 6674826200148978250}
   toggleGroup: {fileID: 5675136710208070068}
+  canvasGroup: {fileID: 1002519000}
 --- !u!114 &1002518999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15582,6 +15584,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPlatform: 3
+--- !u!225 &1002519000
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002518993}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1010879231
 GameObject:
   m_ObjectHideFlags: 0
@@ -37054,7 +37068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.y
@@ -37062,7 +37076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 385
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.y
