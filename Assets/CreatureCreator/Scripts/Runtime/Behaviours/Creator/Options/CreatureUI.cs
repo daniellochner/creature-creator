@@ -26,7 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Button ShareButton => shareButton;
         public GameObject Progress => progress;
 
-        public bool IsLoading
+        public bool IsSharing
         {
             set
             {

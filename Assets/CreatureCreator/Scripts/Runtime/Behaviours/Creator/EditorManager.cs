@@ -943,7 +943,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator UploadRoutine(PublishedFileId_t pf)
         {
-            currentCreatureUI.IsLoading = true;
+            currentCreatureUI.IsSharing = true;
 
             while (true)
             {
@@ -956,7 +956,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             SteamFriends.ActivateGameOverlayToWebPage($"steam://url/CommunityFilePage/{pf}");
 
-            currentCreatureUI.IsLoading = false;
+            currentCreatureUI.IsSharing = false;
         }
 #endif
         #endregion
