@@ -44,6 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             UGCQueryHandle_t handle = SteamUGC.CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByTrend, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items_ReadyToUse, SteamUtils.GetAppID(), SteamUtils.GetAppID());
             SteamUGC.SetMatchAnyTag(handle, true);
+            SteamUGC.SetRankedByTrendDays(handle, 7);
 
             SteamAPICall_t call = SteamUGC.SendQueryUGCRequest(handle);
             query.Set(call);

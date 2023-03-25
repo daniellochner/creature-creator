@@ -750,7 +750,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
             {
                 File.WriteAllBytes(preview, photo.EncodeToPNG());
-                Share(data, preview, base.name, description);
+                Share(data, preview, name, description);
             },
             creatureData);
         }
