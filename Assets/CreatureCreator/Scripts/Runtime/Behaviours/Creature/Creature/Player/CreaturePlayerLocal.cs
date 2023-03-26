@@ -81,13 +81,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.SetVisibility(false);
 
-            EditorManager.Instance.Invoke(delegate
+            float time = Time.time;
+            EditorManager.Instance.InvokeUntil(() => !InputUtility.GetKey(KeybindingsManager.Data.Respawn) && (Time.time > (time + 1f)), delegate
             {
                 string name = Informer.Information.Name.Equals(LocalizationUtility.Localize("creature-unnamed")) ? LocalizationUtility.Localize("you-died_you") : Informer.Information.Name;
                 string age  = Informer.Information.FormattedAge;
                 InformationDialog.Inform(LocalizationUtility.Localize("you-died_title"), LocalizationUtility.Localize("you-died_message", name, age), LocalizationUtility.Localize("you-died_okay"), false, Respawn);
-
-            }, 1f);
+            });
 
 #if USE_STATS
             StatsManager.Instance.Deaths++;
