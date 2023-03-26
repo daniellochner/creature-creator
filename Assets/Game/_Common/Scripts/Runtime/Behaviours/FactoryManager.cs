@@ -10,15 +10,17 @@ namespace DanielLochner.Assets.CreatureCreator
     public class FactoryManager : MonoBehaviourSingleton<FactoryManager>
     {
 #if UNITY_STANDALONE
+        public PublishedFileId_t[] Files { get; private set; }
+
         public void LoadWorkshopItems()
         {
             uint n = SteamUGC.GetNumSubscribedItems();
             if (n > 0)
             {
-                PublishedFileId_t[] files = new PublishedFileId_t[n];
-                SteamUGC.GetSubscribedItems(files, n);
+                Files = new PublishedFileId_t[n];
+                SteamUGC.GetSubscribedItems(Files, n);
 
-                foreach (PublishedFileId_t fileId in files)
+                foreach (PublishedFileId_t fileId in Files)
                 {
                     if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
                     {

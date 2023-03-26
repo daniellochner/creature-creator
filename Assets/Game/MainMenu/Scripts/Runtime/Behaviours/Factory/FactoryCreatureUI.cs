@@ -1,5 +1,6 @@
 using Steamworks;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,10 +17,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button pageBtn;
         [SerializeField] private Button subscribeBtn;
         [SerializeField] private Button likeBtn;
+        [SerializeField] private Sprite addIcon;
+        [SerializeField] private Sprite removeIcon;
         [Space]
         [SerializeField] private GameObject info;
         [SerializeField] private GameObject refreshIcon;
         [SerializeField] private GameObject errorIcon;
+
+        private bool isSubscribed, isLiked;
         #endregion
 
         #region Methods
@@ -39,9 +44,21 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             subscribeBtn.onClick.AddListener(delegate
             {
-                SteamFriends.ActivateGameOverlayToWebPage($"steam://url/CommunityFilePage/{id}");
-                SteamUGC.SubscribeItem(id);
+                if (isSubscribed)
+                {
+                    SteamUGC.UnsubscribeItem(id);
+                }
+                else
+                {
+                    SteamUGC.SubscribeItem(id);
+                }
+                SetSubscribed(!isSubscribed);
             });
+
+            if (FactoryManager.Instance.Files.Contains(id))
+            {
+                SetSubscribed(true);
+            }
         }
 
         public void SetPreview(string url)
@@ -66,6 +83,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 errorIcon.SetActive(true);
             }
             refreshIcon.SetActive(false);
+        }
+
+        public void SetSubscribed(bool s)
+        {
+            isSubscribed = s;
+            subscribeBtn.image.sprite = isSubscribed ? removeIcon : addIcon;
         }
         #endregion
     }

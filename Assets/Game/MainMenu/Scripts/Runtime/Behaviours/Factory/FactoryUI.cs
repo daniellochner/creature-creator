@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class FactoryUI : MonoBehaviour, IPointerDownHandler
+    public class FactoryUI : MonoBehaviour, IPointerEnterHandler
     {
         #region Fields
         [SerializeField] private GameObject factoryCreatureUIPrefab;
@@ -24,13 +24,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (!(SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0))
+            if (Application.internetReachability != NetworkReachability.NotReachable && !(SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0))
             {
                 Setup();
             }
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
             hasEntered = true;
         }
