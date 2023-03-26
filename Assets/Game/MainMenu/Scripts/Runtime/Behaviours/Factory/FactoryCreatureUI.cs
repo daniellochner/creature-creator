@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject refreshIcon;
         [SerializeField] private GameObject errorIcon;
 
-        private bool isSubscribed, isLiked;
+        private bool isSubscribed;
         #endregion
 
         #region Methods
