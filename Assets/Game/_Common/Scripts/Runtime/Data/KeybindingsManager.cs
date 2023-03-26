@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Eat eatAbility;
         [SerializeField] private Abilities.Ping pingAbility;
         [SerializeField] private Growl growlAbility;
+        [SerializeField] private NightVision nightVisionAbility;
         [SerializeField] private Bite[] biteAbilities;
         [SerializeField] private Jump[] jumpAbilities;
         [SerializeField] private Flap[] flapAbilities;
@@ -78,6 +79,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 sprintAbility.PerformKeybind = key;
             }
             Data.Sprint = key;
+        }
+        public void RebindNightVision(Keybind key)
+        {
+            nightVisionAbility.PerformKeybind = key;
         }
         #endregion
     }
