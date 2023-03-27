@@ -104,9 +104,12 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isVisible = true, isEditing = true;
         private bool isUpdatingLoadableCreatures;
         private Coroutine visibleCoroutine;
+        private CreatureUI currentCreatureUI;
+
+#if UNITY_STANDALONE
         private WorkshopData currentWorkshopData;
         private UGCUpdateHandle_t handle;
-        private CreatureUI currentCreatureUI;
+#endif
         #endregion
 
         #region Properties
@@ -730,36 +733,46 @@ namespace DanielLochner.Assets.CreatureCreator
         public void TryShare(string name)
         {
             string data = Path.Combine(creaturesDirectory, $"{name}.dat");
-            string preview = Path.Combine(creaturesDirectory, $"{name}.png");
-
             CreatureData creatureData = SaveUtility.Load<CreatureData>(data, creatureEncryptionKey.Value);
-
-            List<BodyPart> bodyParts = new List<BodyPart>();
-            foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
+            if (creatureData != null)
             {
-                BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", attachedBodyPart.bodyPartID);
-                if (!bodyParts.Contains(bodyPart))
+                // Body Parts
+                List<BodyPart> bodyParts = new List<BodyPart>();
+                foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
                 {
-                    bodyParts.Add(bodyPart);
+                    BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", attachedBodyPart.bodyPartID);
+                    if (!bodyParts.Contains(bodyPart))
+                    {
+                        bodyParts.Add(bodyPart);
+                    }
                 }
+                string bodyPartsStr = bodyParts.Count > 0 ? $"{bodyParts.Count} ({ string.Join(", ", bodyParts)})" : "None";
+
+                // Pattern
+                Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID);
+                string patternStr = pattern?.name ?? "None";
+
+                // Colors
+                string colors = $"#{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)} and #{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)}";
+                
+                string description =
+                    $"Bones: {creatureData.Bones.Count}\n" +
+                    $"Body Parts: {bodyPartsStr}\n" +
+                    $"Pattern: {patternStr}\n" +
+                    $"Tiling: {creatureData.Tiling}\n" +
+                    $"Offset: {creatureData.Offset}\n" +
+                    $"Colors: {colors}\n" +
+                    $"Metallic: {creatureData.Metallic}\n" +
+                    $"Shine: {creatureData.Shine}";
+
+                string preview = Path.Combine(creaturesDirectory, $"{name}.png");
+                Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
+                {
+                    File.WriteAllBytes(preview, photo.EncodeToPNG());
+                    Share(data, preview, name, description);
+                },
+                creatureData);
             }
-
-            string description =
-                $"Bones: {creatureData.Bones.Count}\n" +
-                $"Body Parts: {bodyParts.Count} ({string.Join(", ", bodyParts)})\n" +
-                $"Pattern: {DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID).name}\n" +
-                $"Tiling: {creatureData.Tiling}\n" +
-                $"Offset: {creatureData.Offset}\n" +
-                $"Colors: #{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)} and #{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)}\n" +
-                $"Metallic: {creatureData.Metallic}\n" +
-                $"Shine: {creatureData.Shine}";
-
-            Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
-            {
-                File.WriteAllBytes(preview, photo.EncodeToPNG());
-                Share(data, preview, name, description);
-            },
-            creatureData);
         }
         public void Share(string data, string preview, string title, string description)
         {
@@ -1047,6 +1060,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             });
             UpdateNoCreatures();
+            FilterCreatures(creatureNameText.text);
 
             creatureUI.ShareButton.onClick.AddListener(delegate
             {
