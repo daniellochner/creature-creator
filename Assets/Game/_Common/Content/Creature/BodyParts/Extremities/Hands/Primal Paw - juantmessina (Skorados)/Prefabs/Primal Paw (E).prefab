@@ -30,7 +30,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8258224112484952172}
   m_Father: {fileID: 6708940671036848963}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -7.5, z: 90}
@@ -121,6 +122,37 @@ MonoBehaviour:
   includeSubMeshes: 1
   bakeKeys: []
   bakeValues: []
+--- !u!1 &3578553962180920579
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8258224112484952172}
+  m_Layer: 9
+  m_Name: Palm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8258224112484952172
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578553962180920579}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.158, z: 0.343}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4242404599187600731}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4124887970829900433
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +236,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5319515834927091023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f82ac88c5fb97468755399b6c32b74, type: 3}
+  m_Script: {fileID: 11500000, guid: 919ea9f7e8a8908418202b8537253326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: {fileID: 11400000, guid: 852e74a7788cc6840bbcbd2d542e5016, type: 2}
@@ -235,6 +267,7 @@ MonoBehaviour:
     _keyValues: 
     _keys: 
     _values: []
+  palm: {fileID: 8258224112484952172}
 --- !u!114 &7289487531551727393
 MonoBehaviour:
   m_ObjectHideFlags: 0
