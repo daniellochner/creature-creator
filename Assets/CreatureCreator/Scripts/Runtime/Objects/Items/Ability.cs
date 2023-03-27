@@ -15,22 +15,26 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int priority;
         [SerializeField] private Keybind performKeybind;
         [SerializeField] private float cooldown;
+        [SerializeField] private bool prepare;
         #endregion
 
         #region Properties
         public int Level => level;
         public string Name => name;
         public int Priority => priority;
+        public float Cooldown => cooldown;
+        public bool Prepare => prepare;
         public Keybind PerformKeybind
         {
             get => performKeybind;
             set => performKeybind = value;
         }
-        public float Cooldown => cooldown;
 
         public CreatureAbilities CreatureAbilities { get; private set; }
 
         public float CooldownTimeLeft { get; set; }
+        public bool IsPrepared { get; set; }
+
         public virtual bool CanPerform => !CinematicManager.Instance.IsInCinematic;
         #endregion
 
@@ -39,18 +43,36 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureAbilities = creatureAbilities;
         }
+        public virtual void Shutdown()
+        {
+            CooldownTimeLeft = 0f;
+            IsPrepared = false;
+        }
 
-        public bool OnTryPerform()
+        public bool OnTryPrepare()
         {
             if (CooldownTimeLeft <= 0 && CanPerform)
             {
-                OnPerform();
-                CooldownTimeLeft = Cooldown;
+                OnPrepare();
+                IsPrepared = true;
 
                 return true;
             }
             return false;
         }
+        public bool OnTryPerform()
+        {
+            if (CooldownTimeLeft <= 0 && CanPerform && (!Prepare || IsPrepared))
+            {
+                OnPerform();
+                CooldownTimeLeft = Cooldown;
+                IsPrepared = false;
+
+                return true;
+            }
+            return false;
+        }
+
         public void Tick(float deltaTime)
         {
             if (CooldownTimeLeft > 0)
@@ -67,6 +89,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
         }
         public virtual void OnRemove()
+        {
+        }
+        public virtual void OnPrepare()
         {
         }
         public virtual void OnPerform()

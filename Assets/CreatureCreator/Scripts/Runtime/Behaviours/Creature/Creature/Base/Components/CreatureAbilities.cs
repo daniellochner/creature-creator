@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static DanielLochner.Assets.CreatureCreator.Ability;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -45,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (Ability ability in Abilities)
             {
-                ability.CooldownTimeLeft = 0f;
+                ability.Shutdown();
             }
         }
 
@@ -53,17 +54,39 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (Ability ability in Abilities)
             {
+                ability.Tick(Time.deltaTime);
+
                 if (CanInput)
                 {
-                    if (InputUtility.GetKeyDown(ability.PerformKeybind))
+                    if (ability.Prepare)
                     {
-                        if (abilitiesInfo[ability].isActive && ability.OnTryPerform())
+                        if (InputUtility.GetKeyDown(ability.PerformKeybind))
                         {
-                            break;
+                            if (abilitiesInfo[ability].isActive && ability.OnTryPrepare())
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        if (InputUtility.GetKeyUp(ability.PerformKeybind))
+                        {
+                            if (abilitiesInfo[ability].isActive && ability.OnTryPerform())
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (InputUtility.GetKeyDown(ability.PerformKeybind))
+                        {
+                            if (abilitiesInfo[ability].isActive && ability.OnTryPerform())
+                            {
+                                break;
+                            }
                         }
                     }
                 }
-                ability.Tick(Time.deltaTime);
             }
         }
 

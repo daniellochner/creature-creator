@@ -15,20 +15,40 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public CreatureConstructor Constructor { get; private set; }
         public PlayerEffects PlayerEffects { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            Constructor = GetComponent<CreatureConstructor>();
             PlayerEffects = GetComponent<PlayerEffects>();
+        }
+
+        public void Setup()
+        {
+            Constructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
+            {
+                BodyPartLauncher mainBPL = main.GetComponent<BodyPartLauncher>();
+                mainBPL?.Setup(this);
+
+                BodyPartLauncher flippedBPL = flipped.GetComponent<BodyPartLauncher>();
+                flippedBPL?.SetFlipped(mainBPL);
+                flippedBPL?.Setup(this);
+            };
         }
 
         public void Launch(BodyPartLauncher bpl)
         {
-            foreach (Transform spawnPoint in bpl.SpawnPoints)
+            foreach (Trajectory spawnPoint in bpl.SpawnPoints)
             {
-                LaunchServerRpc(bpl.ProjectileId, spawnPoint.position, spawnPoint.rotation, bpl.transform.localScale.x, bpl.Speed);
+                LaunchServerRpc(bpl.ProjectileId, spawnPoint.transform.position, spawnPoint.transform.rotation, bpl.transform.localScale.x, bpl.Speed);
             }
         }
 

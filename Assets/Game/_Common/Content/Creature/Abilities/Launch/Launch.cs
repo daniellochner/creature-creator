@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Abilities
@@ -16,6 +17,31 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         public CreatureLauncher CreatureLauncher { get; private set; }
 
         public override bool CanPerform => base.CanPerform && !EditorManager.Instance.IsEditing;
+
+        public List<BodyPartLauncher> Launchers
+        {
+            get
+            {
+                List<BodyPartLauncher> launchers = new List<BodyPartLauncher>();
+                foreach (BodyPartConstructor constructor in CreatureLauncher.Constructor.BodyParts)
+                {
+                    BodyPartLauncher launcher = constructor.GetComponent<BodyPartLauncher>();
+                    if (launcher != null)
+                    {
+                        if (launcher.Constructor.BodyPart.Abilities.Contains(this))
+                        {
+                            launchers.Add(launcher);
+                            launchers.Add(launcher.Flipped);
+                        }
+                        if (launchers.Count >= maxLaunchers)
+                        {
+                            break;
+                        }
+                    }
+                }
+                return launchers;
+            }
+        }
         #endregion
 
         #region Methods
@@ -24,20 +50,37 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             base.Setup(creatureAbilities);
             CreatureLauncher = creatureAbilities.GetComponent<CreatureLauncher>();
         }
+        public override void Shutdown()
+        {
+            base.Shutdown();
+            foreach (BodyPartLauncher launcher in Launchers)
+            {
+                foreach (Trajectory trajectory in launcher.SpawnPoints)
+                {
+                    trajectory.enabled = false;
+                }
+            }
+        }
 
+        public override void OnPrepare()
+        {
+            foreach (BodyPartLauncher launcher in Launchers)
+            {
+                foreach (Trajectory trajectory in launcher.SpawnPoints)
+                {
+                    trajectory.Setup(launcher.Speed, 1f);
+                    trajectory.enabled = true;
+                }
+            }
+        }
         public override void OnPerform()
         {
-            int count = 0;
-            foreach (BodyPartLauncher launcher in CreatureLauncher.GetComponentsInChildren<BodyPartLauncher>())
+            foreach (BodyPartLauncher launcher in Launchers)
             {
-                if (launcher.BodyPartConstructor.BodyPart.Abilities.Contains(this))
+                CreatureLauncher.Launch(launcher);
+                foreach (Trajectory trajectory in launcher.SpawnPoints)
                 {
-                    CreatureLauncher.Launch(launcher);
-                    count++;
-                }
-                if (count >= maxLaunchers)
-                {
-                    break;
+                    trajectory.enabled = false;
                 }
             }
         }

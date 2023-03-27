@@ -12,6 +12,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Drop dropAbility;
         [SerializeField] private Eat eatAbility;
         [SerializeField] private Abilities.Ping pingAbility;
+        [SerializeField] private Shoot shootAbility;
+        [SerializeField] private Spit spitAbility;
         [SerializeField] private Growl growlAbility;
         [SerializeField] private NightVision nightVisionAbility;
         [SerializeField] private Bite[] biteAbilities;
@@ -43,10 +45,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public void RebindDrop(Keybind key)
         {
             dropAbility.PerformKeybind = key;
+            Data.Drop = key;
         }
         public void RebindShoot(Keybind key)
         {
-            eatAbility.PerformKeybind = key;
+            shootAbility.PerformKeybind = key;
+            Data.Shoot = key;
         }
         public void RebindFlap(Keybind key)
         {
@@ -66,11 +70,13 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void RebindSpit(Keybind key)
         {
-            pingAbility.PerformKeybind = key;
+            spitAbility.PerformKeybind = key;
+            Data.Spit = key;
         }
         public void RebindGrowl(Keybind key)
         {
             growlAbility.PerformKeybind = key;
+            Data.Growl = key;
         }
         public void RebindSprint(Keybind key)
         {
@@ -83,6 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void RebindNightVision(Keybind key)
         {
             nightVisionAbility.PerformKeybind = key;
+            Data.NightVision = key;
         }
         #endregion
     }

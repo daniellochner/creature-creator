@@ -9,22 +9,39 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private string projectileId;
-        [SerializeField] private Transform[] spawnPoints;
+        [SerializeField] private Trajectory[] spawnPoints;
         [SerializeField] private float speed;
         #endregion
 
         #region Properties
         public string ProjectileId => projectileId;
-        public Transform[] SpawnPoints => spawnPoints;
+        public Trajectory[] SpawnPoints => spawnPoints;
         public float Speed => speed;
 
-        public BodyPartConstructor BodyPartConstructor { get; private set; }
+        public CreatureLauncher CreatureLauncher { get; private set; }
+        public BodyPartConstructor Constructor { get; private set; }
+        public BodyPartLauncher Flipped { get; private set; }
+
+        public bool IsFlipped { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            BodyPartConstructor = GetComponent<BodyPartConstructor>();
+            Constructor = GetComponent<BodyPartConstructor>();
+        }
+
+        public void Setup(CreatureLauncher creatureLauncher)
+        {
+            CreatureLauncher = creatureLauncher;
+        }
+
+        public void SetFlipped(BodyPartLauncher main)
+        {
+            IsFlipped = true;
+
+            Flipped = main;
+            main.Flipped = this;
         }
         #endregion
     }
