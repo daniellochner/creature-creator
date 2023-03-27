@@ -1,10 +1,13 @@
-using Steamworks;
-using System.Collections;
-using System.Linq;
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
+
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -28,6 +31,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+#if UNITY_STANDALONE
+
         public void Setup(string name, uint upVotes, PublishedFileId_t id)
         {
             nameText.text = name;
@@ -90,6 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
             isSubscribed = s;
             subscribeBtn.image.sprite = isSubscribed ? removeIcon : addIcon;
         }
+#endif
         #endregion
     }
 }

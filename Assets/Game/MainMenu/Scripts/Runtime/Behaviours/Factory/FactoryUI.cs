@@ -1,12 +1,21 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using UnityEngine;
-using Steamworks;
-using System.Collections;
 using UnityEngine.EventSystems;
+using System.Collections;
 using UnityEngine.UI;
+
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class FactoryUI : MonoBehaviour, IPointerEnterHandler
+    public class FactoryUI : MonoBehaviour
+#if UNITY_STANDALONE
+        , IPointerEnterHandler
+#endif
     {
         #region Fields
         [SerializeField] private GameObject factoryCreatureUIPrefab;
@@ -22,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+#if UNITY_STANDALONE
         private void Start()
         {
             if (Application.internetReachability != NetworkReachability.NotReachable && !(SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0))
@@ -29,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Setup();
             }
         }
-
+        
         public void OnPointerEnter(PointerEventData eventData)
         {
             hasEntered = true;
@@ -89,6 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
+#endif
         #endregion
     }
 }
