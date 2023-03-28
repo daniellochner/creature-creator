@@ -17,6 +17,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Cash")]
         [SerializeField] private TextMeshProUGUI cashText;
 
+        [Header("Quests")]
+        [SerializeField] private Slider questsSlider;
+        [SerializeField] private TextMeshProUGUI questsText;
+
         [Header("Unlocked Body Parts")]
         [SerializeField] private Slider bodyPartsSlider;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
@@ -43,6 +47,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Cash
             cashText.text = $"${ProgressManager.Data.Cash}";
+
+            // Quests
+            int completedQuests = ProgressManager.Data.CompletedQuests;
+            questsText.text = $"{completedQuests}/{ProgressManager.Data.QUESTS.Length}";
+            questsSlider.maxValue = ProgressManager.Data.QUESTS.Length;
+            questsSlider.value = completedQuests;
 
             // Body Parts
             Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
