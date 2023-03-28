@@ -20,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private GameObject factoryCreatureUIPrefab;
+        [SerializeField] private GameObject moreUIPrefab;
         [SerializeField] private Toggle togglePrefab;
         [SerializeField] private SimpleScrollSnap.SimpleScrollSnap factoryScrollSnap;
         [SerializeField] private float carouselTime;
@@ -40,12 +41,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 Setup();
             }
         }
-        
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            hasEntered = true;
-        }
-
         private void Setup()
         {
             CallResult<SteamUGCQueryCompleted_t> query = CallResult<SteamUGCQueryCompleted_t>.Create(OnQueryComplete);
@@ -60,7 +55,11 @@ namespace DanielLochner.Assets.CreatureCreator
             StartCoroutine(CarouselRoutine());
         }
 
-        private void OnQueryComplete(SteamUGCQueryCompleted_t param, bool hasFailed)
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            hasEntered = true;
+        }
+        public void OnQueryComplete(SteamUGCQueryCompleted_t param, bool hasFailed)
         {
             if (hasFailed)
             {
@@ -77,8 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 uint index = indices[(int)i];
 
-                Toggle toggle = Instantiate(togglePrefab, pagination);
-                toggle.group = toggleGroup;
+                Instantiate(togglePrefab, pagination).group = toggleGroup;
 
                 FactoryCreatureUI factoryCreatureUI = factoryScrollSnap.AddToBack(factoryCreatureUIPrefab).GetComponent<FactoryCreatureUI>();
                 if (SteamUGC.GetQueryUGCResult(param.m_handle, index, out SteamUGCDetails_t details))
@@ -90,6 +88,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     factoryCreatureUI.SetPreview(url);
                 }
             }
+
+            Instantiate(togglePrefab, pagination).group = toggleGroup;
+
+            Button moreUI = factoryScrollSnap.AddToBack(moreUIPrefab).GetComponent<Button>();
+            moreUI.onClick.AddListener(delegate
+            {
+                SteamFriends.ActivateGameOverlayToWebPage($"steam://url/SteamWorkshopPage/1990050");
+            });
 
             if (param.m_unNumResultsReturned > 0)
             {
