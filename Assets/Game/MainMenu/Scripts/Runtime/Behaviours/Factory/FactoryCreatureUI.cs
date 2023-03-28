@@ -35,7 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Methods
 #if UNITY_STANDALONE
-
         public void Setup(string name, uint upVotes, PublishedFileId_t id)
         {
             nameText.text = name;

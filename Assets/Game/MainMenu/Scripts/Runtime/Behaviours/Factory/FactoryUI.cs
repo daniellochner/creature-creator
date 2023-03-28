@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -66,17 +67,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 return;
             }
 
+            List<uint> indices = new List<uint>()
+            {
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+            };
+            indices.Shuffle();
+
             for (uint i = 0; i < param.m_unNumResultsReturned && i < maxCreatures; i++)
             {
+                uint index = indices[(int)i];
+
                 Toggle toggle = Instantiate(togglePrefab, pagination);
                 toggle.group = toggleGroup;
 
                 FactoryCreatureUI factoryCreatureUI = factoryScrollSnap.AddToBack(factoryCreatureUIPrefab).GetComponent<FactoryCreatureUI>();
-                if (SteamUGC.GetQueryUGCResult(param.m_handle, i, out SteamUGCDetails_t details))
+                if (SteamUGC.GetQueryUGCResult(param.m_handle, index, out SteamUGCDetails_t details))
                 {
                     factoryCreatureUI.Setup(details.m_rgchTitle, details.m_unVotesUp, details.m_nPublishedFileId);
                 }
-                if (SteamUGC.GetQueryUGCPreviewURL(param.m_handle, i, out string url, 256))
+                if (SteamUGC.GetQueryUGCPreviewURL(param.m_handle, index, out string url, 256))
                 {
                     factoryCreatureUI.SetPreview(url);
                 }
