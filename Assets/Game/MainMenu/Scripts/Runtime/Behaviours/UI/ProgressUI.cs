@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Achievements")]
         [SerializeField] private TextMeshProUGUI achievementsText;
         [SerializeField] private Slider achievementsSlider;
+        [SerializeField] private Button achievementsButton;
 
         [Header("Cash")]
         [SerializeField] private TextMeshProUGUI cashText;
@@ -44,6 +45,17 @@ namespace DanielLochner.Assets.CreatureCreator
             int total = DatabaseManager.GetDatabase("Achievements").Objects.Count;
             achievementsText.text = $"{unlocked}/{total}";
             achievementsSlider.value = ((float)unlocked) / total;
+            achievementsButton.onClick.AddListener(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    GameServices.Instance.ShowAchievementsUI();
+                }
+                else
+                {
+                    AchievementsMenu.Instance.Open();
+                }
+            });
 
             // Cash
             cashText.text = $"${ProgressManager.Data.Cash}";

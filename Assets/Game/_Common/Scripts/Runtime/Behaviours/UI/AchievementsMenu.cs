@@ -42,11 +42,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Open(instant);
             UpdateInfo();
-
-            if (SystemUtility.IsDevice(DeviceType.Handheld))
-            {
-                GameServices.Instance.ShowAchievementsUI();
-            }
         }    
         #endregion
     }

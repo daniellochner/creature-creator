@@ -640,7 +640,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ViewAchievements()
         {
-            AchievementsMenu.Instance.Open();
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                GameServices.Instance.ShowAchievementsUI();
+            }
+            else
+            {
+                AchievementsMenu.Instance.Open();
+            }
         }
         public void ChooseLanguage()
         {
