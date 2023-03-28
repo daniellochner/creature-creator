@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private Platform raftPlatform;
         [SerializeField] private TriggerRegion water;
+        [SerializeField] private Zone beach;
         #endregion
 
         #region Methods
@@ -25,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 arriveOnRaftCinematic.Begin();
                 raftPlatform.TeleportTo(false);
                 water.OnTriggerEnter(Player.Instance.Collider.Hitbox);
+                beach.OnTriggerEnter(Player.Instance.Collider.Hitbox);
             }
             else
             if (prevScene == "Sandbox")

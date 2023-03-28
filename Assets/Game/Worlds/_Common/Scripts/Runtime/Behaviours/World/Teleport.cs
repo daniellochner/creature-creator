@@ -149,7 +149,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             cinematic.Begin();
 
-            Player.Instance.gameObject.SetActive(false);
+            Player.Instance.Collider.enabled = false;
         }
         [ClientRpc]
         private void UnlockMapClientRpc()
