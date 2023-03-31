@@ -41,6 +41,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private Vector3 keyboardForward, keyboardRight, moveDisplacement, targetPosition;
         private Vector2 prevTouchPosition;
         private InputMode inputMode;
+        private Vector3? touchPos = null;
+        private Quaternion? touchRot = null;
 
 #if USE_STATS
         private float displacementBuffer = 0f;
@@ -163,7 +165,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     inputMode = InputMode.Joystick;
                 }
                 else
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButtonDown(0))
                 {
                     inputMode = InputMode.Touch;
                 }
@@ -260,23 +262,27 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void HandleTouch()
         {
-            if (Input.GetMouseButtonDown(0) && !CanvasUtility.IsPointerOverUI)
+            if (Input.GetMouseButtonDown(0) && !CanvasUtility.IsPointerOverUI
+                && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity)
+                && raycastHit.collider.GetComponent<Interactable>() == null
+                && raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
                 prevTouchPosition = Input.mousePosition;
+
+                touchPos = raycastHit.point;
+                touchRot = Quaternion.LookRotation(raycastHit.normal, transform.up);
             }
 
-            if (Input.GetMouseButtonUp(0) && !CanvasUtility.IsPointerOverUI
-                    && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.MainCamera, Input.mousePosition), out RaycastHit raycastHit, Mathf.Infinity)
-                    && Vector2.Distance(Input.mousePosition, prevTouchPosition) <= touchThreshold
-                    && raycastHit.collider.GetComponent<Interactable>() == null
-                    && raycastHit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            if (Input.GetMouseButtonUp(0) && !CanvasUtility.IsPointerOverUI 
+                && Vector2.Distance(Input.mousePosition, prevTouchPosition) <= touchThreshold
+                && touchPos != null
+                && touchRot != null)
             {
-                Vector3 position = raycastHit.point;
-                Quaternion rotation = Quaternion.LookRotation(raycastHit.normal, transform.up);
+                targetGO = Instantiate(targetPrefab, (Vector3)touchPos, (Quaternion)touchRot, Dynamic.WorldCanvas);
+                targetPosition = (Vector3)touchPos;
 
-                targetGO = Instantiate(targetPrefab, position, rotation, Dynamic.WorldCanvas);
-
-                targetPosition = position;
+                touchPos = null;
+                touchRot = null;
             }
 
             Vector3 displacement = Vector3.ProjectOnPlane(targetPosition - transform.position, transform.up);
