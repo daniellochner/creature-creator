@@ -1,4 +1,40 @@
-# Version 1.2.169 - Jan 20, 2021
+# Version 1.2.175 - Nov 16, 2022
+* General - Added tvOS podfile support to the iOS resolver.
+
+# Version 1.2.174 - Oct 06, 2022
+* General - Added tvOS support to the iOS resolver.
+* General - Fixed #484 - Changed `EditorMeasurement` to use secure connection.
+* Android Resolver - Fixed Android Resolver unable to resolve
+  `mainTemplate.gradle` in Unity `2022.2+` or `2023.1+`.
+
+# Version 1.2.173 - Sep 28, 2022
+* General - Added tvOS library support to the export unity package scripts.
+
+# Version 1.2.172 - Jun 23, 2022
+* iOS Resolver - Stop forcing `ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES` to `YES`,
+  which seems to cause problem for some when submitting apps. See #526 for more
+  information.
+
+# Version 1.2.171 - May 11, 2022
+* iOS Resolver - Change `Enable Swift Framework Support Workaround` setting to
+  be `ON` by default since more pods are using Swift Framework now.
+
+# Version 1.2.170 - Apr 4, 2022
+* Android Resolver - Fixes #498 - Fix the path separator of the Maven repo
+  injected to `mainTemplate.gradle`.
+* iOS Resolver - Fixes #470 - Switch default Cocoapods master repo from Github
+  to CDN.
+* iOS Resolver - `Link Framework Statically` setting is now default to `true`.
+  That is, `use_frameworks! :linkage => static` will be added to `Podfile` by
+  default instead of `use_frameworks!`. This can be changed in iOS Resolver
+  settings. This fixes odd behaviors when pods include static libraries, ex.
+  Firebase Analytics.
+* iOS Resolver - Added a workaround when app crashes on launch due to
+  `Library not loaded: @rpath/libswiftCore.dylib` when some pods includes Swift
+  framework. This is turned `OFF` by default and can be changed in iOS Resolver
+  settings.
+
+# Version 1.2.169 - Jan 20, 2022
 * General - Fixes #425 - Change to save `GvhProjectSettings.xml` without
   Unicode byte order mark (BoM).
 * Android Resolver - Remove reference to `jcenter()`

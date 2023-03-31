@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +13,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private float touchOffset;
         [SerializeField] private float scrollCooldown;
+        [SerializeField] private float scrollThreshold;
         [SerializeField] private Texture2D defaultCursor;
         [SerializeField] private InteractionUI interactionPrefab;
         [SerializeField] private GridLayoutGroup grid;
@@ -113,12 +113,12 @@ namespace DanielLochner.Assets
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    if (Input.mouseScrollDelta.y > 0)
+                    if (Input.mouseScrollDelta.y > +scrollThreshold)
                     {
                         HighlightedIndex++;
                     }
                     else
-                    if (Input.mouseScrollDelta.y < 0)
+                    if (Input.mouseScrollDelta.y < -scrollThreshold)
                     {
                         HighlightedIndex--;
                     }

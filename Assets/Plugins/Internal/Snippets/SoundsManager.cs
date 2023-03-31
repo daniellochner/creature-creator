@@ -23,6 +23,8 @@ namespace DanielLochner.Assets
         {
             get; set;
         }
+
+        public AudioSource[] Sources => sources;
         #endregion
 
         #region Methods
