@@ -25,8 +25,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 arriveOnRaftCinematic.Begin();
                 raftPlatform.TeleportTo(false);
+
                 water.OnTriggerEnter(Player.Instance.Collider.Hitbox);
-                beach.OnTriggerEnter(Player.Instance.Collider.Hitbox);
+                ZoneManager.Instance.EnterZone(beach, false);
             }
             else
             if (prevScene == "Sandbox")
