@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (!Input.GetMouseButton(0))
                 {
                     StatisticsMenu.Instance.Setup(bodyPart, Input.mousePosition);
+                    HideNew();
                 }
             });
             hoverUI.OnExit.AddListener(delegate
@@ -79,11 +80,12 @@ namespace DanielLochner.Assets.CreatureCreator
             if (isNew)
             {
                 newGO.SetActive(true);
-                hoverUI.OnEnter.AddListener(delegate
-                {
-                    newGO.SetActive(false);
-                });
             }
+        }
+
+        private void HideNew()
+        {
+            newGO.SetActive(false);
         }
 
         public void Select()
@@ -95,6 +97,8 @@ namespace DanielLochner.Assets.CreatureCreator
             layoutElement.ignoreLayout = true;
             transform.SetParent(transform.parent.parent);
             transform.SetAsLastSibling();
+
+            HideNew();
         }
         public void Deselect()
         {

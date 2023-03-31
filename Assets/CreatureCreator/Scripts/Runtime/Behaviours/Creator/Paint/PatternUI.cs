@@ -33,14 +33,18 @@ namespace DanielLochner.Assets.CreatureCreator
             graphic.sprite = targetGraphic.sprite = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
             graphic.material = targetGraphic.material = material;
 
+            clickUI.OnLeftClick.AddListener(HideNew);
+            hoverUI.OnEnter.AddListener(HideNew);
+
             if (isNew)
             {
                 newGO.SetActive(true);
-                hoverUI.OnEnter.AddListener(delegate
-                {
-                    newGO.SetActive(false);
-                });
             }
+        }
+
+        private void HideNew()
+        {
+            newGO.SetActive(false);
         }
         #endregion
     }
