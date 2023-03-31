@@ -88,6 +88,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 OptimizeForMobile();
             }
+            FixPostProcessLayerBug();
         }
         protected override void OnDestroy()
         {
@@ -412,6 +413,15 @@ namespace DanielLochner.Assets.CreatureCreator
             Data.MotionBlur = motionBlur;
         }
 
+        private void FixPostProcessLayerBug()
+        {
+            foreach (GameObject camera in cameras)
+            {
+                PostProcessLayer ppl = camera.GetComponentInChildren<PostProcessLayer>();
+                ppl.enabled = !ppl.enabled;
+                ppl.enabled = !ppl.enabled;
+            }
+        }
         private void OptimizeForMobile()
         {
             foreach (PostProcessProfile profile in profiles)
@@ -454,11 +464,38 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.MusicVolume = t;
             SetVolume("MusicVolume", t);
+
+            foreach (AudioSource source in MusicManager.Instance.Sources)
+            {
+                if (t > 0)
+                {
+                    source.UnPause();
+                }
+                else
+                {
+                    source.Pause();
+                }
+            }
         }
         public void SetSoundEffectsVolume(float t)
         {
             Data.SoundEffectsVolume = t;
             SetVolume("SoundEffectsVolume", t);
+
+            if (AmbienceManager.Instance != null)
+            {
+                foreach (AudioSource source in AmbienceManager.Instance.Sources)
+                {
+                    if (t > 0)
+                    {
+                        source.UnPause();
+                    }
+                    else
+                    {
+                        source.Pause();
+                    }
+                }
+            }
         }
         private void SetVolume(string param, float t)
         {
