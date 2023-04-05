@@ -572,6 +572,11 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
             bodyPart.Add(statistics);
 
+            if (bodyPart.IsLightSource)
+            {
+                LightSources++;
+            }
+
             GameObject bodyPartPrefab = OnBodyPartPrefabOverride?.Invoke(bodyPart) ?? bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
 
             // Main
@@ -595,6 +600,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", main.AttachedBodyPart.bodyPartID);
             bodyPart.Remove(statistics);
+
+            if (bodyPart.IsLightSource)
+            {
+                LightSources--;
+            }
 
             main.Remove();
             Data.AttachedBodyParts.Remove(main.AttachedBodyPart);
