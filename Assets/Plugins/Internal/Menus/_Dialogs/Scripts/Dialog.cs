@@ -31,6 +31,10 @@ namespace DanielLochner.Assets
             }
             base.Open(instant);
         }
+        public override void OnEndClose()
+        {
+            base.OnEndClose();
+        }
         #endregion
     }
 }

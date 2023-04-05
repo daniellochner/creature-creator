@@ -73,7 +73,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetVisibility(bool v, float t = 0.25f)
         {
-            StartCoroutine(canvasGroup.Fade(v, t));
+            if (v)
+            {
+                tutorialRT.gameObject.SetActive(true);
+            }
+            StartCoroutine(canvasGroup.Fade(v, t, onEnd: delegate
+            {
+                tutorialRT.gameObject.SetActive(false);
+            }));
         }
 
         public void Hint()

@@ -6,7 +6,7 @@ namespace DanielLochner.Assets
 {
     public static class CanvasGroupUtility
     {
-        public static IEnumerator Fade(this CanvasGroup canvasGroup, bool visible, float duration, bool setInteractable = true, UnityAction endFadeEvent = null)
+        public static IEnumerator Fade(this CanvasGroup canvasGroup, bool visible, float duration, bool setInteractable = true, UnityAction onEnd = null)
         {
             if (setInteractable) { canvasGroup.interactable = canvasGroup.blocksRaycasts = visible; }
 
@@ -29,7 +29,7 @@ namespace DanielLochner.Assets
                 canvasGroup.alpha = 0;
             }
 
-            endFadeEvent?.Invoke();
+            onEnd?.Invoke();
         }
     }
 }

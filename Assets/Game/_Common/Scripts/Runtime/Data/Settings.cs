@@ -364,20 +364,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 TargetFrameRate = 60;
                 Bloom = false;
                 AmbientParticles = false;
+                Foliage = FoliageType.VeryLow;
 
                 if (SystemUtility.IsLowEndDevice)
                 {
                     ShadowQuality = ShadowQualityType.None;
                     AmbientOcclusion = AmbientOcclusionType.None;
                     TextureQuality = TextureQualityType.Medium;
-                    Foliage = FoliageType.VeryLow;
                 }
                 else
                 {
                     ShadowQuality = ShadowQualityType.Low;
                     AmbientOcclusion = AmbientOcclusionType.MSVO;
                     TextureQuality = TextureQualityType.High;
-                    Foliage = FoliageType.Low;
                 }
             }
         }
