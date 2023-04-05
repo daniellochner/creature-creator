@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class LocalizationMenu : MenuSingleton<LocalizationMenu>
+    public class LocalizationMenu : Dialog<LocalizationMenu>
     {
         #region Fields
         [SerializeField] private List<string> officialLanguages;
@@ -28,10 +28,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        protected override void Start()
         {
-            yield return LocalizationSettings.InitializationOperation;
-            Setup();
+            base.Start();
+            StartCoroutine(SetupRoutine());
         }
         protected override void OnDestroy()
         {
@@ -39,59 +39,63 @@ namespace DanielLochner.Assets.CreatureCreator
             LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
         }
 
-        private void Setup()
+        private IEnumerator SetupRoutine()
         {
+            yield return LocalizationSettings.InitializationOperation;
+
             LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
 
-            if (AutoDetectLanguage)
-            {
-                ILocalesProvider locales = LocalizationSettings.AvailableLocales;
+            //if (AutoDetectLanguage)
+            //{
+            //    ILocalesProvider locales = LocalizationSettings.AvailableLocales;
 
-                Locale locale = locales.GetLocale("en");
-                switch (Application.systemLanguage)
-                {
-                    case SystemLanguage.Chinese:
-                        locale = locales.GetLocale("zh-Hans");
-                        break;
-                    case SystemLanguage.Russian:
-                        locale = locales.GetLocale("ru");
-                        break;
-                    case SystemLanguage.Spanish:
-                        locale = locales.GetLocale("es");
-                        break;
-                    case SystemLanguage.Portuguese:
-                        locale = locales.GetLocale("pt-BR");
-                        break;
-                    case SystemLanguage.German:
-                        locale = locales.GetLocale("de");
-                        break;
-                    case SystemLanguage.French:
-                        locale = locales.GetLocale("fr");
-                        break;
-                    case SystemLanguage.Japanese:
-                        locale = locales.GetLocale("ja");
-                        break;
-                    case SystemLanguage.Polish:
-                        locale = locales.GetLocale("pl");
-                        break;
-                    case SystemLanguage.Korean:
-                        locale = locales.GetLocale("ko");
-                        break;
-                    case SystemLanguage.Thai:
-                        locale = locales.GetLocale("th");
-                        break;
-                    case SystemLanguage.Italian:
-                        locale = locales.GetLocale("it");
-                        break;
-                }
-                SettingsManager.Instance.SetLocale(locale.Identifier.Code);
+            //    Locale locale = locales.GetLocale("en");
+            //    switch (Application.systemLanguage)
+            //    {
+            //        case SystemLanguage.Chinese:
+            //            locale = locales.GetLocale("zh-Hans");
+            //            break;
+            //        case SystemLanguage.Russian:
+            //            locale = locales.GetLocale("ru");
+            //            break;
+            //        case SystemLanguage.Spanish:
+            //            locale = locales.GetLocale("es");
+            //            break;
+            //        case SystemLanguage.Portuguese:
+            //            locale = locales.GetLocale("pt-BR");
+            //            break;
+            //        case SystemLanguage.German:
+            //            locale = locales.GetLocale("de");
+            //            break;
+            //        case SystemLanguage.French:
+            //            locale = locales.GetLocale("fr");
+            //            break;
+            //        case SystemLanguage.Japanese:
+            //            locale = locales.GetLocale("ja");
+            //            break;
+            //        case SystemLanguage.Polish:
+            //            locale = locales.GetLocale("pl");
+            //            break;
+            //        case SystemLanguage.Korean:
+            //            locale = locales.GetLocale("ko");
+            //            break;
+            //        case SystemLanguage.Thai:
+            //            locale = locales.GetLocale("th");
+            //            break;
+            //        case SystemLanguage.Italian:
+            //            locale = locales.GetLocale("it");
+            //            break;
+            //    }
+            //    SettingsManager.Instance.SetLocale(locale.Identifier.Code);
 
-                AutoDetectLanguage = false;
-            }
-            else
-            {
-                SettingsManager.Instance.SetLocale(SettingsManager.Data.Locale);
-            }
+            //    AutoDetectLanguage = false;
+            //}
+            //else
+            //{
+            //    SettingsManager.Instance.SetLocale(SettingsManager.Data.Locale);
+            //}
+
+            SettingsManager.Instance.SetLocale(LocalizationSettings.SelectedLocale.Identifier.Code);
 
             foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
             {
