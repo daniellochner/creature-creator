@@ -13,6 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Awake();
             source = GetComponent<AudioSource>();
+        }
+        private void Start()
+        {
             gameObject.SetActive(false);
         }
 
