@@ -17,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool fullscreen;
         [SerializeField] private bool vSync;
         [SerializeField] private int targetFrameRate = -1;
+        [SerializeField] private float screenScale = 0.5f;
         [Space]
         [SerializeField] private CreatureMeshQualityType creatureMeshQuality;
         [SerializeField] private ShadowQualityType shadowQuality;
@@ -45,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<string> hiddenBodyParts;
         [SerializeField] private List<string> hiddenPatterns;
         [SerializeField] private string locale;
-        [SerializeField] private int touchOffset = 100;
+        [SerializeField] private float touchOffset = 100f;
         [SerializeField] private bool cameraShake;
         [SerializeField] private bool vibrations = true;
         [SerializeField] private bool debugMode;
@@ -96,6 +97,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => targetFrameRate;
             set => targetFrameRate = value;
+        }
+        public float ScreenScale
+        {
+            get => screenScale;
+            set => screenScale = value;
         }
 
         public CreatureMeshQualityType CreatureMeshQuality
@@ -212,7 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get => locale;
             set => locale = value;
         }
-        public int TouchOffset
+        public float TouchOffset
         {
             get => touchOffset;
             set => touchOffset = value;
@@ -362,22 +368,23 @@ namespace DanielLochner.Assets.CreatureCreator
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
                 TargetFrameRate = 60;
+                TextureQuality = TextureQualityType.High;
+                ShadowQuality = ShadowQualityType.Low;
+                Foliage = FoliageType.VeryLow;
+                AmbientOcclusion = AmbientOcclusionType.None;
                 Bloom = false;
                 AmbientParticles = false;
-                Foliage = FoliageType.VeryLow;
+                ScreenScale = 0.75f;
 
                 if (SystemUtility.IsLowEndDevice)
                 {
+                    ScreenScale = 0.5f;
                     ShadowQuality = ShadowQualityType.None;
-                    AmbientOcclusion = AmbientOcclusionType.None;
                     TextureQuality = TextureQualityType.Medium;
                 }
-                else
-                {
-                    ShadowQuality = ShadowQualityType.Low;
-                    AmbientOcclusion = AmbientOcclusionType.MSVO;
-                    TextureQuality = TextureQualityType.High;
-                }
+
+                TouchOffset *= ScreenScale;
+                SensitivityHorizontal = SensitivityVertical = 1f / ScreenScale;
             }
         }
         #endregion

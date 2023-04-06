@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
+    [DefaultExecutionOrder(1)]
     public class Dialog<M> : MenuSingleton<M> where M : Menu
     {
         #region Fields

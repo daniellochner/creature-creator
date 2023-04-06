@@ -46,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetFullscreen(Data.Fullscreen);
             SetVSync(Data.VSync);
             SetTargetFrameRate(Data.TargetFrameRate);
+            SetScreenScale(Data.ScreenScale);
 
             SetCreatureMeshQuality(Data.CreatureMeshQuality);
             SetShadowQuality(Data.ShadowQuality);
@@ -124,6 +125,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 refreshRate = refreshRate
             };
             SetResolution(targetResolution);
+
+            Data.ScreenScale = screenScale;
         }
         public void SetTargetFrameRate(int targetFrameRate)
         {
@@ -535,7 +538,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.ExportPrecision = precision;
         }
-        public void SetTouchOffset(int touchOffset)
+        public void SetTouchOffset(float touchOffset)
         {
             CreatureEditor editor = creaturePlayerPrefab.GetComponent<CreatureEditor>();
             editor.TouchOffset = Data.TouchOffset = touchOffset;
