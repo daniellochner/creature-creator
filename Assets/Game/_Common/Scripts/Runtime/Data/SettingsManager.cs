@@ -439,7 +439,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Can't change water at runtime...
             //foreach (PWaterProfile waterProfile in waterProfiles)
             //{
             //    waterProfile.LightingModel = PLightingModel.BlinnPhong;

@@ -614,9 +614,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnLowMemory()
         {
             Resources.UnloadUnusedAssets();
-            presetOS.Select(PresetType.VeryLow);
 
-            InformationDialog.Inform(LocalizationUtility.Localize("low-memory_title"), LocalizationUtility.Localize("low-memory_message"));
+            //InformationDialog.Inform(LocalizationUtility.Localize("low-memory_title"), LocalizationUtility.Localize("low-memory_message"));
 
             Application.lowMemory -= OnLowMemory;
         }
