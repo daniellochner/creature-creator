@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureComparer))]
     [RequireComponent(typeof(CreatureUnderwater))]
     [RequireComponent(typeof(MinimapIcon))]
+    [RequireComponent(typeof(CreatureLauncher))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -49,6 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureSpeedup speedUp;
         [SerializeField] private CreatureGrounded grounded;
         [SerializeField] private MinimapIcon minimapIcon;
+        [SerializeField] private CreatureLauncher launcher;
         #endregion
 
         #region Properties
@@ -74,6 +77,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureSpeedup SpeedUp => speedUp;
         public CreatureGrounded Grounded => grounded;
         public MinimapIcon MinimapIcon => minimapIcon;
+        public CreatureLauncher Launcher => launcher;
+
+        public static List<CreatureBase> Creatures { get; set; } = new List<CreatureBase>();
         #endregion
 
         #region Methods
@@ -102,12 +108,22 @@ namespace DanielLochner.Assets.CreatureCreator
             speedUp = GetComponent<CreatureSpeedup>();
             grounded = GetComponent<CreatureGrounded>();
             minimapIcon = GetComponent<MinimapIcon>();
+            launcher = GetComponent<CreatureLauncher>();
         }
 #endif
+        private void OnEnable()
+        {
+            Creatures.Add(this);
+        }
+        private void OnDisable()
+        {
+            Creatures.Remove(this);
+        }
 
         public virtual void Setup()
         {
             Animator.Setup();
+            Launcher.Setup();
 
             MinimapIcon.enabled = true;
 
@@ -126,9 +142,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public virtual void OnSpawn()
         {
             MinimapIcon.enabled = true;
+            Launcher.enabled = true;
         }
         public virtual void OnDespawn()
         {
+            Launcher.enabled = false;
         }
         public virtual void OnHide()
         {

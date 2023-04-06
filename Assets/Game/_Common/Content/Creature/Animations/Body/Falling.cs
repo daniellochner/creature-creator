@@ -8,8 +8,11 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 {
     public class Falling : CreatureAnimation
     {
+        #region Fields
         [SerializeField] private float maxFallSpeed;
+        #endregion
 
+        #region Methods
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             foreach (LegAnimator leg in Creature.Legs)
@@ -33,5 +36,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 walking.StopMovingLegs();
             }
         }
+        #endregion
     }
 }

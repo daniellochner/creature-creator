@@ -76,7 +76,7 @@ SkinnedMeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -111,7 +111,7 @@ SkinnedMeshRenderer:
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
+  m_SkinnedMotionVectors: 0
   m_Mesh: {fileID: -2008522802869532733, guid: 341e5974835e98b4198194f69d4c4ba8, type: 3}
   m_Bones: []
   m_BlendShapeWeights:
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6484302743034536536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35975bc61708d1d4ab5866852a54f3a0, type: 3}
+  m_Script: {fileID: 11500000, guid: e0745302a6e905441b91acf6cc9343e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: {fileID: 11400000, guid: 0778fa79cb0e7e341a682b099d9c1fbd, type: 2}
@@ -354,7 +354,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -383,6 +387,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: 0
   onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1800621617164271621
@@ -463,7 +470,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:

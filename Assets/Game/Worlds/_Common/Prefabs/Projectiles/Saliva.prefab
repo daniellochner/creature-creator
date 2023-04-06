@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 3615778504621494282}
   - component: {fileID: -4387404258738600928}
   - component: {fileID: 3588123987159888518}
-  - component: {fileID: 5530003112067274670}
   - component: {fileID: -7866358497527998615}
   - component: {fileID: -595621733745176038}
   m_Layer: 19
@@ -113,7 +112,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -161,20 +160,6 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
---- !u!114 &5530003112067274670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3615778504621494283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 014941cf3776a604d88b5f86f98fe687, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifetime: 10
-  elapsedTime: 0
 --- !u!114 &-7866358497527998615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,8 +175,9 @@ MonoBehaviour:
   minMaxDamage:
     min: 10
     max: 15
-  blastRadius: 0.25
+  blastRadius: 1
   collidePrefab: {fileID: 5426885723728467551, guid: 49e727bf1cfe70947a52b5a26f8e2ee0, type: 3}
+  lifetime: 10
 --- !u!96 &-595621733745176038
 TrailRenderer:
   serializedVersion: 2

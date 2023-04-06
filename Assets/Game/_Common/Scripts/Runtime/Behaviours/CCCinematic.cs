@@ -17,19 +17,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Show();
             SetVisibility(true);
-            SetNotificationsHeight(150);
+            SetNotificationOffset(1);
         }
         public override void Hide()
         {
             base.Hide();
             SetVisibility(false);
-            SetNotificationsHeight(0);
+            SetNotificationOffset(-1);
         }
 
-        private void SetNotificationsHeight(int height)
+        private void SetNotificationOffset(int dir)
         {
-            var group = NotificationsManager.Instance.GetComponent<VerticalLayoutGroup>();
-            group.padding.top = height + 10;
+            int value = SystemUtility.IsDevice(DeviceType.Handheld) ? 40 : 150;
+
+            var group = NotificationsManager.Instance.GetComponentInChildren<VerticalLayoutGroup>();
+            group.padding.top += dir * value;
             group.enabled = false;
             group.enabled = true;
         }

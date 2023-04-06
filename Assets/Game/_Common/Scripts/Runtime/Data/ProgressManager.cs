@@ -1,15 +1,22 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using Steamworks;
 using UnityEngine;
+
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class ProgressManager : DataManager<ProgressManager, Progress>
     {
         #region Properties
+#if UNITY_STANDALONE
         public override string SALT => SteamUser.GetSteamID().ToString();
+#elif UNITY_IOS || UNITY_ANDROID
+        public override string SALT => SystemInfo.deviceUniqueIdentifier;
+#endif
         #endregion
 
         #region Methods
@@ -17,13 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
             UnlockMap(Map.Island);
-            
-            // Quick fix to unlock existing maps for returning players...
-            if (PlayerPrefs.GetInt("REVERT_SETTINGS") == 1)
-            {
-                UnlockMap(Map.Farm);
-                UnlockMap(Map.Sandbox);
-            }
         }
 
         public override void Revert()

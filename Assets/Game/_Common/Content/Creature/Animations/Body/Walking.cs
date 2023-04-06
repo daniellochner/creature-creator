@@ -108,14 +108,17 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 #if USE_STATS
             if (animator.CompareTag("Player/Local"))
             {
-                StatsManager.Instance.SetAchievement("ACH_BABY_STEPS");
+                StatsManager.Instance.UnlockAchievement("ACH_BABY_STEPS");
             }
 #endif
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            HandleLegs();
-            HandleBody();
+            if (!Creature.IsOptimized)
+            {
+                HandleLegs();
+                HandleBody();
+            }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

@@ -104,9 +104,9 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Remove();
             CreatureConstructor.Limbs.Remove(this);
         }
-        public override void Flip()
+        public override void Flip(bool align = true)
         {
-            base.Flip();
+            base.Flip(align);
 
             // Bones
             for (int i = 0; i < Bones.Length; i++)

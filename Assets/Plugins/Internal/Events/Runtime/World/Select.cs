@@ -79,7 +79,7 @@ namespace DanielLochner.Assets
         }
         private void Start()
         {
-            Click.OnClick.AddListener(delegate
+            Click.OnLeftClick.AddListener(delegate
             {
                 this.InvokeAtEndOfFrame(delegate
                 {

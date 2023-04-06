@@ -1,3 +1,4 @@
+using MoreMountains.NiceVibrations;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -37,6 +38,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SpawnConfettiClientRpc(Vector3 position)
         {
             Instantiate(confettiPrefab, position, Quaternion.identity);
+
+            MMVibrationManager.Haptic(HapticTypes.LightImpact);
         }
         #endregion
 

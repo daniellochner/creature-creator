@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace DanielLochner.Assets
 {
-    [RequireComponent(typeof(SphereCollider))]
+    [RequireComponent(typeof(Collider))]
     public class TriggerRegion : MonoBehaviour
     {
         #region Fields
@@ -17,11 +17,11 @@ namespace DanielLochner.Assets
         [Header("Debug")]
         [SerializeField, ReadOnly] private List<Collider> entered = new List<Collider>();
 
-        private SphereCollider region;
+        private Collider region;
         #endregion
 
         #region Properties
-        public SphereCollider Region => region;
+        public Collider Region => region;
 
         public UnityEvent<Collider> OnEnter => onEnter;
         public UnityEvent<Collider> OnExit => onExit;
@@ -32,10 +32,10 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            region = GetComponent<SphereCollider>();
+            region = GetComponent<Collider>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             if (CanEnter(other) && !entered.Contains(other) && !ignored.Contains(other.name))
             {
@@ -43,7 +43,7 @@ namespace DanielLochner.Assets
                 entered.Add(other);
             }
         }
-        private void OnTriggerExit(Collider other)
+        public void OnTriggerExit(Collider other)
         {
             if (entered.Contains(other) && !ignored.Contains(other.name))
             {
@@ -60,7 +60,8 @@ namespace DanielLochner.Assets
         {
             List<Collider> tmp = new List<Collider>(entered);
             Clear();
-            Collider[] colliders = Physics.OverlapSphere(transform.position, region.radius);
+            Collider[] colliders = PhysicsUtility.Overlap(region);
+
             foreach (Collider collider in colliders)
             {
                 if (tmp.Contains(collider))

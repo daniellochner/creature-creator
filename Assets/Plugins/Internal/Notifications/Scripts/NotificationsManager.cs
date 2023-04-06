@@ -16,6 +16,19 @@ namespace DanielLochner.Assets
         [SerializeField, Button("TestNotify")] private bool testNotify;
         #endregion
 
+        #region Properties
+        public float OffsetX
+        {
+            get => notificationsRT.offsetMin.x;
+            set => notificationsRT.offsetMin = new Vector2(value, 0);
+        }
+        public float OffsetY
+        {
+            get => notificationsRT.offsetMax.y;
+            set => notificationsRT.offsetMax = new Vector2(0, value);
+        }
+        #endregion
+
         #region Methods
         public static void Notify(string message, UnityAction onClose = null)
         {

@@ -15,12 +15,32 @@ namespace DanielLochner.Assets
         #region Properties
         public UnityEvent OnShow => onShow;
         public UnityEvent OnHide => onHide;
+
+        public float Radius
+        {
+            get => radius;
+            set => radius = value;
+        }
         #endregion
 
         #region Methods
         private void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireSphere(transform.position, radius);
+        }
+        private void Start()
+        {
+            if (!VisibilityManager.Instance.Objects.Contains(this))
+            {
+                VisibilityManager.Instance.Objects.Add(this);
+            }
+        }
+        private void OnDestroy()
+        {
+            if (VisibilityManager.Instance)
+            {
+                VisibilityManager.Instance.Objects.Remove(this);
+            }
         }
 
         public void Show()

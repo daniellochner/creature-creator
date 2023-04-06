@@ -106,6 +106,10 @@ PrefabInstance:
       propertyPath: loadCooldown
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 656765020233377457, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+      propertyPath: maxLightSources
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 656765020233377469, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -479,6 +483,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118559b03109b1d43b1e2003acc9dc6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3246352927499238391 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2160839203011549087, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 3526752849064750184}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b3d4dcdad4ecc4392865f832c85652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3420663574166639978 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2272391890123618562, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
@@ -549,6 +564,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1078009660281691031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074065545388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onScrollUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onScrollDown:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3881683653543598530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -563,6 +596,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: Infinity
   onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4073975958022132436
@@ -603,7 +639,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -667,6 +707,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 656765020233377470, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
   m_PrefabInstance: {fileID: 3526752849064750184}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-4134210725822781499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a57c1b44deba1418716a51f3622236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factor: 50
 --- !u!114 &722333217718591760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,7 +727,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4173930074114902742}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8770fcb7cf26e8742841b7c4f515aafa, type: 3}
   m_Name: 
@@ -720,7 +773,9 @@ MonoBehaviour:
   comparer: {fileID: 2134280685613725843}
   underwater: {fileID: 3866524939012152633}
   speedUp: {fileID: 7040875473051337211}
+  grounded: {fileID: 4630285723951257493}
   minimapIcon: {fileID: 7756471173767236412}
+  launcher: {fileID: 3246352927499238391}
   namer: {fileID: 4012423436152039703}
   deathMessenger: {fileID: 7151558922526411801}
   messenger: {fileID: 8269862162959058614}
@@ -731,6 +786,7 @@ MonoBehaviour:
   interactor: {fileID: 6455319599120189937}
   camera: {fileID: 3128739701310892759}
   speedEffects: {fileID: 3791682475270378197}
+  buoyancy: {fileID: -4134210725822781499}
 --- !u!114 &1571468587715315016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,8 +808,12 @@ MonoBehaviour:
   thresholdWalkSpeed: 0.01
   targetPrefab: {fileID: 2874054129870821986, guid: 94f1e040132570740868668e17e9a6e2, type: 3}
   airDrag: 3
+  joystickThreshold: 0.25
+  touchThreshold: 10
   velocity: {x: 0, y: 0, z: 0}
   angularVelocity: {x: 0, y: 0, z: 0}
+  CanMove: 1
+  CanTurn: 1
 --- !u!114 &1922529363214902832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,6 +833,9 @@ MonoBehaviour:
   stretchAudioClip: {fileID: 8300000, guid: a69d527929ec3ce45b4544108a3bfb7d, type: 3}
   resizeAudioClip: {fileID: 8300000, guid: ae20ed479c5a1434187633fecb940edc, type: 3}
   audioMixer: {fileID: -5561601583770752817, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
+  touchOffset: 100
+  holdTime: 0.5
+  holdThreshold: 10
   addOrRemoveCooldown: 0.02
   angleLimit: 30
   positionSmoothing: 2
@@ -803,6 +866,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraPrefab: {fileID: 4041236049601487436, guid: 1d105993763b3c141ab23abc4e63cb9c, type: 3}
+  minMaxDamage:
+    min: 0
+    max: 100
+  minMaxStress:
+    min: 0.05
+    max: 0.2
 --- !u!114 &3791682475270378197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,6 +990,17 @@ MonoBehaviour:
   includeSubMeshes: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &4630285723951257493 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8121009730630237181, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 3526752849064750184}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4634753195551126157 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8115619012852293349, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}

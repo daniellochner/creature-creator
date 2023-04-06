@@ -247,6 +247,7 @@ GameObject:
   - component: {fileID: -5207407339395265927}
   - component: {fileID: 8401152560435810035}
   - component: {fileID: 122633555678373943}
+  - component: {fileID: 1396989593536621340}
   m_Layer: 5
   m_Name: PatternUI
   m_TagString: Untagged
@@ -328,7 +329,7 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 4
 --- !u!95 &7312135690466870463
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -345,7 +346,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &4094072131891481174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,6 +449,9 @@ MonoBehaviour:
   onRightClick:
     m_PersistentCalls:
       m_Calls: []
+  onMiddleClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &122633555678373943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,3 +469,36 @@ MonoBehaviour:
   hoverUI: {fileID: 4251193710140930045}
   canvasGroup: {fileID: 795921051797695175}
   newGO: {fileID: 2972903641541427067}
+--- !u!114 &1396989593536621340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381465224494974745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1faf7b026177a64fb1d6af18a6c7818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStandalone:
+    m_PersistentCalls:
+      m_Calls: []
+  onHandheld:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7312135690466870463}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onConsole:
+    m_PersistentCalls:
+      m_Calls: []

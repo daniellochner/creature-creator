@@ -16,6 +16,28 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int cash = 500;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
+
+        public readonly string[] QUESTS = new string[]
+        {
+            // Island
+            "quest_27dh3g2",
+
+            // Farm
+            "quest_9n5pdf6",
+            "quest_j5pz7s0",
+            "quest_8s7s83i",
+            "quest_lo4zz8f",
+            "quest_01lfpx7",
+            "quest_mn72a0b",
+            "quest_f8s5x02",
+
+            // Sandbox
+            "quest_8nsgy3m",
+            "quest_9js6hk4",
+
+            // Cave
+            "quest_k2nx0l"
+        };
         #endregion
 
         #region Properties
@@ -67,6 +89,21 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<string> UnlockedPatterns
         {
             get => unlockedPatterns;
+        }
+        public int CompletedQuests
+        {
+            get
+            {
+                int counter = 0;
+                foreach (string quest in QUESTS)
+                {
+                    if (PlayerPrefs.GetInt(quest) == 1)
+                    {
+                        counter++;
+                    }
+                }
+                return counter;
+            }
         }
         #endregion
 

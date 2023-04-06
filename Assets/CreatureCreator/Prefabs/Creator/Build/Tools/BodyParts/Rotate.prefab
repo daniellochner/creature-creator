@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7206478587929954924}
   m_Father: {fileID: 0}
@@ -63,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b214715c83905046a4d7e6ac545e11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseButton: 0
   mousePlaneAlignment: 0
   localDirection: {x: 0, y: 0, z: 1}
   worldDirection: {x: 1, y: 0, z: 0}
@@ -88,7 +90,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  touchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -120,6 +126,7 @@ MonoBehaviour:
     x: 1
     y: 1
     z: 0
+  fixedScaleZ: 2
 --- !u!114 &-6550086194803836997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,14 +226,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 760fd707e08c0944ab3dc2cfd58872e8, type: 3}
---- !u!1 &8019044740873212118 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 760fd707e08c0944ab3dc2cfd58872e8, type: 3}
-  m_PrefabInstance: {fileID: 7172043315225521543}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7206478587929954924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 760fd707e08c0944ab3dc2cfd58872e8, type: 3}
+  m_PrefabInstance: {fileID: 7172043315225521543}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8019044740873212118 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 760fd707e08c0944ab3dc2cfd58872e8, type: 3}
   m_PrefabInstance: {fileID: 7172043315225521543}
   m_PrefabAsset: {fileID: 0}
 --- !u!64 &3006640768777072606

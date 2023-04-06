@@ -1,32 +1,24 @@
-using Unity.Netcode;
+using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [RequireComponent(typeof(Commander))]
     public class Commandable : CreatureInteractable
     {
+        #region Fields
+        private Commander commander;
+        #endregion
+
+        #region Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            commander = GetComponent<Commander>();
+        }
         protected override void OnInteract(Interactor interactor)
         {
-            CommandServerRpc(interactor.NetworkObject);
+            commander.TryCommand(interactor);
         }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void CommandServerRpc(NetworkObjectReference commander)
-        {
-            if (commander.TryGet(out NetworkObject obj))
-            {
-                AnimalAI animalAI = GetComponent<AnimalAI>();
-                if (animalAI.CanFollow)
-                {
-                    if (animalAI.GetState<AnimalAI.Following>("FOL").Target == null)
-                    {
-                        animalAI.Follow(obj.transform);
-                    }
-                    else
-                    {
-                        animalAI.StopFollowing();
-                    }
-                }
-            }
-        }
+        #endregion
     }
 }

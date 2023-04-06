@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +11,9 @@ namespace DanielLochner.Assets
     public class InteractionsManager : MonoBehaviourSingleton<InteractionsManager>
     {
         #region Fields
+        [SerializeField] private float touchOffset;
+        [SerializeField] private float scrollCooldown;
+        [SerializeField] private float scrollThreshold;
         [SerializeField] private Texture2D defaultCursor;
         [SerializeField] private InteractionUI interactionPrefab;
         [SerializeField] private GridLayoutGroup grid;
@@ -23,6 +25,7 @@ namespace DanielLochner.Assets
         private List<InteractionUI> interactions = new List<InteractionUI>();
         private Interactable prevHighlighted;
         private int highlightedIndex;
+        private float scrolledTime;
         #endregion
 
         #region Properties
@@ -108,14 +111,34 @@ namespace DanielLochner.Assets
         {
             if (grid.transform.childCount > 0)
             {
-                if (Input.mouseScrollDelta.y > 0)
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    HighlightedIndex++;
+                    if (Input.mouseScrollDelta.y > +scrollThreshold)
+                    {
+                        HighlightedIndex++;
+                    }
+                    else
+                    if (Input.mouseScrollDelta.y < -scrollThreshold)
+                    {
+                        HighlightedIndex--;
+                    }
                 }
                 else
-                if (Input.mouseScrollDelta.y < 0)
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    HighlightedIndex--;
+                    if (InputUtility.GetDelta(out float deltaX, out float deltaY) && (Time.time > (scrolledTime + scrollCooldown)))
+                    {
+                        if (deltaY > 0)
+                        {
+                            HighlightedIndex++;
+                        }
+                        else
+                        if (deltaY < 0)
+                        {
+                            HighlightedIndex--;
+                        }
+                        scrolledTime = Time.time;
+                    }
                 }
             }
         }
@@ -123,13 +146,71 @@ namespace DanielLochner.Assets
         {
             if (Interactor == null) return;
 
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                if (!Target())
+                {
+                    Targeted = null;
+                }
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                if (Input.GetMouseButtonUp(0) && Highlighted != null)
+                {
+                    if (Highlighted.CanHighlight(Interactor))
+                    {
+                        Highlighted.Interact(Interactor);
+                    }
+                    Targeted = null;
+                }
+
+                if (Input.GetMouseButtonDown(0) && !CanvasUtility.IsPointerOverUI)
+                {
+                    Target();
+                }
+            }
+        }
+
+        private void Setup(GameObject obj)
+        {
+            foreach (Interactable interactable in obj.GetComponents<Interactable>())
+            {
+                if (interactable.CanHighlight(Interactor))
+                {
+                    InteractionUI interaction = Instantiate(interactionPrefab, grid.transform);
+                    interaction.Setup(interactable, toggleGroup);
+
+                    interactions.Add(interaction);
+                }
+            }
+            if (interactions.Count > 0)
+            {
+                HighlightedIndex = 0;
+            }
+
+            grid.gameObject.SetActive(interactions.Count > 1);
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                grid.transform.position = Input.mousePosition + Vector3.up * touchOffset;
+            }
+        }
+
+        private void Clear()
+        {
+            interactions.Clear();
+            grid.transform.DestroyChildren();
+        }
+        private bool Target()
+        {
             if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(Interactor.InteractionCamera, Input.mousePosition), out RaycastHit hitInfo))
             {
                 if (Highlighted != null && hitInfo.collider == Highlighted.Col)
                 {
                     if (Highlighted.CanHighlight(Interactor))
                     {
-                        if (Input.GetMouseButtonDown(0) && Highlighted.CanInteract(Interactor))
+                        if (Input.GetMouseButtonDown(0))
                         {
                             Highlighted.Interact(Interactor);
                         }
@@ -151,36 +232,10 @@ namespace DanielLochner.Assets
                     }
                     Targeted = t;
                 }
-            }
-            else
-            {
-                Targeted = null;
-            }
-        }
 
-        public void Setup(GameObject obj)
-        {
-            foreach (Interactable interactable in obj.GetComponents<Interactable>())
-            {
-                if (interactable.CanHighlight(Interactor))
-                {
-                    InteractionUI interaction = Instantiate(interactionPrefab, grid.transform);
-                    interaction.Setup(interactable, toggleGroup);
-
-                    interactions.Add(interaction);
-                }
+                return true;
             }
-            if (interactions.Count > 0)
-            {
-                HighlightedIndex = 0;
-            }
-
-            grid.gameObject.SetActive(interactions.Count > 1);
-        }
-        public void Clear()
-        {
-            interactions.Clear();
-            grid.transform.DestroyChildren();
+            return false;
         }
         #endregion
     }

@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float spawnCooldown;
         [SerializeField] private float spawnStart;
         [SerializeField] private float rotationOffset;
+        [SerializeField] private Vector3 force;
 
         private List<string> creatures = new List<string>();
         private int index;
@@ -35,6 +36,14 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Start()
         {
             ChangeSpawnerSource(SpawnerSource.Local);
+        }
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0) && Physics.Raycast(RectTransformUtility.ScreenPointToRay(Camera.main, Input.mousePosition), out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Ragdoll")))
+            {
+                Vector3 dir = (hitInfo.point - Camera.main.transform.position).normalized;
+                hitInfo.rigidbody.AddForce((dir * force.z) + (Vector3.up * force.y), ForceMode.Impulse);
+            }
         }
 
         public void ChangeSpawnerSource(SpawnerSource source)

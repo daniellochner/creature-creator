@@ -31,7 +31,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6151723355536251415}
   m_Father: {fileID: 7700470884755878568}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -202,7 +203,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5930943251230688967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58f82ac88c5fb97468755399b6c32b74, type: 3}
+  m_Script: {fileID: 11500000, guid: 919ea9f7e8a8908418202b8537253326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: {fileID: 11400000, guid: 4a7b0797acad3f549b932012b0186544, type: 2}
@@ -233,6 +234,7 @@ MonoBehaviour:
     _keyValues: 
     _keys: 
     _values: []
+  palm: {fileID: 6151723355536251415}
 --- !u!114 &-2743889724114139303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +349,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -376,6 +382,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threshold: 0
   onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &5337495873910092935
@@ -436,7 +445,11 @@ MonoBehaviour:
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
+  mobileTouchOffset: 0
   onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -451,3 +464,34 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &6076452996107252407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6151723355536251415}
+  m_Layer: 9
+  m_Name: Palm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6151723355536251415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6076452996107252407}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.03, z: 0.239}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 994167437110274105}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

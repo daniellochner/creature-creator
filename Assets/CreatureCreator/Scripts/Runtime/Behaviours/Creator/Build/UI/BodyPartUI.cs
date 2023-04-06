@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,19 +40,52 @@ namespace DanielLochner.Assets.CreatureCreator
 
             icon.sprite = bodyPart.Icon;
 
+            hoverUI.OnEnter.AddListener(delegate
+            {
+                if (!Input.GetMouseButton(0))
+                {
+                    StatisticsMenu.Instance.Setup(bodyPart, Input.mousePosition);
+                    HideNew();
+                }
+            });
+            hoverUI.OnExit.AddListener(delegate
+            {
+                StatisticsMenu.Instance.Clear();
+            });
+
             dragUI.OnPress.AddListener(delegate
             {
+                Select();
+
                 animator.SetBool("Expanded", false);
+
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    StatisticsMenu.Instance.Close();
+                }
+            });
+            dragUI.OnRelease.AddListener(delegate
+            {
+                Deselect();
+            });
+
+            clickUI.OnLeftClick.AddListener(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    StartCoroutine(ClickToOpenRoutine(bodyPart));
+                }
             });
 
             if (isNew)
             {
                 newGO.SetActive(true);
-                hoverUI.OnEnter.AddListener(delegate
-                {
-                    newGO.SetActive(false);
-                });
             }
+        }
+
+        private void HideNew()
+        {
+            newGO.SetActive(false);
         }
 
         public void Select()
@@ -63,6 +97,8 @@ namespace DanielLochner.Assets.CreatureCreator
             layoutElement.ignoreLayout = true;
             transform.SetParent(transform.parent.parent);
             transform.SetAsLastSibling();
+
+            HideNew();
         }
         public void Deselect()
         {
@@ -74,6 +110,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 
                 Destroy(tmp);
             }
+        }
+
+        private IEnumerator ClickToOpenRoutine(BodyPart bodyPart)
+        {
+            StatisticsMenu.Instance.Setup(bodyPart, transform.position);
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            StatisticsMenu.Instance.Close();
         }
         #endregion
     }

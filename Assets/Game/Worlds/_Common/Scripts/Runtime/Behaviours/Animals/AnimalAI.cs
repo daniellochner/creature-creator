@@ -194,6 +194,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 base.Enter();
                 idleTimeLeft = wanderCooldown.Random;
                 AnimalAI.Agent.SetDestination(AnimalAI.transform.position);
+                AnimalAI.Creature.Health.OnTakeDamage += OnTakeDamage;
             }
             public override void UpdateLogic()
             {
@@ -202,15 +203,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     TimerUtility.OnTimer(ref idleTimeLeft, wanderCooldown.Random, Time.deltaTime, delegate
                     {
-                        WanderToPosition(wanderBounds?.RandomPointInBounds ?? AnimalAI.transform.position);
+                        WanderToRandomPosition();
                     });
                 }
             }
             public override void Exit()
             {
                 AnimalAI.Agent.SetDestination(AnimalAI.transform.position);
+                AnimalAI.Creature.Health.OnTakeDamage -= OnTakeDamage;
             }
 
+            private void WanderToRandomPosition()
+            {
+                WanderToPosition(wanderBounds?.RandomPointInBounds ?? AnimalAI.transform.position);
+            }
             private void WanderToPosition(Vector3 position)
             {
                 if (NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas))
@@ -218,6 +224,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     position = hit.position;
                 }
                 AnimalAI.Agent.SetDestination(position);
+            }
+
+            private void OnTakeDamage(float damage, Vector3 point)
+            {
+                idleTimeLeft = 0;
             }
         }
 

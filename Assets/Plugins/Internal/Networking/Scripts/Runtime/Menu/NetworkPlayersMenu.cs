@@ -1,5 +1,4 @@
 using Unity.Netcode;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;

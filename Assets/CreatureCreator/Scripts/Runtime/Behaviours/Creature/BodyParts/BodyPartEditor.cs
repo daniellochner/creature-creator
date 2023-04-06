@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -14,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool isInteractable;
         private Transform connectionPoint;
+
+        private float addedOrRemovedTime;
         #endregion
 
         #region Properties
@@ -149,6 +152,36 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding)
                 {
                     CreatureEditor.Camera.CameraOrbit.Freeze();
+
+                    if (SystemUtility.IsDevice(DeviceType.Handheld))
+                    {
+                        StartCoroutine(CreatureEditor.HoldDraggableRoutine(LDrag));
+                    }
+                }
+            });
+            LDrag.OnHold.AddListener(delegate
+            {
+                if (EditorManager.Instance.IsBuilding)
+                {
+                    if (!LDrag.draggable)
+                    {
+                        if (Time.time > addedOrRemovedTime + CreatureEditor.AddOrRemoveCooldown)
+                        {
+                            InputUtility.GetDelta(out float deltaX, out float deltaY);
+
+                            if (deltaY > 0)
+                            {
+                                Scroll.OnScrollUp.Invoke();
+                            }
+                            else
+                            if (deltaY < 0)
+                            {
+                                Scroll.OnScrollDown.Invoke();
+                            }
+
+                            addedOrRemovedTime = Time.time;
+                        }
+                    }
                 }
             });
             LDrag.OnRelease.AddListener(delegate
@@ -233,6 +266,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureEditor.IsDirty = true;
                 }
             });
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                LDrag.mobileTouchOffset = CreatureEditor.TouchOffset;
+            }
 
             RDrag.world = connectionPoint;
             RDrag.OnDrag.AddListener(delegate
@@ -262,6 +299,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
                 Flipped.Select.Outline.enabled = IsSelected;
+            });
+			
+			Click.OnRightClick.AddListener(delegate 
+			{
+                transform.localRotation *= Quaternion.Euler(0, 0f, 180f);
+                BodyPartConstructor.Flip(false);
             });
         }
         private void SetupConstruction()
@@ -327,7 +370,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual bool CanAttach(out Vector3 aPosition, out Quaternion aRotation)
         {
-            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit raycastHit) && CanAttachToCollider(raycastHit.collider))
+            Vector3 origin = Input.mousePosition;
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                origin += Vector3.up * CreatureEditor.TouchOffset;
+            }
+
+            if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, origin), out RaycastHit raycastHit) && CanAttachToCollider(raycastHit.collider))
             {
                 aPosition = raycastHit.point;
                 aRotation = Quaternion.LookRotation(raycastHit.normal, CreatureEditor.transform.up);

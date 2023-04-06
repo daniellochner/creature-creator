@@ -16,6 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int refreshRate;
         [SerializeField] private bool fullscreen;
         [SerializeField] private bool vSync;
+        [SerializeField] private int targetFrameRate = -1;
+        [SerializeField] private float screenScale = 0.5f;
         [Space]
         [SerializeField] private CreatureMeshQualityType creatureMeshQuality;
         [SerializeField] private ShadowQualityType shadowQuality;
@@ -24,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AntialiasingType antialiasing;
         [SerializeField] private ScreenSpaceReflectionsType screenSpaceReflections;
         [SerializeField] private FoliageType foliage;
+        [SerializeField] private bool ambientParticles = true;
         [SerializeField] private bool reflections;
         [SerializeField] private bool anisotropicFiltering;
         [SerializeField] private bool bloom;
@@ -43,7 +46,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<string> hiddenBodyParts;
         [SerializeField] private List<string> hiddenPatterns;
         [SerializeField] private string locale;
+        [SerializeField] private float touchOffset = 100f;
         [SerializeField] private bool cameraShake;
+        [SerializeField] private bool vibrations = true;
         [SerializeField] private bool debugMode;
         [SerializeField] private bool previewFeatures;
         [SerializeField] private bool networkStats;
@@ -57,6 +62,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Range(0, 3)] private float sensitivityVertical;
         [SerializeField] private bool invertHorizontal;
         [SerializeField] private bool invertVertical;
+        [SerializeField] private JoystickType joystick = JoystickType.Floating;
+        [SerializeField] private float joystickPositionHorizontal = 0.2f;
+        [SerializeField] private float joystickPositionVertical = 0.4f;
+        [SerializeField] private float interfaceScale = 1f;
         #endregion
 
         #region Properties
@@ -84,6 +93,17 @@ namespace DanielLochner.Assets.CreatureCreator
             get => vSync;
             set => vSync = value;
         }
+        public int TargetFrameRate
+        {
+            get => targetFrameRate;
+            set => targetFrameRate = value;
+        }
+        public float ScreenScale
+        {
+            get => screenScale;
+            set => screenScale = value;
+        }
+
         public CreatureMeshQualityType CreatureMeshQuality
         {
             get => creatureMeshQuality;
@@ -118,6 +138,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => foliage;
             set => foliage = value;
+        }
+        public bool AmbientParticles
+        {
+            get => ambientParticles;
+            set => ambientParticles = value;
         }
         public bool Reflections
         {
@@ -193,10 +218,20 @@ namespace DanielLochner.Assets.CreatureCreator
             get => locale;
             set => locale = value;
         }
+        public float TouchOffset
+        {
+            get => touchOffset;
+            set => touchOffset = value;
+        }
         public bool CameraShake
         {
             get => cameraShake;
             set => cameraShake = value;
+        }
+        public bool Vibrations
+        {
+            get => vibrations;
+            set => vibrations = value;
         }
         public bool DebugMode
         {
@@ -254,14 +289,37 @@ namespace DanielLochner.Assets.CreatureCreator
             get => invertVertical;
             set => invertVertical = value;
         }
+
+        public JoystickType Joystick
+        {
+            get => joystick;
+            set => joystick = value;
+        }
+        public float JoystickPositionHorizontal
+        {
+            get => joystickPositionHorizontal;
+            set => joystickPositionHorizontal = value;
+        }
+        public float JoystickPositionVertical
+        {
+            get => joystickPositionVertical;
+            set => joystickPositionVertical = value;
+        }
+        public float InterfaceScale
+        {
+            get => interfaceScale;
+            set => interfaceScale = value;
+        }
         #endregion
 
         #region Methods
         public override void Revert()
         {
+            // Defaults
             Resolution = Screen.currentResolution;
             Fullscreen = true;
             VSync = false;
+            TargetFrameRate = -1;
 
             CreatureMeshQuality = CreatureMeshQualityType.High;
             ShadowQuality = ShadowQualityType.Medium;
@@ -270,6 +328,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Antialiasing = AntialiasingType.FXAA;
             ScreenSpaceReflections = ScreenSpaceReflectionsType.None;
             Foliage = FoliageType.Medium;
+            AmbientParticles = true;
             Reflections = false;
             AnisotropicFiltering = true;
             Bloom = true;
@@ -284,7 +343,9 @@ namespace DanielLochner.Assets.CreatureCreator
             OnlineUsername = "";
             CreaturePresets.Clear();
             ExportPrecision = 3;
+            TouchOffset = 100;
             CameraShake = true;
+            Vibrations = true;
             DebugMode = false;
             PreviewFeatures = false;
             NetworkStats = true;
@@ -297,6 +358,34 @@ namespace DanielLochner.Assets.CreatureCreator
             SensitivityVertical = 1f;
             InvertHorizontal = false;
             InvertVertical = false;
+
+            Joystick = JoystickType.Floating;
+            JoystickPositionHorizontal = 0.2f;
+            JoystickPositionVertical = 0.4f;
+            InterfaceScale = 1f;
+
+            // Overrides
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                TargetFrameRate = 30;
+                TextureQuality = TextureQualityType.High;
+                ShadowQuality = ShadowQualityType.Low;
+                Foliage = FoliageType.VeryLow;
+                AmbientOcclusion = AmbientOcclusionType.None;
+                Bloom = false;
+                AmbientParticles = false;
+                ScreenScale = 0.75f;
+
+                if (SystemUtility.IsLowEndDevice)
+                {
+                    ScreenScale = 0.5f;
+                    ShadowQuality = ShadowQualityType.None;
+                    TextureQuality = TextureQualityType.Medium;
+                }
+
+                TouchOffset *= ScreenScale;
+                SensitivityHorizontal = SensitivityVertical = 1f / ScreenScale;
+            }
         }
         #endregion
 
@@ -368,6 +457,11 @@ namespace DanielLochner.Assets.CreatureCreator
             None,
             WistfulHarp,
             Being
+        }
+        public enum JoystickType
+        {
+            Fixed,
+            Floating
         }
         #endregion
     }

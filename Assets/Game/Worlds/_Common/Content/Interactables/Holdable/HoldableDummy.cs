@@ -48,7 +48,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 GameObject h = GameObject.Find(limbGUID);
                 if (h != null)
                 {
-                    hand = h.GetComponent<LimbConstructor>().Extremity;
+                    ArmConstructor arm = h.GetComponent<ArmConstructor>();
+                    if (arm.ConnectedHand != null)
+                    {
+                        hand = arm.ConnectedHand.Palm;
+                    }
+                    else
+                    {
+                        hand = arm.Extremity;
+                    }
                 }
                 else yield return new WaitForSeconds(checkTime);
             }

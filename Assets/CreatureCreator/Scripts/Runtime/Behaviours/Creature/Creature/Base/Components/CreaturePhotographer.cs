@@ -34,17 +34,17 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureCloner = GetComponent<CreatureCloner>();
         }
 
-        public void TakePhoto(int resolution, Action<Texture2D> onPhotoTaken)
+        public void TakePhoto(int resolution, Action<Texture2D> onPhotoTaken, CreatureData dataOverride = null)
         {
-            StartCoroutine(TakePhotoRoutine(resolution, onPhotoTaken));
+            StartCoroutine(TakePhotoRoutine(resolution, onPhotoTaken, dataOverride));
         }
-        public IEnumerator TakePhotoRoutine(int resolution, Action<Texture2D> onPhotoTaken)
+        public IEnumerator TakePhotoRoutine(int resolution, Action<Texture2D> onPhotoTaken, CreatureData dataOverride = null)
         {
             yield return new WaitWhile(() => IsTakingPhoto); // Prevent rare case when creatures are photographed in the same frame.
             IsTakingPhoto = true;
 
             // Clone creature (to world origin).
-            CreatureConstructor tmpCreature = CreatureCloner.Clone(parent: Dynamic.Transform);
+            CreatureConstructor tmpCreature = CreatureCloner.Clone(creatureData: dataOverride, parent: Dynamic.Transform);
             tmpCreature.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Photography"));
 
             GameObject photoCamGO = new GameObject("Camera");

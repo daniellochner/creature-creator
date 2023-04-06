@@ -131,7 +131,7 @@ MonoBehaviour:
   m_FreezeAxis: 0
   m_DistantDisable: 1
   m_ReferenceObject: {fileID: 0}
-  m_DistanceToObject: 20
+  m_DistanceToObject: 25
   m_Multithread: 1
 --- !u!1 &5812436878079772819
 GameObject:
@@ -270,9 +270,9 @@ GameObject:
   - component: {fileID: 7193793692207522153}
   - component: {fileID: -4665765645030724510}
   - component: {fileID: 7193793692207522149}
+  - component: {fileID: 4963198199187730079}
   - component: {fileID: 5812436878276722342}
   - component: {fileID: 5812436878276722343}
-  - component: {fileID: 501283603706205489}
   - component: {fileID: 3811310191443384886}
   - component: {fileID: 5812436878276722340}
   - component: {fileID: 3945330708831151637}
@@ -368,6 +368,7 @@ MonoBehaviour:
     min: 2
     max: 20
   density: 400
+  maxLightSources: 1
   minMaxBodySpeed:
     min: -1
     max: 0
@@ -406,6 +407,18 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &4963198199187730079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ad5f38860900d4da617bfab887c720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5812436878276722342
 Animator:
   serializedVersion: 5
@@ -442,25 +455,6 @@ MonoBehaviour:
   - m_Rig: {fileID: 5812436878079772845}
     m_Active: 1
   m_Effectors: []
---- !u!114 &501283603706205489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7193793692207522154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneShape: 1
-  drawBones: 1
-  drawTripods: 0
-  boneSize: 1
-  tripodSize: 1
-  boneColor: {r: 0, g: 0, b: 1, a: 0.5}
-  m_Transforms: []
 --- !u!114 &3811310191443384886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,7 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useEasing: 0
-  extensionThreshold: 0.8
+  extensionThreshold: 0.95
   rig: {fileID: 5812436878079772845}
   tail: {fileID: 5526538298011628014}
   limbs: {fileID: 3192009271312187847}
@@ -803,6 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2896e7d6253a5f24ab07c5b0f57110b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fleshPrefab: {fileID: 2132262878428099679, guid: 48fb103c7e8735944a3ef140108d12ee, type: 3}
   iconPrefab: {fileID: 6240360066035509822, guid: b5ea984b84383dc46b80caa02a54c8d6, type: 3}
 --- !u!114 &5405419930534611721
 MonoBehaviour:
@@ -1144,7 +1139,7 @@ SkinnedMeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -1177,7 +1172,7 @@ SkinnedMeshRenderer:
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 1
-  m_SkinnedMotionVectors: 1
+  m_SkinnedMotionVectors: 0
   m_Mesh: {fileID: 0}
   m_Bones:
   - {fileID: 0}

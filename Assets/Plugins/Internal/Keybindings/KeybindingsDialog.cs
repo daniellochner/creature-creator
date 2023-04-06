@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class KeybindingsDialog : MenuSingleton<KeybindingsDialog>
+    public class KeybindingsDialog : Dialog<KeybindingsDialog>
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI messageText;
@@ -27,6 +27,8 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        protected override void LateUpdate() { /* Override default close-on-ESC behaviour */ }
+
         public static void Rebind(KeybindUI keybindUI)
         {
             Instance.messageText.text = LocalizationUtility.Localize("keybindings_message", keybindUI.Action);

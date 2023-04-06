@@ -170,6 +170,14 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartSecondaryMat.name = "BodyPart_Secondary";
 
             OverrideMat(null, null, false);
+
+            if (CreatureConstructor.LightSources > CreatureConstructor.MaxLightSources)
+            {
+                foreach (Light light in GetComponentsInChildren<Light>())
+                {
+                    light.enabled = false;
+                }
+            }
         }
 
         public virtual void Add()
@@ -213,7 +221,7 @@ namespace DanielLochner.Assets.CreatureCreator
             OnDetach?.Invoke();
         }
 
-        public virtual void Flip()
+        public virtual void Flip(bool align = true)
         {
             // Parent
             Flipped.transform.SetParent(transform.parent);
@@ -237,13 +245,16 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Flipped.gameObject.SetActive(false);
 
-                localPosition.x = 0;
-                Vector3 worldPosition = CreatureConstructor.transform.TransformPoint(localPosition);
-                transform.position = Flipped.transform.position = worldPosition;
+                if (align)
+                {
+                    localPosition.x = 0;
+                    Vector3 worldPosition = CreatureConstructor.transform.TransformPoint(localPosition);
+                    transform.position = Flipped.transform.position = worldPosition;
 
-                Vector3 localDirection = localRotation * Vector3.forward;
-                localDirection.x = 0;
-                transform.rotation = Flipped.transform.rotation = CreatureConstructor.transform.rotation * Quaternion.LookRotation(localDirection);
+                    Vector3 localDirection = localRotation * Vector3.forward;
+                    localDirection.x = 0;
+                    transform.rotation = Flipped.transform.rotation = CreatureConstructor.transform.rotation * Quaternion.LookRotation(localDirection);
+                }
             }
 
             // Scale

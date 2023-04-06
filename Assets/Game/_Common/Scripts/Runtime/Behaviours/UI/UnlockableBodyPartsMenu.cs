@@ -20,8 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             Setup();
         }
         private void Setup()
@@ -33,22 +34,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 bodyPartUI.Setup(bodyPart);
                 bodyPartUI.name = bodyPartID;
 
-                bodyPartUI.HoverUI.OnEnter.AddListener(delegate
-                {
-                    if (!Input.GetMouseButton(0))
-                    {
-                        StatisticsMenu.Instance.Setup(bodyPart);
-                    }
-                });
-                bodyPartUI.HoverUI.OnExit.AddListener(delegate
-                {
-                    StatisticsMenu.Instance.Clear();
-                });
                 bodyPartUI.DragUI.enabled = false;
 
                 GameObject hiddenIconGO = Instantiate(hiddenIconPrefab, bodyPartUI.transform);
                 hiddenIconGO.SetActive(SettingsManager.Data.HiddenBodyParts.Contains(bodyPartID));
-                bodyPartUI.ClickUI.OnLeftClick.AddListener(delegate
+                bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
                 {
                     if (!ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID)) return;
 

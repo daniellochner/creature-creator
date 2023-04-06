@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 yield return new WaitUntil(() => GameSetup.Instance && GameSetup.Instance.IsSetup && NetworkPlayersMenu.Instance && NetworkPlayersMenu.Instance.NumPlayers > 1);
 #if USE_STATS
-                StatsManager.Instance.SetAchievement("ACH_BETTER_TOGETHER");
+                StatsManager.Instance.UnlockAchievement("ACH_BETTER_TOGETHER");
 #endif
             }
         }

@@ -1,7 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using SimpleFileBrowser;
+using Crosstales.FB;
 using System;
 using System.Collections;
 using TMPro;
@@ -18,8 +18,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Video")]
         [SerializeField] private OptionSelector resolutionOS;
+        [SerializeField] private GameObject resolutionApply;
         [SerializeField] private Toggle fullscreenToggle;
         [SerializeField] private Toggle vSyncToggle;
+        [SerializeField] private Slider targetFrameRateSlider;
+        [SerializeField] private Slider screenScaleSlider;
+        [SerializeField] private GameObject screenScaleApply;
         [SerializeField] private OptionSelector presetOS;
         [SerializeField] private OptionSelector creatureMeshQualityOS;
         [SerializeField] private OptionSelector shadowQualityOS;
@@ -28,11 +32,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector antialiasingOS;
         [SerializeField] private OptionSelector screenSpaceReflectionsOS;
         [SerializeField] private OptionSelector foliageOS;
+        [SerializeField] private Toggle ambientParticlesToggle;
         [SerializeField] private Toggle reflectionsToggle;
         [SerializeField] private Toggle anisotropicFilteringToggle;
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Toggle depthOfFieldToggle;
         [SerializeField] private Toggle motionBlurToggle;
+        [SerializeField] private ParticleSystem[] ambientParticles;
 
         [Header("Audio")]
         [SerializeField] private Slider masterVolumeSlider;
@@ -45,8 +51,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
-        [SerializeField] private OptionSelector relayServerOS;
         [SerializeField] private Toggle cameraShakeToggle;
+        [SerializeField] private Toggle vibrationsToggle;
         [SerializeField] private Toggle debugModeToggle;
         [SerializeField] private Toggle previewFeaturesToggle;
         [SerializeField] private Toggle networkStatsToggle;
@@ -61,6 +67,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider sensitivityVerticalSlider;
         [SerializeField] private Toggle invertHorizontalToggle;
         [SerializeField] private Toggle invertVerticalToggle;
+        [SerializeField] private Slider interfaceScaleSlider;
+        [SerializeField] private OptionSelector joystickOS;
+        [SerializeField] private Slider joystickHorizontalSlider;
+        [SerializeField] private Slider joystickVerticalSlider;
+        [SerializeField] private CanvasGroup joystickHorizontalCG;
+        [SerializeField] private CanvasGroup joystickVerticalCG;
+        [SerializeField] private Slider touchOffsetSlider;
 
         private Coroutine previewMusicCoroutine;
         #endregion
@@ -72,10 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            if (SettingsManager.Instance)
-            {
-                SettingsManager.Instance.Save();
-            }
+            Shutdown();
         }
 
         private void Setup()
@@ -88,6 +98,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 resolutionOS.Options.Add(new OptionSelector.Option()
                 {
                     Id = $"{resolution.width}x{resolution.height} @ {resolution.refreshRate}Hz"
+                });
+                resolutionOS.OnSelected.AddListener(delegate
+                {
+                    resolutionApply.SetActive(true);
                 });
 
                 Resolution current = SettingsManager.Data.Resolution;
@@ -110,6 +124,24 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SettingsManager.Instance.SetVSync(isOn);
             });
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                // Screen Scale
+                screenScaleSlider.value = (float)SettingsManager.Data.Resolution.width / Display.main.systemWidth;
+                screenScaleSlider.onValueChanged.AddListener(delegate
+                {
+                    screenScaleApply.SetActive(true);
+                });
+
+                // Target Frame Rate
+                targetFrameRateSlider.value = SettingsManager.Data.TargetFrameRate;
+                targetFrameRateSlider.onValueChanged.AddListener(delegate (float value)
+                {
+                    SettingsManager.Instance.SetTargetFrameRate((int)value);
+                });
+            }
+
 
             // Preset
             presetOS.SetupUsingEnum<PresetType>();
@@ -242,6 +274,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetFoliage((FoliageType)option);
             });
 
+            // Ambient Particles
+            ambientParticlesToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                foreach (ParticleSystem system in ambientParticles)
+                {
+                    if (isOn)
+                    {
+                        system.Play(true);
+                    }
+                    else
+                    {
+                        system.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    }
+                }
+
+                SettingsManager.Instance.SetAmbientParticles(isOn);
+            });
+            ambientParticlesToggle.isOn = SettingsManager.Data.AmbientParticles;
+
             // Reflections
             reflectionsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Reflections);
             reflectionsToggle.onValueChanged.AddListener(delegate (bool isOn)
@@ -342,24 +393,16 @@ namespace DanielLochner.Assets.CreatureCreator
             creaturePresetsText.text = presets.ToString();
             creaturePresetsButton.onClick.AddListener(delegate
             {
-                FileBrowser.ShowLoadDialog(
-                    onSuccess: delegate (string[] paths)
-                    {
-                        SettingsManager.Data.CreaturePresets.Clear();
-                        foreach (string path in paths)
-                        {
-                            CreatureData creature = SaveUtility.Load<CreatureData>(path);
-                            if (creature != null)
-                            {
-                                SettingsManager.Data.CreaturePresets.Add(creature);
-                            }
-                        }
-                    },
-                    onCancel: null,
-                    pickMode: FileBrowser.PickMode.Files,
-                    allowMultiSelection: true,
-                    initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                );
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    FileBrowser.Instance.OpenFilesAsync(true, "dat");
+                    FileBrowser.Instance.OnOpenFilesComplete += OnOpenFilesComplete;
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    NativeFilePicker.PickMultipleFiles(SelectFiles, NativeFilePicker.AllFileTypes);
+                }
             });
 
             exportPrecisionSlider.value = SettingsManager.Data.ExportPrecision;
@@ -368,11 +411,29 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetExportPrecision((int)precision);
             });
 
+            // Touch Offset
+            touchOffsetSlider.value = SettingsManager.Data.TouchOffset;
+            touchOffsetSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                if (inGame)
+                {
+                    Player.Instance.Editor.TouchOffset = value;
+                }
+                SettingsManager.Instance.SetTouchOffset((int)value);
+            });
+
             // Camera Shake
             cameraShakeToggle.SetIsOnWithoutNotify(SettingsManager.Data.CameraShake);
             cameraShakeToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetCameraShake(isOn, true);
+            });
+
+            // Vibrations
+            vibrationsToggle.SetIsOnWithoutNotify(SettingsManager.Data.Vibrations);
+            vibrationsToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetVibrations(isOn);
             });
 
             // Debug Mode
@@ -463,13 +524,100 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SettingsManager.Instance.SetInvertVertical(isOn, inGame);
             });
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                // Scale
+                interfaceScaleSlider.onValueChanged.AddListener(delegate (float value)
+                {
+                    if (inGame)
+                    {
+                        foreach (PlatformSpecificScaler scaler in MobileControlsManager.Instance.MobileControlsUI.Scalers)
+                        {
+                            scaler.SetScale(scaler.Scale * value);
+                        }
+                    }
+
+                    SettingsManager.Data.InterfaceScale = value;
+                });
+                interfaceScaleSlider.value = SettingsManager.Data.InterfaceScale;
+
+                // Joystick
+                joystickOS.SetupUsingEnum<Settings.JoystickType>();
+                joystickOS.OnSelected.AddListener(delegate (int option)
+                {
+                    Settings.JoystickType type = (Settings.JoystickType)option;
+
+                    if (inGame)
+                    {
+                        MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.gameObject.SetActive(type == Settings.JoystickType.Fixed);
+                        MobileControlsManager.Instance.MobileControlsUI.FloatJoystick.gameObject.SetActive(type == Settings.JoystickType.Floating);
+                    }
+
+                    bool show = type == Settings.JoystickType.Fixed;
+                    joystickHorizontalCG.interactable = joystickVerticalCG.interactable = show;
+                    joystickHorizontalCG.alpha = joystickVerticalCG.alpha = show ? 1f : 0.25f;
+
+                    SettingsManager.Instance.SetJoystick(type);
+                });
+                joystickOS.Select(SettingsManager.Data.Joystick);
+
+                // Joystick Position (Horizontal)
+                joystickHorizontalSlider.onValueChanged.AddListener(delegate (float value)
+                {
+                    if (inGame)
+                    {
+                        RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
+                        rt.anchoredPosition = new Vector2(value * Screen.width, rt.anchoredPosition.y);
+                    }
+
+                    SettingsManager.Instance.SetJoystickPositionHorizontal(value);
+                });
+                joystickHorizontalSlider.value = SettingsManager.Data.JoystickPositionHorizontal;
+
+                // Joystick Position (Vertical)
+                joystickVerticalSlider.onValueChanged.AddListener(delegate (float value)
+                {
+                    if (inGame)
+                    {
+                        RectTransform rt = MobileControlsManager.Instance.MobileControlsUI.FixedJoystick.transform as RectTransform;
+                        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, value * Screen.height);
+                    }
+
+                    SettingsManager.Instance.SetJoystickPositionVertical(value);
+                });
+                joystickVerticalSlider.value = SettingsManager.Data.JoystickPositionVertical;
+            }
             #endregion
+
+            Application.lowMemory += OnLowMemory;
         }
-        
+        private void Shutdown()
+        {
+            if (SettingsManager.Instance)
+            {
+                SettingsManager.Instance.Save();
+            }
+            Application.lowMemory -= OnLowMemory;
+        }
+
         #region Video
         public void ApplyResolution()
         {
             SettingsManager.Instance.SetResolution(Screen.resolutions[resolutionOS.Selected]);
+        }
+        public void AppleScreenScale()
+        {
+            SettingsManager.Instance.SetScreenScale(screenScaleSlider.value);
+        }
+
+        private void OnLowMemory()
+        {
+            Resources.UnloadUnusedAssets();
+
+            //InformationDialog.Inform(LocalizationUtility.Localize("low-memory_title"), LocalizationUtility.Localize("low-memory_message"));
+
+            Application.lowMemory -= OnLowMemory;
         }
         #endregion
 
@@ -493,7 +641,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ViewAchievements()
         {
-            AchievementsMenu.Instance.Open();
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                GameServices.Instance.ShowAchievementsUI();
+            }
+            else
+            {
+                AchievementsMenu.Instance.Open();
+            }
         }
         public void ChooseLanguage()
         {
@@ -507,6 +662,26 @@ namespace DanielLochner.Assets.CreatureCreator
             ProgressUI.Instance.UpdateInfo();
             UnlockableBodyPartsMenu.Instance.UpdateInfo();
             UnlockablePatternsMenu.Instance.UpdateInfo();
+        }
+
+        private void SelectFiles(string[] files)
+        {
+            SettingsManager.Data.CreaturePresets.Clear();
+            foreach (string path in files)
+            {
+                CreatureData creature = SaveUtility.Load<CreatureData>(path);
+                if (creature != null)
+                {
+                    SettingsManager.Data.CreaturePresets.Add(creature);
+                }
+            }
+        }
+        private void OnOpenFilesComplete(bool selected, string singleFile, string[] files)
+        {
+            if (selected)
+            {
+                SelectFiles(files);
+            }
         }
         #endregion
         #endregion

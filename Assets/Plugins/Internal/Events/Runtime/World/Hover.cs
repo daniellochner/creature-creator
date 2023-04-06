@@ -23,15 +23,19 @@ namespace DanielLochner.Assets
         #region Methods
         protected virtual void OnMouseEnter()
         {
-            if (CanvasUtility.IsPointerOverUI) return;
-            OnEnter.Invoke();
-            IsOver = true;
+            if (SystemUtility.IsDevice(DeviceType.Desktop) && !CanvasUtility.IsPointerOverUI)
+            {
+                OnEnter.Invoke();
+                IsOver = true;
+            }
         }
         protected virtual void OnMouseExit()
         {
-            if (CanvasUtility.IsPointerOverUI) return;
-            OnExit.Invoke();
-            IsOver = false;
+            if (IsOver)
+            {
+                OnExit.Invoke();
+                IsOver = false;
+            }
         }
         #endregion
     }

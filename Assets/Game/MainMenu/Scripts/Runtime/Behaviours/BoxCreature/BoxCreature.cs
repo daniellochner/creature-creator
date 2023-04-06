@@ -10,19 +10,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private CreatureConstructor displayPrefab;
         [SerializeField] private Click click;
-        [Space]
-        [SerializeField] private Vector3 force;
 
-        private Camera mainCamera;
         private CreatureConstructor creatureConstructor;
         #endregion
 
         #region Methods
-        private void Awake()
-        {
-            mainCamera = Camera.main;
-        }
-
         public void Spawn(CreatureData creatureData)
         {
             creatureConstructor = Instantiate(displayPrefab, transform.position, transform.rotation, transform);
@@ -60,24 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
             click.enabled = false;
 
             CreatureConstructor ragdoll = creatureConstructor.GetComponent<CreatureRagdoll>().Generate();
-            foreach (Transform bone in ragdoll.Bones)
-            {
-                Press press = bone.gameObject.AddComponent<Press>();
-                press.OnPress.AddListener(delegate
-                {
-                    if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(mainCamera, Input.mousePosition), out RaycastHit hitInfo))
-                    {
-                        Vector3 dir = (hitInfo.point - mainCamera.transform.position).normalized;
-                        hitInfo.rigidbody.AddForce((dir * force.z) + (Vector3.up * force.y), ForceMode.Impulse);
-                    }
-                });
-            }
-
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            foreach (LimbConstructor limb in ragdoll.Limbs)
-            {
-                limb.gameObject.layer = limb.FlippedLimb.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            }
+            gameObject.layer = LayerMask.NameToLayer("Creature");
         }
         #endregion
     }

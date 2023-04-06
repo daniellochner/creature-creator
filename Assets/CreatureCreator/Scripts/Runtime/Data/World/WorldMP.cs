@@ -21,9 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool AllowProfanity { get; private set; }
         public bool EnablePVP { get; private set; }
 
-        public string HostSteamId { get; private set; }
-
-        public bool UseSteam { get; private set; }
+        public string HostPlayerId { get; private set; }
 
         public List<string> KickedPlayers { get; private set; }
         #endregion
@@ -45,10 +43,9 @@ namespace DanielLochner.Assets.CreatureCreator
             EnablePVE = lobby.TryGetValue<bool>("enablePVE");
             SpawnNPC = lobby.TryGetValue<bool>("spawnNPC");
             CreativeMode = lobby.TryGetValue<bool>("creativeMode");
-            UseSteam = lobby.TryGetValue<bool>("useSteam");
             MapId = lobby.TryGetValue<string>("mapId");
 
-            HostSteamId = lobby.TryGetValue<string>("hostSteamId");
+            HostPlayerId = lobby.TryGetValue<string>("hostPlayerId");
             KickedPlayers = new List<string>(lobby.TryGetValue("kickedPlayers", "").Split(","));
         }
         #endregion

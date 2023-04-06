@@ -7,6 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureCamera))]
     [RequireComponent(typeof(CreatureSpeedEffects))]
+    [RequireComponent(typeof(CreatureBuoyancy))]
     public class CreaturePlayerLocal : CreaturePlayer, ISetupable
     {
         #region Fields
@@ -16,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureInteractor interactor;
         [SerializeField] private new CreatureCamera camera;
         [SerializeField] private CreatureSpeedEffects speedEffects;
+        [SerializeField] private CreatureBuoyancy buoyancy;
         #endregion
 
         #region Properties
@@ -25,6 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureInteractor Interactor => interactor;
         public CreatureCamera Camera => camera;
         public CreatureSpeedEffects SpeedEffects => speedEffects;
+        public CreatureBuoyancy Buoyancy => buoyancy;
 
         public bool IsSetup { get; set; }
         #endregion
@@ -41,6 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
             interactor = GetComponent<CreatureInteractor>();
             camera = GetComponent<CreatureCamera>();
             speedEffects = GetComponent<CreatureSpeedEffects>();
+            buoyancy = GetComponent<CreatureBuoyancy>();
         }
 #endif
 
@@ -77,13 +81,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.SetVisibility(false);
 
-            EditorManager.Instance.Invoke(delegate
+            float time = Time.time;
+            EditorManager.Instance.InvokeUntil(() => !InputUtility.GetKey(KeybindingsManager.Data.Respawn) && (Time.time > (time + 1f)), delegate
             {
                 string name = Informer.Information.Name.Equals(LocalizationUtility.Localize("creature-unnamed")) ? LocalizationUtility.Localize("you-died_you") : Informer.Information.Name;
                 string age  = Informer.Information.FormattedAge;
                 InformationDialog.Inform(LocalizationUtility.Localize("you-died_title"), LocalizationUtility.Localize("you-died_message", name, age), LocalizationUtility.Localize("you-died_okay"), false, Respawn);
-
-            }, 1f);
+            });
 
 #if USE_STATS
             StatsManager.Instance.Deaths++;
@@ -95,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
             if (age > 3600)
             {
-                StatsManager.Instance.SetAchievement("ACH_GRAY_HAIRS");
+                StatsManager.Instance.UnlockAchievement("ACH_GRAY_HAIRS");
             }
 #endif
         }
@@ -122,6 +126,18 @@ namespace DanielLochner.Assets.CreatureCreator
             Spawner.Spawn();
 
             EditorManager.Instance.SetVisibility(true);
+        }
+
+        public override void OnDespawn()
+        {
+            base.OnDespawn();
+            buoyancy.enabled = false;
+        }
+
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
+            buoyancy.enabled = true;
         }
         #endregion
     }

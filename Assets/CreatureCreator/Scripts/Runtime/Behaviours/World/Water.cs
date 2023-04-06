@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Pinwheel.Poseidon;
 using Pinwheel.Poseidon.FX;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Ability swimAbility;
         [SerializeField] private GameObject splashPrefab;
         [SerializeField] private UnityEvent<CreaturePlayerLocal> onPlayerEnter;
+
+        private PWater water;
         #endregion
 
         #region Properties
@@ -26,9 +29,14 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Collider = GetComponent<BoxCollider>();
+            water = GetComponent<PWater>();
+        }
+        private void Update()
+        {
+            water.ManualTimeSeconds += Time.deltaTime;
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             CreatureBase creature = other.GetComponent<CreatureBase>();
             if (creature != null)
@@ -38,14 +46,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreaturePlayerLocal player = creature as CreaturePlayerLocal;
                 if (player != null)
                 {
-                    if (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming)
+                    if (!player.Underwater.IsOnRaft && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
                     {
                         player.Health.TakeDamage(player.Health.Health);
                     }
                     else
                     {
 #if USE_STATS
-                        StatsManager.Instance.SetAchievement("ACH_MAKE_A_SPLASH");
+                        StatsManager.Instance.UnlockAchievement("ACH_MAKE_A_SPLASH");
 #endif
                         onPlayerEnter.Invoke(player);
                     }

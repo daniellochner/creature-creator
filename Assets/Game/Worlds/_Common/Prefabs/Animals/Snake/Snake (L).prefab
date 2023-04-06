@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 464128766}
   - component: {fileID: 464128768}
   - component: {fileID: 464128767}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: TrackRegion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 309383035256503333}
   - component: {fileID: 4873227686490808775}
   - component: {fileID: 6940341900441867795}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: IgnoreTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,6 +270,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75cbafde97a7024a9a4524f8688895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2193234416671062684 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4983346658188460659, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2196639755667890052 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4988722081034610539, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
@@ -323,6 +334,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f88a226af4724d4499e89fd0a6ab10da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3857753293406053941 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7984590061413687002, guid: 0a75dd7440d07c54e841f6c16702807d, type: 3}
+  m_PrefabInstance: {fileID: 6577375817211508975}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7476322862451386335}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5b753a4f5a83942bba288613a30455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3932189056534488153 stripped
@@ -449,6 +471,8 @@ MonoBehaviour:
   comparer: {fileID: 4878392046898910618}
   underwater: {fileID: 7747700661109239856}
   speedUp: {fileID: 4583483209169759474}
+  grounded: {fileID: 2193234416671062684}
+  minimapIcon: {fileID: 3857753293406053941}
   selectable: {fileID: 1962287229178218075}
   commandable: {fileID: 2451249857297187828}
   ai: {fileID: 2304548901012607126}
@@ -567,7 +591,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

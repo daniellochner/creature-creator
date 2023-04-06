@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         [SerializeField] private float biteRadius;
         private bool hasFoundCreature;
 
-        public override bool CanPerform => base.CanPerform && !Player.Instance.Animator.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike");
+        public override bool CanPerform => base.CanPerform && !EditorManager.Instance.IsEditing && !Player.Instance.Animator.Animator.GetCurrentAnimatorStateInfo(0).IsName("Strike");
 
         public override void OnPerform()
         {

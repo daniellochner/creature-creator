@@ -49,6 +49,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 outline.enabled = isHighlighted;
             }
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                (interactor as CreatureInteractor).CreatureCamera.CameraOrbit.SetFrozen(isHighlighted);
+            }
         }
         #endregion
     }

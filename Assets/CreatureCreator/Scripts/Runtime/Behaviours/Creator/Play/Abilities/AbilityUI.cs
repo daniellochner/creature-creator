@@ -11,12 +11,11 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class AbilityUI : MonoBehaviour
+    public class AbilityUI : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image cooldownImage;
-        [SerializeField] private Button performButton;
         [SerializeField] private TextMeshProUGUI performKeyText;
         [SerializeField] private CanvasGroup abilityCG;
 
@@ -51,16 +50,25 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             this.ability = ability;
 
-            performButton.onClick.RemoveAllListeners();
-            performButton.onClick.AddListener(delegate 
-            {
-                ability.OnTryPerform();
-            });
-
             LocalizationSettings.Instance.OnSelectedLocaleChanged += UpdateName;
             UpdateName();
 
             cooldownImage.fillAmount = 0f;
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                performKeyText.gameObject.SetActive(false);
+                nameText.rectTransform.anchorMin = Vector2.zero;
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            ability.OnTryPerform();
+        }
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            ability.OnTryPrepare();
         }
 
         public void UpdateUI()

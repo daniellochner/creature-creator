@@ -22,21 +22,24 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
         {
-            float t = (2f * Mathf.PI * x) / breatheTime;
-
-            float b = (breatheBody / 2f) * (Mathf.Cos(t) - 1f);
-            float m = 0.5f + Mathf.Lerp(-breatheMouth, breatheMouth, Mathf.InverseLerp(-breatheBody, 0f, b));
-
-            if (Creature.Legs.Count > 0)
+            if (!Creature.IsOptimized)
             {
-                Creature.Constructor.Root.localPosition = Vector3.up * b;
-            }
-            if (Creature.Mouths.Count > 0)
-            {
-                animator.SetFloat("Mouth_Breathe", m);
-            }
+                float t = (2f * Mathf.PI * x) / breatheTime;
 
-            x += Time.deltaTime;
+                float b = (breatheBody / 2f) * (Mathf.Cos(t) - 1f);
+                float m = 0.5f + Mathf.Lerp(-breatheMouth, breatheMouth, Mathf.InverseLerp(-breatheBody, 0f, b));
+
+                if (Creature.Legs.Count > 0)
+                {
+                    Creature.Constructor.Root.localPosition = Vector3.up * b;
+                }
+                if (Creature.Mouths.Count > 0)
+                {
+                    animator.SetFloat("Mouth_Breathe", m);
+                }
+
+                x += Time.deltaTime;
+            }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

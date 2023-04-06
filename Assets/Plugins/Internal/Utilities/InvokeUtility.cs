@@ -18,6 +18,10 @@ namespace DanielLochner.Assets
         {
             return monoBehaviour.StartCoroutine(InvokeOverTimeRoutine(invokeFunction, time, timeScale));
         }
+        public static Coroutine InvokeUntil(this MonoBehaviour monoBehaviour, Func<bool> predicate, Action onComplete)
+        {
+            return monoBehaviour.StartCoroutine(InvokeUntil(predicate, onComplete));
+        }
 
         public static IEnumerator InvokeRoutine(Action invokeFunction, float delay = 0f)
         {
@@ -41,6 +45,11 @@ namespace DanielLochner.Assets
                 
                 yield return null;
             }
+        }
+        public static IEnumerator InvokeUntil(Func<bool> predicate, Action onComplete)
+        {
+            yield return new WaitUntil(predicate);
+            onComplete();
         }
     }
 }

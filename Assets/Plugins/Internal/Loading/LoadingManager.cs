@@ -37,7 +37,7 @@ namespace DanielLochner.Assets
         public void Load(string sceneName, Action onLoad = null)
         {
             MusicManager.Instance.FadeTo(null);
-            StartCoroutine(LoadRoutine(SceneManager.LoadSceneAsync(sceneName), onLoad));
+            StartCoroutine(LoadRoutine(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single), onLoad));
         }
         public IEnumerator LoadRoutine(AsyncOperation operation, Action onLoad)
         {

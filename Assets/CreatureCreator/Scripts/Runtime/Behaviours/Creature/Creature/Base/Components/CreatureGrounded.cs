@@ -11,12 +11,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public float ContactDistance => contactDistance;
+
         public CreatureCollider Collider { get; private set; }
         public CreatureAnimator Animator { get; private set; }
 
         public bool IsGrounded
         {
-            get; private set;
+            get => Animator.Animator.GetBool("IsGrounded");
+            set => Animator.Animator.SetBool("IsGrounded", value);
         }
         #endregion
 
@@ -25,6 +28,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Collider = GetComponent<CreatureCollider>();
             Animator = GetComponent<CreatureAnimator>();
+        }
+        private void OnDisable()
+        {
+            IsGrounded = false;
         }
         private void FixedUpdate()
         {
@@ -45,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
             }
-            Animator.Animator.SetBool("IsGrounded", IsGrounded = isGrounded);
+            IsGrounded = isGrounded;
         }
 
         private bool CheckLeg(LegAnimator leg)

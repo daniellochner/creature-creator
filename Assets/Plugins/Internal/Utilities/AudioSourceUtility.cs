@@ -6,16 +6,16 @@ namespace DanielLochner.Assets
 {
     public static class AudioSourceUtility
     {
-        public static void PlayClipAtPoint(AudioClip clip, Vector3 position, float volume = 1.0f, AudioMixerGroup group = null)
+        public static void PlayClipAtPoint(AudioClip clip, Vector3? position = null, float volume = 1.0f, AudioMixerGroup group = null)
         {
             if (clip == null) return;
             GameObject gameObject = new GameObject("One shot audio");
-            gameObject.transform.position = position;
+            gameObject.transform.position = position ?? Vector3.zero;
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
             if (group != null)
                 audioSource.outputAudioMixerGroup = group;
             audioSource.clip = clip;
-            audioSource.spatialBlend = 1f;
+            audioSource.spatialBlend = (position != null) ? 1f : 0f;
             audioSource.volume = volume;
             audioSource.Play();
             Object.Destroy(gameObject, clip.length * (Time.timeScale < 0.009999999776482582 ? 0.01f : Time.timeScale));

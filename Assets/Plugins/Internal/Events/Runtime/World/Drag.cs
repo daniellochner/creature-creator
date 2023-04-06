@@ -43,9 +43,11 @@ namespace DanielLochner.Assets
         public bool updatePlaneOnPress = false;
         public float dragThreshold = 0f;
         public Collider customCollider;
+        public float mobileTouchOffset = 0f;
 
         // Events
         public UnityEvent onPress = new UnityEvent();
+        public UnityEvent onHold = new UnityEvent();
         public UnityEvent onRelease = new UnityEvent();
         public UnityEvent onDrag = new UnityEvent();
         public UnityEvent onBeginDrag = new UnityEvent();
@@ -57,6 +59,7 @@ namespace DanielLochner.Assets
 
         #region Properties
         public UnityEvent OnPress => onPress;
+        public UnityEvent OnHold => onHold;
         public UnityEvent OnRelease => onRelease;
         public UnityEvent OnDrag => onDrag;
         public UnityEvent OnBeginDrag => onBeginDrag;
@@ -77,28 +80,38 @@ namespace DanielLochner.Assets
         }
         private void Update()
         {
-            if (Input.GetMouseButtonUp(mouseButton) && IsPressing) // "OnMouseUp()" is unreliable.
+            if (IsPressing)
             {
-                if (resetOnRelease)
+                if (Input.GetMouseButtonUp(mouseButton)) // "OnMouseUp()" is unreliable.
                 {
-                    transform.position = startWorldPosition;
-                }
+                    if (resetOnRelease)
+                    {
+                        transform.position = startWorldPosition;
+                    }
 
-                if (IsDragging)
-                {
-                    OnEndDrag.Invoke();
-                    IsDragging = false;
-                }
-                OnRelease.Invoke();
+                    if (IsDragging)
+                    {
+                        OnEndDrag.Invoke();
+                        IsDragging = false;
+                    }
+                    OnRelease.Invoke();
 
-                IsPressing = false;
+                    IsPressing = false;
+                }
+                OnHold.Invoke();
             }
         }
         private void FixedUpdate()
         {
             if (IsPressing && draggable)
             {
-                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(Input.mousePosition);
+                Vector3 origin = Input.mousePosition;
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    origin += Vector3.up * mobileTouchOffset;
+                }
+
+                Ray ray = CameraUtility.MainCamera.ScreenPointToRay(origin);
 
                 Vector3? targetWorldPosition = null;
                 if (customCollider != null)

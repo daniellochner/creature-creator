@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DanielLochner.Assets
@@ -31,6 +32,11 @@ namespace DanielLochner.Assets
         private Vector3 targetRotation;
         private Vector2 velocity;
         private float prevClippingZoom = -1;
+
+        private float currentDistance, initialDistance, initialZoom;
+        private bool isInitialTouch = true, isPressing;
+
+        private List<int> pressed = new List<int>();
         #endregion
 
         #region Properties
@@ -57,7 +63,6 @@ namespace DanielLochner.Assets
 
         public virtual bool CanInput { get; set; } = true;
         public bool IsFrozen { get; private set; }
-        public bool HasInteractedWithUI { get; private set; }
         public Vector3 OffsetPosition { get; set; }
 
         public Camera Camera { get; private set; }
@@ -71,36 +76,89 @@ namespace DanielLochner.Assets
             OffsetPosition = zoomTransform.localPosition;
             targetRotation = rotationTransform.localEulerAngles;
         }
-        private void LateUpdate()
+        private void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                if (Input.GetMouseButtonDown(0) || Input.mouseScrollDelta.magnitude > 0)
-                {
-                    Freeze();
-                    HasInteractedWithUI = true;
-                }
-                else if (Input.GetMouseButtonUp(0))
-                {
-                    Unfreeze();
-                    HasInteractedWithUI = false;
-                }
-            }
-            else if ((Input.GetMouseButtonUp(0) || Input.mouseScrollDelta.magnitude > 0) && HasInteractedWithUI)
-            {
-                Unfreeze();
-                HasInteractedWithUI = false;
-            }
+            HandlePressed();
 
             OnRotate();
             OnZoom();
+        }
+
+        private void HandlePressed()
+        {
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                if (Input.GetMouseButtonDown(0) && !CanvasUtility.IsPointerOverUI)
+                {
+                    isPressing = true;
+                }
+                else
+                if (Input.GetMouseButtonUp(0))
+                {
+                    isPressing = false;
+                }
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                int hasEnded = 0;
+                foreach (Touch touch in Input.touches)
+                {
+                    if (touch.phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                    {
+                        isPressing = true;
+                        pressed.Add(touch.fingerId);
+                    }
+                    else
+                    if (touch.phase == TouchPhase.Ended)
+                    {
+                        if ((++hasEnded) == Input.touchCount)
+                        {
+                            isPressing = false;
+                        }
+                        pressed.Remove(touch.fingerId);
+                    }
+                }
+            }
         }
 
         private void OnZoom()
         {
             if (!freezeZoom && !IsFrozen && CanInput)
             {
-                OnHandleClipping(Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y));
+                float zoom = targetZoom;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    if (Input.mouseScrollDelta != Vector2.zero && !CanvasUtility.IsPointerOverUI)
+                    {
+                        zoom = Mathf.Clamp(targetZoom - Input.mouseScrollDelta.y * scrollWheelSensitivity, minMaxZoom.x, minMaxZoom.y);
+                    }
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    if (pressed.Count >= 2 && !CanvasUtility.IsPointerOverUI)
+                    {
+                        Vector2 pos1 = Input.touches[0].position;
+                        Vector2 pos2 = Input.touches[1].position;
+
+                        currentDistance = Vector2.Distance(pos1, pos2);
+
+                        if (isInitialTouch)
+                        {
+                            initialZoom = targetZoom;
+                            initialDistance = currentDistance;
+                            isInitialTouch = false;
+                        }
+
+                        zoom = Mathf.Clamp(initialZoom * (initialDistance / currentDistance), minMaxZoom.x, minMaxZoom.y);
+                    }
+                    else
+                    {
+                        isInitialTouch = true;
+                    }
+                }
+                OnHandleClipping(zoom);
             }
 
             zoomTransform.localPosition = Vector3.Lerp(zoomTransform.localPosition, OffsetPosition * targetZoom, Time.deltaTime * zoomSmoothing);
@@ -108,18 +166,32 @@ namespace DanielLochner.Assets
         private void OnRotate()
         {
             Vector3 velocity = Vector3.zero;
-            if (Input.GetMouseButton(0) && !freezeRotation && !IsFrozen && CanInput)
+            if (isPressing && !freezeRotation && !IsFrozen && CanInput && pressed.Count < 2)
             {
-                float mouseX = (invertMouseX ? -1f : 1f) * Input.GetAxis("Mouse X");
-                float mouseY = (invertMouseY ? -1f : 1f) * Input.GetAxis("Mouse Y");
-                
-                velocity.x += 5f * mouseX * mouseSensitivity.x;
-                velocity.y += 5f * mouseY * mouseSensitivity.y;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    float deltaX = Input.GetAxis("Mouse X");
+                    float deltaY = Input.GetAxis("Mouse Y");
+                    AddVelocity(deltaX, deltaY, ref velocity);
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    foreach (int fingerId in pressed)
+                    {
+                        if (fingerId > Input.touchCount - 1) continue;
+
+                        Touch touch = Input.GetTouch(fingerId);
+                        float deltaX = touch.deltaPosition.x * 0.1f;
+                        float deltaY = touch.deltaPosition.y * 0.1f;
+                        AddVelocity(deltaX, deltaY, ref velocity);
+                    }
+                }
             }
 
             targetRotation.y += velocity.x;
             targetRotation.x -= velocity.y;
-            targetRotation.x = ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
+            targetRotation.x = QuaternionUtility.ClampAngle(targetRotation.x, minMaxRotation.x, minMaxRotation.y);
 
             rotationTransform.localRotation = Quaternion.Euler(targetRotation.x, targetRotation.y, 0);
         }
@@ -200,12 +272,13 @@ namespace DanielLochner.Assets
             }
         }
 
-        public static float ClampAngle(float angle, float min, float max)
+        private void AddVelocity(float deltaX, float deltaY, ref Vector3 velocity)
         {
-            if (angle < -360f) { angle += 360f; }
-            if (angle > 360f) { angle -= 360f; }
+            float x = (invertMouseX ? -1f : 1f) * deltaX;
+            float y = (invertMouseY ? -1f : 1f) * deltaY;
 
-            return Mathf.Clamp(angle, min, max);
+            velocity.x += 5f * x * mouseSensitivity.x;
+            velocity.y += 5f * y * mouseSensitivity.y;
         }
         #endregion
     }

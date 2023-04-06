@@ -2,7 +2,9 @@
 // Copyright (c) Daniel Lochner
 
 using IngameDebugConsole;
+using MoreMountains.NiceVibrations;
 using Pinwheel.Griffin;
+using Pinwheel.Jupiter;
 using Pinwheel.Poseidon;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PostProcessProfile[] profiles;
         [SerializeField] private PWaterProfile[] waterProfiles;
         [SerializeField] private GRendering[] renderingProfiles;
+        [SerializeField] private JSkyProfile[] skyProfiles;
         [SerializeField] private Material[] windMaterials;
         [Space]
         [SerializeField] private AudioMixer masterAudioMixer;
@@ -29,6 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private NetworkStatsManager statsManagerPrefab;
         [SerializeField] private GameObject creatureBasePrefab;
+        [SerializeField] private GameObject creaturePlayerPrefab;
         [Space]
         [SerializeField] private CameraOrbit cameraOrbitPrefab;
         #endregion
@@ -41,6 +45,9 @@ namespace DanielLochner.Assets.CreatureCreator
             SetResolution(Data.Resolution);
             SetFullscreen(Data.Fullscreen);
             SetVSync(Data.VSync);
+            SetTargetFrameRate(Data.TargetFrameRate);
+            SetScreenScale(Data.ScreenScale);
+
             SetCreatureMeshQuality(Data.CreatureMeshQuality);
             SetShadowQuality(Data.ShadowQuality);
             SetTextureQuality(Data.TextureQuality);
@@ -48,6 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetAntialiasing(Data.Antialiasing);
             SetScreenSpaceReflections(Data.ScreenSpaceReflections);
             SetFoliage(Data.Foliage);
+            SetAmbientParticles(Data.AmbientParticles);
             SetReflections(Data.Reflections);
             SetAnisotropicFiltering(Data.AnisotropicFiltering);
             SetBloom(Data.Bloom);
@@ -62,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SetOnlineUsername(Data.OnlineUsername);
             SetExportPrecision(Data.ExportPrecision);
+            SetTouchOffset(Data.TouchOffset);
             SetCameraShake(Data.CameraShake);
             SetDebugMode(Data.DebugMode);
             SetPreviewFeatures(Data.PreviewFeatures);
@@ -75,6 +84,12 @@ namespace DanielLochner.Assets.CreatureCreator
             SetSensitivityVertical(Data.SensitivityVertical);
             SetInvertHorizontal(Data.InvertHorizontal);
             SetInvertVertical(Data.InvertVertical);
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                OptimizeForMobile();
+            }
+            FixPostProcessLayerBug();
         }
         protected override void OnDestroy()
         {
@@ -97,6 +112,28 @@ namespace DanielLochner.Assets.CreatureCreator
             QualitySettings.vSyncCount = vSync ? 1 : 0;
             Data.VSync = vSync;
         }
+        public void SetScreenScale(float screenScale)
+        {
+            int width = Mathf.FloorToInt(Display.main.systemWidth * screenScale);
+            int height = Mathf.FloorToInt(Display.main.systemHeight * screenScale);
+            int refreshRate = Data.Resolution.refreshRate;
+
+            Resolution targetResolution = new Resolution()
+            {
+                width = width,
+                height = height,
+                refreshRate = refreshRate
+            };
+            SetResolution(targetResolution);
+
+            Data.ScreenScale = screenScale;
+        }
+        public void SetTargetFrameRate(int targetFrameRate)
+        {
+            Application.targetFrameRate = targetFrameRate;
+            Data.TargetFrameRate = targetFrameRate;
+        }
+
         public void SetCreatureMeshQuality(CreatureMeshQualityType type)
         {
             switch (type)
@@ -133,15 +170,15 @@ namespace DanielLochner.Assets.CreatureCreator
                         break;
                     case ShadowQualityType.Medium:
                         QualitySettings.shadowResolution = ShadowResolution.Medium;
-                        QualitySettings.shadowDistance = 100;
+                        QualitySettings.shadowDistance = 50;
                         break;
                     case ShadowQualityType.High:
                         QualitySettings.shadowResolution = ShadowResolution.High;
-                        QualitySettings.shadowDistance = 150;
+                        QualitySettings.shadowDistance = 100;
                         break;
                     case ShadowQualityType.VeryHigh:
                         QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
-                        QualitySettings.shadowDistance = 200;
+                        QualitySettings.shadowDistance = 100;
                         break;
                 }
             }
@@ -173,8 +210,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                AmbientOcclusion ao = profile.GetSetting<AmbientOcclusion>();
-                if (ao != null)
+                if (profile.TryGetSettings(out AmbientOcclusion ao))
                 {
                     if (type == AmbientOcclusionType.None)
                     {
@@ -242,8 +278,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                ScreenSpaceReflections ssr = profile.GetSetting<ScreenSpaceReflections>();
-                if (ssr != null)
+                if (profile.TryGetSettings(out ScreenSpaceReflections ssr))
                 {
                     if (type == ScreenSpaceReflectionsType.None)
                     {
@@ -326,6 +361,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Data.Foliage = type;
         }
+        public void SetAmbientParticles(bool ambientParticles)
+        {
+            foreach (JSkyProfile profile in skyProfiles)
+            {
+                profile.EnableOverheadCloud = ambientParticles;
+            }
+            Data.AmbientParticles = ambientParticles;
+        }
         public void SetReflections(bool reflections)
         {
             //foreach (PWaterProfile waterProfile in waterProfiles)
@@ -343,8 +386,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                Bloom b = profile.GetSetting<Bloom>();
-                if (b != null)
+                if (profile.TryGetSettings(out Bloom b))
                 {
                     b.active = bloom;
                 }
@@ -355,8 +397,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                DepthOfField dof = profile.GetSetting<DepthOfField>();
-                if (dof != null)
+                if (profile.TryGetSettings(out DepthOfField dof))
                 {
                     dof.active = depthOfField;
                 }
@@ -367,13 +408,50 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (PostProcessProfile profile in profiles)
             {
-                MotionBlur mb = profile.GetSetting<MotionBlur>();
-                if (mb != null)
+                if (profile.TryGetSettings(out MotionBlur mb))
                 {
                     mb.active = motionBlur;
                 }
             }
             Data.MotionBlur = motionBlur;
+        }
+
+        private void FixPostProcessLayerBug()
+        {
+            foreach (GameObject camera in cameras)
+            {
+                PostProcessLayer ppl = camera.GetComponentInChildren<PostProcessLayer>();
+                ppl.enabled = !ppl.enabled;
+                ppl.enabled = !ppl.enabled;
+            }
+        }
+        private void OptimizeForMobile()
+        {
+            foreach (PostProcessProfile profile in profiles)
+            {
+                if (profile.TryGetSettings(out Blur blur))
+                {
+                    blur.active = false;
+                }
+                if (profile.TryGetSettings(out Bloom bloom))
+                {
+                    bloom.fastMode.value = true;
+                }
+            }
+
+            //foreach (PWaterProfile waterProfile in waterProfiles)
+            //{
+            //    waterProfile.LightingModel = PLightingModel.BlinnPhong;
+            //    waterProfile.EnableFoamHQ = false;
+            //}
+
+            foreach (GRendering renderingProfile in renderingProfiles)
+            {
+                foreach (GGrassPrototype grassPrototype in renderingProfile.TerrainData.Foliage.Grasses.Prototypes)
+                {
+                    grassPrototype.ShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
+            }
         }
         #endregion
 
@@ -388,11 +466,38 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.MusicVolume = t;
             SetVolume("MusicVolume", t);
+
+            foreach (AudioSource source in MusicManager.Instance.Sources)
+            {
+                if (t > 0)
+                {
+                    source.UnPause();
+                }
+                else
+                {
+                    source.Pause();
+                }
+            }
         }
         public void SetSoundEffectsVolume(float t)
         {
             Data.SoundEffectsVolume = t;
             SetVolume("SoundEffectsVolume", t);
+
+            if (AmbienceManager.Instance != null)
+            {
+                foreach (AudioSource source in AmbienceManager.Instance.Sources)
+                {
+                    if (t > 0)
+                    {
+                        source.UnPause();
+                    }
+                    else
+                    {
+                        source.Pause();
+                    }
+                }
+            }
         }
         private void SetVolume(string param, float t)
         {
@@ -432,6 +537,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Data.ExportPrecision = precision;
         }
+        public void SetTouchOffset(float touchOffset)
+        {
+            CreatureEditor editor = creaturePlayerPrefab.GetComponent<CreatureEditor>();
+            editor.TouchOffset = Data.TouchOffset = touchOffset;
+        }
         public void SetCameraShake(bool cameraShake, bool updateMain = false)
         {
             List<StressReceiver> receivers = new List<StressReceiver>();
@@ -450,6 +560,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 receiver.Reset();
             }
             Data.CameraShake = cameraShake;
+        }
+        public void SetVibrations(bool vibrations)
+        {
+            MMVibrationManager.SetHapticsActive(vibrations);
+            Data.Vibrations = vibrations;
         }
         public void SetDebugMode(bool debugMode)
         {
@@ -532,6 +647,23 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             Data.InvertVertical = invert;
+        }
+
+        public void SetJoystick(Settings.JoystickType type)
+        {
+            Data.Joystick = type;
+        }
+        public void SetJoystickPositionHorizontal(float position)
+        {
+            Data.JoystickPositionHorizontal = position;
+        }
+        public void SetJoystickPositionVertical(float position)
+        {
+            Data.JoystickPositionVertical = position;
+        }
+        public void SetInterfaceScale(float scale)
+        {
+            Data.InterfaceScale = scale;
         }
         #endregion
         #endregion

@@ -31,16 +31,19 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            float t = animator.GetFloat("%LSpeed");
-            float f = x * Mathf.PI * slitherRate;
+            if (!Creature.IsOptimized)
+            {
+                float t = animator.GetFloat("%LSpeed");
+                float f = x * Mathf.PI * slitherRate;
 
-            float rot = -t * slitherAngle * Mathf.Sin(f);
-            float pos =  t * slitherWidth * Mathf.Cos(f);
-            
-            Head.localRotation = Quaternion.Euler(0, rot, 0);
-            Head.localPosition = initialHeadPos + Vector3.right * pos;
+                float rot = -t * slitherAngle * Mathf.Sin(f);
+                float pos = t * slitherWidth * Mathf.Cos(f);
 
-            x += Time.deltaTime;
+                Head.localRotation = Quaternion.Euler(0, rot, 0);
+                Head.localPosition = initialHeadPos + Vector3.right * pos;
+
+                x += Time.deltaTime;
+            }
         }
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

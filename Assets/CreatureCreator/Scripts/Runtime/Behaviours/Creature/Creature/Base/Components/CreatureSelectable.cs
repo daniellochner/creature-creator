@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SetSelected(false, true);
         }
-        public override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
             if (informationMenu != null)
@@ -124,7 +124,11 @@ namespace DanielLochner.Assets.CreatureCreator
             return (base.CanInteract(interactor) && !IsBehindPlayer) || IsSelected;
         }
 
-        public void SetSelected(bool isSelected, bool instant = false)
+        public void SetSelected(bool isSelected)
+        {
+            SetSelected(isSelected, false);
+        }
+        public void SetSelected(bool isSelected, bool instant)
         {
             if (IsSelected != isSelected)
             {

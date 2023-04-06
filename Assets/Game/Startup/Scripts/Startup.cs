@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -20,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        private void Start()
         {
             float n = (float)baseWidth / Screen.width;
             float s = 1f / scale;
@@ -28,18 +27,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
 
-            #region Welcome Back
-            yield return new WaitUntil(() => SteamManager.Initialized);
-            yield return LocalizationSettings.InitializationOperation;
-
-            if (ProgressManager.Data.UnlockedBodyParts.Count > 0 && !StatsManager.Instance.GetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW"))
-            {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("welcome_back_title"), LocalizationUtility.Localize("welcome_back_message"), onYes: delegate
-                {
-                    ProgressManager.Instance.Revert();
-                });
-            }
-            #endregion
+#if UNITY_STANDALONE
+            FactoryManager.Instance.LoadWorkshopItems();
+#endif
         }
         private void Update()
         {
@@ -48,22 +38,21 @@ namespace DanielLochner.Assets.CreatureCreator
             if (LocalizationSettings.InitializationOperation.IsDone)
             {
                 string entry = "";
+#if UNITY_STANDALONE
                 if (SteamManager.Initialized)
                 {
-                    if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
-                    {
-                        LoadingManager.Instance.Load("MainMenu");
-                        isKeyPressed = true;
-
-                        logoAnimator.SetTrigger("Hide");
-                        enterAudioSource.Play();
-                    }
+                    HandleStart();
                     entry = "startup_press-any-button";
                 }
                 else
                 {
                     entry = "startup_failed-to-initialize";
                 }
+#elif UNITY_IOS || UNITY_ANDROID
+                HandleStart();
+                entry = "startup_tap-to-start";
+#endif
+
                 startText.text = LocalizationUtility.Localize(entry);
             }
         }
@@ -71,6 +60,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             gridMaterial.mainTextureScale = Vector2.one;
             gridMaterial.mainTextureOffset = Vector2.zero;
+        }
+
+        private void HandleStart()
+        {
+            if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
+            {
+                LoadingManager.Instance.Load("MainMenu");
+                isKeyPressed = true;
+
+                logoAnimator.SetTrigger("Hide");
+                enterAudioSource.Play();
+            }
         }
         #endregion
     }

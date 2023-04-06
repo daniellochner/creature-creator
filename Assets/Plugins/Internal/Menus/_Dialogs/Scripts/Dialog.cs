@@ -4,15 +4,24 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
+    [DefaultExecutionOrder(1)]
     public class Dialog<M> : MenuSingleton<M> where M : Menu
     {
         #region Fields
         [SerializeField] protected TextMeshProUGUI titleText;
         [SerializeField] protected Button ignoreButton;
         [SerializeField] protected Button closeButton;
+        [SerializeField] private GameObject dialog;
         #endregion
 
         #region Methods
+        protected virtual void Start()
+        {
+            if (!IsOpen)
+            {
+                dialog.SetActive(false);
+            }
+        }
         protected virtual void LateUpdate()
         {
             if (IsOpen)
@@ -25,11 +34,17 @@ namespace DanielLochner.Assets
         }
         public override void Open(bool instant = false)
         {
+            dialog.SetActive(true);
             if (IsOpen)
             {
                 ignoreButton.onClick.Invoke();
             }
             base.Open(instant);
+        }
+        public override void OnEndClose()
+        {
+            base.OnEndClose();
+            dialog.SetActive(false);
         }
         #endregion
     }

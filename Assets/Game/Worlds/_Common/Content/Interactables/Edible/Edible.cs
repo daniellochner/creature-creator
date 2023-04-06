@@ -1,7 +1,6 @@
-using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -12,8 +11,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MinMax minMaxHunger;
         [SerializeField] private AudioClip eatSound;
         [SerializeField] private AudioMixerGroup soundEffectsMixer;
+        [SerializeField] private UnityEvent onEat;
 
         private bool hasEaten;
+        #endregion
+
+        #region Properties
+        public UnityEvent OnEat => onEat;
         #endregion
 
         #region Methods
@@ -27,20 +31,24 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnInteract(interactor);
 
             CreatureHunger hunger = interactor.GetComponent<CreatureHunger>();
-            if (!hasEaten && hunger.Hunger < 1f)
+            if (!hasEaten)
             {
                 hunger.Hunger += minMaxHunger.Random;
                 AudioSourceUtility.PlayClipAtPoint(eatSound, transform.position, 1f, soundEffectsMixer);
+
+                if (TryGetComponent(out NetworkDespawner despawner))
+                {
+                    despawner.Despawn();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+
+                onEat.Invoke();
+
                 hasEaten = true;
-
-                DisposeServerRpc();
             }
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void DisposeServerRpc()
-        {
-            NetworkObject.Despawn();
         }
         #endregion
     }

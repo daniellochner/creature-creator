@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private MinMax minMaxDamage;
         [SerializeField] private float blastRadius;
         [SerializeField] private GameObject collidePrefab;
+        [SerializeField] private float lifetime;
 
         private Rigidbody rb;
         #endregion
@@ -18,6 +19,14 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+        }
+        private IEnumerator Start()
+        {
+            if (IsServer)
+            {
+                yield return new WaitForSeconds(lifetime);
+                NetworkObject.Despawn();
+            }
         }
         private void LateUpdate()
         {

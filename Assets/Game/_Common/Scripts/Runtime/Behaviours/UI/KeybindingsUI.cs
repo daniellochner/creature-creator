@@ -27,6 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI shootKUI;
         [SerializeField] private KeybindUI spitKUI;
         [SerializeField] private KeybindUI growlKUI;
+        [SerializeField] private KeybindUI nightVisionKUI;
 
         [Header("Build")]
         [SerializeField] private KeybindUI copyKUI;
@@ -186,6 +187,13 @@ namespace DanielLochner.Assets.CreatureCreator
             growlKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Instance.RebindGrowl(key);
+            });
+
+            // Night Vision
+            nightVisionKUI.Rebind(KeybindingsManager.Data.NightVision, false);
+            nightVisionKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindNightVision(key);
             });
             #endregion
 

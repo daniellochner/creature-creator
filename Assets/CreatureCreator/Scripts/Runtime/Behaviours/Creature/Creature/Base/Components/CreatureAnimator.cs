@@ -54,6 +54,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float DefaultHeight { get; private set; }
 
+        public bool IsOptimized
+        {
+            get; set;
+        }
         public bool IsMovingBody
         {
             get; private set;
@@ -385,7 +389,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             tailDynamicBone.enabled = isDamped;
         }
-        
+
         private IEnumerator MoveBodyRoutine(Vector3 offset, float timeToMove, EasingFunction.Function easingFunction)
         {
             IsMovingBody = true;

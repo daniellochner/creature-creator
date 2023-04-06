@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +13,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Achievements")]
         [SerializeField] private TextMeshProUGUI achievementsText;
         [SerializeField] private Slider achievementsSlider;
+        [SerializeField] private Button achievementsButton;
 
         [Header("Cash")]
         [SerializeField] private TextMeshProUGUI cashText;
+
+        [Header("Quests")]
+        [SerializeField] private Slider questsSlider;
+        [SerializeField] private TextMeshProUGUI questsText;
 
         [Header("Unlocked Body Parts")]
         [SerializeField] private Slider bodyPartsSlider;
@@ -41,9 +45,26 @@ namespace DanielLochner.Assets.CreatureCreator
             int total = DatabaseManager.GetDatabase("Achievements").Objects.Count;
             achievementsText.text = $"{unlocked}/{total}";
             achievementsSlider.value = ((float)unlocked) / total;
+            achievementsButton.onClick.AddListener(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    GameServices.Instance.ShowAchievementsUI();
+                }
+                else
+                {
+                    AchievementsMenu.Instance.Open();
+                }
+            });
 
             // Cash
             cashText.text = $"${ProgressManager.Data.Cash}";
+
+            // Quests
+            int completedQuests = ProgressManager.Data.CompletedQuests;
+            questsText.text = $"{completedQuests}/{ProgressManager.Data.QUESTS.Length}";
+            questsSlider.maxValue = ProgressManager.Data.QUESTS.Length;
+            questsSlider.value = completedQuests;
 
             // Body Parts
             Database bodyParts = DatabaseManager.GetDatabase("Body Parts");

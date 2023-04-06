@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureCorpse : NetworkBehaviour
     {
         #region Fields
+        [SerializeField] private Edible fleshPrefab;
         [SerializeField] private MinimapIcon iconPrefab;
         #endregion
 
@@ -35,10 +36,34 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         public void Kill()
-        {            
-            Corpse = Ragdoll.Generate(Constructor.Body.position).gameObject;
-            Corpse.AddComponent<SelfDestructor>().Lifetime = 10f;
-            Instantiate(iconPrefab, Corpse.transform, false);
+        {
+            CreatureConstructor corpse = Ragdoll.Generate(Constructor.Body.position);
+
+            Corpse = corpse.gameObject;
+            Corpse.AddComponent<SelfDestructor>().Lifetime = 30f;
+
+            foreach (Transform bone in corpse.Bones)
+            {
+                BuoyantObject buoyantObject = bone.gameObject.AddComponent<BuoyantObject>();
+                buoyantObject.floatingPoints = new Transform[]
+                {
+                    bone
+                };
+                buoyantObject.floatingPower = 100;
+                buoyantObject.underwaterAngularDrag = 3;
+                buoyantObject.underwaterDrag = 1;
+                buoyantObject.airAngularDrag = 0;
+                buoyantObject.airDrag = 0.05f;
+
+                Edible flesh = Instantiate(fleshPrefab, bone);
+                flesh.GetComponent<SphereCollider>().radius = bone.GetComponent<SphereCollider>().radius;
+                flesh.OnEat.AddListener(delegate
+                {
+                    Destroy(corpse.gameObject);
+                });
+            }
+
+            Instantiate(iconPrefab, Corpse.transform);
         }
         #endregion
     }

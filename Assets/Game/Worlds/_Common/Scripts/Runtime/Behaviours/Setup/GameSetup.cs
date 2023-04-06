@@ -96,7 +96,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 go.SetActive(false);
             }
-            
+
+#if UNITY_STANDALONE
+            FactoryManager.Instance.LoadWorkshopItems();
+#endif
+
             IsSetup = true;
         }
         public void SetupMP()

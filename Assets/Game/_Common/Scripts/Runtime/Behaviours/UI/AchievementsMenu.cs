@@ -1,4 +1,3 @@
-using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,17 +15,18 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             Setup();
         }
 
         private void Setup()
         {
-            foreach (var achievement in Achievements.Objects)
+            foreach (string achievementId in Achievements.Objects.Keys)
             {
                 AchievementUI achievementUI = Instantiate(achievementUIPrefab, achievementsGrid.transform);
-                achievementUI.Setup(achievement.Value as Achievement);
+                achievementUI.Setup(achievementId);
             }
             UpdateInfo();
         }
@@ -34,9 +34,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (AchievementUI achievementUI in achievementsGrid.GetComponentsInChildren<AchievementUI>())
             {
-                achievementUI.canvasGroup.alpha = StatsManager.Instance.GetAchievement(achievementUI.name) ? 1f : 0.2f;
+                achievementUI.canvasGroup.alpha = StatsManager.Instance.IsAchievementUnlocked(achievementUI.name) ? 1f : 0.2f;
             }
-            //titleText.text = $"Unlocked Achievements ({StatsManager.Instance.NumAchievementsUnlocked}/{Achievements.Objects.Count})";
             titleText.SetArguments(StatsManager.Instance.NumAchievementsUnlocked, Achievements.Objects.Count);
         }
 

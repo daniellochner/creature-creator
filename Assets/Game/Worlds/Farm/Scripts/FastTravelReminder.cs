@@ -12,20 +12,27 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
-            if (PlayerPrefs.GetInt("FAST_TRAVEL_REMINDER") == 0)
+            if (SettingsManager.Data.Map && PlayerPrefs.GetInt("FAST_TRAVEL_REMINDER") == 0)
             {
                 yield return new WaitUntil(() => EditorManager.Instance.IsPlaying);
                 yield return new WaitForSeconds(1f);
 
-                InformationDialog.Inform(LocalizationUtility.Localize("cc_fast-travel_title"), LocalizationUtility.Localize("cc_fast-travel_message"));
+                Show();
                 PlayerPrefs.SetInt("FAST_TRAVEL_REMINDER", 1);
 
                 yield return new WaitForSeconds(300f);
                 if (Remind)
                 {
-                    InformationDialog.Inform(LocalizationUtility.Localize("cc_fast-travel_title"), LocalizationUtility.Localize("cc_fast-travel_message"));
+                    Show();
                 }
             }
+        }
+
+        private void Show()
+        {
+            string title = LocalizationUtility.Localize("cc_fast-travel_title");
+            string message = LocalizationUtility.Localize($"cc_fast-travel_message_{SystemUtility.DeviceType}".ToLower());
+            InformationDialog.Inform(title, message);
         }
         #endregion
     }

@@ -1,7 +1,6 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -18,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI dietText;
         [SerializeField] private TextMeshProUGUI speedText;
         [SerializeField] private TextMeshProUGUI abilitiesText;
+        [SerializeField] private Transform dialog;
         #endregion
 
         #region Properties
@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(BodyPart bodyPart)
+        public void Setup(BodyPart bodyPart, Vector3 position)
         {
             nameText.text = $"{bodyPart.name} (${bodyPart.Price})";
             authorText.text = $"{bodyPart.Author}";
@@ -53,7 +53,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 abilitiesText.text = string.Join(", ", bodyPart.Abilities);
             }
 
-            Open();
+            dialog.position = position;
+            Open(HasEntered);
+
             HasEntered = true;
         }
         public void Clear()

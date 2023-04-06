@@ -12,11 +12,15 @@ using UnityEngine.UI;
 using RotaryHeart.Lib.SerializableDictionary;
 using UnityFBXExporter;
 using ProfanityDetector;
-using SimpleFileBrowser;
 using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization;
+using Crosstales.FB;
+
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -100,6 +104,12 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isVisible = true, isEditing = true;
         private bool isUpdatingLoadableCreatures;
         private Coroutine visibleCoroutine;
+        private CreatureUI currentCreatureUI;
+
+#if UNITY_STANDALONE
+        private WorkshopData currentWorkshopData;
+        private UGCUpdateHandle_t handle;
+#endif
         #endregion
 
         #region Properties
@@ -400,17 +410,17 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
             if (Creature.Constructor.Statistics.Weight >= 500f)
             {
-                StatsManager.Instance.SetAchievement("ACH_HEAVYWEIGHT_CHAMPION");
+                StatsManager.Instance.UnlockAchievement("ACH_HEAVYWEIGHT_CHAMPION");
             }
 
             if (Creature.Abilities.Abilities.Count >= 15)
             {
-                StatsManager.Instance.SetAchievement("ACH_OVERPOWERED");
+                StatsManager.Instance.UnlockAchievement("ACH_OVERPOWERED");
             }
 
             if (Creature.Mover.MoveSpeed >= 4f)
             {
-                StatsManager.Instance.SetAchievement("ACH_SPEED_DEMON");
+                StatsManager.Instance.UnlockAchievement("ACH_SPEED_DEMON");
             }
 #endif
         }
@@ -521,8 +531,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             creatureUI.SelectToggle.SetIsOnWithoutNotify(true);
 
-            string path = Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat");
-            SaveUtility.Save(path, creatureData, creatureEncryptionKey.Value);
+            SaveUtility.Save(Path.Combine(creaturesDirectory, $"{creatureData.Name}.dat"), creatureData, creatureEncryptionKey.Value);
 
             Creature.Editor.LoadedCreature = creatureData.Name;
             Creature.Editor.IsDirty = false;
@@ -598,103 +607,225 @@ namespace DanielLochner.Assets.CreatureCreator
             Load(null);
 
 #if USE_STATS
-            StatsManager.Instance.SetAchievement("ACH_BACK_TO_BASICS");
+            StatsManager.Instance.UnlockAchievement("ACH_BACK_TO_BASICS");
 #endif
         }
         public void TryImport()
         {
-            ConfirmUnsavedChanges(Import);
-        }
-        public void Import()
-        {
-            FileBrowser.ShowLoadDialog(
-                onSuccess: delegate (string[] paths)
+            ConfirmUnsavedChanges(delegate
+            {
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    string creaturePath = paths[0];
-
-                    CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath);
-                    if (creatureData != null && IsValidName(creatureData.Name))
-                    {
-                        if (CanLoadCreature(creatureData, out string errorMessage))
-                        {
-                            Save(creatureData);
-                            Load(creatureData);
-                        }
-                        else
-                        {
-                            InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
-                        }
-                    }
-                    else
-                    {
-                        InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
-                    }
-                },
-                onCancel: null,
-                pickMode: FileBrowser.PickMode.Files,
-                initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            );
+                    FileBrowser.Instance.OpenSingleFileAsync("dat");
+                    FileBrowser.Instance.OnOpenFilesComplete += OnImport;
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    NativeFilePicker.PickFile(Import, NativeFilePicker.AllFileTypes);
+                }
+            });
+        }
+        public void Import(string filePath)
+        {
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(filePath);
+            if (creatureData != null && IsValidName(creatureData.Name))
+            {
+                if (CanLoadCreature(creatureData, out string errorMessage))
+                {
+                    Save(creatureData);
+                    Load(creatureData);
+                }
+                else
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
+                }
+            }
+            else
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
+            }
         }
         public void TryExport()
         {
-            UnityAction<string> exportOperation = delegate (string input)
+            UnityAction<string, bool> exportDesktopOperation = delegate (string creatureName, bool exportAll)
             {
-                string exportedCreatureName = PreProcessName(input);
+                string exportedCreatureName = PreProcessName(creatureName);
                 if (IsValidName(exportedCreatureName))
                 {
                     Creature.Constructor.SetName(exportedCreatureName);
-                    if (!IsPlaying){
+                    if (!IsPlaying)
+                    {
                         Creature.Constructor.UpdateConfiguration();
                     }
 
-                    FileBrowser.ShowSaveDialog(
-                        onSuccess: (path) => Export(Creature.Constructor.Data),
-                        onCancel: null,
-                        pickMode: FileBrowser.PickMode.Folders,
-                        initialPath: Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                    );
+                    if (exportAll)
+                    {
+                        FileBrowser.Instance.OnOpenFoldersComplete += OnExportAll;
+                    }
+                    else
+                    {
+                        FileBrowser.Instance.OnOpenFoldersComplete += OnExportDat;
+                    }
+                    FileBrowser.Instance.OpenSingleFolderAsync();
                 }
             };
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
-            if ((selectedCreatureUI != null) && (selectedCreatureUI.name == Creature.Editor.LoadedCreature))
+            if (selectedCreatureUI != null)
             {
-                exportOperation(selectedCreatureUI.name);
+                string creatureName = selectedCreatureUI.name;
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    exportDesktopOperation(creatureName, creatureName == Creature.Editor.LoadedCreature);
+                }
+                else
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    NativeFilePicker.ExportFile(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
+                }
             }
             else
             {
-                InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: exportOperation);
+                if (SystemUtility.IsDevice(DeviceType.Desktop))
+                {
+                    InputDialog.Input(LocalizationUtility.Localize("cc_creature-name_title"), LocalizationUtility.Localize("cc_creature-name_input"), maxCharacters: 32, submit: LocalizationUtility.Localize("cc_creature-name_submit"), onSubmit: (string input) => exportDesktopOperation(input, true));
+                }
             }
         }
-        public void Export(CreatureData creatureData)
+        public void Export(string folderPath, bool exportAll)
         {
-            string creaturePath = Path.Combine(FileBrowser.Result[0], creatureData.Name);
-            if (!Directory.Exists(creaturePath))
-            {
-                Directory.CreateDirectory(creaturePath);
-            }
+            CreatureData data = Creature.Constructor.Data;
 
-            // Data
-            SaveUtility.Save(Path.Combine(creaturePath, $"{creatureData.Name}.dat"), creatureData);
-
-            // Screenshot
-            Creature.Photographer.TakePhoto(1024, delegate(Texture2D photo)
+            if (exportAll && SettingsManager.Data.PreviewFeatures)
             {
-                File.WriteAllBytes(Path.Combine(creaturePath, $"{creatureData.Name}.png"), photo.EncodeToPNG());
-            });
+                string creaturePath = Path.Combine(folderPath, data.Name);
+                if (!Directory.Exists(creaturePath))
+                {
+                    Directory.CreateDirectory(creaturePath);
+                }
 
-            // 3D Model
-            if (SettingsManager.Data.PreviewFeatures)
-            {
-                GameObject export = Creature.Cloner.Clone(creatureData).gameObject;
+                // Data
+                SaveUtility.Save(Path.Combine(creaturePath, $"{data.Name}.dat"), data);
+
+                // Screenshot
+                Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
+                {
+                    File.WriteAllBytes(Path.Combine(creaturePath, $"{data.Name}.png"), photo.EncodeToPNG());
+                });
+
+                // 3D Model
+                GameObject export = Creature.Cloner.Clone(data).gameObject;
                 export.SetLayerRecursively(LayerMask.NameToLayer("Export"));
-
                 foreach (GameObject tool in export.FindChildrenWithTag("Tool"))
                 {
                     tool.SetActive(false);
                 }
-                FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{creatureData.Name}.fbx"));
+                FBXExporter.ExportGameObjToFBX(export, Path.Combine(creaturePath, $"{data.Name}.fbx"));
                 Destroy(export);
+            }
+            else
+            {
+                // Data
+                SaveUtility.Save(Path.Combine(folderPath, $"{data.Name}.dat"), data);
+            }
+        }
+        public void TryShare(string name)
+        {
+            string data = Path.Combine(creaturesDirectory, $"{name}.dat");
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(data, creatureEncryptionKey.Value);
+            if (creatureData != null)
+            {
+                // Body Parts
+                List<BodyPart> bodyParts = new List<BodyPart>();
+                foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
+                {
+                    BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", attachedBodyPart.bodyPartID);
+                    if (!bodyParts.Contains(bodyPart))
+                    {
+                        bodyParts.Add(bodyPart);
+                    }
+                }
+                string bodyPartsStr = bodyParts.Count > 0 ? $"{bodyParts.Count} ({ string.Join(", ", bodyParts)})" : "None";
+
+                // Pattern
+                Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID);
+                string patternStr = pattern?.name ?? "None";
+
+                // Colors
+                string colors = $"#{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)} and #{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)}";
+                
+                string description =
+                    $"Bones: {creatureData.Bones.Count}\n" +
+                    $"Body Parts: {bodyPartsStr}\n" +
+                    $"Pattern: {patternStr}\n" +
+                    $"Tiling: {creatureData.Tiling}\n" +
+                    $"Offset: {creatureData.Offset}\n" +
+                    $"Colors: {colors}\n" +
+                    $"Metallic: {creatureData.Metallic}\n" +
+                    $"Shine: {creatureData.Shine}";
+
+                string preview = Path.Combine(creaturesDirectory, $"{name}.png");
+                Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
+                {
+                    File.WriteAllBytes(preview, photo.EncodeToPNG());
+                    Share(data, preview, name, description);
+                },
+                creatureData);
+            }
+        }
+        public void Share(string data, string preview, string title, string description)
+        {
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                NativeShare share = new NativeShare();
+                share.AddFile(data);
+
+                string link = "";
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    link = "https://play.google.com/store/apps/details?id=com.daniellochner.creaturecreator";
+                }
+                else
+                if (Application.platform == RuntimePlatform.IPhonePlayer)
+                {
+                    link = "https://apps.apple.com/us/app/creature-creator/id1564115819";
+                }
+                else
+                {
+                    link = "https://store.steampowered.com/app/1990050/Creature_Creator/";
+                }
+
+                share.SetTitle(title);
+                share.SetText(LocalizationUtility.Localize("share_subject", link));
+
+                share.Share();
+            }
+            else
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+#if UNITY_STANDALONE
+                if (SteamManager.Initialized)
+                {
+                    string t = LocalizationUtility.Localize("share_title");
+                    string m = LocalizationUtility.Localize("share_message", title);
+                    ConfirmationDialog.Confirm(t, m, onYes: delegate
+                    {
+                        currentWorkshopData = new WorkshopData()
+                        {
+                            dataPath = data,
+                            previewPath = preview,
+                            title = title,
+                            description = description
+                        };
+
+                        CallResult<CreateItemResult_t> item = CallResult<CreateItemResult_t>.Create(OnCreateItem);
+
+                        SteamAPICall_t handle = SteamUGC.CreateItem(SteamUtils.GetAppID(), EWorkshopFileType.k_EWorkshopFileTypeCommunity);
+                        item.Set(handle);
+                    });
+                }
+#endif
             }
         }
 
@@ -783,6 +914,73 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return true;
         }
+
+        private void OnExportDat(bool selected, string singleFolder, string[] folders)
+        {
+            if (selected)
+            {
+                Export(singleFolder, false);
+            }
+            FileBrowser.Instance.OnOpenFoldersComplete -= OnExportDat;
+        }
+        private void OnExportAll(bool selected, string singleFolder, string[] folders)
+        {
+            if (selected)
+            {
+                Export(singleFolder, true);
+            }
+            FileBrowser.Instance.OnOpenFoldersComplete -= OnExportAll;
+        }
+        private void OnImport(bool selected, string singleFile, string[] files)
+        {
+            if (selected)
+            {
+                Import(singleFile);
+            }
+            FileBrowser.Instance.OnOpenFilesComplete -= OnImport;
+        }
+
+#if UNITY_STANDALONE
+        private void OnCreateItem(CreateItemResult_t item, bool hasFailed)
+        {
+            if (hasFailed)
+            {
+                return;
+            }
+            if (item.m_bUserNeedsToAcceptWorkshopLegalAgreement)
+            {
+                SteamFriends.ActivateGameOverlayToWebPage("https://steamcommunity.com/workshop/workshoplegalagreement/");
+                return;
+            }
+
+            handle = SteamUGC.StartItemUpdate(SteamUtils.GetAppID(), item.m_nPublishedFileId);
+            SteamUGC.SetItemTitle(handle, currentWorkshopData.title);
+            SteamUGC.SetItemDescription(handle, currentWorkshopData.description);
+            SteamUGC.SetItemContent(handle, currentWorkshopData.dataPath);
+            SteamUGC.SetItemPreview(handle, currentWorkshopData.previewPath);
+            SteamUGC.SetItemVisibility(handle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic);
+            SteamUGC.SubmitItemUpdate(handle, null);
+
+            StartCoroutine(UploadRoutine(item.m_nPublishedFileId));
+        }
+        private IEnumerator UploadRoutine(PublishedFileId_t pf)
+        {
+            currentCreatureUI.IsSharing = true;
+
+            while (true)
+            {
+                EItemUpdateStatus status = SteamUGC.GetItemUpdateProgress(handle, out ulong p, out ulong t);
+                if (status == EItemUpdateStatus.k_EItemUpdateStatusInvalid)
+                {
+                    break;
+                }
+                yield return null;
+            }
+            SteamFriends.ActivateGameOverlayToWebPage($"steam://url/CommunityFilePage/{pf}");
+
+            currentCreatureUI.IsSharing = false;
+        }
+#endif
         #endregion
 
         #region Unlocks
@@ -862,6 +1060,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             });
             UpdateNoCreatures();
+            FilterCreatures(creatureNameText.text);
+
+            creatureUI.ShareButton.onClick.AddListener(delegate
+            {
+                currentCreatureUI = creatureUI;
+                TryShare(creatureName);
+            });
 
             return creatureUI;
         }
@@ -883,26 +1088,8 @@ namespace DanielLochner.Assets.CreatureCreator
             noPartsText.SetActive(false);
             grid.CalculateLayoutInputVertical();
 
-            bodyPartUI.HoverUI.OnEnter.AddListener(delegate
-            {
-                if (!Input.GetMouseButton(0))
-                {
-                    StatisticsMenu.Instance.Setup(bodyPart);
-                }
-            });
-            bodyPartUI.HoverUI.OnExit.AddListener(delegate
-            {
-                StatisticsMenu.Instance.Clear();
-            });
-
-            bodyPartUI.DragUI.OnPress.AddListener(delegate
-            {
-                StatisticsMenu.Instance.Close();
-                bodyPartUI.Select();
-            });
             bodyPartUI.DragUI.OnRelease.AddListener(delegate
             {
-                bodyPartUI.Deselect();
                 grid.CalculateLayoutInputVertical();
             });
             bodyPartUI.DragUI.OnDrag.AddListener(delegate
@@ -943,7 +1130,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (bodyPart is Eye)
                     {
-                        StatsManager.Instance.SetAchievement("ACH_I_CAN_SEE_CLEARLY_NOW");
+                        StatsManager.Instance.UnlockAchievement("ACH_I_CAN_SEE_CLEARLY_NOW");
                     }
 #endif
                 }
@@ -1393,6 +1580,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             public TextMeshProUGUI title;
             public GridLayoutGroup grid;
+        }
+
+        [Serializable]
+        public struct WorkshopData
+        {
+            public string dataPath;
+            public string previewPath;
+            public string title;
+            public string description;
         }
 
         [Serializable]

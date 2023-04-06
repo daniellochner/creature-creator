@@ -1,12 +1,11 @@
 // Interactions
 // Copyright (c) Daniel Lochner
 
-using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public abstract class Interactable : NetworkBehaviour
+    public abstract class Interactable : MonoBehaviour
     {
         #region Fields
         [SerializeField] private Texture2D cursor;
@@ -26,7 +25,7 @@ namespace DanielLochner.Assets
         {
             Col = GetComponent<Collider>();
         }
-        public override void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if (InteractionsManager.Instance)
             {
@@ -39,7 +38,6 @@ namespace DanielLochner.Assets
                     InteractionsManager.Instance.Targeted = null;
                 }
             }
-            base.OnDestroy();
         }
 
         public virtual bool CanInteract(Interactor interactor)

@@ -30,6 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind ping;
         [SerializeField] private Keybind growl;
         [SerializeField] private Keybind strike;
+        [SerializeField] private Keybind nightVision;
 
         [Header("Build")]
         [SerializeField] private Keybind copy;
@@ -153,6 +154,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => strike;
             set => strike = value;
         }
+        public Keybind NightVision
+        {
+            get => nightVision;
+            set => nightVision = value;
+        }
 
         public Keybind Copy
         {
@@ -212,6 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Spit = new Keybind(KeyCode.F);
             Growl = new Keybind(KeyCode.G);
             Strike = new Keybind(KeyCode.F);
+            NightVision = new Keybind(KeyCode.N);
 
             Copy = new Keybind(KeyCode.LeftAlt);
 

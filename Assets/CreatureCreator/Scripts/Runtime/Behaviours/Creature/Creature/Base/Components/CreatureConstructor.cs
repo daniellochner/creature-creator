@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureQuality boneSettings;
         [SerializeField] private MinMax minMaxBones = new MinMax(2, 20);
         [SerializeField] private float density = 500f;
+        [SerializeField] private int maxLightSources = 3;
         [SerializeField] private MinMax minMaxBodySpeed = new MinMax(-1f, 0f);
         [SerializeField] private MinMax minMaxBodyHealth = new MinMax(0, 250);
         [SerializeField] private MinMax minMaxBodyWeight = new MinMax(10f, 1000f);
@@ -55,6 +56,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureStatistics Statistics => statistics;
         public CreatureDimensions Dimensions => dimensions;
         public float Density => density;
+        public int MaxLightSources => maxLightSources;
 
         public Mesh Mesh { get; private set; }
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
@@ -97,6 +99,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 Mesh.uv = isTextured ? Mesh.uv8 : null;
             }
         }
+        public int LightSources
+        {
+            get; set;
+        }
         #endregion
 
         #region Methods
@@ -129,14 +135,14 @@ namespace DanielLochner.Assets.CreatureCreator
             for (int i = 0; i < data.Bones.Count; i++)
             {
                 Bone bone = data.Bones[i];
-                AddBone(i, bone.position, bone.rotation, bone.weight);
+                AddBone(i, bone.position, bone.rotation, bone.weight, i == data.Bones.Count - 1);
             }
             for (int i = 0; i < data.AttachedBodyParts.Count; i++)
             {
                 AttachedBodyPart attachedBodyPart = data.AttachedBodyParts[i];
                 BodyPartConstructor main = AddBodyPart(attachedBodyPart.bodyPartID);
                 main.Attach(attachedBodyPart);
-                main.Flip();
+                main.Flip(false);
             }
             SetPrimaryColour(data.PrimaryColour);
             SetSecondaryColour(data.SecondaryColour);
@@ -411,12 +417,15 @@ namespace DanielLochner.Assets.CreatureCreator
             OnConstructBody?.Invoke();
         }
 
-        public void AddBone(int index, Vector3 position, Quaternion rotation, float weight)
+        public void AddBone(int index, Vector3 position, Quaternion rotation, float weight, bool apply = true)
         {
             if (CanAddBone(index))
             {
-                // Detach body parts
-                DetachBodyParts();
+                if (apply)
+                {
+                    // Detach body parts
+                    DetachBodyParts();
+                }
 
                 // Add bone
                 Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
@@ -431,11 +440,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     weight = weight
                 });
 
-                // Reconstruct body
-                ConstructBody();
+                if (apply)
+                {
+                    // Reconstruct body
+                    ConstructBody();
 
-                // Reattach body parts
-                ReattachBodyParts();
+                    // Reattach body parts
+                    ReattachBodyParts();
+                }
             }
         }
         public void AddBoneToFront()
@@ -560,6 +572,11 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
             bodyPart.Add(statistics);
 
+            if (bodyPart.IsLightSource)
+            {
+                LightSources++;
+            }
+
             GameObject bodyPartPrefab = OnBodyPartPrefabOverride?.Invoke(bodyPart) ?? bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
 
             // Main
@@ -583,6 +600,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", main.AttachedBodyPart.bodyPartID);
             bodyPart.Remove(statistics);
+
+            if (bodyPart.IsLightSource)
+            {
+                LightSources--;
+            }
 
             main.Remove();
             Data.AttachedBodyParts.Remove(main.AttachedBodyPart);
