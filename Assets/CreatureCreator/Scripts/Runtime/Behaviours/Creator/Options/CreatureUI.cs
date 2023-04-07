@@ -4,7 +4,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using System.IO;
 
 #if UNITY_STANDALONE

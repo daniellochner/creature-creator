@@ -784,7 +784,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string link = "";
                 if (Application.platform == RuntimePlatform.Android)
                 {
-                    link = "https://play.google.com/store/apps/details?id=com.daniellochner.creaturecreator";
+                    link = "https://play.google.com/store/apps/details?id=com.daniellochner.creature_creator";
                 }
                 else
                 if (Application.platform == RuntimePlatform.IPhonePlayer)
