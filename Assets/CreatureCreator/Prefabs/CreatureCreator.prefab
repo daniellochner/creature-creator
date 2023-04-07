@@ -7417,6 +7417,7 @@ GameObject:
   - component: {fileID: 8934269896704737125}
   - component: {fileID: 8934269896704737124}
   - component: {fileID: 8934269896704737123}
+  - component: {fileID: 4074962189734000948}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -7509,6 +7510,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 1
+--- !u!114 &4074962189734000948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8934269896704737126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1faf7b026177a64fb1d6af18a6c7818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStandalone:
+    m_PersistentCalls:
+      m_Calls: []
+  onHandheld:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8934269896704737124}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CellSizeCalculator, Assembly-CSharp-firstpass
+        m_MethodName: set_NumberOfColumns
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onConsole:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8934269896705177083
 GameObject:
   m_ObjectHideFlags: 0
