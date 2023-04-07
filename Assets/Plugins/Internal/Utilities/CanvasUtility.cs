@@ -9,12 +9,20 @@ namespace DanielLochner.Assets
         {
             get
             {
-                for (int i = -1; i < Input.touchCount; ++i)
+                if (Input.touchCount > 0)
                 {
-                    if (EventSystem.current.IsPointerOverGameObject(i))
+                    for (int i = 0; i < Input.touchCount; ++i)
                     {
-                        return true;
+                        Touch touch = Input.touches[i];
+                        if (touch.phase == TouchPhase.Began && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                        {
+                            return true;
+                        }
                     }
+                }
+                else if (EventSystem.current.IsPointerOverGameObject())
+                {
+                    return true;
                 }
                 return false;
             }
