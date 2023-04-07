@@ -12,7 +12,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private float touchOffset;
-        [SerializeField] private float scrollCooldown;
+        [SerializeField] private float highlightCooldown;
         [SerializeField] private float scrollThreshold;
         [SerializeField] private Texture2D defaultCursor;
         [SerializeField] private InteractionUI interactionPrefab;
@@ -25,7 +25,7 @@ namespace DanielLochner.Assets
         private List<InteractionUI> interactions = new List<InteractionUI>();
         private Interactable prevHighlighted;
         private int highlightedIndex;
-        private float scrolledTime;
+        private float highlightedTime;
         #endregion
 
         #region Properties
@@ -92,6 +92,8 @@ namespace DanielLochner.Assets
                 InteractionUI interaction = interactions[highlightedIndex];
                 Highlighted = interaction.Interactable;
                 interaction.Select();
+
+                highlightedTime = Time.time;
             }
         }
         #endregion
@@ -109,16 +111,16 @@ namespace DanielLochner.Assets
 
         private void HandleUI()
         {
-            if (grid.transform.childCount > 0)
+            if (grid.transform.childCount > 0 && Time.time > (highlightedTime + highlightCooldown))
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {
-                    if (Input.mouseScrollDelta.y > +scrollThreshold)
+                    if (Input.mouseScrollDelta.y > 0)
                     {
                         HighlightedIndex++;
                     }
                     else
-                    if (Input.mouseScrollDelta.y < -scrollThreshold)
+                    if (Input.mouseScrollDelta.y < 0)
                     {
                         HighlightedIndex--;
                     }
@@ -126,18 +128,17 @@ namespace DanielLochner.Assets
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    if (InputUtility.GetDelta(out float deltaX, out float deltaY) && (Time.time > (scrolledTime + scrollCooldown)))
+                    if (InputUtility.GetDelta(out float deltaX, out float deltaY))
                     {
-                        if (deltaY > 0)
+                        if (deltaY > +scrollThreshold)
                         {
                             HighlightedIndex++;
                         }
                         else
-                        if (deltaY < 0)
+                        if (deltaY < -scrollThreshold)
                         {
                             HighlightedIndex--;
                         }
-                        scrolledTime = Time.time;
                     }
                 }
             }
