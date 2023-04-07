@@ -279,9 +279,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupConstructor()
         {
+            Vector3 s = Vector3.one * (SystemUtility.IsDevice(DeviceType.Handheld) ? 1.5f : 1f);
             LimbConstructor.OnSetWeight += delegate(int index, float weight)
             {
-                toolRenderers[index].transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 2, weight / 100f);
+                toolRenderers[index].transform.localScale = Vector3.Lerp(s, s * 2, weight / 100f);
 
                 UpdateMeshCollider();
             };
