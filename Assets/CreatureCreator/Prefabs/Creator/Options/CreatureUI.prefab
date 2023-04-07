@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 4377219292514546844}
   - component: {fileID: 6880291585595035577}
   - component: {fileID: 2483167442487746407}
+  - component: {fileID: 1632019352124283926}
   m_Layer: 5
   m_Name: Share
   m_TagString: Untagged
@@ -162,7 +163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc2eebdb3fe7a403886c6c6836fddc62, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1bba47afe4b764058a8e23deadba1988, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -248,6 +249,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1632019352124283926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953180147630180266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1faf7b026177a64fb1d6af18a6c7818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStandalone:
+    m_PersistentCalls:
+      m_Calls: []
+  onHandheld:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 414911292299604554}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
+        m_MethodName: set_sprite
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 21300000, guid: bc2eebdb3fe7a403886c6c6836fddc62, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onConsole:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2452306776350303307
 GameObject:
   m_ObjectHideFlags: 0

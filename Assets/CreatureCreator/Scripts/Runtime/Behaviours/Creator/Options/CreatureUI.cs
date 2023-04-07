@@ -4,6 +4,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+using System.IO;
+
+#if UNITY_STANDALONE
+using Steamworks;
+#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -41,6 +47,20 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             nameText.text = name = creatureName;
             transform.SetAsFirstSibling();
+
+#if UNITY_STANDALONE
+            foreach (PublishedFileId_t fileId in FactoryManager.Instance.Files)
+            {
+                if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
+                {
+                    string src = Directory.GetFiles(folder)[0];
+                    if (Path.GetFileName(src) == creatureName)
+                    {
+                        shareButton.gameObject.SetActive(false);
+                    }
+                }
+            }
+#endif
         }
         #endregion
     }
