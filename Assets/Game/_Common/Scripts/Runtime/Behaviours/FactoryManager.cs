@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Collections;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -11,6 +12,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
 #if UNITY_STANDALONE
         public PublishedFileId_t[] Files { get; private set; }
+
+        private IEnumerator Start()
+        {
+            yield return new WaitUntil(() => SteamManager.Initialized);
+            LoadWorkshopItems();
+        }
 
         public void LoadWorkshopItems()
         {

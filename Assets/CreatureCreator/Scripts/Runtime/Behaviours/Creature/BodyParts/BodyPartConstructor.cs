@@ -163,13 +163,28 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor = creatureConstructor;
 
-            BodyPartPrimaryMat = IsFlipped ? Flipped.BodyPartPrimaryMat : new Material(CreatureConstructor.BodyPartMaterial);
-            BodyPartPrimaryMat.name = "BodyPart_Primary";
+            if (IsFlipped)
+            {
+                BodyPartPrimaryMat = Flipped.BodyPartPrimaryMat;
+                BodyPartSecondaryMat = Flipped.BodyPartSecondaryMat;
 
-            BodyPartSecondaryMat = IsFlipped ? Flipped.BodyPartSecondaryMat : new Material(CreatureConstructor.BodyPartMaterial);
-            BodyPartSecondaryMat.name = "BodyPart_Secondary";
+                Renderer.sharedMaterials = Flipped.Renderer.sharedMaterials;
+            }
+            else
+            {
+                BodyPartPrimaryMat = new Material(CreatureConstructor.BodyPartMaterial)
+                {
+                    name = "BodyPart_Primary",
+                    enableInstancing = true
+                };
+                BodyPartSecondaryMat = new Material(CreatureConstructor.BodyPartMaterial)
+                {
+                    name = "BodyPart_Secondary",
+                    enableInstancing = true
+                };
 
-            OverrideMat(null, null, false);
+                OverrideMat(null, null, false);
+            }
 
             if (CreatureConstructor.LightSources > CreatureConstructor.MaxLightSources)
             {
@@ -390,29 +405,29 @@ namespace DanielLochner.Assets.CreatureCreator
                     materials[j] = overrideMat;
                     name = overrideMat.name;
                 }
+                materials[j].enableInstancing = true;
 
-                if (name == "Body_Primary")
+                switch (name)
                 {
-                    materials[j] = CreatureConstructor.BodyPrimaryMat;
-                    hasBodyPrimary = true;
-                }
-                else 
-                if (name == "Body_Secondary")
-                {
-                    materials[j] = CreatureConstructor.BodySecondaryMat;
-                    hasBodySecondary = true;
-                }
-                else 
-                if (name == "BodyPart_Primary")
-                {
-                    materials[j] = BodyPartPrimaryMat;
-                    hasBodyPartPrimary = true;
-                }
-                else 
-                if (name == "BodyPart_Secondary")
-                {
-                    materials[j] = BodyPartSecondaryMat;
-                    hasBodyPartSecondary = true;
+                    case "Body_Primary":
+                        materials[j] = CreatureConstructor.BodyPrimaryMat;
+                        hasBodyPrimary = true;
+                        break;
+
+                    case "Body_Secondary":
+                        materials[j] = CreatureConstructor.BodySecondaryMat;
+                        hasBodySecondary = true;
+                        break;
+
+                    case "BodyPart_Primary":
+                        materials[j] = BodyPartPrimaryMat;
+                        hasBodyPartPrimary = true;
+                        break;
+
+                    case "BodyPart_Secondary":
+                        materials[j] = BodyPartSecondaryMat;
+                        hasBodyPartSecondary = true;
+                        break;
                 }
             }
             Renderer.materials = materials;

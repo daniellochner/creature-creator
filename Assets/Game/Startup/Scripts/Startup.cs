@@ -26,10 +26,6 @@ namespace DanielLochner.Assets.CreatureCreator
             gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
-
-#if UNITY_STANDALONE
-            FactoryManager.Instance.LoadWorkshopItems();
-#endif
         }
         private void Update()
         {
