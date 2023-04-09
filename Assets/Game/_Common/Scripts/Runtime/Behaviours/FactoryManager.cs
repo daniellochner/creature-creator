@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class FactoryManager : MonoBehaviourSingleton<FactoryManager>
     {
 #if UNITY_STANDALONE
-        public PublishedFileId_t[] Files { get; private set; }
+        public PublishedFileId_t[] Files { get; private set; } = new PublishedFileId_t[0];
 
         public void LoadWorkshopItems()
         {

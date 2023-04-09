@@ -52,8 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
                 {
-                    string src = Directory.GetFiles(folder)[0];
-                    if (Path.GetFileName(src) == creatureName)
+                    if (Path.GetFileNameWithoutExtension(Directory.GetFiles(folder)[0]) == creatureName)
                     {
                         shareButton.gameObject.SetActive(false);
                     }
