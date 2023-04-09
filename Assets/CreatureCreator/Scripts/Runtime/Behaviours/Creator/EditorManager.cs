@@ -628,7 +628,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Import(string filePath)
         {
-            CreatureData creatureData = SaveUtility.Load<CreatureData>(filePath);
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(filePath, creatureEncryptionKey.Value);
+            if (creatureData == null)
+            {
+                creatureData = SaveUtility.Load<CreatureData>(filePath);
+            }
+
             if (creatureData != null && IsValidName(creatureData.Name))
             {
                 if (CanLoadCreature(creatureData, out string errorMessage))
@@ -682,15 +687,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    string tmpPath = Path.Combine(creaturesDirectory, "tmp");
-                    if (!Directory.Exists(tmpPath))
-                    {
-                        Directory.CreateDirectory(tmpPath);
-                    }
-
-                    string creaturePath = Path.Combine(tmpPath, $"{creatureName}.dat");
-                    SaveUtility.Save(creaturePath, Creature.Constructor.Data);
-                    NativeFilePicker.ExportFile(creaturePath);
+                    NativeFilePicker.ExportFile(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
                 }
             }
             else
@@ -714,7 +711,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Data
-                SaveUtility.Save(Path.Combine(creaturePath, $"{data.Name}.dat"), data);
+                SaveUtility.Save(Path.Combine(creaturePath, $"{data.Name}.dat"), data, creatureEncryptionKey.Value);
 
                 // Screenshot
                 Creature.Photographer.TakePhoto(1024, delegate (Texture2D photo)
@@ -735,7 +732,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             {
                 // Data
-                SaveUtility.Save(Path.Combine(folderPath, $"{data.Name}.dat"), data);
+                SaveUtility.Save(Path.Combine(folderPath, $"{data.Name}.dat"), data, creatureEncryptionKey.Value);
             }
         }
         public void TryShare(string name)
