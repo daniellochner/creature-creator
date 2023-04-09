@@ -50,16 +50,22 @@ namespace DanielLochner.Assets.CreatureCreator
             this.modeOS = modeOS;
 
             bool unlocked = true;
+            Map map = (Map)mapOS.Selected;
             Mode mode = (Mode)modeOS.Selected;
             if (mode == Mode.Adventure)
             {
-                Map map = (Map)mapOS.Selected;
                 string mapId = $"map_unlocked_{map}".ToLower();
                 if (PlayerPrefs.GetInt(mapId) == 0)
                 {
                     unlocked = false;
                 }
             }
+
+            if (map == Map.City)
+            {
+                unlocked = false;
+            }
+
             lockedIcon.SetActive(!unlocked);
         }
         #endregion

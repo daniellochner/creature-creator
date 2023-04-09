@@ -5,6 +5,7 @@ namespace DanielLochner.Assets.CreatureCreator
         Island,
         Farm,
         Sandbox,
-        Cave
+        Cave,
+        City
     }
 }
