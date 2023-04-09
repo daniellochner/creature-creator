@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
+    [DefaultExecutionOrder(1)]
     public class OptionMenu : Menu
     {
         private AudioSource source;
