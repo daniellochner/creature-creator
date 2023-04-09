@@ -56,7 +56,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureStatistics Statistics => statistics;
         public CreatureDimensions Dimensions => dimensions;
         public float Density => density;
-        public int MaxLightSources => maxLightSources;
+        public int MaxLightSources
+        {
+            get => maxLightSources;
+            set => maxLightSources = value;
+        }
 
         public Mesh Mesh { get; private set; }
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }

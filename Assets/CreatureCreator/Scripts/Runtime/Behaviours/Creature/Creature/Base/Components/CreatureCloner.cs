@@ -36,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (position == null) parent = transform;
 
             CreatureConstructor clone = Instantiate(skeletonPrefab, (Vector3)position, (Quaternion)rotation, parent);
+            clone.MaxLightSources = CreatureConstructor.MaxLightSources; // TODO: Copy all settings?
             clone.Construct(creatureData);
 
             return clone;
