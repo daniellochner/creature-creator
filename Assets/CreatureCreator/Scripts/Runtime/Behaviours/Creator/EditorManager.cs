@@ -682,7 +682,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (SystemUtility.IsDevice(DeviceType.Handheld))
                 {
-                    NativeFilePicker.ExportFile(Path.Combine(creaturesDirectory, $"{creatureName}.dat"));
+                    string tmpPath = Path.Combine(creaturesDirectory, "tmp");
+                    if (!Directory.Exists(tmpPath))
+                    {
+                        Directory.CreateDirectory(tmpPath);
+                    }
+
+                    string creaturePath = Path.Combine(tmpPath, $"{creatureName}.dat");
+                    SaveUtility.Save(creaturePath, Creature.Constructor.Data);
+                    NativeFilePicker.ExportFile(creaturePath);
                 }
             }
             else
