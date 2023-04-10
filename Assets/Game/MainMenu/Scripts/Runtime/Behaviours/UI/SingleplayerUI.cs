@@ -84,7 +84,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
 
                 // Check Unlocked Map
-                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(mapName)))
+                Map map = Enum.Parse<Map>(mapName);
+                if (map == Map.ComingSoon)
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
+                }
+                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(map))
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())));
                 }

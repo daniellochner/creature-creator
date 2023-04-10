@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image screenshotImg;
         [SerializeField] private Sprite[] screenshots;
         [SerializeField] private GameObject lockedIcon;
+        [SerializeField] private GameObject comingSoonIcon;
 
         private OptionSelector mapOS, modeOS;
         #endregion
@@ -51,19 +52,21 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bool unlocked = true;
             Map map = (Map)mapOS.Selected;
-            Mode mode = (Mode)modeOS.Selected;
-            if (mode == Mode.Adventure)
-            {
-                string mapId = $"map_unlocked_{map}".ToLower();
-                if (PlayerPrefs.GetInt(mapId) == 0)
-                {
-                    unlocked = false;
-                }
-            }
-
-            if (map == Map.City)
+            if (map == Map.ComingSoon)
             {
                 unlocked = false;
+            }
+            else
+            {
+                Mode mode = (Mode)modeOS.Selected;
+                if (mode == Mode.Adventure)
+                {
+                    string mapId = $"map_unlocked_{map}".ToLower();
+                    if (PlayerPrefs.GetInt(mapId) == 0)
+                    {
+                        unlocked = false;
+                    }
+                }
             }
 
             lockedIcon.SetActive(!unlocked);

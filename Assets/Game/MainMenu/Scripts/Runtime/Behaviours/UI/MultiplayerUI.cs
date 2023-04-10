@@ -239,7 +239,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Check Unlocked Map
                 WorldMP world = new WorldMP(await Lobbies.Instance.GetLobbyAsync(id));
-                if (!world.CreativeMode && !ProgressManager.Instance.IsMapUnlocked(Enum.Parse<Map>(world.MapName)))
+                Map map = Enum.Parse<Map>(world.MapName);
+                if (map == Map.ComingSoon)
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
+                }
+                if (!world.CreativeMode && !ProgressManager.Instance.IsMapUnlocked(map))
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(world.MapId)));
                 }
@@ -343,7 +348,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 string kickedPlayers = "";
 
                 // Check Unlocked Map
-                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked((Map)mapOS.Selected))
+                Map map = (Map)mapOS.Selected;
+                if (map == Map.ComingSoon)
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
+                }
+                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(map))
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(mapId)));
                 }

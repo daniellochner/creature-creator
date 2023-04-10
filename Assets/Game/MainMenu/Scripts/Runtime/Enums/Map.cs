@@ -6,6 +6,6 @@ namespace DanielLochner.Assets.CreatureCreator
         Farm,
         Sandbox,
         Cave,
-        City
+        ComingSoon
     }
 }
