@@ -27,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     SettingsManager.Instance.SetLocale(locale.Identifier.Code);
                 }
             });
-            toggle.group = GetComponentInParent<ToggleGroup>();
+            toggle.group = GetComponentInParent<ToggleGroup>(true);
             toggle.SetIsOnWithoutNotify(locale == LocalizationSettings.SelectedLocale);
         }
         #endregion
