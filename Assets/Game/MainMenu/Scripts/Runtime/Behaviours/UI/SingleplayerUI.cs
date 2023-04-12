@@ -39,7 +39,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Setup();
         }
-        private void OnDestroy()
+
+        private void OnEnable()
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnFailed;
+        }
+        private void OnDisable()
         {
             if (NetworkManager.Singleton)
             {
@@ -67,8 +72,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 pveCG.interactable = isOn;
                 pveCG.alpha = isOn ? 1f : 0.25f;
             });
-
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnFailed;
         }
 
         public void Play()
