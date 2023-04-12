@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using System;
-using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -44,25 +43,6 @@ namespace DanielLochner.Assets.CreatureCreator
             serializer.SerializeValue(ref stretch);
             serializer.SerializeValue(ref primaryColour);
             serializer.SerializeValue(ref secondaryColour);
-        }
-
-        // TODO: Fix for IL2CPP Code Generation FasterRuntime bug... (https://discord.com/channels/449263083769036810/1083129789583474790)
-        private void FasterRuntimeFix()
-        {
-            AttachedLimb limb = new AttachedLimb();
-            AttachedExtremity extremity = new AttachedExtremity();
-
-            using (var writer = new FastBufferWriter(1024, Allocator.Persistent))
-            {
-                writer.WriteNetworkSerializable(limb);
-                writer.WriteNetworkSerializable(extremity);
-
-                using (var reader = new FastBufferReader(writer, Allocator.None))
-                {
-                    reader.ReadNetworkSerializable(out limb);
-                    reader.ReadNetworkSerializable(out extremity);
-                }
-            }
         }
     }
 }
