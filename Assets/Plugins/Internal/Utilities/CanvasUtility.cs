@@ -13,10 +13,9 @@ namespace DanielLochner.Assets
 #if UNITY_STANDALONE
                 return EventSystem.current.IsPointerOverGameObject();
 #elif UNITY_IOS || UNITY_ANDROID
-                for (int i = 0; i < Input.touchCount; ++i)
+                foreach (Touch touch in Input.touches)
                 {
-                    Touch touch = Input.touches[i];
-                    if (touch.phase == TouchPhase.Began)
+                    if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Ended)
                     {
                         PointerEventData data = new PointerEventData(EventSystem.current)
                         {
@@ -30,6 +29,10 @@ namespace DanielLochner.Assets
                             return true;
                         }
                     }
+                    //else if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                    //{
+                    //    return true;
+                    //}
                 }
                 return false;
 #endif
