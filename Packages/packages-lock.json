@@ -78,10 +78,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.0.1",
+      "version": "1.17.7",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.services.core": "1.0.1"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
@@ -175,15 +177,17 @@
       "source": "git",
       "dependencies": {
         "com.unity.learn.iet-framework": "1.2.1",
-        "com.unity.multiplayer.tools": "1.1.0",
-        "com.unity.netcode.gameobjects": "1.1.0",
-        "com.unity.services.relay": "1.0.3"
+        "com.unity.multiplayer.tools": "1.0.0-pre.7",
+        "com.unity.netcode.gameobjects": "1.0.0-pre.10",
+        "com.unity.services.authentication": "1.0.0-pre.4",
+        "com.unity.services.lobby": "1.0.0-pre.6",
+        "com.unity.services.relay": "1.0.2"
       },
-      "hash": "60c19dc6cafe555c1a38bb56d072c6e19605b9ae"
+      "hash": "55bc606b0ae04e2368bdaeda903440570bd44900"
     },
     "com.unity.multiplayer.tools": {
-      "version": "1.1.0",
-      "depth": 1,
+      "version": "1.0.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.profiling.core": "1.0.0-pre.1",
@@ -195,8 +199,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.netcode.gameobjects": {
-      "version": "1.2.0",
-      "depth": 1,
+      "version": "1.1.0",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.10.1",
@@ -405,7 +409,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.transport": {
-      "version": "1.3.3",
+      "version": "1.3.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
