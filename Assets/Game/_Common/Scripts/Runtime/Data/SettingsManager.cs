@@ -46,7 +46,6 @@ namespace DanielLochner.Assets.CreatureCreator
             SetFullscreen(Data.Fullscreen);
             SetVSync(Data.VSync);
             SetTargetFrameRate(Data.TargetFrameRate);
-            SetScreenScale(Data.ScreenScale);
 
             SetCreatureMeshQuality(Data.CreatureMeshQuality);
             SetShadowQuality(Data.ShadowQuality);
@@ -87,6 +86,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
+                SetScreenScale(Data.ScreenScale); // Only override screen scale on mobile!
                 OptimizeForMobile();
             }
             FixPostProcessLayerBug();

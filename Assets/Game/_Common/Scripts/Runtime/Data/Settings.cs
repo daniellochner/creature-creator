@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool fullscreen;
         [SerializeField] private bool vSync;
         [SerializeField] private int targetFrameRate = -1;
-        [SerializeField] private float screenScale = 0.5f;
+        [SerializeField] private float screenScale = 1f;
         [Space]
         [SerializeField] private CreatureMeshQualityType creatureMeshQuality;
         [SerializeField] private ShadowQualityType shadowQuality;
@@ -320,6 +320,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Fullscreen = true;
             VSync = false;
             TargetFrameRate = -1;
+            ScreenScale = 1f;
 
             CreatureMeshQuality = CreatureMeshQualityType.High;
             ShadowQuality = ShadowQualityType.Medium;
