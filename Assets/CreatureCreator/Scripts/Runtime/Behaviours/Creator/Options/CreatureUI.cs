@@ -55,6 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     if (Path.GetFileNameWithoutExtension(Directory.GetFiles(folder)[0]) == creatureName)
                     {
                         shareButton.gameObject.SetActive(false);
+                        break;
                     }
                 }
             }
