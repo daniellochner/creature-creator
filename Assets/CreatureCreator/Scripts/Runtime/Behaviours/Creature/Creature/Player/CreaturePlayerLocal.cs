@@ -86,7 +86,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 string name = Informer.Information.Name.Equals(LocalizationUtility.Localize("creature-unnamed")) ? LocalizationUtility.Localize("you-died_you") : Informer.Information.Name;
                 string age  = Informer.Information.FormattedAge;
-                InformationDialog.Inform(LocalizationUtility.Localize("you-died_title"), LocalizationUtility.Localize("you-died_message", name, age), LocalizationUtility.Localize("you-died_okay"), false, Respawn);
+                InformationDialog.Inform(LocalizationUtility.Localize("you-died_title"), LocalizationUtility.Localize("you-died_message", name, age), LocalizationUtility.Localize("you-died_okay"), false, Respawn, Respawn, Respawn);
             });
 
 #if USE_STATS

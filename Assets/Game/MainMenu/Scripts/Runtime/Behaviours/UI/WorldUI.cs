@@ -47,7 +47,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pve")}:</b> {FormatEnabled(world.EnablePVE)}<br>" +
-                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_profanity")}:</b> {FormatAllowed(world.AllowProfanity)}"
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_profanity")}:</b> {FormatAllowed(world.AllowProfanity)}",
+
+                    okay: LocalizationUtility.Localize("mainmenu_multiplayer_join"),
+                    onOkay: joinButton.onClick.Invoke
                     );
             });
 
