@@ -34,12 +34,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (IsServer)
                 {
-                    hunger.Value = Mathf.Clamp01(value);
+                    float prev = hunger.Value;
+                    float next = Mathf.Clamp01(value);
 
-                    if (hunger.Value >= 1f)
+                    if (prev <= next && next == 1f)
                     {
                         Health.HealthPercentage = 1f;
                     }
+                    hunger.Value = next;
                 }
                 else
                 {
@@ -90,6 +92,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator HungerDepletionRoutine(float hungerDepletionRate, float healthTickRate, float healthTickDamage)
         {
+            if (hungerDepletionRate <= 0)
+            {
+                yield break;
+            }
+
             while (!Health.IsDead)
             {
                 if (Hunger <= 0)
