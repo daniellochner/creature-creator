@@ -61,7 +61,6 @@ namespace DanielLochner.Assets
         }
         private void UpdateHealth(float oldHealth, float newHealth)
         {
-            //Health = newHealth;
             OnHealthChanged?.Invoke(Health);
         }
 

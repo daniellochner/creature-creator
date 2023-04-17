@@ -35,6 +35,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (IsServer)
                 {
                     hunger.Value = Mathf.Clamp01(value);
+
+                    if (hunger.Value >= 1f)
+                    {
+                        Health.HealthPercentage = 1f;
+                    }
                 }
                 else
                 {
@@ -63,13 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateHunger(float oldHunger, float newHunger)
         {
-            //Hunger = newHunger;
             OnHungerChanged?.Invoke(Hunger);
-
-            if (newHunger >= 1f)
-            {
-                Health.HealthPercentage = 1f;
-            }
         }
 
         public void StartDepletingHunger()
