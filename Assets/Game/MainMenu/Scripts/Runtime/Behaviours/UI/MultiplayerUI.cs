@@ -300,6 +300,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     ConnectionInfo = joinCode
                 });
                 UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
                 unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
 
                 // Start Client
@@ -371,6 +372,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
                 UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
                 unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
 
                 // Generate Join Code

@@ -100,7 +100,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Set Up Connection Data
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
                 NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
-
+                
                 // Start Host
                 NetworkManager.Singleton.StartHost();
             }
