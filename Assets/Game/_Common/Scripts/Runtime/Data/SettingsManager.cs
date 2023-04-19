@@ -427,6 +427,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OptimizeForMobile()
         {
+            Time.fixedDeltaTime = 0.025f;
+
             foreach (PostProcessProfile profile in profiles)
             {
                 if (profile.TryGetSettings(out Blur blur))
