@@ -370,12 +370,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 TargetFrameRate = 30;
                 TextureQuality = TextureQualityType.High;
-                ShadowQuality = ShadowQualityType.Low;
+                ShadowQuality = ShadowQualityType.None;
                 Foliage = FoliageType.VeryLow;
                 AmbientOcclusion = AmbientOcclusionType.None;
                 Bloom = false;
                 AmbientParticles = false;
                 ScreenScale = 0.75f;
+                VSync = true;
 
                 if (SystemUtility.IsLowEndDevice)
                 {
