@@ -414,6 +414,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     materials[j] = BodyPartSecondaryMat;
                     hasBodyPartSecondary = true;
                 }
+                materials[j].shader = Shader.Find("Creature Creator/Body Part");
             }
             Renderer.materials = materials;
 

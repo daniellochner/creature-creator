@@ -318,7 +318,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         terrainProfile.TreeDistance = 100;
                         foreach (Material material in windMaterials)
                         {
-                            material.shader = Shader.Find("Standard");
+                            material.shader = Shader.Find("Mobile/Diffuse");
                         }
                         break;
                     case FoliageType.Low:
@@ -327,7 +327,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         terrainProfile.TreeDistance = 150;
                         foreach (Material material in windMaterials)
                         {
-                            material.shader = Shader.Find("Standard");
+                            material.shader = Shader.Find("Mobile/Diffuse");
                         }
                         break;
                     case FoliageType.Medium:
