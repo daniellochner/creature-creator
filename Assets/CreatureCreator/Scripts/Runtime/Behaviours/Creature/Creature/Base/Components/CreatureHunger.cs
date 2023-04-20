@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     float prev = hunger.Value;
                     float next = Mathf.Clamp01(value);
 
-                    if (prev <= next && next == 1f)
+                    if (next == 1f)
                     {
                         Health.HealthPercentage = 1f;
                     }
