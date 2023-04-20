@@ -163,11 +163,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor = creatureConstructor;
 
-            BodyPartPrimaryMat = IsFlipped ? Flipped.BodyPartPrimaryMat : new Material(CreatureConstructor.BodyPartMaterial);
-            BodyPartPrimaryMat.name = "BodyPart_Primary";
-
-            BodyPartSecondaryMat = IsFlipped ? Flipped.BodyPartSecondaryMat : new Material(CreatureConstructor.BodyPartMaterial);
-            BodyPartSecondaryMat.name = "BodyPart_Secondary";
+            BodyPartPrimaryMat = IsFlipped ? Flipped.BodyPartPrimaryMat : new Material(CreatureConstructor.BodyPartMaterial) { name = "BodyPart_Primary" };
+            BodyPartSecondaryMat = IsFlipped ? Flipped.BodyPartSecondaryMat : new Material(CreatureConstructor.BodyPartMaterial) { name = "BodyPart_Secondary" };
 
             OverrideMat(null, null, false);
 
@@ -417,7 +414,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (name != "Light")
                 {
-                    materials[j].shader = Shader.Find("Creature Creator/Body Part");
+                    if (RenderSettings.sun != null)
+                    {
+                        materials[j].shader = Shader.Find("Legacy Shaders/Specular");
+                    }
+                    else
+                    {
+                        materials[j].shader = Shader.Find("Legacy Shaders/VertexLit");
+                    }
+                    //materials[j].shader = Shader.Find("Creature Creator/Body Part");
+
+                    materials[j].enableInstancing = true;
                 }
             }
             Renderer.materials = materials;

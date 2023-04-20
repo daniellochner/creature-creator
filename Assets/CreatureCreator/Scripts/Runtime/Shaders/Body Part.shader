@@ -9,11 +9,10 @@ SubShader {
 CGPROGRAM
 #pragma surface surf Lambert
 
-sampler2D _MainTex;
 fixed4 _Color;
 
 struct Input {
-    float2 uv_MainTex;
+    float tmp;
 };
 
 void surf (Input IN, inout SurfaceOutput o) {
