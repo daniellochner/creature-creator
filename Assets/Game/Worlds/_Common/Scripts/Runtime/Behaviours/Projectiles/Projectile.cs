@@ -46,17 +46,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (Collider collider in colliders)
                 {
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null && creature != Player.Instance)
+                    if (creature != null && !((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
                     {
-                        if (!((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
-                        {
-                            float damage = minMaxDamage.Random;
-                            creature.Health.TakeDamage(damage);
+                        float damage = minMaxDamage.Random;
+                        creature.Health.TakeDamage(damage);
 
-                            if (creature.Health.Health - damage <= 0)
-                            {
-                                KillClientRpc(NetworkUtils.SendTo(OwnerClientId));
-                            }
+                        if (creature.Health.Health - damage <= 0)
+                        {
+                            KillClientRpc(NetworkUtils.SendTo(OwnerClientId));
                         }
                     }
                 }
