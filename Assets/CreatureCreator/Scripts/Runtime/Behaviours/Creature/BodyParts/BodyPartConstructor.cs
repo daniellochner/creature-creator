@@ -414,15 +414,21 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (name != "Light")
                 {
-                    if (RenderSettings.sun != null)
+                    if (SystemUtility.IsDevice(DeviceType.Handheld))
                     {
-                        materials[j].shader = Shader.Find("Legacy Shaders/Specular");
+                        if (RenderSettings.sun != null)
+                        {
+                            materials[j].shader = Shader.Find("Legacy Shaders/Specular");
+                        }
+                        else
+                        {
+                            materials[j].shader = Shader.Find("Legacy Shaders/VertexLit");
+                        }
                     }
                     else
                     {
-                        materials[j].shader = Shader.Find("Legacy Shaders/VertexLit");
+                        materials[j].shader = Shader.Find("Standard");
                     }
-                    //materials[j].shader = Shader.Find("Creature Creator/Body Part");
 
                     materials[j].enableInstancing = true;
                 }
