@@ -434,7 +434,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     WorldMP world = new WorldMP(lobby);
                     if (!world.IsPrivate)
                     {
-                        Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
+                        var v1 = new System.Version(world.Version);
+                        var v2 = new System.Version(Application.version);
+
+                        if (v1.CompareTo(v2) >= 0)
+                        {
+                            Instantiate(worldUIPrefab, worldsRT).Setup(this, lobby);
+                        }
                     }
                 }
                 noneGO.SetActive(worldsRT.childCount == 0);
