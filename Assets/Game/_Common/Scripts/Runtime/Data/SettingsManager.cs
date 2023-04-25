@@ -89,7 +89,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetScreenScale(Data.ScreenScale); // Only override screen scale on mobile!
                 OptimizeForMobile();
             }
-            FixPostProcessLayerBug();
         }
         protected override void OnDestroy()
         {
@@ -416,15 +415,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Data.MotionBlur = motionBlur;
         }
 
-        private void FixPostProcessLayerBug()
-        {
-            foreach (GameObject camera in cameras)
-            {
-                PostProcessLayer ppl = camera.GetComponentInChildren<PostProcessLayer>();
-                ppl.enabled = !ppl.enabled;
-                ppl.enabled = !ppl.enabled;
-            }
-        }
         private void OptimizeForMobile()
         {
             Time.fixedDeltaTime = 0.025f;
