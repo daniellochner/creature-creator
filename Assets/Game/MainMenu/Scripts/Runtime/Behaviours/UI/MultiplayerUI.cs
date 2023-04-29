@@ -19,6 +19,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
 using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
+using Unity.Services.RemoteConfig;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -368,6 +369,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Authenticate
                 await Authenticate();
 
+                // Version
+                await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
+
+                var v1 = new System.Version(RemoteConfigService.Instance.appConfig.GetString("min_online_version"));
+                var v2 = new System.Version(Application.version);
+
+                if (v1.CompareTo(v2) > 0)
+                {
+                    throw new Exception("Outdated version."); // TODO: localize
+                }
+
                 // Allocate Relay
                 UpdateStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
                 Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
@@ -588,6 +600,11 @@ namespace DanielLochner.Assets.CreatureCreator
             Public,
             Private
         }
+        #endregion
+
+        #region Nested
+        private struct UserAttributes { }
+        private struct AppAttributes { }
         #endregion
     }
 }
