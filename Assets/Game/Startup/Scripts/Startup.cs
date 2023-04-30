@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -14,12 +15,18 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
         [SerializeField] private TextMeshProUGUI startText;
+        #endregion
 
-        private bool isKeyPressed;
+        #region Properties
+        private bool ShowIntro
+        {
+            get => PlayerPrefs.GetInt("SHOW_INTRO", 1) == 1;
+            set => PlayerPrefs.SetInt("SHOW_INTRO", value ? 1 : 0);
+        }
         #endregion
 
         #region Methods
-        private void Start()
+        private IEnumerator Start()
         {
             float n = (float)baseWidth / Screen.width;
             float s = 1f / scale;
@@ -27,51 +34,45 @@ namespace DanielLochner.Assets.CreatureCreator
 
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
 
+            // Localize
+            startText.text = "Localizing...";
+            yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
+
+            // Authenticate
 #if UNITY_STANDALONE
+            startText.text = "Initializing Steam...";
+            yield return new WaitUntil(() => SteamManager.Initialized);
             FactoryManager.Instance.LoadWorkshopItems();
 #endif
+
+            // Start
+            startText.text = LocalizationUtility.Localize(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
+            yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
+
+            // Load
+            if (ShowIntro)
+            {
+                Fader.FadeInOut(1f, delegate
+                {
+                    LoadingManager.Instance.Load("Intro");
+                });
+                ShowIntro = false;
+            }
+            else
+            {
+                LoadingManager.Instance.Load("MainMenu");
+            }
+            logoAnimator.SetTrigger("Hide");
+            enterAudioSource.Play();
         }
         private void Update()
         {
             gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
-
-            if (LocalizationSettings.InitializationOperation.IsDone)
-            {
-                string entry = "";
-#if UNITY_STANDALONE
-                if (SteamManager.Initialized)
-                {
-                    HandleStart();
-                    entry = "startup_press-any-button";
-                }
-                else
-                {
-                    entry = "startup_failed-to-initialize";
-                }
-#elif UNITY_IOS || UNITY_ANDROID
-                HandleStart();
-                entry = "startup_tap-to-start";
-#endif
-
-                startText.text = LocalizationUtility.Localize(entry);
-            }
         }
         private void OnDestroy()
         {
             gridMaterial.mainTextureScale = Vector2.one;
             gridMaterial.mainTextureOffset = Vector2.zero;
-        }
-
-        private void HandleStart()
-        {
-            if (Input.anyKeyDown && !CanvasUtility.IsPointerOverUI && !isKeyPressed)
-            {
-                LoadingManager.Instance.Load("MainMenu");
-                isKeyPressed = true;
-
-                logoAnimator.SetTrigger("Hide");
-                enterAudioSource.Play();
-            }
         }
         #endregion
     }
