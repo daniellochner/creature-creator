@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -157,7 +158,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     return achieved;
                 }
 #elif UNITY_IOS || UNITY_ANDROID
-                return GameServices.Instance.achievementsManager.IsComplete(GetAchievement(achievementId).gameServicesId);
+                return PlayerPrefs.GetInt(achievementId) == 1;
 #endif
             }
             return false;
@@ -171,6 +172,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SteamUserStats.StoreStats();
 #elif UNITY_IOS || UNITY_ANDROID
                 GameServices.Instance.SubmitAchievement(GetAchievement(achievementId).gameServicesId);
+                PlayerPrefs.SetInt(achievementId, 1);
 #endif
             }
         }

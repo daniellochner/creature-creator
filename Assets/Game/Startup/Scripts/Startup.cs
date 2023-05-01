@@ -38,10 +38,10 @@ namespace DanielLochner.Assets.CreatureCreator
             startText.text = "Localizing...";
             yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
 
-            // Authenticate
+            // Initialize
+            yield return new WaitUntil(() => StatsManager.Instance.Initialized);
+            startText.text = "Authenticating...";
 #if UNITY_STANDALONE
-            startText.text = "Initializing Steam...";
-            yield return new WaitUntil(() => SteamManager.Initialized);
             FactoryManager.Instance.LoadWorkshopItems();
 #endif
 
