@@ -12,6 +12,12 @@ namespace DanielLochner.Assets.CreatureCreator
 #if UNITY_STANDALONE
         public PublishedFileId_t[] Files { get; private set; } = new PublishedFileId_t[0];
 
+        private IEnumerator Start()
+        {
+            yield return new WaitUntil(() => StatsManager.Instance.Initialized);
+            FactoryManager.Instance.LoadWorkshopItems();
+        }
+
         public void LoadWorkshopItems()
         {
             uint n = SteamUGC.GetNumSubscribedItems();

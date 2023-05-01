@@ -371,13 +371,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Version
                 await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
-
                 var v1 = new System.Version(RemoteConfigService.Instance.appConfig.GetString("min_online_version"));
                 var v2 = new System.Version(Application.version);
-
                 if (v1.CompareTo(v2) > 0)
                 {
-                    throw new Exception("Outdated version."); // TODO: localize
+                    throw new Exception(LocalizationUtility.Localize("network_status_outdated-version"));
                 }
 
                 // Allocate Relay

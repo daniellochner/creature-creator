@@ -39,11 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
 
             // Initialize
-            yield return new WaitUntil(() => StatsManager.Instance.Initialized);
             startText.text = "Authenticating...";
-#if UNITY_STANDALONE
-            FactoryManager.Instance.LoadWorkshopItems();
-#endif
+            yield return new WaitUntil(() => StatsManager.Instance.Initialized);
 
             // Start
             startText.text = LocalizationUtility.Localize(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
