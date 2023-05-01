@@ -368,7 +368,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Overrides
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                TargetFrameRate = 30;
+                TargetFrameRate = 60;
                 TextureQuality = TextureQualityType.High;
                 ShadowQuality = ShadowQualityType.None;
                 Foliage = FoliageType.VeryLow;
@@ -380,6 +380,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (SystemUtility.IsLowEndDevice)
                 {
+                    TargetFrameRate = 30;
                     ScreenScale = 0.5f;
                     ShadowQuality = ShadowQualityType.None;
                     TextureQuality = TextureQualityType.Medium;
