@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Collections;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -14,8 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator Start()
         {
-            yield return new WaitUntil(() => StatsManager.Instance.Initialized);
-            FactoryManager.Instance.LoadWorkshopItems();
+            yield return new WaitUntil(() => SteamManager.Initialized);
+            LoadWorkshopItems();
         }
 
         public void LoadWorkshopItems()

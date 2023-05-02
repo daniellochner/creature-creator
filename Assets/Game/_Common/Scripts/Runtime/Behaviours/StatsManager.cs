@@ -70,30 +70,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public bool Initialized
-        {
-            get; set;
-        }
+        private bool Initialized => AuthenticationManager.Instance.Status == AuthenticationManager.AuthStatus.Success;
         #endregion
 
         #region Methods
-        private void Start()
-        {
-#if UNITY_STANDALONE
-            this.InvokeUntil(() => SteamManager.Initialized, delegate
-            {
-                SteamUserStats.StoreStats();
-
-                Initialized = true;
-            });
-#elif UNITY_IOS || UNITY_ANDROID
-            GameServices.Instance.LogIn(delegate (bool success)
-            {
-                Initialized = success;
-            });
-#endif
-        }
-
         public void Revert(bool achievementsToo = false)
         {
             if (Initialized)
@@ -116,7 +96,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     value = defaultValue;
                 }
 #elif UNITY_IOS || UNITY_ANDROID
-            value = PlayerPrefs.GetInt(statId);
+                value = PlayerPrefs.GetInt(statId);
 #endif
             }
             return value;
@@ -129,7 +109,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SteamUserStats.SetStat(statId, value);
                 SteamUserStats.StoreStats();
 #elif UNITY_IOS || UNITY_ANDROID
-            PlayerPrefs.SetInt(statId, value);
+                PlayerPrefs.SetInt(statId, value);
 #endif
             }
 

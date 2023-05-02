@@ -35,18 +35,27 @@ namespace DanielLochner.Assets.CreatureCreator
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
 
             // Localize
-            startText.text = "Localizing...";
             yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
 
-            // Initialize
-            startText.text = "Authenticating...";
-            yield return new WaitUntil(() => StatsManager.Instance.Initialized);
+            // Authenticate
+            while (AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Success)
+            {
+                startText.text = LocalizationUtility.Localize("startup_authenticating");
+
+                yield return new WaitUntil(() => AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Busy);
+
+                if (AuthenticationManager.Instance.Status == AuthenticationManager.AuthStatus.Fail)
+                {
+                    startText.text = LocalizationUtility.Localize("startup_failed-to-authenticate");
+                    yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
+                    AuthenticationManager.Instance.Authenticate();
+                }
+            }
 
             // Start
             startText.text = LocalizationUtility.Localize(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
             yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
 
-            // Load
             if (ShowIntro)
             {
                 Fader.FadeInOut(1f, delegate
@@ -62,6 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
             logoAnimator.SetTrigger("Hide");
             enterAudioSource.Play();
         }
+
         private void Update()
         {
             gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;

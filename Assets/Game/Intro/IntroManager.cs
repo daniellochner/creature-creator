@@ -24,6 +24,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 isSkipping = true;
             }
         }
+        private void OnDestroy()
+        {
+            videoPlayer.targetTexture.Release();
+        }
 
         private void OnVideoEnded(VideoPlayer source)
         {
