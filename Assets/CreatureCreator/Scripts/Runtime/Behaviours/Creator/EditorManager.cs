@@ -160,7 +160,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Update()
         {
-            HandleKeyboardShortcuts();
+            if (SystemUtility.IsDevice(DeviceType.Desktop))
+            {
+                HandleKeyboardShortcuts();
+            }
         }
         protected override void OnDestroy()
         {
@@ -1429,6 +1432,21 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
+        #region Undo
+        public void Register()
+        {
+
+        }
+        public void Undo()
+        {
+
+        }
+        public void Redo()
+        {
+
+        }
+        #endregion
+
         #region Keyboard Shortcuts
         private void HandleKeyboardShortcuts()
         {
@@ -1457,6 +1475,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleBuildShortcuts()
         {
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Undo))
+            {
+                Undo();
+            }
+            else
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Redo))
+            {
+                Redo();
+            }
+            else
+            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Flip))
+            {
+                Player.Instance.Constructor.Flip();
+            }
         }
         private void HandlePlayShortcuts()
         {

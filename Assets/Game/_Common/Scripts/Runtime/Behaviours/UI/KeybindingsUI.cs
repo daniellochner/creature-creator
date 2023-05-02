@@ -31,6 +31,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Build")]
         [SerializeField] private KeybindUI copyKUI;
+        [SerializeField] private KeybindUI undoKUI;
+        [SerializeField] private KeybindUI redoKUI;
+        [SerializeField] private KeybindUI flipKUI;
 
         [Header("General")]
         [SerializeField] private KeybindUI saveKUI;
@@ -203,6 +206,27 @@ namespace DanielLochner.Assets.CreatureCreator
             copyKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Data.Copy = key;
+            });
+
+            // Undo
+            undoKUI.Rebind(KeybindingsManager.Data.Undo, false);
+            undoKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Data.Undo = key;
+            });
+
+            // Redo
+            redoKUI.Rebind(KeybindingsManager.Data.Redo, false);
+            redoKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Data.Redo = key;
+            });
+
+            // Flip
+            flipKUI.Rebind(KeybindingsManager.Data.Flip, false);
+            flipKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Data.Flip = key;
             });
             #endregion
 

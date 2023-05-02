@@ -34,6 +34,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Build")]
         [SerializeField] private Keybind copy;
+        [SerializeField] private Keybind undo;
+        [SerializeField] private Keybind redo;
+        [SerializeField] private Keybind flip;
 
         [Header("General")]
         [SerializeField] private Keybind save;
@@ -165,6 +168,21 @@ namespace DanielLochner.Assets.CreatureCreator
             get => copy;
             set => copy = value;
         }
+        public Keybind Undo
+        {
+            get => undo;
+            set => undo = value;
+        }
+        public Keybind Redo
+        {
+            get => redo;
+            set => redo = value;
+        }
+        public Keybind Flip
+        {
+            get => flip;
+            set => flip = value;
+        }
 
         public Keybind Save
         {
@@ -221,6 +239,9 @@ namespace DanielLochner.Assets.CreatureCreator
             NightVision = new Keybind(KeyCode.N);
 
             Copy = new Keybind(KeyCode.LeftAlt);
+            Undo = new Keybind(KeyCode.Z, KeyCode.LeftControl);
+            Redo = new Keybind(KeyCode.V, KeyCode.LeftControl);
+            Flip = new Keybind(KeyCode.F, KeyCode.LeftControl);
 
             Save = new Keybind(KeyCode.S, KeyCode.LeftControl);
             Load = new Keybind(KeyCode.L, KeyCode.LeftControl);
