@@ -681,6 +681,24 @@ namespace DanielLochner.Assets.CreatureCreator
             OnSetMetallic?.Invoke(metallic);
         }
 
+        public void Flip()
+        {
+            Transform tmp = new GameObject("_TMP").transform;
+            tmp.SetZeroParent(Body);
+
+            foreach (Transform bone in Bones)
+            {
+                bone.parent = tmp;
+            }
+            tmp.localRotation = Quaternion.Euler(0f, 180f, 0f);
+
+            foreach (Transform bone in Bones)
+            {
+                bone.parent = Root;
+            }
+
+            Destroy(tmp.gameObject);
+        }
         public void Recenter()
         {
             Vector3 displacement = Vector3.ProjectOnPlane(Body.position - transform.position, transform.up);
