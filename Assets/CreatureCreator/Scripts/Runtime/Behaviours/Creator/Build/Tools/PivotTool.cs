@@ -7,8 +7,14 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class PivotTool : Tool
     {
+        #region Fields
+        private Vector3 upDirection;
+        #endregion
+
         #region Properties
         public override bool CanShow => BodyPartEditor.BodyPartConstructor.CanMirror;
+
+        protected override Change Type => Change.PivotBodyPart;
         #endregion
 
         #region Methods
@@ -18,8 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             transform.localPosition = Vector3.forward * BodyPartEditor.BodyPartConstructor.BodyPart.PivotOffset;
 
-            Vector3 upDirection = Vector3.zero;
-
             drag.OnPress.AddListener(delegate
             {
                 upDirection = BodyPartEditor.transform.up;
@@ -27,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
             drag.OnDrag.AddListener(delegate
             {
                 BodyPartEditor.transform.LookAt(transform, upDirection);
+                BodyPartEditor.BodyPartConstructor.SetPositionAndRotation(BodyPartEditor.transform.position, BodyPartEditor.transform.rotation);
             });
             drag.OnRelease.AddListener(delegate
             {

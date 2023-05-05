@@ -3,7 +3,6 @@
 
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
-
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator

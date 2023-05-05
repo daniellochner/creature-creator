@@ -613,6 +613,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1473610723777636276}
   - component: {fileID: 1473610723777636277}
+  - component: {fileID: 1555082109997287350}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -692,6 +693,24 @@ MonoBehaviour:
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1555082109997287350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473610723777636279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 831f8017e21915d489a2f71f71a00bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1473610723972850662
@@ -2457,6 +2476,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5642901146442361668}
   - component: {fileID: 5642901146442361669}
+  - component: {fileID: 2329932699856798141}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -2536,6 +2556,24 @@ MonoBehaviour:
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2329932699856798141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5642901146442361671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 831f8017e21915d489a2f71f71a00bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &5642901146744797056
@@ -5157,6 +5195,7 @@ MonoBehaviour:
   editorAudioSource: {fileID: 8934269896407100681}
   editorCanvasGroup: {fileID: 8934269896407100727}
   paginationCanvasGroup: {fileID: 1478969559564981754}
+  historyLimit: 25
   buildMenu: {fileID: 8934269896743753657}
   buildTG: {fileID: 6354685600734330425}
   bodyPartSettingsMenu: {fileID: 8934269896408874171}
@@ -6277,7 +6316,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOpen: 0
   shineSlider: {fileID: 1473610723777636277}
+  shinePressUI: {fileID: 1555082109997287350}
   metallicSlider: {fileID: 5642901146442361669}
+  metallicPressUI: {fileID: 2329932699856798141}
 --- !u!1 &8934269896508736654
 GameObject:
   m_ObjectHideFlags: 0

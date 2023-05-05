@@ -9,11 +9,16 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private float fixedScaleZ = 2f;
+
+        private Quaternion initialRotation;
+        private Vector3 initialDirection;
         #endregion
 
         #region Properties
         public override bool CanShow => BodyPartEditor.BodyPartConstructor.CanMirror;
         public override float ScaleFactor => base.ScaleFactor * BodyPartEditor.BodyPartConstructor.BodyPart.RotateScaleFactor;
+
+        protected override Change Type => Change.RotateBodyPart;
         #endregion
 
         #region Methods
@@ -22,9 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
 
             model.localScale = new Vector3(model.localScale.x, model.localScale.y, fixedScaleZ);
-
-            Quaternion initialRotation = Quaternion.identity;
-            Vector3 initialDirection = Vector3.zero;
 
             drag.OnBeginDrag.AddListener(delegate
             {
@@ -36,7 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 Vector3 direction = (drag.TargetPosition - BodyPartEditor.transform.position).normalized;
 
                 float angle = Vector3.SignedAngle(direction, initialDirection, BodyPartEditor.transform.forward);
-                transform.rotation = BodyPartEditor.transform.rotation = initialRotation * Quaternion.AngleAxis(-angle, Vector3.forward);
+                Quaternion rotation = BodyPartEditor.transform.rotation = initialRotation * Quaternion.AngleAxis(-angle, Vector3.forward);
+
+                BodyPartEditor.BodyPartConstructor.SetPositionAndRotation(BodyPartEditor.transform.position, rotation);
             });
         }
         #endregion

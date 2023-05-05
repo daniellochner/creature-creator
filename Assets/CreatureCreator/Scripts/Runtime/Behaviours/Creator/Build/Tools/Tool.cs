@@ -26,6 +26,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public abstract bool CanShow { get; }
 
         public virtual float ScaleFactor => BodyPartEditor.BodyPartConstructor.BodyPart.ToolsScaleFactor;
+
+        protected abstract Change Type { get; }
         #endregion
 
         #region Methods
@@ -112,12 +114,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                BodyPartEditor.CreatureEditor.IsDirty = true;
+                EditorManager.Instance.TakeSnapshot(Type);
             });
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
         [Serializable]
         public class ScaledAxes
         {

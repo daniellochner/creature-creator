@@ -13,6 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public override bool CanShow => true;
+
+        protected override Change Type => Change.StretchBodyPart;
         #endregion
 
         #region Methods
