@@ -124,7 +124,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     LimbConstructor.AddWeight(0, 5);
                     FlippedLimb.LimbConstructor.AddWeight(0, 5);
-                    CreatureEditor.IsDirty = true;
+
+                    UpdateMeshCollider();
+                    FlippedLimb.UpdateMeshCollider();
+
+                    EditorManager.Instance.UpdateStatistics();
+
+                    EditorManager.Instance.TakeSnapshot(Change.ScrollLimbBoneUp, 1f);
                 }
             });
             Scroll.OnScrollDown.RemoveAllListeners();
@@ -134,18 +140,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     LimbConstructor.RemoveWeight(0, 5);
                     FlippedLimb.LimbConstructor.RemoveWeight(0, 5);
-                    CreatureEditor.IsDirty = true;
+
+                    UpdateMeshCollider();
+                    FlippedLimb.UpdateMeshCollider();
+
+                    EditorManager.Instance.UpdateStatistics();
+
+                    EditorManager.Instance.TakeSnapshot(Change.ScrollLimbBoneDown, 1f);
                 }
             });
 
-            LDrag.OnRelease.AddListener(delegate
-            {
-                if (EditorManager.Instance.IsBuilding)
-                {
-                    UpdateMeshCollider();
-                    FlippedLimb.UpdateMeshCollider();
-                }
-            });
             LDrag.OnEndDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
@@ -156,6 +160,11 @@ namespace DanielLochner.Assets.CreatureCreator
                         connectedExtremity.transform.parent = connectedExtremity.Flipped.transform.parent = transform.parent;
                         connectedExtremity.UpdateAttachmentConfiguration();
                     }
+
+                    LimbConstructor.UpdateAttachmentConfiguration();
+
+                    UpdateMeshCollider();
+                    FlippedLimb.UpdateMeshCollider();
                 }
             });
 
@@ -183,7 +192,13 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             LimbConstructor.AddWeight(index, 5);
                             FlippedLimb.LimbConstructor.AddWeight(index, 5);
-                            CreatureEditor.IsDirty = true;
+
+                            UpdateMeshCollider();
+                            FlippedLimb.UpdateMeshCollider();
+
+                            EditorManager.Instance.UpdateStatistics();
+
+                            EditorManager.Instance.TakeSnapshot(Change.ScrollLimbBoneUp, 1f);
                         }
                     });
                     boneScroll.OnScrollDown.AddListener(delegate
@@ -192,7 +207,13 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             LimbConstructor.RemoveWeight(index, 5);
                             FlippedLimb.LimbConstructor.RemoveWeight(index, 5);
-                            CreatureEditor.IsDirty = true;
+
+                            UpdateMeshCollider();
+                            FlippedLimb.UpdateMeshCollider();
+
+                            EditorManager.Instance.UpdateStatistics();
+
+                            EditorManager.Instance.TakeSnapshot(Change.ScrollLimbBoneUp, 1f);
                         }
                     });
 
@@ -230,15 +251,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         if (EditorManager.Instance.IsBuilding)
                         {
                             CreatureEditor.Camera.CameraOrbit.Freeze();
-
-                            //if (index < LimbConstructor.Bones.Length - 1)
-                            //{
-                            //    Vector3 previousPos = LimbConstructor.Bones[index - 1].position;
-                            //    Vector3 nextPos = LimbConstructor.Bones[index + 1].position;
-
-                            //    boneDrag.maxDistance = Vector3.Distance(previousPos, nextPos) / 2f;
-                            //    boneDrag.ClampFromPosition = (previousPos + nextPos) / 2f;
-                            //}
                         }
                     });
                     boneDrag.OnDrag.AddListener(delegate
@@ -259,13 +271,22 @@ namespace DanielLochner.Assets.CreatureCreator
                             if (!boneHover.IsOver && !Hover.IsOver)
                             {
                                 CreatureEditor.Camera.CameraOrbit.Unfreeze();
+
+                                if (!IsSelected)
+                                {
+                                    SetBonesVisibility(false);
+                                }
                             }
-
-                            UpdateMeshCollider();
-                            FlippedLimb.UpdateMeshCollider();
-
-                            CreatureEditor.IsDirty = true;
                         }
+                    });
+                    boneDrag.OnEndDrag.AddListener(delegate
+                    {
+                        LimbConstructor.UpdateAttachmentConfiguration();
+
+                        UpdateMeshCollider();
+                        FlippedLimb.UpdateMeshCollider();
+
+                        EditorManager.Instance.TakeSnapshot(Change.DragLimbBone);
                     });
                 }
                 if (i < LimbConstructor.Bones.Length - 1)
@@ -273,8 +294,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     boneConstraints[i].worldUpObject = CreatureEditor.transform;
                 }
             }
-
-            UpdateMeshCollider();
+            
             SetBonesVisibility(false);
         }
         private void SetupConstructor()
@@ -283,8 +303,6 @@ namespace DanielLochner.Assets.CreatureCreator
             LimbConstructor.OnSetWeight += delegate(int index, float weight)
             {
                 toolRenderers[index].transform.localScale = Vector3.Lerp(s, s * 2, weight / 100f);
-
-                UpdateMeshCollider();
             };
         }
         

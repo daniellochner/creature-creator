@@ -13,8 +13,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public string GUID;
         public string bodyPartID;
         public int boneIndex = -1;
-        public SerializableTransform serializableTransform;
-        public Vector3 stretch;
+        public SerializableTransform serializableTransform = new SerializableTransform();
+        public Vector3 stretch = default;
         public Color primaryColour = default;
         public Color secondaryColour = default;
 

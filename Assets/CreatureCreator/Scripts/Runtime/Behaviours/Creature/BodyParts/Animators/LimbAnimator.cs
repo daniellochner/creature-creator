@@ -78,7 +78,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            LimbConstructor.OnSetAttached += delegate
+            LimbConstructor.OnSetupAttachment += delegate
             {
                 limb.name = $"{name} (Constraint)";
                 FlippedLimb.limb.name = $"{FlippedLimb.name} (Constraint)";

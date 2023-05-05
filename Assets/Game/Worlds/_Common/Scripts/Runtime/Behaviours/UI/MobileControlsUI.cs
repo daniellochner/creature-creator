@@ -8,12 +8,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private PlatformSpecificScaler[] scalers;
 
-        [Header("Build")]
-        [SerializeField] private Button undoButton;
-        [SerializeField] private Button redoButton;
-        [SerializeField] private Button flipButton;
-
-        [Header("Play")]
         [SerializeField] private Joystick fixedJoystick;
         [SerializeField] private Joystick floatJoystick;
         [SerializeField] private Button settingsButton;
@@ -33,21 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            // Build
-            undoButton.onClick.AddListener(delegate
-            {
-                EditorManager.Instance.Undo();
-            });
-            redoButton.onClick.AddListener(delegate
-            {
-                EditorManager.Instance.Redo();
-            });
-            flipButton.onClick.AddListener(delegate
-            {
-                Player.Instance.Constructor.Flip();
-            });
-
-            // Play
             settingsButton.onClick.AddListener(delegate
             {
                 PauseMenu.Instance.Open();

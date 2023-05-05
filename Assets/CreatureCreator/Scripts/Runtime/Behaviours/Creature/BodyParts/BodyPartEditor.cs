@@ -1,7 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
+using System;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -134,7 +134,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding && BodyPartConstructor.BodyPart.Transformations.HasFlag(Transformation.Scale))
                 {
                     BodyPartConstructor.SetScale(transform.localScale + Vector3.one * BodyPartConstructor.BodyPart.ScaleIncrement, BodyPartConstructor.BodyPart.MinMaxScale);
-                    CreatureEditor.IsDirty = true;
+
+                    EditorManager.Instance.UpdateStatistics();
+
+                    EditorManager.Instance.TakeSnapshot(Change.ScrollBodyPartUp, 1f);
                 }
             });
             Scroll.OnScrollDown.AddListener(delegate
@@ -142,7 +145,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding && BodyPartConstructor.BodyPart.Transformations.HasFlag(Transformation.Scale))
                 {
                     BodyPartConstructor.SetScale(transform.localScale - Vector3.one * BodyPartConstructor.BodyPart.ScaleIncrement, BodyPartConstructor.BodyPart.MinMaxScale);
-                    CreatureEditor.IsDirty = true;
+
+                    EditorManager.Instance.UpdateStatistics();
+
+                    EditorManager.Instance.TakeSnapshot(Change.ScaleBodyPartDown, 1f);
                 }
             });
 
@@ -242,17 +248,24 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
+                    bool isAttached = BodyPartConstructor.AttachedBodyPart.boneIndex != -1;
+
                     if (CanAttach(out Vector3 aPosition, out Quaternion aRotation))
                     {
                         connectionPoint.parent = Flipped.connectionPoint.parent = transform.parent = Flipped.transform.parent = BodyPartConstructor.CreatureConstructor.Bones[BodyPartConstructor.NearestBone];
                         BodyPartConstructor.UpdateAttachmentConfiguration();
 
-                        if (IsSelected)
-                        {
-                            SetToolsVisibility(true);
-                        }
                         IsInteractable = true;
                         IsCopied = false;
+
+                        if (isAttached)
+                        {
+                            EditorManager.Instance.TakeSnapshot(Change.DragBodyPart);
+                        }
+                        else
+                        {
+                            EditorManager.Instance.TakeSnapshot(Change.AttachBodyPart);
+                        }
                     }
                     else
                     {
@@ -260,10 +273,14 @@ namespace DanielLochner.Assets.CreatureCreator
                         BodyPartConstructor.Detach();
 
                         CreatureEditor.Camera.CameraOrbit.Unfreeze(); // Since the body part is destroyed immediately, the OnRelease() method is not invoked.
+
+                        if (isAttached)
+                        {
+                            EditorManager.Instance.TakeSnapshot(Change.DetachBodyPart);
+                        }
                     }
 
                     EditorManager.Instance.UpdateStatistics();
-                    CreatureEditor.IsDirty = true;
                 }
             });
             if (SystemUtility.IsDevice(DeviceType.Handheld))
@@ -278,6 +295,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     BodyPartConstructor.Flip();
                 }
+            });
+            RDrag.OnEndDrag.AddListener(delegate
+            {
+                BodyPartConstructor.SetPositionAndRotation(transform.position, transform.rotation);
+                EditorManager.Instance.TakeSnapshot(Change.NudgeBodyPart);
             });
 
             Select.OnSelect.AddListener(delegate
@@ -300,22 +322,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 Flipped.Select.Outline.enabled = IsSelected;
             });
-			
-			Click.OnRightClick.AddListener(delegate 
-			{
-                transform.localRotation *= Quaternion.Euler(0, 0f, 180f);
-                BodyPartConstructor.Flip(false);
-            });
         }
         private void SetupConstruction()
         {
             BodyPartConstructor.OnStretch += delegate
             {
                 UpdateMeshCollider();
-            };
-            BodyPartConstructor.OnSetAttached += delegate
-            {
-                EditorManager.Instance.UpdateStatistics();
             };
             BodyPartConstructor.OnAttach += delegate
             {
@@ -339,7 +351,7 @@ namespace DanielLochner.Assets.CreatureCreator
             string bodyPartID = BodyPartConstructor.AttachedBodyPart.bodyPartID;
 
             BodyPartConstructor main = CreatureEditor.Constructor.AddBodyPart(bodyPartID);
-            main.SetAttached(new AttachedBodyPart(bodyPartID));
+            main.SetupAttachment(new AttachedBodyPart(bodyPartID));
 
             Color pColour = BodyPartConstructor.AttachedBodyPart.primaryColour;
             if (pColour.a != 0)

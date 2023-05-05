@@ -20,5 +20,15 @@ namespace DanielLochner.Assets.CreatureCreator
             serializer.SerializeValue(ref rotation);
             serializer.SerializeValue(ref weight);
         }
+
+        public Bone()
+        {
+        }
+        public Bone(Bone other)
+        {
+            position = other.position;
+            rotation = other.rotation;
+            weight = other.weight;
+        }
     }
 }
