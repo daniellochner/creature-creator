@@ -73,9 +73,18 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public override void Attach(AttachedBodyPart abp)
+        public override void Detach()
         {
-            base.Attach(abp);
+            if (ConnectedExtremity != null)
+            {
+                ConnectedExtremity.Detach(); // Detach connected extremity before detaching limb.
+            }
+            base.Detach();
+        }
+
+        public override void SetAttached(AttachedBodyPart abp)
+        {
+            base.SetAttached(abp);
 
             // Bones
             for (int i = 0; i < AttachedLimb.bones.Count; i++)
@@ -84,14 +93,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 Bones[i].rotation = CreatureConstructor.transform.rotation * AttachedLimb.bones[i].rotation;
                 SetWeight(i, AttachedLimb.bones[i].weight);
             }
-        }
-        public override void Detach()
-        {
-            if (ConnectedExtremity != null)
-            {
-                ConnectedExtremity.Detach(); // Detach connected extremity before detaching limb.
-            }
-            base.Detach();
         }
 
         public override void Add()
@@ -111,15 +112,10 @@ namespace DanielLochner.Assets.CreatureCreator
             // Bones
             for (int i = 0; i < Bones.Length; i++)
             {
-                //// Position
-                //Vector3 localBonePosition = CreatureConstructor.transform.InverseTransformPoint(Bones[i].position);
-                //localBonePosition.x *= -1;
-                //FlippedLimb.Bones[i].position = CreatureConstructor.transform.TransformPoint(localBonePosition);
+                // Position
                 FlippedLimb.Bones[i].localPosition = Bones[i].localPosition;
 
-                //// Rotation
-                //Quaternion worldRotation = CreatureConstructor.transform.rotation * Quaternion.Euler(Bones[i].eulerAngles.x, -Bones[i].eulerAngles.y, -Bones[i].eulerAngles.z);
-                //FlippedLimb.Bones[i].rotation = worldRotation;
+                // Rotation
                 FlippedLimb.Bones[i].localRotation = Bones[i].localRotation;
 
                 // Weight
@@ -161,7 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Root.localScale = new Vector3(-1f, 1f, 1f);
         }
-        public override void SetAttached(AttachedBodyPart abp)
+        public override void SetupAttachment(AttachedBodyPart abp)
         {
             if (abp.boneIndex == -1)
             {
@@ -176,7 +172,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     (abp as AttachedLimb).bones.Add(new Bone());
                 }
             }
-            base.SetAttached(abp);
+            base.SetupAttachment(abp);
         }
 
         public override void UpdateAttachmentConfiguration()

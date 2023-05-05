@@ -53,7 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnStretch { get; set; }
         public Action OnAttach { get; set; }
         public Action OnDetach { get; set; }
-        public Action OnSetAttached { get; set; }
+        public Action OnSetupAttachment { get; set; }
         public Action<Vector3> OnScale { get; set; }
         public Action<Color> OnSetPrimaryColour { get; set; }
         public Action<Color> OnSetSecondaryColour { get; set; }
@@ -188,27 +188,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Attach(AttachedBodyPart attachedBodyPart)
         {
+            SetupAttachment(attachedBodyPart);
             SetAttached(attachedBodyPart);
-
-            // Transform
-            transform.parent = CreatureConstructor.Bones[attachedBodyPart.boneIndex];
-            transform.Set(attachedBodyPart.serializableTransform, CreatureConstructor.transform);
-
-            // Stretch
-            SetStretch(attachedBodyPart.stretch, Vector3Int.one);
-
-            // Colours
-            Color primary = attachedBodyPart.primaryColour;
-            if (primary.a != 0f)
-            {
-                SetPrimaryColour(primary);
-            }
-
-            Color secondary = attachedBodyPart.secondaryColour;
-            if (secondary.a != 0f)
-            {
-                SetSecondaryColour(secondary);
-            }
 
             OnAttach?.Invoke();
         }
@@ -216,6 +197,52 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureConstructor.RemoveBodyPart(IsFlipped ? Flipped : this);
             OnDetach?.Invoke();
+        }
+
+        public virtual void SetAttached(AttachedBodyPart abp)
+        {
+            // Transform
+            transform.parent = CreatureConstructor.Bones[abp.boneIndex];
+            transform.Set(abp.serializableTransform, CreatureConstructor.transform);
+
+            // Stretch
+            SetStretch(abp.stretch, Vector3Int.one);
+
+            // Colours
+            Color primary = abp.primaryColour;
+            if (primary.a != 0f)
+            {
+                SetPrimaryColour(primary);
+            }
+
+            Color secondary = abp.secondaryColour;
+            if (secondary.a != 0f)
+            {
+                SetSecondaryColour(secondary);
+            }
+        }
+        public virtual void SetupAttachment(AttachedBodyPart abp)
+        {
+            name = abp.GUID;
+            Flipped.name = name + " (Flipped)";
+
+            CreatureConstructor.Data.AttachedBodyParts.Add(AttachedBodyPart = Flipped.AttachedBodyPart = abp);
+
+            if (abp.primaryColour.a == 0f && bodyPart.DefaultColours.primary.a != 0f)
+            {
+                SetPrimaryColour(bodyPart.DefaultColours.primary);
+            }
+            if (abp.secondaryColour.a == 0f && bodyPart.DefaultColours.secondary.a != 0f)
+            {
+                SetSecondaryColour(bodyPart.DefaultColours.secondary);
+            }
+
+            OnSetupAttachment?.Invoke();
+        }
+        public virtual void UpdateAttachmentConfiguration()
+        {
+            AttachedBodyPart.boneIndex = NearestBone;
+            AttachedBodyPart.serializableTransform = new SerializableTransform(transform, CreatureConstructor.transform);
         }
 
         public virtual void Flip(bool align = true)
@@ -260,6 +287,15 @@ namespace DanielLochner.Assets.CreatureCreator
             // Stretch
             Flipped.SetStretch(AttachedBodyPart.stretch, Vector3Int.one);
         }
+        public virtual void SetFlipped(BodyPartConstructor bpc)
+        {
+            IsFlipped = true;
+
+            Flipped = bpc;
+            bpc.Flipped = this;
+
+            Model.localScale = new Vector3(-Model.localScale.x, Model.localScale.y, Model.localScale.z);
+        }
 
         public void SetPrimaryColour(Color colour)
         {
@@ -286,11 +322,20 @@ namespace DanielLochner.Assets.CreatureCreator
             OnSetSecondaryColour?.Invoke(colour);
         }
 
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        {
+            transform.SetPositionAndRotation(position, rotation);
+
+            AttachedBodyPart.serializableTransform = new SerializableTransform(transform, CreatureConstructor.transform);
+        }
+
         public virtual void SetScale(Vector3 scale, MinMax minMaxScale)
         {
             transform.localScale = scale;
             transform.localScale = transform.localScale.Clamp(minMaxScale.min, minMaxScale.max);
             Flipped.transform.localScale = transform.localScale;
+
+            AttachedBodyPart.serializableTransform = new SerializableTransform(transform, CreatureConstructor.transform);
 
             OnScale?.Invoke(scale);
         }
@@ -334,40 +379,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SkinnedMeshRenderer.SetBlendShapeWeight(stretchMap[axis].negative, negative);
             SkinnedMeshRenderer.SetBlendShapeWeight(stretchMap[axis].positive, positive);
-        }
-
-        public virtual void SetFlipped(BodyPartConstructor bpc)
-        {
-            IsFlipped = true;
-
-            Flipped = bpc;
-            bpc.Flipped = this;
-
-            Model.localScale = new Vector3(-Model.localScale.x, Model.localScale.y, Model.localScale.z);
-        }
-        public virtual void SetAttached(AttachedBodyPart abp)
-        {
-            name = abp.GUID;
-            Flipped.name = name + " (Flipped)";
-
-            CreatureConstructor.Data.AttachedBodyParts.Add(AttachedBodyPart = Flipped.AttachedBodyPart = abp);
-
-            if (abp.primaryColour.a == 0f && bodyPart.DefaultColours.primary.a != 0f)
-            {
-                SetPrimaryColour(bodyPart.DefaultColours.primary);
-            }
-            if (abp.secondaryColour.a == 0f && bodyPart.DefaultColours.secondary.a != 0f)
-            {
-                SetSecondaryColour(bodyPart.DefaultColours.secondary);
-            }
-
-            OnSetAttached?.Invoke();
-        }
-
-        public virtual void UpdateAttachmentConfiguration()
-        {
-            AttachedBodyPart.boneIndex = NearestBone;
-            AttachedBodyPart.serializableTransform = new SerializableTransform(transform, CreatureConstructor.transform);
         }
 
         #region Helper

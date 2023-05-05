@@ -22,26 +22,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public override void Attach(AttachedBodyPart attachedBodyPart)
-        {
-            base.Attach(attachedBodyPart);
-
-            // Connected Limb
-            LimbConstructor connectedLimb = null, connectedLimbF = null;
-            foreach (LimbConstructor limb in CreatureConstructor.Limbs)
-            {
-                if (limb.AttachedLimb.GUID == AttachedExtremity.connectedLimbGUID)
-                {
-                    connectedLimb  = limb;
-                    connectedLimbF = limb.FlippedLimb;
-                    break;
-                }
-            }
-            float distance  = Vector3.Distance(connectedLimb. Extremity.position, transform.position);
-            float distanceF = Vector3.Distance(connectedLimbF.Extremity.position, transform.position);
-            ConnectToLimb(distance < distanceF ? connectedLimb : connectedLimbF); // Connect to whichever is closer.
-        }
-
         public override void Flip(bool align = true)
         {
             base.Flip(align);
@@ -72,11 +52,31 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override void SetAttached(AttachedBodyPart abp)
         {
+            base.SetAttached(abp);
+
+            // Connected Limb
+            LimbConstructor connectedLimb = null, connectedLimbF = null;
+            foreach (LimbConstructor limb in CreatureConstructor.Limbs)
+            {
+                if (limb.AttachedLimb.GUID == AttachedExtremity.connectedLimbGUID)
+                {
+                    connectedLimb = limb;
+                    connectedLimbF = limb.FlippedLimb;
+                    break;
+                }
+            }
+            float distance = Vector3.Distance(connectedLimb.Extremity.position, transform.position);
+            float distanceF = Vector3.Distance(connectedLimbF.Extremity.position, transform.position);
+            ConnectToLimb(distance < distanceF ? connectedLimb : connectedLimbF); // Connect to whichever is closer.
+        }
+
+        public override void SetupAttachment(AttachedBodyPart abp)
+        {
             if (abp.boneIndex == -1)
             {
                 abp = new AttachedExtremity(abp.bodyPartID);
             }
-            base.SetAttached(abp);
+            base.SetupAttachment(abp);
         }
 
         /// <summary>
