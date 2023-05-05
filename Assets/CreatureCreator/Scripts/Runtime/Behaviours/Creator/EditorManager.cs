@@ -36,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioSource editorAudioSource;
         [SerializeField] private CanvasGroup editorCanvasGroup;
         [SerializeField] private CanvasGroup paginationCanvasGroup;
+        [SerializeField] private int historyLimit;
 
         [Header("Build")]
         [SerializeField] private Menu buildMenu;
@@ -63,6 +64,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private RectTransform bodyPartsRT;
         [SerializeField] private BodyPartGrids bodyPartGrids;
         [SerializeField] private GameObject noPartsText;
+        [SerializeField] private CanvasGroup undoBuildCG;
+        [SerializeField] private CanvasGroup redoBuildCG;
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
@@ -84,6 +87,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private RectTransform patternsRT;
         [SerializeField] private TextMeshProUGUI noColoursText;
         [SerializeField] private GameObject noPatternsText;
+        [SerializeField] private CanvasGroup undoPaintCG;
+        [SerializeField] private CanvasGroup redoPaintCG;
 
         [Header("Options")]
         [SerializeField] private SimpleSideMenu optionsSideMenu;
@@ -105,6 +110,9 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isUpdatingLoadableCreatures;
         private Coroutine visibleCoroutine;
         private CreatureUI currentCreatureUI;
+
+        private Coroutine delayedRecordCoroutine;
+        private Change prevDelayedChangeType;
 
 #if UNITY_STANDALONE
         private WorkshopData currentWorkshopData;
@@ -136,7 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsEditing => isEditing;
         public bool IsBuilding => buildMenu.IsOpen;
         public bool IsPainting => paintMenu.IsOpen;
-        public bool IsPlaying  => playMenu.IsOpen;
+        public bool IsPlaying => playMenu.IsOpen;
 
         public CreaturePlayerLocal Creature => Player.Instance;
 
@@ -144,7 +152,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => CreativeMode ? CreativeCash : ProgressManager.Data.Cash;
         }
-        public bool Unlimited 
+        public bool Unlimited
         {
             get
             {
@@ -155,6 +163,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 return false;
             }
         }
+
+        public List<ChangeData> History { get; set; } = new List<ChangeData>();
+        public int Counter { get; set; } = -1;
         #endregion
 
         #region Methods
@@ -168,7 +179,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            LocalizationSettings.SelectedLocaleChanged -= OnLocalChanged;
+            LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
         }
 
         #region Setup
@@ -176,6 +187,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SetupPlayer();
             SetupEditor();
+
+            TakeSnapshot(Change.Load);
         }
         public void SetupEditor()
         {
@@ -299,7 +312,14 @@ namespace DanielLochner.Assets.CreatureCreator
             UpdateNoCreatures();
 
             // Other
-            LocalizationSettings.SelectedLocaleChanged += OnLocalChanged;
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+
+
+            // TODO: remove as preview feature...
+            undoBuildCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
+            redoBuildCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
+            undoPaintCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
+            redoPaintCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
         }
         public void SetupPlayer()
         {
@@ -339,7 +359,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
-        private void OnLocalChanged(Locale locale)
+        private void OnLocaleChanged(Locale locale)
         {
             UpdateStatistics();
         }
@@ -400,7 +420,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.UseTemporaryOutline = false;
             Creature.Editor.Deselect();
             Creature.Editor.enabled = false;
-            
+
             Creature.Animator.enabled = true;
 
             Creature.Abilities.enabled = true;
@@ -444,7 +464,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Mover.enabled = false;
             Creature.Interactor.enabled = false;
         }
-        
+
         public void SetMode(EditorMode mode, bool instant = false)
         {
             switch (mode)
@@ -466,7 +486,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     paintMenu.Close(instant);
                     SetCameraOffset(0f, instant);
                     playTG.SetIsOnWithoutNotify(true);
-                    
+
                     Play();
                     break;
 
@@ -563,7 +583,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureName}.dat"), creatureEncryptionKey.Value);
             ConfirmUnsavedChanges(() => Load(creatureData));
         }
-        public void Load(CreatureData creatureData)
+        public void Load(CreatureData creatureData, bool loadFromHistory = false)
         {
             Creature.Mover.Teleport(Creature.Editor.Platform);
 
@@ -600,6 +620,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             patternMaterial.SetColor("_PrimaryCol", primaryColourPalette.Colour);
             patternMaterial.SetColor("_SecondaryCol", secondaryColourPalette.Colour);
+
+            if (!loadFromHistory)
+            {
+                TakeSnapshot(Change.Load, false);
+            }
         }
         public void TryClear()
         {
@@ -762,7 +787,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Colors
                 string colors = $"#{ColorUtility.ToHtmlStringRGB(creatureData.PrimaryColour)} and #{ColorUtility.ToHtmlStringRGB(creatureData.SecondaryColour)}";
-                
+
                 string description =
                     $"Bones: {creatureData.Bones.Count}\n" +
                     $"Body Parts: {bodyPartsStr}\n" +
@@ -969,9 +994,9 @@ namespace DanielLochner.Assets.CreatureCreator
             SteamUGC.SetItemVisibility(handle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic);
             SteamUGC.SubmitItemUpdate(handle, null);
 
-            StartCoroutine(UploadRoutine(item.m_nPublishedFileId));
+            StartCoroutine(UploadItemRoutine(item.m_nPublishedFileId));
         }
-        private IEnumerator UploadRoutine(PublishedFileId_t pf)
+        private IEnumerator UploadItemRoutine(PublishedFileId_t pf)
         {
             currentCreatureUI.IsSharing = true;
 
@@ -1122,7 +1147,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         main.transform.rotation = Quaternion.LookRotation(-plane.normal, Creature.Constructor.transform.up);
                         main.transform.parent = Dynamic.Transform;
 
-                        main.SetAttached(new AttachedBodyPart(bodyPartID));
+                        main.SetupAttachment(new AttachedBodyPart(bodyPartID));
 
                         main.Flipped.gameObject.SetActive(false);
                         BodyPartEditor bpe = main.GetComponent<BodyPartEditor>();
@@ -1146,7 +1171,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bodyPartUI.ClickUI.OnRightClick.AddListener(delegate
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_hide-body-part_title"), LocalizationUtility.Localize("cc_hide-body-part_message", bodyPart.name), onYes: delegate 
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_hide-body-part_title"), LocalizationUtility.Localize("cc_hide-body-part_message", bodyPart.name), onYes: delegate
                 {
                     RemoveBodyPartUI(bodyPartUI);
                     SettingsManager.Data.HiddenBodyParts.Add(bodyPartID);
@@ -1173,14 +1198,15 @@ namespace DanielLochner.Assets.CreatureCreator
             patternUI.SelectToggle.group = patternsToggleGroup;
             patternUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)
             {
-                if (isSelected)
+                if (!isSelected && patternsToggleGroup.AnyTogglesOn())
                 {
-                    Creature.Constructor.SetPattern(patternID);
+                    return;
                 }
-                else
-                {
-                    Creature.Constructor.SetPattern("");
-                }
+
+                string nextPatternID = (isSelected ? patternID : "");
+                Creature.Constructor.SetPattern(nextPatternID);
+
+                TakeSnapshot(Change.SetPattern);
             });
 
             patternUI.ClickUI.OnRightClick.AddListener(delegate
@@ -1191,7 +1217,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     SettingsManager.Data.HiddenPatterns.Add(patternID);
                 });
             });
-            
+
             return patternUI;
         }
 
@@ -1213,6 +1239,17 @@ namespace DanielLochner.Assets.CreatureCreator
             Destroy(patternUI.gameObject);
         }
 
+        public void SetPatternUI(string patternID)
+        {
+            if (patternID != "")
+            {
+                patternsRT.Find(patternID).GetComponent<Toggle>().SetIsOnWithoutNotify(true);
+            }
+            else
+            {
+                patternsToggleGroup.GetFirstActiveToggle().SetIsOnWithoutNotify(false);
+            }
+        }
         public void SetTilingUI(Vector2 tiling)
         {
             patternMaterial.SetTextureScale("_MainTex", tiling);
@@ -1312,9 +1349,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                Creature.Constructor.SetPrimaryColour(primaryColourPalette.Colour);
+                Creature.Constructor.SetPrimaryColour(colour);
                 patternMaterial.SetColor("_PrimaryCol", colour);
                 SetPrimaryColourOverrideUI(false);
+
+                TakeSnapshot(Change.SetBodyPrimaryColor);
             }
         }
         public void UpdateSecondaryColour()
@@ -1331,6 +1370,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 Creature.Constructor.SetSecondaryColour(secondaryColourPalette.Colour);
                 patternMaterial.SetColor("_SecondaryCol", colour);
                 SetSecondaryColourOverrideUI(false);
+
+                TakeSnapshot(Change.SetBodySecondaryColor);
             }
         }
         public void UpdateStatistics()
@@ -1359,11 +1400,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (!string.IsNullOrEmpty(Creature.Editor.LoadedCreature) && creatureUI.NameText.text.Equals(Creature.Editor.LoadedCreature))
                 {
-                    creatureUI.NameText.text = $"<u>{creatureUI.NameText.text}</u>";
-                    if (Creature.Editor.IsDirty)
-                    {
-                        creatureUI.NameText.text += "*";
-                    }
+                    creatureUI.NameText.text = $"<u>{creatureUI.NameText.text}</u>{(Creature.Editor.IsDirty ? "*" : "")}";
                 }
             }
         }
@@ -1432,18 +1469,93 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Undo
-        public void Register()
+        #region History
+        public void TakeSnapshot(Change change, float delay)
         {
+            if (delayedRecordCoroutine != null && change == prevDelayedChangeType)
+            {
+                StopCoroutine(delayedRecordCoroutine);
+            }
+            delayedRecordCoroutine = this.Invoke(delegate
+            {
+                TakeSnapshot(change);
+            },
+            delay);
 
+            prevDelayedChangeType = change;
+        }
+        public void TakeSnapshot(Change change, bool setDirty = true)
+        {
+            string data = JsonUtility.ToJson(Creature.Constructor.Data);
+            if (Counter == -1 || !data.Equals(History[Counter]))
+            {
+                if (History.Count > Counter + 1)
+                {
+                    while (History.Count > Counter + 1)
+                    {
+                        History.RemoveAt(Counter + 1);
+                    }
+                    SetRedoable(false);
+                }
+
+                History.Add(new ChangeData(change, data));
+                Counter++;
+
+                if (History.Count > historyLimit)
+                {
+                    History.RemoveAt(0);
+                    Counter--;
+                }
+
+                if (setDirty)
+                {
+                    Creature.Editor.IsDirty = true;
+                }
+
+                SetUndoable(Counter > 0);
+            }
         }
         public void Undo()
         {
+            if (Counter > 0)
+            {
+                LoadFromHistory(--Counter);
 
+                SetUndoable(Counter > 0);
+                SetRedoable(true);
+            }
         }
         public void Redo()
         {
+            if (Counter < History.Count - 1)
+            {
+                LoadFromHistory(++Counter);
 
+                SetRedoable(Counter < History.Count - 1);
+                SetUndoable(true);
+            }
+        }
+
+        public void LoadFromHistory(int index)
+        {
+            CreatureData data = JsonUtility.FromJson<CreatureData>(History[index].data);
+            Load(data, true);
+        }
+        public void ClearHistory()
+        {
+            History.Clear();
+            Counter = -1;
+        }
+
+        private void SetUndoable(bool canUndo)
+        {
+            undoBuildCG.interactable = undoPaintCG.interactable = canUndo;
+            undoBuildCG.alpha = undoPaintCG.alpha = canUndo ? 1f : 0.25f;
+        }
+        private void SetRedoable(bool canRedo)
+        {
+            redoBuildCG.interactable = redoPaintCG.interactable = canRedo;
+            redoBuildCG.alpha = redoPaintCG.alpha = canRedo ? 1f : 0.25f;
         }
         #endregion
 
@@ -1611,7 +1723,20 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Inner Classes
+        #region Nested
+        [Serializable]
+        public struct ChangeData
+        {
+            public Change change;
+            public string data;
+
+            public ChangeData(Change change, string data)
+            {
+                this.change = change;
+                this.data = data;
+            }
+        }
+
         [Serializable]
         public struct GridInfo
         {
