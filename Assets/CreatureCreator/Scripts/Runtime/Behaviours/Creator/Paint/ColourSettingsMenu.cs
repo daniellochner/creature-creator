@@ -10,7 +10,10 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Slider shineSlider;
+        [SerializeField] private PressUI shinePressUI;
+        [Space]
         [SerializeField] private Slider metallicSlider;
+        [SerializeField] private PressUI metallicPressUI;
         #endregion
 
         #region Properties
@@ -23,6 +26,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             shineSlider.onValueChanged.AddListener(UpdateShine);
             metallicSlider.onValueChanged.AddListener(UpdateMetallic);
+
+            shinePressUI.OnRelease.AddListener(delegate
+            {
+                EditorManager.Instance.TakeSnapshot(Change.SetShine);
+            });
+            metallicPressUI.OnRelease.AddListener(delegate
+            {
+                EditorManager.Instance.TakeSnapshot(Change.SetMetallic);
+            });
         }
         public void Reset()
         {
