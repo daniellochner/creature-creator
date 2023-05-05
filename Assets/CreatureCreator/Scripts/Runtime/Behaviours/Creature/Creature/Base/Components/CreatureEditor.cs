@@ -334,16 +334,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         Camera.CameraOrbit.Unfreeze();
                     }
-
+                }
+            });
+            drag.OnEndDrag.AddListener(delegate
+            {
+                if (EditorManager.Instance.IsBuilding)
+                {
                     Constructor.UpdateConfiguration();
                     Constructor.UpdateDimensions();
-                    foreach (LimbEditor limb in Constructor.Root.GetComponentsInChildren<LimbEditor>())
-                    {
-                        limb.UpdateMeshCollider();
-                    }
 
-                    EditorManager.Instance.UpdateStatistics();
-                    IsDirty = true;
+                    UpdateMeshColliderLimbs();
+
+                    EditorManager.Instance.TakeSnapshot(Change.DragBody);
                 }
             });
             drag.cylinderRadius = Constructor.MaxRadius;
@@ -383,6 +385,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding)
                 {
                     Camera.CameraOrbit.Unfreeze();
+
+                    UpdateMeshCollider();
+
+                    EditorManager.Instance.TakeSnapshot(Change.DragBodyArrowFront);
                 }
             });
             frontToolPress.OnHold.AddListener(delegate
@@ -408,6 +414,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (EditorManager.Instance.IsBuilding)
                 {
                     Camera.CameraOrbit.Unfreeze();
+
+                    UpdateMeshCollider();
+
+                    EditorManager.Instance.TakeSnapshot(Change.DragBodyArrowBack);
                 }
             });
             backToolPress.OnHold.AddListener(delegate
@@ -428,11 +438,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 BTool.parent = FTool.parent = Dynamic.Transform;
                 TransformationTools.Hide();
             };
-            Constructor.OnConstructBody += delegate ()
+            Constructor.OnConstructBody += delegate
             {
-                EditorManager.Instance.UpdateStatistics();
-                UpdateMeshCollider();
                 Constructor.IsTextured = Constructor.IsTextured;
+
+                EditorManager.Instance.UpdateStatistics();
             };
             Constructor.OnSetupBone += delegate (int index)
             {
@@ -459,6 +469,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(-1);
+
+                        EditorManager.Instance.UpdateStatistics();
+
+                        EditorManager.Instance.TakeSnapshot(Change.ScrollBodyBoneDown, 1f);
                     }
                 });
                 scroll.OnScrollUp.RemoveAllListeners();
@@ -474,6 +488,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(1);
+
+                        EditorManager.Instance.UpdateStatistics();
+
+                        EditorManager.Instance.TakeSnapshot(Change.ScrollBodyBoneUp, 1f);
                     }
                 });
             };
@@ -535,7 +553,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         foreach (Transform bone in Constructor.Bones)
                         {
-                            bone.GetComponentInChildren<Collider>().isTrigger = true;
+                            bone.GetChild(0).GetComponent<Collider>().isTrigger = true;
                         }
 
                         Camera.CameraOrbit.Freeze();
@@ -577,27 +595,26 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         foreach (Transform bone in Constructor.Bones)
                         {
-                            bone.GetComponentInChildren<Collider>(true).isTrigger = false;
+                            bone.GetChild(0).GetComponent<Collider>().isTrigger = false;
                         }
 
                         if (!hover.IsOver)
                         {
                             Camera.CameraOrbit.Unfreeze();
                         }
-
-                        Constructor.UpdateOrigin();
-                        Constructor.UpdateConfiguration();
-                        Constructor.UpdateDimensions();
-
-                        UpdateMeshCollider();
-                        foreach (LimbEditor limb in Constructor.Root.GetComponentsInChildren<LimbEditor>(true))
-                        {
-                            limb.UpdateMeshCollider();
-                        }
-
-                        EditorManager.Instance.UpdateStatistics();
-                        IsDirty = true;
                     }
+                });
+                drag.OnEndDrag.AddListener(delegate
+                {
+                    Constructor.UpdateOrigin();
+                    Constructor.UpdateConfiguration();
+                    Constructor.UpdateDimensions();
+
+                    UpdateMeshCollider();
+
+                    EditorManager.Instance.UpdateStatistics();
+
+                    EditorManager.Instance.TakeSnapshot(Change.DragBodyBone, 0.25f);
                 });
                 drag.mousePlaneAlignment = Drag.MousePlaneAlignment.ToWorldDirection;
                 drag.world = transform;
@@ -621,9 +638,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 BTool.localPosition = FTool.localPosition = Vector3.zero;
                 BTool.localRotation = Quaternion.Euler(0, 180, 0);
                 FTool.localRotation = Quaternion.identity;
-
-                // Editor
-                IsDirty = true;
             };
             Constructor.OnPreRemoveBone += delegate (int index)
             {
@@ -631,56 +645,28 @@ namespace DanielLochner.Assets.CreatureCreator
                 FTool.localPosition = BTool.localPosition = Vector3.zero;
                 FTool.localRotation = Quaternion.identity;
             };
-            Constructor.OnRemoveBone += delegate (int index)
-            {
-                IsDirty = true;
-            };
             Constructor.OnSetWeight += delegate (int index, float weight)
             {
-                //UpdateMeshCollider(); // Causes a considerable amount of lag when constructing.
-
-                Transform bone = Constructor.Bones[index];
-
-                // Bone model
-                Transform model = bone.GetChild(0);
+                Transform model = Constructor.Bones[index].GetChild(0);
                 float x = Mathf.Lerp(0.5f, 1.5f, weight / 100f);
                 float y = Mathf.Lerp(0.5f, 1.5f, weight / 100f);
                 float z = 1f;
                 model.localScale = new Vector3(x, y, z);
-
-                EditorManager.Instance.UpdateStatistics();
-                IsDirty = true;
-            };
-            Constructor.OnSetPrimaryColour += delegate (Color colour)
-            {
-                IsDirty = true;
-            };
-            Constructor.OnSetSecondaryColour += delegate (Color colour)
-            {
-                IsDirty = true;
-            };
-            Constructor.OnSetPattern += delegate (string patternID)
-            {
-                IsDirty = true;
             };
             Constructor.OnSetTiling += delegate (Vector2 tiling)
             {
-                IsDirty = true;
                 EditorManager.Instance.SetTilingUI(tiling);
             };
             Constructor.OnSetOffset += delegate (Vector2 offset)
             {
-                IsDirty = true;
                 EditorManager.Instance.SetOffsetUI(offset);
             };
             Constructor.OnSetShine += delegate (float shine)
             {
-                IsDirty = true;
                 EditorManager.Instance.SetShineUI(shine);
             };
             Constructor.OnSetMetallic += delegate (float metallic)
             {
-                IsDirty = true;
                 EditorManager.Instance.SetMetallicUI(metallic);
             };
             Constructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
@@ -733,10 +719,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 LoadedCreature = null;
             }
 
+            UpdateMeshCollider();
+
             Constructor.IsTextured = Constructor.IsTextured;
             IsInteractable = IsInteractable;
             IsDirty = false;
-
+            
             Deselect();
         }
 
@@ -772,7 +760,19 @@ namespace DanielLochner.Assets.CreatureCreator
             colliderMesh.Clear();
             Constructor.SkinnedMeshRenderer.BakeMesh(colliderMesh);
             meshCollider.sharedMesh = colliderMesh;
+
+            UpdateMeshColliderLimbs();
         }
+        public void UpdateMeshColliderLimbs()
+        {
+            foreach (LimbConstructor bpc in Constructor.Limbs)
+            {
+                BodyPartEditor bpe = bpc.GetComponent<LimbEditor>();
+                bpe.UpdateMeshCollider();
+                bpe.Flipped.UpdateMeshCollider();
+            }
+        }
+
         public void UpdateBodyPartsAlignment(int alignment)
         {
             foreach (Transform bone in Constructor.Bones)
