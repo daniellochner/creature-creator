@@ -775,7 +775,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string bodyPartsStr = bodyParts.Count > 0 ? $"{bodyParts.Count} ({ string.Join(", ", bodyParts)})" : "None";
 
                 // Pattern
-                Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", creatureData.PatternID);
+                Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", creatureData.PatternID);
                 string patternStr = pattern?.name ?? "None";
 
                 // Colors
@@ -1018,8 +1018,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (notify)
             {
-                Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
-                Sprite icon = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
+                Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
+                Sprite icon = Sprite.Create(pattern.Texture, new Rect(0, 0, pattern.Texture.width, pattern.Texture.height), new Vector2(0.5f, 0.5f));
                 string title = pattern.name;
                 string description = $"{LocalizationUtility.Localize("cc_unlocked_pattern")} ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
                 UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
@@ -1180,11 +1180,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public PatternUI AddPatternUI(string patternID, bool update = false, bool isNew = false)
         {
-            Texture pattern = DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID);
+            Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
 
             PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT.transform);
             patternsUI.Add(patternUI);
-            patternUI.Setup(pattern, patternMaterial, isNew);
+            patternUI.Setup(pattern.Texture, patternMaterial, isNew);
             patternUI.name = patternID;
             noPatternsText.SetActive(false);
 

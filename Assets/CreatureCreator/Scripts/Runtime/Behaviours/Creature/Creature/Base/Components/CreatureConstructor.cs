@@ -644,7 +644,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             data.PatternID = patternID;
 
-            BodyMat.SetTexture("_PatternTex", DatabaseManager.GetDatabaseEntry<Texture>("Patterns", patternID));
+            BodyMat.SetTexture("_PatternTex", DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID)?.Texture);
 
             OnSetPattern?.Invoke(patternID);
         }
