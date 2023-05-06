@@ -313,13 +313,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // Other
             LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
-
-
-            // TODO: remove as preview feature...
-            undoBuildCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
-            redoBuildCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
-            undoPaintCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
-            redoPaintCG.gameObject.SetActive(SettingsManager.Data.PreviewFeatures);
         }
         public void SetupPlayer()
         {
