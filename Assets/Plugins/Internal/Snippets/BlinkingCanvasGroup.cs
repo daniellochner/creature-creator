@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
@@ -10,18 +9,19 @@ namespace DanielLochner.Assets
         [SerializeField] private float speed = 1;
         [SerializeField] private bool isGlobal = false;
 
-        private CanvasGroup canvasGroup;
         private float timeElapsed;
         #endregion
 
         #region Properties
         public bool IsBlinking { get; set; } = true;
+
+        public CanvasGroup CanvasGroup { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            canvasGroup = GetComponent<CanvasGroup>();
+            CanvasGroup = GetComponent<CanvasGroup>();
         }
         private void Update()
         {
@@ -30,7 +30,7 @@ namespace DanielLochner.Assets
                 float x = isGlobal ? Time.time : timeElapsed;
                 float a = (range.max - range.min) * 0.5f * (Mathf.Cos(Mathf.PI * x) + 1f) + range.min;
 
-                canvasGroup.alpha = a;
+                CanvasGroup.alpha = a;
                 timeElapsed += Time.deltaTime * speed;
             }
         }
