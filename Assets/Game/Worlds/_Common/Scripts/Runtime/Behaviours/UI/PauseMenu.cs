@@ -39,6 +39,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 MusicManager.Instance.FadeTo(null, 0f, 1f);
             });
         }
+
+        public override void Open(bool instant = false)
+        {
+            base.Open(instant);
+            PremiumManager.Instance.ShowBanner();
+        }
+        public override void Close(bool instant = false)
+        {
+            base.Close(instant);
+            PremiumManager.Instance.HideBanner();
+        }
         #endregion
     }
 }

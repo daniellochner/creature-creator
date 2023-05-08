@@ -70,7 +70,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 bodyPartUI.CanvasGroup.alpha = ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartUI.name) ? 1f : 0.2f;
             }
-            //titleText.text = $"Unlocked Body Parts ({ProgressManager.Data.UnlockedBodyParts.Count}/{BodyParts.Objects.Count})";
             titleText.SetArguments(ProgressManager.Data.UnlockedBodyParts.Count, BodyParts.Objects.Count);
         }
         #endregion

@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (string patternID in Patterns.Objects.Keys)
             {
-                Texture2D pattern = Patterns.GetEntry<Texture2D>(patternID);
+                Pattern pattern = Patterns.GetEntry<Pattern>(patternID);
                 PatternUI patternUI = Instantiate(patternUIPrefab, patternGrid.transform);
                 patternUI.Setup(pattern, null);
                 patternUI.name = patternID;
@@ -70,7 +70,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 patternUI.CanvasGroup.alpha = ProgressManager.Data.UnlockedPatterns.Contains(patternUI.name) ? 1f : 0.2f;
             }
-            //titleText.text = $"Unlocked Patterns ({ProgressManager.Data.UnlockedPatterns.Count}/{Patterns.Objects.Count})";
             titleText.SetArguments(ProgressManager.Data.UnlockedPatterns.Count, Patterns.Objects.Count);
         }
         #endregion

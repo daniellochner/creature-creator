@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -26,6 +27,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            UnityServices.InitializeAsync();
+        }
         private IEnumerator Start()
         {
             float n = (float)baseWidth / Screen.width;
@@ -51,6 +56,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     AuthenticationManager.Instance.Authenticate();
                 }
             }
+
+            // Initialize
+            //yield return new WaitUntil(() => UnityEngine.Advertisements.Advertisement.isInitialized);
 
             // Start
             startText.text = LocalizationUtility.Localize(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");

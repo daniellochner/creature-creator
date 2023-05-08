@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public Texture2D Texture => texture;
+        public override Sprite Icon => Sprite.Create(Texture as Texture2D, new Rect(0, 0, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
         #endregion
     }
 }

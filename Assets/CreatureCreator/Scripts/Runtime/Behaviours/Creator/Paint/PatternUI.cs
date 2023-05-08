@@ -25,12 +25,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(Texture pattern, Material material, bool isNew = false)
+        public void Setup(Pattern pattern, Material material, bool isNew = false)
         {
             Image graphic = selectToggle.graphic as Image;
-            Image targetGraphic = transform.GetChild(0).GetComponent<Image>(); //selectToggle.targetGraphic as Image;
+            Image targetGraphic = transform.GetChild(0).GetComponent<Image>();
 
-            graphic.sprite = targetGraphic.sprite = Sprite.Create(pattern as Texture2D, new Rect(0, 0, pattern.width, pattern.height), new Vector2(0.5f, 0.5f));
+            graphic.sprite = targetGraphic.sprite = pattern.Icon;
             graphic.material = targetGraphic.material = material;
 
             clickUI.OnLeftClick.AddListener(HideNew);
@@ -40,6 +40,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 newGO.SetActive(true);
             }
+        }
+        public void SetUsable(bool isUsable)
+        {
+            canvasGroup.alpha = isUsable ? 1f : 0.2f;
         }
 
         private void HideNew()

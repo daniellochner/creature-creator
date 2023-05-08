@@ -349,6 +349,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
 
+                // Check Premium
+                if (!PremiumManager.Data.IsPremium)
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_premium_multiplayer"));
+                }
+
                 // Check Unlocked Map
                 Map map = (Map)mapOS.Selected;
                 if (map == Map.ComingSoon)

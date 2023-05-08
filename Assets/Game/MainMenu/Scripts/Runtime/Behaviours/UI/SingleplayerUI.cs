@@ -86,6 +86,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool unlimited = unlimitedToggle.isOn && creativeMode;
                 WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
 
+                // Check Premium
+                if (unlimited && !PremiumManager.Data.IsPremium)
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_premium_unlimited"));
+                }
+
                 // Check Unlocked Map
                 Map map = Enum.Parse<Map>(mapName);
                 if (map == Map.ComingSoon)

@@ -82,6 +82,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 newGO.SetActive(true);
             }
         }
+        public void SetUsable(bool isUsable)
+        {
+            canvasGroup.alpha = isUsable ? 1f : 0.2f;
+        }
 
         private void HideNew()
         {

@@ -61,6 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle mapToggle;
         [SerializeField] private Toggle footstepsToggle;
         [SerializeField] private Button resetProgressButton;
+        [SerializeField] private Button premiumButton;
 
         [Header("Controls")]
         [SerializeField] private Slider sensitivityHorizontalSlider;
@@ -494,6 +495,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("settings_reset-progress_title"), LocalizationUtility.Localize("settings_reset-progress_message"), onYes: ResetProgress);
             });
+
+            // Premium
+            if (SystemUtility.IsDevice(DeviceType.Handheld) && premiumButton != null)
+            {
+                premiumButton.gameObject.SetActive(!PremiumManager.Data.IsPremium);
+            }
             #endregion
 
             #region Controls
@@ -631,6 +638,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Gameplay
+        public void OnRestorePurchases(bool b, string s)
+        {
+        }
+        public void ViewPremium()
+        {
+            PremiumDialog.Instance.RequestNothing();
+        }
+
         public void ViewUnlockableBodyParts()
         {
             UnlockableBodyPartsMenu.Instance.Open();

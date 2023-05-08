@@ -11,11 +11,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Item")]
         [SerializeField] private string author;
         [SerializeField] private Sprite icon;
+        [SerializeField] private bool premium = true;
         #endregion
 
         #region Properties
         public string Author => author;
-        public Sprite Icon => icon;
+        public virtual Sprite Icon => icon;
+        public bool Premium => premium;
         #endregion
     }
 }

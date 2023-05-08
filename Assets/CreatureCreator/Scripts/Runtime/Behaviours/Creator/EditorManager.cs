@@ -858,9 +858,16 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
         {
             // Load Conditions
+            Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", creatureData.PatternID);
             bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode || string.IsNullOrEmpty(creatureData.PatternID);
+            bool usesPremiumPattern = false;
+            if (pattern != null)
+            {
+                usesPremiumPattern = !PremiumManager.Instance.IsPatternUsable(creatureData.PatternID);
+            }
 
             bool bodyPartsAreUnlocked = true;
+            bool usesPremiumBodyPart = false;
             int totalCost = 0, totalComplexity = 0;
             foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
             {
@@ -869,6 +876,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     totalCost += bodyPart.Price;
                     totalComplexity += bodyPart.Complexity;
+
+                    if (!PremiumManager.Instance.IsBodyPartUsable(attachedBodyPart.bodyPartID))
+                    {
+                        usesPremiumBodyPart = true;
+                    }
                 }
                 else
                 {
@@ -895,11 +907,19 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, BaseCash));
             }
-            if (!patternIsUnlocked)
+            if (usesPremiumPattern)
+            {
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_premium-pattern"));
+            }
+            else if (!patternIsUnlocked)
             {
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_patterns"));
             }
-            if (!bodyPartsAreUnlocked)
+            if (usesPremiumBodyPart)
+            {
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_premium-body-parts"));
+            }
+            else if (!bodyPartsAreUnlocked)
             {
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_body-parts"));
             }
@@ -911,9 +931,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     errorMessage += $"{i + 1}. {errors[i]}\n";
                 }
+                return false;
             }
-
-            return patternIsUnlocked && bodyPartsAreUnlocked && !creatureIsTooComplicated && !creatureIsTooExpensive;
+            else
+            {
+                return true;
+            }
         }
         public bool CanAddBodyPart(string bodyPartID)
         {
@@ -921,24 +944,47 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity && !Unlimited;
             bool notEnoughCash = Creature.Editor.Cash < bodyPart.Price && !Unlimited;
+            bool isPremium = !PremiumManager.Instance.IsBodyPartUsable(bodyPartID);
 
-            if (notEnoughCash || tooComplicated)
+            if (notEnoughCash || tooComplicated || isPremium)
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
-                if (notEnoughCash && CanWarn(cashWarningAnimator))
+                if (isPremium)
                 {
-                    cashWarningAnimator.SetTrigger("Warn");
+                    PremiumDialog.Instance.RequestPremiumBodyPart(bodyPartID);
                 }
-                if (tooComplicated && CanWarn(complexityWarningAnimator))
+                else
                 {
-                    complexityWarningAnimator.SetTrigger("Warn");
+                    if (notEnoughCash && CanWarn(cashWarningAnimator))
+                    {
+                        cashWarningAnimator.SetTrigger("Warn");
+                    }
+                    if (tooComplicated && CanWarn(complexityWarningAnimator))
+                    {
+                        complexityWarningAnimator.SetTrigger("Warn");
+                    }
                 }
-
                 return false;
             }
+            else
+            {
+                return true;
+            }
+        }
+        public bool CanAddPattern(string patternID)
+        {
+            bool isPremium = !PremiumManager.Instance.IsPatternUsable(patternID);
 
-            return true;
+            if (isPremium)
+            {
+                PremiumDialog.Instance.RequestPremiumPattern(patternID);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private void OnExportDat(bool selected, string singleFolder, string[] folders)
@@ -1111,6 +1157,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid.transform as RectTransform);
             bodyPartUI.Setup(bodyPart, isNew);
             bodyPartUI.name = bodyPartID;
+            bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartID));
             noPartsText.SetActive(false);
             grid.CalculateLayoutInputVertical();
 
@@ -1184,22 +1231,25 @@ namespace DanielLochner.Assets.CreatureCreator
 
             PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT.transform);
             patternsUI.Add(patternUI);
-            patternUI.Setup(pattern.Texture, patternMaterial, isNew);
+            patternUI.Setup(pattern, patternMaterial, isNew);
             patternUI.name = patternID;
+            patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternID));
             noPatternsText.SetActive(false);
 
             patternUI.SelectToggle.group = patternsToggleGroup;
             patternUI.SelectToggle.onValueChanged.AddListener(delegate (bool isSelected)
             {
-                if (!isSelected && patternsToggleGroup.AnyTogglesOn())
+                if (!isSelected || CanAddPattern(patternID))
                 {
-                    return;
+                    string nextPatternID = (isSelected ? patternID : "");
+                    Creature.Constructor.SetPattern(nextPatternID);
+
+                    TakeSnapshot(Change.SetPattern);
                 }
-
-                string nextPatternID = (isSelected ? patternID : "");
-                Creature.Constructor.SetPattern(nextPatternID);
-
-                TakeSnapshot(Change.SetPattern);
+                else
+                {
+                    patternUI.SelectToggle.SetIsOnWithoutNotify(false);
+                }
             });
 
             patternUI.ClickUI.OnRightClick.AddListener(delegate
@@ -1321,6 +1371,17 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public void UpdateUsability()
+        {
+            foreach (BodyPartUI bodyPartUI in bodyPartsRT.GetComponentsInChildren<BodyPartUI>())
+            {
+                bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartUI.name));
+            }
+            foreach (PatternUI patternUI in patternsRT.GetComponentsInChildren<PatternUI>())
+            {
+                patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternUI.name));
+            }
+        }
         public void UpdateBodyPartTotals()
         {
             foreach (string type in bodyPartGrids.Keys)
