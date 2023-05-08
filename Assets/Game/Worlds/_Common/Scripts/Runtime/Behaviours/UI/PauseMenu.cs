@@ -14,6 +14,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        protected override void Start()
+        {
+            base.Start();
+        }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape) && CanToggle)
@@ -43,12 +51,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Open(bool instant = false)
         {
             base.Open(instant);
-            PremiumManager.Instance.ShowBanner();
+            PremiumManager.Instance.LoadBanner();
+
+            //PremiumManager.Instance.ShowBanner();
         }
         public override void Close(bool instant = false)
         {
             base.Close(instant);
-            PremiumManager.Instance.HideBanner();
+            PremiumManager.Instance.DestroyBanner();
         }
         #endregion
     }

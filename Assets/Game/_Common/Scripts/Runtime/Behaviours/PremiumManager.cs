@@ -13,12 +13,11 @@ namespace DanielLochner.Assets.CreatureCreator
     public class PremiumManager : DataManager<PremiumManager, Premium>
     {
         #region Fields
-        [SerializeField] private string iOSGameId;
-        [SerializeField] private string androidGameId;
-        [SerializeField] private bool testMode;
+        [SerializeField] private string iOSAppKey;
+        [SerializeField] private string androidAppKey;
 
-        private bool wasPrevPurchased;
         private float currVolume;
+        private bool wasPrevPurchased;
         #endregion
 
         #region Properties
@@ -54,17 +53,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 return id;
             }
         }
-        private string GameId
+        private string AppKey
         {
             get
             {
                 if (Application.platform == RuntimePlatform.IPhonePlayer)
                 {
-                    return iOSGameId;
+                    return iOSAppKey;
                 }
                 else
                 {
-                    return androidGameId;
+                    return androidAppKey;
                 }
             }
         }
@@ -100,21 +99,97 @@ namespace DanielLochner.Assets.CreatureCreator
                 Save();
             }
 
-            //Advertisement.Initialize(GameId, testMode, this);
+            IronSource.Agent.init(AppKey, IronSourceAdUnits.REWARDED_VIDEO, IronSourceAdUnits.BANNER);
         }
 
+        private void OnEnable()
+        {
+            IronSourceEvents.onSdkInitializationCompletedEvent += OnInitialized;
+
+            IronSourceRewardedVideoEvents.onAdOpenedEvent += OnRewardOpened;
+            IronSourceRewardedVideoEvents.onAdRewardedEvent += OnRewardCompleted;
+        }
+
+        private void OnApplicationPause(bool isPaused)
+        {
+            IronSource.Agent.onApplicationPause(isPaused);
+        }
+
+        public void OnInitialized()
+        {
+            IronSource.Agent.validateIntegration();
+        }
+
+
+
+
+        #region Banner
+        public void LoadBanner()
+        {
+            IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
+        }
         public void ShowBanner()
         {
-            //Advertisement.Show(BannerAdUnitId, this);
-        }
-        public void ShowReward()
-        {
-            //Advertisement.Show(RewardAdUnitId, this);
+            IronSource.Agent.displayBanner();
         }
         public void HideBanner()
         {
-            //Advertisement.Banner.Hide();
+            IronSource.Agent.hideBanner();
         }
+        public void DestroyBanner()
+        {
+            IronSource.Agent.destroyBanner();
+        }
+        #endregion
+
+
+        #region Reward
+        public void ShowReward()
+        {
+            if (IronSource.Agent.isRewardedVideoAvailable())
+            {
+                IronSource.Agent.showRewardedVideo();
+            }
+            else
+            {
+                Debug.Log("NOT AVAILABLE");
+            }
+        }
+
+        private void OnRewardOpened(IronSourceAdInfo adInfo)
+        {
+            //currVolume = SettingsManager.Data.MasterVolume;
+            //SettingsManager.Instance.SetMasterVolume(0f);
+        }
+        private void OnRewardCompleted(IronSourcePlacement placement, IronSourceAdInfo adInfo)
+        {
+            if (placement.getPlacementName() == RewardAdUnitId)
+            {
+                RewardsMenu.Instance.ClearRewards();
+                if (RequestedItem != null)
+                {
+                    Access(RequestedItem);
+                    AccessRandom(3);
+                }
+                else
+                {
+                    AccessRandom(4);
+                }
+
+                PremiumDialog.Instance.Close(true);
+                RewardsMenu.Instance.Open();
+
+                EditorManager.Instance?.UpdateUsability();
+            }
+
+            
+
+
+            //SettingsManager.Instance.SetMasterVolume(currVolume);
+        }
+        #endregion
+
+
 
         public void Access(RewardedItem item)
         {
@@ -189,49 +264,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        //public void OnInitializationComplete()
-        //{
-        //    Advertisement.Load(BannerAdUnitId, this);
-        //    Advertisement.Load(RewardAdUnitId, this);
-        //}
-        //public void OnInitializationFailed(UnityAdsInitializationError error, string message)
-        //{
-        //}
-        //public void OnUnityAdsAdLoaded(string placementId)
-        //{
-        //}
-        //public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
-        //{
-        //}
-        //public void OnUnityAdsShowClick(string placementId)
-        //{
-        //}
-        //public void OnUnityAdsShowStart(string placementId)
-        //{
-        //    currVolume = SettingsManager.Data.MasterVolume;
-        //    SettingsManager.Instance.SetMasterVolume(0f);
-        //}
+
         //public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
         //{
-        //    if (placementId == RewardAdUnitId && showCompletionState == UnityAdsShowCompletionState.COMPLETED)
-        //    {
-        //        RewardsMenu.Instance.ClearRewards();
-        //        if (RequestedItem != null)
-        //        {
-        //            Access(RequestedItem);
-        //            AccessRandom(3);
-        //        }
-        //        else
-        //        {
-        //            AccessRandom(4);
-        //        }
 
-        //        PremiumDialog.Instance.Close(true);
-        //        RewardsMenu.Instance.Open();
-
-        //        EditorManager.Instance?.UpdateUsability();
-        //    }
-        //    SettingsManager.Instance.SetMasterVolume(currVolume);
         //}
         //public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
         //{

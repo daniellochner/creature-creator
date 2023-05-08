@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -11,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image requestedItemImg;
         [SerializeField] private BlinkingCanvasGroup requestedItemBCG;
         [SerializeField] private Sprite questionMarkIcon;
+        [SerializeField] private TextMeshProUGUI priceText;
         #endregion
 
         #region Methods
@@ -31,6 +33,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private async void Setup(Sprite icon, bool isBlinking)
         {
+
+            //yield return new WaitUntil(() => CodelessIAPStoreListener.initializationComplete);
+
+
+            //Product product = CodelessIAPStoreListener.Instance.GetProduct("premium");
+            //priceText.text = product.metadata.localizedPriceString;
+
+
             requestedItemImg.sprite = icon;
 
             requestedItemBCG.IsBlinking = isBlinking;
