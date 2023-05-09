@@ -5,6 +5,10 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class CCCinematic : Cinematic
     {
+        #region Fields
+        [SerializeField] private bool showBannerAd = true;
+        #endregion
+
         #region Methods
         private void SetVisibility(bool isVisible)
         {
@@ -24,6 +28,20 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Hide();
             SetVisibility(false);
             SetNotificationOffset(-1);
+        }
+
+        public override void Begin()
+        {
+            base.Begin();
+            if (showBannerAd)
+            {
+                PremiumManager.Instance.ShowBannerAd();
+            }
+        }
+        public override void End()
+        {
+            base.End();
+            PremiumManager.Instance.HideBannerAd();
         }
 
         private void SetNotificationOffset(int dir)

@@ -61,7 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle mapToggle;
         [SerializeField] private Toggle footstepsToggle;
         [SerializeField] private Button resetProgressButton;
-        [SerializeField] private Button premiumButton;
+        [SerializeField] private GameObject[] premiumButtons;
 
         [Header("Controls")]
         [SerializeField] private Slider sensitivityHorizontalSlider;
@@ -497,9 +497,12 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Premium
-            if (SystemUtility.IsDevice(DeviceType.Handheld) && premiumButton != null)
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                premiumButton.gameObject.SetActive(!PremiumManager.Data.IsPremium);
+                foreach (GameObject button in premiumButtons)
+                {
+                    button.SetActive(!PremiumManager.Data.IsPremium && !(SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0));
+                }
             }
             #endregion
 
@@ -640,10 +643,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Gameplay
         public void OnRestorePurchases(bool b, string s)
         {
+            Debug.Log(b + " - " + s);
         }
         public void ViewPremium()
         {
-            PremiumDialog.Instance.RequestNothing();
+            PremiumMenu.Instance.RequestNothing();
         }
 
         public void ViewUnlockableBodyParts()

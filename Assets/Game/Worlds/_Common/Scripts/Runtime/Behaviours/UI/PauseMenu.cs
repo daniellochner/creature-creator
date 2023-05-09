@@ -14,14 +14,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Start()
-        {
-            base.Start();
-        }
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape) && CanToggle)
@@ -29,7 +21,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 Toggle();
             }
         }
-        protected override void LateUpdate() { /* Override default close-on-ESC behaviour */ }
+        protected override void LateUpdate()
+        {
+            /* Override default close-on-ESC behaviour */
+        }
 
         public void Leave()
         {
@@ -51,14 +46,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void Open(bool instant = false)
         {
             base.Open(instant);
-            PremiumManager.Instance.LoadBanner();
-
-            //PremiumManager.Instance.ShowBanner();
+            PremiumManager.Instance.ShowBannerAd();
         }
         public override void Close(bool instant = false)
         {
             base.Close(instant);
-            PremiumManager.Instance.DestroyBanner();
+            PremiumManager.Instance.HideBannerAd();
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Purchasing;
 using System;
 using System.IO;
+using GoogleMobileAds.Api;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -13,10 +14,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class PremiumManager : DataManager<PremiumManager, Premium>
     {
         #region Fields
-        [SerializeField] private string iOSAppKey;
-        [SerializeField] private string androidAppKey;
+        private BannerView bannerAd;
+        private RewardedAd rewardAd;
 
-        private float currVolume;
         private bool wasPrevPurchased;
         #endregion
 
@@ -25,60 +25,52 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                string id = "Banner_";
-                if (Application.platform == RuntimePlatform.IPhonePlayer)
-                {
-                    id += "iOS";
-                }
-                else
-                {
-                    id += "Android";
-                }
-                return id;
+#if UNITY_EDITOR
+                string adUnitId = "unused";
+#elif UNITY_ANDROID
+                string adUnitId = "ca-app-pub-8574849693522303/8775844882";
+#elif UNITY_IOS
+                string adUnitId = "ca-app-pub-8574849693522303/2350037330";
+#else
+                string adUnitId = "unexpected_platform";
+#endif
+                return adUnitId;
             }
         }
         private string RewardAdUnitId
         {
             get
             {
-                string id = "Rewarded_";
-                if (Application.platform == RuntimePlatform.IPhonePlayer)
-                {
-                    id += "iOS";
-                }
-                else
-                {
-                    id += "Android";
-                }
-                return id;
+#if UNITY_EDITOR
+                string adUnitId = "unused";
+#elif UNITY_ANDROID
+                string adUnitId = "ca-app-pub-8574849693522303/4330129572";
+#elif UNITY_IOS
+                string adUnitId = "ca-app-pub-8574849693522303/3208619599";
+#else
+                string adUnitId = "unexpected_platform";
+#endif
+                return adUnitId;
             }
         }
-        private string AppKey
+
+        public override string SALT
         {
             get
             {
-                if (Application.platform == RuntimePlatform.IPhonePlayer)
-                {
-                    return iOSAppKey;
-                }
-                else
-                {
-                    return androidAppKey;
-                }
+#if UNITY_STANDALONE
+                public override string SALT => SteamUser.GetSteamID().ToString();
+#elif UNITY_IOS || UNITY_ANDROID
+                return SystemInfo.deviceUniqueIdentifier;
+#endif
             }
-        }
+}
 
         public RewardedItem RequestedItem
         {
             get;
             set;
         }
-
-#if UNITY_STANDALONE
-        public override string SALT => SteamUser.GetSteamID().ToString();
-#elif UNITY_IOS || UNITY_ANDROID
-        public override string SALT => SystemInfo.deviceUniqueIdentifier;
-#endif
         #endregion
 
         #region Methods
@@ -99,118 +91,129 @@ namespace DanielLochner.Assets.CreatureCreator
                 Save();
             }
 
-            IronSource.Agent.init(AppKey, IronSourceAdUnits.REWARDED_VIDEO, IronSourceAdUnits.BANNER);
+            MobileAds.SetiOSAppPauseOnBackground(true);
+            MobileAds.RaiseAdEventsOnUnityMainThread = true;
+
+            MobileAds.Initialize(OnInitialized);
         }
 
-        private void OnEnable()
+        public void OnInitialized(InitializationStatus status)
         {
-            IronSourceEvents.onSdkInitializationCompletedEvent += OnInitialized;
-
-            IronSourceRewardedVideoEvents.onAdOpenedEvent += OnRewardOpened;
-            IronSourceRewardedVideoEvents.onAdRewardedEvent += OnRewardCompleted;
+            RequestBannerAd();
         }
-
-        private void OnApplicationPause(bool isPaused)
-        {
-            IronSource.Agent.onApplicationPause(isPaused);
-        }
-
-        public void OnInitialized()
-        {
-            IronSource.Agent.validateIntegration();
-        }
-
-
-
 
         #region Banner
-        public void LoadBanner()
+        public void RequestBannerAd()
         {
-            IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
+            if (Data.IsPremium) return;
+
+            bannerAd?.Destroy();
+            bannerAd = new BannerView(BannerAdUnitId, AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(Display.main.systemWidth / 2), AdPosition.Bottom);
+
+            bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
+            bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
+
+            bannerAd.LoadAd(new AdRequest.Builder().Build());
+            bannerAd.Hide();
         }
-        public void ShowBanner()
+
+        public void ShowBannerAd()
         {
-            IronSource.Agent.displayBanner();
+            if (Data.IsPremium) return;
+            bannerAd?.Show();
         }
-        public void HideBanner()
+        public void HideBannerAd()
         {
-            IronSource.Agent.hideBanner();
+            bannerAd?.Hide();
         }
-        public void DestroyBanner()
+
+        private void OnBannerAdLoadFailed(LoadAdError error)
         {
-            IronSource.Agent.destroyBanner();
+            if (error.GetCode() == 2)
+            {
+                if (Application.internetReachability == NetworkReachability.NotReachable)
+                {
+                    this.InvokeUntil(() => Application.internetReachability != NetworkReachability.NotReachable, RequestBannerAd);
+                }
+            }
+        }
+        private void OnBannerAdLoaded()
+        {
         }
         #endregion
 
-
         #region Reward
-        public void ShowReward()
+        public void RequestRewardAd(Action<RewardedAd, LoadAdError> onLoaded)
         {
-            if (IronSource.Agent.isRewardedVideoAvailable())
+            RewardedAd.Load(RewardAdUnitId, new AdRequest.Builder().Build(), delegate (RewardedAd ad, LoadAdError error) 
             {
-                IronSource.Agent.showRewardedVideo();
+                rewardAd = ad;
+
+                if (ad == null || error != null)
+                {
+                    InformationDialog.Inform($"Error ({error?.GetCode()})", error?.GetMessage());
+                    return;
+                }
+
+                ad.OnAdFullScreenContentOpened += OnRewardAdOpened;
+                ad.OnAdFullScreenContentClosed += OnRewardAdClosed;
+
+                onLoaded(ad, error);
+            });
+        }
+
+        public void ShowRewardAd()
+        {
+            rewardAd?.Show(OnRewardAdCompleted);
+        }
+
+        private void OnRewardAdOpened()
+        {
+            MobileAds.SetApplicationMuted(true);
+        }
+        private void OnRewardAdClosed()
+        {
+            MobileAds.SetApplicationMuted(false);
+        }
+        private void OnRewardAdCompleted(Reward reward)
+        {
+            PremiumMenu.Instance.Close(true);
+
+            RewardsMenu.Instance.Clear();
+            if (RequestedItem != null)
+            {
+                Access(RequestedItem);
+                AccessRandom(3);
             }
             else
             {
-                Debug.Log("NOT AVAILABLE");
+                AccessRandom(4);
             }
+            RewardsMenu.Instance.Open();
+
+            EditorManager.Instance?.UpdateUsability();
+            OnRewardAdClosed();
         }
 
-        private void OnRewardOpened(IronSourceAdInfo adInfo)
-        {
-            //currVolume = SettingsManager.Data.MasterVolume;
-            //SettingsManager.Instance.SetMasterVolume(0f);
-        }
-        private void OnRewardCompleted(IronSourcePlacement placement, IronSourceAdInfo adInfo)
-        {
-            if (placement.getPlacementName() == RewardAdUnitId)
-            {
-                RewardsMenu.Instance.ClearRewards();
-                if (RequestedItem != null)
-                {
-                    Access(RequestedItem);
-                    AccessRandom(3);
-                }
-                else
-                {
-                    AccessRandom(4);
-                }
-
-                PremiumDialog.Instance.Close(true);
-                RewardsMenu.Instance.Open();
-
-                EditorManager.Instance?.UpdateUsability();
-            }
-
-            
-
-
-            //SettingsManager.Instance.SetMasterVolume(currVolume);
-        }
-        #endregion
-
-
-
-        public void Access(RewardedItem item)
+        private void Access(RewardedItem item)
         {
             switch (item.Type)
             {
                 case ItemType.BodyPart:
+                    RewardsMenu.Instance.Add(DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", item.Id));
                     Data.UsableBodyParts.Add(item.Id, true);
-                    RewardsMenu.Instance.AddReward(DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", item.Id).Icon);
                     break;
 
                 case ItemType.Pattern:
+                    RewardsMenu.Instance.Add(DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", item.Id));
                     Data.UsablePatterns.Add(item.Id, true);
-                    RewardsMenu.Instance.AddReward(DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", item.Id).Icon);
                     break;
             }
             Save();
         }
-        public void AccessRandom(int count)
+        private void AccessRandom(int count)
         {
             List<RewardedItem> items = new List<RewardedItem>();
-
             foreach (var kv in DatabaseManager.GetDatabase("Body Parts").Objects)
             {
                 BodyPart bodyPart = kv.Value as BodyPart;
@@ -219,7 +222,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     items.Add(new RewardedItem(ItemType.BodyPart, kv.Key));
                 }
             }
-
             foreach (var kv in DatabaseManager.GetDatabase("Patterns").Objects)
             {
                 Pattern pattern = kv.Value as Pattern;
@@ -236,7 +238,26 @@ namespace DanielLochner.Assets.CreatureCreator
                 Access(items[i]);
             }
         }
+        #endregion
 
+        #region Premium
+        public void OnPremiumPurchased()
+        {
+            Data.IsPremium = true;
+            Save();
+
+            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
+
+            EditorManager.Instance?.UpdateUsability();
+            HideBannerAd();
+        }
+        public void OnPremiumFailed(string reason)
+        {
+            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_failed_title"), LocalizationUtility.Localize("premium_paid_failed_message", reason));
+        }
+        #endregion
+
+        #region Helper
         public bool IsBodyPartUsable(string bodyPartId)
         {
             if (Data.IsPremium) return true;
@@ -264,31 +285,28 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-
-        //public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
-        //{
-
-        //}
-        //public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
-        //{
-        //}
-
-        public void OnPurchaseComplete(Product product)
+        public bool IsEverythingUsable()
         {
-            if (product.definition.id == "premium")
+            if (Data.IsPremium) return true;
+
+            foreach (string id in DatabaseManager.GetDatabase("Body Parts").Objects.Keys)
             {
-                Data.IsPremium = true;
-                Save();
-
-                InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
-
-                EditorManager.Instance?.UpdateUsability();
+                if (!IsBodyPartUsable(id))
+                {
+                    return false;
+                }
             }
+            foreach (string id in DatabaseManager.GetDatabase("Patterns").Objects.Keys)
+            {
+                if (!IsPatternUsable(id))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
-        public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
-        {
-            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_failed_title"), LocalizationUtility.Localize("premium_paid_failed_message", reason));
-        }
+        #endregion
         #endregion
 
         #region Nested

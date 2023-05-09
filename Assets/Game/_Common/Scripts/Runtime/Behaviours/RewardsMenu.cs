@@ -5,16 +5,33 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class RewardsMenu : Dialog<RewardsMenu>
     {
+        #region Fields
         [SerializeField] private GameObject rewardPrefab;
         [SerializeField] private RectTransform rewardsRT;
+        private AudioSource audioSource;
+        #endregion
 
-        public void ClearRewards()
+        #region Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        public void Add(Item item)
+        {
+            Instantiate(rewardPrefab, rewardsRT).transform.GetChild(0).GetComponent<Image>().sprite = item.Icon;
+        }
+        public void Clear()
         {
             rewardsRT.DestroyChildren();
         }
-        public void AddReward(Sprite icon)
+
+        public override void Open(bool instant = false)
         {
-            Instantiate(rewardPrefab, rewardsRT).transform.GetChild(0).GetComponent<Image>().sprite = icon;
+            base.Open(instant);
+            audioSource.Play();
         }
+        #endregion
     }
 }

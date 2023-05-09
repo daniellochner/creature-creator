@@ -952,7 +952,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (isPremium)
                 {
-                    PremiumDialog.Instance.RequestPremiumBodyPart(bodyPartID);
+                    PremiumMenu.Instance.RequestBodyPart(bodyPartID);
                 }
                 else
                 {
@@ -978,7 +978,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (isPremium)
             {
-                PremiumDialog.Instance.RequestPremiumPattern(patternID);
+                editorAudioSource.PlayOneShot(errorAudioClip);
+
+                PremiumMenu.Instance.RequestPattern(patternID);
                 return false;
             }
             else

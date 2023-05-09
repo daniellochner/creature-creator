@@ -13,6 +13,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void Start()
+        {
+            PremiumManager.Instance.HideBannerAd();
+        }
         private void Update()
         {
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))
