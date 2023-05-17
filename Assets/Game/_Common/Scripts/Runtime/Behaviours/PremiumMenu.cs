@@ -75,6 +75,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Open(instant);
 
+            if (PremiumManager.Instance.IsRewardAdLoaded) return;
+
             watchAdProgress.SetActive(true);
             watchAdText.SetActive(false);
             watchAdButton.interactable = true;
@@ -84,6 +86,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void WatchAd()
         {
+            if (!PremiumManager.Instance.IsRewardAdLoaded) return;
+
             PremiumManager.Instance.ShowRewardAd();
             watchAdButton.interactable = false;
         }

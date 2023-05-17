@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
 #if UNITY_IOS
@@ -18,7 +19,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Material gridMaterial;
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
-        [SerializeField] private TextMeshProUGUI startText;
+        [SerializeField] private TextMeshProUGUI promptText;
+
+        private string prompt;
         #endregion
 
         #region Properties
@@ -39,18 +42,19 @@ namespace DanielLochner.Assets.CreatureCreator
             MusicManager.Instance.FadeTo("Fun", 0f, 1f);
 
             // Localize
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
             yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
 
             // Authenticate
             while (AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Success)
             {
-                startText.text = LocalizationUtility.Localize("startup_authenticating");
+                SetPrompt("startup_authenticating");
 
                 yield return new WaitUntil(() => AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Busy);
 
                 if (AuthenticationManager.Instance.Status == AuthenticationManager.AuthStatus.Fail)
                 {
-                    startText.text = LocalizationUtility.Localize("startup_failed-to-authenticate");
+                    SetPrompt("startup_failed-to-authenticate");
                     yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
                     AuthenticationManager.Instance.Authenticate();
                 }
@@ -65,7 +69,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #endif
 
             // Start
-            startText.text = LocalizationUtility.Localize(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
+            SetPrompt(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
             yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
 
             if (ShowIntro)
@@ -92,6 +96,17 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             gridMaterial.mainTextureScale = Vector2.one;
             gridMaterial.mainTextureOffset = Vector2.zero;
+
+            LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
+        }
+
+        private void SetPrompt(string p)
+        {
+            promptText.text = LocalizationUtility.Localize(prompt = p);
+        }
+        private void OnLocaleChanged(Locale locale)
+        {
+            SetPrompt(prompt);
         }
         #endregion
     }

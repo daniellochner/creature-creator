@@ -87,9 +87,6 @@ public class SteamManager : MonoBehaviour
             throw new System.Exception("Tried to Initialize the SteamAPI twice in one session!");
         }
 
-        // We want our SteamManager Instance to persist across scenes.
-        DontDestroyOnLoad(gameObject);
-
         if (!Packsize.Test())
         {
             Debug.LogError("[Steamworks.NET] Packsize Test returned false, the wrong version of Steamworks.NET is being run in this platform.", this);

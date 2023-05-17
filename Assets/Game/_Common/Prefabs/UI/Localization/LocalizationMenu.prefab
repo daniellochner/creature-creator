@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5090888951588161977}
   - component: {fileID: 6475691553297909332}
   - component: {fileID: 6972009029760073027}
-  - component: {fileID: 232665962620715383}
+  - component: {fileID: 5971297038395549596}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -87,7 +87,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 232665962620715383}
+  m_TargetGraphic: {fileID: 5971297038395549596}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -103,7 +103,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &232665962620715383
+--- !u!114 &5971297038395549596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,24 +112,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 232665962620715382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 196bb08d6c2d3c9499c04e1281fd4ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6}
+  m_Material: {fileID: 2100000, guid: 96c5704d0681e35408630c488fc0c234, type: 2}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+  source: {fileID: 0}
+  vibrancy: 1.8
+  brightness: 0
+  flatten: 0.15
+  m_spriteBlending: 0.65
 --- !u!1 &477267602601368462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,7 +1531,6 @@ GameObject:
   - component: {fileID: 3129361385160408870}
   - component: {fileID: 4000344275694103587}
   - component: {fileID: 4761762152402259911}
-  - component: {fileID: 1062006385363151272}
   m_Layer: 5
   m_Name: LocalizationMenu
   m_TagString: Untagged
@@ -1585,6 +1592,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6863745379821790792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1602,7 +1610,6 @@ MonoBehaviour:
   ignoreButton: {fileID: 6972009029760073027}
   closeButton: {fileID: 4097410554572177822}
   dialog: {fileID: 6863745380502333008}
-  officialLanguages: []
   languagePrefab: {fileID: 986670386055892550, guid: cc9ae52a02cf5654498852274c613ac8, type: 3}
   languagesRT: {fileID: 1214470258249640609}
   languagesTG: {fileID: 5272183312509023780}
@@ -1669,18 +1676,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1062006385363151272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6863745379821790807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92650e2212393db44ba60c37f5b6b000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6863745380502333008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1972,6 +1967,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1483825456712437340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2351,6 +2347,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4125467119082423867
 MonoBehaviour:
   m_ObjectHideFlags: 0
