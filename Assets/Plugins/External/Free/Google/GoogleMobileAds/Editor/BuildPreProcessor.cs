@@ -23,10 +23,10 @@ public class BuildPreProcessor : IPreprocessBuild
     public void OnPreprocessBuild(BuildTarget target, string path)
 #endif
     {
-        if (!AssetDatabase.IsValidFolder("Assets/GoogleMobileAds"))
-        {
-            AssetDatabase.CreateFolder("Assets", "GoogleMobileAds");
-        }
+        //if (!AssetDatabase.IsValidFolder("Assets/GoogleMobileAds"))
+        //{
+        //    AssetDatabase.CreateFolder("Assets", "GoogleMobileAds");
+        //}
 
         if (AssetDatabase.IsValidFolder("Packages/com.google.ads.mobile"))
         {
