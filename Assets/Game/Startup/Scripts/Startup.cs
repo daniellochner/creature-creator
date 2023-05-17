@@ -3,6 +3,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
+#if UNITY_IOS
+using Unity.Advertisement.IosSupport;
+#endif
+
 namespace DanielLochner.Assets.CreatureCreator
 {
     public class Startup : MonoBehaviour
@@ -51,6 +55,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     AuthenticationManager.Instance.Authenticate();
                 }
             }
+
+            // Track
+#if UNITY_IOS
+            if (ATTrackingStatusBinding.GetAuthorizationTrackingStatus() == ATTrackingStatusBinding.AuthorizationTrackingStatus.NOT_DETERMINED)
+            {
+                ATTrackingStatusBinding.RequestAuthorizationTracking();
+            }
+#endif
 
             // Start
             startText.text = LocalizationUtility.Localize(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");

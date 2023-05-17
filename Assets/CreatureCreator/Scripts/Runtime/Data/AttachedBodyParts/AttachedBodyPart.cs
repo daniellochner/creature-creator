@@ -29,12 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             GUID = Guid.NewGuid().ToString();
         }
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            Serialize(serializer);
-        }
-
-        public virtual void Serialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        public virtual void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref GUID);
             serializer.SerializeValue(ref bodyPartID);

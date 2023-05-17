@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Authenticate()
         {
             Status = AuthStatus.Busy;
+
 #if UNITY_EDITOR
             Status = AuthStatus.Success;
 #elif UNITY_STANDALONE

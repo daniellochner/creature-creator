@@ -20,9 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
         }
 
-        public override void Serialize<T>(BufferSerializer<T> serializer)
+        public override void NetworkSerialize<T>(BufferSerializer<T> serializer)
         {
-            base.Serialize(serializer);
+            base.NetworkSerialize(serializer);
 
             Bone[] b = null;
             if (serializer.IsWriter)

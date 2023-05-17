@@ -59,17 +59,29 @@ namespace DanielLochner.Assets.CreatureCreator
             get
             {
 #if UNITY_STANDALONE
-                public override string SALT => SteamUser.GetSteamID().ToString();
+                return SteamUser.GetSteamID().ToString();
 #elif UNITY_IOS || UNITY_ANDROID
                 return SystemInfo.deviceUniqueIdentifier;
 #endif
             }
-}
+        }
 
         public RewardedItem RequestedItem
         {
             get;
             set;
+        }
+
+        public bool IsRewardAdLoaded
+        {
+            get => rewardAd != null && rewardAd.CanShowAd();
+        }
+        private int BannerAdWidth
+        {
+            get
+            {
+                return 160 * Mathf.RoundToInt((Display.main.systemWidth / Screen.dpi) / 2f);
+            }
         }
         #endregion
 
@@ -91,10 +103,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 Save();
             }
 
-            MobileAds.SetiOSAppPauseOnBackground(true);
-            MobileAds.RaiseAdEventsOnUnityMainThread = true;
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                MobileAds.SetiOSAppPauseOnBackground(true);
+                MobileAds.RaiseAdEventsOnUnityMainThread = true;
 
-            MobileAds.Initialize(OnInitialized);
+                MobileAds.Initialize(OnInitialized);
+            }
         }
 
         public void OnInitialized(InitializationStatus status)
@@ -108,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Data.IsPremium) return;
 
             bannerAd?.Destroy();
-            bannerAd = new BannerView(BannerAdUnitId, AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(Display.main.systemWidth / 2), AdPosition.Bottom);
+            bannerAd = new BannerView(BannerAdUnitId, AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Bottom);
 
             bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
             bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
@@ -145,6 +160,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Reward
         public void RequestRewardAd(Action<RewardedAd, LoadAdError> onLoaded)
         {
+            if (IsRewardAdLoaded) return;
+
             RewardedAd.Load(RewardAdUnitId, new AdRequest.Builder().Build(), delegate (RewardedAd ad, LoadAdError error) 
             {
                 rewardAd = ad;
