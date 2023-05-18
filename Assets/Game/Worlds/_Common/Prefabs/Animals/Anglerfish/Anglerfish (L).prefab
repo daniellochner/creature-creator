@@ -388,6 +388,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118559b03109b1d43b1e2003acc9dc6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5590107688074641156 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2222541433071504512, guid: 5af1cb919a8ace844be1af91cbefd504, type: 3}
+  m_PrefabInstance: {fileID: 6002173483345179524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6446224274633657893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b3d4dcdad4ecc4392865f832c85652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5756148975965589913 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2066573905067680285, guid: 5af1cb919a8ace844be1af91cbefd504, type: 3}
@@ -460,6 +471,7 @@ MonoBehaviour:
   speedUp: {fileID: 85400627169330440}
   grounded: {fileID: 2367562787969241958}
   minimapIcon: {fileID: 810037658440847311}
+  launcher: {fileID: 5590107688074641156}
   selectable: {fileID: 2706622752654487457}
   commandable: {fileID: 2067218308065454606}
   ai: {fileID: 6830720543932093709}
@@ -479,12 +491,12 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
   m_WalkableMask: 8
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 2
 --- !u!114 &6830720543932093709
 MonoBehaviour:
   m_ObjectHideFlags: 0
