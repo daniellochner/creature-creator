@@ -123,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Data.IsPremium) return;
 
             bannerAd?.Destroy();
-            bannerAd = new BannerView(BannerAdUnitId, AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Bottom);
+            bannerAd = new BannerView(BannerAdUnitId, AdSize.Banner/*AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth)*/, AdPosition.Top);
 
             bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
             bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;

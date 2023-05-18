@@ -15,8 +15,16 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            PremiumManager.Instance.HideBannerAd();
+            if (!SettingsManager.Instance.ShowTutorial)
+            {
+                PremiumManager.Instance.ShowBannerAd();
+            }
         }
+        private void OnDestroy()
+        {
+            PremiumManager.Instance?.HideBannerAd();
+        }
+
         private void Update()
         {
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.U))
