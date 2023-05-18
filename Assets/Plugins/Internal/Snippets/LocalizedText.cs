@@ -16,11 +16,14 @@ namespace DanielLochner.Assets
             base.Awake();
             Initialize();
         }
-        
+
         private void Initialize()
         {
             localizedStringEvent = GetComponent<LocalizeStringEvent>();
-            SetArguments(defaultArgs);
+            if (localizedStringEvent.StringReference.Arguments == null)
+            {
+                SetArguments(defaultArgs);
+            }
         }
         public void SetArguments(params object[] arguments)
         {
