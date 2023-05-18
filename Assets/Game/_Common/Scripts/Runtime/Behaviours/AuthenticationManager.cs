@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Authenticate()
         {
             Status = AuthStatus.Busy;
-
+            
 #if UNITY_EDITOR
             Status = AuthStatus.Success;
 #elif UNITY_STANDALONE
@@ -34,7 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #elif UNITY_IOS || UNITY_ANDROID
             GameServices.Instance.LogIn(delegate (bool success)
             {
-                Status = success ? AuthStatus.Success : AuthStatus.Fail;
+                Status = AuthStatus.Success;//success ? AuthStatus.Success : AuthStatus.Fail;
             });
 #endif
         }
