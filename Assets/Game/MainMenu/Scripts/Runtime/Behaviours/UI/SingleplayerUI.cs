@@ -50,6 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 NetworkManager.Singleton.OnClientDisconnectCallback -= OnFailed;
             }
+            statusText.text = "";
         }
 
         public void Setup()

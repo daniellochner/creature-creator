@@ -173,8 +173,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnect;
             }
+            statusText.text = "";
         }
-        
+
         private void Setup()
         {
             mapOS.SetupUsingEnum<Map>();
