@@ -71,7 +71,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             clickUI.OnLeftClick.AddListener(delegate
             {
-                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                if (SystemUtility.IsDevice(DeviceType.Handheld) && PremiumManager.Instance.IsBodyPartUsable(name))
                 {
                     StartCoroutine(ClickToOpenRoutine(bodyPart));
                 }
