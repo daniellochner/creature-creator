@@ -6,10 +6,10 @@
             url "https://maven.google.com"
         }
         maven {
-            url "https://maven.google.com/" // Assets/Plugins/External/Free/Google/GoogleMobileAds/Editor/GoogleMobileAdsDependencies.xml:7, Assets/Plugins/External/Free/Google/GoogleMobileAds/Editor/GoogleUmpDependencies.xml:7
+            url "https://maven.google.com/" // Assets/GoogleMobileAds/Editor/GoogleMobileAdsDependencies.xml:7, Assets/GoogleMobileAds/Editor/GoogleUmpDependencies.xml:7
         }
         maven {
-            url (unityProjectPath + "/Assets/GeneratedLocalRepo/Plugins/External/Free/Google/GooglePlayGames/Editor/m2repository") // Assets/Plugins/External/Free/Google/GooglePlayGames/Editor/GooglePlayGamesPluginDependencies.xml:11
+            url (unityProjectPath + "/Assets/GeneratedLocalRepo/GooglePlayGames/Editor/m2repository") // Assets/GooglePlayGames/Editor/GooglePlayGamesPluginDependencies.xml:11
         }
         mavenLocal()
         mavenCentral()
@@ -22,11 +22,11 @@ apply plugin: 'com.android.library'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'com.google.android.gms:play-services-ads:22.0.0' // Assets/Plugins/External/Free/Google/GoogleMobileAds/Editor/GoogleMobileAdsDependencies.xml:7
-    implementation 'com.google.android.play:core-common:2.0.0' // Assets/Plugins/External/Free/Google/GooglePlayPlugins/com.google.play.core/Editor/Dependencies.xml:3
-    implementation 'com.google.android.play:review:2.0.0' // Assets/Plugins/External/Free/Google/GooglePlayPlugins/com.google.play.review/Editor/Dependencies.xml:3
-    implementation 'com.google.android.ump:user-messaging-platform:2.0.0' // Assets/Plugins/External/Free/Google/GoogleMobileAds/Editor/GoogleUmpDependencies.xml:7
-    implementation 'com.google.games:gpgs-plugin-support:0.10.14' // Assets/Plugins/External/Free/Google/GooglePlayGames/Editor/GooglePlayGamesPluginDependencies.xml:11
+    implementation 'com.google.android.gms:play-services-ads:22.0.0' // Assets/GoogleMobileAds/Editor/GoogleMobileAdsDependencies.xml:7
+    implementation 'com.google.android.play:core-common:2.0.0' // Assets/GooglePlayPlugins/com.google.play.core/Editor/Dependencies.xml:3
+    implementation 'com.google.android.play:review:2.0.0' // Assets/GooglePlayPlugins/com.google.play.review/Editor/Dependencies.xml:3
+    implementation 'com.google.android.ump:user-messaging-platform:2.0.0' // Assets/GoogleMobileAds/Editor/GoogleUmpDependencies.xml:7
+    implementation 'com.google.games:gpgs-plugin-support:0.10.14' // Assets/GooglePlayGames/Editor/GooglePlayGamesPluginDependencies.xml:11
 // Android Resolver Dependencies End
 **DEPS**}
 
