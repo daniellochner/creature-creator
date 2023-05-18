@@ -501,7 +501,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 foreach (GameObject button in premiumButtons)
                 {
-                    button.SetActive(!PremiumManager.Data.IsPremium && !(SettingsManager.Data.Tutorial && ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0));
+                    button.SetActive(!PremiumManager.Data.IsPremium && !SettingsManager.Instance.ShowTutorial);
                 }
             }
             #endregion

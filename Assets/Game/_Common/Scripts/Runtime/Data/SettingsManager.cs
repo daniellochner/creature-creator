@@ -37,6 +37,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CameraOrbit cameraOrbitPrefab;
         #endregion
 
+        #region Properties
+        public bool ShowTutorial => Data.Tutorial && (ProgressManager.Data.UnlockedBodyParts.Count == 0 && ProgressManager.Data.UnlockedPatterns.Count == 0) && (!EditorManager.Instance || !EditorManager.Instance.CreativeMode);
+        #endregion
+
         #region Methods
         protected override void Start()
         {

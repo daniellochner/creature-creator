@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnEnter(prevScene, nextScene);
 
-            if (!GameSetup.Instance.DoTutorial)
+            if (!SettingsManager.Instance.ShowTutorial)
             {
                 if (prevScene == "Farm")
                 {
