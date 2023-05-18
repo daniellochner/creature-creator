@@ -32,11 +32,6 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
             Creature.Animator.SetTrigger(strikeAction);
             yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float t)
             {
-                foreach (LegAnimator leg in Creature.Legs)
-                {
-                    leg.Anchor.SetPositionAndRotation(Creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos), Quaternion.identity);
-                }
-
                 Creature.Constructor.Root.localRotation = Quaternion.Slerp(Quaternion.identity, Quaternion.LookRotation(localDisplacement), t);
                 Creature.Constructor.Root.localPosition = Vector3.Lerp(Vector3.zero, localDisplacement, EasingFunction.EaseOutExpo(0f, 1f, t));
             },
