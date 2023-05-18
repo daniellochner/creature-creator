@@ -88,6 +88,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Shutdown();
         }
+        private void OnEnable()
+        {
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                targetFrameRateSlider.value = Application.targetFrameRate;
+            }
+        }
 
         private void Setup()
         {
@@ -140,6 +147,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 targetFrameRateSlider.onValueChanged.AddListener(delegate (float value)
                 {
                     SettingsManager.Instance.SetTargetFrameRate((int)value);
+                    TieredFramerate.Instance?.Reset();
                 });
             }
 
