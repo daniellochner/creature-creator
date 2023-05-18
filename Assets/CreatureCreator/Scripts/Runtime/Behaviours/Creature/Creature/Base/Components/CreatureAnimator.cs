@@ -31,6 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private RigBuilder rigBuilder;
         private Coroutine moveBodyCoroutine;
         private DynamicBone tailDynamicBone;
+        private bool isOptimized;
         #endregion
 
         #region Properties
@@ -56,7 +57,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool IsOptimized
         {
-            get; set;
+            get => isOptimized;
+            set
+            {
+                isOptimized = value;
+                Rig.weight = isOptimized ? 0f : 1f;
+            }
         }
         public bool IsMovingBody
         {
@@ -78,6 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator.enabled = true;
             Grounded.enabled = true;
             SetDamping(true);
+            Rig.weight = 1f;
         }
         protected override void OnDisable()
         {
@@ -88,6 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Restructure(false);
             Grounded.enabled = false;
             Animator.enabled = false;
+            Rig.weight = 0f;
         }
 
         private void Initialize()
