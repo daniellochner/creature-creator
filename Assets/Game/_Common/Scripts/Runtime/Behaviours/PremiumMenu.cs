@@ -13,22 +13,46 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Paid")]
         [SerializeField] private RectTransform paidRT;
-        [SerializeField] private TextMeshProUGUI priceText;
+        [SerializeField] private Button buyButton;
+        [SerializeField] private TextMeshProUGUI buyText;
+        [SerializeField] private GameObject buyLoadIcon;
 
         [Header("Free")]
         [SerializeField] private RectTransform freeRT;
         [SerializeField] private Image requestedItemImg;
         [SerializeField] private BlinkingCanvasGroup requestedItemBCG;
         [SerializeField] private Button watchAdButton;
-        [SerializeField] private GameObject watchAdText;
-        [SerializeField] private GameObject watchAdProgress;
+        [SerializeField] private TextMeshProUGUI watchAdText;
+        [SerializeField] private GameObject watchAdLoadIcon;
         [SerializeField] private Sprite questionMarkIcon;
+        #endregion
+
+        #region Properties
+        private bool IsLoadingPurchase
+        {
+            set
+            {
+                buyLoadIcon.SetActive(value);
+                buyText.gameObject.SetActive(!value);
+                buyButton.interactable = !value;
+            }
+        }
+        private bool IsLoadingAd
+        {
+            set
+            {
+                watchAdLoadIcon.SetActive(value);
+                watchAdText.gameObject.SetActive(!value);
+                watchAdButton.interactable = !value;
+            }
+        }
         #endregion
 
         #region Methods
         protected override void Start()
         {
             base.Start();
+
             if (PremiumManager.Instance.IsEverythingUsable())
             {
                 paidRT.pivot = new Vector2(0.5f, 0.5f);
@@ -61,7 +85,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Paid
-            priceText.text = CodelessIAPStoreListener.Instance.GetProduct("cc_premium").metadata.localizedPriceString;
+            buyText.text = CodelessIAPStoreListener.Instance.GetProduct("cc_premium").metadata.localizedPriceString;
 
             // Free
             requestedItemBCG.IsBlinking = isBlinking;
@@ -75,39 +99,46 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Open(instant);
 
-            if (PremiumManager.Instance.IsRewardAdLoaded) return;
-
-            watchAdProgress.SetActive(true);
-            watchAdText.SetActive(false);
-            watchAdButton.interactable = true;
-
-            PremiumManager.Instance.RequestRewardAd(OnRewardAdLoaded);
+            if (!PremiumManager.Instance.IsRewardAdLoaded)
+            {
+                IsLoadingAd = true;
+                PremiumManager.Instance.RequestRewardAd(OnRewardAdLoaded);
+            }
         }
 
+        #region Free
         public void WatchAd()
         {
-            if (!PremiumManager.Instance.IsRewardAdLoaded) return;
-
-            PremiumManager.Instance.ShowRewardAd();
-            watchAdButton.interactable = false;
+            if (PremiumManager.Instance.IsRewardAdLoaded)
+            {
+                PremiumManager.Instance.ShowRewardAd();
+            }
         }
         public void OnRewardAdLoaded(RewardedAd ad, LoadAdError error)
         {
-            watchAdProgress.SetActive(false);
-            watchAdText.SetActive(true);
+            IsLoadingAd = false;
         }
+        #endregion
 
+        #region Paid
+        public void OnPurchaseClicked()
+        {
+            IsLoadingPurchase = true;
+        }
         public void OnPurchaseComplete(Product product)
         {
             if (product.definition.id == "cc_premium")
             {
                 PremiumManager.Instance.OnPremiumPurchased();
+                IsLoadingPurchase = false;
             }
         }
         public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
         {
             PremiumManager.Instance.OnPremiumFailed(reason.ToString());
+            IsLoadingPurchase = false;
         }
+        #endregion
         #endregion
     }
 }
