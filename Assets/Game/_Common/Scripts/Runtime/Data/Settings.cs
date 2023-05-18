@@ -375,17 +375,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 AmbientOcclusion = AmbientOcclusionType.None;
                 Bloom = false;
                 AmbientParticles = false;
-                ScreenScale = 0.75f;
+                ScreenScale = Mathf.Min(720f / Display.main.systemHeight, 0.75f); // Minimum: 720p or 75%
                 VSync = true;
 
                 if (SystemUtility.IsLowEndDevice)
                 {
                     TargetFrameRate = 30;
-                    ScreenScale = 0.5f;
+                    ScreenScale = Mathf.Min(0.5f, ScreenScale);
                     ShadowQuality = ShadowQualityType.None;
                     TextureQuality = TextureQualityType.Medium;
                 }
-
+                
                 TouchOffset *= ScreenScale;
                 SensitivityHorizontal = SensitivityVertical = 1f / ScreenScale;
             }
