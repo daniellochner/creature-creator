@@ -183,7 +183,7 @@ namespace IngameDebugConsole
 
 		public void UpdatePosition( bool immediately )
 		{
-			Vector2 canvasSize = debugManager.canvasTR.rect.size;
+			Vector2 canvasSize = (transform.parent as RectTransform).rect.size;
 
 			float canvasWidth = canvasSize.x;
 			float canvasHeight = canvasSize.y;
