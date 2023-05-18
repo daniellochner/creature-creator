@@ -1,7 +1,5 @@
 using GoogleMobileAds.Api;
-using System.Threading.Tasks;
 using TMPro;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.UI;
