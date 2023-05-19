@@ -31,7 +31,7 @@ public static class PListProcessor
 
     private const string KEY_SK_ADNETWORK_ID = "SKAdNetworkIdentifier";
 
-    private const string SKADNETWORKS_RELATIVE_PATH = "GoogleMobileAds/Editor/GoogleMobileAdsSKAdNetworkItems.xml";
+    private const string SKADNETWORKS_RELATIVE_PATH = "Plugins/External/Free/Google/GoogleMobileAds/Editor/GoogleMobileAdsSKAdNetworkItems.xml";
 
     [PostProcessBuild]
     public static void OnPostProcessBuild(BuildTarget buildTarget, string path)

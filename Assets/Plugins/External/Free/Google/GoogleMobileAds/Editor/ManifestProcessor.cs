@@ -33,7 +33,7 @@ public class ManifestProcessor : IPreprocessBuild
 #endif
 {
     private const string MANIFEST_RELATIVE_PATH =
-            "Plugins/Android/GoogleMobileAdsPlugin.androidlib/AndroidManifest.xml";
+            "Plugins/External/Free/Google/Plugins/Android/GoogleMobileAdsPlugin.androidlib/AndroidManifest.xml";
 
     private const string METADATA_APPLICATION_ID  =
             "com.google.android.gms.ads.APPLICATION_ID";
