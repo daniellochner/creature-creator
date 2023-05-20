@@ -7,7 +7,6 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Animations;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -19,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind keybind;
         [SerializeField] private TeleportCinematic cinematic;
         [Space]
-        [SerializeField] private TextMeshPro teleportText;
+        [SerializeField] private TextMeshProUGUI teleportText;
         [SerializeField] private LookAtConstraint teleportLookAtConstraint;
 
         private TrackRegion region;
@@ -29,11 +28,19 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         private bool CanTeleport
         {
-            get => (WorldManager.Instance.World is WorldSP) || (NetworkManager.Singleton.IsServer && (region.tracked.Count == NetworkPlayersMenu.Instance.NumPlayers));
+            get => (WorldManager.Instance.World is WorldSP) || (NetworkManager.Singleton.IsServer && (NumPlayers == MaxPlayers));
         }
         private bool ShowCount
         {
-            get => (WorldManager.Instance.World is WorldMP) && (NetworkPlayersMenu.Instance.NumPlayers > 1);
+            get => (WorldManager.Instance.World is WorldMP) && (MaxPlayers > 1);
+        }
+        private int NumPlayers
+        {
+            get => region.tracked.Count;
+        }
+        private int MaxPlayers
+        {
+            get => NetworkPlayersMenu.Instance.NumPlayers;
         }
 
         private bool IsVisible
@@ -100,7 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void RequestTeleport()
         {
-            ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title", LocalizationUtility.Localize(targetMapId)), LocalizationUtility.Localize("teleport_message"), onYes: delegate
+            ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title"), LocalizationUtility.Localize("teleport_message", LocalizationUtility.Localize(targetMapId)), onYes: delegate
             {
                 UnlockMapClientRpc();
 
@@ -166,14 +173,22 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (ShowCount)
             {
-                text += $"{region.tracked.Count}/{NetworkPlayersMenu.Instance.NumPlayers}<br>";
+                text += $"{FormatError(NumPlayers, !CanTeleport)}/{MaxPlayers}<br>";
             }
             if (SystemUtility.IsDevice(DeviceType.Desktop) && CanTeleport)
             {
-                text += $"<size=1>[{keybind.ToString()}]</size>";
+                text += $"[{keybind.ToString()}]";
             }
 
             teleportText.text = text;
+        }
+        private string FormatError(object obj, bool isError)
+        {
+            if (isError)
+            {
+                return $"<color=red>{obj}</color>";
+            }
+            return obj.ToString();
         }
         #endregion
     }
