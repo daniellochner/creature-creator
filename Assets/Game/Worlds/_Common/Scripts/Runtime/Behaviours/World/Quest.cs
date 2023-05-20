@@ -12,8 +12,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Quest : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private TextMeshPro questText;
-        [SerializeField] private LookAtConstraint questLAS;
+        [SerializeField] private TextMeshProUGUI questText;
+        [SerializeField] private LookAtConstraint questLookAtConstraint;
         [SerializeField] private MinimapIcon minimapIcon;
         [SerializeField] private float disappearTime;
         [SerializeField] private QuestType type;
@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 minimapIcon.enabled = !IsCompleted;
 
                 yield return new WaitUntil(() => Player.Instance.IsSetup);
-                questLAS.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
+                questLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
             }
             else
             {
@@ -144,7 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                questText.text = $"<size=1>{LocalizationUtility.Localize(description)} (${reward})</size><br><size=2>{current}/{required}</size>";
+                questText.text = $"<size=7>{LocalizationUtility.Localize(description)}: ${reward}</size><br><size=14>{TextUtility.FormatError(current, current != required)}/{required}</size>";
             }
             else
             {

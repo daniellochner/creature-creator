@@ -173,7 +173,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (ShowCount)
             {
-                text += $"{FormatError(NumPlayers, !CanTeleport)}/{MaxPlayers}<br>";
+                text += $"{TextUtility.FormatError(NumPlayers, !CanTeleport)}/{MaxPlayers}<br>";
             }
             if (SystemUtility.IsDevice(DeviceType.Desktop) && CanTeleport)
             {
@@ -181,14 +181,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             teleportText.text = text;
-        }
-        private string FormatError(object obj, bool isError)
-        {
-            if (isError)
-            {
-                return $"<color=red>{obj}</color>";
-            }
-            return obj.ToString();
         }
         #endregion
     }
