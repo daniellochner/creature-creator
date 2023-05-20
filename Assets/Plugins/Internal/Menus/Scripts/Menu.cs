@@ -12,7 +12,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private bool isOpen;
 
-        private Animator animator;
+        protected Animator animator;
         #endregion
 
         #region Properties

@@ -1,19 +1,21 @@
 using UnityEngine;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets
 {
     [DefaultExecutionOrder(1)]
     public class OptimizedMenu : Menu
     {
-        private void Start()
+        protected virtual void Start()
         {
             if (!IsOpen)
             {
                 gameObject.SetActive(false);
+                animator.enabled = false;
             }
         }
         public override void Open(bool instant = false)
         {
+            animator.enabled = true;
             gameObject.SetActive(true);
             base.Open(instant);
         }
@@ -21,6 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnEndClose();
             gameObject.SetActive(false);
+            animator.enabled = false;
         }
     }
 }

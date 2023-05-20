@@ -11,7 +11,7 @@ namespace DanielLochner.Assets
         [SerializeField] protected TextMeshProUGUI titleText;
         [SerializeField] protected Button ignoreButton;
         [SerializeField] protected Button closeButton;
-        [SerializeField] private GameObject dialog;
+        [SerializeField] protected GameObject dialog;
         #endregion
 
         #region Methods
@@ -20,6 +20,7 @@ namespace DanielLochner.Assets
             if (!IsOpen)
             {
                 dialog.SetActive(false);
+                animator.enabled = false;
             }
         }
         protected virtual void LateUpdate()
@@ -34,6 +35,7 @@ namespace DanielLochner.Assets
         }
         public override void Open(bool instant = false)
         {
+            animator.enabled = true;
             dialog.SetActive(true);
             if (IsOpen)
             {
@@ -45,6 +47,7 @@ namespace DanielLochner.Assets
         {
             base.OnEndClose();
             dialog.SetActive(false);
+            animator.enabled = false;
         }
         #endregion
     }

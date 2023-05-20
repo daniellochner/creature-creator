@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [DefaultExecutionOrder(1)]
-    public class OptionMenu : Menu
+    public class OptionMenu : OptimizedMenu
     {
         private AudioSource source;
 
@@ -15,21 +14,10 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Awake();
             source = GetComponent<AudioSource>();
         }
-        private void Start()
-        {
-            gameObject.SetActive(false);
-        }
-
         public override void Open(bool instant = false)
         {
-            gameObject.SetActive(true);
             base.Open(instant);
             source.Play();
-        }
-        public override void OnEndClose()
-        {
-            base.OnEndClose();
-            gameObject.SetActive(false);
         }
     }
 }
