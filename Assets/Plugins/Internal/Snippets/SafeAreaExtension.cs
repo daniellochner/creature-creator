@@ -17,27 +17,27 @@ namespace DanielLochner.Assets
 
             if (rectTransform.pivot.x == 1)
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.anchorMin.x * Screen.width);
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.anchorMin.x * Display.main.systemWidth);
             }
             else 
             if (rectTransform.pivot.x == 0)
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (1f - safeAreaRT.anchorMax.x) * Screen.width);
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (1f - safeAreaRT.anchorMax.x) * Display.main.systemWidth);
             }
             else 
             if (rectTransform.pivot.y == 1)
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.anchorMin.y * Screen.height);
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.anchorMin.y * Display.main.systemHeight);
             }
             else
             if (rectTransform.pivot.y == 0)
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1f - safeAreaRT.anchorMax.y) * Screen.height);
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1f - safeAreaRT.anchorMax.y) * Display.main.systemHeight);
             }
             else
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width);
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Screen.height);
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Display.main.systemWidth);
+                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Display.main.systemHeight);
             }
         }
     }
