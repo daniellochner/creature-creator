@@ -12,9 +12,16 @@ namespace DanielLochner.Assets
         [SerializeField] protected Button ignoreButton;
         [SerializeField] protected Button closeButton;
         [SerializeField] protected GameObject dialog;
+
+        private CanvasGroup canvasGroup;
         #endregion
 
         #region Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            canvasGroup = GetComponent<CanvasGroup>();
+        }
         protected virtual void Start()
         {
             if (!IsOpen)
@@ -48,6 +55,9 @@ namespace DanielLochner.Assets
             base.OnEndClose();
             dialog.SetActive(false);
             animator.enabled = false;
+
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = canvasGroup.blocksRaycasts = false;
         }
         #endregion
     }

@@ -50,10 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDestroy()
         {
-            if (KeybindingsManager.Instance)
-            {
-                KeybindingsManager.Instance.Save();
-            }
+            KeybindingsManager.Instance?.Save();
         }
 
         private void Setup()

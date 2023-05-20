@@ -612,10 +612,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Shutdown()
         {
-            if (SettingsManager.Instance)
-            {
-                SettingsManager.Instance.Save();
-            }
+            SettingsManager.Instance?.Save();
             Application.lowMemory -= OnLowMemory;
         }
 

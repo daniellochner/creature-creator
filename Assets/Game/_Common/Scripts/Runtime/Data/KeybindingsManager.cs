@@ -24,6 +24,21 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        protected override void Start()
+        {
+            base.Start();
+
+            RebindViewPlayers(Data.ViewPlayers);
+            RebindBite(Data.Bite);
+            RebindDrop(Data.Drop);
+            RebindShoot(Data.Shoot);
+            RebindFlap(Data.Flap);
+            RebindJump(Data.Jump);
+            RebindSpit(Data.Spit);
+            RebindGrowl(Data.Growl);
+            RebindSprint(Data.Sprint);
+            RebindNightVision(Data.NightVision);
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();

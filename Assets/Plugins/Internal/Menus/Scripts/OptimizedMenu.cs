@@ -5,6 +5,13 @@ namespace DanielLochner.Assets
     [DefaultExecutionOrder(1)]
     public class OptimizedMenu : Menu
     {
+        private CanvasGroup canvasGroup;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            canvasGroup = GetComponent<CanvasGroup>();
+        }
         protected virtual void Start()
         {
             if (!IsOpen)
@@ -24,6 +31,9 @@ namespace DanielLochner.Assets
             base.OnEndClose();
             gameObject.SetActive(false);
             animator.enabled = false;
+
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = canvasGroup.blocksRaycasts = false;
         }
     }
 }
