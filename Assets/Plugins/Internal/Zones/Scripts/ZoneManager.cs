@@ -10,6 +10,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private string playerTag;
         private Zone currentZone;
+        private Zone notifiedZone;
         #endregion
 
         #region Properties
@@ -30,9 +31,10 @@ namespace DanielLochner.Assets
             zone.onEnter?.Invoke();
             currentZone = zone;
 
-            if (notify)
+            if (notify && zone != notifiedZone)
             {
                 NotificationsManager.Notify(LocalizationUtility.Localize("zone_enter", zone.name));
+                notifiedZone = zone;
             }
         }
         public void ExitCurrentZone(Vector3 exitPosition)
