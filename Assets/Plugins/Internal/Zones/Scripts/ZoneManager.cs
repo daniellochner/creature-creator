@@ -9,8 +9,7 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private string playerTag;
-        private Zone currentZone;
-        private Zone notifiedZone;
+        private Zone currentZone, notifiedZone;
         #endregion
 
         #region Properties

@@ -828,7 +828,9 @@ public class FlexibleColorPicker : MonoBehaviour {
         modeDropdown.value = (int)mode;
     }
 
-
+    public void SetStaticMode(bool mode) {
+        staticMode = mode;
+    }
 
 
 

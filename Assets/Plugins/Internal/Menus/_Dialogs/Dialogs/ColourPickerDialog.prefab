@@ -340,6 +340,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4530849858547861086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6881,6 +6882,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1150392384908297673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7289,6 +7291,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7146146882255495003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7732,6 +7735,7 @@ GameObject:
   - component: {fileID: 4912905919689308582}
   - component: {fileID: 4912905919689308583}
   - component: {fileID: 4912905919689308576}
+  - component: {fileID: 1959921021645295861}
   m_Layer: 5
   m_Name: FlexibleColorPicker
   m_TagString: Untagged
@@ -7907,6 +7911,39 @@ MonoBehaviour:
     a:
       range: {x: 0, y: 1}
       overrideStatic: 0
+--- !u!114 &1959921021645295861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4912905919689308578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1faf7b026177a64fb1d6af18a6c7818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStandalone:
+    m_PersistentCalls:
+      m_Calls: []
+  onHandheld:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4912905919689308576}
+        m_TargetAssemblyTypeName: FlexibleColorPicker, Assembly-CSharp-firstpass
+        m_MethodName: SetStaticMode
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onConsole:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4912905919720646636
 GameObject:
   m_ObjectHideFlags: 0
@@ -8276,6 +8313,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6157112898901516941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8515,6 +8553,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4391511938180392594
 MonoBehaviour:
   m_ObjectHideFlags: 0
