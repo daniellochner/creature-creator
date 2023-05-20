@@ -4,6 +4,14 @@ namespace DanielLochner.Assets
 {
     public static class TransformUtility
     {
+        public static void ExpandTo(this RectTransform rectTransform, RectTransform parent)
+        {
+            rectTransform.SetParent(parent, false);
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = rectTransform.offsetMax = Vector2.zero;
+        }
+
         public static void DestroyChildren(this Transform transform)
         {
             while (transform.childCount > 0)

@@ -100,8 +100,8 @@ namespace Crystal
         Rect LastSafeArea = new Rect (0, 0, 0, 0);
         Vector2Int LastScreenSize = new Vector2Int (0, 0);
         ScreenOrientation LastOrientation = ScreenOrientation.AutoRotation;
-        [SerializeField] bool ConformX = true;  // Conform to screen safe area on X-axis (default true, disable to ignore)
-        [SerializeField] bool ConformY = true;  // Conform to screen safe area on Y-axis (default true, disable to ignore)
+        [SerializeField] public bool ConformX = true;  // Conform to screen safe area on X-axis (default true, disable to ignore)
+        [SerializeField] public bool ConformY = true;  // Conform to screen safe area on Y-axis (default true, disable to ignore)
         [SerializeField] bool Logging = false;  // Conform to screen safe area on Y-axis (default true, disable to ignore)
 
         void Awake ()
@@ -122,7 +122,7 @@ namespace Crystal
             Refresh ();
         }
 
-        void Refresh ()
+        public void Refresh ()
         {
             Rect safeArea = GetSafeArea ();
 
@@ -137,11 +137,11 @@ namespace Crystal
                 LastScreenSize.y = Screen.height;
                 LastOrientation = Screen.orientation;
 
-                ApplySafeArea (safeArea);
+                Apply (safeArea);
             }
         }
 
-        Rect GetSafeArea ()
+        public Rect GetSafeArea ()
         {
             Rect safeArea = Screen.safeArea;
 
@@ -185,7 +185,7 @@ namespace Crystal
             return safeArea;
         }
 
-        void ApplySafeArea (Rect r)
+        public void Apply (Rect r)
         {
             LastSafeArea = r;
 
