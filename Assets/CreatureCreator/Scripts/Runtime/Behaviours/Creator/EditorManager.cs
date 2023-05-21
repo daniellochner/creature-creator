@@ -655,21 +655,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 creatureData = SaveUtility.Load<CreatureData>(filePath);
             }
 
-            if (creatureData != null && IsValidName(creatureData.Name))
+            if (CanLoadCreature(creatureData, out string errorTitle, out string errorMessage))
             {
-                if (CanLoadCreature(creatureData, out string errorMessage))
-                {
-                    Save(creatureData);
-                    Load(creatureData);
-                }
-                else
-                {
-                    InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
-                }
+                Save(creatureData);
+                Load(creatureData);
             }
             else
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("cc_invalid-creature"), LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid"));
+                InformationDialog.Inform(errorTitle, errorMessage);
             }
         }
         public void TryExport()
@@ -855,8 +848,19 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public bool CanLoadCreature(CreatureData creatureData, out string errorMessage)
+        public bool CanLoadCreature(CreatureData creatureData, out string errorTitle, out string errorMessage)
         {
+            #region Invalid
+            if (creatureData == null || !IsValidName(creatureData.Name))
+            {
+                errorTitle = LocalizationUtility.Localize("cc_invalid-creature");
+                errorMessage = LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid");
+
+                return false;
+            }
+            #endregion
+
+            #region Unavailable
             // Load Conditions
             Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", creatureData.PatternID);
             bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode || string.IsNullOrEmpty(creatureData.PatternID);
@@ -924,6 +928,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_body-parts"));
             }
 
+            errorTitle = LocalizationUtility.Localize("cc_creature-unavailable");
             errorMessage = LocalizationUtility.Localize("cc_cannot-load-creature_reason", creatureData.Name) + "\n";
             if (errors.Count > 0)
             {
@@ -937,6 +942,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return true;
             }
+            #endregion
         }
         public bool CanAddBodyPart(string bodyPartID)
         {
@@ -1480,7 +1486,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureUI.name}.dat"), creatureEncryptionKey.Value);
 
-                bool canLoadCreature = CanLoadCreature(creatureData, out string errorMessage);
+                bool canLoadCreature = CanLoadCreature(creatureData, out string errorTitle, out string errorMessage);
 
                 // Button
                 creatureUI.ErrorButton.gameObject.SetActive(!canLoadCreature);
@@ -1489,7 +1495,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     creatureUI.ErrorButton.onClick.RemoveAllListeners();
                     creatureUI.ErrorButton.onClick.AddListener(delegate
                     {
-                        InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unavailable"), errorMessage);
+                        InformationDialog.Inform(errorTitle, errorMessage);
                     });
                 }
 
