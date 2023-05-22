@@ -65,6 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetDebugMode(Data.DebugMode);
             SetDepthOfField(Data.DepthOfField);
             SetMotionBlur(Data.MotionBlur);
+            SetOptimizeOtherCreatures(Data.OptimizeOtherCreatures);
 
             SetMasterVolume(Data.MasterVolume);
             SetMusicVolume(Data.MusicVolume);
@@ -417,6 +418,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
             Data.MotionBlur = motionBlur;
+        }
+        public void SetOptimizeOtherCreatures(bool optimizeCreatures)
+        {
+            Data.OptimizeOtherCreatures = optimizeCreatures;
         }
 
         private void OptimizeForMobile()

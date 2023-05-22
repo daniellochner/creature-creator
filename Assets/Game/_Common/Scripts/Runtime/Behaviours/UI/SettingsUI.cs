@@ -38,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Toggle depthOfFieldToggle;
         [SerializeField] private Toggle motionBlurToggle;
+        [SerializeField] private Toggle optimizeOtherCreaturesToggle;
         [SerializeField] private ParticleSystem[] ambientParticles;
 
         [Header("Audio")]
@@ -335,6 +336,13 @@ namespace DanielLochner.Assets.CreatureCreator
             motionBlurToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetMotionBlur(isOn);
+            });
+
+            // Optimize Creatures
+            optimizeOtherCreaturesToggle.SetIsOnWithoutNotify(SettingsManager.Data.OptimizeOtherCreatures);
+            optimizeOtherCreaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetOptimizeOtherCreatures(isOn);
             });
             #endregion
 
