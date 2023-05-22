@@ -7,61 +7,58 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class BattleManager : NetworkSingleton<BattleManager>
+    public class BattleManager : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI roundText;
         [SerializeField] private TextMeshProUGUI remainingText;
-        [SerializeField] private GameObject battleInfo;
+        [SerializeField] private Transform rounds;
         [SerializeField] private AudioSource bellAS;
         [SerializeField] private AudioSource victoryAS;
-        [SerializeField] private Transform[] rounds;
 
+        private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);
         private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
         #endregion
 
         #region Properties
-        public bool InBattle => round.Value >= 0 && round.Value < rounds.Length;
+        public bool InBattle => round.Value >= 0 && round.Value < rounds.childCount;
         #endregion
 
         #region Methods
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
             round.OnValueChanged += OnRoundChanged;
             remaining.OnValueChanged += OnRemainingChanged;
         }
         private void Start()
         {
-            battleInfo.SetActive(InBattle);
-            OnRoundChanged(0, round.Value);
-            OnRemainingChanged(0, remaining.Value);
+            if (WorldManager.Instance.World.EnablePVE || complete.Value)
+            {
+                HideBattle();
+            }
+            else
+            {
+                OnRoundChanged(0, round.Value);
+                OnRemainingChanged(0, remaining.Value);
+            }
         }
 
         public void TryBattle()
         {
             BattleServerRpc();
         }
-        [ServerRpc(RequireOwnership = false)]
-        private void BattleServerRpc()
-        {
-            if (!InBattle)
-            {
-                StartCoroutine(BattleRoutine());
-            }
-        }
+
         private IEnumerator BattleRoutine()
         {
-            battleInfo.SetActive(true);
             round.Value = 0;
 
-            for (int i = 0; i < rounds.Length; ++i)
+            for (int i = 0; i < rounds.childCount; ++i)
             {
                 StartRoundClientRpc();
 
                 List<CreatureNonPlayer> spawned = SpawnEnemies(i);
-                yield return new WaitUntil(() => 
+                yield return new WaitUntil(() =>
                 {
                     int r = 0;
                     foreach (CreatureNonPlayer npc in spawned)
@@ -79,41 +76,38 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 round.Value++;
             }
+            complete.Value = true;
 
             WinClientRpc();
         }
 
-        [ClientRpc]
-        private void WinClientRpc()
+        [ServerRpc(RequireOwnership = false)]
+        private void BattleServerRpc()
         {
-            battleInfo.SetActive(false);
-            victoryAS.Play();
-#if USE_STATS
-            StatsManager.Instance.UnlockAchievement("ACH_GLADIATOR");
-#endif
-
-            MMVibrationManager.Haptic(HapticTypes.Success);
-        }
+            if (!InBattle) StartCoroutine(BattleRoutine());
+        }      
         [ClientRpc]
         private void StartRoundClientRpc()
         {
-            battleInfo.SetActive(true);
             bellAS.Play();
         }
+        [ClientRpc]
+        private void WinClientRpc()
+        {
+            victoryAS.Play();
+            MMVibrationManager.Haptic(HapticTypes.Success);
 
-        private void OnRoundChanged(int oldRound, int newRound)
-        {
-            roundText.SetArguments(newRound + 1, rounds.Length);
-        }
-        private void OnRemainingChanged(int oldRemaining, int newRemaining)
-        {
-            remainingText.SetArguments(newRemaining);
+#if USE_STATS
+            StatsManager.Instance.CompletedBattles++;
+#endif
+
+            HideBattle();
         }
 
         private List<CreatureNonPlayer> SpawnEnemies(int round)
         {
             List<CreatureNonPlayer> spawned = new List<CreatureNonPlayer>();
-            foreach (AnimalSpawner spawner in rounds[round].GetComponentsInChildren<AnimalSpawner>())
+            foreach (AnimalSpawner spawner in rounds.GetChild(round).GetComponentsInChildren<AnimalSpawner>())
             {
                 spawner.Spawn();
 
@@ -122,6 +116,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 spawned.Add(spawner.SpawnedNPC.GetComponent<CreatureNonPlayer>());
             }
             return spawned;
+        }
+        private void HideBattle()
+        {
+            foreach (Transform t in transform) { t.gameObject.SetActive(false); }
+        }
+
+        private void OnRoundChanged(int oldRound, int newRound)
+        {
+            roundText.SetArguments(newRound + 1, rounds.childCount);
+        }
+        private void OnRemainingChanged(int oldRemaining, int newRemaining)
+        {
+            remainingText.SetArguments(newRemaining);
         }
         #endregion
     }

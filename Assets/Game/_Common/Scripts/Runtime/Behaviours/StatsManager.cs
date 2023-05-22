@@ -53,6 +53,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => GetStat("STA_KILLS", 0);
             set => SetStat("STA_KILLS", value, new StatAchievement("ACH_RAMPAGE", 100));
         }
+        public int CompletedBattles
+        {
+            get => GetStat("STA_COMPLETED_BATTLES", 0);
+            set => SetStat("STA_COMPLETED_BATTLES", value, new StatAchievement("ACH_GLADIATOR", 10));
+        }
 
         public int NumAchievementsUnlocked
         {
