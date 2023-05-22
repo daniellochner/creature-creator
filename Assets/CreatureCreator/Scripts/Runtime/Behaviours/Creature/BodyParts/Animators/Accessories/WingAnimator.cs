@@ -7,8 +7,11 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class WingAnimator : BodyPartAnimator
     {
+        #region Fields
         private Animator animator;
+        #endregion
 
+        #region Methods
         protected override void Initialize()
         {
             base.Initialize();
@@ -19,5 +22,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             animator.SetTrigger("Flap");
         }
+        #endregion
     }
 }

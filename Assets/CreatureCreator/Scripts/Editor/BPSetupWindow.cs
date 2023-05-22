@@ -546,6 +546,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     return typeof(TailAnimator);
                 case "Wing":
                     return typeof(WingAnimator);
+                case "Hand":
+                case "Foot":
+                    return typeof(ExtremityAnimator);
             }
             return typeof(BodyPartAnimator);
         }

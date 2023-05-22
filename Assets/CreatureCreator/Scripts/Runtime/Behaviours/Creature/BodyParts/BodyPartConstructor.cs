@@ -65,7 +65,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public Material BodyPartPrimaryMat { get; private set; }
         public Material BodyPartSecondaryMat { get; private set; }
 
-        public bool IsFlipped { get; set; }
+        public bool IsFlipped
+        {
+            get; set;
+        }
+        public bool IsVisible
+        {
+            get => gameObject.activeSelf;
+        }
 
         public bool CanOverridePrimary
         {
@@ -441,7 +448,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         materials[j].shader = Shader.Find("Standard");
                     }
 
-                    materials[j].enableInstancing = true;
+                    //materials[j].enableInstancing = true;
                 }
             }
             Renderer.materials = materials;

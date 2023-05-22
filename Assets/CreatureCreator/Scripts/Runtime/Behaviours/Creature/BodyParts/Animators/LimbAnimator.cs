@@ -15,10 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         protected Transform target, limb;
         protected ChainIKConstraint limbIK; //protected TwoBoneIKConstraint limbIK;
-        
-        //protected Vector3[] defaultBonePositions;
-        //protected Quaternion[] defaultBoneRotations;
-        //protected Quaternion defaultExtremityRotation;
         #endregion
 
         #region Properties
@@ -27,7 +23,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Transform Target => target;
         public ChainIKConstraint LimbIK => limbIK;
-        //public Vector3[] DefaultPositions => defaultBonePositions;
         #endregion
 
         #region Methods
