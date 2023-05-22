@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return 160 * Mathf.RoundToInt((Display.main.systemWidth / Screen.dpi) / 2f);
+                return 160 * Mathf.RoundToInt((/*Display.main.systemWidth*/Screen.safeArea.width / Screen.dpi) / 3f);
             }
         }
         #endregion
@@ -123,12 +123,12 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Data.IsPremium) return;
 
             bannerAd?.Destroy();
-            bannerAd = new BannerView(BannerAdUnitId, AdSize.Banner/*AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth)*/, AdPosition.Top);
+            bannerAd = new BannerView(BannerAdUnitId, /*AdSize.Banner*/AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Top);
 
             bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
             bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
 
-            bannerAd.LoadAd(new AdRequest.Builder().Build());
+            bannerAd.LoadAd(new AdRequest());
             bannerAd.Hide();
         }
 
@@ -162,7 +162,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsRewardAdLoaded) return;
 
-            RewardedAd.Load(RewardAdUnitId, new AdRequest.Builder().Build(), delegate (RewardedAd ad, LoadAdError error) 
+            RewardedAd.Load(RewardAdUnitId, new AdRequest(), delegate (RewardedAd ad, LoadAdError error) 
             {
                 rewardAd = ad;
 
