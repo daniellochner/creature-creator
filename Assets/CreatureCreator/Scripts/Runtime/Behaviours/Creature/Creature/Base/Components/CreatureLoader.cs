@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(CreatureConstructor))]
+    [RequireComponent(typeof(CreatureConstructor), typeof(CreatureOptimizer))]
     public class CreatureLoader : NetworkBehaviour
     {
         #region Fields
@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         private CreatureConstructor Constructor { get; set; }
+        private CreatureOptimizer Optimizer { get; set; }
 
         public Action OnShow { get; set; }
         public Action OnHide { get; set; }
@@ -37,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
+            Optimizer = GetComponent<CreatureOptimizer>();
         }
         private void Update()
         {
@@ -105,6 +107,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor.Body.gameObject.SetActive(true);
             Constructor.Construct(data);
             OnShow?.Invoke();
+
+            Optimizer.Optimize();
         }
         #endregion
 

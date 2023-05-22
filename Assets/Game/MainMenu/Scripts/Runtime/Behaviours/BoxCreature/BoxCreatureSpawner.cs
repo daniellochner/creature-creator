@@ -148,11 +148,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             spawnerAudioSource.PlayOneShot(spawnAudioClip);
 
-            Quaternion rotation = boxCreaturesRoot.rotation * Quaternion.Euler(Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset));
-            BoxCreature boxCreature = Instantiate(boxCreaturePrefab, boxCreaturesRoot.position, rotation, boxCreaturesRoot);
+            this.InvokeAtEndOfFrame(delegate
+            {
+                Quaternion rotation = boxCreaturesRoot.rotation * Quaternion.Euler(Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset), Random.Range(-rotationOffset, rotationOffset));
+                BoxCreature boxCreature = Instantiate(boxCreaturePrefab, boxCreaturesRoot.position, rotation, boxCreaturesRoot);
 
-            CreatureData creature = JsonUtility.FromJson<CreatureData>(creatures[index++ % creatures.Count]);
-            boxCreature.Spawn(creature);
+                CreatureData creature = JsonUtility.FromJson<CreatureData>(creatures[index++ % creatures.Count]);
+                boxCreature.Spawn(creature);
+            });
         }
         #endregion
 

@@ -37,6 +37,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             #endregion
 
+            creatureConstructor.GetComponent<CreatureOptimizer>().Optimize();
+
             this.InvokeOverTime(delegate (float progress)
             {
                 transform.localScale = Vector3.one * Mathf.Lerp(0, 1, progress);

@@ -53,6 +53,8 @@ namespace DanielLochner.Assets.CreatureCreator
             //    SetupLimbRagdoll(limb.FlippedLimb);
             //}
 
+            ragdoll.GetComponent<CreatureOptimizer>().Optimize();
+
             return ragdoll;
         }
 
