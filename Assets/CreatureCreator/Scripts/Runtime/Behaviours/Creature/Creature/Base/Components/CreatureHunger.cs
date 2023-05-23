@@ -15,11 +15,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private NetworkVariable<float> hunger = new NetworkVariable<float>(1f);
 
+        [SerializeField] private float hungerHealThreshold = 0.9f;
         [SerializeField] private float hungerDepletionRate = 1f / 1200f;
         [SerializeField] private float healthTickRate = 1f;
         [SerializeField] private float healthTickDamage = 5f;
+        [SerializeField] private float healthTickHeal = 10f;
+        [SerializeField] private float healFromHungerCooldown = 10f;
 
         private Coroutine hungerDepletingCoroutine;
+        private float timeLeftToHealFromHunger;
         #endregion
 
         #region Properties
@@ -34,14 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (IsServer)
                 {
-                    float prev = hunger.Value;
-                    float next = Mathf.Clamp01(value);
-
-                    if (next == 1f)
-                    {
-                        Health.HealthPercentage = 1f;
-                    }
-                    hunger.Value = next;
+                    hunger.Value = Mathf.Clamp01(value);
                 }
                 else
                 {
@@ -61,6 +58,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             hunger.OnValueChanged += UpdateHunger;
             hunger.SetDirty(true);
+
+            if (IsServer)
+            {
+                Health.OnTakeDamage += delegate
+                {
+                    timeLeftToHealFromHunger = healFromHungerCooldown;
+                };
+            }
+        }
+        private void Update()
+        {
+            if (IsServer && timeLeftToHealFromHunger > 0)
+            {
+                timeLeftToHealFromHunger -= Time.deltaTime;
+            }
         }
 
         [ServerRpc]
@@ -73,16 +85,15 @@ namespace DanielLochner.Assets.CreatureCreator
             OnHungerChanged?.Invoke(Hunger);
         }
 
-        public void StartDepletingHunger()
+        public void StartHunger()
         {
-            if (WorldManager.Instance.World.CreativeMode) return;
-
-            StopDepletingHunger();
+            StopHunger();
 
             Hunger = 1f;
             hungerDepletingCoroutine = StartCoroutine(HungerDepletionRoutine(hungerDepletionRate, healthTickRate, healthTickDamage));
+            timeLeftToHealFromHunger = 0f;
         }
-        public void StopDepletingHunger()
+        public void StopHunger()
         {
             if (hungerDepletingCoroutine != null)
             {
@@ -92,11 +103,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator HungerDepletionRoutine(float hungerDepletionRate, float healthTickRate, float healthTickDamage)
         {
-            if (hungerDepletionRate <= 0)
-            {
-                yield break;
-            }
-
             while (!Health.IsDead)
             {
                 if (Hunger <= 0)
@@ -105,6 +111,16 @@ namespace DanielLochner.Assets.CreatureCreator
                     yield return new WaitForSeconds(1f / healthTickRate);
                 }
                 else
+                if (Hunger > hungerHealThreshold)
+                {
+                    if (timeLeftToHealFromHunger <= 0)
+                    {
+                        Health.Health += healthTickHeal;
+                    }
+                    yield return new WaitForSeconds(1f / healthTickRate);
+                }
+                else 
+                if (!WorldManager.Instance.World.CreativeMode && hungerDepletionRate > 0)
                 {
                     Hunger -= hungerDepletionRate;
                     yield return new WaitForSeconds(1f);
