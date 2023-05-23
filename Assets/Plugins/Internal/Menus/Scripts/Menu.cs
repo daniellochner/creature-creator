@@ -21,10 +21,7 @@ namespace DanielLochner.Assets
             get => isOpen;
             set
             {
-                if (animator != null)
-                {
-                    animator.SetBool("IsOpen", isOpen = value);
-                }
+                animator?.SetBool("IsOpen", isOpen = value);
             }
         }
 
@@ -36,7 +33,10 @@ namespace DanielLochner.Assets
         protected virtual void Awake()
         {
             animator = GetComponent<Animator>();
-            animator.SetBool("IsOpenByDefault", IsOpen = isOpen); // Set to the default value in the inspector.
+        }
+        protected virtual void OnEnable()
+        {
+            animator.SetBool("IsOpenByDefault", IsOpen = IsOpen); // Set to the default value in the inspector.
         }
 
         public virtual void Open(bool instant = false)
