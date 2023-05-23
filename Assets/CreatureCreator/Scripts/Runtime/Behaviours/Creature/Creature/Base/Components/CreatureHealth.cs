@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using DamageNumbersPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,18 +11,25 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureConstructor))]
     public class CreatureHealth : PlayerHealth
     {
+        #region Fields
         [SerializeField] private PlayerEffects.Sound[] takeDamageSounds;
         [SerializeField] private float damageTime;
         [SerializeField] private Material damageMaterial;
+        [SerializeField] private DamageNumber damagePopupPrefab;
+
         private Rigidbody rb;
 
         private Coroutine damageCoroutine;
+        #endregion
 
+        #region Properties
         public CreatureConstructor Constructor { get; private set; }
         public PlayerEffects Effects { get; private set; }
 
         public override float MaxHealth => Constructor.Statistics.Health;
+        #endregion
 
+        #region Methods
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
@@ -39,6 +47,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Effects.PlaySound(takeDamageSounds);
                 }
+                damagePopupPrefab.Spawn(Constructor.Body.position, damage);
+
                 if (damageCoroutine == null)
                 {
                     damageCoroutine = StartCoroutine(DamageRoutine());
@@ -71,5 +81,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             damageCoroutine = null;
         }
+        #endregion
     }
 }
