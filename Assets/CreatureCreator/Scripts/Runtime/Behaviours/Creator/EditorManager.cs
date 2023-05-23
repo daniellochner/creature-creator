@@ -107,7 +107,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private List<PatternUI> patternsUI = new List<PatternUI>();
         private string creaturesDirectory = null; // null because Application.persistentDataPath cannot be called during serialization.
         private bool isVisible = true, isEditing = true;
-        private bool isUpdatingLoadableCreatures;
         private Coroutine visibleCoroutine;
         private CreatureUI currentCreatureUI;
 
@@ -305,10 +304,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath, creatureEncryptionKey.Value);
                 if (creatureData != null)
                 {
-                    AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
+                    CreatureUI creatureUI = AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
+                    UpdateLoadableCreatureUI(creatureUI);
                 }
             }
-            UpdateLoadableCreatures();
             UpdateNoCreatures();
 
             // Other
@@ -554,11 +553,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryLoad()
         {
-            if (isUpdatingLoadableCreatures)
-            {
-                return;
-            }
-
             string creatureName = default;
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
@@ -1476,39 +1470,38 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         /// <summary>
-        /// Convert to a routine to prevent lag spikes when entering the platform!
+        /// Use a coroutine to prevent lag spikes when entering a platform!
         /// </summary>
         private IEnumerator UpdateLoadableCreaturesRoutine()
         {
-            isUpdatingLoadableCreatures = true;
-
             foreach (CreatureUI creatureUI in creaturesUI)
             {
-                CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureUI.name}.dat"), creatureEncryptionKey.Value);
-
-                bool canLoadCreature = CanLoadCreature(creatureData, out string errorTitle, out string errorMessage);
-
-                // Button
-                creatureUI.ErrorButton.gameObject.SetActive(!canLoadCreature);
-                if (!canLoadCreature)
-                {
-                    creatureUI.ErrorButton.onClick.RemoveAllListeners();
-                    creatureUI.ErrorButton.onClick.AddListener(delegate
-                    {
-                        InformationDialog.Inform(errorTitle, errorMessage);
-                    });
-                }
-
-                // Background
-                Color colour = canLoadCreature ? Color.white : Color.black;
-                colour.a = 0.25f;
-                creatureUI.SelectToggle.targetGraphic.color = colour;
-                creatureUI.SelectToggle.interactable = canLoadCreature;
-
+                UpdateLoadableCreatureUI(creatureUI);
                 yield return null;
             }
+        }
+        private void UpdateLoadableCreatureUI(CreatureUI creatureUI)
+        {
+            CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureUI.name}.dat"), creatureEncryptionKey.Value);
 
-            isUpdatingLoadableCreatures = false;
+            bool canLoadCreature = CanLoadCreature(creatureData, out string errorTitle, out string errorMessage);
+
+            // Button
+            creatureUI.ErrorButton.gameObject.SetActive(!canLoadCreature);
+            if (!canLoadCreature)
+            {
+                creatureUI.ErrorButton.onClick.RemoveAllListeners();
+                creatureUI.ErrorButton.onClick.AddListener(delegate
+                {
+                    InformationDialog.Inform(errorTitle, errorMessage);
+                });
+            }
+
+            // Background
+            Color colour = canLoadCreature ? Color.white : Color.black;
+            colour.a = 0.25f;
+            creatureUI.SelectToggle.targetGraphic.color = colour;
+            creatureUI.SelectToggle.interactable = canLoadCreature;
         }
 
         public void SetEditing(bool e)
