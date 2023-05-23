@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ExitCrackCinematic exitCrackCinematic;
         [Space]
         [SerializeField] private Platform raftPlatform;
-        [SerializeField] private TriggerRegion water;
+        [SerializeField] private TrackRegion water;
         [SerializeField] private Zone beach;
         #endregion
 
@@ -34,7 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 arriveOnRaftCinematic.Begin();
                 raftPlatform.TeleportTo(false);
 
-                water.OnTriggerEnter(Player.Instance.Collider.Hitbox);
+                water.OnTrack(Player.Instance.Collider.Hitbox);
                 ZoneManager.Instance.EnterZone(beach, false);
 
                 if (!HasRequestedReview)
