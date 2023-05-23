@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (animalAI.CanFollow)
                 {
-                    if (animalAI.GetState<AnimalAI.Following>("FOL").Target == null)
+                    if (animalAI.Target == null)
                     {
                         animalAI.Follow(obj.transform);
                     }

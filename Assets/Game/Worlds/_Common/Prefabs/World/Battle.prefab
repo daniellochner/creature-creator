@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7650900183667860850}
   - component: {fileID: 3680544027966776058}
-  - component: {fileID: 441532212564530038}
+  - component: {fileID: 544542282150704302}
+  - component: {fileID: 4250629450943641333}
   - component: {fileID: 4920716292131291601}
   m_Layer: 0
-  m_Name: Trigger
+  m_Name: Region
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +48,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &441532212564530038
+--- !u!114 &544542282150704302
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,56 +57,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 7314886776373001502}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 052aa47d2624da84584299e43cd692e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerable:
+  width: 0
+  length: 0
+--- !u!114 &4250629450943641333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7314886776373001502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  region: {fileID: 3680544027966776058}
+  trackable:
   - Player/Local
+  - Player/Remote
   ignored: []
-  onEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7445643652585618780}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.BattleManager,
-          Assembly-CSharp
-        m_MethodName: TryBattle
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7445643653960065709}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  onExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7445643653960065709}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  entered: []
+  tracked: []
 --- !u!114 &4920716292131291601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,6 +174,9 @@ MonoBehaviour:
   rounds: {fileID: 7445643653617153978}
   bellAS: {fileID: 7445643652585618782}
   victoryAS: {fileID: 7445643652585618777}
+  region: {fileID: 4250629450943641333}
+  bounds: {fileID: 544542282150704302}
+  info: {fileID: 7445643653960065709}
 --- !u!82 &7445643652585618782
 AudioSource:
   m_ObjectHideFlags: 0

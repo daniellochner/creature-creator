@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8284196428221533938}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &8268638009676689784
 SphereCollider:
@@ -58,11 +58,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  region: {fileID: 0}
+  region: {fileID: 8268638009676689784}
   trackable:
   - Player/Local
   - Player/Remote
   ignored: []
+  onTrack:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoseTrackOf:
+    m_PersistentCalls:
+      m_Calls: []
   tracked: []
 --- !u!1 &6504072470239105101
 GameObject:
@@ -74,7 +80,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6401417207488651825}
   - component: {fileID: 7876804352719277741}
-  - component: {fileID: 630821494742610286}
+  - component: {fileID: 4673372709371492310}
   m_Layer: 20
   m_Name: IgnoreTrigger
   m_TagString: Untagged
@@ -95,7 +101,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8284196428221533938}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &7876804352719277741
 SphereCollider:
@@ -110,7 +116,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 12
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &630821494742610286
+--- !u!114 &4673372709371492310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,14 +125,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6504072470239105101}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerable:
+  region: {fileID: 7876804352719277741}
+  trackable:
   - Player/Local
   - Player/Remote
   ignored: []
-  onEnter:
+  onTrack:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4063777470767587221}
@@ -142,10 +149,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onExit:
+  onLoseTrackOf:
     m_PersistentCalls:
       m_Calls: []
-  entered: []
+  tracked: []
 --- !u!1001 &7633535019909575460
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -466,7 +473,7 @@ MonoBehaviour:
   - rid: 0
   - rid: 1
   - rid: 2
-  ignoreTrigger: {fileID: 630821494742610286}
+  ignoreRegion: {fileID: 4673372709371492310}
   trackRegion: {fileID: 2082952735247441148}
   references:
     version: 2
@@ -525,8 +532,8 @@ MonoBehaviour:
         onFollow:
           m_PersistentCalls:
             m_Calls:
-            - m_Target: {fileID: 8268638009676689784}
-              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+            - m_Target: {fileID: 2082952735247441148}
+              m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
               m_MethodName: set_enabled
               m_Mode: 6
               m_Arguments:
@@ -540,8 +547,8 @@ MonoBehaviour:
         onStopFollowing:
           m_PersistentCalls:
             m_Calls:
-            - m_Target: {fileID: 8268638009676689784}
-              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+            - m_Target: {fileID: 2082952735247441148}
+              m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
               m_MethodName: set_enabled
               m_Mode: 6
               m_Arguments:
@@ -562,7 +569,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

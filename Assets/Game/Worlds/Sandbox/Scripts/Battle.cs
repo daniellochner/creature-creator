@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class BattleManager : NetworkBehaviour
+    public class Battle : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI roundText;
@@ -15,13 +15,22 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Transform rounds;
         [SerializeField] private AudioSource bellAS;
         [SerializeField] private AudioSource victoryAS;
+        [SerializeField] private TrackRegion region;
+        [SerializeField] private Bounds bounds;
+        [SerializeField] private GameObject info;
 
         private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);
         private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
+
+        private List<AnimalLocal> spawned = new List<AnimalLocal>();
         #endregion
 
         #region Properties
+        public TrackRegion Region => region;
+
+        public List<Collider> Players => Region.tracked;
+
         public bool InBattle => round.Value >= 0 && round.Value < rounds.childCount;
         #endregion
 
@@ -33,20 +42,18 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            if (WorldManager.Instance.World.EnablePVE || complete.Value)
+            if (!WorldManager.Instance.World.EnablePVE || complete.Value)
             {
                 HideBattle();
             }
             else
             {
+                region.OnTrack += OnPlayerEnter;
+                region.OnLoseTrackOf += OnPlayerExit;
+
                 OnRoundChanged(0, round.Value);
                 OnRemainingChanged(0, remaining.Value);
             }
-        }
-
-        public void TryBattle()
-        {
-            BattleServerRpc();
         }
 
         private IEnumerator BattleRoutine()
@@ -57,11 +64,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 StartRoundClientRpc();
 
-                List<CreatureNonPlayer> spawned = SpawnEnemies(i);
+                SpawnEnemies(i);
                 yield return new WaitUntil(() =>
                 {
                     int r = 0;
-                    foreach (CreatureNonPlayer npc in spawned)
+                    foreach (AnimalLocal npc in spawned)
                     {
                         if (!npc.Health.IsDead)
                         {
@@ -71,6 +78,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     remaining.Value = r;
                     return (r == 0);
                 });
+                spawned.Clear();
 
                 yield return new WaitForSeconds(1f);
 
@@ -84,7 +92,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void BattleServerRpc()
         {
-            if (!InBattle) StartCoroutine(BattleRoutine());
+            StartCoroutine(BattleRoutine());
         }      
         [ClientRpc]
         private void StartRoundClientRpc()
@@ -104,24 +112,43 @@ namespace DanielLochner.Assets.CreatureCreator
             HideBattle();
         }
 
-        private List<CreatureNonPlayer> SpawnEnemies(int round)
+        private void SpawnEnemies(int round)
         {
-            List<CreatureNonPlayer> spawned = new List<CreatureNonPlayer>();
             foreach (AnimalSpawner spawner in rounds.GetChild(round).GetComponentsInChildren<AnimalSpawner>())
             {
+                spawner.wanderBounds = bounds;
                 spawner.Spawn();
 
-                spawner.SpawnedNPC.GetComponent<AnimalAI>().PVE = true;
+                AnimalAI animalAI = spawner.SpawnedNPC.GetComponent<AnimalAI>();
+                animalAI.PVE = true;
+                animalAI.Battle = this;
 
-                spawned.Add(spawner.SpawnedNPC.GetComponent<CreatureNonPlayer>());
+                spawned.Add(spawner.SpawnedNPC.GetComponent<AnimalLocal>());
             }
-            return spawned;
         }
         private void HideBattle()
         {
             foreach (Transform t in transform) { t.gameObject.SetActive(false); }
         }
 
+        private void OnPlayerEnter(Collider col)
+        {
+            if (col.CompareTag("Player/Local"))
+            {
+                if (!InBattle)
+                {
+                    BattleServerRpc();
+                }
+                info.SetActive(true);
+            }
+        }
+        private void OnPlayerExit(Collider col)
+        {
+            if (col.CompareTag("Player/Local"))
+            {
+                info.SetActive(false);
+            }
+        }
         private void OnRoundChanged(int oldRound, int newRound)
         {
             roundText.SetArguments(newRound + 1, rounds.childCount);

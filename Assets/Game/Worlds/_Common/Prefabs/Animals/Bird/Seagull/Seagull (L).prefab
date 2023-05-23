@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 857639292}
   - component: {fileID: 857639294}
-  - component: {fileID: 857639293}
+  - component: {fileID: 5885828186830155932}
   m_Layer: 20
   m_Name: FrightenTrigger
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2959052427373306998}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &857639294
 SphereCollider:
@@ -46,7 +46,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &857639293
+--- !u!114 &5885828186830155932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,14 +55,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 857639291}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerable:
+  region: {fileID: 857639294}
+  trackable:
   - Player/Local
   - Player/Remote
   ignored: []
-  onEnter:
+  onTrack:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2941841359456031920}
@@ -77,10 +78,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onExit:
+  onLoseTrackOf:
     m_PersistentCalls:
       m_Calls: []
-  entered: []
+  tracked: []
 --- !u!1 &2950853415844939345
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6181681485082244874}
   - component: {fileID: 3506739102350065147}
-  - component: {fileID: 8800687552752952756}
+  - component: {fileID: 1875007341128938219}
   m_Layer: 20
   m_Name: IgnoreTrigger
   m_TagString: Untagged
@@ -112,7 +113,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2959052427373306998}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &3506739102350065147
 SphereCollider:
@@ -127,7 +128,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 7
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8800687552752952756
+--- !u!114 &1875007341128938219
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -136,14 +137,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2950853415844939345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerable:
+  region: {fileID: 3506739102350065147}
+  trackable:
   - Player/Local
   - Player/Remote
   ignored: []
-  onEnter:
+  onTrack:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2941841359456031920}
@@ -159,10 +161,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onExit:
+  onLoseTrackOf:
     m_PersistentCalls:
       m_Calls: []
-  entered: []
+  tracked: []
 --- !u!1001 &2503716476779784200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -340,7 +342,7 @@ MonoBehaviour:
   - rid: 0
   - rid: 1
   - rid: 2
-  ignoreTrigger: {fileID: 8800687552752952756}
+  ignoreRegion: {fileID: 1875007341128938219}
   references:
     version: 2
     RefIds:
@@ -429,7 +431,6 @@ MonoBehaviour:
           volume: 0.5
         - name: Flap6
           volume: 0.5
-        frightenTrigger: {fileID: 857639293}
         dilate: 1
     - rid: 2
       type: {class: AnimalAI/Following, ns: DanielLochner.Assets.CreatureCreator, asm: Assembly-CSharp}
@@ -440,8 +441,8 @@ MonoBehaviour:
         onFollow:
           m_PersistentCalls:
             m_Calls:
-            - m_Target: {fileID: 857639294}
-              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+            - m_Target: {fileID: 5885828186830155932}
+              m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
               m_MethodName: set_enabled
               m_Mode: 6
               m_Arguments:
@@ -467,8 +468,8 @@ MonoBehaviour:
         onStopFollowing:
           m_PersistentCalls:
             m_Calls:
-            - m_Target: {fileID: 857639294}
-              m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+            - m_Target: {fileID: 5885828186830155932}
+              m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
               m_MethodName: set_enabled
               m_Mode: 6
               m_Arguments:

@@ -15,9 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class AnimalAI : StateMachine
     {
         #region Fields
-        [SerializeField] private TriggerRegion ignoreTrigger;
+        [SerializeField] private TrackRegion ignoreRegion;
 
-        private List<TriggerRegion> triggerRegions;
         private List<TrackRegion> trackRegions;
         #endregion
 
@@ -28,6 +27,16 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureNonPlayerLocal Creature { get; set; }
         public NavMeshAgent Agent { get; set; }
 
+        public Transform Target
+        {
+            get;
+            set;
+        }
+        public Battle Battle
+        {
+            get;
+            set;
+        }
         public bool PVE
         {
             get;
@@ -61,11 +70,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature = GetComponent<CreatureNonPlayerLocal>();
             Agent = GetComponent<NavMeshAgent>();
 
-            if (ignoreTrigger != null)
+            if (ignoreRegion != null)
             {
-                triggerRegions = new List<TriggerRegion>(GetComponentsInChildren<TriggerRegion>(true));
                 trackRegions = new List<TrackRegion>(GetComponentsInChildren<TrackRegion>(true));
-                triggerRegions.Remove(ignoreTrigger);
+                trackRegions.Remove(ignoreRegion);
             }
         }
 
@@ -74,15 +82,33 @@ namespace DanielLochner.Assets.CreatureCreator
             Agent.speed *= Creature.Constructor.Statistics.Speed;
         }
 
+        public void SetupTrackRegionBuffer(TrackRegion region)
+        {
+            region.OnTrack += delegate
+            {
+                if (region.tracked.Count == 1)
+                {
+                    (region.Region as SphereCollider).radius *= 1.5f;
+                }
+            };
+            region.OnLoseTrackOf += delegate
+            {
+                if (region.tracked.Count == 0)
+                {
+                    (region.Region as SphereCollider).radius /= 1.5f;
+                }
+            };
+        }
+
         public virtual void Follow(Transform target)
         {
-            GetState<Following>("FOL").Target = target;
+            Target = target;
             ChangeState("FOL");
         }
         public virtual void StopFollowing()
         {
             ChangeState(startStateID);
-            GetState<Following>("FOL").Target = null;
+            Target = null;
         }
 
         public bool IsAnimationState(string state)
@@ -108,14 +134,29 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            foreach (TriggerRegion region in triggerRegions)
-            {
-                region.ignored = ignored;
-            }
             foreach (TrackRegion region in trackRegions)
             {
                 region.ignored = ignored;
             }
+        }
+
+        public Transform MoveToRandomPlayer()
+        {
+            if (Battle.Players.Count > 0)
+            {
+                Transform player = Battle.Players[UnityEngine.Random.Range(0, Battle.Players.Count - 1)].transform;
+                MoveToPosition(player.position);
+                return player;
+            }
+            return null;
+        }
+        public void MoveToPosition(Vector3 position)
+        {
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+            {
+                position = hit.position;
+            }
+            Agent.SetDestination(position);
         }
 
         #region Debug
@@ -192,38 +233,45 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
+                AnimalAI.Agent.ResetPath();
                 idleTimeLeft = wanderCooldown.Random;
-                AnimalAI.Agent.SetDestination(AnimalAI.transform.position);
                 AnimalAI.Creature.Health.OnTakeDamage += OnTakeDamage;
             }
             public override void UpdateLogic()
             {
                 base.UpdateLogic();
-                if (!AnimalAI.IsMovingToPosition && AnimalAI.IsAnimationState("Idling"))
+
+                if (AnimalAI.Battle == null || AnimalAI.Battle.Players.Count == 0)
                 {
-                    TimerUtility.OnTimer(ref idleTimeLeft, wanderCooldown.Random, Time.deltaTime, delegate
+                    if (!AnimalAI.IsMovingToPosition)
                     {
-                        WanderToRandomPosition();
-                    });
+                        TimerUtility.OnTimer(ref idleTimeLeft, wanderCooldown.Random, Time.deltaTime, delegate
+                        {
+                            WanderToRandomPosition();
+                        });
+                    }
+                }
+                else
+                {
+                    if (AnimalAI.Target != null)
+                    {
+                        AnimalAI.Agent.SetDestination(AnimalAI.Target.position);
+                    }
+                    else 
+                    if (AnimalAI.Battle.Players.Count > 0)
+                    {
+                        AnimalAI.Target = AnimalAI.MoveToRandomPlayer();
+                    }
                 }
             }
             public override void Exit()
             {
-                AnimalAI.Agent.SetDestination(AnimalAI.transform.position);
                 AnimalAI.Creature.Health.OnTakeDamage -= OnTakeDamage;
             }
 
-            private void WanderToRandomPosition()
+            public void WanderToRandomPosition()
             {
-                WanderToPosition(wanderBounds?.RandomPointInBounds ?? AnimalAI.transform.position);
-            }
-            private void WanderToPosition(Vector3 position)
-            {
-                if (NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas))
-                {
-                    position = hit.position;
-                }
-                AnimalAI.Agent.SetDestination(position);
+                AnimalAI.MoveToPosition(wanderBounds?.RandomPointInBounds ?? AnimalAI.transform.position);
             }
 
             private void OnTakeDamage(float damage, Vector3 point)
@@ -240,7 +288,6 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private UnityEvent onStopFollowing;
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
-            public Transform Target { get; set; }
 
             private float FollowOffset => AnimalAI.Creature.Constructor.Dimensions.radius + baseFollowOffset;
 
@@ -250,12 +297,15 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void UpdateLogic()
             {
-                Vector3 displacement = Target.position - AnimalAI.transform.position;
-                if (displacement.magnitude > FollowOffset)
+                if (AnimalAI.Target != null)
                 {
-                    Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target
-                    Vector3 target = AnimalAI.transform.position + (displacement - offset);
-                    AnimalAI.Agent.SetDestination(target);
+                    Vector3 displacement = AnimalAI.Target.position - AnimalAI.transform.position;
+                    if (displacement.magnitude > FollowOffset)
+                    {
+                        Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target
+                        Vector3 target = AnimalAI.transform.position + (displacement - offset);
+                        AnimalAI.Agent.SetDestination(target);
+                    }
                 }
             }
             public override void Exit()

@@ -24,9 +24,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (PVE)
             {
-                trackRegion.OnTrack += delegate (Collider col1, Collider col2)
+                SetupTrackRegionBuffer(trackRegion);
+
+                trackRegion.OnTrack += delegate (Collider col)
                 {
-                    CreatureBase creature = col2.GetComponent<CreatureBase>();
+                    CreatureBase creature = col.GetComponent<CreatureBase>();
 
                     List<Holdable> held = new List<Holdable>(creature.Holder.Held.Values);
                     dogBone = held.Find(x => x is DogBone) as DogBone;
@@ -36,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
-                        if ((HasWeapon(creature) || trackRegion.tracked.Count >= 3) && (GetState("SCU") as Scurrying).doghouse != null)
+                        if ((HasWeapon(creature) || trackRegion.tracked.Count >= 3) && GetState<Scurrying>("SCU").doghouse != null)
                         {
                             ChangeState("SCU");
                         }
@@ -136,6 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
             
             public override void Enter()
             {
+                DogAI.Agent.ResetPath();
                 UpdateTarget();
                 barkingCoroutine = DogAI.StartCoroutine(BarkingRoutine());
             }
@@ -151,18 +154,22 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private IEnumerator BarkingRoutine()
             {
-                DogAI.Params.SetBool("Eye_IsGlaring", true);
-                DogAI.Creature.Effects.PlaySound(growlSounds);
-                yield return new WaitForSeconds(growlTime);
-                DogAI.Params.SetBool("Eye_IsGlaring", false);
-
+                yield return GrowlRoutine();
                 while (IsActive)
                 {
-                    yield return DogAI.StartCoroutine(BarkRoutine());
+                    yield return BarkRoutine();
                     yield return new WaitForSeconds(barkDelayBetween.Random);
-
                     UpdateTarget();
                 }
+            }
+
+            private IEnumerator GrowlRoutine()
+            {
+                DogAI.Creature.Effects.PlaySound(growlSounds);
+
+                DogAI.Params.SetBool("Eye_IsGlaring", true);
+                yield return new WaitForSeconds(growlTime);
+                DogAI.Params.SetBool("Eye_IsGlaring", false);
             }
             private IEnumerator BarkRoutine()
             {
@@ -234,7 +241,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Biting : Targeting
         {
-            [SerializeField] private float biteOffset;
+            [SerializeField] private float biteMaxDistance;
             [SerializeField] private float minBiteAngle;
             [SerializeField] private MinMax biteDelay;
             [SerializeField] private float biteRadius;
@@ -250,6 +257,8 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
+                DogAI.Agent.ResetPath();
+
                 bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
                 DogAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
@@ -278,7 +287,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     // Move Closer.
                     float angle = Mathf.Infinity, distance = Mathf.Infinity;
-                    while (angle > minBiteAngle || distance > (TargetDistance + biteOffset))
+                    while (angle > minBiteAngle || distance > (TargetDistance + biteMaxDistance))
                     {
                         UpdateTarget();
                         angle = Vector3.Angle(DogAI.transform.forward, lookDir);

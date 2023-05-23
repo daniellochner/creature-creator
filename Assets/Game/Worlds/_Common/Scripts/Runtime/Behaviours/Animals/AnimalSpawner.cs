@@ -6,8 +6,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class AnimalSpawner : NPCSpawner
     {
         [Header("Scene References")]
-        [SerializeField] private Bounds wanderBounds;
-        [SerializeField] private float scale = 1f;
+        [SerializeField] public Bounds wanderBounds;
+        [SerializeField] public float scale = 1f;
 
         public override void Setup(NetworkObject npc)
         {
@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             animal.Creature.Scaler.Scale(scale);
 
-            AnimalAI.Wandering wandering = animal.GetState("WAN") as AnimalAI.Wandering;
+            AnimalAI.Wandering wandering = animal.GetState<AnimalAI.Wandering>("WAN");
             if (wandering != null)
             {
                 wandering.wanderBounds = wanderBounds;

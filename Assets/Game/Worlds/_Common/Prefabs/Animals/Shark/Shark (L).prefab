@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5593041682936221991}
   - component: {fileID: 1624682590408769744}
-  - component: {fileID: 4990880349595211662}
+  - component: {fileID: 5544650454174584109}
   m_Layer: 20
   m_Name: IgnoreTrigger
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 603483102406388799}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1624682590408769744
 SphereCollider:
@@ -46,7 +46,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 12
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4990880349595211662
+--- !u!114 &5544650454174584109
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,14 +55,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 840106491445129377}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dd7856769368f4c839d490856554b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerable:
+  region: {fileID: 1624682590408769744}
+  trackable:
   - Player/Local
   - Player/Remote
   ignored: []
-  onEnter:
+  onTrack:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1437172670}
@@ -78,10 +79,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onExit:
+  onLoseTrackOf:
     m_PersistentCalls:
       m_Calls: []
-  entered: []
+  tracked: []
 --- !u!1 &5613836067430570196
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 603483102406388799}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &5287057288485283221
 SphereCollider:
@@ -140,11 +141,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1101a6299d69bdd47bc02df7c4b6238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  region: {fileID: 0}
+  region: {fileID: 5287057288485283221}
   trackable:
   - Player/Local
   - Player/Remote
   ignored: []
+  onTrack:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoseTrackOf:
+    m_PersistentCalls:
+      m_Calls: []
   tracked: []
 --- !u!1001 &169331969076154781
 PrefabInstance:
@@ -252,7 +259,7 @@ MonoBehaviour:
   - rid: 2943806374631178244
   - rid: 2943806374631178245
   - rid: 5486954710187114496
-  ignoreTrigger: {fileID: 4990880349595211662}
+  ignoreRegion: {fileID: 5544650454174584109}
   trackRegion: {fileID: 7327758548027677695}
   references:
     version: 2
@@ -279,7 +286,7 @@ MonoBehaviour:
         sm: {fileID: 1437172670}
         trackRegion: {fileID: 7327758548027677695}
         lookAtSmoothing: 5
-        biteOffset: 0.5
+        biteMaxDistance: 1
         minBiteAngle: 5
         biteDelay:
           min: 2

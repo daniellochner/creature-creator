@@ -32,7 +32,6 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private float shockTime;
             [SerializeField] private float minDistanceFromCreature;
             [SerializeField] private PlayerEffects.Sound[] flapSounds;
-            [SerializeField] private TriggerRegion frightenTrigger;
             [SerializeField] private bool dilate;
 
             public BirdAI BirdAI => StateMachine as BirdAI;
@@ -84,10 +83,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 BirdAI.Params.SetBool("Body_IsFlying", false);
                 BirdAI.Animator.GetBehaviour<Animations.Flying>().OnFlap -= OnFlap;
-
-                frightenTrigger.Region.enabled = false;
-                frightenTrigger.Clear();
-                frightenTrigger.Region.enabled = true;
             }
 
             private IEnumerator FlyToPositionRoutine(Vector3 to)

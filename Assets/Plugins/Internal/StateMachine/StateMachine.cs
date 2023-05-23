@@ -1,6 +1,7 @@
 // State Machine
 // Copyright (c) Daniel Lochner
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace DanielLochner.Assets
 
         #region Properties
         public List<BaseState> States => states;
+
+        public BaseState CurrentState => currentState;
         #endregion
 
         #region Methods
@@ -47,13 +50,10 @@ namespace DanielLochner.Assets
             currentStateId = id;
             currentState?.InternalEnter();
         }
-        public BaseState GetState(string id)
-        {
-            return States.Find(x => x.ID == id);
-        }
+
         public T GetState<T>(string id) where T : BaseState
         {
-            return GetState(id) as T;
+            return States.Find(x => x.ID == id) as T;
         }
         #endregion
     }

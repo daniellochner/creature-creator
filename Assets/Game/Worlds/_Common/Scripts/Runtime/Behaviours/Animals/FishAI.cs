@@ -21,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Start();
             if (PVE)
             {
+                SetupTrackRegionBuffer(trackRegion);
+
                 trackRegion.OnLoseTrackOf += delegate
                 {
                     if (Creature.Health.Health <= 0) return;
@@ -54,13 +56,34 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public FishAI FishAI => StateMachine as FishAI;
 
+            public override void Enter()
+            {
+                base.Enter();
+                AnimalAI.Agent.ResetPath();
+            }
             public override void UpdateLogic()
             {
                 base.UpdateLogic();
-                if (!AnimalAI.IsMovingToPosition)
+
+                if (AnimalAI.Battle == null || AnimalAI.Battle.Players.Count == 0)
                 {
-                    current = (current + 1) % waypoints.Length;
-                    FishAI.Agent.SetDestination(waypoints[current].position);
+                    if (!AnimalAI.IsMovingToPosition)
+                    {
+                        current = (current + 1) % waypoints.Length;
+                        FishAI.Agent.SetDestination(waypoints[current].position);
+                    }
+                }
+                else
+                {
+                    if (AnimalAI.Target != null)
+                    {
+                        AnimalAI.Agent.SetDestination(AnimalAI.Target.position);
+                    }
+                    else
+                    if (AnimalAI.Battle.Players.Count > 0)
+                    {
+                        AnimalAI.Target = AnimalAI.MoveToRandomPlayer();
+                    }
                 }
             }
         }
@@ -68,7 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class Biting : Targeting
         {
-            [SerializeField] private float biteOffset;
+            [SerializeField] private float biteMaxDistance;
             [SerializeField] private float minBiteAngle;
             [SerializeField] private MinMax biteDelay;
             [SerializeField] private float biteRadius;
@@ -84,6 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
+                FishAI.Agent.ResetPath();
                 bitingCoroutine = FishAI.StartCoroutine(BitingRoutine());
                 FishAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
@@ -102,9 +126,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     FishAI.Agent.CalculatePath(target.transform.position, path);
                     if (path.status != NavMeshPathStatus.PathComplete)
                     {
-                        FishAI.trackRegion.enabled = false;
                         FishAI.ChangeState("SWI");
-                        FishAI.Invoke(delegate { FishAI.trackRegion.enabled = true; }, 5f);
                     }
                 }
             }
@@ -121,7 +143,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     // Move Closer.
                     float angle = Mathf.Infinity, distance = Mathf.Infinity;
-                    while (angle > minBiteAngle || distance > (TargetDistance + biteOffset))
+                    while (angle > minBiteAngle || distance > (TargetDistance + biteMaxDistance))
                     {
                         UpdateTarget();
                         angle = Vector3.Angle(FishAI.transform.forward, lookDir);

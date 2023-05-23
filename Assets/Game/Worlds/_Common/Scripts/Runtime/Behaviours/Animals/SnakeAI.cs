@@ -21,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (PVE)
             {
+                SetupTrackRegionBuffer(trackRegion);
+
                 trackRegion.OnTrack += delegate
                 {
                     if (currentStateId == "WAN")
@@ -59,6 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
+                SnakeAI.Agent.ResetPath();
                 strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
                 SnakeAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }

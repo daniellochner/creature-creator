@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             BirdAI bird = npc.GetComponent<BirdAI>();
 
-            BirdAI.Flying flying = bird.GetState("FLY") as BirdAI.Flying;
+            BirdAI.Flying flying = bird.GetState<BirdAI.Flying>("FLY");
             if (flying != null)
             {
                 flying.perchPoints = perchPoints;

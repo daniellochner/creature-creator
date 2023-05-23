@@ -88,17 +88,17 @@ namespace DanielLochner.Assets.CreatureCreator
             region.OnLoseTrackOf += OnLoseTrackOf;
         }
 
-        private void OnTrack(Collider col1, Collider col2)
+        private void OnTrack(Collider col)
         {
-            if (col1.CompareTag("Player/Local"))
+            if (col.CompareTag("Player/Local"))
             {
                 UpdateInfo();
                 IsVisible = true;
             }
         }
-        private void OnLoseTrackOf(Collider col1, Collider col2)
+        private void OnLoseTrackOf(Collider col)
         {
-            if (col1.CompareTag("Player/Local"))
+            if (col.CompareTag("Player/Local"))
             {
                 IsVisible = false;
             }

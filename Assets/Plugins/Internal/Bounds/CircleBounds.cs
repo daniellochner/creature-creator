@@ -4,7 +4,7 @@ namespace DanielLochner.Assets
 {
     public class CircleBounds : Bounds
     {
-        [SerializeField] private float radius;
+        [SerializeField] public float radius;
 
         public override Vector3 RandomPointInBounds
         {

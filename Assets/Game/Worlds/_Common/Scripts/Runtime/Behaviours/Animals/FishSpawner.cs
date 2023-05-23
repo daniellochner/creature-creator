@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             FishAI fish = npc.GetComponent<FishAI>();
 
-            FishAI.Swimming swimming = fish.GetState("SWI") as FishAI.Swimming;
+            FishAI.Swimming swimming = fish.GetState<FishAI.Swimming>("SWI");
             if (swimming != null)
             {
                 swimming.current = start;

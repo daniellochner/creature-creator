@@ -21,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (PVE)
             {
+                SetupTrackRegionBuffer(trackRegion);
+
                 trackRegion.OnTrack += delegate
                 {
                     if (currentStateId == "WAN")
@@ -61,6 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
+                CowAI.Agent.ResetPath();
                 CowAI.Agent.speed *= chargeSpeedMultiplier;
 
                 Charge(CowAI.trackRegion.Nearest.transform);

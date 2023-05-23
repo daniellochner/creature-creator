@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets
 {
@@ -14,14 +15,19 @@ namespace DanielLochner.Assets
         [SerializeField] private Collider region;
         [SerializeField] private List<string> trackable;
         [SerializeField] public List<string> ignored;
+        [SerializeField] private UnityEvent<Collider> onTrack = new UnityEvent<Collider>();
+        [SerializeField] private UnityEvent<Collider> onLoseTrackOf = new UnityEvent<Collider>();
+        [Header("Debug")]
         [ReadOnly] public List<Collider> tracked = new List<Collider>();
 
         private List<Collider> toBeRemoved = new List<Collider>();
         #endregion
 
         #region Properties
-        public Action<Collider, Collider> OnTrack { get; set; }
-        public Action<Collider, Collider> OnLoseTrackOf { get; set; }
+        public Collider Region => region;
+
+        public Action<Collider> OnTrack { get; set; }
+        public Action<Collider> OnLoseTrackOf { get; set; }
 
         public Collider Nearest
         {
@@ -70,8 +76,7 @@ namespace DanielLochner.Assets
 
         private void FixedUpdate()
         {
-            HandleTracked();
-            HandleRemoval();
+            HandleRemoved();
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -88,7 +93,7 @@ namespace DanielLochner.Assets
             }
         }
 
-        private void HandleTracked()
+        private void HandleRemoved()
         {
             foreach (Collider col in tracked)
             {
@@ -97,9 +102,6 @@ namespace DanielLochner.Assets
                     toBeRemoved.Add(col);
                 }
             }
-        }
-        private void HandleRemoval()
-        {
             if (toBeRemoved.Count > 0)
             {
                 foreach (Collider col in toBeRemoved)
@@ -115,7 +117,9 @@ namespace DanielLochner.Assets
             if (trackable.Count == 0 || trackable.Contains(col.tag))
             {
                 tracked.Add(col);
-                OnTrack?.Invoke(col, col);
+
+                onTrack?.Invoke(col);
+                OnTrack?.Invoke(col);
             }
         }
         private void LoseTrackOf(Collider col)
@@ -123,7 +127,9 @@ namespace DanielLochner.Assets
             if (tracked.Contains(col))
             {
                 tracked.Remove(col);
-                OnLoseTrackOf?.Invoke(col, col);
+
+                onLoseTrackOf?.Invoke(col);
+                OnLoseTrackOf?.Invoke(col);
             }
         }
         public void LoseTrackOfAll()

@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             DogAI dog = npc.GetComponent<DogAI>();
 
-            DogAI.Scurrying scurrying = dog.GetState("SCU") as DogAI.Scurrying;
+            DogAI.Scurrying scurrying = dog.GetState<DogAI.Scurrying>("SCU");
             if (scurrying != null)
             {
                 scurrying.doghouse = doghouse;
