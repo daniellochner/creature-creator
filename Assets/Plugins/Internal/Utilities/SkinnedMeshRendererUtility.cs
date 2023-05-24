@@ -4,9 +4,10 @@ namespace DanielLochner.Assets
 {
     public static class SkinnedMeshRendererUtility
     {
+        private static Mesh tmpMesh = new Mesh();
+
         public static void RecalculateBounds(this SkinnedMeshRenderer skinnedMeshRenderer)
         {
-            Mesh tmpMesh = new Mesh();
             skinnedMeshRenderer.BakeMesh(tmpMesh);
 
             MinMax minMaxX = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
@@ -46,7 +47,7 @@ namespace DanielLochner.Assets
             Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
             skinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
 
-            Object.Destroy(tmpMesh);
+            tmpMesh.Clear();
         }
     }
 }
