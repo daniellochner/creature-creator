@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839967363280219241}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -54,7 +54,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -4765487963230297516, guid: 1e10aed77731b9241a7ccb248ad236b0, type: 3}
+  - {fileID: 2100000, guid: 756cb2ee28fedc243bdaac61f13034ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -87,8 +87,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 2779539937221731784}
   m_AABB:
-    m_Center: {x: 0, y: -0.7499999, z: 0.0002590604}
-    m_Extent: {x: 0.05, y: 0.75001717, z: 0.050259054}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
   m_DirtyAABB: 0
 --- !u!64 &176249536387234419
 MeshCollider:
@@ -147,7 +147,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3416725675007816995}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 5502838656889801556}
   - component: {fileID: 8606837923996723140}
   - component: {fileID: 1682634223824764349}
-  - component: {fileID: 2881535438965446474}
+  - component: {fileID: 550500259950583620}
   m_Layer: 9
   m_Name: Bone.2
   m_TagString: Untagged
@@ -279,8 +279,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3452143081272334608}
-  m_LocalRotation: {x: 2.646978e-23, y: -0, z: 1, w: -6.950004e-16}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalRotation: {x: 0, y: -0.00000009362675, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: -0.9999999, z: 0.000000059604645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -398,7 +398,7 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
---- !u!1818360609 &2881535438965446474
+--- !u!1818360609 &550500259950583620
 RotationConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -408,7 +408,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: -180}
-  m_RotationOffset: {x: -0.019759728, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -426,7 +426,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 562934529216444012}
-  - component: {fileID: 6970436648952265754}
+  - component: {fileID: -911415675222325277}
   m_Layer: 9
   m_Name: Bone.0
   m_TagString: Untagged
@@ -441,7 +441,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4387412379154648029}
-  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0.00017255412}
+  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0.00017264773}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -450,7 +450,7 @@ Transform:
   m_Father: {fileID: 2779539937221731784}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1183024399 &6970436648952265754
+--- !u!1183024399 &-911415675222325277
 LookAtConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -459,7 +459,7 @@ LookAtConstraint:
   m_GameObject: {fileID: 4387412379154648029}
   m_Enabled: 1
   m_Weight: 1
-  m_RotationAtRest: {x: 359.9915, y: 180, z: 180}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_RotationOffset: {x: 89.98022, y: -0.000008652065, z: 0}
   m_Roll: 0
   m_WorldUpObject: {fileID: 0}
@@ -492,8 +492,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5267539845856118630}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 9173308420340968702}
   - component: {fileID: 5706148786008188589}
   - component: {fileID: 3445320649620117496}
-  - component: {fileID: 4364420367223434754}
+  - component: {fileID: -6882792778411366466}
   m_Layer: 9
   m_Name: Bone.1
   m_TagString: Untagged
@@ -850,8 +850,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9053287741630767089}
-  m_LocalRotation: {x: -0, y: 0.0001724605, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalRotation: {x: 0, y: -0.00000009362675, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: -0.49999994, z: 0.000000029802322}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -968,7 +968,7 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
---- !u!1183024399 &4364420367223434754
+--- !u!1183024399 &-6882792778411366466
 LookAtConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -977,8 +977,8 @@ LookAtConstraint:
   m_GameObject: {fileID: 9053287741630767089}
   m_Enabled: 1
   m_Weight: 1
-  m_RotationAtRest: {x: 2.1093998e-36, y: -3.0332133e-21, z: 180}
-  m_RotationOffset: {x: 270.01978, y: 180, z: 0}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 270, y: 180, z: 0}
   m_Roll: 0
   m_WorldUpObject: {fileID: 0}
   m_UseUpObject: 1

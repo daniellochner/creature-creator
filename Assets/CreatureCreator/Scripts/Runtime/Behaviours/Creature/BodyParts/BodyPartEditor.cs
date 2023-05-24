@@ -21,12 +21,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureEditor CreatureEditor { get; private set; }
-        public BodyPartConstructor BodyPartConstructor { get; private set; }
+        public BodyPartConstructor BodyPartConstructor { get; set; }
         public BodyPartEditor Flipped { get; set; }
 
         public Hover Hover { get; private set; }
         public Scroll Scroll { get; private set; }
-        public Click Click { get; private set; }
         public Drag LDrag { get; private set; }
         public Drag RDrag { get; private set; }
         public Select Select { get; private set; }
@@ -91,7 +90,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Hover = GetComponent<Hover>();
             Scroll = GetComponent<Scroll>();
-            Click = GetComponent<Click>();
             Select = GetComponent<Select>();
 
             Drag[] drags = GetComponents<Drag>();

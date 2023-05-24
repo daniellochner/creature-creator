@@ -1,6 +1,7 @@
 ﻿// Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -349,6 +350,64 @@ namespace DanielLochner.Assets.CreatureCreator
                 toolColliders[i].enabled = isVisible;
             }
             toolColliders[0].enabled = false;
+        }
+
+        [ContextMenu("Remove Constraints")]
+        public void Internal_RemoveConstraints()
+        {
+            LookAtConstraint[] lac = GetComponentsInChildren<LookAtConstraint>(true);
+            for (int i = 0; i < lac.Length; i++)
+            {
+                DestroyImmediate(lac[i], true);
+            }
+            DestroyImmediate(GetComponentInChildren<RotationConstraint>(true), true);
+        }
+        [ContextMenu("Setup Constraints")]
+        public void Internal_SetupConstraints()
+        {
+            BodyPartConstructor = GetComponent<LimbConstructor>();
+
+            // LookAt
+            for (int i = 0; i < LimbConstructor.Bones.Length - 1; i++)
+            {
+                Transform from = LimbConstructor.Bones[i];
+                Transform to = LimbConstructor.Bones[i+1];
+
+                Quaternion look = Quaternion.LookRotation(to.transform.position - from.transform.position);
+                Quaternion diff = Quaternion.Inverse(look) * from.transform.rotation;
+
+                LookAtConstraint lookAtConstraint = from.gameObject.GetOrAddComponent<LookAtConstraint>();
+                lookAtConstraint.SetSources(new List<ConstraintSource>()
+                {
+                    new ConstraintSource()
+                    {
+                        sourceTransform = to,
+                        weight = 1f
+                    }
+                });
+                lookAtConstraint.rotationAtRest = Vector3.zero;
+                lookAtConstraint.rotationOffset = diff.eulerAngles;
+                lookAtConstraint.constraintActive = true;
+                lookAtConstraint.locked = true;
+                lookAtConstraint.enabled = true;
+            }
+
+            // Rotation
+            RotationConstraint rotationConstraint = LimbConstructor.Bones[LimbConstructor.Bones.Length - 1].gameObject.GetOrAddComponent<RotationConstraint>();
+            rotationConstraint.SetSources(new List<ConstraintSource>()
+            {
+                new ConstraintSource()
+                {
+                    sourceTransform = LimbConstructor.Bones[LimbConstructor.Bones.Length - 2],
+                    weight = 1f
+                }
+            });
+            rotationConstraint.constraintActive = true;
+        }
+        [ContextMenu("Enable Rotation Constraint")]
+        public void Internal_EnableRotationConstraint()
+        {
+            GetComponentInChildren<RotationConstraint>(true).locked = true;
         }
         #endregion
     }
