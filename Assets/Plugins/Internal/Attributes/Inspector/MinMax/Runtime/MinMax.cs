@@ -20,6 +20,16 @@ namespace DanielLochner.Assets
             get => UnityEngine.Random.Range(min, max);
         }
 
+        public float Average
+        {
+            get => (min + max) / 2f;
+        }
+
+        public float Range
+        {
+            get => max - min;
+        }
+
         public float Clamp(float value)
         {
             return Mathf.Clamp(value, min, max);
