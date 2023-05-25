@@ -140,6 +140,11 @@ namespace DanielLochner.Assets
             }
             tracked.Clear();
         }
+
+        public void Clear()
+        {
+            tracked.Clear();
+        }
         #endregion
     }
 }
