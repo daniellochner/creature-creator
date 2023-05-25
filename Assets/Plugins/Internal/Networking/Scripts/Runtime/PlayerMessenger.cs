@@ -14,7 +14,7 @@ namespace DanielLochner.Assets
         [SerializeField] private bool checkForProfanity;
         [SerializeField] private int characterLimit;
         [SerializeField] private float sendCooldown;
-        [SerializeField] private float height;
+        [SerializeField] protected float height;
 
         private ProfanityFilter filter = new ProfanityFilter();
         private float cooldownTimeLeft;
