@@ -4,7 +4,6 @@
 using Pinwheel.Poseidon;
 using Pinwheel.Poseidon.FX;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -16,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private Ability swimAbility;
         [SerializeField] private GameObject splashPrefab;
-        [SerializeField] private UnityEvent<CreaturePlayerLocal> onPlayerEnter;
+        [SerializeField] private GameObject lod;
 
         private PWater water;
         #endregion
@@ -55,13 +54,21 @@ namespace DanielLochner.Assets.CreatureCreator
 #if USE_STATS
                         StatsManager.Instance.UnlockAchievement("ACH_MAKE_A_SPLASH");
 #endif
-                        onPlayerEnter.Invoke(player);
                     }
                     if (waterFX != null)
                     {
                         waterFX.enabled = true;
                     }
                 }
+            }
+        }
+
+        public void SetVisibility(bool isVisible)
+        {
+            if (!CinematicManager.Instance.IsInCinematic && lod != null)
+            {
+                water.enabled = isVisible;
+                lod.SetActive(!isVisible);
             }
         }
         #endregion
