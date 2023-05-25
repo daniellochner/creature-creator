@@ -97,6 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void StartRoundClientRpc()
         {
+            info.SetActive(Players.Contains(Player.Instance.Collider.Hitbox));
             bellAS.Play();
         }
         [ClientRpc]
@@ -133,13 +134,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnPlayerEnter(Collider col)
         {
-            if (col.CompareTag("Player/Local"))
+            if (col.CompareTag("Player/Local") && rounds.childCount > 0)
             {
-                if (!InBattle)
+                if (InBattle)
+                {
+                    info.SetActive(true);
+                }
+                else
                 {
                     BattleServerRpc();
                 }
-                info.SetActive(true);
             }
         }
         private void OnPlayerExit(Collider col)
