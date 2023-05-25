@@ -3,6 +3,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -27,11 +28,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void LateUpdate()
-        {
-            HandleFloor();
-        }
-
         protected override void Initialize()
         {
             base.Initialize();
@@ -51,6 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup(creatureEditor);
 
             SetupInteraction();
+            SetupBones();
             SetupConstructor();
         }
         private void SetupInteraction()
@@ -63,6 +60,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     footBoneDrag.cylinderRadius = Mathf.Infinity;
                 }
             });
+            LDrag.onDrag.AddListener(delegate
+            {
+                if (EditorManager.Instance.IsBuilding)
+                {
+                    HandleFloor();
+                }
+            });
             LDrag.OnRelease.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
@@ -70,6 +74,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     footBoneDrag.cylinderRadius = dragRadius;
                 }
             });
+
+            CreatureEditor.Drag.OnDrag.AddListener(delegate
+            {
+                HandleFloor();
+            });
+        }
+        private void SetupBones()
+        {
+            foreach (LookAtConstraint boneConstraint in boneConstraints)
+            {
+                boneConstraint.useUpObject = true;
+            }
         }
         private void SetupConstructor()
         {
@@ -107,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleFloor()
         {
-            footBoneDrag.transform.position = footBoneDrag.ClampToBounds(footBoneDrag.transform.position);
+            footBoneDrag.transform.position = footBoneDrag.ClampToBounds(LimbConstructor.Bones[LimbConstructor.Bones.Length - 2].position);
         }
         #endregion
     }
