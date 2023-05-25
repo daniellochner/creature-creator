@@ -170,6 +170,10 @@ PrefabInstance:
       propertyPath: m_UpdateMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4770992976388664030, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+      propertyPath: height
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 4844542432179967607, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: m_IsKinematic
       value: 0
@@ -635,7 +639,7 @@ MonoBehaviour:
   sphereRadius: Infinity
   cylinderRadius: 1
   cylinderHeight: 2
-  boundsOffset: {x: 0, y: 0, z: 0}
+  boundsOffset: {x: 0, y: 0.25, z: 0}
   world: {fileID: 4173930074114902741}
   controlDrag: 1
   draggable: 1
@@ -781,6 +785,7 @@ MonoBehaviour:
   grounded: {fileID: 4630285723951257493}
   minimapIcon: {fileID: 7756471173767236412}
   launcher: {fileID: 3246352927499238391}
+  optimizer: {fileID: 7034011164038674520}
   namer: {fileID: 4012423436152039703}
   deathMessenger: {fileID: 7151558922526411801}
   messenger: {fileID: 8269862162959058614}
@@ -1070,6 +1075,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08266b5bcd7c8d1418e5bb39d1e9daa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7034011164038674520 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5867162155424535600, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 3526752849064750184}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4173930074114902742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75fd43019974c544e95f3319cba7fe03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &7040875473051337211 stripped

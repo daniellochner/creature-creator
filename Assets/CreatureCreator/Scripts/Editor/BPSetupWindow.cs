@@ -575,6 +575,120 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             GetWindow<BPSetupWindow>("Body Part Setup");
         }
+
+        #region Limbs Setup
+        public static List<SerializableTransform> transforms = new List<SerializableTransform>();
+
+        public void LimbEditor_SetupAll()
+        {
+            foreach (var obj in database.Objects)
+            {
+                BodyPart bp = obj.Value as BodyPart;
+                if (bp is Limb)
+                {
+                    LimbEditor_Setup(bp);
+                }
+            }
+        }
+        public void LimbEditor_Setup(BodyPart bp)
+        {
+            LimbEditor limbEditor = bp.GetPrefab(BodyPart.PrefabType.Editable).GetComponent<LimbEditor>();
+
+            // Remove constraints
+            LimbEditor_RemoveConstraints(limbEditor);
+
+            // Copy serializable transfroms from constructible to animatable and editable
+            LimbEditor_Copy(bp.GetPrefab(BodyPart.PrefabType.Constructible).transform);
+            LimbEditor_Paste(bp.GetPrefab(BodyPart.PrefabType.Animatable).transform);
+            LimbEditor_Paste(limbEditor.transform);
+
+            // Setup constraints
+            LimbEditor_SetupConstraints(limbEditor);
+            foreach (LookAtConstraint c in limbEditor.GetComponentsInChildren<LookAtConstraint>(true))
+            {
+                c.useUpObject = false;
+            }
+
+            // Set dirty
+            EditorUtility.SetDirty(bp.GetPrefab(BodyPart.PrefabType.Animatable));
+            EditorUtility.SetDirty(bp.GetPrefab(BodyPart.PrefabType.Constructible));
+            EditorUtility.SetDirty(bp.GetPrefab(BodyPart.PrefabType.Editable));
+        }
+
+        public void LimbEditor_Copy(Transform copyFromT)
+        {
+            transforms.Clear();
+            foreach (var t in copyFromT.GetComponentsInChildren<Transform>(true))
+            {
+                transforms.Add(new SerializableTransform(t, copyFromT));
+            }
+        }
+        public void LimbEditor_Paste(Transform pasteToT)
+        {
+            int counter = 0;
+            foreach (var t in pasteToT.GetComponentsInChildren<Transform>(true))
+            {
+                if (t.name == "Move") continue;
+                t.Set(transforms[counter], pasteToT);
+                counter++;
+            }
+            EditorUtility.SetDirty(pasteToT.gameObject);
+        }
+        public void LimbEditor_RemoveConstraints(LimbEditor limbEditor)
+        {
+            LookAtConstraint[] lac = limbEditor.GetComponentsInChildren<LookAtConstraint>(true);
+            for (int i = 0; i < lac.Length; i++)
+            {
+                DestroyImmediate(lac[i], true);
+            }
+            DestroyImmediate(limbEditor.GetComponentInChildren<RotationConstraint>(true), true);
+        }
+        public void LimbEditor_SetupConstraints(LimbEditor limbEditor)
+        {
+            limbEditor.BodyPartConstructor = limbEditor.GetComponent<LimbConstructor>();
+
+            // LookAt
+            for (int i = 0; i < limbEditor.LimbConstructor.Bones.Length - 1; i++)
+            {
+                Transform from = limbEditor.LimbConstructor.Bones[i];
+                Transform to = limbEditor.LimbConstructor.Bones[i + 1];
+
+                Quaternion look = Quaternion.LookRotation(to.transform.position - from.transform.position);
+                Quaternion diff = Quaternion.Inverse(look) * from.transform.rotation;
+
+                LookAtConstraint lookAtConstraint = from.gameObject.GetOrAddComponent<LookAtConstraint>();
+                lookAtConstraint.SetSources(new List<ConstraintSource>()
+                {
+                    new ConstraintSource()
+                    {
+                        sourceTransform = to,
+                        weight = 1f
+                    }
+                });
+                lookAtConstraint.rotationAtRest = Vector3.zero;
+                lookAtConstraint.rotationOffset = diff.eulerAngles;
+                lookAtConstraint.constraintActive = true;
+                lookAtConstraint.locked = true;
+                lookAtConstraint.enabled = true;
+            }
+
+            // Rotation
+            RotationConstraint rotationConstraint = limbEditor.LimbConstructor.Bones[limbEditor.LimbConstructor.Bones.Length - 1].gameObject.GetOrAddComponent<RotationConstraint>();
+            rotationConstraint.SetSources(new List<ConstraintSource>()
+            {
+                new ConstraintSource()
+                {
+                    sourceTransform = limbEditor.LimbConstructor.Bones[limbEditor.LimbConstructor.Bones.Length - 2],
+                    weight = 1f
+                }
+            });
+            rotationConstraint.constraintActive = true;
+        }
+        public void LimbEditor_EnableRotationConstraint(LimbEditor limbEditor)
+        {
+            limbEditor.GetComponentInChildren<RotationConstraint>(true).locked = true;
+        }
+        #endregion
         #endregion
 
         #region Enums

@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 5812436878276722343}
   - component: {fileID: 3811310191443384886}
   - component: {fileID: 5812436878276722340}
-  - component: {fileID: 3945330708831151637}
+  - component: {fileID: 5813611488364411215}
   - component: {fileID: 8789640660392786810}
   - component: {fileID: 2177206371310096007}
   - component: {fileID: 156098017691023718}
@@ -497,8 +497,8 @@ MonoBehaviour:
   rig: {fileID: 5812436878079772845}
   tail: {fileID: 5526538298011628014}
   limbs: {fileID: 3192009271312187847}
---- !u!136 &3945330708831151637
-CapsuleCollider:
+--- !u!64 &5813611488364411215
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -507,10 +507,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
-  m_Radius: 0.1
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!114 &8789640660392786810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,12 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6331468b6e73c6e4e9d9905b2bc66a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minMaxRadius:
-    min: 0.1
-    max: 0.5
-  minMaxHeight:
-    min: 0.5
-    max: 2
+  capsuleMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!82 &2177206371310096007
 AudioSource:
   m_ObjectHideFlags: 0
@@ -744,9 +739,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hunger:
     m_InternalValue: 1
+  hungerHealThreshold: 0.9
   hungerDepletionRate: 0.00083333335
   healthTickRate: 1
   healthTickDamage: 5
+  healthTickHeal: 10
+  healFromHungerCooldown: 10
 --- !u!114 &974720351450483152
 MonoBehaviour:
   m_ObjectHideFlags: 0
