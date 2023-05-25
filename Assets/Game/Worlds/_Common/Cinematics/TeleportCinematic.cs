@@ -19,20 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureConstructor creature = Player.Instance.Cloner.Clone(data);
             creature.transform.SetZeroParent(parent);
 
-            if (creature.Legs.Count == 0)
-            {
-                Mesh bodyMesh = new Mesh();
-                creature.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-                float minY = Mathf.Infinity;
-                foreach (Vector3 vertex in bodyMesh.vertices)
-                {
-                    if (vertex.y < minY)
-                    {
-                        minY = vertex.y;
-                    }
-                }
-                creature.Body.localPosition = Vector3.up * -minY;
-            }
+            creature.Realign();
 
             return creature;
         }

@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Health.HealthPercentage = 1f;
             Age.StartAging();
-            Hunger.StartDepletingHunger();
+            Hunger.StartHunger();
 
             SpawnClientRpc();
         }
@@ -50,7 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void DespawnServerRpc()
         {
             Age.StopAging();
-            Hunger.StopDepletingHunger();
+            Hunger.StopHunger();
 
             DespawnClientRpc();
         }

@@ -287,19 +287,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (Legs.Count == 0)
                 {
-                    Mesh bodyMesh = new Mesh();
-                    Constructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-
+                    Constructor.SkinnedMeshRenderer.BakeMesh(Constructor.SkinnedMeshRenderer.sharedMesh);
                     float minY = Mathf.Infinity;
-                    foreach (Vector3 vertex in bodyMesh.vertices)
+                    foreach (Vector3 vertex in Constructor.SkinnedMeshRenderer.sharedMesh.vertices)
                     {
                         if (vertex.y < minY)
                         {
                             minY = vertex.y;
                         }
                     }
-
                     offset = transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
+
                     function = EasingFunction.EaseOutBounce;
                 }
                 else

@@ -64,6 +64,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Informer.Capture();
 
+            Collider.UpdateCollider();
+            Optimizer.Optimize();
+
             Collider.enabled = true;
             Animator.enabled = true;
         }

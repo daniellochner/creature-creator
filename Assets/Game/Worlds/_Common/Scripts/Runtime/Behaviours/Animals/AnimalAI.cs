@@ -110,12 +110,7 @@ namespace DanielLochner.Assets.CreatureCreator
             ChangeState(startStateID);
             Target = null;
         }
-
-        public bool IsAnimationState(string state)
-        {
-            return Animator.GetCurrentAnimatorStateInfo(0).IsName(state);
-        }
-        
+ 
         public void UpdateIgnored()
         {
             StartCoroutine(UpdateIgnoredRoutine());
@@ -157,6 +152,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 position = hit.position;
             }
             Agent.SetDestination(position);
+        }
+
+        public bool IsAnimationState(string state)
+        {
+            return Animator.GetCurrentAnimatorStateInfo(0).IsName(state);
         }
 
         public static float GetTargetDistance(CreatureBase creature, CreatureBase other, float offset = 0f)

@@ -20,24 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             creatureConstructor = Instantiate(displayPrefab, transform.position, transform.rotation, transform);
             creatureConstructor.Construct(creatureData);
 
-            #region Legless
-            if (creatureConstructor.Legs.Count == 0)
-            {
-                Mesh bodyMesh = new Mesh();
-                creatureConstructor.SkinnedMeshRenderer.BakeMesh(bodyMesh);
-                float minY = Mathf.Infinity;
-                foreach (Vector3 vertex in bodyMesh.vertices)
-                {
-                    if (vertex.y < minY)
-                    {
-                        minY = vertex.y;
-                    }
-                }
-                creatureConstructor.Body.localPosition = Vector3.up * -minY;
-            }
-            #endregion
-
-            creatureConstructor.GetComponent<CreatureOptimizer>().Optimize();
+            creatureConstructor.Realign();
 
             this.InvokeOverTime(delegate (float progress)
             {
