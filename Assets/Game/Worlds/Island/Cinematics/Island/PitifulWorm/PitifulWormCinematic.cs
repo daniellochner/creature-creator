@@ -1,10 +1,9 @@
-using Pinwheel.Poseidon;
-using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
 {
     public class PitifulWormCinematic : CCCinematic
     {
+        #region Methods
         public override void Show()
         {
             base.Show();
@@ -18,5 +17,6 @@ namespace DanielLochner.Assets.CreatureCreator.Cinematics.Island
             TutorialManager.Instance.SetVisibility(true, 0.25f);
             TutorialManager.Instance.Begin();
         }
+        #endregion
     }
 }

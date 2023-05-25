@@ -8,6 +8,8 @@ namespace DanielLochner.Assets
         #region Properties
         public UnityAction OnBegin { get; set; }
         public UnityAction OnEnd { get; set; }
+        public UnityAction OnShow { get; set; }
+        public UnityAction OnHide { get; set; }
         #endregion
 
         #region Methods
@@ -34,9 +36,11 @@ namespace DanielLochner.Assets
 
         public virtual void Show()
         {
+            OnShow?.Invoke();
         }
         public virtual void Hide()
         {
+            OnHide?.Invoke();
         }
         #endregion
     }

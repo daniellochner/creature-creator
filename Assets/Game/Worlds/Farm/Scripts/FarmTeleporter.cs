@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ExitCrackCinematic exitCrackCinematic;
         [Space]
         [SerializeField] private Platform raftPlatform;
-        [SerializeField] private TrackRegion water;
+        [SerializeField] private Water ocean;
         [SerializeField] private Zone beach;
         #endregion
 
@@ -31,11 +31,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (prevScene == "Island")
             {
-                arriveOnRaftCinematic.Begin();
                 raftPlatform.TeleportTo(false);
 
-                water.OnTrack(Player.Instance.Collider.Hitbox);
                 ZoneManager.Instance.EnterZone(beach, false);
+                ocean.SetVisibility(true);
+
+                arriveOnRaftCinematic.Begin();
 
                 if (!HasRequestedReview)
                 {

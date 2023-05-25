@@ -7,6 +7,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -156,6 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             cinematic.Begin();
 
+            Player.Instance.Rigidbody.isKinematic = true;
             Player.Instance.Collider.enabled = false;
         }
         [ClientRpc]
