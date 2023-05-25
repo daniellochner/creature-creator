@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6367194911713456327}
-  - component: {fileID: -952673024282425781}
+  - component: {fileID: 3693160317328508847}
   m_Layer: 9
   m_Name: Bone.0
   m_TagString: Untagged
@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994479209120775189}
-  m_LocalRotation: {x: 1, y: -0, z: -0.0000000754979, w: -0.0000004172325}
+  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0.00017264773}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 6641413630954305314}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1183024399 &-952673024282425781
+--- !u!1183024399 &3693160317328508847
 LookAtConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 564752841296320382}
   - component: {fileID: 1366282402841491137}
   - component: {fileID: 8134849126315115691}
-  - component: {fileID: -4904832535078413989}
+  - component: {fileID: -939931431723342665}
   m_Layer: 9
   m_Name: Bone.1
   m_TagString: Untagged
@@ -203,7 +203,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3282348337596188681}
-  m_LocalRotation: {x: 1, y: -0, z: -0.0000000754979, w: 0}
+  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: -0.29999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
---- !u!1183024399 &-4904832535078413989
+--- !u!1183024399 &-939931431723342665
 LookAtConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -737,7 +737,7 @@ GameObject:
   - component: {fileID: 4604029996263993979}
   - component: {fileID: 6366112176395144977}
   - component: {fileID: 272480338537360452}
-  - component: {fileID: -1005725701985799263}
+  - component: {fileID: -1960143354277674437}
   m_Layer: 9
   m_Name: Bone.2
   m_TagString: Untagged
@@ -871,7 +871,7 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
---- !u!1818360609 &-1005725701985799263
+--- !u!1818360609 &-1960143354277674437
 RotationConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -881,12 +881,12 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 180}
-  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 180, z: 0}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
   m_IsContraintActive: 1
-  m_IsLocked: 0
+  m_IsLocked: 1
   m_Sources:
   - sourceTransform: {fileID: 8890526187075423957}
     weight: 1
