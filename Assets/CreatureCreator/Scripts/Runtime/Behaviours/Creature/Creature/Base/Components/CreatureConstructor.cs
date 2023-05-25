@@ -415,9 +415,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 boneTransforms[boneIndex].rotation = transform.rotation * data.Bones[boneIndex].rotation;
                 SetWeight(boneIndex, data.Bones[boneIndex].weight);
             }
-
-            // Mesh Bounds
-            SkinnedMeshRenderer.RecalculateBounds();
+            UpdateDimensions();
 
             OnConstructBody?.Invoke();
         }
@@ -428,11 +426,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (apply)
                 {
-                    // Detach body parts
                     DetachBodyParts();
                 }
 
-                // Add bone
                 Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
                 bone.SetParent(Root, false);
                 Bones.Add(bone);
@@ -447,10 +443,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (apply)
                 {
-                    // Reconstruct body
                     ConstructBody();
 
-                    // Reattach body parts
                     ReattachBodyParts();
                 }
             }
@@ -482,14 +476,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return !tooManyBones && !tooComplicated;
         }
-        public void RemoveBone(int index)
+        public void RemoveBone(int index, bool apply = true)
         {
             if (CanRemoveBone(index))
             {
-                // Detach body parts
-                DetachBodyParts();
+                if (apply)
+                {
+                    DetachBodyParts();
+                }
 
-                // Remove bone
                 OnPreRemoveBone?.Invoke(index);
 
                 Transform bone = Bones[Bones.Count - 1];
@@ -499,11 +494,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 OnRemoveBone?.Invoke(index);
                 data.Bones.RemoveAt(index);
 
-                // Reconstruct body
-                ConstructBody();
+                if (apply)
+                {
+                    ConstructBody();
 
-                // Reattach body parts
-                ReattachBodyParts();
+                    ReattachBodyParts();
+                }
             }
         }
         public void RemoveBoneFromFront()
@@ -707,27 +703,23 @@ namespace DanielLochner.Assets.CreatureCreator
             transform.position += displacement;
             Body.localPosition = new Vector3(0, Body.localPosition.y, 0);
         }
-        public void UpdateConfiguration()
+        public void Realign()
         {
-            UpdateBoneConfiguration();
-            UpdateAttachedBodyPartConfiguration();
-        }
-        public void UpdateBoneConfiguration()
-        {
-            for (int boneIndex = 0; boneIndex < Bones.Count; boneIndex++)
+            if (Legs.Count == 0)
             {
-                data.Bones[boneIndex].position = transform.InverseTransformPoint(Bones[boneIndex].position);
-                data.Bones[boneIndex].rotation = Quaternion.Inverse(transform.rotation) * Bones[boneIndex].rotation;
-                data.Bones[boneIndex].weight = GetWeight(boneIndex);
+                SkinnedMeshRenderer.BakeMesh(Mesh);
+                float minY = Mathf.Infinity;
+                foreach (Vector3 vertex in Mesh.vertices)
+                {
+                    if (vertex.y < minY)
+                    {
+                        minY = vertex.y;
+                    }
+                }
+                Body.localPosition = Vector3.up * -minY;
             }
         }
-        public void UpdateAttachedBodyPartConfiguration()
-        {
-            foreach (BodyPartConstructor bodyPart in BodyParts)
-            {
-                bodyPart.UpdateAttachmentConfiguration();
-            }
-        }
+
         public void UpdateOrigin()
         {
             Vector3 sum = Vector3.zero;
@@ -751,7 +743,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateBodyDimensions()
         {
             dimensions.body.length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
-
             float avgWeight = 0f;
             foreach (Bone bone in Data.Bones)
             {
@@ -759,14 +750,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             avgWeight /= Data.Bones.Count;
             dimensions.body.radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
-
             UpdateWeight();
         }
         public void UpdateDimensions()
         {
             float maxHeight = Mathf.NegativeInfinity, maxRadius = Mathf.NegativeInfinity;
             float minHeight = Mathf.Infinity;
-
             foreach (Bone bone in Data.Bones)
             {
                 float radius = Mathf.Abs(bone.position.z);
@@ -774,7 +763,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     maxRadius = radius;
                 }
-
                 float height = bone.position.y;
                 if (height > maxHeight)
                 {
@@ -785,7 +773,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     minHeight = height;
                 }
             }
-
             dimensions.height = ((Legs.Count == 0) ? (maxHeight - minHeight) : maxHeight) + dimensions.body.radius;
             dimensions.radius = maxRadius;
         }
@@ -794,12 +781,33 @@ namespace DanielLochner.Assets.CreatureCreator
             float volume = Mathf.PI * Mathf.Pow(dimensions.body.radius, 2) * dimensions.body.length;
             float weight = volume * density;
             statistics.WeightBody = weight;
-            
+
             float w = Mathf.InverseLerp(minMaxBodyWeight.min, minMaxBodyWeight.max, weight);
             statistics.SpeedBody = Mathf.Lerp(minMaxBodySpeed.min, minMaxBodySpeed.max, 1 - w);
             statistics.HealthBody = (int)Mathf.Lerp(minMaxBodyHealth.min, minMaxBodyHealth.max, w);
-
             rb.mass = statistics.Weight;
+        }
+
+        public void UpdateConfiguration()
+        {
+            UpdateBoneConfiguration();
+            UpdateAttachedBodyPartConfiguration();
+        }
+        public void UpdateBoneConfiguration()
+        {
+            for (int boneIndex = 0; boneIndex < Bones.Count; boneIndex++)
+            {
+                data.Bones[boneIndex].position = transform.InverseTransformPoint(Bones[boneIndex].position);
+                data.Bones[boneIndex].rotation = Quaternion.Inverse(transform.rotation) * Bones[boneIndex].rotation;
+                data.Bones[boneIndex].weight = GetWeight(boneIndex);
+            }
+        }
+        public void UpdateAttachedBodyPartConfiguration()
+        {
+            foreach (BodyPartConstructor bodyPart in BodyParts)
+            {
+                bodyPart.UpdateAttachmentConfiguration();
+            }
         }
         #endregion
     }

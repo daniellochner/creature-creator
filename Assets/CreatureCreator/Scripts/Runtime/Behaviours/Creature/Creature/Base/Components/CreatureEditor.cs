@@ -38,7 +38,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private Mesh colliderMesh;
         private AudioSource toolsAudioSource;
         private Select select;
-        private Drag drag;
         private Rigidbody rb;
 
         private float addedOrRemovedTime;
@@ -144,6 +143,8 @@ namespace DanielLochner.Assets.CreatureCreator
             get; set;
         }
 
+        public Drag Drag { get; private set; }
+
         public bool IsDirty
         {
             get => isDirty;
@@ -176,8 +177,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public bool IsDraggable
         {
-            get => drag.draggable;
-            set => drag.draggable = value;
+            get => Drag.draggable;
+            set => Drag.draggable = value;
         }
         public bool UseTemporaryOutline
         {
@@ -303,8 +304,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 GetNearestBone().GetComponent<Scroll>().OnScrollDown.Invoke();
             });
 
-            drag = Constructor.Body.GetComponent<Drag>();
-            drag.OnPress.AddListener(delegate
+            Drag = Constructor.Body.GetComponent<Drag>();
+            Drag.OnPress.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -315,18 +316,18 @@ namespace DanielLochner.Assets.CreatureCreator
                         Drag bone = GetNearestBone().GetComponent<Drag>();
                         StartCoroutine(HoldDraggableRoutine(bone, onPress: delegate
                         {
-                            drag.draggable = false;
+                            Drag.draggable = false;
                             bone.IsPressing = true;
                         }, 
                         onRelease: delegate
                         {
-                            drag.draggable = true;
+                            Drag.draggable = true;
                             bone.IsPressing = false;
                         }));
                     }
                 }
             });
-            drag.OnRelease.AddListener(delegate
+            Drag.OnRelease.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -336,7 +337,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
             });
-            drag.OnEndDrag.AddListener(delegate
+            Drag.OnEndDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
@@ -348,8 +349,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     EditorManager.Instance.TakeSnapshot(Change.DragBody);
                 }
             });
-            drag.cylinderRadius = Constructor.MaxRadius;
-            drag.cylinderHeight = Constructor.MaxHeight;
+            Drag.cylinderRadius = Constructor.MaxRadius;
+            Drag.cylinderHeight = Constructor.MaxHeight;
 
             Constructor.Body.GetComponent<Click>();
             select = Constructor.Body.GetComponent<Select>();
@@ -589,6 +590,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 });
+                drag.OnDrag.AddListener(delegate
+                {
+                    Drag.OnDrag.Invoke();
+                });
                 drag.OnRelease.AddListener(delegate
                 {
                     if (EditorManager.Instance.IsBuilding)
@@ -617,11 +622,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     EditorManager.Instance.TakeSnapshot(Change.DragBodyBone, 0.25f);
                 });
                 drag.mousePlaneAlignment = Drag.MousePlaneAlignment.ToWorldDirection;
-                drag.world = transform;
-                drag.boundsShape = Drag.BoundsShape.Cylinder;
-                drag.cylinderHeight = Constructor.MaxHeight;
-                drag.cylinderRadius = Constructor.MaxRadius;
-                drag.updatePlaneOnPress = true;
+                drag.world = Drag.world;
+                drag.updatePlaneOnPress = Drag.updatePlaneOnPress;
+                drag.boundsShape = Drag.boundsShape;
+                drag.cylinderHeight = Drag.cylinderHeight;
+                drag.cylinderRadius = Drag.cylinderRadius;
+                drag.boundsOffset = Drag.boundsOffset;
                 
                 Click click = addedBoneGO.AddComponent<Click>();
                 click.OnLeftClick.AddListener(delegate

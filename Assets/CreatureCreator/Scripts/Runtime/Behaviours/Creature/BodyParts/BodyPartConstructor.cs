@@ -175,7 +175,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             OverrideMat(null, null, false);
 
-            if (CreatureConstructor.LightSources > CreatureConstructor.MaxLightSources)
+            if (BodyPart.IsLightSource && CreatureConstructor.LightSources > CreatureConstructor.MaxLightSources)
             {
                 foreach (Light light in GetComponentsInChildren<Light>())
                 {

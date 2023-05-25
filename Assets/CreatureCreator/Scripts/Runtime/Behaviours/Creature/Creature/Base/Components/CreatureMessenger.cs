@@ -26,7 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void ReceiveMessage(string message)
         {
             base.ReceiveMessage(message);
-            messageGO.transform.localPosition = Vector3.up * (Constructor.Height + height); // this.height functions as an offset in this case
+            messageGO.transform.localPosition = Vector3.up * (Constructor.Dimensions.height + height); // this.height functions as an offset in this case
         }
         #endregion
     }

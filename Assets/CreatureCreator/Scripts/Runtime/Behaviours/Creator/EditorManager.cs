@@ -1432,14 +1432,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateStatistics()
         {
-            CreatureStatistics statistics = Creature.Constructor.Statistics;
-            CreatureDimensions dimensions = Creature.Constructor.Dimensions;
-
-            complexityText.SetArguments(statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
-            heightText.SetArguments(Math.Round(dimensions.height, 2));
-            weightText.SetArguments(Math.Round(statistics.Weight, 2));
-            dietText.SetArguments(LocalizationUtility.Localize($"diet_{statistics.Diet}".ToLower()));
-            healthText.SetArguments(statistics.Health);
+            complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
+            heightText.SetArguments(Math.Round(Creature.Constructor.Dimensions.height, 2));
+            weightText.SetArguments(Math.Round(Creature.Constructor.Statistics.Weight, 2));
+            dietText.SetArguments(LocalizationUtility.Localize($"diet_{Creature.Constructor.Statistics.Diet}".ToLower()));
+            healthText.SetArguments(Creature.Constructor.Statistics.Health);
             speedText.SetArguments(Math.Round(Creature.Mover.MoveSpeed, 2));
             bonesText.SetArguments(Creature.Constructor.Bones.Count, Creature.Constructor.MinMaxBones.max);
 
