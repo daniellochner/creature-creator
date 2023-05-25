@@ -159,6 +159,15 @@ namespace DanielLochner.Assets.CreatureCreator
             Agent.SetDestination(position);
         }
 
+        public static float GetTargetDistance(CreatureBase creature, CreatureBase other, float offset = 0f)
+        {
+            return (creature.Constructor.Dimensions.radius + other.Constructor.Dimensions.radius) / 2f + offset;
+        }
+        public static float GetTargetDistance(CreatureBase creature, float offset = 0f)
+        {
+            return (creature.Constructor.Dimensions.radius / 2f) + offset;
+        }
+
         #region Debug
         [ContextMenu("Debug/Follow/Player")]
         public void FollowPlayer()
@@ -289,7 +298,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
-            private float FollowOffset => AnimalAI.Creature.Constructor.Dimensions.radius + baseFollowOffset;
+            private float FollowOffset => GetTargetDistance(AnimalAI.Creature, baseFollowOffset);
 
             public override void Enter()
             {
@@ -299,7 +308,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (AnimalAI.Target != null)
                 {
-                    Vector3 displacement = AnimalAI.Target.position - AnimalAI.transform.position;
+                    Vector3 displacement = AnimalAI.Target.transform.position - AnimalAI.transform.position;
                     if (displacement.magnitude > FollowOffset)
                     {
                         Vector3 offset = 0.99f * FollowOffset * displacement.normalized; // offset slightly closer to target

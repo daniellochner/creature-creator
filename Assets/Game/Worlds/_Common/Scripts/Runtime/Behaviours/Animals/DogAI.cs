@@ -106,10 +106,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     targetBone = DogAI.dogBone.Dummy.transform;
                 }
 
-                Vector3 lookDir = Vector3.ProjectOnPlane(targetBone.position - StateMachine.transform.position, StateMachine.transform.up).normalized;
-                Vector3 offset = lookDir * DogAI.Creature.Constructor.Dimensions.radius;
+                Vector3 lookDir = Vector3.ProjectOnPlane(targetBone.position - DogAI.transform.position, DogAI.transform.up).normalized;
+                Vector3 offset = lookDir * GetTargetDistance(DogAI.Creature);
                 DogAI.Agent.SetDestination(targetBone.position - offset);
-
 
                 TimerUtility.OnTimer(ref pantTimeLeft, pantTime.Random, Time.deltaTime, delegate
                 {
@@ -251,8 +250,6 @@ namespace DanielLochner.Assets.CreatureCreator
             private bool hasDealtDamage;
 
             public DogAI DogAI => StateMachine as DogAI;
-
-            private float TargetDistance => DogAI.Creature.Constructor.Dimensions.radius + target.Constructor.Dimensions.radius;
             
             public override void Enter()
             {
@@ -268,7 +265,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     UpdateLookDir();
 
-                    Vector3 offset = lookDir * TargetDistance;
+                    Vector3 offset = lookDir * GetTargetDistance(DogAI.Creature, target);
                     DogAI.Agent.SetDestination(target.transform.position - offset);
 
                     HandleLookAt();
@@ -287,7 +284,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     // Move Closer.
                     float angle = Mathf.Infinity, distance = Mathf.Infinity;
-                    while (angle > minBiteAngle || distance > (TargetDistance + biteMaxDistance))
+                    while (angle > minBiteAngle || distance > GetTargetDistance(DogAI.Creature, target, biteMaxDistance))
                     {
                         UpdateTarget();
                         angle = Vector3.Angle(DogAI.transform.forward, lookDir);

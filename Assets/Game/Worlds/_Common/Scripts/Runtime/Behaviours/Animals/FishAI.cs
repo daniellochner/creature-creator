@@ -101,8 +101,6 @@ namespace DanielLochner.Assets.CreatureCreator
             private bool hasDealtDamage;
 
             public FishAI FishAI => StateMachine as FishAI;
-
-            private float TargetDistance => FishAI.Creature.Constructor.Dimensions.radius + target.Constructor.Dimensions.radius;
             
             public override void Enter()
             {
@@ -117,7 +115,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     UpdateLookDir();
 
-                    Vector3 offset = lookDir * TargetDistance;
+                    Vector3 offset = lookDir * GetTargetDistance(FishAI.Creature, target);
                     FishAI.Agent.SetDestination(target.transform.position - offset);
 
                     HandleLookAt();
@@ -143,7 +141,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     // Move Closer.
                     float angle = Mathf.Infinity, distance = Mathf.Infinity;
-                    while (angle > minBiteAngle || distance > (TargetDistance + biteMaxDistance))
+                    while (angle > minBiteAngle || distance > GetTargetDistance(FishAI.Creature, target, biteMaxDistance))
                     {
                         UpdateTarget();
                         angle = Vector3.Angle(FishAI.transform.forward, lookDir);
