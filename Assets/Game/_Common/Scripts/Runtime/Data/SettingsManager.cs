@@ -147,7 +147,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     creatureQualitySettings.Rings = 2;
                     break;
                 case CreatureMeshQualityType.Medium:
-                    creatureQualitySettings.Segments = 14;
+                    creatureQualitySettings.Segments = 16;
                     creatureQualitySettings.Rings = 4;
                     break;
                 case CreatureMeshQualityType.High:

@@ -613,7 +613,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Constructor.UpdateOrigin();
                     Constructor.UpdateConfiguration();
-                    Constructor.UpdateDimensions();
+                    Constructor.UpdateBounds();
 
                     UpdateMeshCollider();
 

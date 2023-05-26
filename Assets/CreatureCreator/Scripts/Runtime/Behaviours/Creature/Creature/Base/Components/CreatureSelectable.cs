@@ -76,7 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (informationMenu.IsVisible)
             {
-                Vector3 position = transform.position + transform.up * Constructor.Dimensions.height;
+                Vector3 position = transform.position + transform.up * Constructor.Dimensions.Height;
                 informationMenu.transform.position = RectTransformUtility.WorldToScreenPoint(Player.Instance.Camera.MainCamera, position);
             }
         }

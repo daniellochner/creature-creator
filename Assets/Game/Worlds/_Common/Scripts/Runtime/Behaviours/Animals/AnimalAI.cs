@@ -161,11 +161,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public static float GetTargetDistance(CreatureBase creature, CreatureBase other, float offset = 0f)
         {
-            return (creature.Constructor.Dimensions.radius + other.Constructor.Dimensions.radius) / 2f + offset;
+            return (creature.Constructor.Dimensions.Body.Width + other.Constructor.Dimensions.Body.Width) / 2f + offset;
         }
         public static float GetTargetDistance(CreatureBase creature, float offset = 0f)
         {
-            return (creature.Constructor.Dimensions.radius / 2f) + offset;
+            return (creature.Constructor.Dimensions.Body.Width / 2f) + offset;
         }
 
         #region Debug

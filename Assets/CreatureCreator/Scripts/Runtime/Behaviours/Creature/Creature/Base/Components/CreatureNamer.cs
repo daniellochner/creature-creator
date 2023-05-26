@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnEnable();
             if (nameGO != null)
             {
-                nameGO.transform.localPosition = Vector3.up * (Constructor.Dimensions.height + height); // this.height functions as an offset in this case
+                nameGO.transform.localPosition = Vector3.up * (Constructor.Dimensions.Height + height); // this.height functions as an offset in this case
             }
         }
         #endregion

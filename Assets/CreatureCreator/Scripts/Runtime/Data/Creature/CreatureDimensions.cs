@@ -8,28 +8,27 @@ namespace DanielLochner.Assets.CreatureCreator
     [Serializable]
     public class CreatureDimensions
     {
-        public float height = 0f;
-        public float radius = 0f;
-        public BodyDimensions body = new BodyDimensions();
+        #region Fields
+        public float Height;
+        public BodyDimensions Body = new BodyDimensions();
+        #endregion
 
+        #region Methods
         public void Reset()
         {
-            height = 0f;
-            radius = 0f;
-            body.Reset();
+            Height = 0f;
+            Body.Reset();
         }
+        #endregion
 
         #region Nested
         [Serializable]
         public class BodyDimensions
         {
-            public float length = 0f;
-            public float radius = 0f;
-
+            public float Width, Height, Length;
             public void Reset()
             {
-                length = 0f;
-                radius = 0f;
+                Width = Height = Length = 0f;
             }
         }
         #endregion

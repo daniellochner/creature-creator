@@ -177,8 +177,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void ConstructBody()
         {
-            UpdateBodyDimensions();
-
             // Mesh Generation
             Mesh.Clear();
             Mesh.ClearBlendShapes();
@@ -314,8 +312,15 @@ namespace DanielLochner.Assets.CreatureCreator
             float vScale = 1f;
             float uScale = 1f;
 
-            float length = dimensions.body.length;
-            float circumference = 2f * Mathf.PI * dimensions.body.radius;
+            float avgWeight = 0f;
+            foreach (Bone bone in Data.Bones)
+            {
+                avgWeight += bone.weight;
+            }
+            avgWeight /= Data.Bones.Count;
+            float radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
+            float length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
+            float circumference = 2f * Mathf.PI * radius;
 
             if (length > circumference)
             {
@@ -415,7 +420,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 boneTransforms[boneIndex].rotation = transform.rotation * data.Bones[boneIndex].rotation;
                 SetWeight(boneIndex, data.Bones[boneIndex].weight);
             }
-            UpdateDimensions();
+
+            // Mesh Bounds
+            UpdateBounds();
 
             OnConstructBody?.Invoke();
         }
@@ -544,7 +551,6 @@ namespace DanielLochner.Assets.CreatureCreator
             SkinnedMeshRenderer.SetBlendShapeWeight(index, weight);
 
             UpdateOrigin();
-            UpdateBodyDimensions();
             UpdateDimensions();
 
             OnSetWeight?.Invoke(index, weight);
@@ -707,16 +713,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (Legs.Count == 0)
             {
-                SkinnedMeshRenderer.BakeMesh(Mesh);
-                float minY = Mathf.Infinity;
-                foreach (Vector3 vertex in Mesh.vertices)
-                {
-                    if (vertex.y < minY)
-                    {
-                        minY = vertex.y;
-                    }
-                }
-                Body.localPosition = Vector3.up * -minY;
+                Body.localPosition = Vector3.up * (Dimensions.Height - Dimensions.Body.Height / 2f);
             }
         }
 
@@ -740,51 +737,102 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Body.position = mean;
         }
-        public void UpdateBodyDimensions()
+        public void UpdateBounds()
         {
-            dimensions.body.length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
+            Mesh tmpMesh = new Mesh();
+            SkinnedMeshRenderer.BakeMesh(tmpMesh);
+
+            MinMax minMaxX = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            MinMax minMaxY = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            MinMax minMaxZ = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+
+            Vector3[] vertices = tmpMesh.vertices;
+
+            int rings = (boneSettings.Segments + 1) + (boneSettings.Rings * data.Bones.Count);
+            int offset = boneSettings.Segments / 4;
+
+            int v = 0;
+            for (int ringIndex = 0; ringIndex < rings; ringIndex += 2, v += boneSettings.Segments + 1)
+            {
+                for (int i = 0; i < boneSettings.Segments; i += offset, v += offset)
+                {
+                    Vector3 vertex = vertices[v];
+
+                    // X
+                    if (vertex.x < minMaxX.min)
+                    {
+                        minMaxX.min = vertex.x;
+                    }
+                    if (vertex.x > minMaxX.max)
+                    {
+                        minMaxX.max = vertex.x;
+                    }
+
+                    // Y
+                    if (vertex.y < minMaxY.min)
+                    {
+                        minMaxY.min = vertex.y;
+                    }
+                    if (vertex.y > minMaxY.max)
+                    {
+                        minMaxY.max = vertex.y;
+                    }
+
+                    // Z
+                    if (vertex.z < minMaxZ.min)
+                    {
+                        minMaxZ.min = vertex.z;
+                    }
+                    if (vertex.z > minMaxZ.max)
+                    {
+                        minMaxZ.max = vertex.z;
+                    }
+                }
+            }
+
+            Vector3 center = new Vector3(minMaxX.Average, minMaxY.Average, minMaxZ.Average);
+            Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
+            SkinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
+
+            UpdateDimensions();
+
+            Destroy(tmpMesh);
+        }
+        public void UpdateDimensions()
+        {
+            Dimensions.Body.Width = SkinnedMeshRenderer.localBounds.size.x;
+            Dimensions.Body.Height = SkinnedMeshRenderer.localBounds.size.y;
+            Dimensions.Body.Length = SkinnedMeshRenderer.localBounds.size.z;
+
+            if (Legs.Count > 0)
+            {
+                float offset = (SkinnedMeshRenderer.localBounds.size.y / 2f) + (SkinnedMeshRenderer.localBounds.center.y);
+                Dimensions.Height = Body.localPosition.y + offset;
+            }
+            else
+            {
+                Dimensions.Height = Dimensions.Body.Height;
+            }
+        }
+        public void UpdateWeight()
+        {
             float avgWeight = 0f;
             foreach (Bone bone in Data.Bones)
             {
                 avgWeight += bone.weight;
             }
             avgWeight /= Data.Bones.Count;
-            dimensions.body.radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
-            UpdateWeight();
-        }
-        public void UpdateDimensions()
-        {
-            float maxHeight = Mathf.NegativeInfinity, maxRadius = Mathf.NegativeInfinity;
-            float minHeight = Mathf.Infinity;
-            foreach (Bone bone in Data.Bones)
-            {
-                float radius = Mathf.Abs(bone.position.z);
-                if (radius > maxRadius)
-                {
-                    maxRadius = radius;
-                }
-                float height = bone.position.y;
-                if (height > maxHeight)
-                {
-                    maxHeight = height;
-                }
-                if (height < minHeight)
-                {
-                    minHeight = height;
-                }
-            }
-            dimensions.height = ((Legs.Count == 0) ? (maxHeight - minHeight) : maxHeight) + dimensions.body.radius;
-            dimensions.radius = maxRadius;
-        }
-        public void UpdateWeight()
-        {
-            float volume = Mathf.PI * Mathf.Pow(dimensions.body.radius, 2) * dimensions.body.length;
+            float radius = Mathf.Lerp(boneSettings.Radius, boneSettings.Radius * 4f, (avgWeight / 100f));
+            float length = (2 * boneSettings.Radius) + (data.Bones.Count * boneSettings.Length);
+
+            float volume = Mathf.PI * Mathf.Pow(radius, 2) * length;
             float weight = volume * density;
             statistics.WeightBody = weight;
 
             float w = Mathf.InverseLerp(minMaxBodyWeight.min, minMaxBodyWeight.max, weight);
             statistics.SpeedBody = Mathf.Lerp(minMaxBodySpeed.min, minMaxBodySpeed.max, 1 - w);
             statistics.HealthBody = (int)Mathf.Lerp(minMaxBodyHealth.min, minMaxBodyHealth.max, w);
+
             rb.mass = statistics.Weight;
         }
 

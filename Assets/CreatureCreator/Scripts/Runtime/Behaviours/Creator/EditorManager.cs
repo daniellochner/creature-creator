@@ -1433,7 +1433,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateStatistics()
         {
             complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
-            heightText.SetArguments(Math.Round(Creature.Constructor.Dimensions.height, 2));
+            heightText.SetArguments(Math.Round(Creature.Constructor.Dimensions.Height, 2));
             weightText.SetArguments(Math.Round(Creature.Constructor.Statistics.Weight, 2));
             dietText.SetArguments(LocalizationUtility.Localize($"diet_{Creature.Constructor.Statistics.Diet}".ToLower()));
             healthText.SetArguments(Creature.Constructor.Statistics.Health);
