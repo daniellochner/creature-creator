@@ -242,61 +242,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     tailDynamicBone.m_Root = Constructor.Bones[tIndex];
                 }
 
-
-                // Unity's DampedTransform is broken...
-
-                //if (Limbs.Count > 0)
-                //{
-                //    for (int i = n - 1; i > h; --i)
-                //    {
-                //        Transform bone = new GameObject($"Bone.{i}").transform;
-                //        bone.SetParent(head, false);
-                //        bone.SetAsFirstSibling();
-
-                //        DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                //        damping.data = new DampedTransformData()
-                //        {
-                //            constrainedObject = Constructor.Bones[i],
-                //            sourceObject = Constructor.Bones[i - 1],
-                //            dampPosition = 0f,
-                //            dampRotation = 0f,
-                //            maintainAim = true
-                //        };
-                //    }
-                //}
-                //for (int i = 0; i < t; ++i)
-                //{
-                //    Transform bone = new GameObject($"Bone.{i}").transform;
-                //    bone.SetParent(tail, false);
-                //    bone.SetAsFirstSibling();
-
-                //    DampedTransform damping = bone.gameObject.AddComponent<DampedTransform>();
-                //    damping.data = new DampedTransformData()
-                //    {
-                //        constrainedObject = Constructor.Bones[i],
-                //        sourceObject = Constructor.Bones[i + 1],
-                //        dampPosition = 0f,
-                //        dampRotation = 0f,
-                //        maintainAim = true
-                //    };
-                //}
-
-
                 EasingFunction.Function function = null;
                 Vector3 offset = Vector3.zero;
 
                 if (Legs.Count == 0)
                 {
-                    Constructor.SkinnedMeshRenderer.BakeMesh(Constructor.SkinnedMeshRenderer.sharedMesh);
-                    float minY = Mathf.Infinity;
-                    foreach (Vector3 vertex in Constructor.SkinnedMeshRenderer.sharedMesh.vertices)
-                    {
-                        if (vertex.y < minY)
-                        {
-                            minY = vertex.y;
-                        }
-                    }
-                    offset = transform.position - Constructor.Body.L2WSpace(Vector3.up * minY);
+                    Vector3 target = Vector3.up * Constructor.BodyAlignedOffset;
+                    offset = target - Constructor.Body.localPosition;
 
                     function = EasingFunction.EaseOutBounce;
                 }

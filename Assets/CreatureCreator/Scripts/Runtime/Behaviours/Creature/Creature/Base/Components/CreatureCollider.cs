@@ -12,8 +12,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private Mesh capsuleMesh;
         private MeshCollider meshCollider;
-
-        private Mesh tmpMesh;
         #endregion
 
         #region Properties
@@ -42,74 +40,30 @@ namespace DanielLochner.Assets.CreatureCreator
 
             meshCollider = GetComponent<MeshCollider>();
             meshCollider.sharedMesh = new Mesh();
-            tmpMesh = new Mesh();
         }
 
         public void UpdateCollider()
         {
-            // Calculate bounds
-            Constructor.SkinnedMeshRenderer.BakeMesh(tmpMesh);
-
-            MinMax minMaxX = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            MinMax minMaxY = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            MinMax minMaxZ = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            foreach (Vector3 vertex in tmpMesh.vertices)
-            {
-                if (vertex.x < minMaxX.min)
-                {
-                    minMaxX.min = vertex.x;
-                }
-                if (vertex.x > minMaxX.max)
-                {
-                    minMaxX.max = vertex.x;
-                }
-
-                if (vertex.y < minMaxY.min)
-                {
-                    minMaxY.min = vertex.y;
-                }
-                if (vertex.y > minMaxY.max)
-                {
-                    minMaxY.max = vertex.y;
-                }
-
-                if (vertex.z < minMaxZ.min)
-                {
-                    minMaxZ.min = vertex.z;
-                }
-                if (vertex.z > minMaxZ.max)
-                {
-                    minMaxZ.max = vertex.z;
-                }
-            }
-
-            Vector3 center = new Vector3(minMaxX.Average, minMaxY.Average, minMaxZ.Average);
-            Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
-            Constructor.SkinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
-
-            UnityEngine.Bounds bounds = Constructor.SkinnedMeshRenderer.localBounds;
-
-            // Setup meshes
-            Transform tmp = new GameObject().transform;
-            tmp.SetParent(Dynamic.Transform, false);
-
             MeshFilter capsule = new GameObject("_TMP").AddComponent<MeshFilter>();
             capsule.sharedMesh = capsuleMesh;
             capsule.transform.SetZeroParent(Dynamic.Transform);
-            capsule.transform.localPosition = Vector3.up * (bounds.size.y / 2f);
-            capsule.transform.localScale = new Vector3(bounds.size.x, bounds.size.y / 2f, bounds.size.x);
+            capsule.transform.localPosition = Vector3.up * (Constructor.Dimensions.Body.Height / 2f);
+            capsule.transform.localScale = new Vector3(Constructor.Dimensions.Body.Width, Constructor.Dimensions.Body.Height / 2f, Constructor.Dimensions.Body.Width);
  
+            Transform tmp = new GameObject().transform;
+            tmp.SetParent(Dynamic.Transform, false);
             if (Constructor.Legs.Count > 0)
             {
                 tmp.localPosition = Constructor.Body.localPosition;
             }
             else
             {
-                capsule.transform.position += Vector3.up * (bounds.size.y / 2f - bounds.center.y);
-                tmp.localPosition = Vector3.up * (bounds.size.y / 2f - bounds.center.y);
+                capsule.transform.position += Vector3.up * Constructor.BodyAlignedOffset;
+                tmp.localPosition = Vector3.up * Constructor.BodyAlignedOffset;
             }
 
-            // Combine
+            Mesh tmpMesh = new Mesh();
+            Constructor.SkinnedMeshRenderer.BakeMesh(tmpMesh);
             List<CombineInstance> combine = new List<CombineInstance>()
             {
                 new CombineInstance(){ mesh = tmpMesh, transform = tmp.localToWorldMatrix }
@@ -119,7 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 combine.Add(new CombineInstance() { mesh = capsule.mesh, transform = capsule.transform.localToWorldMatrix });
             }
             meshCollider.sharedMesh.CombineMeshes(combine.ToArray());
-            tmpMesh.Clear();
+            Destroy(tmpMesh);
         }
         #endregion
     }

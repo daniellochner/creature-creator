@@ -468,6 +468,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                         Constructor.RemoveWeight(index, 5);
 
+                        Constructor.UpdateOrigin();
+                        Constructor.UpdateBounds();
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(-1);
 
@@ -487,6 +489,8 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                         Constructor.AddWeight(index, 5);
 
+                        Constructor.UpdateOrigin();
+                        Constructor.UpdateBounds();
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(1);
 

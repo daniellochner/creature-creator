@@ -107,6 +107,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get; set;
         }
+        public float BodyAlignedOffset
+        {
+            get => (SkinnedMeshRenderer.localBounds.size.y / 2f) - (SkinnedMeshRenderer.localBounds.center.y);
+        }
         #endregion
 
         #region Methods
@@ -550,9 +554,6 @@ namespace DanielLochner.Assets.CreatureCreator
             data.Bones[index].weight = weight;
             SkinnedMeshRenderer.SetBlendShapeWeight(index, weight);
 
-            UpdateOrigin();
-            UpdateDimensions();
-
             OnSetWeight?.Invoke(index, weight);
         }
         public void AddWeight(int index, float weight, int dir = 0)
@@ -713,7 +714,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (Legs.Count == 0)
             {
-                Body.localPosition = Vector3.up * (Dimensions.Height - Dimensions.Body.Height / 2f);
+                Body.localPosition = Vector3.up * BodyAlignedOffset;
             }
         }
 
@@ -794,9 +795,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
             SkinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
 
-            UpdateDimensions();
-
             Destroy(tmpMesh);
+
+            UpdateDimensions();
         }
         public void UpdateDimensions()
         {
@@ -806,13 +807,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (Legs.Count > 0)
             {
-                float offset = (SkinnedMeshRenderer.localBounds.size.y / 2f) + (SkinnedMeshRenderer.localBounds.center.y);
-                Dimensions.Height = Body.localPosition.y + offset;
+                Dimensions.Height = Body.localPosition.y + BodyAlignedOffset;
             }
             else
             {
                 Dimensions.Height = Dimensions.Body.Height;
             }
+
+            UpdateWeight();
         }
         public void UpdateWeight()
         {
