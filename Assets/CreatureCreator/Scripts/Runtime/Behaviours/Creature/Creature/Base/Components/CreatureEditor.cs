@@ -729,6 +729,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 LoadedCreature = null;
             }
 
+            Constructor.UpdateOrigin();
             UpdateMeshCollider();
 
             Constructor.IsTextured = Constructor.IsTextured;
