@@ -165,6 +165,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public List<ChangeData> History { get; set; } = new List<ChangeData>();
         public int Counter { get; set; } = -1;
+        public static string PrevCreatureData { get; set; }
         #endregion
 
         #region Methods
@@ -187,7 +188,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetupPlayer();
             SetupEditor();
 
-            TakeSnapshot(Change.Load);
+            TakeSnapshot(Change.Load, false);
         }
         public void SetupEditor()
         {
@@ -349,6 +350,28 @@ namespace DanielLochner.Assets.CreatureCreator
                     bonesWarningAnimator.SetTrigger("Warn");
                 }
             };
+
+            // Request to load unsaved creature
+            if (!WorldManager.Instance.IsUsingTeleport && !string.IsNullOrEmpty(PrevCreatureData))
+            {
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_unsaved-creature"), LocalizationUtility.Localize("cc_unsaved-creature_message"), onYes: delegate
+                {
+                    CreatureData creatureData = JsonUtility.FromJson<CreatureData>(PrevCreatureData);
+                    if (CanLoadCreature(creatureData, out string errorTitle, out string errorMessage))
+                    {
+                        if (IsValidName(creatureData.Name, true))
+                        {
+                            Load(creatureData);
+                        }
+                    }
+                    else
+                    {
+                        InformationDialog.Inform(errorTitle, errorMessage);
+                    }
+
+                    PrevCreatureData = null;
+                });
+            }
         }
 
         private void OnLocaleChanged(Locale locale)
@@ -550,6 +573,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Creature.Editor.LoadedCreature = creatureData.Name;
             Creature.Editor.IsDirty = false;
+
+            PrevCreatureData = null;
         }
         public void TryLoad()
         {
@@ -562,13 +587,18 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else return;
 
-            if (!IsValidName(creatureName))
-            {
-                return;
-            }
-
             CreatureData creatureData = SaveUtility.Load<CreatureData>(Path.Combine(creaturesDirectory, $"{creatureName}.dat"), creatureEncryptionKey.Value);
-            ConfirmUnsavedChanges(() => Load(creatureData));
+            if (CanLoadCreature(creatureData, out string errorTitle, out string errorMessage))
+            {
+                if (IsValidName(creatureData.Name))
+                {
+                    ConfirmUnsavedChanges(() => Load(creatureData));
+                }
+            }
+            else
+            {
+                InformationDialog.Inform(errorTitle, errorMessage);
+            }
         }
         public void Load(CreatureData creatureData, bool loadFromHistory = false)
         {
@@ -612,6 +642,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 TakeSnapshot(Change.Load, false);
             }
+
+            PrevCreatureData = null;
         }
         public void TryClear()
         {
@@ -651,8 +683,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (CanLoadCreature(creatureData, out string errorTitle, out string errorMessage))
             {
-                Save(creatureData);
-                Load(creatureData);
+                if (IsValidName(creatureData.Name))
+                {
+                    Save(creatureData);
+                    Load(creatureData);
+                }
             }
             else
             {
@@ -845,11 +880,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool CanLoadCreature(CreatureData creatureData, out string errorTitle, out string errorMessage)
         {
             #region Invalid
-            if (creatureData == null || !IsValidName(creatureData.Name))
+            if (creatureData == null)
             {
                 errorTitle = LocalizationUtility.Localize("cc_invalid-creature");
                 errorMessage = LocalizationUtility.Localize("cc_cannot-load-creature_reason_invalid");
-
                 return false;
             }
             #endregion
@@ -1562,6 +1596,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (setDirty)
                 {
                     Creature.Editor.IsDirty = true;
+                    if (!WorldManager.Instance.IsUsingTeleport)
+                    {
+                        PrevCreatureData = data;
+                    }
                 }
 
                 SetUndoable(Counter > 0);
@@ -1701,9 +1739,9 @@ namespace DanielLochner.Assets.CreatureCreator
         /// </summary>
         /// <param name="creatureName">The name to be validated.</param>
         /// <returns>The validity of the name.</returns>
-        private bool IsValidName(string creatureName)
+        private bool IsValidName(string creatureName, bool allowUnnamed = false)
         {
-            if (string.IsNullOrEmpty(creatureName))
+            if (!allowUnnamed && string.IsNullOrEmpty(creatureName))
             {
                 InformationDialog.Inform(LocalizationUtility.Localize("cc_creature-unnamed_title"), LocalizationUtility.Localize("cc_creature-unnamed_message"));
                 return false;

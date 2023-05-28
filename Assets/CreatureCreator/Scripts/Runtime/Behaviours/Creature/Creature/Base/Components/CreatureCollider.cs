@@ -57,7 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bone.SetZeroParent(Constructor.Bones[i]);
 
                 float width = 2f * Constructor.BoneSettings.Radius * Mathf.Lerp(1, 4, Constructor.GetWeight(i) / 100f);
-                bone.localScale = new Vector3(Constructor.Dimensions.Body.Width, width, Constructor.BoneSettings.Length);
+                bone.localScale = new Vector3(width, width, Constructor.BoneSettings.Length);
 
                 if (Constructor.Legs.Count > 0)
                 {
