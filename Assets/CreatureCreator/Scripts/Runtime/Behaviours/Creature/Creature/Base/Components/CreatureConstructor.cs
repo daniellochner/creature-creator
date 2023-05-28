@@ -38,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool isTextured;
         private Rigidbody rb;
+        private Mesh bodyMesh, tmpBodyMesh;
         #endregion
 
         #region Properties
@@ -62,7 +63,6 @@ namespace DanielLochner.Assets.CreatureCreator
             set => maxLightSources = value;
         }
 
-        public Mesh Mesh { get; private set; }
         public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
         public Material BodyMat { get; private set; }
         public Material BodyPrimaryMat { get; private set; }
@@ -100,7 +100,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 isTextured = value;
-                Mesh.uv = isTextured ? Mesh.uv8 : null;
+                bodyMesh.uv = isTextured ? bodyMesh.uv8 : null;
             }
         }
         public int LightSources
@@ -126,8 +126,9 @@ namespace DanielLochner.Assets.CreatureCreator
             SkinnedMeshRenderer = Model.GetComponent<SkinnedMeshRenderer>();
             SkinnedMeshRenderer.sharedMaterial = BodyMat = new Material(bodyMaterial);
             BodyMat.name = "Body";
-            SkinnedMeshRenderer.sharedMesh = Mesh = new Mesh();
-            Mesh.name = "Body";
+            SkinnedMeshRenderer.sharedMesh = bodyMesh = new Mesh();
+            bodyMesh.name = "Body";
+            tmpBodyMesh = new Mesh();
 
             BodyPrimaryMat = new Material(bodyPartMaterial);
             BodyPrimaryMat.name = "Body_Primary";
@@ -182,8 +183,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void ConstructBody()
         {
             // Mesh Generation
-            Mesh.Clear();
-            Mesh.ClearBlendShapes();
+            bodyMesh.Clear();
+            bodyMesh.ClearBlendShapes();
 
             #region Vertices
             List<Vector3> vertices = new List<Vector3>();
@@ -266,8 +267,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            Mesh.SetVertices(vertices);
-            Mesh.boneWeights = boneWeights.ToArray();
+            bodyMesh.SetVertices(vertices);
+            bodyMesh.boneWeights = boneWeights.ToArray();
             #endregion
 
             #region Triangles
@@ -307,7 +308,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 triangles.Add(topOffset + i + (boneSettings.Segments + 1));
             }
 
-            Mesh.SetTriangles(triangles, 0);
+            bodyMesh.SetTriangles(triangles, 0);
             #endregion
 
             #region UVs
@@ -346,8 +347,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            Mesh.SetUVs(7, uv); // Store copy of UVs in mesh.
-            Mesh.uv = Mesh.uv8;
+            bodyMesh.SetUVs(7, uv); // Store copy of UVs in mesh.
+            bodyMesh.uv = bodyMesh.uv8;
             #endregion
 
             #region Normals
@@ -361,7 +362,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 normals[i] = (xyDir + zDir).normalized;
             }
 
-            Mesh.SetNormals(normals);
+            bodyMesh.SetNormals(normals);
             #endregion
 
             #region Bones
@@ -407,13 +408,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     deltaVertices[vertIndex] = new Vector2(vertices[vertIndex].x, vertices[vertIndex].y).normalized * heightAboveBone;
                 }
-                Mesh.AddBlendShapeFrame("Bone." + boneIndex, 0, deltaZeroArray, deltaZeroArray, deltaZeroArray);
-                Mesh.AddBlendShapeFrame("Bone." + boneIndex, 100, deltaVertices, deltaZeroArray, deltaZeroArray);
+                bodyMesh.AddBlendShapeFrame("Bone." + boneIndex, 0, deltaZeroArray, deltaZeroArray, deltaZeroArray);
+                bodyMesh.AddBlendShapeFrame("Bone." + boneIndex, 100, deltaVertices, deltaZeroArray, deltaZeroArray);
 
                 OnSetupBone?.Invoke(boneIndex);
             }
 
-            Mesh.bindposes = bindPoses;
+            bodyMesh.bindposes = bindPoses;
             SkinnedMeshRenderer.bones = boneTransforms;
             #endregion
 
@@ -426,7 +427,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Mesh Bounds
-            UpdateBounds();
+            if (!SkinnedMeshRenderer.updateWhenOffscreen)
+            {
+                SkinnedMeshRenderer.BakeMesh(tmpBodyMesh);
+                UpdateBounds(tmpBodyMesh);
+            }
 
             OnConstructBody?.Invoke();
         }
@@ -738,64 +743,63 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Body.position = mean;
         }
-        public void UpdateBounds()
+
+        public void UpdateBounds(Mesh mesh)
         {
-            Mesh tmpMesh = new Mesh();
-            SkinnedMeshRenderer.BakeMesh(tmpMesh);
+            mesh.RecalculateBounds();
+            SkinnedMeshRenderer.localBounds = mesh.bounds;
 
-            MinMax minMaxX = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            MinMax minMaxY = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            MinMax minMaxZ = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            // MinMax minMaxX = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            // MinMax minMaxY = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
+            // MinMax minMaxZ = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
 
-            Vector3[] vertices = tmpMesh.vertices;
+            // Vector3[] vertices = mesh.vertices;
 
-            int rings = (boneSettings.Segments + 1) + (boneSettings.Rings * data.Bones.Count);
-            int offset = boneSettings.Segments / 4;
+            // int rings = (boneSettings.Segments + 1) + (boneSettings.Rings * data.Bones.Count);
+            // int offset = boneSettings.Segments / 4;
 
-            int v = 0;
-            for (int ringIndex = 0; ringIndex < rings; ringIndex += 2, v += boneSettings.Segments + 1)
-            {
-                for (int i = 0; i < boneSettings.Segments; i += offset, v += offset)
-                {
-                    Vector3 vertex = vertices[v];
+            // int v = 0;
+            // for (int ringIndex = 0; ringIndex < rings; ringIndex += 2, v += boneSettings.Segments + 1)
+            // {
+            //    for (int i = 0; i < boneSettings.Segments; i += offset, v += offset)
+            //    {
+            //        Vector3 vertex = vertices[v];
 
-                    // X
-                    if (vertex.x < minMaxX.min)
-                    {
-                        minMaxX.min = vertex.x;
-                    }
-                    if (vertex.x > minMaxX.max)
-                    {
-                        minMaxX.max = vertex.x;
-                    }
+            //        // X
+            //        if (vertex.x < minMaxX.min)
+            //        {
+            //            minMaxX.min = vertex.x;
+            //        }
+            //        if (vertex.x > minMaxX.max)
+            //        {
+            //            minMaxX.max = vertex.x;
+            //        }
 
-                    // Y
-                    if (vertex.y < minMaxY.min)
-                    {
-                        minMaxY.min = vertex.y;
-                    }
-                    if (vertex.y > minMaxY.max)
-                    {
-                        minMaxY.max = vertex.y;
-                    }
+            //        // Y
+            //        if (vertex.y < minMaxY.min)
+            //        {
+            //            minMaxY.min = vertex.y;
+            //        }
+            //        if (vertex.y > minMaxY.max)
+            //        {
+            //            minMaxY.max = vertex.y;
+            //        }
 
-                    // Z
-                    if (vertex.z < minMaxZ.min)
-                    {
-                        minMaxZ.min = vertex.z;
-                    }
-                    if (vertex.z > minMaxZ.max)
-                    {
-                        minMaxZ.max = vertex.z;
-                    }
-                }
-            }
+            //        // Z
+            //        if (vertex.z < minMaxZ.min)
+            //        {
+            //            minMaxZ.min = vertex.z;
+            //        }
+            //        if (vertex.z > minMaxZ.max)
+            //        {
+            //            minMaxZ.max = vertex.z;
+            //        }
+            //    }
+            // }
 
-            Vector3 center = new Vector3(minMaxX.Average, minMaxY.Average, minMaxZ.Average);
-            Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
-            SkinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
-
-            Destroy(tmpMesh);
+            // Vector3 center = new Vector3(minMaxX.Average, minMaxY.Average, minMaxZ.Average);
+            // Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
+            // SkinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
 
             UpdateDimensions();
         }
