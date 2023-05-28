@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CreatureInformationMenu : Menu
+    public class CreatureInformationMenu : OptimizedMenu
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI nameAgeText;
@@ -16,7 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image photoImage;
 
         private CreatureInformation information = null;
-        private CanvasGroup canvasGroup;
         #endregion
 
         #region Properties
@@ -27,11 +26,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-            canvasGroup = GetComponent<CanvasGroup>();
-        }
         private void Update()
         {
             if (information != null)

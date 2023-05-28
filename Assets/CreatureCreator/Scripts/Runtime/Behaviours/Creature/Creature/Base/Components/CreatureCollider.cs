@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Mesh cubeMesh;
+        [SerializeField] private Mesh baseMesh;
         private MeshCollider meshCollider;
         #endregion
 
@@ -39,7 +40,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
 
             meshCollider = GetComponent<MeshCollider>();
-            meshCollider.sharedMesh = new Mesh();
+            meshCollider.sharedMesh = new Mesh
+            {
+                name = "Creature"
+            };
         }
 
         public void UpdateCollider()
@@ -47,92 +51,49 @@ namespace DanielLochner.Assets.CreatureCreator
             Transform tmp = new GameObject("_TMP").transform;
 
             List<CombineInstance> combine = new List<CombineInstance>();
-            foreach (Transform bone in Constructor.Bones)
+            for (int i = 0; i < Constructor.Bones.Count; i++)
             {
-                MeshFilter meshFilter = new GameObject("Bone").AddComponent<MeshFilter>();
-                meshFilter.sharedMesh = cubeMesh;
-                meshFilter.transform.SetZeroParent(bone);
+                Transform bone = new GameObject($"Bone.{i}").transform;
+                bone.SetZeroParent(Constructor.Bones[i]);
 
-                float width = Constructor.Dimensions.Body.Width;
+                float width = 2f * Constructor.BoneSettings.Radius * Mathf.Lerp(1, 4, Constructor.GetWeight(i) / 100f);
+                bone.localScale = new Vector3(Constructor.Dimensions.Body.Width, width, Constructor.BoneSettings.Length);
 
-                meshFilter.transform.localScale = new Vector3(width, width, Constructor.BoneSettings.Length);
-
-if (Constructor.Legs.Count > 0)
-{
-                tmp.SetZeroParent(transform);
-
-}
-else
-{
-                tmp.SetZeroParent(Constructor.Body);
-
-}
-                tmp.localPosition = -Vector3.up * Constructor.BodyAlignedOffset;
-
-
-                meshFilter.transform.SetParent(tmp, true);
-
+                if (Constructor.Legs.Count > 0)
+                {
+                    tmp.SetZeroParent(transform);
+                }
+                else
+                {
+                    tmp.SetZeroParent(Constructor.Body);
+                    tmp.localPosition = new Vector3(0f, Constructor.SkinnedMeshRenderer.localBounds.center.y - (Constructor.SkinnedMeshRenderer.localBounds.size.y / 2f), 0f);
+                }
+                bone.SetParent(tmp, true);
                 tmp.SetZeroParent(Dynamic.Transform);
 
                 combine.Add(new CombineInstance()
                 {
                     mesh = cubeMesh,
-                    transform = meshFilter.transform.localToWorldMatrix
+                    transform = bone.localToWorldMatrix
                 });
             }
 
             if (Constructor.Legs.Count > 0)
             {
-                MeshFilter meshFilter = new GameObject("Legs").AddComponent<MeshFilter>();
-                meshFilter.sharedMesh = cubeMesh;
-                meshFilter.transform.SetZeroParent(Dynamic.Transform);
-                meshFilter.transform.localScale *= Constructor.Dimensions.Body.Width;
-                meshFilter.transform.localPosition = Vector3.up * Constructor.Dimensions.Body.Width;
+                Transform legs = new GameObject("Legs").transform;
+                legs.SetZeroParent(tmp);
+                legs.localScale *= Constructor.Dimensions.Body.Width;
 
                 combine.Add(new CombineInstance()
                 {
-                    mesh = cubeMesh,
-                    transform = meshFilter.transform.localToWorldMatrix
+                    mesh = baseMesh,
+                    transform = legs.localToWorldMatrix
                 });
             }
 
             meshCollider.sharedMesh.CombineMeshes(combine.ToArray());
 
-
-
-
-            //  if (useComplexMesh)
-            // {
-            //     MeshFilter capsule = new GameObject("_TMP").AddComponent<MeshFilter>();
-            //     capsule.sharedMesh = capsuleMesh;
-            //     capsule.transform.SetZeroParent(Dynamic.Transform);
-            //     capsule.transform.localPosition = Vector3.up * (Constructor.Dimensions.Body.Height / 2f);
-            //     capsule.transform.localScale = new Vector3(Constructor.Dimensions.Body.Width, Constructor.Dimensions.Body.Height / 2f, Constructor.Dimensions.Body.Width);
-    
-            //     Transform tmp = new GameObject().transform;
-            //     tmp.SetParent(Dynamic.Transform, false);
-            //     if (Constructor.Legs.Count > 0)
-            //     {
-            //         tmp.localPosition = Constructor.Body.localPosition;
-            //     }
-            //     else
-            //     {
-            //         tmp.localPosition = Vector3.up * Constructor.BodyAlignedOffset;
-            //     }
-
-            //     Mesh tmpMesh = new Mesh();
-            //     Constructor.SkinnedMeshRenderer.BakeMesh(tmpMesh);
-            //     List<CombineInstance> combine = new List<CombineInstance>()
-            //     {
-            //         new CombineInstance(){ mesh = tmpMesh, transform = tmp.localToWorldMatrix }
-            //     };
-            //     if (Constructor.Legs.Count > 0)
-            //     {
-            //         combine.Add(new CombineInstance() { mesh = capsule.mesh, transform = capsule.transform.localToWorldMatrix });
-            //     }
-            //     meshCollider.sharedMesh.CombineMeshes(combine.ToArray());
-            //     Destroy(tmpMesh);
-            // }
+            Destroy(tmp.gameObject);
         }
         #endregion
     }

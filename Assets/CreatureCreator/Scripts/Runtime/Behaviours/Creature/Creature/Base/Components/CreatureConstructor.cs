@@ -107,10 +107,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get; set;
         }
-        public float BodyAlignedOffset
-        {
-            get => (SkinnedMeshRenderer.localBounds.size.y / 2f) - (SkinnedMeshRenderer.localBounds.center.y);
-        }
         #endregion
 
         #region Methods
@@ -124,16 +120,24 @@ namespace DanielLochner.Assets.CreatureCreator
             rb = GetComponent<Rigidbody>();
 
             SkinnedMeshRenderer = Model.GetComponent<SkinnedMeshRenderer>();
-            SkinnedMeshRenderer.sharedMaterial = BodyMat = new Material(bodyMaterial);
-            BodyMat.name = "Body";
-            SkinnedMeshRenderer.sharedMesh = bodyMesh = new Mesh();
-            bodyMesh.name = "Body";
+            SkinnedMeshRenderer.sharedMaterial = BodyMat = new Material(bodyMaterial)
+            {
+                name = "Body"
+            };
+            SkinnedMeshRenderer.sharedMesh = bodyMesh = new Mesh()
+            {
+                name = "Body"
+            };
             tmpBodyMesh = new Mesh();
 
-            BodyPrimaryMat = new Material(bodyPartMaterial);
-            BodyPrimaryMat.name = "Body_Primary";
-            BodySecondaryMat = new Material(bodyPartMaterial);
-            BodySecondaryMat.name = "Body_Secondary";
+            BodyPrimaryMat = new Material(bodyPartMaterial)
+            {
+                name = "Body_Primary"
+            };
+            BodySecondaryMat = new Material(bodyPartMaterial)
+            {
+                name = "Body_Secondary"
+            };
         }
 
         public void Construct(CreatureData data, bool debug = false)
@@ -719,7 +723,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (Legs.Count == 0)
             {
-                Body.localPosition = Vector3.up * BodyAlignedOffset;
+                Body.localPosition = new Vector3(0f, (SkinnedMeshRenderer.localBounds.size.y / 2f) - SkinnedMeshRenderer.localBounds.center.y, 0f);
             }
         }
 
@@ -811,7 +815,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (Legs.Count > 0)
             {
-                Dimensions.Height = Body.localPosition.y + BodyAlignedOffset;
+                Dimensions.Height = Body.localPosition.y - SkinnedMeshRenderer.localBounds.center.y + SkinnedMeshRenderer.localBounds.size.y;
             }
             else
             {

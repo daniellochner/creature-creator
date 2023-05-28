@@ -5,7 +5,7 @@ namespace DanielLochner.Assets
     [DefaultExecutionOrder(1)]
     public class OptimizedMenu : Menu
     {
-        private CanvasGroup canvasGroup;
+        protected CanvasGroup canvasGroup;
 
         protected override void Awake()
         {
