@@ -247,8 +247,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 if (Legs.Count == 0)
                 {
-                    Vector3 target = Vector3.up * Constructor.BodyAlignedOffset;
-                    offset = target - Constructor.Body.localPosition;
+                    offset = Vector3.up * Constructor.BodyAlignedOffset - Constructor.Body.localPosition;
 
                     function = EasingFunction.EaseOutBounce;
                 }
