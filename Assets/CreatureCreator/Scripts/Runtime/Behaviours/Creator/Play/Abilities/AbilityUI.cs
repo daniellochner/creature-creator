@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class AbilityUI : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
+    public class AbilityUI : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerExitHandler
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI nameText;
@@ -69,6 +69,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public void OnPointerDown(PointerEventData eventData)
         {
             ability.OnTryPrepare();
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (ability.IsPrepared)
+            {
+                ability.OnTryPerform();
+            }
         }
 
         public void UpdateUI()
