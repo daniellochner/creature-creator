@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isInteractable;
         private Transform connectionPoint;
 
-        private float addedOrRemovedTime;
+        protected float addedOrRemovedTime;
         #endregion
 
         #region Properties

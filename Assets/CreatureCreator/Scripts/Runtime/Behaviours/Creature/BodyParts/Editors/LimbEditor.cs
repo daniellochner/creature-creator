@@ -251,6 +251,36 @@ namespace DanielLochner.Assets.CreatureCreator
                         if (EditorManager.Instance.IsBuilding)
                         {
                             CreatureEditor.Camera.CameraOrbit.Freeze();
+
+                            if (SystemUtility.IsDevice(DeviceType.Handheld))
+                            {
+                                StartCoroutine(CreatureEditor.HoldDraggableRoutine(boneDrag));
+                            }
+                        }
+                    });
+                    boneDrag.OnHold.AddListener(delegate
+                    {
+                        if (EditorManager.Instance.IsBuilding)
+                        {
+                            if (!boneDrag.draggable)
+                            {
+                                if (Time.time > addedOrRemovedTime + CreatureEditor.AddOrRemoveCooldown)
+                                {
+                                    InputUtility.GetDelta(out float deltaX, out float deltaY);
+
+                                    if (deltaY > 0)
+                                    {
+                                        boneScroll.OnScrollUp.Invoke();
+                                    }
+                                    else
+                                    if (deltaY < 0)
+                                    {
+                                        boneScroll.OnScrollDown.Invoke();
+                                    }
+
+                                    addedOrRemovedTime = Time.time;
+                                }
+                            }
                         }
                     });
                     boneDrag.OnDrag.AddListener(delegate
