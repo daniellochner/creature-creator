@@ -265,7 +265,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetupInteraction()
         {
             meshCollider = Constructor.Model.GetComponent<MeshCollider>();
-            colliderMesh = new Mesh(); // Separate mesh used to contain a snapshot of the body for the collider.
+            meshCollider.sharedMesh = colliderMesh = new Mesh(); // Separate mesh used to contain a snapshot of the body for the collider.
 
             // Interact
             toolsAudioSource = gameObject.AddComponent<AudioSource>();
@@ -469,7 +469,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         Constructor.RemoveWeight(index, 5);
 
                         Constructor.UpdateOrigin();
-                        Constructor.UpdateBounds();
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(-1);
 
@@ -490,7 +489,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         Constructor.AddWeight(index, 5);
 
                         Constructor.UpdateOrigin();
-                        Constructor.UpdateBounds();
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(1);
 
@@ -617,7 +615,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Constructor.UpdateOrigin();
                     Constructor.UpdateConfiguration();
-                    Constructor.UpdateBounds();
 
                     UpdateMeshCollider();
 
@@ -715,9 +712,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                Constructor.AddBone(0, Vector3.up * 1.5f, Quaternion.identity, 0f);
+                Constructor.AddBone(0, new Vector3(0f, 1.5f, -0.1f), Quaternion.identity, 0f);
                 Constructor.AddBoneToBack();
-                Constructor.Body.localPosition = new Vector3(0, Constructor.Body.localPosition.y, 0); // Added bones aren't initially center-aligned.
+                Constructor.UpdateOrigin();
+
                 Constructor.SetPrimaryColour(Color.white);
                 Constructor.SetSecondaryColour(Color.black);
                 Constructor.SetPattern("");
@@ -729,7 +727,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 LoadedCreature = null;
             }
 
-            Constructor.UpdateOrigin();
             UpdateMeshCollider();
 
             Constructor.IsTextured = Constructor.IsTextured;
@@ -768,9 +765,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void UpdateMeshCollider()
         {
-            colliderMesh.Clear();
             Constructor.SkinnedMeshRenderer.BakeMesh(colliderMesh);
             meshCollider.sharedMesh = colliderMesh;
+            Constructor.UpdateBounds(colliderMesh);
 
             UpdateMeshColliderLimbs();
         }
