@@ -36,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ragdoll = CreatureCloner.Clone(creatureData, transform.position, transform.rotation, transform.parent);
             ragdoll.Body.position = pos;
+            ragdoll.SkinnedMeshRenderer.updateWhenOffscreen = true;
 
             CopyPositionsAndRotations(original, ragdoll);
             ragdoll.Body.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Ragdoll"));
