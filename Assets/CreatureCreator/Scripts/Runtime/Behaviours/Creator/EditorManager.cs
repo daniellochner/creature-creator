@@ -165,7 +165,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public List<ChangeData> History { get; set; } = new List<ChangeData>();
         public int Counter { get; set; } = -1;
-        public static string PrevCreatureData { get; set; }
+
+        public string PrevCreatureData
+        {
+            get => PlayerPrefs.GetString("PREV_CREATURE_DATA");
+            set => PlayerPrefs.SetString("PREV_CREATURE_DATA", value);
+        }
         #endregion
 
         #region Methods
@@ -354,7 +359,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Request to load unsaved creature
             if (!WorldManager.Instance.IsUsingTeleport && !string.IsNullOrEmpty(PrevCreatureData))
             {
-                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_unsaved-creature"), LocalizationUtility.Localize("cc_unsaved-creature_message"), onYes: delegate
+                ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_unsaved-creature_title"), LocalizationUtility.Localize("cc_unsaved-creature_message"), onYes: delegate
                 {
                     CreatureData creatureData = JsonUtility.FromJson<CreatureData>(PrevCreatureData);
                     if (CanLoadCreature(creatureData, out string errorTitle, out string errorMessage))
