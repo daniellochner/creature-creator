@@ -60,17 +60,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Dictionary<Renderer, Material[]> rm = new Dictionary<Renderer, Material[]>();
 
-            foreach (Renderer renderer in Constructor.Body.GetComponentsInChildren<Renderer>(true))
+            foreach (BodyPartConstructor bpc in Constructor.BodyParts)
             {
-                rm[renderer] = renderer.sharedMaterials;
-
-                Material[] placeholder = new Material[renderer.materials.Length];
-                for (int i = 0; i < placeholder.Length; ++i)
-                {
-                    placeholder[i] = damageMaterial;
-                }
-                renderer.materials = placeholder;
+                RecordRenderer(ref rm, bpc.Renderer);
+                RecordRenderer(ref rm, bpc.Flipped.Renderer);
             }
+            RecordRenderer(ref rm, Constructor.SkinnedMeshRenderer);
 
             yield return new WaitForSeconds(damageTime);
 
@@ -80,6 +75,17 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             damageCoroutine = null;
+        }
+        private void RecordRenderer(ref Dictionary<Renderer, Material[]> rm, Renderer renderer)
+        {
+            rm[renderer] = renderer.sharedMaterials;
+
+            Material[] placeholder = new Material[renderer.materials.Length];
+            for (int i = 0; i < placeholder.Length; ++i)
+            {
+                placeholder[i] = damageMaterial;
+            }
+            renderer.materials = placeholder;
         }
         #endregion
     }
