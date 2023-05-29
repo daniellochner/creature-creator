@@ -16,8 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, DrawIf("autoFix", true)] private float autoFixTime;
         [SerializeField] private GameObject breakFX;
 
-        private MeshRenderer meshRenderer;
-        private MeshCollider meshCollider;
         private AudioSource creakAudioSource;
         #endregion
 
@@ -29,14 +27,12 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             creakAudioSource = GetComponentInParent<AudioSource>();
-            meshCollider = GetComponent<MeshCollider>();
-            meshRenderer = GetComponent<MeshRenderer>();
         }
         private void Start()
         {
             if (IsBroken.Value)
             {
-                meshCollider.enabled = meshRenderer.enabled = false;
+                SetVisibility(false);
             }
         }
         private void OnCollisionEnter(Collision other)
@@ -70,13 +66,13 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void BreakClientRpc()
         {
-            meshCollider.enabled = meshRenderer.enabled = false;
+            SetVisibility(false);
             Instantiate(breakFX, transform.position, transform.rotation);
         }
         [ClientRpc]
         private void FixClientRpc()
         {
-            meshCollider.enabled = meshRenderer.enabled = true;
+            SetVisibility(true);
         }
         [ServerRpc]
         private void CreakServerRpc()
@@ -100,6 +96,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitForSeconds(autoFixTime);
                 FixClientRpc();
                 IsBroken.Value = false;
+            }
+        }
+        private void SetVisibility(bool isVisible)
+        {
+            foreach (Collider c in GetComponentsInChildren<Collider>(true))
+            {
+                c.enabled = isVisible;
+            }
+            foreach (Renderer r in GetComponentsInChildren<Renderer>(true))
+            {
+                r.enabled = isVisible;
             }
         }
         #endregion
