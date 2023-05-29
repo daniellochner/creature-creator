@@ -113,15 +113,9 @@ namespace DanielLochner.Assets.CreatureCreator
  
         public void UpdateIgnored()
         {
-            StartCoroutine(UpdateIgnoredRoutine());
-        }
-        private IEnumerator UpdateIgnoredRoutine()
-        {
             List<string> ignored = new List<string>();
             foreach (var client in NetworkManager.Singleton.ConnectedClients)
             {
-                yield return new WaitUntil(() => client.Value.PlayerObject != null);
-
                 CreaturePlayer player = client.Value.PlayerObject.GetComponent<CreaturePlayer>();
                 if (Creature.Comparer.CompareTo(player.Constructor))
                 {
@@ -161,11 +155,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public static float GetTargetDistance(CreatureBase creature, CreatureBase other, float offset = 0f)
         {
-            return (creature.Constructor.Dimensions.Body.Width + other.Constructor.Dimensions.Body.Width) / 2f + offset;
+            return (creature.Constructor.Dimensions.Radius + other.Constructor.Dimensions.Radius) / 2f + offset;
         }
         public static float GetTargetDistance(CreatureBase creature, float offset = 0f)
         {
-            return (creature.Constructor.Dimensions.Body.Width / 2f) + offset;
+            return (creature.Constructor.Dimensions.Radius / 2f) + offset;
         }
 
         #region Debug
