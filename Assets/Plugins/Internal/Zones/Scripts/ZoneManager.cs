@@ -32,7 +32,7 @@ namespace DanielLochner.Assets
 
             if (notify && zone != notifiedZone)
             {
-                NotificationsManager.Notify(LocalizationUtility.Localize("zone_enter", zone.name));
+                NotificationsManager.Notify(LocalizationUtility.Localize("zone_enter", LocalizationUtility.Localize(zone.nameId)));
                 notifiedZone = zone;
             }
         }

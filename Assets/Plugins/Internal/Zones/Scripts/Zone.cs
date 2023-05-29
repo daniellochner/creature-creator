@@ -9,6 +9,7 @@ namespace DanielLochner.Assets
     public class Zone : MonoBehaviour
     {
         #region Fields
+        [SerializeField] public string nameId;
         [SerializeField] public bool notify = true;
         [SerializeField] private float entryDelay;
         public UnityEvent onEnter;
