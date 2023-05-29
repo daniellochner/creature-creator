@@ -42,9 +42,9 @@ namespace DanielLochner.Assets
 
         public virtual bool CanInteract(Interactor interactor)
         {
-            return !CanvasUtility.IsPointerOverUI && !Vector3Utility.SqrDistanceComp(transform.position, interactor.transform.position, interactionRange);
+            return !Vector3Utility.SqrDistanceComp(transform.position, interactor.transform.position, interactionRange);
         }
-        public virtual bool CanHighlight(Interactor interactor) => CanInteract(interactor);
+        public virtual bool CanHighlight(Interactor interactor) => !CanvasUtility.IsPointerOverUI && CanInteract(interactor);
 
         public void Interact(Interactor interactor)
         {
