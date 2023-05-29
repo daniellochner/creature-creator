@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private CreatureInformationMenu informationMenuPrefab;
         [SerializeField] private GameObject selectCirclePrefab;
+        [SerializeField] private float offset;
 
         private CreatureInformationMenu informationMenu;
         private GameObject informationSelectCircle;
@@ -76,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (informationMenu.IsVisible)
             {
-                Vector3 position = transform.position + transform.up * Constructor.Dimensions.Height;
+                Vector3 position = transform.position + transform.up * (Constructor.Dimensions.Height + offset);
                 informationMenu.transform.position = RectTransformUtility.WorldToScreenPoint(Player.Instance.Camera.MainCamera, position);
             }
         }

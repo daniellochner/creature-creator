@@ -58,7 +58,7 @@ PrefabInstance:
     - target: {fileID: 5222088643920328137, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: onSpawn.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 6768347154810087137}
+      objectReference: {fileID: 0}
     - target: {fileID: 5222088643920328137, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: onSpawn.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 5222088643920328137, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: onDespawn.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 6768347154810087137}
+      objectReference: {fileID: 0}
     - target: {fileID: 5222088643920328137, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
       propertyPath: onDespawn.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
@@ -236,6 +236,7 @@ MonoBehaviour:
   reqAbility: {fileID: 11400000, guid: 96d2191b659761846805a7cf38933ce2, type: 2}
   informationMenuPrefab: {fileID: 1257471989696206141, guid: f2f494ecd6ba5f14fb6ae8e08066afe0, type: 3}
   selectCirclePrefab: {fileID: 6934024238365535033, guid: a057762bebc43be4497953e485c8f86f, type: 3}
+  offset: 0.15
 --- !u!114 &7154973901576851369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +401,7 @@ MonoBehaviour:
   grounded: {fileID: 8166979559846952157}
   minimapIcon: {fileID: 6534830369455530100}
   launcher: {fileID: 2024852089997676735}
+  optimizer: {fileID: 5803230153924989712}
   namer: {fileID: 484727593248719455}
   deathMessenger: {fileID: 5920988887648741201}
   messenger: {fileID: 4886571779201347070}
@@ -537,6 +539,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f919572083005240b4ce1e8996766f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5803230153924989712 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5867162155424535600, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 136638444904974112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646305851666112926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75fd43019974c544e95f3319cba7fe03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5810437394869824179 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5856858711622266259, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
@@ -586,11 +599,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5b753a4f5a83942bba288613a30455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &6768347154810087137 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 6631708856504426945, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
-  m_PrefabInstance: {fileID: 136638444904974112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7398209664529582372 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7444124243389632004, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}

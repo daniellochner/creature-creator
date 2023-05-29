@@ -468,7 +468,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                         Constructor.RemoveWeight(index, 5);
 
-                        Constructor.UpdateOrigin();
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(-1);
 
@@ -488,7 +487,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                         Constructor.AddWeight(index, 5);
 
-                        Constructor.UpdateOrigin();
                         UpdateMeshCollider();
                         UpdateBodyPartsAlignment(1);
 
@@ -613,7 +611,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
                 drag.OnEndDrag.AddListener(delegate
                 {
-                    Constructor.UpdateOrigin();
                     Constructor.UpdateConfiguration();
 
                     UpdateMeshCollider();
@@ -714,7 +711,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Constructor.AddBone(0, new Vector3(0f, 1.5f, -0.1f), Quaternion.identity, 0f);
                 Constructor.AddBoneToBack();
-                Constructor.UpdateOrigin();
 
                 Constructor.SetPrimaryColour(Color.white);
                 Constructor.SetSecondaryColour(Color.black);

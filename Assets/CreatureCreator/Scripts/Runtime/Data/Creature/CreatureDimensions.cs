@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -11,6 +12,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         public float Height;
         public BodyDimensions Body = new BodyDimensions();
+
+        public float Radius => Mathf.Max(Body.Width, Body.Length);
         #endregion
 
         #region Methods

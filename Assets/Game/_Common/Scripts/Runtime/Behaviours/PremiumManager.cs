@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return 160 * Mathf.RoundToInt((/*Display.main.systemWidth*/Screen.safeArea.width / Screen.dpi) / 3f);
+                return 160 * Mathf.RoundToInt((Screen.safeArea.width / Screen.dpi) / 3f);
             }
         }
         #endregion
@@ -120,26 +120,26 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Banner
         public void RequestBannerAd()
         {
-            //if (Data.IsPremium) return;
+            if (Data.IsPremium) return;
 
-            //bannerAd?.Destroy();
-            //bannerAd = new BannerView(BannerAdUnitId, /*AdSize.Banner*/AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Top);
+            bannerAd?.Destroy();
+            bannerAd = new BannerView(BannerAdUnitId, /*AdSize.Banner*/AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Top);
 
-            //bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
-            //bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
+            bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
+            bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
 
-            //bannerAd.LoadAd(new AdRequest());
-            //bannerAd.Hide();
+            bannerAd.LoadAd(new AdRequest());
+            bannerAd.Hide();
         }
 
         public void ShowBannerAd()
         {
-            //if (Data.IsPremium) return;
-            //bannerAd?.Show();
+            if (Data.IsPremium) return;
+            bannerAd?.Show();
         }
         public void HideBannerAd()
         {
-            //bannerAd?.Hide();
+            bannerAd?.Hide();
         }
 
         private void OnBannerAdLoadFailed(LoadAdError error)

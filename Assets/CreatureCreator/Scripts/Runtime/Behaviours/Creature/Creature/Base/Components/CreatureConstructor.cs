@@ -429,6 +429,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 boneTransforms[boneIndex].rotation = transform.rotation * data.Bones[boneIndex].rotation;
                 SetWeight(boneIndex, data.Bones[boneIndex].weight);
             }
+            UpdateOrigin();
 
             // Mesh Bounds
             if (!SkinnedMeshRenderer.updateWhenOffscreen)
@@ -747,75 +748,22 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Body.position = mean;
         }
-
         public void UpdateBounds(Mesh mesh)
         {
             mesh.RecalculateBounds();
             SkinnedMeshRenderer.localBounds = mesh.bounds;
 
-            // MinMax minMaxX = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            // MinMax minMaxY = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-            // MinMax minMaxZ = new MinMax(Mathf.Infinity, Mathf.NegativeInfinity);
-
-            // Vector3[] vertices = mesh.vertices;
-
-            // int rings = (boneSettings.Segments + 1) + (boneSettings.Rings * data.Bones.Count);
-            // int offset = boneSettings.Segments / 4;
-
-            // int v = 0;
-            // for (int ringIndex = 0; ringIndex < rings; ringIndex += 2, v += boneSettings.Segments + 1)
-            // {
-            //    for (int i = 0; i < boneSettings.Segments; i += offset, v += offset)
-            //    {
-            //        Vector3 vertex = vertices[v];
-
-            //        // X
-            //        if (vertex.x < minMaxX.min)
-            //        {
-            //            minMaxX.min = vertex.x;
-            //        }
-            //        if (vertex.x > minMaxX.max)
-            //        {
-            //            minMaxX.max = vertex.x;
-            //        }
-
-            //        // Y
-            //        if (vertex.y < minMaxY.min)
-            //        {
-            //            minMaxY.min = vertex.y;
-            //        }
-            //        if (vertex.y > minMaxY.max)
-            //        {
-            //            minMaxY.max = vertex.y;
-            //        }
-
-            //        // Z
-            //        if (vertex.z < minMaxZ.min)
-            //        {
-            //            minMaxZ.min = vertex.z;
-            //        }
-            //        if (vertex.z > minMaxZ.max)
-            //        {
-            //            minMaxZ.max = vertex.z;
-            //        }
-            //    }
-            // }
-
-            // Vector3 center = new Vector3(minMaxX.Average, minMaxY.Average, minMaxZ.Average);
-            // Vector3 size = new Vector3(minMaxX.Range, minMaxY.Range, minMaxZ.Range);
-            // SkinnedMeshRenderer.localBounds = new UnityEngine.Bounds(center, size);
-
             UpdateDimensions();
         }
         public void UpdateDimensions()
         {
-            Dimensions.Body.Width = SkinnedMeshRenderer.localBounds.size.x;
+            Dimensions.Body.Width  = SkinnedMeshRenderer.localBounds.size.x;
             Dimensions.Body.Height = SkinnedMeshRenderer.localBounds.size.y;
             Dimensions.Body.Length = SkinnedMeshRenderer.localBounds.size.z;
 
             if (Legs.Count > 0)
             {
-                Dimensions.Height = Body.localPosition.y - SkinnedMeshRenderer.localBounds.center.y + SkinnedMeshRenderer.localBounds.size.y;
+                Dimensions.Height = Body.localPosition.y - SkinnedMeshRenderer.localBounds.center.y + SkinnedMeshRenderer.localBounds.size.y / 2f;
             }
             else
             {
