@@ -214,6 +214,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 pveCG.interactable = isOn;
                 pveCG.alpha = isOn ? 1f : 0.25f;
             });
+
+            if (!PremiumManager.Data.IsPremium)
+            {
+                maxPlayersSlider.value = 4;
+            }
         }
 
         private void OnClientDisconnect(ulong clientID)
@@ -351,8 +356,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 string kickedPlayers = "";
 
                 // Check Premium
-                if (!PremiumManager.Data.IsPremium)
+                if (!PremiumManager.Data.IsPremium && maxPlayers > 4)
                 {
+                    maxPlayersSlider.value = 4;
                     throw new Exception(LocalizationUtility.Localize("mainmenu_premium_multiplayer"));
                 }
 
