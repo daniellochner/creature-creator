@@ -356,10 +356,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 string kickedPlayers = "";
 
                 // Check Premium
-                if (!PremiumManager.Data.IsPremium && maxPlayers > 4)
+                if (!PremiumManager.Data.IsPremium)
                 {
-                    maxPlayersSlider.value = 4;
-                    throw new Exception(LocalizationUtility.Localize("mainmenu_premium_multiplayer"));
+                    if (maxPlayers > 4)
+                    {
+                        maxPlayersSlider.value = 4;
+                        throw new Exception(LocalizationUtility.Localize("mainmenu_premium_max-players"));
+                    }
+
+                    if (isPrivate)
+                    {
+                        visibilityOS.Select(Visibility.Public);
+                        throw new Exception(LocalizationUtility.Localize("mainmenu_premium_private"));
+                    }
                 }
 
                 // Check Unlocked Map
