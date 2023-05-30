@@ -105,9 +105,10 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
+                UpdateTarget();
+
                 FishAI.Agent.ResetPath();
                 bitingCoroutine = FishAI.StartCoroutine(BitingRoutine());
-                FishAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
@@ -132,7 +133,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.Exit();
                 FishAI.StopCoroutine(bitingCoroutine);
-                FishAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }
 
             private IEnumerator BitingRoutine()
@@ -154,16 +154,19 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 head = FishAI.Creature.Animator.Mouths[0].transform.position;
                     Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, FishAI.Creature.transform.up);
                     float d = displacement.magnitude;
+
+                    FishAI.Animator.GetBehaviour<Bite>().OnBiteMouth = OnBiteMouth;
+                    FishAI.Animator.GetBehaviour<Bite>().OnBite = OnBite;
+
                     FishAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
-                    
+
                     // Wait...
                     yield return new WaitForSeconds(biteDelay.Random);
                 }
             }
 
-            private void OnBite(MouthAnimator mouth)
+            private void OnBiteMouth(MouthAnimator mouth)
             {
-                FishAI.Creature.Effects.PlaySound(biteSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
@@ -177,6 +180,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 }
+            }
+            private void OnBite()
+            {
+                FishAI.Creature.Effects.PlaySound(biteSounds);
             }
         }
         #endregion
