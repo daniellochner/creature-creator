@@ -19,13 +19,14 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         {
             hasFoundCreature = false;
 
-            Player.Instance.Animator.Animator.GetBehaviour<Animations.Bite>().OnBite += OnBite;
+            Player.Instance.Animator.Animator.GetBehaviour<Animations.Bite>().OnBiteMouth = OnBiteMouth;
+            Player.Instance.Animator.Animator.GetBehaviour<Animations.Bite>().OnBite = OnBite;
+
             Player.Instance.Animator.Params.SetTrigger("Body_Strike");
         }
-        private void OnBite(MouthAnimator mouth)
-        {
-            Player.Instance.Effects.PlaySound(biteSounds);
 
+        private void OnBiteMouth(MouthAnimator mouth)
+        {
             Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
             foreach (Collider collider in colliders)
             {
@@ -54,8 +55,10 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                     hasFoundCreature = true;
                 }
             }
-
-            Player.Instance.Animator.Animator.GetBehaviour<Animations.Bite>().OnBite -= OnBite;
+        }
+        private void OnBite()
+        {
+            Player.Instance.Effects.PlaySound(biteSounds);
         }
     }
 }

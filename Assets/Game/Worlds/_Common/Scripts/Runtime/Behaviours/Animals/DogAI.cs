@@ -257,7 +257,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 DogAI.Agent.ResetPath();
 
                 bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
-                DogAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
@@ -275,7 +274,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.Exit();
                 DogAI.StopCoroutine(bitingCoroutine);
-                DogAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }
 
             private IEnumerator BitingRoutine()
@@ -297,6 +295,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 head = DogAI.Creature.Animator.Mouths[0].transform.position;
                     Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, DogAI.Creature.transform.up);
                     float d = displacement.magnitude;
+
+                    DogAI.Animator.GetBehaviour<Bite>().OnBiteMouth = OnBiteMouth;
+                    DogAI.Animator.GetBehaviour<Bite>().OnBite = OnBite;
+
                     DogAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Wait...
@@ -304,9 +306,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            private void OnBite(MouthAnimator mouth)
+            private void OnBiteMouth(MouthAnimator mouth)
             {
-                DogAI.Creature.Effects.PlaySound(biteSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, biteRadius);
@@ -320,6 +321,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 }
+            }
+            private void OnBite()
+            {
+                DogAI.Creature.Effects.PlaySound(biteSounds);
             }
         }
         #endregion

@@ -63,7 +63,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 base.Enter();
                 SnakeAI.Agent.ResetPath();
                 strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
-                SnakeAI.Animator.GetBehaviour<Bite>().OnBite += OnBite;
             }
             public override void UpdateLogic()
             {
@@ -77,7 +76,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.Exit();
                 SnakeAI.StopCoroutine(strikeCoroutine);
-                SnakeAI.Animator.GetBehaviour<Bite>().OnBite -= OnBite;
             }
 
             private IEnumerator StrikingRoutine()
@@ -99,6 +97,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 head = SnakeAI.Creature.Animator.Mouths[0].transform.position;
                     Vector3 displacement = Vector3.ProjectOnPlane(target.transform.position - head, SnakeAI.Creature.transform.up);
                     float d = displacement.magnitude;
+
+                    SnakeAI.Animator.GetBehaviour<Bite>().OnBiteMouth = OnBiteMouth;
+                    SnakeAI.Animator.GetBehaviour<Bite>().OnBite = OnBite;
+
                     SnakeAI.Params.SetTriggerWithValue("Body_Strike", "Body_Strike_Distance", d);
 
                     // Rest...
@@ -106,9 +108,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            private void OnBite(MouthAnimator mouth)
+            private void OnBiteMouth(MouthAnimator mouth)
             {
-                SnakeAI.Creature.Effects.PlaySound(strikeSounds);
                 if (!hasDealtDamage)
                 {
                     Collider[] colliders = Physics.OverlapSphere(mouth.transform.position, strikeRadius);
@@ -122,6 +123,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 }
+            }
+            private void OnBite()
+            {
+                SnakeAI.Creature.Effects.PlaySound(strikeSounds);
             }
         }
         #endregion
