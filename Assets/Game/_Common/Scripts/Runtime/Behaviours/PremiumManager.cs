@@ -206,13 +206,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 AccessRandom(4);
             }
-            RewardsMenu.Instance.Open();
+            RewardsMenu.Instance.Open(false, LocalizationUtility.Localize("premium_free_success_title"));
 
             EditorManager.Instance?.UpdateUsability();
             OnRewardAdClosed();
         }
 
-        private void Access(RewardedItem item)
+        public void Access(RewardedItem item)
         {
             switch (item.Type)
             {
@@ -228,7 +228,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Save();
         }
-        private void AccessRandom(int count)
+        public void AccessRandom(int count)
         {
             List<RewardedItem> items = new List<RewardedItem>();
             foreach (var kv in DatabaseManager.GetDatabase("Body Parts").Objects)

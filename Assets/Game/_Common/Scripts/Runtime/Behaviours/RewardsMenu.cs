@@ -27,9 +27,11 @@ namespace DanielLochner.Assets.CreatureCreator
             rewardsRT.DestroyChildren();
         }
 
-        public override void Open(bool instant = false)
+        public void Open(bool instant, string title)
         {
-            base.Open(instant);
+            Open(instant);
+
+            titleText.text = title;
             audioSource.Play();
         }
         #endregion
