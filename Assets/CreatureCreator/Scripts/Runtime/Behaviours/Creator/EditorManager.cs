@@ -433,6 +433,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Creature.Informer.Capture();
 
+            Creature.Collider.enabled = false;
             Creature.Collider.UpdateCollider();
             Creature.Collider.enabled = true;
 
