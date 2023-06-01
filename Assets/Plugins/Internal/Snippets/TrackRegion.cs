@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets
 {
@@ -66,11 +67,9 @@ namespace DanielLochner.Assets
         }
         private void OnDisable()
         {
+            if (SceneManager.sceneCount != 1) return;
+
             region.enabled = false;
-            LoseTrackOfAll();
-        }
-        private void OnDestroy()
-        {
             LoseTrackOfAll();
         }
 
