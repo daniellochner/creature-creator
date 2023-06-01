@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -46,6 +47,12 @@ namespace DanielLochner.Assets.CreatureCreator
             // Clone creature (to world origin).
             CreatureConstructor tmpCreature = CreatureCloner.Clone(creatureData: dataOverride, parent: Dynamic.Transform);
             tmpCreature.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Photography"));
+            tmpCreature.SkinnedMeshRenderer.lightProbeUsage = LightProbeUsage.Off;
+            foreach (BodyPartConstructor bpc in tmpCreature.BodyParts)
+            {
+                bpc.Renderer.lightProbeUsage = LightProbeUsage.Off;
+                bpc.Flipped.Renderer.lightProbeUsage = LightProbeUsage.Off;
+            }
 
             GameObject photoCamGO = new GameObject("Camera");
             photoCamGO.transform.SetParent(tmpCreature.Body);
