@@ -11,16 +11,18 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureConstructor displayPrefab;
         [SerializeField] private Click click;
 
-        private CreatureConstructor creatureConstructor;
+        private CreatureConstructor creature;
         #endregion
 
         #region Methods
         public void Spawn(CreatureData creatureData)
         {
-            creatureConstructor = Instantiate(displayPrefab, transform.position, transform.rotation, transform);
-            creatureConstructor.Construct(creatureData);
+            creature = Instantiate(displayPrefab, transform.position, transform.rotation, transform);
+            creature.Construct(creatureData);
 
-            creatureConstructor.Realign();
+            creature.Realign();
+
+            creature.GetComponent<CreatureOptimizer>().Optimize();
 
             this.InvokeOverTime(delegate (float progress)
             {
@@ -29,14 +31,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ReplaceWithRagdoll()
         {
-            if (creatureConstructor.gameObject.activeSelf == false)
+            if (creature.gameObject.activeSelf == false)
             {
                 return;
             }
-            creatureConstructor.gameObject.SetActive(false);
+            creature.gameObject.SetActive(false);
             click.enabled = false;
 
-            CreatureConstructor ragdoll = creatureConstructor.GetComponent<CreatureRagdoll>().Generate();
+            CreatureConstructor ragdoll = creature.GetComponent<CreatureRagdoll>().Generate();
             gameObject.layer = LayerMask.NameToLayer("Creature");
         }
         #endregion

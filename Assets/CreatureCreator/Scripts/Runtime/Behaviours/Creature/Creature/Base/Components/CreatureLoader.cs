@@ -25,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         private CreatureConstructor Constructor { get; set; }
+        private CreatureOptimizer Optimizer { get; set; }
 
         public Action OnShow { get; set; }
         public Action OnHide { get; set; }

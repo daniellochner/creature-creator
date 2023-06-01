@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool bloom;
         [SerializeField] private bool depthOfField;
         [SerializeField] private bool motionBlur;
-        [SerializeField] private bool optimizeOtherCreatures;
+        [SerializeField] private bool optimizeCreatures = true;
 
         [Header("Audio")]
         [SerializeField, Range(0, 1)] private float masterVolume;
@@ -170,10 +170,10 @@ namespace DanielLochner.Assets.CreatureCreator
             get => motionBlur;
             set => motionBlur = value;
         }
-        public bool OptimizeOtherCreatures
+        public bool OptimizeCreatures
         {
-            get => optimizeOtherCreatures;
-            set => optimizeOtherCreatures = value;
+            get => optimizeCreatures;
+            set => optimizeCreatures = value;
         }
 
         public float MasterVolume
@@ -341,7 +341,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Bloom = true;
             DepthOfField = false;
             MotionBlur = false;
-            OptimizeOtherCreatures = false;
+            OptimizeCreatures = true;
 
             MasterVolume = 1f;
             MusicVolume = 0.5f;
@@ -384,7 +384,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 AmbientParticles = false;
                 ScreenScale = Mathf.Min(720f / Display.main.systemHeight, 0.75f); // Minimum: 720p or 75%
                 VSync = true;
-                OptimizeOtherCreatures = true;
 
                 if (SystemUtility.IsLowEndDevice)
                 {

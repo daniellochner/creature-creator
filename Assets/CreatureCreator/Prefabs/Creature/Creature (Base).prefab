@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 5163313818900779823}
   - component: {fileID: -633627936575074229}
   - component: {fileID: 3575083059256352896}
-  - component: {fileID: -7384090426924272051}
+  - component: {fileID: -746940629120589561}
   - component: {fileID: -4925696004417530908}
   m_Layer: 18
   m_Name: Creature (Base)
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   onClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-7384090426924272051
+--- !u!114 &-746940629120589561
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1109,91 +1109,71 @@ MonoBehaviour:
   m_GameObject: {fileID: 7193793692207522154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c70468a0838cae4092805a79901b3c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2fb2e0d8bc810bb48b63c91af80d5f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resultMergeOriginalGameObjects: []
-  resultMergeGameObject: {fileID: 0}
-  resultMergeTextStats: 
-  resultMergeLogs: []
-  resultMergeAssetsSaved: []
-  mergeMethod: 2
-  oneMeshPerMaterialParams:
-    mergeOnlyEqualRootBones: 0
-  justMaterialColorsParams:
-    materialToUse: {fileID: 2100000, guid: d418d8dc2bec25d4ab01ad733d5f907b, type: 2}
-    mergeOnlyEqualsRootBones: 0
-    useDefaultColorProperty: 0
-    colorPropertyToFind: _Color
-    mainTexturePropertyToInsert: _MainTex
-  allInOneParams:
-    materialToUse: {fileID: 2100000, guid: 6f2379d3c953e004097d747f507da6d9, type: 2}
-    atlasResolution: 4
-    mipMapEdgesSize: 3
-    atlasPadding: 0
-    mergeTiledTextures: 2
-    mergeOnlyEqualsRootBones: 0
-    useDefaultMainTextureProperty: 0
-    mainTexturePropertyToFind: _MainTex
-    mainTexturePropertyToInsert: _MainTex
-    metallicMapSupport: 0
-    metallicMapPropertyToFind: _MetallicGlossMap
-    metallicMapPropertyToInsert: _MetallicGlossMap
-    specularMapSupport: 0
-    specularMapPropertyToFind: _SpecGlossMap
-    specularMapPropertyToInsert: _SpecGlossMap
-    normalMapSupport: 0
-    normalMapPropertyToFind: _BumpMap
-    normalMapPropertyToInsert: _BumpMap
-    normalMap2Support: 0
-    normalMap2PropertyFind: _DetailNormalMap
-    normalMap2PropertyToInsert: _DetailNormalMap
-    heightMapSupport: 0
-    heightMapPropertyToFind: _ParallaxMap
-    heightMapPropertyToInsert: _ParallaxMap
-    occlusionMapSupport: 0
-    occlusionMapPropertyToFind: _OcclusionMap
-    occlusionMapPropertyToInsert: _OcclusionMap
-    detailAlbedoMapSupport: 0
-    detailMapPropertyToFind: _DetailAlbedoMap
-    detailMapPropertyToInsert: _DetailAlbedoMap
-    detailMaskSupport: 0
-    detailMaskPropertyToFind: _DetailMask
-    detailMaskPropertyToInsert: _DetailMask
-    pinkNormalMapsFix: 1
-  onlyAnima2dMeshes:
-    atlasResolution: 4
-  blendShapesSupport: 2
-  blendShapesMultiplier: 1
-  rootBoneToUse: 1
-  manualRootBoneToUse: {fileID: 7193793691555180562}
-  autoManagePosition: 1
-  compatibilityMode: 1
-  combineInactives: 0
-  combineOnStart: 0
-  convertCombinedMeshToStaticOnStart: 0
-  legacyAnimationSupport: 0
-  nameOfThisMerge: BodyParts
-  gameObjectsToIgnore:
-  - {fileID: 7193793692236944224}
-  saveDataInAssets: 0
-  savePrefabOfMerge: 0
-  nameOfPrefabOfMerge: 
-  launchConsoleLogs: 0
-  highlightUvVertices: 0
-  onCombineMeshs:
-    m_PersistentCalls:
-      m_Calls: []
-  onUndoCombineMeshs:
-    m_PersistentCalls:
-      m_Calls: []
-  clearUndoHistory: 0
-  showMergeEventsOptions: 0
-  currentTab: 0
-  currentDebuggingTab: 0
-  logsOfMergeScrollpos: {x: 0, y: 724}
-  lastQuantityOfLogs: 16
-  dontShowWarnsAboutTexturesResolution: 0
+  sortAxis: {x: 0, y: 0, z: 0}
+  objsToMesh: []
+  useObjsToMeshFromTexBaker: 0
+  clearBuffersAfterBake: 1
+  bakeAssetsInPlaceFolderPath: 
+  resultPrefab: {fileID: 0}
+  resultPrefabLeaveInstanceInSceneAfterBake: 0
+  parentSceneObject: {fileID: 7193793692207522153}
+  _meshCombiner:
+    _validationLevel: 2
+    _name: 
+    _textureBakeResults: {fileID: 0}
+    _resultSceneObject: {fileID: 0}
+    _targetRenderer: {fileID: 0}
+    _LOG_LEVEL: 3
+    _settingsHolder: {fileID: 0}
+    _outputOption: 0
+    _renderType: 1
+    _lightmapOption: 1
+    _doNorm: 1
+    _doTan: 1
+    _doCol: 0
+    _doUV: 1
+    _doUV3: 0
+    _doUV4: 0
+    _doUV5: 0
+    _doUV6: 0
+    _doUV7: 0
+    _doUV8: 0
+    _doBlendShapes: 1
+    _pivotLocationType: 1
+    _pivotLocation: {x: 0, y: 0, z: 0}
+    _clearBuffersAfterBake: 0
+    _optimizeAfterBake: 1
+    _uv2UnwrappingParamsHardAngle: 60
+    _uv2UnwrappingParamsPackMargin: 0.005
+    _smrNoExtraBonesWhenCombiningMeshRenderers: 0
+    _smrMergeBlendShapesWithSameNames: 0
+    _assignToMeshCustomizer: {fileID: 0}
+    objectsInCombinedMesh: []
+    lightmapIndex: -1
+    mbDynamicObjectsInCombinedMesh: []
+    verts: []
+    normals: []
+    tangents: []
+    uvs: []
+    uvsSliceIdx: []
+    uv2s: []
+    uv3s: []
+    uv4s: []
+    uv5s: []
+    uv6s: []
+    uv7s: []
+    uv8s: []
+    colors: []
+    bindPoses: []
+    bones: []
+    blendShapes: []
+    blendShapesInCombined: []
+    submeshTris: []
+    _meshBirth: 0
+    _mesh: {fileID: 0}
 --- !u!114 &-4925696004417530908
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Toggle depthOfFieldToggle;
         [SerializeField] private Toggle motionBlurToggle;
-        [SerializeField] private Toggle optimizeOtherCreaturesToggle;
+        [SerializeField] private Toggle optimizeCreaturesToggle;
         [SerializeField] private ParticleSystem[] ambientParticles;
 
         [Header("Audio")]
@@ -339,10 +339,10 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Optimize Creatures
-            optimizeOtherCreaturesToggle.SetIsOnWithoutNotify(SettingsManager.Data.OptimizeOtherCreatures);
-            optimizeOtherCreaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
+            optimizeCreaturesToggle.SetIsOnWithoutNotify(SettingsManager.Data.OptimizeCreatures);
+            optimizeCreaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
-                SettingsManager.Instance.SetOptimizeOtherCreatures(isOn);
+                SettingsManager.Instance.SetOptimizeCreatures(isOn);
             });
             #endregion
 

@@ -410,6 +410,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Build()
         {
+            Creature.Optimizer.Unoptimize();
+
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = false;
             Creature.Collider.enabled = false;
@@ -450,6 +452,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Creature.Spawner.Spawn();
 
+            Creature.Optimizer.Optimize();
 
 #if USE_STATS
             if (Creature.Constructor.Statistics.Weight >= 500f)
@@ -470,6 +473,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Paint()
         {
+            Creature.Optimizer.Unoptimize();
+
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = true;
             Creature.Collider.enabled = false;
@@ -608,6 +613,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Load(CreatureData creatureData, bool loadFromHistory = false)
         {
+            Creature.Optimizer.Unoptimize();
+
             Creature.Mover.Teleport(Creature.Editor.Platform);
 
             Creature.Animator.enabled = false;
