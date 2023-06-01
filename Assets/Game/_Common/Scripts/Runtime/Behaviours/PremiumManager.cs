@@ -80,9 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                float t = Screen.safeArea.width / Screen.width;
-                float w = t * Display.main.systemWidth;
-                return 160 * Mathf.RoundToInt((w / Screen.dpi) / 3f);
+                return 160 * Mathf.RoundToInt((Screen.safeArea.width / Screen.dpi) / 3f);
             }
         }
         #endregion
@@ -125,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Data.IsPremium) return;
 
             bannerAd?.Destroy();
-            bannerAd = new BannerView(BannerAdUnitId, /*AdSize.Banner*/AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Top);
+            bannerAd = new BannerView(BannerAdUnitId, AdSize.GetLandscapeAnchoredAdaptiveBannerAdSizeWithWidth(BannerAdWidth), AdPosition.Top);
 
             bannerAd.OnBannerAdLoaded += OnBannerAdLoaded;
             bannerAd.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
