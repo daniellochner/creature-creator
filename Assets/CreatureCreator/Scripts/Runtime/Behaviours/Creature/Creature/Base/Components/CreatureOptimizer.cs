@@ -7,6 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureOptimizer : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private bool isAnimated;
         [SerializeField, Button("Optimize")] private bool optimize;
 
         private List<BodyPartConstructor> bodyPartsToAdd = new List<BodyPartConstructor>();
@@ -29,22 +30,28 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void LateUpdate()
         {
-            if (OptimizedCreature == null) return;
-
-            int j = Constructor.Bones.Count;
-            foreach (BodyPartConstructor bodyPart in bodyPartsToAdd)
+            if (isAnimated && IsOptimized)
             {
-                if (bodyPart.SkinnedMeshRenderer == null) continue;
-                for (int i = 0; i < bodyPart.SkinnedMeshRenderer.sharedMesh.blendShapeCount; i++, j++)
+                int j = Constructor.Bones.Count;
+                foreach (BodyPartConstructor bodyPart in bodyPartsToAdd)
                 {
-                    OptimizedCreature.SetBlendShapeWeight(j, bodyPart.SkinnedMeshRenderer.GetBlendShapeWeight(i));
+                    if (bodyPart.SkinnedMeshRenderer == null) continue;
+                    for (int i = 0; i < bodyPart.SkinnedMeshRenderer.sharedMesh.blendShapeCount; i++, j++)
+                    {
+                        OptimizedCreature.SetBlendShapeWeight(j, bodyPart.SkinnedMeshRenderer.GetBlendShapeWeight(i));
+                    }
                 }
             }
         }
 
         public void Optimize()
         {
-            if (SettingsManager.Data.OptimizeCreatures && !IsOptimized)
+            if (SettingsManager.Instance && !SettingsManager.Data.OptimizeCreatures)
+            {
+                return;
+            }
+
+            if (!IsOptimized)
             {
                 Baker.ClearMesh();
 
@@ -82,7 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 IsOptimized = true;
             }
         }
-        public void Unoptimize()
+        public void Undo()
         {
             if (IsOptimized)
             {

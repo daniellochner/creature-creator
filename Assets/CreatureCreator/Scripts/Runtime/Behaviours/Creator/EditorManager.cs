@@ -410,7 +410,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Build()
         {
-            Creature.Optimizer.Unoptimize();
+            Creature.Optimizer.Undo();
 
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = false;
@@ -473,7 +473,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Paint()
         {
-            Creature.Optimizer.Unoptimize();
+            Creature.Optimizer.Undo();
 
             Creature.Spawner.Despawn();
             Creature.Constructor.IsTextured = true;
@@ -613,7 +613,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Load(CreatureData creatureData, bool loadFromHistory = false)
         {
-            Creature.Optimizer.Unoptimize();
+            Creature.Optimizer.Undo();
 
             Creature.Mover.Teleport(Creature.Editor.Platform);
 
