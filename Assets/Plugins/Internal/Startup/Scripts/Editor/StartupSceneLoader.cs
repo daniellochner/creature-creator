@@ -20,6 +20,8 @@ namespace DanielLochner.Assets
         {
             EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
             {
+                if (StartupWindow.Window.Bypass) return;
+
                 foreach (string ignoredScene in StartupWindow.Window.IgnoredScenes)
                 {
                     if (SceneManager.GetActiveScene().name.Equals(ignoredScene)) return;

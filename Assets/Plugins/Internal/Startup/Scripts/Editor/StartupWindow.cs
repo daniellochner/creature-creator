@@ -9,13 +9,15 @@ namespace DanielLochner.Assets
     public class StartupWindow : EditorWindow
     {
         #region Fields
+        [SerializeField] private bool bypass;
         [SerializeField] private string[] ignoredScenes;
 
-        private SerializedProperty _ignoredScenes;
+        private SerializedProperty _bypass, _ignoredScenes;
         private SerializedObject target;
         #endregion
 
         #region Properties
+        public bool Bypass => bypass;
         public string[] IgnoredScenes => ignoredScenes;
 
         public static StartupWindow Window => GetWindow<StartupWindow>("Startup", false);
@@ -26,6 +28,7 @@ namespace DanielLochner.Assets
         {
             target = new SerializedObject(this);
 
+            _bypass = target.FindProperty("bypass");
             _ignoredScenes = target.FindProperty("ignoredScenes");
         }
         private void OnGUI()
@@ -33,6 +36,7 @@ namespace DanielLochner.Assets
             target.Update();
 
             EditorGUILayout.PropertyField(_ignoredScenes);
+            EditorGUILayout.PropertyField(_bypass);
 
             target.ApplyModifiedProperties();
         }
