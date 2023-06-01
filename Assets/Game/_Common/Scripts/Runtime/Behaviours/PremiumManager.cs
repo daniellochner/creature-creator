@@ -80,7 +80,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return 160 * Mathf.RoundToInt((Screen.safeArea.width / Screen.dpi) / 3f);
+                float t = Screen.safeArea.width / Screen.width;
+                float w = t * Display.main.systemWidth;
+                return 160 * Mathf.RoundToInt((w / Screen.dpi) / 3f);
             }
         }
         #endregion
