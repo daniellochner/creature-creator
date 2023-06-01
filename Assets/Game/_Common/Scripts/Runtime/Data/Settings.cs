@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool bloom;
         [SerializeField] private bool depthOfField;
         [SerializeField] private bool motionBlur;
-        [SerializeField] private bool optimizeCreatures = true;
+        [SerializeField] private bool optimizeCreatures;
 
         [Header("Audio")]
         [SerializeField, Range(0, 1)] private float masterVolume;
@@ -341,7 +341,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Bloom = true;
             DepthOfField = false;
             MotionBlur = false;
-            OptimizeCreatures = true;
+            OptimizeCreatures = false;
 
             MasterVolume = 1f;
             MusicVolume = 0.5f;
