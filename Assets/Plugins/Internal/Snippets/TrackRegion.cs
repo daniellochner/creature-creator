@@ -136,9 +136,13 @@ namespace DanielLochner.Assets
         {
             for (int i = 0; i < tracked.Count; ++i)
             {
-                LoseTrackOf(tracked[i]);
+                Collider t = tracked[i];
+                if (t != null)
+                {
+                    LoseTrackOf(t);
+                }
             }
-            tracked.Clear();
+            Clear();
         }
 
         public void Clear()
