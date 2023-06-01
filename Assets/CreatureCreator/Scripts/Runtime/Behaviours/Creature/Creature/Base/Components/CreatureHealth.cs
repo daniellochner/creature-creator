@@ -17,13 +17,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Material damageMaterial;
         [SerializeField] private DamageNumber damagePopupPrefab;
 
-        private Rigidbody rb;
-
         private Coroutine damageCoroutine;
         #endregion
 
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
+        public CreatureOptimizer Optimizer { get; private set; }
         public PlayerEffects Effects { get; private set; }
 
         public override float MaxHealth => Constructor.Statistics.Health;
@@ -33,9 +32,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
+            Optimizer = GetComponent<CreatureOptimizer>();
             Effects = GetComponent<PlayerEffects>();
-
-            rb = GetComponent<Rigidbody>();
         }
 
         protected override void Start()
@@ -43,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Start();
             OnTakeDamage += delegate (float damage, Vector3 force)
             {
-                if (IsOwner) // only one source should play a sound
+                if (IsOwner)
                 {
                     Effects.PlaySound(takeDamageSounds);
                 }
@@ -58,34 +56,49 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator DamageRoutine()
         {
-            Dictionary<Renderer, Material[]> rm = new Dictionary<Renderer, Material[]>();
-
-            foreach (BodyPartConstructor bpc in Constructor.BodyParts)
+            if (Optimizer.IsOptimized)
             {
-                RecordRenderer(ref rm, bpc.Renderer);
-                RecordRenderer(ref rm, bpc.Flipped.Renderer);
+                Material[] prev = Optimizer.OptimizedCreature.materials;
+
+                Optimizer.OptimizedCreature.materials = GetDamageMaterials(prev.Length);
+                yield return new WaitForSeconds(damageTime);
+                Optimizer.OptimizedCreature.materials = prev;
             }
-            RecordRenderer(ref rm, Constructor.SkinnedMeshRenderer);
-
-            yield return new WaitForSeconds(damageTime);
-
-            foreach (Renderer renderer in rm.Keys)
+            else
             {
-                renderer.materials = rm[renderer];
+                Dictionary<Renderer, Material[]> rm = new Dictionary<Renderer, Material[]>();
+
+                foreach (BodyPartConstructor bpc in Constructor.BodyParts)
+                {
+                    RecordRenderer(ref rm, bpc.Renderer);
+                    RecordRenderer(ref rm, bpc.Flipped.Renderer);
+                }
+                RecordRenderer(ref rm, Constructor.SkinnedMeshRenderer);
+
+                yield return new WaitForSeconds(damageTime);
+
+                foreach (Renderer renderer in rm.Keys)
+                {
+                    renderer.materials = rm[renderer];
+                }
             }
 
             damageCoroutine = null;
         }
+
         private void RecordRenderer(ref Dictionary<Renderer, Material[]> rm, Renderer renderer)
         {
             rm[renderer] = renderer.sharedMaterials;
-
-            Material[] placeholder = new Material[renderer.materials.Length];
+            renderer.materials = GetDamageMaterials(renderer.materials.Length);
+        }
+        private Material[] GetDamageMaterials(int size)
+        {
+            Material[] placeholder = new Material[size];
             for (int i = 0; i < placeholder.Length; ++i)
             {
                 placeholder[i] = damageMaterial;
             }
-            renderer.materials = placeholder;
+            return placeholder;
         }
         #endregion
     }

@@ -10,14 +10,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, Button("Optimize")] private bool optimize;
 
         private List<BodyPartConstructor> bodyPartsToAdd = new List<BodyPartConstructor>();
-        private SkinnedMeshRenderer optimizedCreature;
         #endregion
 
         #region Properties
         private CreatureConstructor Constructor { get; set; }
         private MB3_MeshBaker Baker { get; set; }
 
-        public bool IsOptimized { get; set; }
+        public SkinnedMeshRenderer OptimizedCreature { get; private set; }
+
+        public bool IsOptimized { get; private set; }
         #endregion
 
         #region Methods
@@ -28,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void LateUpdate()
         {
-            if (optimizedCreature == null) return;
+            if (OptimizedCreature == null) return;
 
             int j = Constructor.Bones.Count;
             foreach (BodyPartConstructor bodyPart in bodyPartsToAdd)
@@ -36,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (bodyPart.SkinnedMeshRenderer == null) continue;
                 for (int i = 0; i < bodyPart.SkinnedMeshRenderer.sharedMesh.blendShapeCount; i++, j++)
                 {
-                    optimizedCreature.SetBlendShapeWeight(j, bodyPart.SkinnedMeshRenderer.GetBlendShapeWeight(i));
+                    OptimizedCreature.SetBlendShapeWeight(j, bodyPart.SkinnedMeshRenderer.GetBlendShapeWeight(i));
                 }
             }
         }
@@ -73,11 +74,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 Baker.Apply();
                 FlipLimbs();
 
-                optimizedCreature = Baker.meshCombiner.resultSceneObject.GetComponentInChildren<SkinnedMeshRenderer>();
+                OptimizedCreature = Baker.meshCombiner.resultSceneObject.GetComponentInChildren<SkinnedMeshRenderer>();
 
                 for (int i = 0; i < Constructor.Bones.Count; i++)
                 {
-                    optimizedCreature.SetBlendShapeWeight(i, Constructor.SkinnedMeshRenderer.GetBlendShapeWeight(i));
+                    OptimizedCreature.SetBlendShapeWeight(i, Constructor.SkinnedMeshRenderer.GetBlendShapeWeight(i));
                 }
 
                 IsOptimized = true;
