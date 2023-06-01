@@ -44,9 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Optimize()
         {
-            if (!SettingsManager.Data.OptimizeCreatures) return;
-
-            if (!IsOptimized)
+            if (SettingsManager.Data.OptimizeCreatures && !IsOptimized)
             {
                 Baker.ClearMesh();
 
@@ -86,8 +84,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Unoptimize()
         {
-            if (!SettingsManager.Data.OptimizeCreatures) return;
-
             if (IsOptimized)
             {
                 Constructor.SkinnedMeshRenderer.enabled = true;
