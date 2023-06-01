@@ -65,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SetVisibility(bool isVisible)
         {
-            if (!CinematicManager.Instance.IsInCinematic && lod != null)
+            if (lod != null && !CinematicManager.Instance.IsInCinematic && !(EditorManager.Instance.IsBuilding || EditorManager.Instance.IsPainting) && !Player.Instance.Health.IsDead)
             {
                 water.enabled = isVisible;
                 lod.SetActive(!isVisible);
