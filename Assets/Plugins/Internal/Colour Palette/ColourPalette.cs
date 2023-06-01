@@ -17,7 +17,7 @@ namespace DanielLochner.Assets
         [Space]
         [SerializeField] private Color startColour;
         [SerializeField] private Vector2 size;
-        [SerializeField] private UnityEvent onColourPick;
+        [SerializeField] private UnityEvent<Color> onColourPick;
         #endregion
 
         #region Properties
@@ -80,7 +80,7 @@ namespace DanielLochner.Assets
 
             if (notify)
             {
-                onColourPick.Invoke();
+                onColourPick.Invoke(colour);
             }
         }
 

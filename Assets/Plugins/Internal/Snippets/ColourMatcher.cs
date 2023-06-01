@@ -1,15 +1,15 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
     public class ColourMatcher : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI sourceText;
-        [SerializeField] private TextMeshProUGUI targetText;
+        [SerializeField] private Graphic source;
+        [SerializeField] private Graphic target;
         private void Update()
         {
-            targetText.color = sourceText.color;
+            target.color = source.color;
         }
     }
 }
