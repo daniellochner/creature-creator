@@ -45,6 +45,7 @@ namespace DanielLochner.Assets
                 return Health <= 0;
             }
         }
+        public virtual bool CanTakeDamage => !IsDead;
         #endregion
 
         #region Methods
@@ -71,13 +72,15 @@ namespace DanielLochner.Assets
         [ServerRpc(RequireOwnership = false)]
         private void TakeDamageServerRpc(float damage, Vector3 force)
         {
-            if (IsDead) return;
-            Health -= damage;
-            TakeDamageClientRpc(damage, force);
-
-            if (Health <= 0f)
+            if (CanTakeDamage)
             {
-                Die();
+                Health -= damage;
+                TakeDamageClientRpc(damage, force);
+
+                if (Health <= 0f)
+                {
+                    Die();
+                }
             }
         }
         [ClientRpc]
