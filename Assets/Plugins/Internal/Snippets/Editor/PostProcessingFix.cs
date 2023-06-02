@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -21,7 +19,9 @@ namespace DanielLochner.Assets
                 if (pp.TryGetSettings(out AmbientOcclusion ao))
                 {
                     pp.RemoveSettings<AmbientOcclusion>();
-                    pp.AddSettings(ao);
+                    var setting = pp.AddSettings(ao);
+                    setting.active = true;
+
                     EditorUtility.SetDirty(pp);
 
                     Debug.Log($"Fixed {ppPath}", pp);
