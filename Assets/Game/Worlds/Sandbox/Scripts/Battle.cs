@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            if (!WorldManager.Instance.World.EnablePVE || complete.Value)
+            if (!WorldManager.Instance.World.SpawnNPC || !WorldManager.Instance.World.EnablePVE || complete.Value)
             {
                 HideBattle();
             }
