@@ -11,7 +11,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private Drop dropAbility;
         [SerializeField] private Eat eatAbility;
-        [SerializeField] private Abilities.Ping pingAbility;
         [SerializeField] private Shoot shootAbility;
         [SerializeField] private Spit spitAbility;
         [SerializeField] private Growl growlAbility;
@@ -21,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Flap[] flapAbilities;
         [SerializeField] private Sprint[] sprintAbilities;
         [SerializeField] private Strike[] strikeAbilities;
+        [SerializeField] private Spin[] spinAbilities;
+        [SerializeField] private Dance[] danceAbilities;
         #endregion
 
         #region Methods
@@ -38,6 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
             RebindGrowl(Data.Growl);
             RebindSprint(Data.Sprint);
             RebindNightVision(Data.NightVision);
+            RebindDance(Data.Dance);
+            RebindSpin(Data.Spin);
         }
         protected override void OnDestroy()
         {
@@ -105,6 +108,22 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             nightVisionAbility.PerformKeybind = key;
             Data.NightVision = key;
+        }
+        public void RebindDance(Keybind key)
+        {
+            foreach (Dance danceAbility in danceAbilities)
+            {
+                danceAbility.PerformKeybind = key;
+            }
+            Data.Dance = key;
+        }
+        public void RebindSpin(Keybind key)
+        {
+            foreach (Spin spinAbility in spinAbilities)
+            {
+                spinAbility.PerformKeybind = key;
+            }
+            Data.Spin = key;
         }
         #endregion
     }

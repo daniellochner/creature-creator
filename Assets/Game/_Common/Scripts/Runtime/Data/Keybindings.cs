@@ -8,42 +8,44 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Play")]
-        [SerializeField] private Keybind walkForwards;
-        [SerializeField] private Keybind walkBackwards;
-        [SerializeField] private Keybind walkLeft;
-        [SerializeField] private Keybind walkRight;
-        [SerializeField] private Keybind jump;
-        [SerializeField] private Keybind flap;
-        [SerializeField] private Keybind sprint;
-        [SerializeField] private Keybind interact;
-        [SerializeField] private Keybind drop;
-        [SerializeField] private Keybind talk;
-        [SerializeField] private Keybind viewPlayers;
-        [SerializeField] private Keybind freeLook;
-        [SerializeField] private Keybind stopMove;
-        [SerializeField] private Keybind respawn;
-        [SerializeField] private Keybind toggleUI;
-        [SerializeField] private Keybind bite;
-        [SerializeField] private Keybind dig;
-        [SerializeField] private Keybind distract;
-        [SerializeField] private Keybind eat;
-        [SerializeField] private Keybind ping;
-        [SerializeField] private Keybind growl;
-        [SerializeField] private Keybind strike;
-        [SerializeField] private Keybind nightVision;
+        [SerializeField] private Keybind walkForwards = new Keybind(KeyCode.W);
+        [SerializeField] private Keybind walkBackwards = new Keybind(KeyCode.S);
+        [SerializeField] private Keybind walkLeft = new Keybind(KeyCode.A);
+        [SerializeField] private Keybind walkRight = new Keybind(KeyCode.D);
+        [SerializeField] private Keybind jump = new Keybind(KeyCode.Space);
+        [SerializeField] private Keybind flap = new Keybind(KeyCode.Space);
+        [SerializeField] private Keybind sprint = new Keybind(KeyCode.LeftShift);
+        [SerializeField] private Keybind interact = new Keybind(KeyCode.E);
+        [SerializeField] private Keybind drop = new Keybind(KeyCode.Q);
+        [SerializeField] private Keybind talk = new Keybind(KeyCode.T);
+        [SerializeField] private Keybind viewPlayers = new Keybind(KeyCode.Tab);
+        [SerializeField] private Keybind freeLook = new Keybind(KeyCode.LeftAlt);
+        [SerializeField] private Keybind stopMove = new Keybind(KeyCode.LeftControl);
+        [SerializeField] private Keybind respawn = new Keybind(KeyCode.R, KeyCode.LeftControl);
+        [SerializeField] private Keybind toggleUI = new Keybind(KeyCode.U, KeyCode.LeftControl);
+        [SerializeField] private Keybind bite = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind dig = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind distract = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind shoot = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind spit = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind growl = new Keybind(KeyCode.G);
+        [SerializeField] private Keybind strike = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind nightVision = new Keybind(KeyCode.N);
+        [SerializeField] private Keybind dance = new Keybind(KeyCode.E);
+        [SerializeField] private Keybind spin = new Keybind(KeyCode.F);
 
         [Header("Build")]
-        [SerializeField] private Keybind copy;
-        [SerializeField] private Keybind undo;
-        [SerializeField] private Keybind redo;
-        [SerializeField] private Keybind flip;
+        [SerializeField] private Keybind copy = new Keybind(KeyCode.LeftAlt);
+        [SerializeField] private Keybind undo = new Keybind(KeyCode.Z, KeyCode.LeftControl);
+        [SerializeField] private Keybind redo = new Keybind(KeyCode.V, KeyCode.LeftControl);
+        [SerializeField] private Keybind flip = new Keybind(KeyCode.F, KeyCode.LeftControl);
 
         [Header("General")]
-        [SerializeField] private Keybind save;
-        [SerializeField] private Keybind load;
-        [SerializeField] private Keybind clear;
-        [SerializeField] private Keybind import;
-        [SerializeField] private Keybind export;
+        [SerializeField] private Keybind save = new Keybind(KeyCode.S, KeyCode.LeftControl);
+        [SerializeField] private Keybind load = new Keybind(KeyCode.L, KeyCode.LeftControl);
+        [SerializeField] private Keybind clear = new Keybind(KeyCode.C, KeyCode.LeftControl);
+        [SerializeField] private Keybind import = new Keybind(KeyCode.I, KeyCode.LeftControl);
+        [SerializeField] private Keybind export = new Keybind(KeyCode.E, KeyCode.LeftControl);
         #endregion
 
         #region Properties
@@ -139,13 +141,13 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public Keybind Shoot
         {
-            get => eat;
-            set => eat = value;
+            get => shoot;
+            set => shoot = value;
         }
         public Keybind Spit
         {
-            get => ping;
-            set => ping = value;
+            get => spit;
+            set => spit = value;
         }
         public Keybind Growl
         {
@@ -161,6 +163,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => nightVision;
             set => nightVision = value;
+        }
+        public Keybind Dance
+        {
+            get => dance;
+            set => dance = value;
+        }
+        public Keybind Spin
+        {
+            get => spin;
+            set => spin = value;
         }
 
         public Keybind Copy
@@ -237,6 +249,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Growl = new Keybind(KeyCode.G);
             Strike = new Keybind(KeyCode.F);
             NightVision = new Keybind(KeyCode.N);
+            Dance = new Keybind(KeyCode.E);
+            Spin = new Keybind(KeyCode.F);
 
             Copy = new Keybind(KeyCode.LeftAlt);
             Undo = new Keybind(KeyCode.Z, KeyCode.LeftControl);
