@@ -18,6 +18,8 @@ namespace DanielLochner.Assets
         [SerializeField] private Color startColour;
         [SerializeField] private Vector2 size;
         [SerializeField] private UnityEvent<Color> onColourPick;
+
+        private CanvasGroup canvasGroup;
         #endregion
 
         #region Properties
@@ -29,6 +31,10 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+        }
         private void Start()
         {
             Setup();
@@ -82,6 +88,11 @@ namespace DanielLochner.Assets
             {
                 onColourPick.Invoke(colour);
             }
+        }
+        public void SetInteractable(bool isInteractable)
+        {
+            canvasGroup.alpha = isInteractable ? 1f : 0.25f;
+            canvasGroup.interactable = canvasGroup.blocksRaycasts = isInteractable;
         }
 
         public void PickColour()
