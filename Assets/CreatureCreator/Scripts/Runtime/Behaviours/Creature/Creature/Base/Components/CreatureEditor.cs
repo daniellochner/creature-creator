@@ -832,7 +832,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (tryAdd)
                     {
-                        if (Constructor.CanAddBone(oldIndex))
+                        if (CanAddBone(oldIndex))
                         {
                             Constructor.UpdateBoneConfiguration(); // Necessary in-case creature moves slightly while editing (due to hinge-joint bounciness).
 
@@ -850,7 +850,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     else 
                     if (tryRem)
                     {
-                        if (Constructor.CanRemoveBone(oldIndex))
+                        if (CanRemoveBone(oldIndex))
                         {
                             Constructor.RemoveBone(oldIndex);
                             addOrRemove = true;
@@ -869,6 +869,21 @@ namespace DanielLochner.Assets.CreatureCreator
         private void HandlePlatform()
         {
             if (Platform != null) transform.LerpTo(Platform.Position, positionSmoothing);
+        }
+
+        public bool CanAddBone(int index)
+        {
+            bool tooManyBones = Constructor.Bones.Count + 1 > EditorManager.Instance.MaxBones;
+            bool tooComplicated = Constructor.Statistics.Complexity + 1 > EditorManager.Instance.MaxComplexity;
+
+            return !tooManyBones && !tooComplicated;
+        }
+        public bool CanRemoveBone(int index)
+        {
+            bool tooFewBones = Constructor.Bones.Count - 1 < Constructor.MinMaxBones.min;
+            bool noAttachedLimbs = Constructor.Bones[index].GetComponentsInChildren<BodyPartConstructor>().Length == 0;
+
+            return noAttachedLimbs && !tooFewBones;
         }
 
         public IEnumerator HoldDraggableRoutine(Drag draggable, UnityAction onPress = default, UnityAction onHold = default, UnityAction onRelease = default)

@@ -53,6 +53,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI bonesText;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
         [SerializeField] private TextMeshProUGUI abilitiesText;
+        [SerializeField] private TextMeshProUGUI bodyPartsTitleText;
+        [SerializeField] private TextMeshProUGUI statisticsTitleText;
         [SerializeField] private Toggle bodyPartsToggle;
         [SerializeField] private Toggle abilitiesToggle;
         [SerializeField] private Animator cashWarningAnimator;
@@ -85,10 +87,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject secondaryColourOverride;
         [SerializeField] private ToggleGroup patternsToggleGroup;
         [SerializeField] private RectTransform patternsRT;
+        [SerializeField] private TextMeshProUGUI coloursTitleText;
+        [SerializeField] private TextMeshProUGUI patternsTitleText;
         [SerializeField] private TextMeshProUGUI noColoursText;
         [SerializeField] private GameObject noPatternsText;
         [SerializeField] private CanvasGroup undoPaintCG;
         [SerializeField] private CanvasGroup redoPaintCG;
+        [SerializeField] private CanvasGroup restrictedColoursCG;
+        [SerializeField] private ClickUI restrictedColoursClickUI;
 
         [Header("Options")]
         [SerializeField] private SimpleSideMenu optionsSideMenu;
@@ -109,6 +115,13 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isVisible = true, isEditing = true;
         private Coroutine visibleCoroutine;
         private CreatureUI currentCreatureUI;
+
+        private List<string> restrictedBodyParts = new List<string>();
+        private List<string> restrictedPatterns = new List<string>();
+        private Color? restrictedColour = null;
+        private int restrictedComplexity = -1;
+        private int restrictedBones = -1;
+        private int restrictedCash = -1;
 
         private Coroutine delayedRecordCoroutine;
         private Change prevDelayedChangeType;
@@ -146,6 +159,55 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsPlaying => playMenu.IsOpen;
 
         public CreaturePlayerLocal Creature => Player.Instance;
+
+        public int MaxComplexity
+        {
+            get
+            {
+                if (restrictedComplexity != -1)
+                {
+                    return restrictedComplexity;
+                }
+                else
+                if (Unlimited)
+                {
+                    return int.MaxValue;
+                }
+                return Creature.Constructor.MaxComplexity;
+            }
+        }
+        public int MaxBones
+        {
+            get
+            {
+                if (restrictedBones != -1)
+                {
+                    return restrictedBones;
+                }
+                else
+                if (Unlimited)
+                {
+                    return int.MaxValue;
+                }
+                return (int)Creature.Constructor.MinMaxBones.max;
+            }
+        }
+        public int MaxCash
+        {
+            get
+            {
+                if (restrictedCash != -1)
+                {
+                    return restrictedCash;
+                }
+                else
+                if (Unlimited)
+                {
+                    return int.MaxValue;
+                }
+                return Creature.Editor.Cash;
+            }
+        }
 
         public int BaseCash
         {
@@ -298,6 +360,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     });
                 }
             });
+            restrictedColoursClickUI.OnLeftClick.AddListener(delegate
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_colour_title"), LocalizationUtility.Localize("cc_restriction_colour_message"));
+            });
 
             // Options
             creaturesDirectory = Path.Combine(Application.persistentDataPath, "creature");
@@ -348,7 +414,7 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             Creature.Editor.OnTryAddBone += delegate
             {
-                bool tooManyBones = Creature.Constructor.Bones.Count + 1 > Creature.Constructor.MinMaxBones.max;
+                bool tooManyBones = Creature.Constructor.Bones.Count + 1 > MaxBones;
                 if (tooManyBones && CanWarn(bonesWarningAnimator))
                 {
                     editorAudioSource.PlayOneShot(errorAudioClip);
@@ -793,6 +859,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryShare(string name)
         {
+            if (Unlimited)
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("cc_cannot-share_title"), LocalizationUtility.Localize("cc_cannot-share_message"));
+                return;
+            }
+
             string data = Path.Combine(creaturesDirectory, $"{name}.dat");
             CreatureData creatureData = SaveUtility.Load<CreatureData>(data, creatureEncryptionKey.Value);
             if (creatureData != null)
@@ -905,14 +977,15 @@ namespace DanielLochner.Assets.CreatureCreator
             // Load Conditions
             Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", creatureData.PatternID);
             bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode || string.IsNullOrEmpty(creatureData.PatternID);
-            bool usesPremiumPattern = false;
+            bool usesPremiumPattern = false, usesRestrictedPattern = false;
             if (pattern != null)
             {
                 usesPremiumPattern = !PremiumManager.Instance.IsPatternUsable(creatureData.PatternID);
+                usesRestrictedPattern = restrictedPatterns.Contains(creatureData.PatternID);
             }
 
             bool bodyPartsAreUnlocked = true;
-            bool usesPremiumBodyPart = false;
+            bool usesPremiumBodyPart = false, usesRestrictedBodyPart = false, usesRestrictedColour = false;
             int totalCost = 0, totalComplexity = 0;
             foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
             {
@@ -926,10 +999,29 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         usesPremiumBodyPart = true;
                     }
+                    if (restrictedBodyParts.Contains(attachedBodyPart.bodyPartID))
+                    {
+                        usesRestrictedBodyPart = true;
+                    }
+                    if (restrictedColour != null)
+                    {
+                        if (attachedBodyPart.primaryColour != bodyPart.DefaultColours.primary && attachedBodyPart.primaryColour != restrictedColour)
+                        {
+                            usesRestrictedColour = true;
+                        }
+                        if (attachedBodyPart.secondaryColour != bodyPart.DefaultColours.secondary && attachedBodyPart.secondaryColour != restrictedColour)
+                        {
+                            usesRestrictedColour = true;
+                        }
+                    }
                 }
                 else
                 {
                     bodyPartsAreUnlocked = false;
+                }
+                if (restrictedColour != null && (creatureData.PrimaryColour != restrictedColour || creatureData.SecondaryColour != restrictedColour))
+                {
+                    usesRestrictedColour = true;
                 }
 
                 if (!ProgressManager.Data.UnlockedBodyParts.Contains(attachedBodyPart.bodyPartID) && !CreativeMode)
@@ -939,18 +1031,23 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             totalComplexity += creatureData.Bones.Count;
 
-            bool creatureIsTooComplicated = totalComplexity > Creature.Constructor.MaxComplexity && !Unlimited;
-            bool creatureIsTooExpensive = totalCost > BaseCash && !Unlimited;
+            bool creatureIsTooComplicated = totalComplexity > MaxComplexity;
+            bool creatureIsTooExpensive = totalCost > MaxCash;
+            bool creatureHasTooManyBones = creatureData.Bones.Count > MaxBones;
 
             // Error Message
             List<string> errors = new List<string>();
             if (creatureIsTooComplicated)
             {
-                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_complicated", totalComplexity, Creature.Constructor.MaxComplexity));
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_complicated", totalComplexity, MaxComplexity));
             }
             if (creatureIsTooExpensive)
             {
-                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, BaseCash));
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, MaxCash));
+            }
+            if (creatureHasTooManyBones)
+            {
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_restricted_bones", creatureData.Bones.Count, MaxBones));
             }
             if (usesPremiumPattern)
             {
@@ -967,6 +1064,18 @@ namespace DanielLochner.Assets.CreatureCreator
             else if (!bodyPartsAreUnlocked)
             {
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_body-parts"));
+            }
+            if (usesRestrictedBodyPart)
+            {
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_restricted_body-part"));
+            }
+            if (usesRestrictedPattern)
+            {
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_restricted_pattern"));
+            }
+            if (usesRestrictedColour)
+            {
+                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_restricted_colour"));
             }
 
             errorTitle = LocalizationUtility.Localize("cc_creature-unavailable");
@@ -989,14 +1098,20 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
-            bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > Creature.Constructor.MaxComplexity && !Unlimited;
-            bool notEnoughCash = Creature.Editor.Cash < bodyPart.Price && !Unlimited;
+            bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > MaxComplexity;
+            bool notEnoughCash = bodyPart.Price > MaxCash;
             bool isPremium = !PremiumManager.Instance.IsBodyPartUsable(bodyPartID);
+            bool isRestricted = restrictedBodyParts.Contains(bodyPartID);
 
-            if (notEnoughCash || tooComplicated || isPremium)
+            if (notEnoughCash || tooComplicated || isPremium || isRestricted)
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
+                if (isRestricted)
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_body-part_title"), LocalizationUtility.Localize("cc_restriction_body-part_message", bodyPart.name));
+                }
+                else
                 if (isPremium)
                 {
                     PremiumMenu.Instance.RequestBodyPart(bodyPartID);
@@ -1012,6 +1127,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         complexityWarningAnimator.SetTrigger("Warn");
                     }
                 }
+
                 return false;
             }
             else
@@ -1021,15 +1137,28 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public bool CanAddPattern(string patternID)
         {
-            bool isPremium = !PremiumManager.Instance.IsPatternUsable(patternID);
+            Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
 
-            if (isPremium)
+            bool isPremium = !PremiumManager.Instance.IsPatternUsable(patternID);
+            bool isRestricted = restrictedPatterns.Contains(patternID);
+
+            if (isPremium || isRestricted)
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
-                PremiumMenu.Instance.RequestPattern(patternID);
+                if (isRestricted)
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_pattern_title"), LocalizationUtility.Localize("cc_restriction_pattern_message", pattern.name));
+                }
+                else
+                if (isPremium)
+                {
+                    PremiumMenu.Instance.RequestPattern(patternID);
+                }
+
                 return false;
             }
+
             else
             {
                 return true;
@@ -1330,7 +1459,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Destroy(patternUI.gameObject);
         }
-
+        
         public void SetPatternUI(string patternID)
         {
             if (patternID != "")
@@ -1387,7 +1516,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             secondaryColourOverride.SetActive(isOverride);
         }
-        private void SetColourNoneUI()
+        public void SetColourNoneUI()
         {
             noColoursText.gameObject.SetActive(!primaryColourPalette.gameObject.activeSelf && !secondaryColourPalette.gameObject.activeSelf);
         }
@@ -1479,18 +1608,18 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateStatistics()
         {
-            complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, Unlimited ? "∞" : Creature.Constructor.MaxComplexity.ToString());
+            complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, ((MaxComplexity == int.MaxValue) ? "∞" : MaxComplexity.ToString()));
             heightText.SetArguments(Math.Round(Creature.Constructor.Dimensions.Height, 2));
             weightText.SetArguments(Math.Round(Creature.Constructor.Statistics.Weight, 2));
             dietText.SetArguments(LocalizationUtility.Localize($"diet_{Creature.Constructor.Statistics.Diet}".ToLower()));
             healthText.SetArguments(Creature.Constructor.Statistics.Health);
             speedText.SetArguments(Math.Round(Creature.Mover.MoveSpeed, 2));
-            bonesText.SetArguments(Creature.Constructor.Bones.Count, Creature.Constructor.MinMaxBones.max);
+            bonesText.SetArguments(Creature.Constructor.Bones.Count, ((MaxBones == int.MaxValue) ? "∞" : MaxBones.ToString()));
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
 
-            cashText.text = $"${(Unlimited ? "∞" : Creature.Editor.Cash.ToString())}";
+            cashText.text = $"${((MaxCash == int.MaxValue) ? "∞" : MaxCash.ToString())}";
         }
         public void UpdateCreaturesFormatting()
         {
@@ -1565,6 +1694,111 @@ namespace DanielLochner.Assets.CreatureCreator
                 StopCoroutine(visibleCoroutine);
             }
             visibleCoroutine = StartCoroutine(editorCanvasGroup.Fade(v, t));
+        }
+        #endregion
+
+        #region Restrictions
+        public void SetRestrictedBodyParts(List<string> bodyParts)
+        {
+            restrictedBodyParts = bodyParts;
+
+            foreach (BodyPartUI bodyPartUI in bodyPartsRT.GetComponentsInChildren<BodyPartUI>(true))
+            {
+                if (bodyParts.Contains(bodyPartUI.name))
+                {
+                    bodyPartUI.SetUsable(false);
+                }
+            }
+            UpdateBodyPartTotals();
+
+            bodyPartsTitleText.SetArguments("*");
+        }
+        public void SetRestrictedPatterns(List<string> patterns)
+        {
+            restrictedPatterns = patterns;
+
+            foreach (PatternUI patternUI in patternsRT.GetComponentsInChildren<PatternUI>(true))
+            {
+                if (patterns.Contains(patternUI.name))
+                {
+                    patternUI.SetUsable(false);
+                }
+            }
+
+            patternsTitleText.SetArguments("*");
+        }
+        public void SetRestrictedColour(Color colour)
+        {
+            primaryColourPalette.SetColour(colour, true);
+            secondaryColourPalette.SetColour(colour, true);
+            restrictedColoursCG.interactable = restrictedColoursCG.blocksRaycasts = true;
+            coloursTitleText.SetArguments("*");
+
+            restrictedColour = colour;
+
+            PatternUI[] patterns = patternsRT.GetComponentsInChildren<PatternUI>(true);
+            for (int i = 1; i < patterns.Length; i++)
+            {
+                patterns[i].gameObject.SetActive(false);
+            }
+            patternsTitleText.SetArguments("*");
+        }
+        public void SetRestrictedComplexity(int complexity)
+        {
+            restrictedComplexity = complexity;
+
+            complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, complexity);
+
+            statisticsTitleText.SetArguments("*");
+        }
+        public void SetRestrictedBones(int bones)
+        {
+            restrictedBones = bones;
+
+            bonesText.SetArguments(Creature.Constructor.Bones.Count, bones);
+
+            statisticsTitleText.SetArguments("*");
+        }
+        public void SetRestrictedCash(int cash)
+        {
+            restrictedCash = cash;
+
+            cashText.text = $"${cash}";
+
+            statisticsTitleText.SetArguments("*");
+        }
+
+        public void ResetRestrictions()
+        {
+            // Body Parts
+            foreach (BodyPartUI bodyPartUI in bodyPartsRT.GetComponentsInChildren<BodyPartUI>(true))
+            {
+                bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartUI.name));
+            }
+            restrictedBodyParts.Clear();
+            bodyPartsTitleText.SetArguments("");
+
+            // Statistics
+            restrictedComplexity = restrictedBones = restrictedCash = -1;
+            statisticsTitleText.SetArguments("");
+            UpdateStatistics();
+
+            // Patterns
+            foreach (PatternUI patternUI in patternsRT.GetComponentsInChildren<PatternUI>(true))
+            {
+                patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternUI.name));
+                patternUI.gameObject.SetActive(true);
+            }
+            restrictedPatterns.Clear();
+            patternsTitleText.SetArguments("");
+
+            // Colours
+            restrictedColoursCG.interactable = restrictedColoursCG.blocksRaycasts = false;
+            restrictedColour = null;
+            coloursTitleText.SetArguments("");
+
+
+            UpdateLoadableCreatures();
         }
         #endregion
 

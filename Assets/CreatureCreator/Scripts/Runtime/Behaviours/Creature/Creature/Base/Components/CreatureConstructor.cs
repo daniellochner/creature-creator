@@ -443,31 +443,28 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void AddBone(int index, Vector3 position, Quaternion rotation, float weight, bool apply = true)
         {
-            if (CanAddBone(index))
+            if (apply)
             {
-                if (apply)
-                {
-                    DetachBodyParts();
-                }
+                DetachBodyParts();
+            }
 
-                Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
-                bone.SetParent(Root, false);
-                Bones.Add(bone);
-                Statistics.Complexity++;
-                OnAddBone?.Invoke(index);
-                data.Bones.Insert(index, new Bone()
-                {
-                    position = position,
-                    rotation = rotation,
-                    weight = weight
-                });
+            Transform bone = new GameObject("Bone." + data.Bones.Count).transform;
+            bone.SetParent(Root, false);
+            Bones.Add(bone);
+            Statistics.Complexity++;
+            OnAddBone?.Invoke(index);
+            data.Bones.Insert(index, new Bone()
+            {
+                position = position,
+                rotation = rotation,
+                weight = weight
+            });
 
-                if (apply)
-                {
-                    ConstructBody();
+            if (apply)
+            {
+                ConstructBody();
 
-                    ReattachBodyParts();
-                }
+                ReattachBodyParts();
             }
         }
         public void AddBoneToFront()
@@ -490,37 +487,27 @@ namespace DanielLochner.Assets.CreatureCreator
 
             AddBone(Bones.Count, position, rotation, Mathf.Clamp(GetWeight(Bones.Count - 1) * 0.75f, 0f, 100f));
         }
-        public bool CanAddBone(int index)
-        {
-            bool tooManyBones = Bones.Count + 1 > MinMaxBones.max;
-            bool tooComplicated = Statistics.Complexity + 1 > MaxComplexity && !EditorManager.Instance.Unlimited;
-
-            return !tooManyBones && !tooComplicated;
-        }
         public void RemoveBone(int index, bool apply = true)
         {
-            if (CanRemoveBone(index))
+            if (apply)
             {
-                if (apply)
-                {
-                    DetachBodyParts();
-                }
+                DetachBodyParts();
+            }
 
-                OnPreRemoveBone?.Invoke(index);
+            OnPreRemoveBone?.Invoke(index);
 
-                Transform bone = Bones[Bones.Count - 1];
-                Bones.Remove(bone);
-                DestroyImmediate(bone.gameObject);
-                Statistics.Complexity--;
-                OnRemoveBone?.Invoke(index);
-                data.Bones.RemoveAt(index);
+            Transform bone = Bones[Bones.Count - 1];
+            Bones.Remove(bone);
+            DestroyImmediate(bone.gameObject);
+            Statistics.Complexity--;
+            OnRemoveBone?.Invoke(index);
+            data.Bones.RemoveAt(index);
 
-                if (apply)
-                {
-                    ConstructBody();
+            if (apply)
+            {
+                ConstructBody();
 
-                    ReattachBodyParts();
-                }
+                ReattachBodyParts();
             }
         }
         public void RemoveBoneFromFront()
@@ -530,13 +517,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void RemoveBoneFromBack()
         {
             RemoveBone(Bones.Count - 1);
-        }
-        public bool CanRemoveBone(int index)
-        {
-            bool tooFewBones = Bones.Count - 1 < MinMaxBones.min;
-            bool noAttachedLimbs = Bones[index].GetComponentsInChildren<BodyPartConstructor>().Length == 0;
-
-            return noAttachedLimbs && !tooFewBones;
         }
         private void DetachBodyParts()
         {
