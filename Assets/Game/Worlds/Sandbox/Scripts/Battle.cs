@@ -92,7 +92,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void BattleServerRpc()
         {
-            StartCoroutine(BattleRoutine());
+            if (!InBattle)
+            {
+                StartCoroutine(BattleRoutine());
+            }
         }      
         [ClientRpc]
         private void StartRoundClientRpc()
