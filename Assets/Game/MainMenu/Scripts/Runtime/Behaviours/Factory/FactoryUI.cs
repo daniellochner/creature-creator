@@ -51,8 +51,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SteamAPICall_t call = SteamUGC.SendQueryUGCRequest(handle);
             query.Set(call);
-
-            StartCoroutine(CarouselRoutine());
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -61,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void OnQueryComplete(SteamUGCQueryCompleted_t param, bool hasFailed)
         {
-            if (hasFailed)
+            if (hasFailed || this is null)
             {
                 return;
             }
@@ -100,6 +98,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (param.m_unNumResultsReturned > 0)
             {
                 StartCoroutine(canvasGroup.Fade(true, 0.25f));
+                StartCoroutine(CarouselRoutine());
             }
         }
 
