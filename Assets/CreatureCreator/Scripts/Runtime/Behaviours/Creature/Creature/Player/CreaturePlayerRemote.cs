@@ -49,9 +49,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public override void OnDie()
+        public override void OnDie(DamageReason reason)
         {
-            base.OnDie();
+            base.OnDie(reason);
             OnHide();
         }
 

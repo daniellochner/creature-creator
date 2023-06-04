@@ -61,9 +61,9 @@ namespace DanielLochner.Assets.CreatureCreator
             IsSetup = true;
         }
 
-        public override void OnDie()
+        public override void OnDie(DamageReason reason)
         {
-            base.OnDie();
+            base.OnDie(reason);
 
             Constructor.Body.gameObject.SetActive(false);
             Rigidbody.isKinematic = true;

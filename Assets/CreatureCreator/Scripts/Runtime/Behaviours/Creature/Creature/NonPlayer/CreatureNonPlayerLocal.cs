@@ -13,9 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Spawner.Spawn();
         }
 
-        public override void OnDie()
+        public override void OnDie(DamageReason reason)
         {
-            base.OnDie();
+            base.OnDie(reason);
             GetComponent<NetworkObject>().Despawn();
         }
     }

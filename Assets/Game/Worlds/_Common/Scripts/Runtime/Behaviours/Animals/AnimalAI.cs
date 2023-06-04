@@ -277,7 +277,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 AnimalAI.MoveToPosition(wanderBounds?.RandomPointInBounds ?? AnimalAI.transform.position);
             }
 
-            private void OnTakeDamage(float damage, Vector3 point)
+            private void OnTakeDamage(float damage, Vector3 point, DamageReason reason)
             {
                 idleTimeLeft = 0;
             }

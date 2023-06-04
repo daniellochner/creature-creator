@@ -138,7 +138,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Health.OnDie += OnDie;
         }
 
-        public virtual void OnDie()
+        public virtual void OnDie(DamageReason reason)
         {
             Collider.enabled = false;
             MinimapIcon.enabled = false;
