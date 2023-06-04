@@ -173,7 +173,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     return int.MaxValue;
                 }
-                return Creature.Constructor.MaxComplexity;
+                else
+                {
+                    return Creature.Constructor.MaxComplexity;
+                }
             }
         }
         public int MaxBones
@@ -185,11 +188,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     return restrictedBones;
                 }
                 else
-                if (Unlimited)
                 {
-                    return int.MaxValue;
+                    return (int)Creature.Constructor.MinMaxBones.max;
                 }
-                return (int)Creature.Constructor.MinMaxBones.max;
             }
         }
         public int MaxCash
@@ -205,13 +206,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     return int.MaxValue;
                 }
-                return Creature.Editor.Cash;
+                if (CreativeMode)
+                {
+                    return CreativeCash;
+                }
+                else
+                {
+                    return ProgressManager.Data.Cash;
+                }
             }
-        }
-
-        public int BaseCash
-        {
-            get => CreativeMode ? CreativeCash : ProgressManager.Data.Cash;
         }
         public bool Unlimited
         {
@@ -399,7 +402,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Creature.Editor.Load(null);
             }
-            Creature.Editor.Cash = BaseCash;
+            Creature.Editor.Cash = MaxCash;
             Creature.Informer.Setup(informationMenu);
             Creature.Mover.Teleport(Creature.Editor.Platform, true);
 
@@ -1099,7 +1102,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
             bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > MaxComplexity;
-            bool notEnoughCash = bodyPart.Price > MaxCash;
+            bool notEnoughCash = bodyPart.Price > Creature.Editor.Cash;
             bool isPremium = !PremiumManager.Instance.IsBodyPartUsable(bodyPartID);
             bool isRestricted = restrictedBodyParts.Contains(bodyPartID);
 
@@ -1608,18 +1611,18 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdateStatistics()
         {
-            complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, ((MaxComplexity == int.MaxValue) ? "∞" : MaxComplexity.ToString()));
+            complexityText.SetArguments(Creature.Constructor.Statistics.Complexity, FormatInfinite(MaxComplexity));
             heightText.SetArguments(Math.Round(Creature.Constructor.Dimensions.Height, 2));
             weightText.SetArguments(Math.Round(Creature.Constructor.Statistics.Weight, 2));
             dietText.SetArguments(LocalizationUtility.Localize($"diet_{Creature.Constructor.Statistics.Diet}".ToLower()));
             healthText.SetArguments(Creature.Constructor.Statistics.Health);
             speedText.SetArguments(Math.Round(Creature.Mover.MoveSpeed, 2));
-            bonesText.SetArguments(Creature.Constructor.Bones.Count, ((MaxBones == int.MaxValue) ? "∞" : MaxBones.ToString()));
+            bonesText.SetArguments(Creature.Constructor.Bones.Count, FormatInfinite(MaxBones));
 
             bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
             abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
 
-            cashText.text = $"${((MaxCash == int.MaxValue) ? "∞" : MaxCash.ToString())}";
+            cashText.text = $"${FormatInfinite(Creature.Editor.Cash)}";
         }
         public void UpdateCreaturesFormatting()
         {
@@ -1694,6 +1697,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 StopCoroutine(visibleCoroutine);
             }
             visibleCoroutine = StartCoroutine(editorCanvasGroup.Fade(v, t));
+        }
+
+        private string FormatInfinite(int value)
+        {
+            return (value > 999999) ? "∞" : value.ToString();
         }
         #endregion
 
