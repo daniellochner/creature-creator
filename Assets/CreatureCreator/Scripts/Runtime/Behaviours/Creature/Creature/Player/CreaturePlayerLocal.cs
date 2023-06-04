@@ -82,7 +82,7 @@ namespace DanielLochner.Assets.CreatureCreator
             EditorManager.Instance.SetVisibility(false);
 
             float time = Time.time;
-            EditorManager.Instance.InvokeUntil(() => !InputUtility.GetKey(KeybindingsManager.Data.Respawn) && (Time.time > (time + 1f)), delegate
+            EditorManager.Instance.InvokeUntil(() => !Input.GetMouseButton(0) && (Time.time > (time + 1f)), delegate
             {
                 string name = Informer.Information.Name.Equals(LocalizationUtility.Localize("creature-unnamed")) ? LocalizationUtility.Localize("you-died_you") : Informer.Information.Name;
                 string age  = Informer.Information.FormattedAge;
