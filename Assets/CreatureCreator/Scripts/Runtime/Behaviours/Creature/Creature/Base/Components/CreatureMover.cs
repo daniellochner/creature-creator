@@ -366,11 +366,11 @@ namespace DanielLochner.Assets.CreatureCreator
             },
             1f);
         }
-        public void Teleport(Platform platform, bool start = false)
+        public void Teleport(Platform platform, bool align = false)
         {
             Teleport(platform.Position);
 
-            if (start)
+            if (align)
             {
                 transform.rotation = platform.Rotation;
                 Camera.Root.SetPositionAndRotation(platform.Position, platform.Rotation);

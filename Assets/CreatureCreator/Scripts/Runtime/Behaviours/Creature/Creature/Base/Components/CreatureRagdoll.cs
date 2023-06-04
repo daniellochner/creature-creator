@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -10,40 +9,43 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureRagdoll : MonoBehaviour
     {
         #region Fields
-        private CreatureConstructor original, ragdoll;
+        [SerializeField] private MinMax minMaxForce;
         #endregion
 
         #region Properties
         private CreatureCloner CreatureCloner { get; set; }
+        private CreatureConstructor Constructor { get; set; }
+
+        public CreatureConstructor Ragdoll { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
             CreatureCloner = GetComponent<CreatureCloner>();
-            original = GetComponent<CreatureConstructor>();
+            Constructor = GetComponent<CreatureConstructor>();
         }
 
-        public CreatureConstructor Generate(Vector3? pos = null)
+        public CreatureConstructor Generate(Vector3? pos = null, bool dismember = false)
         {
             if (pos == null)
             {
-                pos = original.Body.position;
+                pos = Constructor.Body.position;
             }
-            return Generate(original.Data, (Vector3)pos);
+            return Generate(Constructor.Data, (Vector3)pos, dismember);
         }
-        public CreatureConstructor Generate(CreatureData creatureData, Vector3 pos)
+        public CreatureConstructor Generate(CreatureData creatureData, Vector3 pos, bool dismember)
         {
-            ragdoll = CreatureCloner.Clone(creatureData, transform.position, transform.rotation, transform.parent);
-            ragdoll.Body.position = pos;
-            ragdoll.SkinnedMeshRenderer.updateWhenOffscreen = true;
+            Ragdoll = CreatureCloner.Clone(creatureData, transform.position, transform.rotation, transform.parent);
+            Ragdoll.Body.position = pos;
+            Ragdoll.SkinnedMeshRenderer.updateWhenOffscreen = true;
 
-            CopyPositionsAndRotations(original, ragdoll);
-            ragdoll.Body.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Ragdoll"));
+            CopyPositionsAndRotations(Constructor, Ragdoll);
+            Ragdoll.Body.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Ragdoll"));
 
-            for (int i = 0; i < ragdoll.Bones.Count; ++i)
+            for (int i = 0; i < Ragdoll.Bones.Count; ++i)
             {
-                SetupBoneRagdoll(ragdoll.Bones[i], ragdoll.BoneSettings.Radius * Mathf.Lerp(1, 5, ragdoll.GetWeight(i) / 100f), 30);
+                SetupBoneRagdoll(Ragdoll.Bones[i], Ragdoll.BoneSettings.Radius * Mathf.Lerp(1, 5, Ragdoll.GetWeight(i) / 100f), 30);
             }
             //foreach (LimbConstructor limb in ragdoll.Limbs)
             //{
@@ -54,9 +56,27 @@ namespace DanielLochner.Assets.CreatureCreator
             //    SetupLimbRagdoll(limb.FlippedLimb);
             //}
 
-            ragdoll.GetComponent<CreatureOptimizer>().Optimize();
+            if (SettingsManager.Data.OptimizeCreatures)
+            {
+                Ragdoll.GetComponent<CreatureOptimizer>().Optimize();
+            }
+            else
+            if (dismember)
+            {
+                foreach (BodyPartConstructor bpc in Ragdoll.BodyParts)
+                {
+                    if (bpc.IsVisible)
+                    {
+                        DismemberBodyPart(bpc);
+                    }
+                    if (bpc.Flipped.IsVisible)
+                    {
+                        DismemberBodyPart(bpc.Flipped);
+                    }
+                }
+            }
 
-            return ragdoll;
+            return Ragdoll;
         }
 
         private void CopyPositionsAndRotations(CreatureConstructor from, CreatureConstructor to)
@@ -76,13 +96,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
+        private void AddRigidbody(GameObject obj, float radius)
+        {
+            SphereCollider collider = obj.AddComponent<SphereCollider>();
+            collider.radius = radius;
+
+            Rigidbody rigidbody = obj.AddComponent<Rigidbody>();
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            rigidbody.AddForce(new Vector3(minMaxForce.Random, minMaxForce.Random, minMaxForce.Random), ForceMode.Impulse);
+        }
 
         private void SetupBoneRagdoll(Transform bone, float radius, float angleLimit)
         {
-            SphereCollider collider = bone.gameObject.AddComponent<SphereCollider>();
-            collider.radius = radius;
-            Rigidbody rigidbody = bone.gameObject.AddComponent<Rigidbody>();
-            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            AddRigidbody(bone.gameObject, radius);
 
             int index = bone.GetSiblingIndex();
             if (index > 0)
@@ -122,6 +148,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             FixedJoint fixedJoint = limb.Bones[0].gameObject.AddComponent<FixedJoint>();
             fixedJoint.connectedBody = limb.transform.parent.GetComponent<Rigidbody>();
+        }
+
+        private void DismemberBodyPart(BodyPartConstructor bpc)
+        {
+            bpc.transform.SetParent(Ragdoll.transform, true);
+            AddRigidbody(bpc.gameObject, 0.1f);
         }
         #endregion
     }

@@ -700,7 +700,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Constructor.Demolish();
 
-            Cash = EditorManager.Instance.BaseCash;
+            Cash = EditorManager.Instance.MaxCash;
             if (creatureData != null)
             {
                 Constructor.Construct(creatureData);

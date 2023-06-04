@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -35,19 +36,37 @@ namespace DanielLochner.Assets.CreatureCreator
             Health.OnDie += Kill;
         }
 
-        public void Kill()
+        public void Kill(DamageReason reason)
         {
-            CreatureConstructor corpse = Ragdoll.Generate(Constructor.Body.position);
+            bool dismember = reason == DamageReason.Acid;
+
+            CreatureConstructor corpse = Ragdoll.Generate(Constructor.Body.position, dismember);
 
             Corpse = corpse.gameObject;
             Corpse.AddComponent<SelfDestructor>().Lifetime = 30f;
 
-            foreach (Transform bone in corpse.Bones)
+            List<Transform> transforms = new List<Transform>(corpse.Bones);
+            if (dismember)
             {
-                BuoyantObject buoyantObject = bone.gameObject.AddComponent<BuoyantObject>();
+                foreach (BodyPartConstructor bpc in corpse.BodyParts)
+                {
+                    if (bpc.IsVisible)
+                    {
+                        transforms.Add(bpc.transform);
+                    }
+                    if (bpc.Flipped.IsVisible)
+                    {
+                        transforms.Add(bpc.Flipped.transform);
+                    }
+                }
+            }
+
+            foreach (Transform t in transforms)
+            {
+                BuoyantObject buoyantObject = t.gameObject.AddComponent<BuoyantObject>();
                 buoyantObject.floatingPoints = new Transform[]
                 {
-                    bone
+                    t
                 };
                 buoyantObject.floatingPower = 100;
                 buoyantObject.underwaterAngularDrag = 3;
@@ -55,8 +74,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 buoyantObject.airAngularDrag = 0;
                 buoyantObject.airDrag = 0.05f;
 
-                Edible flesh = Instantiate(fleshPrefab, bone);
-                flesh.GetComponent<SphereCollider>().radius = bone.GetComponent<SphereCollider>().radius;
+                Edible flesh = Instantiate(fleshPrefab, t);
+                flesh.GetComponent<SphereCollider>().radius = t.GetComponent<SphereCollider>().radius;
                 flesh.OnEat.AddListener(delegate
                 {
                     Destroy(corpse.gameObject);
