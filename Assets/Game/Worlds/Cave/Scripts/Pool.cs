@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class AquaDeVida : MonoBehaviour
+    public class Pool : MonoBehaviour
     {
         #region Fields
         [SerializeField] private GameObject healPrefab;
