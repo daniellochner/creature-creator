@@ -27,7 +27,7 @@ namespace DanielLochner.Assets
         {
             lr.enabled = false;
         }
-        private void LateUpdate()
+        private void Update()
         {
             DrawProjection(speed, mass);
         }
