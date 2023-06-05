@@ -38,6 +38,8 @@ Creature Creator and related products by Daniel Lochner have been open-sourced u
 
 > Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
 
+One additional constraint when using this work is that the developer(s) must ensure a visible link to the original game (i.e., https://creaturecreator.daniellochner.com) is included within the game itself, prominently displayed during the main flow of gameplay. This could mean showcasing it on the main menu screen itself, rather than being buried within sub-menus or credits Moreover, this link should also be provided on any associated websites and social media related to the work.
+
 
 ## Support
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/daniellochner?logo=github&style=flat)
