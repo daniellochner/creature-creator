@@ -656,7 +656,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Gameplay
         public void OnRestorePurchases(bool b, string s)
         {
-            Debug.Log(b + " - " + s);
         }
         public void ViewPremium()
         {
@@ -673,7 +672,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ViewAchievements()
         {
-            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            if (SystemUtility.IsDevice(DeviceType.Handheld) && GameServices.Instance.IsLoggedIn())
             {
                 GameServices.Instance.ShowAchievementsUI();
             }

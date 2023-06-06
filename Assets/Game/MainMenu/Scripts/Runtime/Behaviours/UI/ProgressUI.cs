@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
             achievementsSlider.value = ((float)unlocked) / total;
             achievementsButton.onClick.AddListener(delegate
             {
-                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                if (SystemUtility.IsDevice(DeviceType.Handheld) && GameServices.Instance.IsLoggedIn())
                 {
                     GameServices.Instance.ShowAchievementsUI();
                 }

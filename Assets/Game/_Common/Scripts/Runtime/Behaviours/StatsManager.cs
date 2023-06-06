@@ -154,7 +154,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 SteamUserStats.SetAchievement(achievementId);
                 SteamUserStats.StoreStats();
 #elif UNITY_IOS || UNITY_ANDROID
-                GameServices.Instance.SubmitAchievement(GetAchievement(achievementId).gameServicesId);
+                if (GameServices.Instance.IsLoggedIn())
+                {
+                    GameServices.Instance.SubmitAchievement(GetAchievement(achievementId).gameServicesId);
+                }
                 PlayerPrefs.SetInt(achievementId, 1);
 #endif
             }
