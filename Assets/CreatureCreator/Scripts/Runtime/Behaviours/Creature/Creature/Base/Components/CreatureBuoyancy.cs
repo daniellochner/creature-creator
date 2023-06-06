@@ -17,12 +17,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void OnEnable()
         {
-            buoyantObject.floatingPower = rb.mass * factor;
+            Refresh();
             buoyantObject.enabled = true;
         }
         private void OnDisable()
         {
             buoyantObject.enabled = false;
+        }
+
+        public void Refresh()
+        {
+            buoyantObject.floatingPower = rb.mass * factor;
         }
     }
 }
