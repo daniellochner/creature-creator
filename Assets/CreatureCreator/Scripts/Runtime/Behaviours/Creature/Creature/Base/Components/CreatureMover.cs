@@ -27,6 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float airDrag;
         [SerializeField] private float joystickThreshold;
         [SerializeField] private float touchThreshold;
+        [SerializeField] private AudioClip teleportFX;
 
         [Header("Debug")]
         [SerializeField, ReadOnly] private Vector3 velocity;
@@ -34,8 +35,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private Animator targetAnimator;
         private CapsuleCollider capsuleCollider;
-        private GameObject targetGO;
         private new Rigidbody rigidbody;
+        private GameObject targetGO;
 
         private bool isMovable;
         private Vector3 keyboardForward, keyboardRight, moveDisplacement, targetPosition;
@@ -63,6 +64,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool CanMove = true, CanTurn = true;
         public Vector3 Direction { get; set; } = Vector3.zero;
+
+        public bool FreezeMove { get; set; }
+        public bool FreezeTurn { get; set; }
 
         public bool CanInput
         {
@@ -296,13 +300,13 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Direction != Vector3.zero)
             {
                 float angle = Vector3.SignedAngle(transform.forward, Direction, transform.up);
-                if (CanTurn)
+                if (CanTurn && !FreezeTurn)
                 {
                     RequestTurn(angle);
                 }
                 CanMove &= Mathf.Abs(angle) < angleToMove;
             }
-            RequestMove(CanMove && CanInput ? Direction : Vector3.zero);
+            RequestMove(CanMove && CanInput && !FreezeMove ? Direction : Vector3.zero);
         }
         private void HandleGliding()
         {
@@ -353,27 +357,21 @@ namespace DanielLochner.Assets.CreatureCreator
             rigidbody.rotation *= rotation;
         }
 
-        public void Teleport(Vector3 position)
+        public void Teleport(Vector3 position, Quaternion rotation, bool playSound)
         {
-            transform.position = targetPosition = position;
+            StopMoving();
 
-            moveDisplacement = Vector3.zero;
+            transform.position = targetPosition = position;
+            transform.rotation = rotation;
 
             Camera.CameraOrbit.HandleClipping = false;
-            this.Invoke(delegate
-            {
+            this.Invoke(delegate {
                 Camera.CameraOrbit.HandleClipping = true;
-            },
-            1f);
-        }
-        public void Teleport(Platform platform, bool align = false)
-        {
-            Teleport(platform.Position);
+            }, 1f);
 
-            if (align)
+            if (playSound)
             {
-                transform.rotation = platform.Rotation;
-                Camera.Root.SetPositionAndRotation(platform.Position, platform.Rotation);
+                EditorManager.Instance.EditorAudioSource.PlayOneShot(teleportFX);
             }
         }
 

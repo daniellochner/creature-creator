@@ -2,7 +2,6 @@
 // Copyright (c) Daniel Lochner
 
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -24,6 +23,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => transform.rotation;
         }
+
+        public bool HasEntered
+        {
+            get => hasEntered;
+            set
+            {
+                hasEntered = value;
+                minimapIcon.enabled = !hasEntered;
+            }
+        }
         #endregion
 
         #region Methods
@@ -41,9 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 player.Loader.HideFromOthers();
                 player.SpeedUp.SlowDown();
 
-                minimapIcon.enabled = false;
-
-                hasEntered = true;
+                HasEntered = true;
             }
         }
         private void OnTriggerExit(Collider other)
@@ -55,22 +62,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 
                 player.Loader.ShowMeToOthers();
 
-                minimapIcon.enabled = true;
-
-                hasEntered = false;
+                HasEntered = false;
             }
         }
 
-        public void TeleportTo(bool sfx = true)
+        public void TeleportTo()
         {
-            Player.Instance.Editor.Platform.hasEntered = false;
-            Player.Instance.Editor.Platform.minimapIcon.enabled = true;
+            TeleportTo(false, true);
+        }
+        public void TeleportTo(bool align, bool playSound)
+        {
+            Player.Instance.Editor.Platform.HasEntered = false;
             Player.Instance.Editor.Platform = this;
+            HasEntered = true;
 
-            Player.Instance.Mover.Teleport(this);
-            if (sfx)
+            Player.Instance.Mover.Teleport(Position, align ? Rotation : Player.Instance.transform.rotation, playSound);
+
+            if (align)
             {
-                teleportAS.Play();
+                Player.Instance.Camera.Root.SetPositionAndRotation(Position, Rotation);
             }
         }
         #endregion

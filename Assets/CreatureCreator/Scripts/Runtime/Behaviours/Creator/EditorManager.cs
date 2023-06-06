@@ -64,6 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioClip errorAudioClip;
         [SerializeField] private AudioClip createAudioClip;
         [SerializeField] private RectTransform bodyPartsRT;
+        [SerializeField] private RectTransform statisticsRT;
         [SerializeField] private BodyPartGrids bodyPartGrids;
         [SerializeField] private GameObject noPartsText;
         [SerializeField] private CanvasGroup undoBuildCG;
@@ -113,7 +114,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private List<PatternUI> patternsUI = new List<PatternUI>();
         private string creaturesDirectory = null; // null because Application.persistentDataPath cannot be called during serialization.
         private bool isVisible = true, isEditing = true;
-        private Coroutine visibleCoroutine;
+        private Coroutine fadeEditorCoroutine, fadePaginationCoroutine, fadeOptionsCoroutine;
         private CreatureUI currentCreatureUI;
 
         private List<string> restrictedBodyParts = new List<string>();
@@ -133,6 +134,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public AudioSource EditorAudioSource => editorAudioSource;
+
         public bool CheckForProfanity
         {
             get => checkForProfanity;
@@ -278,52 +281,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (!SettingsManager.Data.HiddenBodyParts.Contains(bodyPartID)) AddBodyPartUI(bodyPartID);
             }
             UpdateBodyPartTotals();
-            bodyPartsToggle.onValueChanged.AddListener(delegate
-            {
-                // Create a dictionary of distinct body parts with their respective counts.
-                Dictionary<string, int> distinctBodyParts = new Dictionary<string, int>();
-                foreach (AttachedBodyPart attachedBodyPart in Creature.Constructor.Data.AttachedBodyParts)
-                {
-                    string bodyPartID = attachedBodyPart.bodyPartID;
-                    if (distinctBodyParts.ContainsKey(bodyPartID))
-                    {
-                        distinctBodyParts[bodyPartID]++;
-                    }
-                    else
-                    {
-                        distinctBodyParts.Add(bodyPartID, 1);
-                    }
-                }
-
-                // Create a list of (joinable) strings using the dictionary of distinct body parts.
-                List<string> bodyPartTotals = new List<string>();
-                foreach (KeyValuePair<string, int> distinctBodyPart in distinctBodyParts)
-                {
-                    BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", distinctBodyPart.Key);
-                    int bodyPartCount = distinctBodyPart.Value;
-
-                    if (bodyPartCount > 1)
-                    {
-                        bodyPartTotals.Add($"{bodyPart} ({bodyPartCount})");
-                    }
-                    else
-                    {
-                        bodyPartTotals.Add(bodyPart.ToString());
-                    }
-                }
-
-                int count = Creature.Constructor.Data.AttachedBodyParts.Count;
-                string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : LocalizationUtility.Localize("cc_build_statistics_none");
-
-                bodyPartsText.SetArguments(bodyPartsToggle.isOn ? bodyParts : count.ToString());
-            });
-            abilitiesToggle.onValueChanged.AddListener(delegate
-            {
-                int count = Creature.Abilities.Abilities.Count;
-                string abilities = (count > 0) ? string.Join(", ", Creature.Abilities.Abilities) : LocalizationUtility.Localize("cc_build_statistics_none");
-
-                abilitiesText.SetArguments((abilitiesToggle.isOn ? abilities : count.ToString()));
-            });
 
             // Paint
             patternMaterial = new Material(patternMaterial);
@@ -404,7 +361,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Creature.Editor.Cash = MaxCash;
             Creature.Informer.Setup(informationMenu);
-            Creature.Mover.Teleport(Creature.Editor.Platform, true);
+            Creature.Editor.Platform.TeleportTo(true, false);
 
             Creature.Editor.OnTryRemoveBone += delegate
             {
@@ -518,6 +475,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Abilities.enabled = true;
             Creature.Mover.enabled = true;
             Creature.Interactor.enabled = true;
+            Creature.Buoyancy.Refresh();
 
             Creature.Spawner.Spawn();
 
@@ -684,7 +642,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Creature.Optimizer.Undo();
 
-            Creature.Mover.Teleport(Creature.Editor.Platform);
+            Creature.Editor.Platform.TeleportTo(false, false);
 
             Creature.Animator.enabled = false;
             Creature.Mover.enabled = false;
@@ -1402,6 +1360,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (update)
             {
                 UpdateBodyPartTotals();
+                LayoutRebuilder.MarkLayoutForRebuild(bodyPartsRT);
             }
 
             return bodyPartUI;
@@ -1410,7 +1369,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
 
-            PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT.transform);
+            PatternUI patternUI = Instantiate(patternUIPrefab, patternsRT);
             patternsUI.Add(patternUI);
             patternUI.Setup(pattern, patternMaterial, isNew);
             patternUI.name = patternID;
@@ -1441,6 +1400,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     SettingsManager.Data.HiddenPatterns.Add(patternID);
                 });
             });
+
+            if (update)
+            {
+                LayoutRebuilder.MarkLayoutForRebuild(patternsRT);
+            }
 
             return patternUI;
         }
@@ -1619,10 +1583,56 @@ namespace DanielLochner.Assets.CreatureCreator
             speedText.SetArguments(Math.Round(Creature.Mover.MoveSpeed, 2));
             bonesText.SetArguments(Creature.Constructor.Bones.Count, FormatInfinite(MaxBones));
 
-            bodyPartsToggle.onValueChanged.Invoke(bodyPartsToggle.isOn);
-            abilitiesToggle.onValueChanged.Invoke(abilitiesToggle.isOn);
+            UpdateStatisticsBodyParts();
+            UpdateStatisticsAbilities();
 
             cashText.text = $"${FormatInfinite(Creature.Editor.Cash)}";
+        }
+        public void UpdateStatisticsBodyParts()
+        {
+            // Create a dictionary of distinct body parts with their respective counts.
+            Dictionary<string, int> distinctBodyParts = new Dictionary<string, int>();
+            foreach (AttachedBodyPart attachedBodyPart in Creature.Constructor.Data.AttachedBodyParts)
+            {
+                string bodyPartID = attachedBodyPart.bodyPartID;
+                if (distinctBodyParts.ContainsKey(bodyPartID))
+                {
+                    distinctBodyParts[bodyPartID]++;
+                }
+                else
+                {
+                    distinctBodyParts.Add(bodyPartID, 1);
+                }
+            }
+
+            // Create a list of (joinable) strings using the dictionary of distinct body parts.
+            List<string> bodyPartTotals = new List<string>();
+            foreach (KeyValuePair<string, int> distinctBodyPart in distinctBodyParts)
+            {
+                BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", distinctBodyPart.Key);
+                int bodyPartCount = distinctBodyPart.Value;
+
+                if (bodyPartCount > 1)
+                {
+                    bodyPartTotals.Add($"{bodyPart} ({bodyPartCount})");
+                }
+                else
+                {
+                    bodyPartTotals.Add(bodyPart.ToString());
+                }
+            }
+
+            int count = Creature.Constructor.Data.AttachedBodyParts.Count;
+            string bodyParts = (bodyPartTotals.Count > 0) ? string.Join(", ", bodyPartTotals) : LocalizationUtility.Localize("cc_build_statistics_none");
+
+            bodyPartsText.SetArguments(bodyPartsToggle.isOn ? bodyParts : count.ToString());
+        }
+        public void UpdateStatisticsAbilities()
+        {
+            int count = Creature.Abilities.Abilities.Count;
+            string abilities = (count > 0) ? string.Join(", ", Creature.Abilities.Abilities) : LocalizationUtility.Localize("cc_build_statistics_none");
+
+            abilitiesText.SetArguments((abilitiesToggle.isOn ? abilities : count.ToString()));
         }
         public void UpdateCreaturesFormatting()
         {
@@ -1662,6 +1672,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bool canLoadCreature = CanLoadCreature(creatureData, out string errorTitle, out string errorMessage);
 
+            // Toggle
+            if (creatureUI.SelectToggle.isOn && !canLoadCreature)
+            {
+                creatureUI.SelectToggle.isOn = false;
+            }
+
             // Button
             creatureUI.ErrorButton.gameObject.SetActive(!canLoadCreature);
             if (!canLoadCreature)
@@ -1680,23 +1696,23 @@ namespace DanielLochner.Assets.CreatureCreator
             creatureUI.SelectToggle.interactable = canLoadCreature;
         }
 
-        public void SetEditing(bool e)
+        public void SetEditing(bool e, float t = 0.25f)
         {
             isEditing = e;
 
-            optionsSideMenu.Close();
+            this.StopStartCoroutine(paginationCanvasGroup.FadeRoutine(e, t), ref fadePaginationCoroutine);
+            this.StopStartCoroutine(optionsCanvasGroup.FadeRoutine(e, t), ref fadeOptionsCoroutine);
 
-            StartCoroutine(paginationCanvasGroup.Fade(isEditing, 0.25f));
-            StartCoroutine(optionsCanvasGroup.Fade(isEditing, 0.25f));
+            if (!isEditing)
+            {
+                optionsSideMenu.Close();
+            }
         }
         public void SetVisibility(bool v, float t = 0.25f)
         {
             isVisible = v;
-            if (visibleCoroutine != null)
-            {
-                StopCoroutine(visibleCoroutine);
-            }
-            visibleCoroutine = StartCoroutine(editorCanvasGroup.Fade(v, t));
+
+            this.StopStartCoroutine(editorCanvasGroup.FadeRoutine(v, t), ref fadeEditorCoroutine);
         }
 
         private string FormatInfinite(int value)

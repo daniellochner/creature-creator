@@ -108,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ZoneManager.Instance.ExitCurrentZone(Editor.Platform.Position);
 
-            Mover.Teleport(Editor.Platform);
+            Editor.Platform.TeleportTo(false, true);
 
             Constructor.Body.gameObject.SetActive(true);
             Rigidbody.isKinematic = false;
