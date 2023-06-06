@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
+    [ExecuteAlways]
     [RequireComponent(typeof(RectTransform))]
-    public class SizeMatcher : MonoBehaviour
+    public class SizeMatcher : UIBehaviour
     {
-        [SerializeField] private RectTransform source;
+        [SerializeField] private RectTransform target;
 
         private RectTransform RectTransform => transform as RectTransform;
 
-        private void LateUpdate()
+        protected override void OnRectTransformDimensionsChange()
         {
             Match();
         }
@@ -17,9 +20,10 @@ namespace DanielLochner.Assets
         [ContextMenu("Match")]
         public void Match()
         {
-            if (source != null)
+            if (target != null)
             {
-                RectTransform.sizeDelta = source.sizeDelta;
+                target.sizeDelta = RectTransform.sizeDelta;
+                LayoutRebuilder.MarkLayoutForRebuild(target);
             }
         }
     }
