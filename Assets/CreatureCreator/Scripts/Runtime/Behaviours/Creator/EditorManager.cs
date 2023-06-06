@@ -323,6 +323,7 @@ namespace DanielLochner.Assets.CreatureCreator
             restrictedColoursClickUI.OnLeftClick.AddListener(delegate
             {
                 InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_colour_title"), LocalizationUtility.Localize("cc_restriction_colour_message"));
+                editorAudioSource.PlayOneShot(errorAudioClip);
             });
 
             // Options
@@ -398,6 +399,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     else
                     {
                         InformationDialog.Inform(errorTitle, errorMessage);
+                        editorAudioSource.PlayOneShot(errorAudioClip);
                     }
 
                     PrevCreatureData = null;
@@ -636,6 +638,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             {
                 InformationDialog.Inform(errorTitle, errorMessage);
+                editorAudioSource.PlayOneShot(errorAudioClip);
             }
         }
         public void Load(CreatureData creatureData, bool loadFromHistory = false)
@@ -732,6 +735,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             {
                 InformationDialog.Inform(errorTitle, errorMessage);
+                editorAudioSource.PlayOneShot(errorAudioClip);
             }
         }
         public void TryExport()
@@ -1686,6 +1690,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 creatureUI.ErrorButton.onClick.AddListener(delegate
                 {
                     InformationDialog.Inform(errorTitle, errorMessage);
+                    editorAudioSource.PlayOneShot(errorAudioClip);
                 });
             }
 
