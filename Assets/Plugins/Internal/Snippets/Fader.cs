@@ -58,7 +58,7 @@ namespace DanielLochner.Assets
         {
             yield return new WaitForEndOfFrame(); // Start fading on next frame.
 
-            yield return Instance.StartCoroutine(Instance.fadeCanvasGroup.Fade(targetVisibility, fadeDuration, true, onFade));
+            yield return Instance.StartCoroutine(Instance.fadeCanvasGroup.FadeRoutine(targetVisibility, fadeDuration, true, onFade));
         }
         #endregion
     }

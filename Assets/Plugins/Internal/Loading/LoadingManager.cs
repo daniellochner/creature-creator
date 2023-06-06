@@ -41,7 +41,7 @@ namespace DanielLochner.Assets
         }
         public IEnumerator LoadRoutine(AsyncOperation operation, Action onLoad)
         {
-            Coroutine fadeIn = StartCoroutine(canvasGroup.Fade(true, 1f));
+            Coroutine fadeIn = StartCoroutine(canvasGroup.FadeRoutine(true, 1f));
 
             Progress = 0f;
             while (!operation.isDone)
@@ -58,7 +58,7 @@ namespace DanielLochner.Assets
 
             onLoad?.Invoke();
 
-            yield return canvasGroup.Fade(false, 1f);
+            yield return canvasGroup.FadeRoutine(false, 1f);
             canvasGroup.alpha = 0f;
         }
 

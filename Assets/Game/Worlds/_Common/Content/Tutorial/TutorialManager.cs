@@ -77,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 tutorialRT.gameObject.SetActive(true);
             }
-            StartCoroutine(canvasGroup.Fade(v, t, onEnd: delegate
+            StartCoroutine(canvasGroup.FadeRoutine(v, t, onEnd: delegate
             {
                 tutorialRT.gameObject.SetActive(v);
             }));

@@ -26,7 +26,7 @@ namespace DanielLochner.Assets
         private IEnumerator Start()
         {
             yield return LocalizationSettings.InitializationOperation;
-            yield return StartCoroutine(canvasGroup.Fade(false, 1f, true, () => gameObject.SetActive(false)));
+            yield return StartCoroutine(canvasGroup.FadeRoutine(false, 1f, true, () => gameObject.SetActive(false)));
         }
         #endregion
     }

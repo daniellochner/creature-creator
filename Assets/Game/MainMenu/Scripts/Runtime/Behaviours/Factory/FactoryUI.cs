@@ -97,7 +97,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (param.m_unNumResultsReturned > 0)
             {
-                StartCoroutine(canvasGroup.Fade(true, 0.25f));
+                StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
                 StartCoroutine(CarouselRoutine());
             }
         }

@@ -14,11 +14,7 @@ namespace DanielLochner.Assets
         }
         public void SetVisibility(bool isVisible, float time = 0f)
         {
-            if (coroutine != null)
-            {
-                StopCoroutine(coroutine);
-            }
-            coroutine = StartCoroutine(canvasGroup.Fade(isVisible, time));
+            this.StopStartCoroutine(canvasGroup.FadeRoutine(isVisible, time), ref coroutine);
         }
     }
 }
