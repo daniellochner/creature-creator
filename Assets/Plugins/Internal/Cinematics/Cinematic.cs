@@ -1,10 +1,15 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Playables;
 
 namespace DanielLochner.Assets
 {
     public class Cinematic : MonoBehaviour
     {
+        #region Fields
+        private PlayableDirector director;
+        #endregion
+
         #region Properties
         public UnityAction OnBegin { get; set; }
         public UnityAction OnEnd { get; set; }
@@ -13,6 +18,10 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            director = GetComponent<PlayableDirector>();
+        }
         private void OnDestroy()
         {
             if (CinematicManager.Instance)
@@ -32,6 +41,14 @@ namespace DanielLochner.Assets
             CinematicManager.Instance.IsInCinematic = false;
             gameObject.SetActive(false);
             OnEnd?.Invoke();
+        }
+        public void Pause()
+        {
+            director.Pause();
+        }
+        public void Unpause()
+        {
+            director.Play();
         }
 
         public virtual void Show()

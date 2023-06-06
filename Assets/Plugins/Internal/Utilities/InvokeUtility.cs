@@ -39,12 +39,13 @@ namespace DanielLochner.Assets
             while (progress < 1f)
             {
                 timeElapsed += Time.deltaTime * timeScale;
-                progress = timeElapsed / timeToMove;
+                progress = Mathf.Clamp01(timeElapsed / timeToMove);
 
                 onProgress(progress);
                 
                 yield return null;
             }
+            onProgress(1f);
         }
         public static IEnumerator InvokeUntil(Func<bool> predicate, Action onComplete)
         {

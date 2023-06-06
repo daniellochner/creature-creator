@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ExpandInSandboxCinematic expandInSandboxCinematic;
         [SerializeField] private ExitCrackCinematic exitCrackCinematic;
         [Space]
-        [SerializeField] private Platform raftPlatform;
+        [SerializeField] private Platform beachPlatform;
         [SerializeField] private Water ocean;
         [SerializeField] private Zone beach;
         #endregion
@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (prevScene == "Island")
             {
-                raftPlatform.TeleportTo(false);
+                beachPlatform.TeleportTo(true, false);
 
                 ZoneManager.Instance.EnterZone(beach, false);
                 ocean.SetVisibility(true);

@@ -12,6 +12,10 @@ namespace DanielLochner.Assets
         private NetworkPlayersMenu networkMenu;
         #endregion
 
+        #region Properties
+        public int NumPlayers => networkMenu.NumPlayers;
+        #endregion
+
         #region Methods
         private void Start()
         {

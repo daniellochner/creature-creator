@@ -258,7 +258,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9201031152740778725}
   - component: {fileID: 1481119122031675531}
-  - component: {fileID: 8050734463131846695}
   - component: {fileID: 5637203917219042299}
   - component: {fileID: 9201031152740778722}
   - component: {fileID: 4967089676624150492}
@@ -296,24 +295,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 1, z: 5}
+  m_Size: {x: 10, y: 1, z: 10}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &8050734463131846695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702022667769298155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &5637203917219042299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +314,12 @@ MonoBehaviour:
   - Player/Local
   - Player/Remote
   ignored: []
+  onTrack:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoseTrackOf:
+    m_PersistentCalls:
+      m_Calls: []
   tracked: []
 --- !u!114 &9201031152740778722
 MonoBehaviour:
@@ -345,7 +334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigame: {fileID: 0}
-  countdownTime: 10
   minigameText: {fileID: 2236019691625662699}
   minigameLookAtConstraint: {fileID: 5841355306098678798}
 --- !u!114 &4967089676624150492

@@ -35,13 +35,13 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Begin();
             if (showBannerAd)
             {
-                PremiumManager.Instance.ShowBannerAd();
+                PremiumManager.Instance?.ShowBannerAd();
             }
         }
         public override void End()
         {
             base.End();
-            PremiumManager.Instance.HideBannerAd();
+            PremiumManager.Instance?.HideBannerAd();
         }
 
         private void SetNotificationOffset(int dir)

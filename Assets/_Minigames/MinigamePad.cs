@@ -1,36 +1,25 @@
-using System;
 using System.Collections;
 using TMPro;
 using Unity.Netcode;
-using Unity.Services.Authentication;
-using Unity.Services.Lobbies;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Animations;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class MinigamePad : NetworkBehaviour
+    public class MinigamePad : MonoBehaviour
     {
         #region Fields
         [SerializeField] private Minigame minigame;
-        [SerializeField] private float countdownTime;
         [Space]
         [SerializeField] private TextMeshProUGUI minigameText;
         [SerializeField] private LookAtConstraint minigameLookAtConstraint;
 
         private TrackRegion region;
         private bool isVisible;
-        private float timeLeft;
         #endregion
 
         #region Properties
-        private bool CanBegin
-        {
-            get => (minigame.State == Minigame.GameState.WaitingForPlayers) && (NumPlayers > minigame.MinPlayers) && (NumPlayers < minigame.MaxPlayers);
-        }
-        private int NumPlayers
+        public int NumPlayers
         {
             get => region.tracked.Count;
         }
@@ -61,33 +50,24 @@ namespace DanielLochner.Assets.CreatureCreator
             if (IsVisible)
             {
                 UpdateInfo();
-
-                if (CanBegin)
-                {
-                    if (timeLeft > 0)
-                    {
-                        timeLeft -= Time.deltaTime;
-                    }
-                    else
-                    {
-                        minigame.Begin();
-                    }
-                }
-                else
-                {
-                    timeLeft = countdownTime;
-                }
             }
         }
 
         private void Setup()
         {
-            minigameLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
+            if (GameSetup.Instance.IsMultiplayer)
+            {
+                minigameLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
 
-            region.OnTrack += OnTrack;
-            region.OnLoseTrackOf += OnLoseTrackOf;
+                region.OnTrack += OnTrack;
+                region.OnLoseTrackOf += OnLoseTrackOf;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
-
+        
         private void OnTrack(Collider col)
         {
             if (col.CompareTag("Player/Local"))
@@ -117,9 +97,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 text += $"{TextUtility.FormatError(NumPlayers, NumPlayers > minigame.MaxPlayers)}/{minigame.MaxPlayers}<br>";
             }
             
-            if (timeLeft <= countdownTime)
+            if (minigame.WaitTimeLeft.Value <= minigame.WaitTime)
             {
-                text += $"<size=1>{Mathf.RoundToInt(timeLeft)}</size>";
+                text += $"{minigame.WaitTimeLeft.Value}";
             }
 
             minigameText.text = text;

@@ -24,10 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup(Minigame minigame)
         {
             Clear();
-
-            
         }
-
         public void Clear()
         {
             scoresRT.DestroyChildren();

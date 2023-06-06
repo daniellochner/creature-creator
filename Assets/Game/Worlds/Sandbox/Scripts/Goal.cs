@@ -8,7 +8,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Team team;
-        [SerializeField] private Transform start;
         [SerializeField] private GameObject confettiPrefab;
         #endregion
 
@@ -20,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (other.CompareTag("Ball"))
             {
                 SpawnConfettiClientRpc(other.transform.position);
-                other.GetComponent<Ball>().Teleport(start.position);
+                other.GetComponent<Ball>().Teleport(other.transform.parent.position);
 
                 if (team == Team.Red)
                 {

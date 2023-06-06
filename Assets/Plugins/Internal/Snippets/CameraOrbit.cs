@@ -37,6 +37,8 @@ namespace DanielLochner.Assets
         private bool isInitialTouch = true, isPressing;
 
         private List<int> pressed = new List<int>();
+
+        private Vector3 initialPosition, initialRotation;
         #endregion
 
         #region Properties
@@ -73,8 +75,8 @@ namespace DanielLochner.Assets
         {
             Camera = GetComponentInChildren<Camera>();
 
-            OffsetPosition = zoomTransform.localPosition;
-            targetRotation = rotationTransform.localEulerAngles;
+            initialPosition = OffsetPosition = zoomTransform.localPosition;
+            initialRotation = targetRotation = rotationTransform.localEulerAngles;
         }
         private void Update()
         {
@@ -82,6 +84,14 @@ namespace DanielLochner.Assets
 
             OnRotate();
             OnZoom();
+        }
+        public void Reset()
+        {
+            zoomTransform.localPosition = OffsetPosition = initialPosition;
+            rotationTransform.localEulerAngles = targetRotation = initialRotation;
+
+            velocity = Vector2.zero;
+            targetZoom = 1f;
         }
 
         private void HandlePressed()

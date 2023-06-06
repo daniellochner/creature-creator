@@ -104,13 +104,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 Save();
             }
 
-            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            // TODO: Not sure if initializing in start causes crashes...
+            this.InvokeAtEndOfFrame(delegate
             {
-                MobileAds.SetiOSAppPauseOnBackground(true);
-                MobileAds.RaiseAdEventsOnUnityMainThread = true;
+                if (SystemUtility.IsDevice(DeviceType.Handheld))
+                {
+                    MobileAds.SetiOSAppPauseOnBackground(true);
+                    MobileAds.RaiseAdEventsOnUnityMainThread = true;
 
-                MobileAds.Initialize(OnInitialized);
-            }
+                    MobileAds.Initialize(OnInitialized);
+                }
+            });
         }
 
         public void OnInitialized(InitializationStatus status)

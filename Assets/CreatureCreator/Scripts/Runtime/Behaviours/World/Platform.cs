@@ -38,32 +38,39 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void OnTriggerEnter(Collider other)
         {
-            CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
-            if (player != null && !hasEntered)
+            if (other.CompareTag("Player/Local") && !hasEntered)
             {
-                player.Holder.DropAll();
-
-                EditorManager.Instance.UpdateLoadableCreatures();
-                EditorManager.Instance.SetEditing(true);
-
-                player.Editor.Platform = this;
-                player.Loader.HideFromOthers();
-                player.SpeedUp.SlowDown();
-
-                HasEntered = true;
+                Enter();
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
-            if (player != null && hasEntered)
+            if (other.CompareTag("Player/Local") && hasEntered)
             {
-                EditorManager.Instance.SetEditing(false);
-                
-                player.Loader.ShowMeToOthers();
-
-                HasEntered = false;
+                Exit();
             }
+        }
+
+        private void Enter()
+        {
+            Player.Instance.Holder.DropAll();
+            Player.Instance.Loader.HideFromOthers();
+            Player.Instance.SpeedUp.SlowDown();
+
+            Player.Instance.Editor.Platform = this;
+
+            EditorManager.Instance.UpdateLoadableCreatures();
+            EditorManager.Instance.SetEditing(true);
+
+            HasEntered = true;
+        }
+        private void Exit()
+        {
+            EditorManager.Instance.SetEditing(false);
+
+            Player.Instance.Loader.ShowMeToOthers();
+
+            HasEntered = false;
         }
 
         public void TeleportTo()
@@ -73,14 +80,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public void TeleportTo(bool align, bool playSound)
         {
             Player.Instance.Editor.Platform.HasEntered = false;
-            Player.Instance.Editor.Platform = this;
-            HasEntered = true;
-
             Player.Instance.Mover.Teleport(Position, align ? Rotation : Player.Instance.transform.rotation, playSound);
+            Enter();
 
             if (align)
             {
                 Player.Instance.Camera.Root.SetPositionAndRotation(Position, Rotation);
+                Player.Instance.Camera.CameraOrbit.Reset();
             }
         }
         #endregion

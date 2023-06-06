@@ -14,6 +14,15 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
+        private void OnEnable()
+        {
+            globalPPV.enabled = true;
+        }
+        private void OnDisable()
+        {
+            globalPPV.enabled = false;
+        }
+
         public void BlendToProfile(PostProcessProfile profile, float timeToBlend)
         {
             if (blendToProfileRoutine != null)
