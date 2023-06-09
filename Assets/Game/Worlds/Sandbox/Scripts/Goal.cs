@@ -7,7 +7,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Goal : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private Team team;
+        [SerializeField] private Soccer soccer;
+
+        [SerializeField] private Soccer.Team team;
         [SerializeField] private GameObject confettiPrefab;
         #endregion
 
@@ -21,14 +23,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 SpawnConfettiClientRpc(other.transform.position);
                 other.GetComponent<Ball>().Teleport(other.transform.parent.position);
 
-                if (team == Team.Red)
+                if (soccer.State.Value == Minigame.MinigameStateType.Playing)
                 {
-                    Scoreboard.Instance.BlueScore.Value++;
-                }
-                else
-                if (team == Team.Blue)
-                {
-                    Scoreboard.Instance.RedScore.Value++;
+                    if (team == Soccer.Team.Red)
+                    {
+                        soccer.BlueScore.Value++;
+                    }
+                    else
+                    if (team == Soccer.Team.Blue)
+                    {
+                        soccer.RedScore.Value++;
+                    }
                 }
             }
         }
@@ -39,14 +44,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Instantiate(confettiPrefab, position, Quaternion.identity);
 
             MMVibrationManager.Haptic(HapticTypes.LightImpact);
-        }
-        #endregion
-
-        #region Enums
-        private enum Team
-        {
-            Red,
-            Blue
         }
         #endregion
     }

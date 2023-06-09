@@ -140,7 +140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8487467773718100570, guid: 7397c68c239775746a601ea8bd82153e, type: 3}
       propertyPath: m_Events.m_Events.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Expand
+      value: ShowBoundsEvent
       objectReference: {fileID: 0}
     - target: {fileID: 8487467773718100570, guid: 7397c68c239775746a601ea8bd82153e, type: 3}
       propertyPath: m_Events.m_Events.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -231,10 +231,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6769803950317437873, guid: 60f42503c2ba6be469078cbf1a04f4cf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 7709674588056687489, guid: 60f42503c2ba6be469078cbf1a04f4cf, type: 3}
+      propertyPath: boundsNT
+      value: 
+      objectReference: {fileID: 8800774305100821080}
     - target: {fileID: 8010843610322803334, guid: 60f42503c2ba6be469078cbf1a04f4cf, type: 3}
       propertyPath: m_Name
       value: MinigameZone
@@ -274,9 +274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
+  SyncPositionX: 0
+  SyncPositionY: 0
+  SyncPositionZ: 0
   SyncRotAngleX: 0
   SyncRotAngleY: 0
   SyncRotAngleZ: 0
@@ -286,7 +286,7 @@ MonoBehaviour:
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
-  InLocalSpace: 1
+  InLocalSpace: 0
   Interpolate: 1
 --- !u!4 &5279213318942869848 stripped
 Transform:

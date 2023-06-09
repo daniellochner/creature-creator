@@ -1,44 +1,51 @@
+using CustomYieldInstructions;
 using System;
 using System.Collections;
-using TMPro;
+using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class Minigame : NetworkBehaviour
+    public abstract class Minigame : NetworkBehaviour
     {
         #region Fields
+        [Header("Minigame")]
         [SerializeField] private string nameId;
-
         [Header("Waiting For Players")]
+        [SerializeField] private MinigamePad pad;
         [SerializeField] private int minPlayers;
         [SerializeField] private int maxPlayers;
         [SerializeField] private int waitTime;
-
-        [Header("Starting")]
-        [SerializeField] private MinigamePad pad;
+        [Header("Introducing")]
         [SerializeField] private MinigameCinematic cinematic;
         [SerializeField] private MinigameZone zone;
-        [SerializeField] private Platform platform;
         [SerializeField] private float expandTime;
-
+        [SerializeField] private float showBoundsTime;
         [Header("Building")]
+        [SerializeField] private Platform platform;
         [SerializeField] private int buildTime;
-        [SerializeField] private TextMeshProUGUI playText;
-        [SerializeField] private Toggle playToggle;
-
-        [Header("Introducing")]
+        [SerializeField] protected TextAsset creaturePreset;
+        [Header("Starting")]
         [SerializeField] private string objectiveId;
-        [SerializeField] private float introduceTime;
-
+        [SerializeField] private int startTime;
+        [SerializeField] private float teleportTime;
+        [SerializeField] private float switchTime;
+        [SerializeField] private string musicId;
         [Header("Playing")]
-        [SerializeField] private float scoreboardHeight;
-        [SerializeField] private float playTime;
-        [SerializeField] private Transform[] spawnPoints;
+        [SerializeField] private int playTime;
+        [SerializeField] protected bool isAscendingOrder;
+        [Header("Completing")]
+        [SerializeField] private int celebrateTime;
+        [SerializeField] private int completeTime;
+        [SerializeField] private MinMax minMaxFireworksCooldown;
+        [SerializeField] private GameObject[] fireworksPrefabs;
 
-        private float _waitTimeLeft, _buildTimeLeft, _introduceTimeLeft, _playTimeLeft;
+        protected List<MinigameState> states = new List<MinigameState>();
+        protected List<ulong> players = new List<ulong>();
+
+        protected MinigameState waitingForPlayers, introducing, building, starting, playing, completing;
         #endregion
 
         #region Properties
@@ -49,186 +56,160 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public int WaitTime => waitTime;
 
-        public float ScoreboardHeight => scoreboardHeight;
+        public bool InMinigame => MinigameManager.Instance.CurrentMinigame == this;
 
+
+        public NetworkVariable<MinigameStateType> State { get; set; } = new NetworkVariable<MinigameStateType>(MinigameStateType.WaitingForPlayers);
 
         public NetworkVariable<int> WaitTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> BuildTimeLeft { get; set; } = new NetworkVariable<int>(-1);
-        public NetworkVariable<int> IntroduceTimeLeft { get; set; } = new NetworkVariable<int>(-1);
+        public NetworkVariable<int> StartTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> PlayTimeLeft { get; set; } = new NetworkVariable<int>(-1);
 
-        public NetworkVariable<MinigameState> State { get; set; } = new NetworkVariable<MinigameState>(MinigameState.WaitingForPlayers);
+        public NetworkList<Score> Scoreboard { get; set; }
         #endregion
 
         #region Methods
-        private void Start()
+        protected virtual void Awake()
         {
-            OnWaitingForPlayersStart();
-            OnStartingStart();
-            OnBuildingStart();
-            OnPlayingStart();
-            OnCompletingStart();
-
-
-            if (!IsServer)
-            {
-                zone.Bounds.gameObject.SetActive(State.Value != MinigameState.WaitingForPlayers);
-            }
+            Scoreboard = new NetworkList<Score>();
         }
-        private void Update()
+        protected virtual void Start()
         {
-            switch (State.Value)
+            if (IsClient)
             {
-                case MinigameState.WaitingForPlayers:
-                    OnWaitingForPlayersUpdate();
-                    break;
+                BuildTimeLeft.OnValueChanged += OnBuildTimeLeftChanged;
+                StartTimeLeft.OnValueChanged += OnStartTimeLeftChanged;
+                PlayTimeLeft.OnValueChanged += OnPlayTimeLeftChanged;
 
-                case MinigameState.Starting:
-                    OnStartingUpdate();
-                    break;
+                Scoreboard.OnListChanged += OnScoreboardChanged;
 
-                case MinigameState.Building:
-                    OnBuildingUpdate();
-                    break;
+                zone.gameObject.SetActive(State.Value != MinigameStateType.WaitingForPlayers);
+                pad.gameObject.SetActive(State.Value == MinigameStateType.WaitingForPlayers);
+            }
 
-                case MinigameState.Introducing:
-                    OnIntroducingUpdate();
-                    break;
+            if (IsServer)
+            {
+                Setup();
 
-                case MinigameState.Playing:
-                    OnPlayingUpdate();
-                    break;
-
-                case MinigameState.Completing:
-                    OnCompletingUpdate();
-                    break;
+                StartCoroutine(MinigameRoutine());
             }
         }
 
-        public void ChangeState(MinigameState state)
+        private void OnEnable()
         {
-            ChangeStateClientRpc(state);
-            Debug.Log(state);
-        }
-        [ClientRpc]
-        public void ChangeStateClientRpc(MinigameState state)
-        {
-            switch (State.Value)
+            if (IsServer)
             {
-                case MinigameState.WaitingForPlayers:
-                    OnWaitingForPlayersExit();
-                    break;
-
-                case MinigameState.Starting:
-                    OnStartingExit();
-                    break;
-
-                case MinigameState.Building:
-                    OnBuildingExit();
-                    break;
-
-                case MinigameState.Introducing:
-                    OnIntroducingExit();
-                    break;
-
-                case MinigameState.Playing:
-                    OnPlayingExit();
-                    break;
-
-                case MinigameState.Completing:
-                    OnCompletingExit();
-                    break;
-            }
-
-            State.Value = state;
-
-            switch (State.Value)
-            {
-                case MinigameState.WaitingForPlayers:
-                    OnWaitingForPlayersEnter();
-                    break;
-
-                case MinigameState.Starting:
-                    OnStartingEnter();
-                    break;
-
-                case MinigameState.Building:
-                    OnBuildingEnter();
-                    break;
-
-                case MinigameState.Introducing:
-                    OnIntroducingEnter();
-                    break;
-
-                case MinigameState.Playing:
-                    OnPlayingEnter();
-                    break;
-
-                case MinigameState.Completing:
-                    OnCompletingEnter();
-                    break;
+                NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
             }
         }
+        private void OnDisable()
+        {
+            if (IsServer && NetworkManager.Singleton != null)
+            {
+                NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+            }
+        }
+
+        protected virtual void Setup()
+        {
+            states.Add(waitingForPlayers = new MinigameState(MinigameStateType.WaitingForPlayers, WaitingForPlayersRoutine));
+            states.Add(introducing = new MinigameState(MinigameStateType.Introducing, IntroducingRoutine));
+            states.Add(building = new MinigameState(MinigameStateType.Building, BuildingRoutine));
+            states.Add(starting = new MinigameState(MinigameStateType.Starting, StartingRoutine));
+            states.Add(playing = new MinigameState(MinigameStateType.Playing, PlayingRoutine));
+            states.Add(completing = new MinigameState(MinigameStateType.Completing, CompletingRoutine));
+        }
+
+        private IEnumerator MinigameRoutine()
+        {
+            while (true)
+            {
+                foreach (MinigameState state in states)
+                {
+                    State.Value = state.type;
+
+                    state.onEnter?.Invoke();
+                    yield return state.onUpdate();
+                    state.onExit?.Invoke();
+                }
+            }
+        }
+
 
         #region Waiting For Players
-        public virtual void OnWaitingForPlayersStart()
+
+        private IEnumerator WaitingForPlayersRoutine()
         {
-        }
-        public virtual void OnWaitingForPlayersEnter()
-        {
-            if (IsServer)
-            {
-                _waitTimeLeft = waitTime;
-            }
-        }
-        public virtual void OnWaitingForPlayersUpdate()
-        {
-            if (IsServer)
+            WaitTimeLeft.Value = waitTime;
+
+            while (WaitTimeLeft.Value > 0)
             {
                 if ((pad.NumPlayers >= MinPlayers) && (pad.NumPlayers <= MaxPlayers))
                 {
-                    if (_waitTimeLeft > 0)
-                    {
-                        _waitTimeLeft -= Time.deltaTime;
-                    }
-                    else
-                    {
-                        ChangeState(MinigameState.Starting);
-                    }
+                    yield return new WaitForSeconds(1f);
+                    WaitTimeLeft.Value--;
                 }
                 else
                 {
-                    _waitTimeLeft = WaitTime;
+                    yield return null;
+                    WaitTimeLeft.Value = waitTime;
                 }
-
-                WaitTimeLeft.Value = Mathf.CeilToInt(_waitTimeLeft);
             }
+
+            foreach (var t in pad.Region.tracked)
+            {
+                players.Add(t.GetComponent<NetworkObject>().OwnerClientId);
+            }
+            IncludePlayersClientRpc(NetworkUtils.SendTo(players.ToArray()));
+
+            SetupClientRpc();
         }
-        public virtual void OnWaitingForPlayersExit()
+
+        [ClientRpc]
+        private void IncludePlayersClientRpc(ClientRpcParams clientRpcParams = default)
         {
+            MinigameManager.Instance.CurrentMinigame = this;
+            MinigameManager.Instance.Scoreboard.Setup(this);
+
+            NotificationsManager.Instance.IsHidden = true;
+        }
+
+        [ClientRpc]
+        private void SetupClientRpc()
+        {
+            zone.gameObject.SetActive(true);
             pad.gameObject.SetActive(false);
         }
+
         #endregion
 
-        #region Starting
-        public virtual void OnStartingStart()
-        {
-        }
-        public virtual void OnStartingEnter()
-        {
-            MinigameManager.Instance.Setup(this);
 
-            cinematic.OnShow = OnCinematicShow;
-            cinematic.OnHide = OnCinematicHide;
-            cinematic.Begin();
+        #region Introducing
 
-            zone.gameObject.SetActive(true);
-        }
-        public virtual void OnStartingUpdate()
+        private IEnumerator IntroducingRoutine()
         {
+            BeginCinematicClientRpc();
+            OnCinematic();
+
+            yield return new WaitForSeconds((float)cinematic.Director.duration - 0.5f);
         }
-        public virtual void OnStartingExit()
+
+        protected virtual void OnCinematic()
         {
+            this.Invoke(ShowBounds, showBoundsTime);
+        }
+
+
+        [ClientRpc]
+        protected void BeginCinematicClientRpc()
+        {
+            if (InMinigame)
+            {
+                cinematic.OnShow = OnCinematicShow;
+                cinematic.OnHide = OnCinematicHide;
+                cinematic.Begin();
+            }
         }
 
         private void OnCinematicShow()
@@ -237,190 +218,457 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnCinematicHide()
         {
-            if (IsServer)
-            {
-                ChangeState(MinigameState.Building);
-            }
-            else if (State.Value != MinigameState.Building)
+            if (!IsServer && State.Value != MinigameStateType.Building)
             {
                 cinematic.Pause();
 
-                this.InvokeUntil(() => State.Value == MinigameState.Building, cinematic.Unpause);
+                this.InvokeUntil(() => State.Value == MinigameStateType.Building, cinematic.Unpause);
             }
         }
 
-        public void ShowAndExpandBounds()
+        public void ShowBounds()
         {
-            if (IsServer)
-            {
-                ShowBoundsClientRpc();
+            ShowBoundsClientRpc();
 
-                this.InvokeOverTime(delegate (float p)
-                {
-                    zone.Bounds.localScale = new Vector3(p, 1f, p);
-                }, 
-                expandTime);
-            }
+            this.InvokeOverTime(delegate (float p)
+            {
+                zone.SetScale(p, false);
+            },
+            expandTime);
         }
+
         [ClientRpc]
         private void ShowBoundsClientRpc()
         {
-            zone.Bounds.gameObject.SetActive(true);
+            zone.gameObject.SetActive(true);
         }
+
         #endregion
 
+
         #region Building
-        public virtual void OnBuildingStart()
+
+        private IEnumerator BuildingRoutine()
         {
-            BuildTimeLeft.OnValueChanged += OnBuildTimeLeftChanged;
-        }
-        public virtual void OnBuildingEnter()
-        {
-            EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
+            SwitchToBuildModeClientRpc();
 
-            EditorManager.Instance.ClearHistory();
-            EditorManager.Instance.Load(null);
+            BuildTimeLeft.Value = buildTime;
 
-            OnApplyRestrictions();
-
-            MinigameManager.Instance.SetPlayOverride(buildTime.ToString(), false);
-
-            platform.TeleportTo(true, false);
-
-            if (IsServer)
+            while (BuildTimeLeft.Value > 0)
             {
-                _buildTimeLeft = buildTime;
+                yield return new WaitForSeconds(1f);
+                BuildTimeLeft.Value--;
             }
         }
-        public virtual void OnBuildingUpdate()
+
+        [ClientRpc]
+        private void SwitchToBuildModeClientRpc()
         {
-            if (IsServer)
+            if (InMinigame)
             {
-                if (_buildTimeLeft > 0)
-                {
-                    _buildTimeLeft -= Time.deltaTime;
-                }
-                else
-                {
-                    ChangeState(MinigameState.Introducing);
-                }
+                EditorManager.Instance.SetMode(EditorManager.EditorMode.Build, true);
 
-                BuildTimeLeft.Value = Mathf.CeilToInt(_buildTimeLeft);
+                OnApplyRestrictions();
+                if (!EditorManager.Instance.CanLoadCreature(Player.Instance.Constructor.Data, out string errorTitle, out string errorMessage))
+                {
+                    CreatureData creatureData = null;
+                    if (creaturePreset != null)
+                    {
+                        creatureData = JsonUtility.FromJson<CreatureData>(creaturePreset.text);
+                    }
+                    EditorManager.Instance.Load(creatureData);
+                }
+                EditorManager.Instance.ClearHistory();
+                EditorManager.Instance.TakeSnapshot(Change.Load, false);
+
+                EditorManager.Instance.UpdateLoadableCreatures();
             }
-        }
-        public virtual void OnBuildingExit()
-        {
-            MinigameManager.Instance.SetPlayOverride(LocalizationUtility.Localize("cc_pagination_play"), true);
-        }
-
-        private void OnBuildTimeLeftChanged(int oldBT, int newBT)
-        {
-            MinigameManager.Instance.SetPlayOverride(newBT.ToString(), false);
         }
 
         protected virtual void OnApplyRestrictions()
         {
-            EditorManager.Instance.UpdateLoadableCreatures();
         }
-        #endregion
 
-        #region Introducing
-        public virtual void OnIntroducingStart()
+        private void OnBuildTimeLeftChanged(int oldTime, int newTime)
         {
-        }
-        public virtual void OnIntroducingEnter()
-        {
-            Player.Instance.Mover.FreezeMove = true;
-
-            EditorManager.Instance.SetMode(EditorManager.EditorMode.Play);
-
-            this.Invoke(delegate
+            if (InMinigame)
             {
-                ShowInfo();
-                Teleport();
-            }, 
-            0.5f);
+                bool isInteractable = newTime <= 0;
+                string text = !isInteractable ? newTime.ToString() : LocalizationUtility.Localize("cc_pagination_play");
 
-            if (IsServer)
-            {
-                _introduceTimeLeft = introduceTime;
+                MinigameManager.Instance.SetPlay(text, isInteractable);
             }
         }
-        public virtual void OnIntroducingUpdate()
+
+        #endregion
+
+
+        #region Starting
+
+        private IEnumerator StartingRoutine()
         {
-            if (IsServer)
+            Scoreboard.Clear();
+            OnSetupScoreboard();
+
+            SwitchToPlayModeClientRpc();
+            yield return new WaitForSeconds(switchTime);
+
+            for (int i = 0; i < players.Count; i++)
             {
-                if (_introduceTimeLeft > 0)
+                TeleportToStartClientRpc();
+            }
+            yield return new WaitForSeconds(teleportTime);
+
+
+            StartTimeLeft.Value = startTime;
+            while (StartTimeLeft.Value > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                StartTimeLeft.Value--;
+            }
+
+            StartClientRpc();
+        }
+
+        [ClientRpc]
+        private void SwitchToPlayModeClientRpc()
+        {
+            if (InMinigame)
+            {
+                EditorManager.Instance.SetMode(EditorManager.EditorMode.Play);
+
+                Player.Instance.Mover.FreezeMove = true;
+
+                MusicManager.Instance.FadeTo(musicId);
+
+                MinigameManager.Instance.SetTitle(LocalizationUtility.Localize(objectiveId));
+            }
+        }
+
+        [ClientRpc]
+        private void TeleportToStartClientRpc()
+        {
+            if (InMinigame)
+            {
+                Transform spawnPoint = GetSpawnPoint();
+                Player.Instance.Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true);
+            }
+        }
+
+        [ClientRpc]
+        private void StartClientRpc()
+        {
+            if (InMinigame)
+            {
+                Player.Instance.Mover.FreezeMove = false;
+
+                MinigameManager.Instance.SetTitle(null);
+            }
+        }
+
+        public abstract Transform GetSpawnPoint();
+
+        public abstract void OnSetupScoreboard();
+
+        private void OnStartTimeLeftChanged(int oldTime, int newTime)
+        {
+            if (InMinigame)
+            {
+                if (newTime > 0)
                 {
-                    _introduceTimeLeft -= Time.deltaTime;
+                    Color color = (newTime <= 3) ? Color.red : Color.white;
+
+                    MinigameManager.Instance.SetSubtitle(newTime.ToString(), color);
                 }
                 else
                 {
-                    ChangeState(MinigameState.Playing);
+                    MinigameManager.Instance.SetSubtitle(null, Color.white);
                 }
             }
         }
-        public virtual void OnIntroducingExit()
-        {
-            MinigameManager.Instance.SetTitle(null);
 
-            Player.Instance.Mover.FreezeMove = false;
+        private void OnScoreboardChanged(NetworkListEvent<Score> changeEvent)
+        {
+            if (InMinigame)
+            {
+                Score score = changeEvent.Value;
+
+                string id = score.id.ToString();
+                string displayName = score.displayName.ToString();
+                int value = score.score;
+
+                switch (changeEvent.Type)
+                {
+                    case NetworkListEvent<Score>.EventType.Add:
+                        MinigameManager.Instance.Scoreboard.Add(id, displayName, value);
+                        break;
+
+                    case NetworkListEvent<Score>.EventType.Value:
+                        MinigameManager.Instance.Scoreboard.Set(id, value);
+                        MinigameManager.Instance.Scoreboard.Sort(isAscendingOrder);
+                        break;
+
+                    case NetworkListEvent<Score>.EventType.Clear:
+                        MinigameManager.Instance.Scoreboard.Clear();
+                        break;
+                }
+            }
         }
 
-        protected virtual void ShowInfo()
-        {
-            MinigameManager.Instance.SetTitle(LocalizationUtility.Localize(objectiveId));
-        }
-        protected virtual void Teleport()
-        {
-
-            int hash = (WorldManager.Instance.World as WorldMP).WorldName.GetHashCode();
-            Player.Instance.Mover.Teleport(spawnPoints[0].position, spawnPoints[0].rotation, true);
-        }
         #endregion
+
 
         #region Playing
-        public virtual void OnPlayingStart()
+
+        private IEnumerator PlayingRoutine()
         {
+            yield return new WaitAny(this, TimerRoutine(), GameplayLogicRoutine());
+            PlayTimeLeft.Value = 0;
         }
-        public virtual void OnPlayingEnter()
+
+        private IEnumerator TimerRoutine()
         {
+            PlayTimeLeft.Value = playTime;
+
+            while (PlayTimeLeft.Value > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                PlayTimeLeft.Value--;
+            }
         }
-        public virtual void OnPlayingUpdate()
+        protected virtual IEnumerator GameplayLogicRoutine()
         {
+            yield return new WaitUntil(() => false);
         }
-        public virtual void OnPlayingExit()
+
+        private void OnPlayTimeLeftChanged(int oldTime, int newTime)
         {
+            if (InMinigame)
+            {
+                if (newTime > 0)
+                {
+                    string time = FormatTime(newTime);
+                    Color color = (newTime <= 10) ? Color.red : Color.white;
+
+                    MinigameManager.Instance.SetSubtitle(time, color);
+                }
+                else
+                {
+                    MinigameManager.Instance.SetSubtitle(null, Color.white);
+                }
+            }
         }
+
+        private string FormatTime(int seconds)
+        {
+            int mins = seconds / 60;
+            int secs = seconds % 60;
+            return $"{mins:00}:{secs:00}";
+        }
+
         #endregion
+
 
         #region Completing
-        public virtual void OnCompletingStart()
+
+        private IEnumerator CompletingRoutine()
         {
+            yield return new WaitForSeconds(1f);
+
+            NotifyOfWinnerClientRpc(GetWinnerName());
+
+            ulong[] winnerClientIds = GetWinnerClientIds().ToArray();
+
+            if (winnerClientIds.Length > 0)
+            {
+                LoseClientRpc(NetworkUtils.DontSendTo(winnerClientIds));
+                WinClientRpc(NetworkUtils.SendTo(winnerClientIds));
+
+                Coroutine spawnFireworksCoroutine = StartCoroutine(SpawnFireworksRoutine(winnerClientIds));
+                yield return new WaitForSeconds(celebrateTime);
+                StopCoroutine(spawnFireworksCoroutine);
+            }
+            else
+            {
+                LoseClientRpc();
+                yield return new WaitForSeconds(completeTime);
+            }
+
+            OnShutdown();
         }
-        public virtual void OnCompletingEnter()
+        protected abstract List<ulong> GetWinnerClientIds();
+
+        protected virtual void OnShutdown()
         {
+            Scoreboard.Clear();
+            zone.SetScale(0f, true);
+            players.Clear();
+
+            ShutdownClientRpc();
         }
-        public virtual void OnCompletingUpdate()
+
+        private IEnumerator SpawnFireworksRoutine(ulong[] winnerClientIds)
         {
+            List<Transform> winnerTransforms = new List<Transform>();
+            foreach (ulong clientId in winnerClientIds)
+            {
+                NetworkObject winner = NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId);
+                if (winner != null)
+                {
+                    winnerTransforms.Add(winner.transform);
+                }
+            }
+
+            while (true)
+            {
+                foreach (Transform winner in winnerTransforms)
+                {
+                    if (winner != null)
+                    {
+                        SpawnRandomFireworkClientRpc(winner.position);
+                    }
+                    yield return new WaitForSeconds(minMaxFireworksCooldown.Random);
+                }
+            }
         }
-        public virtual void OnCompletingExit()
+
+        [ClientRpc]
+        private void NotifyOfWinnerClientRpc(string winnerName)
+        {
+            if (InMinigame)
+            {
+                MinigameManager.Instance.SetTitle(LocalizationUtility.Localize("minigame_notify-winner_internal", winnerName));
+            }
+            else
+            {
+                NotificationsManager.Notify(LocalizationUtility.Localize("minigame_notify-winner_external", winnerName, Name));
+            }
+        }
+        protected abstract string GetWinnerName();
+
+        [ClientRpc]
+        private void WinClientRpc(ClientRpcParams sendTo = default)
+        {
+            if (InMinigame)
+            {
+                MusicManager.Instance.FadeTo(null);
+
+#if USE_STATS
+                StatsManager.Instance.MinigamesWon++;
+#endif
+            }
+        }
+
+        [ClientRpc]
+        private void LoseClientRpc(ClientRpcParams sendTo = default)
+        {
+            if (InMinigame)
+            {
+                MusicManager.Instance.FadeTo(null);
+            }
+        }
+
+        [ClientRpc]
+        private void SpawnRandomFireworkClientRpc(Vector3 position)
+        {
+            Instantiate(fireworksPrefabs[UnityEngine.Random.Range(0, fireworksPrefabs.Length)], position, Quaternion.identity, Dynamic.Transform);
+        }
+
+        [ClientRpc]
+        private void ShutdownClientRpc()
         {
             zone.gameObject.SetActive(false);
+            pad.gameObject.SetActive(true);
+
+            if (InMinigame)
+            {
+                EditorManager.Instance.ResetRestrictions();
+
+                MinigameManager.Instance.SetTitle(null);
+                MinigameManager.Instance.Scoreboard.Clear();
+                MinigameManager.Instance.CurrentMinigame = null;
+
+                NotificationsManager.Instance.IsHidden = false;
+
+                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
+            }
         }
-        #endregion
+
         #endregion
 
+
+        #region Other
+
+        private void OnClientDisconnectCallback(ulong clientId)
+        {
+            players.Remove(clientId);
+        }
+
+        #endregion
+
+        #endregion
+
+
+
         #region Enums
-        public enum MinigameState
+
+        public enum MinigameStateType
         {
             WaitingForPlayers,
-            Starting,
-            Building,
             Introducing,
+            Building,
+            Starting,
             Playing,
             Completing
         }
+
+        #endregion
+
+
+
+        #region Nested
+
+        public class MinigameState
+        {
+            public MinigameStateType type;
+
+            public Func<IEnumerator> onUpdate;
+            public Action onEnter;
+            public Action onExit;
+
+            public MinigameState(MinigameStateType type, Func<IEnumerator> onUpdate)
+            {
+                this.type = type;
+                this.onUpdate = onUpdate;
+            }
+        }
+
+        public struct Score : INetworkSerializable, IEquatable<Score>
+        {
+            public FixedString32Bytes id;
+            public FixedString32Bytes displayName;
+            public int score;
+
+            public Score(string id, string displayName, int score)
+            {
+                this.id = id;
+                this.displayName = displayName;
+                this.score = score;
+            }
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref id);
+                serializer.SerializeValue(ref displayName);
+                serializer.SerializeValue(ref score);
+            }
+
+            public bool Equals(Score other)
+            {
+                return id == other.id && displayName == other.displayName && score == other.score;
+            }
+        }
+
         #endregion
     }
 }

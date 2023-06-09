@@ -33,6 +33,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 minigameText.gameObject.SetActive(isVisible);
             }
         }
+
+        public TrackRegion Region => region;
         #endregion
 
         #region Methods

@@ -375,15 +375,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 InGameMusicType type = (InGameMusicType)option;
                 SettingsManager.Instance.SetInGameMusic(type);
 
-                string music = type.ToString();
-                if (type == InGameMusicType.None)
-                {
-                    music = null;
-                }
-
                 if (inGame)
                 {
-                    MusicManager.Instance.FadeTo(music);
+                    MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
                 }
                 else
                 {
@@ -391,7 +385,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         StopCoroutine(previewMusicCoroutine);
                     }
-                    previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(music));
+                    previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(SettingsManager.Data.InGameMusicName));
                 }
             });
             inGameMusicOS.Select(SettingsManager.Data.InGameMusic, inGame && !WorldManager.Instance.IsUsingTeleport);
