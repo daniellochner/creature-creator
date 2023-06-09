@@ -27,15 +27,21 @@ namespace DanielLochner.Assets
             get => notificationsRT.offsetMax.y;
             set => notificationsRT.offsetMax = new Vector2(0, value);
         }
+
+        public bool IsHidden { get; set; } = false;
         #endregion
 
         #region Methods
         public static void Notify(string message, UnityAction onClose = null)
         {
+            if (Instance.IsHidden) return;
+
             Instantiate(Instance.notificationTextOnlyPrefab, Instance.notificationsRT).Setup(message, onClose);
         }
         public static void Notify(Sprite icon, string title, string description, UnityAction onClose = null, float iconScale = 1f, float textScale = 1f)
         {
+            if (Instance.IsHidden) return;
+
             Instantiate(Instance.notificationPrefab, Instance.notificationsRT).Setup(icon, title, description, onClose, iconScale, textScale);
         }
 
