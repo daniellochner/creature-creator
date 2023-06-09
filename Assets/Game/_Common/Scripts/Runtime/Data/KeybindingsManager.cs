@@ -29,6 +29,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Start();
 
+            if (Data.AnyNone)
+            {
+                Data.Revert();
+                Save();
+            }
+
             RebindViewPlayers(Data.ViewPlayers);
             RebindBite(Data.Bite);
             RebindDrop(Data.Drop);

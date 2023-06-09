@@ -221,6 +221,14 @@ namespace DanielLochner.Assets.CreatureCreator
             get => export;
             set => export = value;
         }
+
+        public bool AnyNone
+        {
+            get
+            {
+                return WalkForwards.Key == KeyCode.None || WalkBackwards.Key == KeyCode.None || WalkLeft.Key == KeyCode.None || WalkRight.Key == KeyCode.None || Jump.Key == KeyCode.None || Flap.Key == KeyCode.None || Sprint.Key == KeyCode.None || Interact.Key == KeyCode.None || Drop.Key == KeyCode.None || Talk.Key == KeyCode.None || ViewPlayers.Key == KeyCode.None || FreeLook.Key == KeyCode.None || StopMove.Key == KeyCode.None || Respawn.Key == KeyCode.None || ToggleUI.Key == KeyCode.None || Bite.Key == KeyCode.None || Dig.Key == KeyCode.None || Distract.Key == KeyCode.None || Shoot.Key == KeyCode.None || Spit.Key == KeyCode.None || Growl.Key == KeyCode.None || Strike.Key == KeyCode.None || NightVision.Key == KeyCode.None || Dance.Key == KeyCode.None || Spin.Key == KeyCode.None || Copy.Key == KeyCode.None || Undo.Key == KeyCode.None || Redo.Key == KeyCode.None || Flip.Key == KeyCode.None || Save.Key == KeyCode.None || Load.Key == KeyCode.None || Clear.Key == KeyCode.None || Import.Key == KeyCode.None || Export.Key == KeyCode.None;
+            }
+        }
         #endregion
 
         #region Methods
