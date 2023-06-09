@@ -179,21 +179,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Setup()
         {
             mapOS.SetupUsingEnum<Map>();
-            mapOS.OnSelected.AddListener(delegate (int option)
-            {
-                Map map = (Map)option;
-                switch (map)
-                {
-                    case Map.Island:
-                        break;
-
-                    case Map.Sandbox:
-                        break;
-
-                    case Map.Farm:
-                        break;
-                }
-            });
             mapOS.Select(Map.Island, false);
             multiplayerMenu.OnOpen += UpdateMap;
 
@@ -354,6 +339,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
+                bool isBeta = Application.version.EndsWith("beta");
+
+                // Beta
+                if (isBeta)
+                {
+                    worldName = $"[BETA] {worldName}";
+                }
 
                 // Check Premium
                 if (!PremiumManager.Data.IsPremium)
