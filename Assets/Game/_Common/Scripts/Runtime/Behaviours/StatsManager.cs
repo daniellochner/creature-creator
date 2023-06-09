@@ -58,6 +58,16 @@ namespace DanielLochner.Assets.CreatureCreator
             get => GetStat("STA_COMPLETED_BATTLES", 0);
             set => SetStat("STA_COMPLETED_BATTLES", value, new StatAchievement("ACH_GLADIATOR", 10));
         }
+        public int MinigamesWon
+        {
+            get => GetStat("STA_MINIGAMES_WON", 0);
+            set => SetStat("STA_MINIGAMES_WON", value);
+        }
+        public int MinigamesCompleted
+        {
+            get => GetStat("STA_MINIGAMES_COMPLETED", 0);
+            set => SetStat("STA_MINIGAMES_COMPLETED", value, new StatAchievement("ACH_MINIGAMER", 10));
+        }
 
         public int NumAchievementsUnlocked
         {
@@ -160,6 +170,21 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
                 PlayerPrefs.SetInt(achievementId, 1);
 #endif
+            }
+        }
+        public void SubmitScore(string leaderboardId, long score)
+        {
+            if (Initialized)
+            {
+#if UNITY_STANDALONE
+
+#elif UNITY_IOS || UNITY_ANDROID
+                
+#endif
+                if (GameServices.Instance.IsLoggedIn())
+                {
+                    //GameServices.Instance.SubmitScore()
+                }
             }
         }
         #endregion

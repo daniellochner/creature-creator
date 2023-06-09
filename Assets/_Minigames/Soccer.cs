@@ -173,9 +173,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnCompletingEnter()
         {
             ShowWinningScoreboardClientRpc();
-#if USE_STATS
-            StatsManager.Instance.UnlockAchievement("ACH_FOOTBALL_FRENZY");
-#endif
             soccerAS.PlayOneShot(whistleFX);
         }
 
