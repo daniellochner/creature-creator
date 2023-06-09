@@ -6,7 +6,8 @@ namespace DanielLochner.Assets
 {
     public class CinematicManager : MonoBehaviourSingleton<CinematicManager>
     {
-        public bool IsInCinematic { get; set; }
+        public Cinematic CurrentCinematic { get; set; }
+        public bool IsInCinematic => CurrentCinematic != null;
 
         protected override void OnDestroy()
         {

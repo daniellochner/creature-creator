@@ -7,10 +7,14 @@ namespace DanielLochner.Assets
     public class Cinematic : MonoBehaviour
     {
         #region Fields
-        private PlayableDirector director;
+        [SerializeField] private Camera cinematicCam;
+        [SerializeField] private PlayableDirector director;
         #endregion
 
         #region Properties
+        public Camera CinematicCamera => cinematicCam;
+        public PlayableDirector Director => director;
+
         public UnityAction OnBegin { get; set; }
         public UnityAction OnEnd { get; set; }
         public UnityAction OnShow { get; set; }
@@ -18,10 +22,6 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        private void Awake()
-        {
-            director = GetComponent<PlayableDirector>();
-        }
         private void OnDestroy()
         {
             if (CinematicManager.Instance)
@@ -32,25 +32,16 @@ namespace DanielLochner.Assets
 
         public virtual void Begin()
         {
-            CinematicManager.Instance.IsInCinematic = true;
+            CinematicManager.Instance.CurrentCinematic = this;
             gameObject.SetActive(true);
             OnBegin?.Invoke();
         }
         public virtual void End()
         {
-            CinematicManager.Instance.IsInCinematic = false;
+            CinematicManager.Instance.CurrentCinematic = null;
             gameObject.SetActive(false);
             OnEnd?.Invoke();
         }
-        public void Pause()
-        {
-            director.Pause();
-        }
-        public void Unpause()
-        {
-            director.Play();
-        }
-
         public virtual void Show()
         {
             OnShow?.Invoke();
@@ -58,6 +49,15 @@ namespace DanielLochner.Assets
         public virtual void Hide()
         {
             OnHide?.Invoke();
+        }
+
+        public void Pause()
+        {
+            Director.Pause();
+        }
+        public void Unpause()
+        {
+            Director.Play();
         }
         #endregion
     }
