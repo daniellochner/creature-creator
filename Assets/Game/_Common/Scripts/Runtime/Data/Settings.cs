@@ -196,6 +196,20 @@ namespace DanielLochner.Assets.CreatureCreator
             get => inGameMusic;
             set => inGameMusic = value;
         }
+        public string InGameMusicName
+        {
+            get
+            {
+                if (InGameMusic == InGameMusicType.None)
+                {
+                    return null;
+                }
+                else
+                {
+                    return InGameMusic.ToString();
+                }
+            }
+        }
 
         public string OnlineUsername
         {
@@ -466,7 +480,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             None,
             WistfulHarp,
-            Being
         }
         public enum JoystickType
         {
