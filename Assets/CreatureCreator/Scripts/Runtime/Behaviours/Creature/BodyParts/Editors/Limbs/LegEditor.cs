@@ -28,6 +28,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void LateUpdate()
+        {
+            HandleFloor();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -60,11 +65,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     footBoneDrag.cylinderRadius = Mathf.Infinity;
                 }
             });
-            LDrag.onDrag.AddListener(delegate
+            LDrag.OnDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
                 {
-                    HandleFloor();
+                    HandleAlignment();
                 }
             });
             LDrag.OnRelease.AddListener(delegate
@@ -75,9 +80,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             });
 
+            RDrag.OnDrag.AddListener(delegate
+            {
+                if (EditorManager.Instance.IsBuilding)
+                {
+                    HandleAlignment();
+                }
+            });
+
             CreatureEditor.Drag.OnDrag.AddListener(delegate
             {
-                HandleFloor();
+                HandleAlignment();
             });
         }
         private void SetupBones()
@@ -122,6 +135,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         private void HandleFloor()
+        {
+            footBoneDrag.transform.position = footBoneDrag.ClampToBounds(footBoneDrag.transform.position);
+        }
+        private void HandleAlignment()
         {
             footBoneDrag.transform.position = footBoneDrag.ClampToBounds(LimbConstructor.Bones[LimbConstructor.Bones.Length - 2].position);
         }
