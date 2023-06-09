@@ -18,7 +18,7 @@ namespace DanielLochner.Assets
             {
                 if (IsServer)
                 {
-                    health.Value = Mathf.Clamp(value, 0f, MaxHealth);
+                    health.Value = value;
                 }
                 else
                 {

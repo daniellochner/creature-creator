@@ -25,12 +25,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Spawn()
         {
-            SpawnServerRpc();
+            SpawnServerRpc(Health.MaxHealth);
         }
         [ServerRpc]
-        private void SpawnServerRpc()
+        private void SpawnServerRpc(float maxHealth)
         {
-            Health.HealthPercentage = 1f;
+            Health.Health = maxHealth;
             Age.StartAging();
             Hunger.StartHunger();
 
