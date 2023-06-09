@@ -187,6 +187,16 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
                 }
+                else
+                {
+                    // Destroy held parts when you switch mode...
+                    if (transform.parent == Dynamic.Transform)
+                    {
+                        Instantiate(CreatureEditor.PoofPrefab, transform.position, Quaternion.identity, Dynamic.Transform);
+                        BodyPartConstructor.Detach();
+                        EditorManager.Instance.UpdateStatistics();
+                    }
+                }
             });
             LDrag.OnRelease.AddListener(delegate
             {
