@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -7,52 +8,67 @@ namespace DanielLochner.Assets
     public class PostProcessManager : MonoBehaviourSingleton<PostProcessManager>
     {
         #region Fields
-        [SerializeField] private PostProcessVolume globalPPV;
+        [SerializeField] private PostProcessVolume curVolume;
 
         private Coroutine blendToProfileRoutine;
-        private PostProcessVolume tempPPV;
+        private PostProcessVolume tarVolume;
+
+        private Stack<PostProcessProfile> blendStack = new Stack<PostProcessProfile>();
         #endregion
 
         #region Methods
         private void OnEnable()
         {
-            globalPPV.enabled = true;
+            curVolume.enabled = true;
         }
         private void OnDisable()
         {
-            globalPPV.enabled = false;
+            curVolume.enabled = false;
+        }
+
+        private void LateUpdate()
+        {
+            if (blendStack.Count > 0)
+            {
+                PostProcessProfile target = blendStack.Peek();
+
+                if (curVolume.profile != target)
+                {
+                    if (blendToProfileRoutine != null)
+                    {
+                        StopCoroutine(blendToProfileRoutine);
+                        DestroyImmediate(tarVolume);
+                    }
+                    blendToProfileRoutine = StartCoroutine(BlendToProfileRoutine(target, 0.25f));
+                }
+
+                blendStack.Clear();
+            }
         }
 
         public void BlendToProfile(PostProcessProfile profile, float timeToBlend)
         {
-            if (blendToProfileRoutine != null)
-            {
-                StopCoroutine(blendToProfileRoutine);
-                Destroy(tempPPV);
-            }
-
-            blendToProfileRoutine = StartCoroutine(BlendToProfileRoutine(profile, timeToBlend));
+            blendStack.Push(profile);
         }
         public IEnumerator BlendToProfileRoutine(PostProcessProfile profile, float timeToBlend)
         {
-            tempPPV = globalPPV.gameObject.AddComponent<PostProcessVolume>();
-            tempPPV.isGlobal = true;
-            tempPPV.profile = profile;
-            tempPPV.weight = 0;
+            tarVolume = gameObject.AddComponent<PostProcessVolume>();
+            tarVolume.isGlobal = true;
+            tarVolume.profile = profile;
+            tarVolume.weight = 0f;
 
-            while (tempPPV.weight < 1)
+            yield return this.InvokeOverTime(delegate (float p)
             {
-                float deltaWeight = Time.deltaTime / timeToBlend;
+                tarVolume.weight = Mathf.Clamp01(p);
+                curVolume.weight = Mathf.Clamp01(1f - p);
+            },
+            timeToBlend);
+            curVolume.weight = 0f;
+            tarVolume.weight = 1f;
 
-                globalPPV.weight = Mathf.Clamp01(globalPPV.weight - deltaWeight);
-                tempPPV.weight = Mathf.Clamp01(tempPPV.weight + deltaWeight);
-
-                yield return null;
-            }
-            Destroy(globalPPV);
-
-            globalPPV = tempPPV;
-            tempPPV = null;
+            DestroyImmediate(curVolume);
+            curVolume = tarVolume;
+            tarVolume = null;
         }
         #endregion
     }
