@@ -113,7 +113,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (Hunger > hungerHealThreshold)
                 {
-                    if (timeLeftToHealFromHunger <= 0)
+                    if (timeLeftToHealFromHunger <= 0 && Health.HealthPercentage < 1f)
                     {
                         Health.Health += healthTickHeal;
                     }

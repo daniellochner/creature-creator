@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public PlayerEffects Effects { get; private set; }
 
         public override float MaxHealth => Constructor.Statistics.Health;
+
         public override bool CanTakeDamage => base.CanTakeDamage && !CinematicManager.Instance.IsInCinematic;
         #endregion
 

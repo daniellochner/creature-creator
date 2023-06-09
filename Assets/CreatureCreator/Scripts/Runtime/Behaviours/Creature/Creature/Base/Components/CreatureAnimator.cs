@@ -150,6 +150,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     limb.RestoreDefaults();
                 }
             }
+
+            Limbs.Clear();
+            Arms.Clear();
+            Legs.Clear();
+            Wings.Clear();
+            Mouths.Clear();
+            Eyes.Clear();
         }
         public void Reinitialize()
         {

@@ -610,8 +610,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             OnRemoveBodyPartData?.Invoke(bodyPart);
 
-            DestroyImmediate(main.Flipped.gameObject);
-            DestroyImmediate(main.gameObject);
+            if (main != null)
+            {
+                DestroyImmediate(main.Flipped.gameObject);
+                DestroyImmediate(main.gameObject);
+            }
         }
 
         public void SetName(string creatureName)

@@ -58,6 +58,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ShowMeToOthers()
         {
+            if (!IsHidden) return;
+
             ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
             OnShow?.Invoke();
 
@@ -112,6 +114,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Hide
         public void HideFromOthers()
         {
+            if (IsHidden) return;
             HideFromOthersServerRpc();
         }
         [ServerRpc(RequireOwnership = false)]
