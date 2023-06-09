@@ -136,10 +136,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateInGameScoreboard()
         {
-            if (State.Value != MinigameStateType.Playing)
-            {
-                return;
-            }
             scoreText.text = $"{BlueScore.Value:00}-{RedScore.Value:00}";
         }
         #endregion

@@ -99,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 text += $"{TextUtility.FormatError(NumPlayers, NumPlayers > minigame.MaxPlayers)}/{minigame.MaxPlayers}<br>";
             }
             
-            if (minigame.WaitTimeLeft.Value <= minigame.WaitTime)
+            if (NumPlayers >= minigame.MinPlayers && NumPlayers <= minigame.MaxPlayers && minigame.WaitTimeLeft.Value <= minigame.WaitTime)
             {
                 text += $"{minigame.WaitTimeLeft.Value}";
             }
