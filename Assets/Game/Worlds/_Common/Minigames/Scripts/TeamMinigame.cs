@@ -11,10 +11,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Team Minigame")]
         [SerializeField] protected TeamData[] teams;
 
-        private int myTeamId, myTeamIndex;
-        private List<List<ulong>> teamPlayers = new List<List<ulong>>();
+        protected List<List<ulong>> teamPlayers = new List<List<ulong>>();
+        protected int myTeamId, myTeamIndex;
         #endregion
 
+        #region Methods
         protected override void Setup()
         {
             base.Setup();
@@ -22,9 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
             waitingForPlayers.onExit += OnWaitingForPlayersExit;
         }
 
-
         #region Waiting For Players
-
         private void OnWaitingForPlayersExit()
         {
             AssignTeams();
@@ -32,8 +31,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void AssignTeams()
         {
+            // Randomize ordering of players
             players.Shuffle();
 
+            // Assign players evenly to teams
             int counter = 0;
             for (int t = 0; t < teams.Length; t++)
             {
@@ -45,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
+            // Assign remaining players to random teams
             int playersLeft = players.Count - counter;
             if (playersLeft > 0)
             {
@@ -59,14 +61,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
         private void AssignTeam(ulong clientId, int teamId, int teamIndex)
         {
             teamPlayers[teamId].Add(clientId);
 
             AssignTeamClientRpc(teamId, teamIndex, NetworkUtils.SendTo(clientId));
         }
-
         [ClientRpc]
         private void AssignTeamClientRpc(int teamId, int teamIndex, ClientRpcParams sendTo)
         {
@@ -80,33 +80,18 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             creaturePreset = teams[teamId].creaturePreset;
         }
-
         #endregion
 
-
-
-
         #region Building
-
         protected override void OnApplyRestrictions()
         {
             base.OnApplyRestrictions();
 
             EditorManager.Instance.SetRestrictedColour(teams[myTeamId].colour);
         }
-
         #endregion
 
-
-
-
         #region Starting
-
-        public override Transform GetSpawnPoint()
-        {
-            return teams[myTeamId].spawnPoints[myTeamIndex];
-        }
-
         public override void OnSetupScoreboard()
         {
             foreach (TeamData teamData in teams)
@@ -120,20 +105,28 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public override Transform GetSpawnPoint()
+        {
+            return teams[myTeamId].spawnPoints[myTeamIndex];
+        }
         #endregion
 
+        #region Playing
+        protected void SetTeamScore(int teamId, int score)
+        {
+            if ((teamId < 0) || (teamId > teams.Length - 1) || (teamId > Scoreboard.Count - 1)) return;
 
-
+            TeamData data = teams[teamId];
+            Scoreboard[teamId] = new Score()
+            {
+                id = data.nameId,
+                displayName = data.Name,
+                score = score
+            };
+        }
+        #endregion
 
         #region Completing
-
-        protected override void OnShutdown()
-        {
-            base.OnShutdown();
-
-            teamPlayers.Clear();
-        }
-
         protected override List<ulong> GetWinnerClientIds()
         {
             int winningTeam = GetWinningTeam();
@@ -184,12 +177,16 @@ namespace DanielLochner.Assets.CreatureCreator
             return winningTeam;
         }
 
+        protected override void OnShutdown()
+        {
+            base.OnShutdown();
+
+            teamPlayers.Clear();
+        }
+        #endregion
         #endregion
 
-
-
         #region Nested
-
         [Serializable]
         public class TeamData
         {

@@ -182,7 +182,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized)
             {
 #if UNITY_STANDALONE
-
+                // TODO: Implement leaderboards for Steam
 #elif UNITY_IOS || UNITY_ANDROID
                 if (GameServices.Instance.IsLoggedIn())
                 {

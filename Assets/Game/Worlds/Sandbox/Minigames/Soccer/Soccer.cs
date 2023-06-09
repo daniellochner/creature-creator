@@ -10,16 +10,18 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Soccer")]
-        [SerializeField] private TextMeshPro scoreText;
         [SerializeField] private float spawnDelay;
-        [SerializeField] private float blinkTime;
-        [SerializeField] private int blinkCount;
         [SerializeField] private Ball[] balls;
+        [Space]
+        [SerializeField] private TextMeshPro scoreText;
+        [Space]
         [SerializeField] private AudioClip countdownFX;
         [SerializeField] private AudioClip whistleFX;
+        [Space]
+        [SerializeField] private float blinkTime;
+        [SerializeField] private int blinkCount;
 
-        private Coroutine winningScoreboardCoroutine;
-        private AudioSource soccerAS;
+        private AudioSource soccerAudioSource;
         #endregion
 
         #region Properties
@@ -31,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void Awake()
         {
             base.Awake();
-            soccerAS = GetComponent<AudioSource>();
+            soccerAudioSource = GetComponent<AudioSource>();
         }
         protected override void Start()
         {
@@ -50,14 +52,11 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
 
             completing.onEnter += OnCompletingEnter;
-            completing.onExit += OnCompletingExit;
 
             StartTimeLeft.OnValueChanged += OnStartTimeLeftChanged;
         }
 
-
         #region Introducing
-
         protected override void OnCinematic()
         {
             base.OnCinematic();
@@ -77,19 +76,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 spawnDelay * i);
             }
         }
-
         #endregion
 
-        
-
         #region Building
-
         protected override void OnApplyRestrictions()
         {
             base.OnApplyRestrictions();
 
+            // Restrict to 5 bones (to prevent large creatures from blocking the goals)
             EditorManager.Instance.SetRestrictedBones(5);
 
+            // Restrict body parts with the flap ability (to prevent flying creatures)
             List<string> bodyParts = new List<string>();
             foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
             {
@@ -101,90 +98,66 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             EditorManager.Instance.SetRestrictedBodyParts(bodyParts);
         }
-
         #endregion
 
-
         #region Starting
-
         private void OnStartTimeLeftChanged(int oldTime, int newTime)
         {
             if (newTime == 3)
             {
-                soccerAS.PlayOneShot(countdownFX);
+                soccerAudioSource.PlayOneShot(countdownFX);
             }
         }
-
         #endregion
 
-
-
         #region Playing
-
         protected override IEnumerator GameplayLogicRoutine()
         {
             return new WaitUntil(() => RedScore.Value >= 10 || BlueScore.Value >= 10);
         }
 
-
         private void OnRedScoreChanged(int oldScore, int newScore)
         {
-            if (IsServer && Scoreboard.Count == 2)
+            if (IsServer && State.Value == MinigameStateType.Playing)
             {
-                Scoreboard[0] = new Score()
-                {
-                    id = teams[0].nameId,
-                    score = newScore,
-                    displayName = teams[0].Name
-                };
+                SetTeamScore((int)Team.Red, newScore);
             }
 
             UpdateInGameScoreboard();
         }
         private void OnBlueScoreChanged(int oldScore, int newScore)
         {
-            if (IsServer && Scoreboard.Count == 2)
+            if (IsServer && State.Value == MinigameStateType.Playing)
             {
-                Scoreboard[1] = new Score()
-                {
-                    id = teams[1].nameId,
-                    score = newScore,
-                    displayName = teams[1].Name
-                };
+                SetTeamScore((int)Team.Blue, newScore);
             }
 
             UpdateInGameScoreboard();
         }
         private void UpdateInGameScoreboard()
         {
-            if (winningScoreboardCoroutine != null)
+            if (State.Value != MinigameStateType.Playing)
             {
-                Clear();
+                return;
             }
             scoreText.text = $"{BlueScore.Value:00}-{RedScore.Value:00}";
         }
-
         #endregion
 
-
-
         #region Completing
-
         private void OnCompletingEnter()
         {
-            ShowWinningScoreboardClientRpc();
-            soccerAS.PlayOneShot(whistleFX);
-        }
-
-        private void OnCompletingExit()
-        {
-            Clear();
+            CompleteSoccerClientRpc();
         }
 
         [ClientRpc]
-        private void ShowWinningScoreboardClientRpc()
+        private void CompleteSoccerClientRpc()
         {
-            winningScoreboardCoroutine = StartCoroutine(WinningScoreboardRoutine());
+            if (InMinigame)
+            {
+                soccerAudioSource.PlayOneShot(whistleFX);
+            }
+            StartCoroutine(WinningScoreboardRoutine());
         }
 
         private IEnumerator WinningScoreboardRoutine()
@@ -210,19 +183,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 scoreText.enabled = true;
                 yield return new WaitForSeconds(blinkTime);
             }
-
-            Clear();
-        }
-
-        private void Clear()
-        {
-            if (winningScoreboardCoroutine != null)
-            {
-                StopCoroutine(winningScoreboardCoroutine);
-                winningScoreboardCoroutine = null;
-            }
-
-            scoreText.enabled = true;
             scoreText.color = Color.white;
 
             if (IsServer)
@@ -230,27 +190,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 RedScore.Value = BlueScore.Value = 0;
             }
         }
-
-
-
         #endregion
-
         #endregion
-
-
-
-
 
         #region Enums
-
         public enum Team
         {
             Red,
             Blue
         }
-
         #endregion
-
-
     }
 }

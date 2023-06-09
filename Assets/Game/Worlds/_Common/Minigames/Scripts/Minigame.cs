@@ -12,35 +12,35 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [Header("Minigame")]
-        [SerializeField] private string nameId;
-        [Header("Waiting For Players")]
-        [SerializeField] private MinigamePad pad;
-        [SerializeField] private int minPlayers;
-        [SerializeField] private int maxPlayers;
-        [SerializeField] private int waitTime;
-        [Header("Introducing")]
-        [SerializeField] private MinigameCinematic cinematic;
-        [SerializeField] private MinigameZone zone;
-        [SerializeField] private float expandTime;
-        [SerializeField] private float showBoundsTime;
-        [Header("Building")]
-        [SerializeField] private Platform platform;
-        [SerializeField] private int buildTime;
+        [SerializeField] protected string nameId;
+        [Space]
+        [SerializeField] protected MinigamePad pad;
+        [SerializeField] protected int waitTime;
+        [SerializeField] protected int minPlayers;
+        [SerializeField] protected int maxPlayers;
+        [Space]
+        [SerializeField] protected MinigameCinematic cinematic;
+        [SerializeField] protected MinigameZone zone;
+        [SerializeField] protected float expandTime;
+        [SerializeField] protected float showBoundsTime;
+        [Space]
+        [SerializeField] protected Platform platform;
         [SerializeField] protected TextAsset creaturePreset;
-        [Header("Starting")]
-        [SerializeField] private string objectiveId;
-        [SerializeField] private int startTime;
-        [SerializeField] private float teleportTime;
-        [SerializeField] private float switchTime;
-        [SerializeField] private string musicId;
-        [Header("Playing")]
-        [SerializeField] private int playTime;
+        [SerializeField] protected int buildTime;
+        [Space]
+        [SerializeField] protected string objectiveId;
+        [SerializeField] protected string musicId;
+        [SerializeField] protected float switchTime;
+        [SerializeField] protected float teleportTime;
+        [SerializeField] protected int startTime;
+        [Space]
         [SerializeField] protected bool isAscendingOrder;
-        [Header("Completing")]
-        [SerializeField] private int celebrateTime;
-        [SerializeField] private int completeTime;
-        [SerializeField] private MinMax minMaxFireworksCooldown;
-        [SerializeField] private GameObject[] fireworksPrefabs;
+        [SerializeField] protected int playTime;
+        [Space]
+        [SerializeField] protected MinMax minMaxFireworksCooldown;
+        [SerializeField] protected int celebrateTime;
+        [SerializeField] protected int completeTime;
+        [SerializeField] protected GameObject[] fireworksPrefabs;
 
         protected List<MinigameState> states = new List<MinigameState>();
         protected List<ulong> players = new List<ulong>();
@@ -50,14 +50,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public string Name => LocalizationUtility.Localize(nameId);
-
         public int MinPlayers => minPlayers;
         public int MaxPlayers => Mathf.Min(maxPlayers, NetworkPlayersManager.Instance.NumPlayers);
-
         public int WaitTime => waitTime;
 
         public bool InMinigame => MinigameManager.Instance.CurrentMinigame == this;
-
 
         public NetworkVariable<MinigameStateType> State { get; set; } = new NetworkVariable<MinigameStateType>(MinigameStateType.WaitingForPlayers);
 
@@ -120,7 +117,6 @@ namespace DanielLochner.Assets.CreatureCreator
             states.Add(playing = new MinigameState(MinigameStateType.Playing, PlayingRoutine));
             states.Add(completing = new MinigameState(MinigameStateType.Completing, CompletingRoutine));
         }
-
         private IEnumerator MinigameRoutine()
         {
             while (true)
@@ -136,13 +132,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-
         #region Waiting For Players
-
         private IEnumerator WaitingForPlayersRoutine()
         {
             WaitTimeLeft.Value = waitTime;
 
+            // Wait for the waiting time to run out, reset when invalid
             while (WaitTimeLeft.Value > 0)
             {
                 if ((pad.NumPlayers >= MinPlayers) && (pad.NumPlayers <= MaxPlayers))
@@ -157,17 +152,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            foreach (var t in pad.Region.tracked)
+            // Add all players waiting on the pad
+            var tracked = pad.Region.tracked;
+            for (int i = 0; i < tracked.Count && i < MaxPlayers; i++)
             {
-                players.Add(t.GetComponent<NetworkObject>().OwnerClientId);
+                players.Add(tracked[i].GetComponent<NetworkObject>().OwnerClientId);
             }
-            IncludePlayersClientRpc(NetworkUtils.SendTo(players.ToArray()));
 
+            // Setup clients
+            SetupPlayerClientRpc(NetworkUtils.SendTo(players.ToArray()));
             SetupClientRpc();
         }
 
         [ClientRpc]
-        private void IncludePlayersClientRpc(ClientRpcParams clientRpcParams = default)
+        private void SetupPlayerClientRpc(ClientRpcParams clientRpcParams = default)
         {
             MinigameManager.Instance.CurrentMinigame = this;
             MinigameManager.Instance.Scoreboard.Setup(this);
@@ -181,12 +179,9 @@ namespace DanielLochner.Assets.CreatureCreator
             zone.gameObject.SetActive(true);
             pad.gameObject.SetActive(false);
         }
-
         #endregion
 
-
         #region Introducing
-
         private IEnumerator IntroducingRoutine()
         {
             BeginCinematicClientRpc();
@@ -200,7 +195,6 @@ namespace DanielLochner.Assets.CreatureCreator
             this.Invoke(ShowBounds, showBoundsTime);
         }
 
-
         [ClientRpc]
         protected void BeginCinematicClientRpc()
         {
@@ -211,7 +205,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 cinematic.Begin();
             }
         }
-
         private void OnCinematicShow()
         {
             platform.TeleportTo(true, false);
@@ -220,8 +213,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsServer && State.Value != MinigameStateType.Building)
             {
+                // Wait until the cinematic has ended for everyone before proceeding (i.e., when the state is building)
                 cinematic.Pause();
-
                 this.InvokeUntil(() => State.Value == MinigameStateType.Building, cinematic.Unpause);
             }
         }
@@ -230,6 +223,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ShowBoundsClientRpc();
 
+            // Expand bounds over time
             this.InvokeOverTime(delegate (float p)
             {
                 zone.SetScale(p, false);
@@ -242,18 +236,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             zone.gameObject.SetActive(true);
         }
-
         #endregion
 
-
         #region Building
-
         private IEnumerator BuildingRoutine()
         {
             SwitchToBuildModeClientRpc();
 
             BuildTimeLeft.Value = buildTime;
-
             while (BuildTimeLeft.Value > 0)
             {
                 yield return new WaitForSeconds(1f);
@@ -299,27 +289,27 @@ namespace DanielLochner.Assets.CreatureCreator
                 MinigameManager.Instance.SetPlay(text, isInteractable);
             }
         }
-
         #endregion
 
-
         #region Starting
-
         private IEnumerator StartingRoutine()
         {
+            // Setup the scoreboard
             Scoreboard.Clear();
             OnSetupScoreboard();
 
+            // Switch everyone to play mode
             SwitchToPlayModeClientRpc();
             yield return new WaitForSeconds(switchTime);
 
+            // Teleport everyone to their starting positions
             for (int i = 0; i < players.Count; i++)
             {
                 TeleportToStartClientRpc();
             }
             yield return new WaitForSeconds(teleportTime);
 
-
+            // Countdown to start the minigame
             StartTimeLeft.Value = startTime;
             while (StartTimeLeft.Value > 0)
             {
@@ -327,6 +317,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 StartTimeLeft.Value--;
             }
 
+            // Start minigame
             StartClientRpc();
         }
 
@@ -339,9 +330,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 Player.Instance.Mover.FreezeMove = true;
 
-                MusicManager.Instance.FadeTo(musicId);
-
                 MinigameManager.Instance.SetTitle(LocalizationUtility.Localize(objectiveId));
+
+                MusicManager.Instance.FadeTo(musicId);
             }
         }
 
@@ -364,10 +355,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 MinigameManager.Instance.SetTitle(null);
             }
+            else
+            {
+                NotificationsManager.Notify(LocalizationUtility.Localize("minigame_notify-started", Name));
+            }
         }
 
         public abstract Transform GetSpawnPoint();
-
         public abstract void OnSetupScoreboard();
 
         private void OnStartTimeLeftChanged(int oldTime, int newTime)
@@ -386,7 +380,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
         private void OnScoreboardChanged(NetworkListEvent<Score> changeEvent)
         {
             if (InMinigame)
@@ -414,12 +407,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
         #endregion
 
-
         #region Playing
-
         private IEnumerator PlayingRoutine()
         {
             yield return new WaitAny(this, TimerRoutine(), GameplayLogicRoutine());
@@ -429,7 +419,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator TimerRoutine()
         {
             PlayTimeLeft.Value = playTime;
-
             while (PlayTimeLeft.Value > 0)
             {
                 yield return new WaitForSeconds(1f);
@@ -438,7 +427,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         protected virtual IEnumerator GameplayLogicRoutine()
         {
-            yield return new WaitUntil(() => false);
+            yield return new WaitUntil(() => false); // Rely on timer to finish by default (override for gameplay logic functionality)
         }
 
         private void OnPlayTimeLeftChanged(int oldTime, int newTime)
@@ -458,27 +447,25 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
         private string FormatTime(int seconds)
         {
             int mins = seconds / 60;
             int secs = seconds % 60;
             return $"{mins:00}:{secs:00}";
         }
-
         #endregion
 
-
         #region Completing
-
         private IEnumerator CompletingRoutine()
         {
             yield return new WaitForSeconds(1f);
 
+            // Notify everyone of the minigame's winner(s)
             NotifyOfWinnerClientRpc(GetWinnerName());
 
             ulong[] winnerClientIds = GetWinnerClientIds().ToArray();
 
+            // Celebrate with fireworks if there are winners (for a slightly longer celebration time)
             if (winnerClientIds.Length > 0)
             {
                 LoseClientRpc(NetworkUtils.DontSendTo(winnerClientIds));
@@ -494,19 +481,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitForSeconds(completeTime);
             }
 
+            // Shutdown minigame
             OnShutdown();
         }
-        protected abstract List<ulong> GetWinnerClientIds();
-
-        protected virtual void OnShutdown()
-        {
-            Scoreboard.Clear();
-            zone.SetScale(0f, true);
-            players.Clear();
-
-            ShutdownClientRpc();
-        }
-
         private IEnumerator SpawnFireworksRoutine(ulong[] winnerClientIds)
         {
             List<Transform> winnerTransforms = new List<Transform>();
@@ -532,6 +509,19 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        protected virtual void OnShutdown()
+        {
+            Scoreboard.Clear();
+            players.Clear();
+
+            zone.SetScale(0f, true);
+
+            ShutdownClientRpc();
+        }
+
+        protected abstract List<ulong> GetWinnerClientIds();
+        protected abstract string GetWinnerName();
+
         [ClientRpc]
         private void NotifyOfWinnerClientRpc(string winnerName)
         {
@@ -544,14 +534,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 NotificationsManager.Notify(LocalizationUtility.Localize("minigame_notify-winner_external", winnerName, Name));
             }
         }
-        protected abstract string GetWinnerName();
 
         [ClientRpc]
         private void WinClientRpc(ClientRpcParams sendTo = default)
         {
             if (InMinigame)
             {
-                MusicManager.Instance.FadeTo(null);
+                MusicManager.Instance.FadeTo(null); // TODO: Win music?
 
 #if USE_STATS
                 StatsManager.Instance.MinigamesWon++;
@@ -564,7 +553,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                MusicManager.Instance.FadeTo(null);
+                MusicManager.Instance.FadeTo(null); // TODO: Lose music?
             }
         }
 
@@ -577,11 +566,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void ShutdownClientRpc()
         {
-            zone.gameObject.SetActive(false);
-            pad.gameObject.SetActive(true);
-
             if (InMinigame)
             {
+#if USE_STATS
+                StatsManager.Instance.MinigamesCompleted++;
+#endif
+
                 EditorManager.Instance.ResetRestrictions();
 
                 MinigameManager.Instance.SetTitle(null);
@@ -591,31 +581,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 NotificationsManager.Instance.IsHidden = false;
 
                 MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
-
-#if USE_STATS
-                StatsManager.Instance.MinigamesCompleted++;
-#endif
             }
-        }
 
+            zone.gameObject.SetActive(false);
+            pad.gameObject.SetActive(true);
+        }
         #endregion
 
-
         #region Other
-
         private void OnClientDisconnectCallback(ulong clientId)
         {
             players.Remove(clientId);
         }
-
         #endregion
-
         #endregion
-
-
-
+        
         #region Enums
-
         public enum MinigameStateType
         {
             WaitingForPlayers,
@@ -625,13 +606,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Playing,
             Completing
         }
-
         #endregion
 
-
-
         #region Nested
-
         public class MinigameState
         {
             public MinigameStateType type;
@@ -672,7 +649,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 return id == other.id && displayName == other.displayName && score == other.score;
             }
         }
-
         #endregion
     }
 }

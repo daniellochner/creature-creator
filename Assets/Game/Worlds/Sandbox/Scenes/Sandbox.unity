@@ -806,28 +806,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameId: minigame_soccer
   pad: {fileID: 8800774305848061232}
-  minPlayers: 1
+  waitTime: 30
+  minPlayers: 2
   maxPlayers: 12
-  waitTime: 10
   cinematic: {fileID: 8800774305848061231}
   zone: {fileID: 1402871668}
   expandTime: 2
   showBoundsTime: 2
   platform: {fileID: 1490982891}
-  buildTime: 30
   creaturePreset: {fileID: 0}
+  buildTime: 30
   objectiveId: minigame_soccer_objective
-  startTime: 10
-  teleportTime: 1.5
-  switchTime: 0.5
   musicId: QuirkyRetroFunk
-  playTime: 120
+  switchTime: 0.5
+  teleportTime: 1.5
+  startTime: 10
   isAscendingOrder: 0
-  celebrateTime: 10
-  completeTime: 5
+  playTime: 120
   minMaxFireworksCooldown:
     min: 0.25
     max: 1
+  celebrateTime: 10
+  completeTime: 5
   fireworksPrefabs:
   - {fileID: 1481965347600448, guid: 526ea180104dcc64ca953442c1a923cf, type: 3}
   - {fileID: 1682879854576530, guid: 920d7d0b8f2a7df45ad3bd35448738c9, type: 3}
@@ -853,16 +853,16 @@ MonoBehaviour:
     - {fileID: 1469131496}
     - {fileID: 1649114271}
     - {fileID: 1499327233}
-  scoreText: {fileID: 1501324442}
-  spawnDelay: 0.5
-  blinkTime: 0.5
-  blinkCount: 10
   balls:
   - {fileID: 528984945}
   - {fileID: 528313326}
   - {fileID: 230786541}
+  scoreText: {fileID: 1501324442}
   countdownFX: {fileID: 8300000, guid: 62d91bb75f6cf2243b0e2574772e2efd, type: 3}
   whistleFX: {fileID: 8300000, guid: 565e9de4772857240bd21f881de6e4c0, type: 3}
+  spawnDelay: 0.5
+  blinkTime: 0.5
+  blinkCount: 10
 --- !u!82 &294398234
 AudioSource:
   m_ObjectHideFlags: 0
