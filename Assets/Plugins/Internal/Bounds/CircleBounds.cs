@@ -23,5 +23,10 @@ namespace DanielLochner.Assets
             UnityEditor.Handles.DrawWireDisc(transform.position, transform.up, radius);
 #endif
         }
+
+        public override Vector3 GetClosestPointOnBounds(Vector3 point, bool useY)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
