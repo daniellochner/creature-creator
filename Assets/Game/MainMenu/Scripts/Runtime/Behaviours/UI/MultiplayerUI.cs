@@ -345,6 +345,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (isBeta)
                 {
                     worldName = $"[BETA] {worldName}";
+
+
+                    // TODO: Remove this in the next update!
+                    visibilityOS.Select(Visibility.Private);
+                    isPrivate = true;
+                    usePassword = false;
                 }
 
                 // Check Premium
