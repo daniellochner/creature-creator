@@ -612,6 +612,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 drag.OnEndDrag.AddListener(delegate
                 {
                     Constructor.UpdateConfiguration();
+                    Constructor.UpdateOrigin();
 
                     UpdateMeshCollider();
 
