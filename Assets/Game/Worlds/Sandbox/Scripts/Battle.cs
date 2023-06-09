@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TrackRegion region;
         [SerializeField] private Bounds bounds;
         [SerializeField] private GameObject info;
+        [SerializeField] private string musicId;
 
         private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);
@@ -147,6 +148,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     BattleServerRpc();
                 }
+
+                MusicManager.Instance.FadeTo(musicId);
             }
         }
         private void OnPlayerExit(Collider col)
@@ -154,6 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (col.CompareTag("Player/Local"))
             {
                 info.SetActive(false);
+                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
             }
         }
         private void OnRoundChanged(int oldRound, int newRound)
