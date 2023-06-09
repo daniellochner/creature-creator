@@ -40,6 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle motionBlurToggle;
         [SerializeField] private Toggle optimizeCreaturesToggle;
         [SerializeField] private ParticleSystem[] ambientParticles;
+        [SerializeField] private Slider creatureRenderDistanceSlider;
 
         [Header("Audio")]
         [SerializeField] private Slider masterVolumeSlider;
@@ -343,6 +344,13 @@ namespace DanielLochner.Assets.CreatureCreator
             optimizeCreaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetOptimizeCreatures(isOn);
+            });
+
+            // Creature Render Distance
+            creatureRenderDistanceSlider.value = SettingsManager.Data.CreatureRenderDistance;
+            creatureRenderDistanceSlider.onValueChanged.AddListener(delegate (float value)
+            {
+                SettingsManager.Instance.SetCreatureRenderDistance(value);
             });
             #endregion
 
