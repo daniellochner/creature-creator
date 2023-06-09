@@ -51,7 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private void Enter()
+        public void Enter()
         {
             Player.Instance.Holder.DropAll();
             Player.Instance.Loader.HideFromOthers();
@@ -64,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             HasEntered = true;
         }
-        private void Exit()
+        public void Exit()
         {
             EditorManager.Instance.SetEditing(false);
 
@@ -75,7 +75,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void TeleportTo()
         {
-            TeleportTo(false, true);
+            if (MinigameManager.Instance.CurrentMinigame == null)
+            {
+                TeleportTo(false, true);
+            }
+            else
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("minigame_cannot-teleport_title"), LocalizationUtility.Localize("minigame_cannot-teleport_message"));
+            }
         }
         public void TeleportTo(bool align, bool playSound)
         {

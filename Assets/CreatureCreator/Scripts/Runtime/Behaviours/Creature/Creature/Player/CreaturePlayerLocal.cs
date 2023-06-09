@@ -82,7 +82,7 @@ namespace DanielLochner.Assets.CreatureCreator
             EditorManager.Instance.SetVisibility(false);
 
             float time = Time.time;
-            EditorManager.Instance.InvokeUntil(() => !Input.GetMouseButton(0) && (Time.time > (time + 1f)), delegate
+            EditorManager.Instance.InvokeUntil(() => !Input.GetMouseButton(0) && !InputUtility.GetKey(KeybindingsManager.Data.Respawn) && (Time.time > (time + 1f)), delegate
             {
                 string name = Informer.Information.Name.Equals(LocalizationUtility.Localize("creature-unnamed")) ? LocalizationUtility.Localize("you-died_you") : Informer.Information.Name;
                 string age  = Informer.Information.FormattedAge;
@@ -106,9 +106,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Respawn()
         {
-            ZoneManager.Instance.ExitCurrentZone(Editor.Platform.Position);
+            if (MinigameManager.Instance.CurrentMinigame != null)
+            {
+                Transform spawnPoint = MinigameManager.Instance.CurrentMinigame.GetSpawnPoint();
+                Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true);
 
-            Editor.Platform.TeleportTo(false, true);
+                Player.Instance.Loader.ShowMeToOthers();
+            }
+            else
+            {
+                ZoneManager.Instance.ExitCurrentZone(Editor.Platform.Position);
+                Editor.Platform.TeleportTo(false, true);
+            }
+
 
             Constructor.Body.gameObject.SetActive(true);
             Rigidbody.isKinematic = false;

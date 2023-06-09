@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool CanRespawn
         {
-            get => !Health.IsDead && !EditorManager.Instance.IsEditing;
+            get => !Health.IsDead && !EditorManager.Instance.IsEditing && (MinigameManager.Instance.CurrentMinigame == null || MinigameManager.Instance.CurrentMinigame.State.Value == Minigame.MinigameStateType.Playing);
         }
         #endregion
 
