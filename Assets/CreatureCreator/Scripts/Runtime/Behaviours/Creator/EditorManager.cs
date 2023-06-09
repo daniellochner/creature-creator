@@ -472,6 +472,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Creature.Editor.Deselect();
             Creature.Editor.enabled = false;
 
+            Creature.Camera.CameraOrbit.Unfreeze();
+
             Creature.Animator.enabled = true;
 
             Creature.Abilities.enabled = true;
@@ -1911,6 +1913,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             History.Clear();
             Counter = -1;
+            SetUndoable(false);
+            SetRedoable(false);
         }
 
         private void SetUndoable(bool canUndo)
