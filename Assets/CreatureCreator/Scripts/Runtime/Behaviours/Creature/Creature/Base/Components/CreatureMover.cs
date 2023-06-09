@@ -2,6 +2,8 @@
 // Copyright (c) Daniel Lochner
 
 using System;
+using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -44,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private InputMode inputMode;
         private Vector3? touchPos = null;
         private Quaternion? touchRot = null;
+        private ClientNetworkTransform clientNetworkTransform;
 
 #if USE_STATS
         private float displacementBuffer = 0f;
@@ -141,6 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
+            clientNetworkTransform = GetComponent<ClientNetworkTransform>();
         }
 
         private void HandleInput()
@@ -361,8 +365,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             StopMoving();
 
-            transform.position = targetPosition = position;
-            transform.rotation = rotation;
+            clientNetworkTransform.Teleport(targetPosition = position, rotation, transform.localScale);
 
             Camera.CameraOrbit.HandleClipping = false;
             this.Invoke(delegate {
