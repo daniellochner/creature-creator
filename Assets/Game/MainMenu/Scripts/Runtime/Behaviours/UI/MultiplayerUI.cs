@@ -339,18 +339,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
-                bool isBeta = Application.version.EndsWith("beta");
+                bool isBeta = Application.version.EndsWith("beta") || Application.version == "1.1.28"; // TODO: REMOVE THIS!!!
 
                 // Beta
                 if (isBeta)
                 {
                     worldName = $"[BETA] {worldName}";
-
-
-                    // TODO: Remove this in the next update!
-                    visibilityOS.Select(Visibility.Private);
-                    isPrivate = true;
-                    usePassword = false;
                 }
 
                 // Check Premium
