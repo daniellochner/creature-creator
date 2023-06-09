@@ -172,6 +172,11 @@ namespace DanielLochner.Assets.CreatureCreator
 #endif
             }
         }
+
+        public Leaderboard GetLeaderboard(string leaderboardId)
+        {
+            return DatabaseManager.GetDatabaseEntry<Leaderboard>("Leaderboards", leaderboardId);
+        }
         public void SubmitScore(string leaderboardId, long score)
         {
             if (Initialized)
@@ -179,12 +184,11 @@ namespace DanielLochner.Assets.CreatureCreator
 #if UNITY_STANDALONE
 
 #elif UNITY_IOS || UNITY_ANDROID
-                
-#endif
                 if (GameServices.Instance.IsLoggedIn())
                 {
-                    //GameServices.Instance.SubmitScore()
+                    GameServices.Instance.SubmitScore(score, GetLeaderboard(leaderboardId).gameServicesId);
                 }
+#endif
             }
         }
         #endregion
