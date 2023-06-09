@@ -91,8 +91,8 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnDisable();
 
             SetDamping(false);
-            RestoreDefaults();
             Restructure(false);
+            RestoreDefaults();
             Grounded.enabled = false;
             Animator.enabled = false;
             Rig.weight = 0f;
@@ -150,13 +150,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     limb.RestoreDefaults();
                 }
             }
-
-            Limbs.Clear();
-            Arms.Clear();
-            Legs.Clear();
-            Wings.Clear();
-            Mouths.Clear();
-            Eyes.Clear();
         }
         public void Reinitialize()
         {
