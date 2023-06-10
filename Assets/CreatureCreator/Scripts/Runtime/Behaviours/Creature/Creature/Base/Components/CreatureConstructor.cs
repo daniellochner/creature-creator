@@ -529,7 +529,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (BodyPartConstructor bodyPart in BodyParts)
             {
-                bodyPart.transform.parent = bodyPart.Flipped.transform.parent = Bones[bodyPart.NearestBone];
+                int index = bodyPart.NearestBone;
+                bodyPart.transform.parent = bodyPart.Flipped.transform.parent = Bones[index];
+                bodyPart.AttachedBodyPart.boneIndex = index;
             }
         }
 
