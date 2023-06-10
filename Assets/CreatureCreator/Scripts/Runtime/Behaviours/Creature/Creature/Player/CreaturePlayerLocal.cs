@@ -77,6 +77,8 @@ namespace DanielLochner.Assets.CreatureCreator
             Holder.DropAll();
             Holder.enabled = false;
 
+            Loader.HideFromOthers();
+
             Spawner.Despawn();
 
             EditorManager.Instance.SetVisibility(false);

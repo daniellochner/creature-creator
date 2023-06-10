@@ -91,8 +91,8 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnDisable();
 
             SetDamping(false);
-            Restructure(false);
             RestoreDefaults();
+            Restructure(false);
             Grounded.enabled = false;
             Animator.enabled = false;
             Rig.weight = 0f;

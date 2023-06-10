@@ -48,10 +48,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-            CreatureBase creature = collision.gameObject.GetComponent<CreatureBase>();
-            if (creature != null)
+            CreaturePlayerLocal player = collision.gameObject.GetComponent<CreaturePlayerLocal>();
+            if (player != null)
             {
-                creature.Health.TakeDamage(creature.Health.Health);
+                player.Health.TakeDamage(player.Health.Health);
                 SpawnElectricShockClientRpc(collision.GetContact(0).point);
             }
         }
