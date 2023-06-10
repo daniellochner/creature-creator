@@ -176,7 +176,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void SetupClientRpc()
         {
-            zone.gameObject.SetActive(true);
             pad.gameObject.SetActive(false);
         }
         #endregion
