@@ -17,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private AudioClip countdownFX;
         [SerializeField] private AudioClip whistleFX;
+        [SerializeField] private int goalsToWin;
         [Space]
         [SerializeField] private float blinkTime;
         [SerializeField] private int blinkCount;
@@ -113,7 +114,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Playing
         protected override IEnumerator GameplayLogicRoutine()
         {
-            return new WaitUntil(() => RedScore.Value >= 10 || BlueScore.Value >= 10);
+            return new WaitUntil(() => RedScore.Value >= goalsToWin || BlueScore.Value >= goalsToWin);
         }
 
         private void OnRedScoreChanged(int oldScore, int newScore)
