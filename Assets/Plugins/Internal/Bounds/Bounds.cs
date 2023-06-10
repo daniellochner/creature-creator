@@ -13,6 +13,8 @@ namespace DanielLochner.Assets
 
         protected abstract void DrawBounds();
 
+        public abstract bool IsPointInBounds(Vector3 point);
+
         public abstract Vector3 GetClosestPointOnBounds(Vector3 point, bool useY);
     }
 }

@@ -21,6 +21,23 @@ namespace DanielLochner.Assets
             Gizmos.DrawWireCube(transform.position, transform.TransformVector(width, 0f, length));
         }
 
+        public override bool IsPointInBounds(Vector3 point)
+        {
+            Vector3 size = transform.TransformVector(width, 0f, length);
+
+            if (Mathf.Abs(point.x - transform.position.x) > size.x / 2f)
+            {
+                return false;
+            }
+
+            if (Mathf.Abs(point.z - transform.position.z) > size.z / 2f)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public override Vector3 GetClosestPointOnBounds(Vector3 point, bool useY)
         {
             Vector3 cp = new Vector3(0f, useY ? point.y : transform.position.y, 0f);

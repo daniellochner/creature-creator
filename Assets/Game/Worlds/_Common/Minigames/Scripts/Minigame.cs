@@ -223,12 +223,26 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ShowBoundsClientRpc();
 
-            // Expand bounds over time
             this.InvokeOverTime(delegate (float p)
             {
                 zone.SetScale(p, false);
             },
             expandTime);
+
+            this.Invoke(delegate
+            {
+                CheckBoundsClientRpc();
+            },
+            expandTime);
+        }
+
+        [ClientRpc]
+        private void CheckBoundsClientRpc()
+        {
+            if (!InMinigame && zone.Bounds.IsPointInBounds(Player.Instance.transform.position))
+            {
+                Player.Instance.Editor.Platform.TeleportTo();
+            }
         }
 
         [ClientRpc]

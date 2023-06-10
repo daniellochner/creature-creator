@@ -24,6 +24,11 @@ namespace DanielLochner.Assets
 #endif
         }
 
+        public override bool IsPointInBounds(Vector3 point)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override Vector3 GetClosestPointOnBounds(Vector3 point, bool useY)
         {
             throw new System.NotImplementedException();

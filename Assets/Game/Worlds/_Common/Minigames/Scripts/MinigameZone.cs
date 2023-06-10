@@ -20,6 +20,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private Material boundsMatDown;
         #endregion
 
+        #region Properties
+        public Bounds Bounds => bounds;
+        #endregion
+
         #region Methods
         private void Start()
         {
