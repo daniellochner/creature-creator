@@ -42,6 +42,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             region = GetComponent<TrackRegion>();
         }
+        private void OnDisable()
+        {
+            IsVisible = false;
+        }
+
         private IEnumerator Start()
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
