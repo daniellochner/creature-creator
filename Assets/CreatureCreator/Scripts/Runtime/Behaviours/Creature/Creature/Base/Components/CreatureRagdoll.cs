@@ -47,14 +47,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetupBoneRagdoll(Ragdoll.Bones[i], Ragdoll.BoneSettings.Radius * Mathf.Lerp(1, 5, Ragdoll.GetWeight(i) / 100f), 30);
             }
-            //foreach (LimbConstructor limb in ragdoll.Limbs)
-            //{
-            //    SetupLimbRagdoll(limb);
-
-            //    limb.FlippedLimb.Root.localScale = Vector3.one;
-            //    limb.Flip();
-            //    SetupLimbRagdoll(limb.FlippedLimb);
-            //}
+            foreach (LimbConstructor limb in Ragdoll.Limbs)
+            {
+                SetupLimbRagdoll(limb);
+                SetupLimbRagdoll(limb.FlippedLimb);
+            }
 
             if (SettingsManager.Data.OptimizeCreatures)
             {
@@ -130,24 +127,21 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void SetupLimbRagdoll(LimbConstructor limb)
         {
-            for (int i = 0; i < limb.Bones.Length; ++i)
-            {
-                SetupBoneRagdoll(limb.Bones[i], 0.05f, 10);
-            }
+            //for (int i = 0; i < limb.Bones.Length; ++i)
+            //{
+            //    SetupBoneRagdoll(limb.Bones[i], 0.05f, 10);
+            //}
+
+            //FixedJoint fixedJoint = limb.Bones[0].gameObject.AddComponent<FixedJoint>();
+            //fixedJoint.connectedBody = limb.transform.parent.GetComponent<Rigidbody>();
 
             if (limb.ConnectedExtremity != null)
             {
-                limb.ConnectedExtremity.transform.parent = limb.Extremity;
-
-                Quaternion prevRotation = limb.ConnectedExtremity.transform.rotation;
                 limb.InvokeAtEndOfFrame(delegate
                 {
-                    limb.ConnectedExtremity.transform.rotation = prevRotation;
+                    limb.ConnectedExtremity.transform.SetParent(limb.Extremity, true);
                 });
             }
-
-            FixedJoint fixedJoint = limb.Bones[0].gameObject.AddComponent<FixedJoint>();
-            fixedJoint.connectedBody = limb.transform.parent.GetComponent<Rigidbody>();
         }
 
         private void DismemberBodyPart(BodyPartConstructor bpc)
