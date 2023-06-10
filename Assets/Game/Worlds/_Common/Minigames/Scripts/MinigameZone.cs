@@ -4,17 +4,18 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class MinigameZone : MonoBehaviour
+    public class MinigameZone : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private Minigame minigame;
-        [SerializeField] private float speed;
+        [SerializeField] private NetworkTransform boundsNT;
         [SerializeField] private Bounds bounds;
         [SerializeField] private Material boundsMat;
         [SerializeField] private AudioSource humAS;
+        [SerializeField] private GameObject electricShockPrefab;
+        [SerializeField] private float speed;
         [SerializeField] private MeshRenderer[] renderersUp;
         [SerializeField] private MeshRenderer[] renderersDown;
-        [SerializeField] private NetworkTransform boundsNT;
 
         private Material boundsMatUp;
         private Material boundsMatDown;
@@ -51,7 +52,14 @@ namespace DanielLochner.Assets.CreatureCreator
             if (creature != null)
             {
                 creature.Health.TakeDamage(creature.Health.Health);
+                SpawnElectricShockClientRpc(collision.GetContact(0).point);
             }
+        }
+
+        [ClientRpc]
+        private void SpawnElectricShockClientRpc(Vector3 position)
+        {
+            Instantiate(electricShockPrefab, position, Quaternion.identity, Dynamic.Transform);
         }
 
         private void HandleMat()
