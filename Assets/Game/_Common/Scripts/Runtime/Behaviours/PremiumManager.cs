@@ -104,17 +104,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 Save();
             }
 
-            // TODO: Not sure if initializing in start causes crashes...
-            this.InvokeAtEndOfFrame(delegate
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                if (SystemUtility.IsDevice(DeviceType.Handheld))
-                {
-                    MobileAds.SetiOSAppPauseOnBackground(true);
-                    MobileAds.RaiseAdEventsOnUnityMainThread = true;
+                MobileAds.SetiOSAppPauseOnBackground(true);
+                MobileAds.RaiseAdEventsOnUnityMainThread = true;
 
-                    MobileAds.Initialize(OnInitialized);
-                }
-            });
+                MobileAds.Initialize(OnInitialized);
+            }
         }
 
         public void OnInitialized(InitializationStatus status)
@@ -167,21 +163,28 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsRewardAdLoaded) return;
 
-            RewardedAd.Load(RewardAdUnitId, new AdRequest(), delegate (RewardedAd ad, LoadAdError error) 
+            try
             {
-                rewardAd = ad;
-
-                if (ad == null || error != null)
+                RewardedAd.Load(RewardAdUnitId, new AdRequest(), delegate (RewardedAd ad, LoadAdError error) 
                 {
-                    InformationDialog.Inform($"Error ({error?.GetCode()})", error?.GetMessage());
-                    return;
-                }
+                    rewardAd = ad;
 
-                ad.OnAdFullScreenContentOpened += OnRewardAdOpened;
-                ad.OnAdFullScreenContentClosed += OnRewardAdClosed;
+                    if (ad == null || error != null)
+                    {
+                        InformationDialog.Inform($"Error ({error?.GetCode()})", error?.GetMessage());
+                        return;
+                    }
 
-                onLoaded(ad, error);
-            });
+                    ad.OnAdFullScreenContentOpened += OnRewardAdOpened;
+                    ad.OnAdFullScreenContentClosed += OnRewardAdClosed;
+
+                    onLoaded(ad, error);
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
         }
 
         public void ShowRewardAd()
