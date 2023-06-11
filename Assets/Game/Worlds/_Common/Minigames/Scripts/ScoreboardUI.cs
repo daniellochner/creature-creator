@@ -8,30 +8,25 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private ScoreUI scorePrefab;
 
-        private RectTransform rectTransform;
-
         private Dictionary<string, ScoreUI> scores = new Dictionary<string, ScoreUI>();
         #endregion
 
         #region Properties
+        private RectTransform RectTransform => transform as RectTransform;
+
         public float OffsetX
         {
-            get => rectTransform.offsetMin.x;
-            set => rectTransform.offsetMin = new Vector2(value, 0);
+            get => RectTransform.offsetMin.x;
+            set => RectTransform.offsetMin = new Vector2(value, 0);
         }
         public float OffsetY
         {
-            get => rectTransform.offsetMax.y;
-            set => rectTransform.offsetMax = new Vector2(0, value);
+            get => RectTransform.offsetMax.y;
+            set => RectTransform.offsetMax = new Vector2(0, value);
         }
         #endregion
 
         #region Methods
-        private void Awake()
-        {
-            rectTransform = transform as RectTransform;
-        }
-
         public void Setup(Minigame minigame)
         {
             Clear();
@@ -39,7 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Add(string id, string displayName, int score)
         {
-            ScoreUI scoreUI = Instantiate(scorePrefab, rectTransform);
+            ScoreUI scoreUI = Instantiate(scorePrefab, RectTransform);
             scoreUI.Setup(id, score, displayName);
 
             scores.Add(id, scoreUI);
@@ -70,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Clear()
         {
             scores.Clear();
-            rectTransform.DestroyChildren();
+            RectTransform.DestroyChildren();
         }
         #endregion
     }

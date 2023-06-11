@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Minigame CurrentMinigame { get; set; }
         #endregion
 
-        #region Fields
+        #region Methods
         public void SetTitle(string title)
         {
             titleText.text = title;
