@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private TimeData initializedTimeData;
         private float initializedStartupTime;
 
-        private const string API_URL = "http://worldtimeapi.org/api/ip";
+        private const string API_URL = "https://worldtimeapi.org/api/ip";
         #endregion
 
         #region Properties
