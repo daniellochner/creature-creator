@@ -75,8 +75,9 @@ GameObject:
   - component: {fileID: 3002746977395476857}
   - component: {fileID: 3002746977395476853}
   - component: {fileID: -7791624001616801461}
-  - component: {fileID: 5915628988158719982}
   - component: {fileID: -223738154515605932}
+  - component: {fileID: -4198753976662255897}
+  - component: {fileID: 5915628988158719982}
   m_Layer: 0
   m_Name: Creature (Skeleton)
   m_TagString: Untagged
@@ -181,19 +182,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &5915628988158719982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3002746977395476858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75fd43019974c544e95f3319cba7fe03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  optimize: 0
 --- !u!114 &-223738154515605932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,9 +195,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortAxis: {x: 0, y: 0, z: 0}
+  version: 100
   objsToMesh: []
   useObjsToMeshFromTexBaker: 0
-  clearBuffersAfterBake: 1
+  _clearBuffersAfterBake: 1
   bakeAssetsInPlaceFolderPath: 
   resultPrefab: {fileID: 0}
   resultPrefabLeaveInstanceInSceneAfterBake: 0
@@ -238,7 +227,7 @@ MonoBehaviour:
     _doBlendShapes: 1
     _pivotLocationType: 1
     _pivotLocation: {x: 0, y: 0, z: 0}
-    _clearBuffersAfterBake: 0
+    _clearBuffersAfterBake: 1
     _optimizeAfterBake: 1
     _uv2UnwrappingParamsHardAngle: 60
     _uv2UnwrappingParamsPackMargin: 0.005
@@ -268,6 +257,38 @@ MonoBehaviour:
     submeshTris: []
     _meshBirth: 0
     _mesh: {fileID: 0}
+--- !u!114 &-4198753976662255897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3002746977395476858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a8157bd5113c4bb62fac465525d70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorTintPropertyName: _Color
+  sourceMaterials: []
+  materialBakeResult: {fileID: 0}
+  atlasMaterial: {fileID: 0}
+  atlasTexture: {fileID: 0}
+  targetMeshBaker: {fileID: -223738154515605932}
+--- !u!114 &5915628988158719982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3002746977395476858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75fd43019974c544e95f3319cba7fe03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAnimated: 0
+  optimize: 0
 --- !u!1 &3002746977433303920
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         private CreatureConstructor Constructor { get; set; }
         private MB3_MeshBaker Baker { get; set; }
+        private MB_HackTextureAtlasExample Hack { get; set; }
 
         public SkinnedMeshRenderer OptimizedCreature { get; private set; }
 
@@ -27,20 +28,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Constructor = GetComponent<CreatureConstructor>();
             Baker = GetComponent<MB3_MeshBaker>();
+            Hack = GetComponent<MB_HackTextureAtlasExample>();
         }
         private void LateUpdate()
         {
-            if (isAnimated && IsOptimized)
+            if (IsOptimized && isAnimated)
             {
-                int j = Constructor.Bones.Count;
-                foreach (BodyPartConstructor bodyPart in bodyPartsToAdd)
-                {
-                    if (bodyPart.SkinnedMeshRenderer == null) continue;
-                    for (int i = 0; i < bodyPart.SkinnedMeshRenderer.sharedMesh.blendShapeCount; i++, j++)
-                    {
-                        OptimizedCreature.SetBlendShapeWeight(j, bodyPart.SkinnedMeshRenderer.GetBlendShapeWeight(i));
-                    }
-                }
+                UpdateBlendShapes();
             }
         }
 
@@ -53,38 +47,49 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (!IsOptimized)
             {
-                Baker.ClearMesh();
-
+                // Material
+                List<Material> matsToCombine = new List<Material>();
                 foreach (BodyPartConstructor bpc in Constructor.BodyParts)
                 {
                     if (bpc.IsVisible)
                     {
-                        AddBodyPart(bpc);
+                        AddBodyPart(bpc, matsToCombine);
                     }
                     if (bpc.Flipped.IsVisible)
                     {
-                        AddBodyPart(bpc.Flipped);
+                        AddBodyPart(bpc.Flipped, matsToCombine);
                     }
                 }
+                Hack.sourceMaterials = matsToCombine.ToArray();
+                Hack.GenerateMaterialBakeResult();
+
+
+                // Mesh
                 FlipLimbs();
 
-                GameObject[] objsToCombine = new GameObject[bodyPartsToAdd.Count + 1];
-                objsToCombine[0] = Constructor.SkinnedMeshRenderer.gameObject;
+                GameObject[] objsToCombine = new GameObject[bodyPartsToAdd.Count];
                 for (int i = 0; i < bodyPartsToAdd.Count; i++)
                 {
-                    objsToCombine[i + 1] = bodyPartsToAdd[i].Renderer.gameObject;
+                    objsToCombine[i] = bodyPartsToAdd[i].Renderer.gameObject;
                 }
-                Baker.AddDeleteGameObjects(objsToCombine, null, true);
 
-                Baker.Apply();
+                Baker.textureBakeResults = Hack.materialBakeResult;
+                Baker.ClearMesh();
+
+                if (Baker.AddDeleteGameObjects(objsToCombine, null, true))
+                {
+                    Baker.Apply();
+                }
+                GameObject result = Baker.meshCombiner.resultSceneObject;
+                result.name = "Body Parts (Optimized)";
+                OptimizedCreature = result.GetComponentInChildren<SkinnedMeshRenderer>();
+
                 FlipLimbs();
 
-                OptimizedCreature = Baker.meshCombiner.resultSceneObject.GetComponentInChildren<SkinnedMeshRenderer>();
 
-                for (int i = 0; i < Constructor.Bones.Count; i++)
-                {
-                    OptimizedCreature.SetBlendShapeWeight(i, Constructor.SkinnedMeshRenderer.GetBlendShapeWeight(i));
-                }
+                // Blend Shapes
+                UpdateBlendShapes();
+
 
                 IsOptimized = true;
             }
@@ -106,7 +111,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private void AddBodyPart(BodyPartConstructor bpc)
+        private void AddBodyPart(BodyPartConstructor bpc, List<Material> matsToCombine)
         {
             if (bpc.SkinnedMeshRenderer != null)
             {
@@ -119,6 +124,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 mats[i].name += $"_{bpc.name}";
             }
             bpc.Renderer.sharedMaterials = mats;
+            matsToCombine.AddRange(mats);
 
             bodyPartsToAdd.Add(bpc);
         }
@@ -129,6 +135,19 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (bodyPart is LimbConstructor && bodyPart.IsFlipped)
                 {
                     bodyPart.Model.localScale = new Vector3(-bodyPart.Model.localScale.x, bodyPart.Model.localScale.y, bodyPart.Model.localScale.z);
+                }
+            }
+        }
+
+        private void UpdateBlendShapes()
+        {
+            int j = 0;
+            foreach (BodyPartConstructor bodyPart in bodyPartsToAdd)
+            {
+                if (bodyPart.SkinnedMeshRenderer == null) continue;
+                for (int i = 0; i < bodyPart.SkinnedMeshRenderer.sharedMesh.blendShapeCount; i++, j++)
+                {
+                    OptimizedCreature.SetBlendShapeWeight(j, bodyPart.SkinnedMeshRenderer.GetBlendShapeWeight(i));
                 }
             }
         }

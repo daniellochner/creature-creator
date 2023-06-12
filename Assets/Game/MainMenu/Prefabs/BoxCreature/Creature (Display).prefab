@@ -77,8 +77,9 @@ GameObject:
   - component: {fileID: 3002746977395476853}
   - component: {fileID: -8281928493183005937}
   - component: {fileID: 5280495404595548643}
-  - component: {fileID: -6783532466876764130}
   - component: {fileID: 951227993407253879}
+  - component: {fileID: 5224359030948400187}
+  - component: {fileID: -6783532466876764130}
   m_Layer: 0
   m_Name: Creature (Display)
   m_TagString: Untagged
@@ -208,21 +209,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d48cc88e887d7a4fbfe3716af3a01f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6783532466876764130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3002746977395476858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75fd43019974c544e95f3319cba7fe03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isAnimated: 0
-  optimizedMaterial: {fileID: 0}
-  optimize: 0
+  minMaxForce:
+    min: 0
+    max: 0
 --- !u!114 &951227993407253879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,9 +225,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sortAxis: {x: 0, y: 0, z: 0}
+  version: 100
   objsToMesh: []
   useObjsToMeshFromTexBaker: 0
-  clearBuffersAfterBake: 1
+  _clearBuffersAfterBake: 1
   bakeAssetsInPlaceFolderPath: 
   resultPrefab: {fileID: 0}
   resultPrefabLeaveInstanceInSceneAfterBake: 0
@@ -267,7 +257,7 @@ MonoBehaviour:
     _doBlendShapes: 1
     _pivotLocationType: 1
     _pivotLocation: {x: 0, y: 0, z: 0}
-    _clearBuffersAfterBake: 0
+    _clearBuffersAfterBake: 1
     _optimizeAfterBake: 1
     _uv2UnwrappingParamsHardAngle: 60
     _uv2UnwrappingParamsPackMargin: 0.005
@@ -297,6 +287,38 @@ MonoBehaviour:
     submeshTris: []
     _meshBirth: 0
     _mesh: {fileID: 0}
+--- !u!114 &5224359030948400187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3002746977395476858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a8157bd5113c4bb62fac465525d70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorTintPropertyName: _Color
+  sourceMaterials: []
+  materialBakeResult: {fileID: 0}
+  atlasMaterial: {fileID: 0}
+  atlasTexture: {fileID: 0}
+  targetMeshBaker: {fileID: 951227993407253879}
+--- !u!114 &-6783532466876764130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3002746977395476858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75fd43019974c544e95f3319cba7fe03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAnimated: 0
+  optimize: 0
 --- !u!1 &3002746977433303920
 GameObject:
   m_ObjectHideFlags: 0
