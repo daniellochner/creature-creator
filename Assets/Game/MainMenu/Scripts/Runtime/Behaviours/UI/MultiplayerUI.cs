@@ -339,7 +339,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
-                bool isBeta = Application.version.EndsWith("beta") || Application.version == "1.1.29"; // TODO: REMOVE THIS!!!
+                bool isBeta = Application.version.EndsWith("beta");
 
                 // Beta
                 if (isBeta)
