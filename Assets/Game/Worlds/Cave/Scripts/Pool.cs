@@ -9,16 +9,17 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Ability swimAbility;
-
+        [Space]
         [SerializeField] private PWater water;
         [SerializeField] private PWaterEmissionSetter waterEmission;
-
-        [SerializeField] private GameObject toxic;
+        [Space]
+        [SerializeField] private GameObject fumes;
         [SerializeField] private GameObject healPrefab;
         [SerializeField] private GameObject splashPrefab;
-
-        [SerializeField] private Color healColour;
-        [SerializeField] private Color acidColour;
+        [Space]
+        [SerializeField] private bool isHealing;
+        [SerializeField] private Color defaultColour;
+        [SerializeField] private Color toxicColour;
         [SerializeField] private float damageCooldown;
         [SerializeField] private float damageAmount;
         [SerializeField] private float acidifyTime;
@@ -33,44 +34,48 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            SetColour(IsAcidic.Value ? acidColour : healColour);
-            toxic.SetActive(IsAcidic.Value);
+            SetColour(IsAcidic.Value ? toxicColour : defaultColour);
+            fumes.SetActive(IsAcidic.Value);
         }
         public override void OnDestroy()
         {
-            SetColour(healColour);
+            SetColour(defaultColour);
             base.OnDestroy();
         }
 
         public void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player/Local"))
+            if (other.CompareTag("Player/Local") && isHealing && !IsAcidic.Value)
             {
                 CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
                 if (player.Abilities.Abilities.Contains(swimAbility))
                 {
-                    if (!IsAcidic.Value)
-                    {
-                        Instantiate(healPrefab, player.Constructor.Body, false);
-                        player.Health.HealthPercentage = 1f;
-                    }
+                    Instantiate(healPrefab, player.Constructor.Body, false);
+                    player.Health.HealthPercentage = 1f;
                 }
             }
             else
             if (other.CompareTag("Toxic"))
             {
-                Acidify();
+                if (IsServer)
+                {
+                    Acidify();
+                }
                 Instantiate(splashPrefab, other.transform.position, Quaternion.identity);
             }
         }
         public void OnTriggerStay(Collider other)
         {
-            if (IsAcidic.Value && other.CompareTag("Player/Local"))
+            if (IsServer)
             {
-                TimerUtility.OnTimer(ref damageTimeLeft, damageCooldown, Time.fixedDeltaTime, delegate
+                CreatureBase creature = other.GetComponent<CreatureBase>();
+                if (creature != null && IsAcidic.Value)
                 {
-                    other.GetComponent<CreaturePlayerLocal>().Health.TakeDamage(damageAmount, reason: DamageReason.Acid);
-                });
+                    TimerUtility.OnTimer(ref damageTimeLeft, damageCooldown, Time.fixedDeltaTime, delegate
+                    {
+                        creature.Health.TakeDamage(damageAmount, reason: DamageReason.Acid);
+                    });
+                }
             }
         }
 
@@ -85,11 +90,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void AcidifyClientRpc()
         {
-            toxic.SetActive(true);
+            fumes.SetActive(true);
 
             this.InvokeOverTime(delegate (float p)
             {
-                SetColour(Color.Lerp(healColour, acidColour, p));
+                SetColour(Color.Lerp(defaultColour, toxicColour, p));
             },
             acidifyTime);
         }
@@ -97,7 +102,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetColour(Color colour)
         {
             water.Profile.Color = water.Profile.DepthColor = colour;
-            waterEmission.emission = colour;
+            if (waterEmission != null)
+            {
+                waterEmission.emission = colour;
+            }
         }
         #endregion
     }
