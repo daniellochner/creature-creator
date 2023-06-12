@@ -27,6 +27,7 @@ namespace DanielLochner.Assets
         [SerializeField] private bool handleClipping;
         [SerializeField] private bool snapClipping;
         [SerializeField] private LayerMask clippingMask;
+        [SerializeField] private float clippingOffset;
 
         private float targetZoom = 1f;
         private Vector3 targetRotation;
@@ -224,7 +225,9 @@ namespace DanielLochner.Assets
 
                 if (Physics.Raycast(origin, dir, out RaycastHit hitInfo, maxDistance, clippingMask))
                 {
-                    float d = Mathf.Clamp(Vector3.Distance(hitInfo.point, transform.position), offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y);
+                    Vector3 point = hitInfo.point - dir * clippingOffset;
+
+                    float d = Mathf.Clamp(Vector3.Distance(point, transform.position), offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y);
 
                     float p = Mathf.InverseLerp(offsetDistance * minMaxZoom.x, offsetDistance * minMaxZoom.y, d);
                     float t = Mathf.Lerp(minMaxZoom.x, minMaxZoom.y, p);
