@@ -157,7 +157,7 @@ MonoBehaviour:
     m_Bits: 8192
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 0
-  antialiasingMode: 3
+  antialiasingMode: 1
   temporalAntialiasing:
     jitterSpread: 0.75
     sharpness: 0.25
@@ -286,10 +286,11 @@ MonoBehaviour:
   zoomSmoothing: 6.1
   minMaxZoom: {x: 0, y: 1.5}
   handleClipping: 1
-  snapClipping: 0
+  snapClipping: 1
   clippingMask:
     serializedVersion: 2
     m_Bits: 2048
+  clippingOffset: 0.5
 --- !u!1 &4041236050074530310
 GameObject:
   m_ObjectHideFlags: 0
