@@ -383,9 +383,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 InGameMusicType type = (InGameMusicType)option;
                 SettingsManager.Instance.SetInGameMusic(type);
 
+                string musicId = SettingsManager.Data.InGameMusicId;
                 if (inGame)
                 {
-                    MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
+                    MusicManager.Instance.FadeTo(musicId);
                 }
                 else
                 {
@@ -393,7 +394,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         StopCoroutine(previewMusicCoroutine);
                     }
-                    previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(SettingsManager.Data.InGameMusicName));
+                    previewMusicCoroutine = StartCoroutine(PreviewMusicRoutine(musicId));
                 }
             });
             inGameMusicOS.Select(SettingsManager.Data.InGameMusic, inGame && !WorldManager.Instance.IsUsingTeleport);
