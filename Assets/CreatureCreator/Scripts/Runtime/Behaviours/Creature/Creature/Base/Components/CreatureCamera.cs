@@ -59,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Follower.SetFollow(transform, true);
 
-            Health.OnTakeDamage += delegate (float damage, Vector3 point, DamageReason reason)
+            Health.OnTakeDamage += delegate (float damage, DamageReason reason, string inflicter)
             {
                 StressReceiver.InduceStress(Mathf.Lerp(minMaxStress.min, minMaxStress.max, Mathf.InverseLerp(minMaxDamage.min, minMaxDamage.max, damage)));
                 MMVibrationManager.Haptic(HapticTypes.LightImpact);

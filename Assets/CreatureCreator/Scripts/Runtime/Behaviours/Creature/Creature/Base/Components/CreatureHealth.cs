@@ -41,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void Start()
         {
             base.Start();
-            OnTakeDamage += delegate (float damage, Vector3 force, DamageReason reason)
+            OnTakeDamage += delegate (float damage, DamageReason reason, string inflicter)
             {
                 if (IsOwner)
                 {

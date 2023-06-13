@@ -50,9 +50,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public override void OnDie(DamageReason reason)
+        public override void OnDie(DamageReason reason, string inflicter)
         {
-            base.OnDie(reason);
+            base.OnDie(reason, inflicter);
             Selectable.SetSelected(false, true);
         }
 

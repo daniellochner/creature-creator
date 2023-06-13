@@ -36,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Health.OnDie += Kill;
         }
 
-        public void Kill(DamageReason reason)
+        public void Kill(DamageReason reason, string inflicter)
         {
             bool dismember = reason == DamageReason.Acid;
 
