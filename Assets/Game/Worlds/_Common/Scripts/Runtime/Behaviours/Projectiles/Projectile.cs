@@ -15,6 +15,9 @@ namespace DanielLochner.Assets.CreatureCreator
         private Rigidbody rb;
         #endregion
 
+        #region Properties
+        #endregion
+
         #region Methods
         private void Awake()
         {
@@ -49,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     if (creature != null && !((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
                     {
                         float damage = minMaxDamage.Random;
-                        creature.Health.TakeDamage(damage);
+                        creature.Health.TakeDamage(damage, DamageReason.ProjectileAttack, OwnerClientId.ToString());
 
                         if (creature.Health.Health - damage <= 0)
                         {

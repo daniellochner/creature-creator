@@ -24,7 +24,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public bool IsMultiplayer => WorldManager.Instance.World is WorldMP;
         public bool IsSetup { get; set; }
         #endregion
 
@@ -65,7 +64,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             }
 
-            if (IsMultiplayer)
+            if (WorldManager.Instance.IsMultiplayer)
             {
                 SetupMP();
             }
@@ -175,7 +174,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Shutdown()
         {
-            if (IsMultiplayer)
+            if (WorldManager.Instance.IsMultiplayer)
             {
                 ShutdownMP();
             }

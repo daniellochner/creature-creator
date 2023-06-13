@@ -107,7 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (Hunger <= 0)
                 {
-                    Health.TakeDamage(healthTickDamage);
+                    Health.TakeDamage(healthTickDamage, DamageReason.Hunger);
                     yield return new WaitForSeconds(1f / healthTickRate);
                 }
                 else

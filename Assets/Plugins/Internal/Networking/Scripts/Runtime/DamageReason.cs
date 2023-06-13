@@ -7,6 +7,16 @@ namespace DanielLochner.Assets
     public enum DamageReason
     {
         Misc,
-        Acid
+        Acid,
+        Hunger,
+        Suicide,
+        Drowning,
+        SpinAttack,
+        Fire,
+        MinigameZone,
+        ChargeAttack,
+        BiteAttack,
+        ProjectileAttack,
+        Bees
     }
 }

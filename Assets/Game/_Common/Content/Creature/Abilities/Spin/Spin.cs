@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                     if (!ignorePVP)
                     {
                         float damage = spinDamage.Random;
-                        creature.Health.TakeDamage(damage);
+                        creature.Health.TakeDamage(damage, DamageReason.SpinAttack, Player.Instance.OwnerClientId.ToString());
 
 #if USE_STATS
                         if (creature.Health.Health - damage <= 0)

@@ -18,11 +18,13 @@ namespace DanielLochner.Assets
         {
             if (IsServer)
             {
-                Health.OnDie += delegate
-                {
-                    SendDeathMsg(OwnerClientId);
-                };
+                Health.OnDie += OnDie;
             }
+        }
+
+        private void OnDie(DamageReason reason, string inflicter)
+        {
+            SendDeathMsg(OwnerClientId);
         }
 
         private void SendDeathMsg(ulong clientId)

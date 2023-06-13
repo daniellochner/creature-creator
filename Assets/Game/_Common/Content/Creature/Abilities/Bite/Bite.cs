@@ -43,7 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                     if (!ignorePVP)
                     {
                         float damage = biteDamage.Random;
-                        creature.Health.TakeDamage(damage);
+                        creature.Health.TakeDamage(damage, DamageReason.BiteAttack, Player.Instance.OwnerClientId.ToString());
 
 #if USE_STATS
                         if (creature.Health.Health - damage <= 0)

@@ -6,6 +6,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class TickDamage : NetworkBehaviour
     {
         #region Fields
+        [SerializeField] private DamageReason damageReason;
         [SerializeField] private MinMax damage;
         [SerializeField] private float cooldown;
         private float timeLeft;
@@ -21,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     TimerUtility.OnTimer(ref timeLeft, cooldown, Time.deltaTime, delegate
                     {
-                        creature.Health.TakeDamage(damage.Random);
+                        creature.Health.TakeDamage(damage.Random, damageReason);
                     });
                 }
             }

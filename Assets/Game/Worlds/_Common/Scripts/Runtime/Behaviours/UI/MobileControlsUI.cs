@@ -32,13 +32,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 PauseMenu.Instance.Open();
             });
 
-            networkButton.gameObject.SetActive(GameSetup.Instance.IsMultiplayer);
+            networkButton.gameObject.SetActive(WorldManager.Instance.IsMultiplayer);
             networkButton.onClick.AddListener(delegate
             {
                 NetworkPlayersMenu.Instance.Toggle();
             });
 
-            talkButton.gameObject.SetActive(GameSetup.Instance.IsMultiplayer);
+            talkButton.gameObject.SetActive(WorldManager.Instance.IsMultiplayer);
             talkButton.onClick.AddListener(delegate
             {
                 Player.Instance.Messenger.Open();

@@ -51,7 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
             CreaturePlayerLocal player = collision.gameObject.GetComponent<CreaturePlayerLocal>();
             if (player != null)
             {
-                player.Health.TakeDamage(player.Health.Health);
+                player.Health.TakeDamage(player.Health.Health, DamageReason.MinigameZone);
                 SpawnElectricShockClientRpc(collision.GetContact(0).point);
             }
         }

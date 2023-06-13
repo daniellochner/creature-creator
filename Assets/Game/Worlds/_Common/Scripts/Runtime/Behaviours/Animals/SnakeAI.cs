@@ -118,7 +118,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
                         if (creature != null && creature != SnakeAI.Creature)
                         {
-                            creature.Health.TakeDamage(strikeDamage.Random);
+                            creature.Health.TakeDamage(strikeDamage.Random, DamageReason.BiteAttack, SnakeAI.Creature.Constructor.Data.Name);
                             hasDealtDamage = true;
                         }
                     }

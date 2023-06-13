@@ -23,7 +23,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InputUtility.GetKeyDown(KeybindingsManager.Data.Respawn) && CanRespawn)
             {
-                Health.TakeDamage(Health.Health);
+                Health.TakeDamage(Health.Health, DamageReason.Suicide);
             }
         }
         #endregion

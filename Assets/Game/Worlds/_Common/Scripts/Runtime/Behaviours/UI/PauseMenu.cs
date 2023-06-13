@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ConfirmationDialog.Confirm(LocalizationUtility.Localize("leave_title"), LocalizationUtility.Localize("leave_message"), onYes: delegate
             {
-                if (GameSetup.Instance.IsMultiplayer)
+                if (WorldManager.Instance.IsMultiplayer)
                 {
                     NetworkConnectionManager.Instance.Leave();
                 }

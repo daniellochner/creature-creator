@@ -7,7 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         private IEnumerator Start()
         {
-            if (GameSetup.Instance.IsMultiplayer)
+            if (WorldManager.Instance.IsMultiplayer)
             {
                 yield return new WaitUntil(() => GameSetup.Instance && GameSetup.Instance.IsSetup && NetworkPlayersMenu.Instance && NetworkPlayersMenu.Instance.NumPlayers > 1);
 #if USE_STATS

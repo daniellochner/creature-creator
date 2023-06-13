@@ -65,7 +65,7 @@ namespace DanielLochner.Assets
             OnHealthChanged?.Invoke(Health);
         }
 
-        public void TakeDamage(float damage, DamageReason reason = DamageReason.Misc, string inflicter = "")
+        public void TakeDamage(float damage, DamageReason reason, string inflicter = null)
         {
             TakeDamageServerRpc(damage, reason, inflicter);
         }
@@ -108,7 +108,7 @@ namespace DanielLochner.Assets
         [ContextMenu("Take Random Damage")]
         private void TakeRandomDamage()
         {
-            TakeDamage(UnityEngine.Random.Range(0f, MaxHealth));
+            TakeDamage(UnityEngine.Random.Range(0f, MaxHealth), DamageReason.Misc);
         }
         #endregion
     }

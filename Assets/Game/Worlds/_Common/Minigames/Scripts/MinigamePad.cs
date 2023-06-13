@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
-            if (GameSetup.Instance.IsMultiplayer)
+            if (WorldManager.Instance.IsMultiplayer)
             {
                 minigameLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
 

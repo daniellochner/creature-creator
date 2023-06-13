@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnHide { get; set; }
 
         public bool IsHidden => isHidden.Value;
-        private bool RateLimit => rateLimit && GameSetup.Instance.IsMultiplayer;
+        private bool RateLimit => rateLimit && WorldManager.Instance.IsMultiplayer;
         #endregion
 
         #region Methods
