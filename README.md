@@ -1,6 +1,6 @@
 ![Creature Creator Logo](./Logo.png)
 
-<p align="center"><b><a href="[https://www.youtube.com/watch?v=FgXHPeQhEXo](https://apps.apple.com/us/app/creature-creator/id1564115819)">Apple</a> | <a href="[https://bit.ly/creature-creator-demo](https://store.steampowered.com/app/1990050/Creature_Creator/)">Steam</a> | <a href="[https://store.steampowered.com/app/1990050/Creature_Creator](https://play.google.com/store/apps/details?id=com.daniellochner.creature_creator)">Google Play</a></b></p>
+<p align="center"><b><a href="https://apps.apple.com/us/app/creature-creator/id1564115819">Apple</a> | <a href="https://store.steampowered.com/app/1990050/Creature_Creator/">Steam</a> | <a href="https://play.google.com/store/apps/details?id=com.daniellochner.creature_creator">Google Play</a></b></p>
 
 <p align="center">Create your own creatures to explore online worlds with friends and collect new parts to upgrade your stats and abilities! Complete quests, battle enemies, challenge friends to minigames, or just have fun roleplaying — the possibilities are endless when your imagination is the limit!</p>
 
