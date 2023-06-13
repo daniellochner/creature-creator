@@ -7,7 +7,7 @@ namespace DanielLochner.Assets
     public abstract class NPCSpawner : NetworkBehaviour
     {
         [SerializeField] private NetworkObject npcPrefab;
-        [SerializeField] public bool spawnOnStart = true;
+        [SerializeField] private bool ignoreFromSpawners;
 
         public static List<NPCSpawner> Spawners { get; set; } = new List<NPCSpawner>();
 
@@ -15,11 +15,17 @@ namespace DanielLochner.Assets
 
         private void OnEnable()
         {
-            Spawners.Add(this);
+            if (!ignoreFromSpawners)
+            {
+                Spawners.Add(this);
+            }
         }
         private void OnDisable()
         {
-            Spawners.Remove(this);
+            if (!ignoreFromSpawners)
+            {
+                Spawners.Remove(this);
+            }
         }
 
         public void Spawn()

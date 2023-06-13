@@ -137,11 +137,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     foreach (NPCSpawner npc in NPCSpawner.Spawners)
                     {
-                        if (npc.spawnOnStart)
-                        {
-                            npc.Spawn();
-                            npc.SpawnedNPC.GetComponent<AnimalAI>().PVE = world.EnablePVE;
-                        }
+                        npc.Spawn();
+                        npc.SpawnedNPC.GetComponent<AnimalAI>().PVE = world.EnablePVE;
                     }
                 }
             }
@@ -159,11 +156,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 foreach (NPCSpawner npc in NPCSpawner.Spawners)
                 {
-                    if (npc.spawnOnStart)
-                    {
-                        npc.Spawn();
-                        npc.SpawnedNPC.GetComponent<AnimalAI>().PVE = world.EnablePVE;
-                    }
+                    npc.Spawn();
+                    npc.SpawnedNPC.GetComponent<AnimalAI>().PVE = world.EnablePVE;
                 }
             }
 
