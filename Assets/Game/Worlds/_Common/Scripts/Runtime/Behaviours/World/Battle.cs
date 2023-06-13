@@ -157,7 +157,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (col.CompareTag("Player/Local"))
             {
                 info.SetActive(false);
-                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
+                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicId);
             }
         }
         private void OnRoundChanged(int oldRound, int newRound)

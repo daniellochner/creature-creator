@@ -44,7 +44,7 @@ namespace DanielLochner.Assets
         {
             if (startSound != "")
             {
-                FadeTo(startSound);
+                FadeTo(startSound, 0f, 1f);
             }
         }
         private void Update()

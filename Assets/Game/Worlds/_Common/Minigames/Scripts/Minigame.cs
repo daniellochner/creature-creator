@@ -593,7 +593,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 NotificationsManager.Instance.IsHidden = false;
 
-                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicName);
+                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicId);
             }
 
             zone.gameObject.SetActive(false);
