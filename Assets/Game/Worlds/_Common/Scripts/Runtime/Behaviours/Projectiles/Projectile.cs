@@ -49,7 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (Collider collider in colliders)
                 {
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null && !((creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
+                    if (creature != null && !((creature is CreaturePlayerRemote) && (creature.OwnerClientId != OwnerClientId) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
                     {
                         float damage = minMaxDamage.Random;
                         creature.Health.TakeDamage(damage, DamageReason.ProjectileAttack, OwnerClientId.ToString());
