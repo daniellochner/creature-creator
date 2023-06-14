@@ -1,6 +1,6 @@
 ![Creature Creator Logo](./Logo.png)
 
-<p align="center"><b><a href="[https://www.youtube.com/watch?v=FgXHPeQhEXo](https://apps.apple.com/us/app/creature-creator/id1564115819)">Apple</a> | <a href="[https://bit.ly/creature-creator-demo](https://store.steampowered.com/app/1990050/Creature_Creator/)">Steam</a> | <a href="[https://store.steampowered.com/app/1990050/Creature_Creator](https://play.google.com/store/apps/details?id=com.daniellochner.creature_creator)">Google Play</a></b></p>
+<p align="center"><b><a href="https://apps.apple.com/us/app/creature-creator/id1564115819">Apple</a> | <a href="https://store.steampowered.com/app/1990050/Creature_Creator/">Steam</a> | <a href="https://play.google.com/store/apps/details?id=com.daniellochner.creature_creator">Google Play</a></b></p>
 
 <p align="center">Create your own creatures to explore online worlds with friends and collect new parts to upgrade your stats and abilities! Complete quests, battle enemies, challenge friends to minigames, or just have fun roleplaying — the possibilities are endless when your imagination is the limit!</p>
 
@@ -24,7 +24,7 @@ Join the community Discord server and follow me on YouTube and Twitter to stay u
 ## License
 ![GitHub](https://img.shields.io/github/license/daniellochner/creature-creator-game?logo=github&style=flat)
 
-Creature Creator and related products by Daniel Lochner have been open-sourced under the [GNU General Public License v3.0](./LICENSE.md), however, contributions made by members of the community are usable at the discretion of their author(s). One additional constraint when using this work is that the developer(s) must ensure a visible link to the original game (i.e., https://creaturecreator.daniellochner.com) is included within the game itself, prominently displayed during the main flow of gameplay. This could mean showcasing it on the main menu screen itself, rather than being buried within sub-menus or credits Moreover, this link should also be provided on any associated websites and social media related to the work.
+Creature Creator and related products by Daniel Lochner have been open-sourced under the [GNU General Public License v3.0](./LICENSE.md), however, contributions made by members of the community are usable at the discretion of their author(s). One additional constraint when using this work is that the developer(s) must ensure a visible link to the original game (i.e., https://creaturecreator.daniellochner.com) is included within the game itself, prominently displayed during the main flow of gameplay. This could mean showcasing it on the main menu screen itself, rather than being buried within sub-menus or credits. Moreover, this link should also be provided on any associated websites and social media related to the work.
 
 > Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
 
