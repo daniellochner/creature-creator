@@ -30,8 +30,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public TrackRegion Region => region;
 
-        public List<Collider> Players => Region.tracked;
-
         public bool InBattle => round.Value >= 0 && round.Value < rounds.childCount;
         #endregion
 
@@ -101,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void StartRoundClientRpc()
         {
-            info.SetActive(Players.Contains(Player.Instance.Collider.Hitbox));
+            info.SetActive(region.tracked.Contains(Player.Instance.Collider.Hitbox));
             bellAS.Play();
         }
         [ClientRpc]
@@ -126,7 +124,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 AnimalAI animalAI = spawner.SpawnedNPC.GetComponent<AnimalAI>();
                 animalAI.PVE = true;
-                animalAI.Battle = this;
+                animalAI.Region = region;
 
                 spawned.Add(spawner.SpawnedNPC.GetComponent<AnimalLocal>());
             }

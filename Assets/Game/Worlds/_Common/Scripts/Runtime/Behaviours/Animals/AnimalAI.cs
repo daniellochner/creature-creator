@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
             get;
             set;
         }
-        public Battle Battle
+        public TrackRegion Region
         {
             get;
             set;
@@ -131,9 +131,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Transform MoveToRandomPlayer()
         {
-            if (Battle.Players.Count > 0)
+            if (Region.tracked.Count > 0)
             {
-                Transform player = Battle.Players[UnityEngine.Random.Range(0, Battle.Players.Count - 1)].transform;
+                Transform player = Region.tracked[UnityEngine.Random.Range(0, Region.tracked.Count - 1)].transform;
                 MoveToPosition(player.position);
                 return player;
             }
@@ -244,7 +244,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.UpdateLogic();
 
-                if (AnimalAI.Battle == null || AnimalAI.Battle.Players.Count == 0)
+                if (AnimalAI.Region == null || AnimalAI.Region.tracked.Count == 0)
                 {
                     if (!AnimalAI.IsMovingToPosition)
                     {
@@ -261,7 +261,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         AnimalAI.Agent.SetDestination(AnimalAI.Target.position);
                     }
                     else 
-                    if (AnimalAI.Battle.Players.Count > 0)
+                    if (AnimalAI.Region.tracked.Count > 0)
                     {
                         AnimalAI.Target = AnimalAI.MoveToRandomPlayer();
                     }

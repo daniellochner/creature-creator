@@ -65,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.UpdateLogic();
 
-                if (AnimalAI.Battle == null || AnimalAI.Battle.Players.Count == 0)
+                if (AnimalAI.Region == null || AnimalAI.Region.tracked.Count == 0)
                 {
                     if (!AnimalAI.IsMovingToPosition)
                     {
@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         AnimalAI.Agent.SetDestination(AnimalAI.Target.position);
                     }
                     else
-                    if (AnimalAI.Battle.Players.Count > 0)
+                    if (AnimalAI.Region.tracked.Count > 0)
                     {
                         AnimalAI.Target = AnimalAI.MoveToRandomPlayer();
                     }
