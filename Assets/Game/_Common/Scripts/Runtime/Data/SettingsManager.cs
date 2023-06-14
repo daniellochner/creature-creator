@@ -194,19 +194,19 @@ namespace DanielLochner.Assets.CreatureCreator
             switch (type)
             {
                 case TextureQualityType.VeryLow:
-                    QualitySettings.masterTextureLimit = 4;
+                    QualitySettings.globalTextureMipmapLimit = 4;
                     break;
                 case TextureQualityType.Low:
-                    QualitySettings.masterTextureLimit = 3;
+                    QualitySettings.globalTextureMipmapLimit = 3;
                     break;
                 case TextureQualityType.Medium:
-                    QualitySettings.masterTextureLimit = 2;
+                    QualitySettings.globalTextureMipmapLimit = 2;
                     break;
                 case TextureQualityType.High:
-                    QualitySettings.masterTextureLimit = 1;
+                    QualitySettings.globalTextureMipmapLimit = 1;
                     break;
                 case TextureQualityType.VeryHigh:
-                    QualitySettings.masterTextureLimit = 0;
+                    QualitySettings.globalTextureMipmapLimit = 0;
                     break;
             }
             Data.TextureQuality = type;
