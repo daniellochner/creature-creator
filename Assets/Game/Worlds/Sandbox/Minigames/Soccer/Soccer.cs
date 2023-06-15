@@ -15,14 +15,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private TextMeshPro scoreText;
         [Space]
-        [SerializeField] private AudioClip countdownFX;
-        [SerializeField] private AudioClip whistleFX;
         [SerializeField] private int goalsToWin;
         [Space]
         [SerializeField] private float blinkTime;
         [SerializeField] private int blinkCount;
-
-        private AudioSource soccerAudioSource;
         #endregion
 
         #region Properties
@@ -31,11 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Awake()
-        {
-            base.Awake();
-            soccerAudioSource = GetComponent<AudioSource>();
-        }
         protected override void Start()
         {
             base.Start();
@@ -53,8 +44,6 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
 
             completing.onEnter += OnCompletingEnter;
-
-            StartTimeLeft.OnValueChanged += OnStartTimeLeftChanged;
         }
 
         #region Introducing
@@ -101,16 +90,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Starting
-        private void OnStartTimeLeftChanged(int oldTime, int newTime)
-        {
-            if (newTime == 3)
-            {
-                soccerAudioSource.PlayOneShot(countdownFX);
-            }
-        }
-        #endregion
-
         #region Playing
         protected override IEnumerator GameplayLogicRoutine()
         {
@@ -150,10 +129,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void CompleteSoccerClientRpc()
         {
-            if (InMinigame)
-            {
-                soccerAudioSource.PlayOneShot(whistleFX);
-            }
             StartCoroutine(WinningScoreboardRoutine());
         }
 

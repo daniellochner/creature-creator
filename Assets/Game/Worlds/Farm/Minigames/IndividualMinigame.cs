@@ -69,24 +69,25 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override List<ulong> GetWinnerClientIds()
         {
             List<ulong> winnerClientIds = new List<ulong>();
-            int maxScore = int.MinValue;
+            int targetScore = isAscendingOrder ? int.MaxValue : int.MinValue;
 
-            foreach (Score s in Scoreboard)
+            for (int i = 0; i < Scoreboard.Count; i++)
             {
-                ulong clientId = ulong.Parse(s.id.ToString());
-                int score = s.score;
-
-                if (score > maxScore)
+                Score score = Scoreboard[i];
+                if ((!isAscendingOrder && score.score >= targetScore) || (isAscendingOrder && score.score <= targetScore))
                 {
-                    winnerClientIds.Clear();
-                    winnerClientIds.Add(clientId);
+                    ulong clientId = ulong.Parse(score.id.ToString());
+                    if (score.score == targetScore)
+                    {
+                        winnerClientIds.Add(clientId);
+                    }
+                    else
+                    {
+                        winnerClientIds.Clear();
+                        winnerClientIds.Add(clientId);
 
-                    maxScore = score;
-                }
-                else
-                if (score == maxScore)
-                {
-                    winnerClientIds.Add(clientId);
+                        targetScore = score.score;
+                    }
                 }
             }
 

@@ -33,6 +33,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] protected float switchTime;
         [SerializeField] protected float teleportTime;
         [SerializeField] protected int startTime;
+        [SerializeField] private AudioClip countdownFX;
+        [SerializeField] private AudioClip whistleFX;
         [Space]
         [SerializeField] protected bool isAscendingOrder;
         [SerializeField] protected int playTime;
@@ -46,6 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected List<ulong> players = new List<ulong>();
 
         protected MinigameState waitingForPlayers, introducing, building, starting, playing, completing;
+        private AudioSource audioSource;
         #endregion
 
         #region Properties
@@ -70,6 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected virtual void Awake()
         {
             Scoreboard = new NetworkList<Score>();
+            audioSource = GetComponent<AudioSource>();
         }
         protected virtual void Start()
         {
@@ -207,6 +211,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnCinematicShow()
         {
             platform.TeleportTo(true, false);
+            SwitchToBuildModeClientRpc();
         }
         private void OnCinematicHide()
         {
@@ -254,8 +259,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Building
         private IEnumerator BuildingRoutine()
         {
-            SwitchToBuildModeClientRpc();
-
             BuildTimeLeft.Value = buildTime;
             while (BuildTimeLeft.Value > 0)
             {
@@ -381,6 +384,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
+                if (newTime == 3)
+                {
+                    audioSource.PlayOneShot(countdownFX);
+                }
+
                 if (newTime > 0)
                 {
                     Color color = (newTime <= 3) ? Color.red : Color.white;
@@ -431,6 +439,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator TimerRoutine()
         {
+            if (playTime == -1)
+            {
+                yield return new WaitUntil(() => false);
+            }
+
             PlayTimeLeft.Value = playTime;
             while (PlayTimeLeft.Value > 0)
             {
@@ -447,6 +460,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
+                if (newTime == 0)
+                {
+                    audioSource.PlayOneShot(whistleFX);
+                }
+
                 if (newTime > 0)
                 {
                     string time = FormatTime(newTime);
@@ -647,6 +665,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 this.id = id;
                 this.displayName = displayName;
+                this.score = score;
+            }
+
+            public Score(Score s, int score)
+            {
+                id = s.id;
+                displayName = s.displayName;
                 this.score = score;
             }
 

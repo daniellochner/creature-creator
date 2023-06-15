@@ -24,7 +24,7 @@ namespace DanielLochner.Assets
             }
             else
             {
-                return string.Join(", ", list, 0, list.Count - 1) + ", and " + list.LastOrDefault();
+                return string.Join(", ", list.ToArray(), 0, list.Count - 1) + " and " + list.LastOrDefault();
             }
         }
     }
