@@ -11,8 +11,7 @@ namespace DanielLochner.Assets
         {
             get
             {
-                Vector3 offset = transform.TransformDirection(Random.Range(-width, width) / 2f, 0f, Random.Range(-length, length) / 2f);
-                return transform.position + offset;
+                return transform.TransformPoint(Random.Range(-width, width) / 2f, 0f, Random.Range(-length, length) / 2f);
             }
         }
 

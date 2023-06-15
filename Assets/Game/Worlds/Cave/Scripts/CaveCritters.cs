@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CaveCritters : TotalKills
+    public class CaveCritters : TopKills
     {
 
     }

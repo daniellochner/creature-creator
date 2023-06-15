@@ -186,6 +186,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
+
+        public bool HasAbility<T>()
+        {
+            return Abilities.Find(x => x is T);
+        }
         #endregion
 
         #region Inner Classes
