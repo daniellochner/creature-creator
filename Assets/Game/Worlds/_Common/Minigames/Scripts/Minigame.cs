@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] protected string nameId;
         [Space]
         [SerializeField] protected MinigamePad pad;
+        [SerializeField] protected Battle battle;
         [SerializeField] protected int waitTime;
         [SerializeField] protected int minPlayers;
         [SerializeField] protected int maxPlayers;
@@ -86,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Scoreboard.OnListChanged += OnScoreboardChanged;
 
                 zone.gameObject.SetActive(State.Value != MinigameStateType.WaitingForPlayers);
-                pad.gameObject.SetActive(State.Value == MinigameStateType.WaitingForPlayers);
+                pad.gameObject.SetActive((State.Value == MinigameStateType.WaitingForPlayers) && (!battle || battle.IsComplete));
             }
 
             if (IsServer)
