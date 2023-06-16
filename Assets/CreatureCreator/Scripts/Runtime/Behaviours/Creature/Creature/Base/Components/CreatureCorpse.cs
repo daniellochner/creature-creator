@@ -24,6 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureHealth Health { get; private set; }
 
         public GameObject Corpse { get; private set; }
+
+        public NetworkVariable<bool> GenerateRagdoll { get; set; } = new NetworkVariable<bool>(true);
         #endregion
 
         #region Methods
@@ -38,6 +40,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Kill(DamageReason reason, string inflicter)
         {
+            if (!GenerateRagdoll.Value) return;
+
             bool dismember = reason == DamageReason.Acid;
 
             CreatureConstructor corpse = Ragdoll.Generate(Constructor.Body.position, dismember);

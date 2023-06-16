@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -68,7 +69,6 @@ namespace DanielLochner.Assets.CreatureCreator
         protected virtual AnimalLocal SpawnEnemy()
         {
             AnimalSpawner spawner = enemySpawners[Random.Range(0, enemySpawners.Length)];
-
             spawner.wanderBounds = bounds;
             spawner.Spawn();
 
@@ -76,6 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
             animalAI.PVE = true;
             animalAI.Region = region;
             animalAI.Creature.Health.OnDie += OnDie;
+            animalAI.Creature.Corpse.GenerateRagdoll.Value = false;
 
             Transform spawnPoint = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)];
             animalAI.GetComponent<ClientNetworkTransform>().Teleport(spawnPoint.position, spawnPoint.rotation, animalAI.transform.localScale);
