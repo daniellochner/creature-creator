@@ -11,7 +11,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private GameObject border;
-        [SerializeField] private GameObject boosts;
         [SerializeField] private RaceCheckpoint startCheckpoint;
         [SerializeField] private PathCreator path;
         [SerializeField] private int laps;
@@ -139,17 +138,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public void LapServerRpc(ulong clientId)
         {
             int lap = ++playerLaps[clientId];
-            SetLapClientRpc(lap, NetworkUtils.SendTo(clientId));
-
-            if (lap == laps && !boosts.activeSelf)
-            {
-                SetBoostsActiveClientRpc(true);
-            }
-            else
             if (lap > laps)
             {
                 hasAnyoneFinished = true;
             }
+
+            SetLapClientRpc(lap, NetworkUtils.SendTo(clientId));
         }
 
         [ClientRpc]
@@ -176,12 +170,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 CurrentCheckpoint = startCheckpoint;
             }
         }
-
-        [ClientRpc]
-        private void SetBoostsActiveClientRpc(bool isActive)
-        {
-            boosts.SetActive(isActive);
-        }
         #endregion
 
         #region Completing
@@ -193,7 +181,6 @@ namespace DanielLochner.Assets.CreatureCreator
             playerLaps.Clear();
 
             SetBorderActiveClientRpc(false);
-            SetBoostsActiveClientRpc(false);
             ResetCheckpointClientRpc();
         }
 
