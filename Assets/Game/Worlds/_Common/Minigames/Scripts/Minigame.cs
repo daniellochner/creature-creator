@@ -345,7 +345,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Play);
 
-                Player.Instance.Mover.FreezeMove = true;
+                Player.Instance.Mover.enabled = Player.Instance.Abilities.enabled = false;
 
                 MinigameManager.Instance.SetTitle(LocalizationUtility.Localize(objectiveId));
 
@@ -368,7 +368,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                Player.Instance.Mover.FreezeMove = false;
+                Player.Instance.Mover.enabled = Player.Instance.Abilities.enabled = true;
 
                 MinigameManager.Instance.SetTitle(null);
             }
