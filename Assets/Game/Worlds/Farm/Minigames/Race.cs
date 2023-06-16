@@ -43,6 +43,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
 
+            waitingForPlayers.onEnter += OnWaitingForPlayersEnter;
             waitingForPlayers.onExit += OnWaitingForPlayersExit;
 
             starting.onEnter += OnStartingEnter;
@@ -53,6 +54,10 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         #region Waiting For Players
+        private void OnWaitingForPlayersEnter()
+        {
+            SetBorderActiveClientRpc(false);
+        }
         private void OnWaitingForPlayersExit()
         {
             SetBorderActiveClientRpc(true);
@@ -91,13 +96,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Playing
         private void OnPlayingEnter()
         {
-            StartCheckpointClientRpc();
-
             foreach (ulong clientId in players)
             {
                 int lap = (playerLaps[clientId] = 1);
                 SetLapClientRpc(lap, NetworkUtils.SendTo(clientId));
             }
+            StartCheckpointClientRpc();
 
             StartCoroutine(RankRoutine());
         }
@@ -151,6 +155,15 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        [ClientRpc]
+        private void StartCheckpointClientRpc()
+        {
+            if (InMinigame)
+            {
+                CurrentCheckpoint = startCheckpoint;
+            }
+        }
+
         [ServerRpc(RequireOwnership = false)]
         public void LapServerRpc(ulong clientId)
         {
@@ -178,15 +191,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-
-        [ClientRpc]
-        private void StartCheckpointClientRpc()
-        {
-            if (InMinigame)
-            {
-                CurrentCheckpoint = startCheckpoint;
-            }
-        }
         #endregion
 
         #region Completing
@@ -197,7 +201,6 @@ namespace DanielLochner.Assets.CreatureCreator
             playerDistances.Clear();
             playerLaps.Clear();
 
-            SetBorderActiveClientRpc(false);
             ResetCheckpointClientRpc();
         }
 
