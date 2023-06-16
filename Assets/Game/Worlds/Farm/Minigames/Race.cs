@@ -29,9 +29,21 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        protected override void Start()
+        {
+            base.Start();
+
+            if (IsClient)
+            {
+                border.SetActive(State.Value != MinigameStateType.WaitingForPlayers);
+            }
+        }
+
         protected override void Setup()
         {
             base.Setup();
+
+            waitingForPlayers.onExit += OnWaitingForPlayersExit;
 
             starting.onEnter += OnStartingEnter;
 
@@ -40,11 +52,22 @@ namespace DanielLochner.Assets.CreatureCreator
             completing.onExit += OnCompletingExit;
         }
 
+        #region Waiting For Players
+        private void OnWaitingForPlayersExit()
+        {
+            SetBorderActiveClientRpc(true);
+        }
+
+        [ClientRpc]
+        private void SetBorderActiveClientRpc(bool isActive)
+        {
+            border.SetActive(isActive);
+        }
+        #endregion
+
         #region Starting
         private void OnStartingEnter()
         {
-            SetBorderActiveClientRpc(true);
-
             foreach (ulong clientId in players)
             {
                 playerDistances.Add(clientId, 0f);
@@ -62,12 +85,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 return base.GetSpawnPoint();
             }
-        }
-
-        [ClientRpc]
-        private void SetBorderActiveClientRpc(bool isActive)
-        {
-            border.SetActive(isActive);
         }
         #endregion
 
