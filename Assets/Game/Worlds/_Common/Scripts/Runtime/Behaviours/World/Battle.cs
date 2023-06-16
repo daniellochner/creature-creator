@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -20,6 +21,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject info;
         [SerializeField] private string musicId;
 
+        [SerializeField] private UnityEvent onComplete;
+
         private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);
         private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
@@ -31,6 +34,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public TrackRegion Region => region;
 
         public bool InBattle => round.Value >= 0 && round.Value < rounds.childCount;
+        public bool IsComplete => complete.Value;
         #endregion
 
         #region Methods
@@ -105,12 +109,16 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void WinClientRpc()
         {
-            victoryAS.Play();
-            MMVibrationManager.Haptic(HapticTypes.Success);
+            if (region.tracked.Contains(Player.Instance.Collider.Hitbox))
+            {
+                victoryAS.Play();
+                MMVibrationManager.Haptic(HapticTypes.Success);
 
 #if USE_STATS
-            StatsManager.Instance.CompletedBattles++;
+                StatsManager.Instance.CompletedBattles++;
 #endif
+            }
+            onComplete.Invoke();
 
             HideBattle();
         }
