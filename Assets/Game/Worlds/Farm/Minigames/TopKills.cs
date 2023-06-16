@@ -93,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     Score score = Scoreboard[i];
                     if (score.id == inflicter)
                     {
-                        Scoreboard[i] = new Score(score.id.ToString(), score.displayName.ToString(), score.score + 1);
+                        Scoreboard[i] = new Score(score, score.score + 1);
                         return;
                     }
                 }

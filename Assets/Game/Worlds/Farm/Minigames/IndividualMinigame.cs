@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Individual Minigame")]
         [SerializeField] private Transform[] spawnPoints;
 
+        protected Dictionary<ulong, int> playerIndices = new Dictionary<ulong, int>();
         private int myIndex;
         #endregion
 
@@ -19,6 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
 
             waitingForPlayers.onExit += OnWaitingForPlayersExit;
+            completing.onExit += OnCompletingExit;
         }
 
         #region Waiting For Players
@@ -36,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
             for (int i = 0; i < players.Count; i++)
             {
                 AssignClientRpc(i, NetworkUtils.SendTo(players[i]));
+                playerIndices[players[i]] = i;
             }
         }
         [ClientRpc]
@@ -66,6 +69,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Completing
+        private void OnCompletingExit()
+        {
+            playerIndices.Clear();
+        }
+
         protected override List<ulong> GetWinnerClientIds()
         {
             List<ulong> winnerClientIds = new List<ulong>();
