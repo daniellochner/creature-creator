@@ -8,6 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private NetworkObject[] foodCratePrefabs;
         [SerializeField] private MinMax spawnCooldown;
+        [SerializeField] private bool spawnInCreative;
 
         private NetworkObject foodCrate;
         private float spawnTimeLeft;
@@ -16,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Update()
         {
-            if (IsServer && foodCrate == null && !WorldManager.Instance.World.CreativeMode)
+            if (IsServer && foodCrate == null && (spawnInCreative || !WorldManager.Instance.World.CreativeMode))
             {
                 TimerUtility.OnTimer(ref spawnTimeLeft, spawnCooldown.Random, Time.deltaTime, delegate
                 {
@@ -24,6 +25,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     foodCrate.Spawn(true);
                 });
             }
+        }
+        public void Reset()
+        {
+            foodCrate.Despawn();
+            spawnTimeLeft = 0;
         }
         #endregion
     }
