@@ -142,7 +142,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 int rating = 0;
                 foreach (ulong ratingClientId in players)
                 {
-                    rating += playerRatings[ratedClientId][ratingClientId];
+                    int r = playerRatings[ratedClientId][ratingClientId];
+                    rating += (r == 0) ? 3 : r;
                 }
                 SetScore(ratedClientId, rating);
             }
