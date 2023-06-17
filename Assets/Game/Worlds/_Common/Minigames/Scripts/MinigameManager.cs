@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private ScoreboardUI scoreboard;
         [Space]
+        [SerializeField] private RectTransform infoRT;
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI subtitleText;
         [Space]
@@ -18,6 +19,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public ScoreboardUI Scoreboard => scoreboard;
+
+        public float InfoOffset
+        {
+            get => infoRT.offsetMax.y;
+            set => infoRT.offsetMax = new Vector2(0, value);
+        }
 
         public Minigame CurrentMinigame { get; set; }
         #endregion

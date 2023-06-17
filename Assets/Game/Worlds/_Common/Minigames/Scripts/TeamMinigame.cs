@@ -98,9 +98,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Scoreboard.Add(new Score()
                 {
-                    id = teamData.nameId,
+                    id = teamData.name,
                     score = 0,
-                    displayName = teamData.Name
+                    displayName = teamData.name
                 });
             }
         }
@@ -119,8 +119,8 @@ namespace DanielLochner.Assets.CreatureCreator
             TeamData data = teams[teamId];
             Scoreboard[teamId] = new Score()
             {
-                id = data.nameId,
-                displayName = data.Name,
+                id = data.name,
+                displayName = data.name,
                 score = score
             };
         }
@@ -144,7 +144,7 @@ namespace DanielLochner.Assets.CreatureCreator
             int winningTeam = GetWinningTeam();
             if (winningTeam != -1)
             {
-                return teams[winningTeam].Name;
+                return teams[winningTeam].name;
             }
             else
             {
@@ -190,12 +190,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [Serializable]
         public class TeamData
         {
-            public string nameId;
+            public string name;
             public Color colour;
             public TextAsset creaturePreset;
             public Transform[] spawnPoints;
-
-            public string Name => LocalizationUtility.Localize(nameId);
         }
         #endregion
     }

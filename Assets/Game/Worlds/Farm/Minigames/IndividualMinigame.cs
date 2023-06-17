@@ -68,6 +68,17 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
+        #region Playing
+        public int  GetScore(ulong clientId)
+        {
+            return Scoreboard[playerIndices[clientId]].score;
+        }
+        public void SetScore(ulong clientId, int score)
+        {
+            Scoreboard[playerIndices[clientId]] = new Score(Scoreboard[playerIndices[clientId]], score);
+        }
+        #endregion
+
         #region Completing
         private void OnCompletingExit()
         {

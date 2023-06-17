@@ -806,6 +806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameId: minigame_soccer
   pad: {fileID: 8800774305848061232}
+  battle: {fileID: 0}
   waitTime: 30
   minPlayers: 2
   maxPlayers: 12
@@ -835,7 +836,7 @@ MonoBehaviour:
   - {fileID: 1682879854576530, guid: 920d7d0b8f2a7df45ad3bd35448738c9, type: 3}
   - {fileID: 1298818325660344, guid: 0cda87f1d492ba94da98ca131ae02756, type: 3}
   teams:
-  - nameId: minigame_soccer_team-red
+  - name: Red
     colour: {r: 0.9372549, g: 0.23529412, b: 0.25490198, a: 1}
     creaturePreset: {fileID: 4900000, guid: 36e8a99a8caa9c0438c6ae28eba85941, type: 3}
     spawnPoints:
@@ -845,7 +846,7 @@ MonoBehaviour:
     - {fileID: 1593459345}
     - {fileID: 103233196}
     - {fileID: 169286322}
-  - nameId: minigame_soccer_team-blue
+  - name: Blue
     colour: {r: 0.4392157, g: 0.4392157, b: 0.972549, a: 1}
     creaturePreset: {fileID: 4900000, guid: 12399d70edf51fd4f9ee862df21f160c, type: 3}
     spawnPoints:
