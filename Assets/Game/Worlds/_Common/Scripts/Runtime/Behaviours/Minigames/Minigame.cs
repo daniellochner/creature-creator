@@ -68,7 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<int> StartTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> PlayTimeLeft { get; set; } = new NetworkVariable<int>(-1);
 
-        public NetworkVariable<bool> IsPadVisible { get; set; } = new NetworkVariable<bool>(false);
+        public NetworkVariable<bool> IsPadVisible { get; set; } = new NetworkVariable<bool>(true);
         public NetworkVariable<bool> IsZoneVisible { get; set; } = new NetworkVariable<bool>(false);
 
         public NetworkList<Score> Scoreboard { get; set; }

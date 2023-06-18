@@ -306,8 +306,11 @@ namespace DanielLochner.Assets.CreatureCreator
             });
             RDrag.OnEndDrag.AddListener(delegate
             {
-                BodyPartConstructor.SetPositionAndRotation(transform.position, transform.rotation);
-                EditorManager.Instance.TakeSnapshot(Change.NudgeBodyPart);
+                if (EditorManager.Instance.IsBuilding)
+                {
+                    BodyPartConstructor.SetPositionAndRotation(transform.position, transform.rotation);
+                    EditorManager.Instance.TakeSnapshot(Change.NudgeBodyPart);
+                }
             });
 
             Select.OnSelect.AddListener(delegate
