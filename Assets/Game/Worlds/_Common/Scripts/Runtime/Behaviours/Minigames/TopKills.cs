@@ -14,7 +14,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] protected Transform[] enemySpawnPoints;
         [SerializeField] protected MinMax minMaxEnemies;
         [SerializeField] protected TrackRegion region;
-        [SerializeField] protected Bounds bounds;
 
         private List<AnimalLocal> spawned = new List<AnimalLocal>();
         #endregion
@@ -32,7 +31,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Playing
         private void OnPlayingEnter()
         {
+            SetupPlayerCorpses(false);
             StartCoroutine(SpawnRoutine());
+        }
+        private void OnPlayingExit()
+        {
+            SetupPlayerCorpses(true);
         }
 
         private IEnumerator SpawnRoutine()
@@ -69,14 +73,13 @@ namespace DanielLochner.Assets.CreatureCreator
         protected virtual AnimalLocal SpawnEnemy()
         {
             AnimalSpawner spawner = enemySpawners[Random.Range(0, enemySpawners.Length)];
-            spawner.wanderBounds = bounds;
             spawner.Spawn();
 
             AnimalAI animalAI = spawner.SpawnedNPC.GetComponent<AnimalAI>();
             animalAI.PVE = true;
             animalAI.Region = region;
             animalAI.Creature.Health.OnDie += OnDie;
-            animalAI.Creature.Corpse.GenerateRagdoll.Value = false;
+            SetupCorpse(animalAI.Creature, false);
 
             Transform spawnPoint = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)];
             animalAI.GetComponent<ClientNetworkTransform>().Teleport(spawnPoint.position, spawnPoint.rotation, animalAI.transform.localScale);
@@ -98,6 +101,18 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
             }
+        }
+
+        private void SetupPlayerCorpses(bool isActive)
+        {
+            foreach (ulong clientId in players)
+            {
+                SetupCorpse(NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<CreatureBase>(), isActive);
+            }
+        }
+        private void SetupCorpse(CreatureBase creature, bool isActive)
+        {
+            creature.Corpse.GenerateRagdoll.Value = isActive;
         }
         #endregion
 

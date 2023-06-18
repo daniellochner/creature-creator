@@ -80,6 +80,11 @@ namespace DanielLochner.Assets
             return interactableCheck;
         }
 
+        public static bool IsPlayer(this GameObject gameObject)
+        {
+            return gameObject.CompareTag("Player/Local");
+        }
+
         public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
         {
             T component = gameObject.GetComponent<T>();

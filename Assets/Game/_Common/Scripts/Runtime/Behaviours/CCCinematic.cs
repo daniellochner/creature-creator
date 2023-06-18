@@ -22,12 +22,14 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Show();
             SetVisibility(true);
             SetNotificationOffset(1);
+            InteractionsManager.Instance.enabled = false;
         }
         public override void Hide()
         {
             base.Hide();
             SetVisibility(false);
             SetNotificationOffset(-1);
+            InteractionsManager.Instance.enabled = true;
         }
 
         public override void Begin()

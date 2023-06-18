@@ -9,6 +9,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private Diet diet;
         [SerializeField] private MinMax minMaxHunger;
+        [SerializeField] private MinMax minMaxHeal;
         [SerializeField] private AudioClip eatSound;
         [SerializeField] private AudioMixerGroup soundEffectsMixer;
         [SerializeField] private UnityEvent onEat;
@@ -33,6 +34,10 @@ namespace DanielLochner.Assets.CreatureCreator
             CreatureHunger hunger = interactor.GetComponent<CreatureHunger>();
             if (!hasEaten)
             {
+                if (hunger.Hunger >= 1f)
+                {
+                    hunger.Health.Health += minMaxHeal.Random;
+                }
                 hunger.Hunger += minMaxHunger.Random;
                 AudioSourceUtility.PlayClipAtPoint(eatSound, transform.position, 1f, soundEffectsMixer);
 

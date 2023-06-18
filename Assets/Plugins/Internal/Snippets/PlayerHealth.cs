@@ -65,6 +65,11 @@ namespace DanielLochner.Assets
             OnHealthChanged?.Invoke(Health);
         }
 
+        public void Kill(DamageReason reason, string inflicter = null)
+        {
+            TakeDamage(Health, reason, inflicter);
+        }
+
         public void TakeDamage(float damage, DamageReason reason, string inflicter = null)
         {
             TakeDamageServerRpc(damage, reason, inflicter);

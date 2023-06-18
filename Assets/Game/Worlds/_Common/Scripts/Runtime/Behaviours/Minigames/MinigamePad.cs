@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -19,10 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public int NumPlayers
-        {
-            get => region.tracked.Count;
-        }
+        public TrackRegion Region => region;
 
         private bool IsVisible
         {
@@ -34,7 +30,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public TrackRegion Region => region;
+        public int NumTracked
+        {
+            get => Region.tracked.Count;
+        }
         #endregion
 
         #region Methods
@@ -77,7 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
         
         private void OnTrack(Collider col)
         {
-            if (col.CompareTag("Player/Local"))
+            if (col.gameObject.IsPlayer())
             {
                 UpdateInfo();
                 IsVisible = true;
@@ -85,7 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnLoseTrackOf(Collider col)
         {
-            if (col.CompareTag("Player/Local"))
+            if (col.gameObject.IsPlayer())
             {
                 IsVisible = false;
             }
@@ -95,16 +94,16 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             string text = $"{minigame.Name}<br>";
 
-            if (NumPlayers < minigame.MinPlayers)
+            if (NumTracked < minigame.MinPlayers)
             {
-                text += $"{TextUtility.FormatError(NumPlayers, true)}/{minigame.MinPlayers}<br>";
+                text += $"{TextUtility.FormatError(NumTracked, true)}/{minigame.MinPlayers}<br>";
             }
             else
             {
-                text += $"{TextUtility.FormatError(NumPlayers, NumPlayers > minigame.MaxPlayers)}/{minigame.MaxPlayers}<br>";
+                text += $"{TextUtility.FormatError(NumTracked, NumTracked > minigame.MaxPlayers)}/{minigame.MaxPlayers}<br>";
             }
             
-            if (NumPlayers >= minigame.MinPlayers && NumPlayers <= minigame.MaxPlayers && minigame.WaitTimeLeft.Value <= minigame.WaitTime)
+            if (NumTracked >= minigame.MinPlayers && NumTracked <= minigame.MaxPlayers && minigame.WaitTimeLeft.Value <= minigame.WaitTime)
             {
                 text += $"{minigame.WaitTimeLeft.Value}";
             }

@@ -15,9 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private Rigidbody rb;
         #endregion
 
-        #region Properties
-        #endregion
-
         #region Methods
         private void Awake()
         {
@@ -41,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (IsServer)
+            if (IsOwner)
             {
                 Vector3 point = collision.GetContact(0).point;
 
@@ -49,14 +46,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (Collider collider in colliders)
                 {
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null && !((creature is CreaturePlayerRemote) && (creature.OwnerClientId != OwnerClientId) && !(WorldManager.Instance.World as WorldMP).EnablePVP))
+                    if (creature != null)
                     {
-                        float damage = minMaxDamage.Random;
-                        creature.Health.TakeDamage(damage, DamageReason.ProjectileAttack, OwnerClientId.ToString());
-
-                        if (creature.Health.Health - damage <= 0)
+                        bool ignore = creature.OwnerClientId != OwnerClientId || ((creature is CreaturePlayerRemote) && !WorldManager.Instance.EnablePVP);
+                        if (!ignore)
                         {
-                            KillClientRpc(NetworkUtils.SendTo(OwnerClientId));
+                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.ProjectileAttack, OwnerClientId.ToString());
                         }
                     }
                 }
@@ -75,14 +70,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkObject.Despawn();
             }
             gameObject.SetActive(false);
-        }
-
-        [ClientRpc]
-        private void KillClientRpc(ClientRpcParams clientRpcParams = default)
-        {
-#if USE_STATS
-            StatsManager.Instance.Kills++;
-#endif
         }
         #endregion
     }

@@ -17,6 +17,23 @@ namespace DanielLochner.Assets.CreatureCreator
             set;
         }
 
+        public bool EnablePVP
+        {
+            get
+            {
+                if (!IsMultiplayer)
+                {
+                    return true;
+                }
+
+                if (MinigameManager.Instance.CurrentMinigame != null)
+                {
+                    return MinigameManager.Instance.CurrentMinigame.EnablePVP;
+                }
+
+                return (World as WorldMP).EnablePVP;
+            }
+        }
         public bool IsMultiplayer => World is WorldMP;
         public bool IsUsingTeleport { get; set; }
         #endregion

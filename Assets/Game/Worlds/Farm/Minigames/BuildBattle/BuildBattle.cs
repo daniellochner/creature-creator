@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -13,9 +14,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI topicText;
         [SerializeField] private CreatureConstructor creatureToRate;
         [SerializeField] private Cinematic ratingCinematic;
-        [SerializeField] private CanvasGroup ratingCG;
+        [SerializeField] private GameObject ratingPad;
         [SerializeField] private int rateTime;
         [SerializeField] private int stepSize;
+        [SerializeField] private Toggle[] ratingToggles;
         [SerializeField] private string[] topicIds;
 
         private Dictionary<ulong, Dictionary<ulong, int>> playerRatings = new Dictionary<ulong, Dictionary<ulong, int>>();
@@ -45,7 +47,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
 
+            building.onEnter += OnBuildingEnter;
+            building.onExit += OnBuildingExit;
+
             starting.onEnter += OnStartingEnter;
+
+            playing.onEnter += OnPlayingEnter;
+            playing.onExit += OnPlayingExit;
 
             completing.onEnter += OnCompletingEnter;
             completing.onExit += OnCompletingExit;
@@ -66,7 +74,7 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return this.InvokeOverTime(delegate (float p)
             {
                 float t = EasingFunction.EaseOutQuad(0f, 1000f, p);
-                if (t >= top)
+                if (t > top)
                 {
                     TopicId.Value = (current++) % topicIds.Length;
                     top += stepSize;
@@ -84,43 +92,77 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         #endregion
 
-        #region Starting
-        private void OnStartingEnter()
+        #region Building
+        private void OnBuildingEnter()
         {
-            SetScoreboardClientRpc(false);
+            SetTopicClientRpc(true);
+        }
+        private void OnBuildingExit()
+        {
+            SetTopicClientRpc(false);
         }
 
         [ClientRpc]
-        private void SetScoreboardClientRpc(bool isVisible)
+        private void SetTopicClientRpc(bool isVisible)
+        {
+            MinigameManager.Instance.SetTitle(isVisible ? LocalizationUtility.Localize(topicIds[TopicId.Value]) : null);
+        }
+        #endregion
+
+        #region Starting
+        private void OnStartingEnter()
+        {
+            SetScoreboardActiveClientRpc(false);
+            SetPlayerNameActiveClientRpc(false);
+        }
+
+        [ClientRpc]
+        private void SetScoreboardActiveClientRpc(bool isActive)
         {
             if (InMinigame)
             {
-                MinigameManager.Instance.Scoreboard.gameObject.SetActive(isVisible);
+                MinigameManager.Instance.Scoreboard.gameObject.SetActive(isActive);
+            }
+        }
+
+        [ClientRpc]
+        private void SetPlayerNameActiveClientRpc(bool isActive)
+        {
+            if (InMinigame)
+            {
+                foreach (CreaturePlayer player in CreaturePlayer.Players)
+                {
+                    player.Namer.enabled = isActive;
+                }
             }
         }
         #endregion
 
         #region Playing
-        protected override IEnumerator GameplayLogicRoutine()
+        private void OnPlayingEnter()
         {
             StartRatingClientRpc();
+        }
+        private void OnPlayingExit()
+        {
+            StopRatingClientRpc();
+            SetPlayerNameActiveClientRpc(true);
+        }
 
+        protected override IEnumerator GameplayLogicRoutine()
+        {
             yield return new WaitForSeconds(1f);
 
+            // Rate
             foreach (ulong clientId in players)
             {
-                playerRatings[clientId] = new Dictionary<ulong, int>()
-                {
-                    { clientId, 0 }
-                };
-
+                playerRatings[clientId] = new Dictionary<ulong, int>();
                 currentClientId = clientId;
 
 
-                SetRatingPadVisibleClientRpc(true);
+                SetRatingPadActiveClientRpc(true);
 
-                CreaturePlayer player = NetworkManager.SpawnManager.GetPlayerNetworkObject(currentClientId).GetComponent<CreaturePlayer>();
-                DisplayCreatureClientRpc(currentClientId, player.Constructor.Data);
+                DisplayCreatureClientRpc(currentClientId, NetworkManager.SpawnManager.GetPlayerNetworkObject(currentClientId).GetComponent<CreaturePlayer>().Constructor.Data);
 
                 RateTimeLeft.Value = rateTime;
                 while (RateTimeLeft.Value > 0)
@@ -129,26 +171,23 @@ namespace DanielLochner.Assets.CreatureCreator
                     RateTimeLeft.Value--;
                 }
 
-                SetRatingPadVisibleClientRpc(false);
+                SetRatingPadActiveClientRpc(false);
                 ClearCreatureClientRpc();
 
 
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
             }
 
-            // Determine winner (from the players that are currently in the game)
+            // Determine Winner
             foreach (ulong ratedClientId in players)
             {
                 int rating = 0;
                 foreach (ulong ratingClientId in players)
                 {
-                    int r = playerRatings[ratedClientId][ratingClientId];
-                    rating += (r == 0) ? 3 : r;
+                    rating += playerRatings[ratedClientId][ratingClientId];
                 }
                 SetScore(ratedClientId, rating);
             }
-
-            StopRatingClientRpc();
         }
 
         [ClientRpc]
@@ -163,10 +202,9 @@ namespace DanielLochner.Assets.CreatureCreator
             ratingCinematic.Unpause();
         }
 
-        public void SetMyRating(int rating)
+        private void SetMyRating(int rating)
         {
             SetRatingServerRpc(rating, NetworkManager.Singleton.LocalClientId);
-            SetRatingPadInteractable(false);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -180,7 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                SetRatingPadInteractable(!NetworkUtils.IsPlayer(currentClientId));
+                SetRatingPadActiveClientRpc(!NetworkUtils.IsPlayer(currentClientId));
             }
 
             creatureToRate.transform.parent.localRotation = Quaternion.identity;
@@ -190,18 +228,34 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [ClientRpc]
-        private void SetRatingPadVisibleClientRpc(bool isVisible)
+        private void ClearCreatureClientRpc()
         {
             if (InMinigame)
             {
-                ratingCG.gameObject.SetActive(isVisible);
+                for (int i = 0; i < ratingToggles.Length; i++)
+                {
+                    if (ratingToggles[i].isOn)
+                    {
+                        SetMyRating(i);
+                        break;
+                    }
+                }
             }
+
+            creatureToRate.Body.gameObject.SetActive(false);
         }
 
-        private void SetRatingPadInteractable(bool isInteractable)
+        [ClientRpc]
+        private void SetRatingPadActiveClientRpc(bool isActive)
         {
-            ratingCG.interactable = isInteractable;
-            ratingCG.alpha = isInteractable ? 1f : 0.25f;
+            if (InMinigame)
+            {
+                ratingPad.SetActive(isActive);
+                if (isActive)
+                {
+                    ratingToggles[0].SetIsOnWithoutNotify(true);
+                }
+            }
         }
 
         private void OnRateTimeLeftChanged(int oldTime, int newTime)
@@ -225,9 +279,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Completing
         private void OnCompletingEnter()
         {
-            SetScoreboardClientRpc(true);
+            SetScoreboardActiveClientRpc(true);
 
-            SetRatingPadVisibleClientRpc(false);
+            SetRatingPadActiveClientRpc(false);
             ClearCreatureClientRpc();
         }
 
@@ -236,12 +290,6 @@ namespace DanielLochner.Assets.CreatureCreator
             playerRatings.Clear();
 
             TopicId.Value = -1;
-        }
-
-        [ClientRpc]
-        private void ClearCreatureClientRpc()
-        {
-            creatureToRate.Body.gameObject.SetActive(false);
         }
         #endregion
         #endregion

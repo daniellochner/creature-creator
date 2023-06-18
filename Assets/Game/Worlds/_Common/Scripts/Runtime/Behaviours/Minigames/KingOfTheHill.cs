@@ -6,6 +6,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class KingOfTheHill : IndividualMinigame
     {
         #region Fields
+        [Header("King Of The Hill")]
         [SerializeField] private TrackRegion region;
         #endregion
 

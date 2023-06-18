@@ -39,18 +39,10 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                 CreatureBase creature = collider.GetComponent<CreatureBase>();
                 if (creature != null && creature != Player.Instance && !hasFoundCreature)
                 {
-                    bool ignorePVP = (creature is CreaturePlayerRemote) && !(WorldManager.Instance.World as WorldMP).EnablePVP;
-                    if (!ignorePVP)
+                    bool ignore = (creature is CreaturePlayerRemote) && !WorldManager.Instance.EnablePVP;
+                    if (!ignore)
                     {
-                        float damage = biteDamage.Random;
-                        creature.Health.TakeDamage(damage, DamageReason.BiteAttack, Player.Instance.OwnerClientId.ToString());
-
-#if USE_STATS
-                        if (creature.Health.Health - damage <= 0)
-                        {
-                            StatsManager.Instance.Kills++;
-                        }
-#endif
+                        creature.Health.TakeDamage(biteDamage.Random, DamageReason.BiteAttack, Player.Instance.OwnerClientId.ToString());
                     }
                     hasFoundCreature = true;
                 }

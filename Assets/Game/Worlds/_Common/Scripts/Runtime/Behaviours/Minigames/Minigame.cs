@@ -15,7 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] protected string nameId;
         [Space]
         [SerializeField] protected MinigamePad pad;
-        [SerializeField] protected Battle battle;
         [SerializeField] protected int waitTime;
         [SerializeField] protected int minPlayers;
         [SerializeField] protected int maxPlayers;
@@ -31,14 +30,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] protected string objectiveId;
         [SerializeField] protected string musicId;
+        [SerializeField] private AudioClip countdownFX;
+        [SerializeField] private AudioClip whistleFX;
         [SerializeField] protected float switchTime;
         [SerializeField] protected float teleportTime;
         [SerializeField] protected int startTime;
-        [SerializeField] private AudioClip countdownFX;
-        [SerializeField] private AudioClip whistleFX;
         [Space]
-        [SerializeField] protected bool isAscendingOrder;
         [SerializeField] protected int playTime;
+        [SerializeField] protected bool enablePVP;
+        [SerializeField] protected bool isAscendingOrder;
         [Space]
         [SerializeField] protected MinMax minMaxFireworksCooldown;
         [SerializeField] protected int celebrateTime;
@@ -57,6 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public int MinPlayers => minPlayers;
         public int MaxPlayers => Mathf.Min(maxPlayers, NetworkPlayersManager.Instance.NumPlayers);
         public int WaitTime => waitTime;
+        public bool EnablePVP => enablePVP;
 
         public bool InMinigame => MinigameManager.Instance.CurrentMinigame == this;
 
@@ -66,6 +67,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public NetworkVariable<int> BuildTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> StartTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> PlayTimeLeft { get; set; } = new NetworkVariable<int>(-1);
+
+        public NetworkVariable<bool> IsPadVisible { get; set; } = new NetworkVariable<bool>(false);
+        public NetworkVariable<bool> IsZoneVisible { get; set; } = new NetworkVariable<bool>(false);
 
         public NetworkList<Score> Scoreboard { get; set; }
         #endregion
@@ -86,8 +90,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 Scoreboard.OnListChanged += OnScoreboardChanged;
 
-                zone.gameObject.SetActive(State.Value != MinigameStateType.WaitingForPlayers);
-                pad.gameObject.SetActive((State.Value == MinigameStateType.WaitingForPlayers) && (!battle || battle.IsComplete));
+
+                IsPadVisible.OnValueChanged += OnIsPadVisibleChanged;
+                IsZoneVisible.OnValueChanged += OnIsZoneVisibleChanged;
+
+                OnIsPadVisibleChanged(default, IsPadVisible.Value);
+                OnIsZoneVisibleChanged(default, IsZoneVisible.Value);
             }
 
             if (IsServer)
@@ -145,7 +153,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Wait for the waiting time to run out, reset when invalid
             while (WaitTimeLeft.Value > 0)
             {
-                if ((pad.NumPlayers >= MinPlayers) && (pad.NumPlayers <= MaxPlayers))
+                if ((pad.NumTracked >= MinPlayers) && (pad.NumTracked <= MaxPlayers))
                 {
                     yield return new WaitForSeconds(1f);
                     WaitTimeLeft.Value--;
@@ -165,12 +173,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Setup clients
-            SetupPlayerClientRpc(NetworkUtils.SendTo(players.ToArray()));
-            SetupClientRpc();
+            SetupMinigameClientRpc(NetworkUtils.SendTo(players.ToArray()));
+
+            IsPadVisible.Value = false;
+            IsZoneVisible.Value = true;
         }
 
         [ClientRpc]
-        private void SetupPlayerClientRpc(ClientRpcParams clientRpcParams = default)
+        private void SetupMinigameClientRpc(ClientRpcParams clientRpcParams = default)
         {
             MinigameManager.Instance.CurrentMinigame = this;
             MinigameManager.Instance.Scoreboard.Setup(this);
@@ -178,10 +188,13 @@ namespace DanielLochner.Assets.CreatureCreator
             NotificationsManager.Instance.IsHidden = true;
         }
 
-        [ClientRpc]
-        private void SetupClientRpc()
+        private void OnIsZoneVisibleChanged(bool oldVisible, bool newVisible)
         {
-            pad.gameObject.SetActive(false);
+            zone.gameObject.SetActive(newVisible);
+        }
+        private void OnIsPadVisibleChanged(bool oldVisible, bool newVisible)
+        {
+            pad.gameObject.SetActive(newVisible);
         }
         #endregion
 
@@ -226,34 +239,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void ShowBounds()
         {
-            ShowBoundsClientRpc();
-
             this.InvokeOverTime(delegate (float p)
             {
                 zone.SetScale(p, false);
             },
             expandTime);
-
-            this.Invoke(delegate
-            {
-                CheckBoundsClientRpc();
-            },
-            expandTime);
-        }
-
-        [ClientRpc]
-        private void CheckBoundsClientRpc()
-        {
-            if (!InMinigame && zone.Bounds.IsPointInBounds(Player.Instance.transform.position))
-            {
-                Player.Instance.Editor.Platform.TeleportTo();
-            }
-        }
-
-        [ClientRpc]
-        private void ShowBoundsClientRpc()
-        {
-            zone.gameObject.SetActive(true);
         }
         #endregion
 
@@ -456,7 +446,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         protected virtual IEnumerator GameplayLogicRoutine()
         {
-            yield return new WaitUntil(() => false); // Rely on timer to finish by default (override for gameplay logic functionality)
+            yield return new WaitUntil(() => false);
         }
 
         private void OnPlayTimeLeftChanged(int oldTime, int newTime)
@@ -550,6 +540,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             zone.SetScale(0f, true);
 
+            IsZoneVisible.Value = false;
+            IsPadVisible.Value = true;
+
             ShutdownClientRpc();
         }
 
@@ -616,9 +609,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicId);
             }
-
-            zone.gameObject.SetActive(false);
-            pad.gameObject.SetActive(true);
         }
         #endregion
 

@@ -8,21 +8,17 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Minigame minigame;
+        [Space]
         [SerializeField] private NetworkTransform boundsNT;
-        [SerializeField] private Bounds bounds;
         [SerializeField] private Material boundsMat;
-        [SerializeField] private AudioSource humAS;
         [SerializeField] private GameObject electricShockPrefab;
         [SerializeField] private float speed;
         [SerializeField] private MeshRenderer[] renderersUp;
         [SerializeField] private MeshRenderer[] renderersDown;
+        [SerializeField] private Transform[] spectatorSpawnPoints;
 
         private Material boundsMatUp;
         private Material boundsMatDown;
-        #endregion
-
-        #region Properties
-        public Bounds Bounds => bounds;
         #endregion
 
         #region Methods
@@ -43,16 +39,22 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Update()
         {
             HandleMat();
-            HandleHum();
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            CreaturePlayerLocal player = collision.gameObject.GetComponent<CreaturePlayerLocal>();
-            if (player != null)
+            if (collision.gameObject.IsPlayer() && minigame.InMinigame)
             {
-                player.Health.TakeDamage(player.Health.Health, DamageReason.MinigameZone);
+                Player.Instance.Health.Kill(DamageReason.MinigameZone);
                 SpawnElectricShockClientRpc(collision.GetContact(0).point);
+            }
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.IsPlayer() && !minigame.InMinigame)
+            {
+                Transform spawnPoint = spectatorSpawnPoints[Random.Range(0, spectatorSpawnPoints.Length)];
+                Player.Instance.Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true);
             }
         }
 
@@ -67,20 +69,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Vector2 dir = Vector2.up * speed * Time.deltaTime;
             boundsMatUp.mainTextureOffset -= dir;
             boundsMatDown.mainTextureOffset += dir;
-        }
-        private void HandleHum()
-        {
-            if (CinematicManager.Instance.IsInCinematic)
-            {
-                humAS.transform.position = bounds.GetClosestPointOnBounds(CinematicManager.Instance.CurrentCinematic.CinematicCamera.transform.position, true);
-            }
-            else 
-            if (Player.Instance != null && Player.Instance.IsSetup)
-            {
-                humAS.transform.position = bounds.GetClosestPointOnBounds(Player.Instance.Camera.MainCamera.transform.position, true);
-            }
-
-            humAS.gameObject.SetActive(transform.localScale.x > 0.001f);
         }
 
         public void SetScale(float scale, bool instant)

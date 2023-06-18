@@ -43,8 +43,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         public void KickServerRpc(Vector3 point, Vector3 force)
         {
-            rb.AddForceAtPosition(force, point, ForceMode.Impulse);
             rb.angularVelocity = Vector3.zero;
+            rb.AddForceAtPosition(force, point, ForceMode.Impulse);
 
             BounceClientRpc(point);
         }

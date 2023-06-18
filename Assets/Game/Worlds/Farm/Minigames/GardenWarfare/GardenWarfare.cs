@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class ApplesVsOranges : TeamMinigame
+    public class GardenWarfare : TeamMinigame
     {
         #region Fields
         [Header("Apples Vs Oranges")]
         [SerializeField] private TrackRegion[] teamRegions;
-        [SerializeField] private FoodCrateSpawner[] foodSpawners;
+        [SerializeField] private FoodSpawner[] foodSpawners;
         #endregion
 
         #region Methods
@@ -35,15 +35,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Setup();
 
-            starting.onEnter += OnStartingEnter;
+            introducing.onEnter += OnIntroducingEnter;
         }
 
         #region Starting
-        private void OnStartingEnter()
+        private void OnIntroducingEnter()
         {
-            foreach (FoodCrateSpawner foodSpawner in foodSpawners)
+            foreach (FoodSpawner foodSpawner in foodSpawners)
             {
-                foodSpawner.Reset();
+                foodSpawner.Despawn();
             }
         }
         #endregion
