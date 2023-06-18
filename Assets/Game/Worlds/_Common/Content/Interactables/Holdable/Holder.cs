@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -9,7 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private HoldableDummy dummyPrefab;
 
-        private Unity.Netcode.Components.NetworkTransform networkTransform;
+        private NetworkTransform networkTransform;
+        private Rigidbody rigidBody;
         private Vector3 startPosition;
         private Quaternion startRotation;
 
@@ -27,7 +29,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Awake()
         {
-            networkTransform = GetComponent<Unity.Netcode.Components.NetworkTransform>();
+            networkTransform = GetComponent<NetworkTransform>();
+            rigidBody = GetComponent<Rigidbody>();
             holdable = GetComponent<Holdable>();
         }
         private void Start()
@@ -48,6 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (IsServer && collision.collider.CompareTag("WorldBorder"))
             {
                 networkTransform.Teleport(startPosition, startRotation, transform.localScale);
+                rigidBody.velocity = rigidBody.angularVelocity = Vector3.zero;
             }
         }
 
