@@ -24,7 +24,13 @@ public class Target : MonoBehaviour
         material = new Material(meshRenderer.sharedMaterial);
         meshRenderer.sharedMaterial = material;
     }
-    public void Update()
+    private void OnDisable()
+    {
+        hasCompleted = hasEntered = IsHeld = false;
+        progress = 0f;
+    }
+
+    private void Update()
     {
         material.SetFloat("_MinTransparency", 0.25f + Mathf.PingPong(Time.time, 0.75f));
         progress = Mathf.Clamp01(progress + ((hasEntered || IsHeld) ? speed : -speed) * Time.deltaTime);
@@ -42,14 +48,14 @@ public class Target : MonoBehaviour
         }
     }
 
-    public void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player/Local"))
         {
             hasEntered = true;
         }
     }
-    public void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player/Local"))
         {

@@ -557,6 +557,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             zone.SetScale(0f, true);
 
+            WaitingPlayers.Value = 0;
             IsZoneVisible.Value = false;
             IsPadVisible.Value = true;
 
