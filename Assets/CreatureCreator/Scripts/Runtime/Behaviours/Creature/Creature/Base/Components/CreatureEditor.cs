@@ -732,6 +732,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Constructor.IsTextured = Constructor.IsTextured;
             IsInteractable = IsInteractable;
+            PaintedBodyPart = null;
             IsDirty = false;
             
             Deselect();

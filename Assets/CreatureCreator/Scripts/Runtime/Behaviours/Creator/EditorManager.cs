@@ -670,18 +670,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 Paint();
             }
 
-            // Colour
-            primaryColourPalette.SetColour(Creature.Constructor.Data.PrimaryColour, false);
-            secondaryColourPalette.SetColour(Creature.Constructor.Data.SecondaryColour, false);
-
-            // Pattern
-            patternsToggleGroup.SetAllTogglesOff(false);
-            if (!string.IsNullOrEmpty(Creature.Constructor.Data.PatternID))
-            {
-                patternsUI.Find(x => x.name.Equals(Creature.Constructor.Data.PatternID)).SelectToggle.SetIsOnWithoutNotify(true);
-            }
-            patternMaterial.SetColor("_PrimaryCol", primaryColourPalette.Colour);
-            patternMaterial.SetColor("_SecondaryCol", secondaryColourPalette.Colour);
+            UpdatePrimaryColour();
+            UpdateSecondaryColour();
+            UpdatePattern();
 
             if (!loadFromHistory)
             {
@@ -697,6 +688,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Clear()
         {
             Load(null);
+
+            if (restrictedColour != null)
+            {
+                primaryColourPalette  .SetColour((Color)restrictedColour, true);
+                secondaryColourPalette.SetColour((Color)restrictedColour, true);
+            }
 
 #if USE_STATS
             StatsManager.Instance.UnlockAchievement("ACH_BACK_TO_BASICS");
@@ -1577,6 +1574,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetSecondaryColourOverrideUI(false);
 
                 TakeSnapshot(Change.SetBodySecondaryColor);
+            }
+        }
+        public void UpdatePattern()
+        {
+            patternsToggleGroup.SetAllTogglesOff(false);
+            if (!string.IsNullOrEmpty(Creature.Constructor.Data.PatternID))
+            {
+                patternsUI.Find(x => x.name.Equals(Creature.Constructor.Data.PatternID)).SelectToggle.SetIsOnWithoutNotify(true);
             }
         }
         public void UpdateStatistics()
