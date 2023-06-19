@@ -70,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public Action OnPreDemolish { get; set; }
         public Action OnConstructBody { get; set; }
+        public Action OnFlip { get; set; }
         public Action<int> OnSetupBone { get; set; }
         public Action<int> OnAddBone { get; set; }
         public Action<int> OnRemoveBone { get; set; }
@@ -697,6 +698,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             Destroy(tmp.gameObject);
+
+            OnFlip?.Invoke();
         }
         public void Recenter()
         {

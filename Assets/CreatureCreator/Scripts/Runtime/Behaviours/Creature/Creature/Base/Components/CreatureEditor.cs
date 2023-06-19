@@ -445,6 +445,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 EditorManager.Instance.UpdateStatistics();
             };
+            Constructor.OnFlip += delegate
+            {
+                UpdateMeshCollider();
+            };
             Constructor.OnSetupBone += delegate (int index)
             {
                 // Hinge Joint
