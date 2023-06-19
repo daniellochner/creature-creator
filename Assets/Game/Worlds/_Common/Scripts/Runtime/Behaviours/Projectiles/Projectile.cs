@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (IsOwner)
+            if (IsServer)
             {
                 Vector3 point = collision.GetContact(0).point;
 
@@ -48,10 +48,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
                     if (creature != null)
                     {
-                        bool ignore = creature.OwnerClientId != OwnerClientId || ((creature is CreaturePlayerRemote) && !WorldManager.Instance.EnablePVP);
+                        bool ignore = (creature is CreaturePlayer) && (creature.OwnerClientId == OwnerClientId || !WorldManager.Instance.EnablePVP);
                         if (!ignore)
                         {
-                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.ProjectileAttack, OwnerClientId.ToString());
+                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, OwnerClientId.ToString());
                         }
                     }
                 }

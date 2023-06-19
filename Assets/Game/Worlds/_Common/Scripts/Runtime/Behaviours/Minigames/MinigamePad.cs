@@ -18,8 +18,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public TrackRegion Region => region;
-
         private bool IsVisible
         {
             get => isVisible;
@@ -28,11 +26,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 isVisible = value;
                 minigameText.gameObject.SetActive(isVisible);
             }
-        }
-
-        public int NumTracked
-        {
-            get => Region.tracked.Count;
         }
         #endregion
 
@@ -76,7 +69,7 @@ namespace DanielLochner.Assets.CreatureCreator
         
         private void OnTrack(Collider col)
         {
-            if (col.gameObject.IsPlayer())
+            if (col.CompareTag("Player/Local"))
             {
                 UpdateInfo();
                 IsVisible = true;
@@ -84,9 +77,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnLoseTrackOf(Collider col)
         {
-            if (col.gameObject.IsPlayer())
+            if (col.CompareTag("Player/Local"))
             {
                 IsVisible = false;
+                SignOut();
+
+                Debug.Log(col.name, col);
             }
         }
 
@@ -94,21 +90,34 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             string text = $"{minigame.Name}<br>";
 
-            if (NumTracked < minigame.MinPlayers)
+            // Waiting Players
+            int waitingPlayers = minigame.WaitingPlayers.Value;
+            if (waitingPlayers < minigame.MinPlayers)
             {
-                text += $"{TextUtility.FormatError(NumTracked, true)}/{minigame.MinPlayers}<br>";
+                text += $"{TextUtility.FormatError(waitingPlayers, true)}/{minigame.MinPlayers}<br>";
             }
             else
             {
-                text += $"{TextUtility.FormatError(NumTracked, NumTracked > minigame.MaxPlayers)}/{minigame.MaxPlayers}<br>";
+                text += $"{TextUtility.FormatError(waitingPlayers, waitingPlayers > minigame.MaxPlayers)}/{minigame.MaxPlayers}<br>";
             }
-            
-            if (NumTracked >= minigame.MinPlayers && NumTracked <= minigame.MaxPlayers && minigame.WaitTimeLeft.Value <= minigame.WaitTime)
+
+            // Wait Time
+            int waitTimeLeft = minigame.WaitTimeLeft.Value;
+            if (waitingPlayers >= minigame.MinPlayers && waitingPlayers <= minigame.MaxPlayers && waitTimeLeft <= minigame.WaitTime)
             {
-                text += $"{minigame.WaitTimeLeft.Value}";
+                text += $"{waitTimeLeft}";
             }
 
             minigameText.text = text;
+        }
+
+        public void SignUp()
+        {
+            minigame.SignMeUp(true);
+        }
+        public void SignOut()
+        {
+            minigame.SignMeUp(false);
         }
         #endregion
     }

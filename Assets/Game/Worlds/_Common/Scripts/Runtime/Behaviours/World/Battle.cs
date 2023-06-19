@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -21,8 +20,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject info;
         [SerializeField] private string musicId;
 
-        [SerializeField] private UnityEvent onComplete;
-
         private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);
         private NetworkVariable<int> remaining = new NetworkVariable<int>(-1);
@@ -33,7 +30,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public TrackRegion Region => region;
 
-        public bool InBattle => round.Value >= 0 && round.Value < rounds.childCount;
+        public bool InBattle => region.tracked.Contains(Player.Instance.Collider.Hitbox);
+
+        public bool HasStarted => round.Value >= 0 && round.Value < rounds.childCount;
         public bool IsComplete => complete.Value;
         #endregion
 
@@ -95,7 +94,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void BattleServerRpc()
         {
-            if (!InBattle)
+            if (!HasStarted)
             {
                 StartCoroutine(BattleRoutine());
             }
@@ -103,13 +102,16 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void StartRoundClientRpc()
         {
-            info.SetActive(region.tracked.Contains(Player.Instance.Collider.Hitbox));
-            bellAS.Play();
+            if (InBattle)
+            {
+                info.SetActive(true);
+                bellAS.Play();
+            }
         }
         [ClientRpc]
         private void WinClientRpc()
         {
-            if (region.tracked.Contains(Player.Instance.Collider.Hitbox))
+            if (InBattle)
             {
                 victoryAS.Play();
                 MMVibrationManager.Haptic(HapticTypes.Success);
@@ -118,8 +120,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 StatsManager.Instance.CompletedBattles++;
 #endif
             }
-            onComplete.Invoke();
-
             HideBattle();
         }
 
@@ -146,7 +146,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (col.CompareTag("Player/Local") && rounds.childCount > 0)
             {
-                if (InBattle)
+                if (HasStarted)
                 {
                     info.SetActive(true);
                 }

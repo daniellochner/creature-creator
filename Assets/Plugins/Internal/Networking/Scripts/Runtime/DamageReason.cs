@@ -11,12 +11,12 @@ namespace DanielLochner.Assets
         Hunger,
         Suicide,
         Drowning,
-        SpinAttack,
+        Spin,
         Fire,
-        MinigameZone,
-        ChargeAttack,
-        BiteAttack,
-        ProjectileAttack,
+        ElectricShock,
+        Charge,
+        Bite,
+        Projectile,
         Bees
     }
 }

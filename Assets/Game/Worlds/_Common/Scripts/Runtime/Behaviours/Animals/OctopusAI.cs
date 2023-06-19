@@ -89,7 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
                     if (creature != null && creature != OctopusAI.Creature && !damagedCreatures.Contains(creature))
                     {
-                        creature.Health.TakeDamage(spinDamage.Random, DamageReason.SpinAttack, OctopusAI.Creature.Constructor.Data.Name);
+                        creature.Health.TakeDamage(spinDamage.Random, DamageReason.Spin, OctopusAI.Creature.Constructor.Data.Name);
                         damagedCreatures.Add(creature);
                     }
                 }

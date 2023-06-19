@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                     bool ignore = (creature is CreaturePlayerRemote) && !WorldManager.Instance.EnablePVP;
                     if (!ignore)
                     {
-                        creature.Health.TakeDamage(biteDamage.Random, DamageReason.BiteAttack, Player.Instance.OwnerClientId.ToString());
+                        creature.Health.TakeDamage(biteDamage.Random, DamageReason.Bite, Player.Instance.OwnerClientId.ToString());
                     }
                     hasFoundCreature = true;
                 }

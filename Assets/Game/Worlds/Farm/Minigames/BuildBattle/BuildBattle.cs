@@ -236,7 +236,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (ratingToggles[i].isOn)
                     {
-                        SetMyRating(i);
+                        SetMyRating(i+1);
                         break;
                     }
                 }

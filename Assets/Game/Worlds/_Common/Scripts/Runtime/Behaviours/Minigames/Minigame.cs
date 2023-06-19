@@ -63,6 +63,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public NetworkVariable<MinigameStateType> State { get; set; } = new NetworkVariable<MinigameStateType>(MinigameStateType.WaitingForPlayers);
 
+        public NetworkVariable<int> WaitingPlayers { get; set; } = new NetworkVariable<int>(0);
+
         public NetworkVariable<int> WaitTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> BuildTimeLeft { get; set; } = new NetworkVariable<int>(-1);
         public NetworkVariable<int> StartTimeLeft { get; set; } = new NetworkVariable<int>(-1);
@@ -150,10 +152,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             WaitTimeLeft.Value = waitTime;
 
-            // Wait for the waiting time to run out, reset when invalid
+            // Wait For Players
             while (WaitTimeLeft.Value > 0)
             {
-                if ((pad.NumTracked >= MinPlayers) && (pad.NumTracked <= MaxPlayers))
+                WaitingPlayers.Value = players.Count;
+
+                if ((WaitingPlayers.Value >= MinPlayers) && (WaitingPlayers.Value <= MaxPlayers))
                 {
                     yield return new WaitForSeconds(1f);
                     WaitTimeLeft.Value--;
@@ -165,18 +169,31 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Add all players waiting on the pad
-            var tracked = pad.Region.tracked;
-            for (int i = 0; i < tracked.Count && i < MaxPlayers; i++)
-            {
-                players.Add(tracked[i].GetComponent<NetworkObject>().OwnerClientId);
-            }
-
-            // Setup clients
+            // Setup Players
             SetupMinigameClientRpc(NetworkUtils.SendTo(players.ToArray()));
 
             IsPadVisible.Value = false;
             IsZoneVisible.Value = true;
+        }
+
+        public void SignMeUp(bool isSignUp)
+        {
+            SignUpServerRpc(NetworkManager.Singleton.LocalClientId, isSignUp);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SignUpServerRpc(ulong clientId, bool isSignUp)
+        {
+            if (WaitTimeLeft.Value <= 0) return;
+
+            if (isSignUp)
+            {
+                players.Add(clientId);
+            }
+            else
+            {
+                players.Remove(clientId);
+            }
         }
 
         [ClientRpc]

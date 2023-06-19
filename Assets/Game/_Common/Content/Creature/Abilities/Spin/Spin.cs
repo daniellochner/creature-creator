@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                     bool ignore = (creature is CreaturePlayerRemote) && !WorldManager.Instance.EnablePVP;
                     if (!ignore)
                     {
-                        creature.Health.TakeDamage(spinDamage.Random, DamageReason.SpinAttack, Player.Instance.OwnerClientId.ToString());
+                        creature.Health.TakeDamage(spinDamage.Random, DamageReason.Spin, Player.Instance.OwnerClientId.ToString());
                     }
                     damagedCreatures.Add(creature);
                 }
