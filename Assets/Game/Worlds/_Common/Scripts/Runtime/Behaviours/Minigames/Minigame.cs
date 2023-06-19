@@ -242,7 +242,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnCinematicShow()
         {
             platform.TeleportTo(true, false);
-            SwitchToBuildModeClientRpc();
         }
         private void OnCinematicHide()
         {
@@ -267,6 +266,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Building
         private IEnumerator BuildingRoutine()
         {
+            SwitchToBuildModeClientRpc();
+
             BuildTimeLeft.Value = buildTime;
             while (BuildTimeLeft.Value > 0)
             {
