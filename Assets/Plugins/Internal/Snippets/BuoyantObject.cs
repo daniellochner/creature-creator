@@ -43,6 +43,11 @@ namespace DanielLochner.Assets
         {
             rb = GetComponent<Rigidbody>();
         }
+        private void OnDisable()
+        {
+            water = null;
+        }
+
         private void FixedUpdate()
         {
             if (water != null)
