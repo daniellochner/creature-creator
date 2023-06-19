@@ -30,7 +30,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Despawn()
         {
             food.Despawn();
-            spawnTimeLeft = 0;
         }
         #endregion
     }

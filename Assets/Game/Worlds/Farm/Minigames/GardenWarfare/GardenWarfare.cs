@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Apples Vs Oranges")]
         [SerializeField] private TrackRegion[] teamRegions;
         [SerializeField] private FoodSpawner[] foodSpawners;
+        [SerializeField] private float respawnFruitTime;
         #endregion
 
         #region Methods
@@ -38,16 +38,58 @@ namespace DanielLochner.Assets.CreatureCreator
             introducing.onEnter += OnIntroducingEnter;
         }
 
-        #region Starting
+        #region Building
+        protected override void OnApplyRestrictions()
+        {
+            base.OnApplyRestrictions();
+
+            List<string> bodyParts = new List<string>();
+            foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
+            {
+                BodyPart bodyPart = obj.Value as BodyPart;
+                if (bodyPart is Mouth)
+                {
+                    Mouth mouth = bodyPart as Mouth;
+                    if (mouth.Diet != Diet.Carnivore)
+                    {
+                        bodyParts.Add(obj.Key);
+                    }
+                }
+            }
+            EditorManager.Instance.SetRestrictedBodyParts(bodyParts);
+        }
+        #endregion
+
+        #region Introducing
         private void OnIntroducingEnter()
+        {
+            DropFruitClientRpc();
+        }
+
+        protected override void OnCinematic()
+        {
+            base.OnCinematic();
+
+            this.Invoke(RespawnFruit, respawnFruitTime);
+        }
+
+        private void RespawnFruit()
         {
             foreach (FoodSpawner foodSpawner in foodSpawners)
             {
                 foodSpawner.Despawn();
             }
         }
-        #endregion
-        #endregion
 
+        [ClientRpc]
+        private void DropFruitClientRpc()
+        {
+            if (InMinigame)
+            {
+                Player.Instance.Holder.DropAll();
+            }
+        }
+        #endregion
+        #endregion
     }
 }

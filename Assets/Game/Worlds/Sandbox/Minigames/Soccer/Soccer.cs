@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private TextMeshPro scoreText;
         [Space]
-        [SerializeField] private int goalsToWin;
+        [SerializeField] private int maxGoals;
         [Space]
         [SerializeField] private float blinkTime;
         [SerializeField] private int blinkCount;
@@ -73,10 +73,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnApplyRestrictions();
 
-            // Restrict to 5 bones (to prevent large creatures from blocking the goals)
             EditorManager.Instance.SetRestrictedBones(5);
 
-            // Restrict body parts with the flap ability (to prevent flying creatures)
             List<string> bodyParts = new List<string>();
             foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
             {
@@ -93,7 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Playing
         protected override IEnumerator GameplayLogicRoutine()
         {
-            return new WaitUntil(() => RedScore.Value >= goalsToWin || BlueScore.Value >= goalsToWin);
+            return new WaitUntil(() => RedScore.Value >= maxGoals || BlueScore.Value >= maxGoals);
         }
 
         private void OnRedScoreChanged(int oldScore, int newScore)
