@@ -173,7 +173,6 @@ namespace DanielLochner.Assets.CreatureCreator
             SetupMinigameClientRpc(NetworkUtils.SendTo(players.ToArray()));
 
             IsPadVisible.Value = false;
-            IsZoneVisible.Value = true;
         }
 
         public void SignMeUp(bool isSignUp)
@@ -219,9 +218,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator IntroducingRoutine()
         {
             BeginCinematicClientRpc();
-            OnCinematic();
 
-            yield return new WaitForSeconds((float)cinematic.Director.duration - 0.5f);
+            yield return new WaitForSeconds(0.5f);
+            OnCinematic();
+            yield return new WaitForSeconds((float)cinematic.Director.duration - 1f);
         }
 
         protected virtual void OnCinematic()
@@ -255,6 +255,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void ShowBounds()
         {
+            IsZoneVisible.Value = true;
+
             this.InvokeOverTime(delegate (float p)
             {
                 zone.SetScale(p, false);

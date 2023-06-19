@@ -55,6 +55,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (minigame.State.Value == Minigame.MinigameStateType.Introducing) return;
+
             if (IsServer)
             {
                 CreatureBase creature = collision.gameObject.GetComponent<CreatureBase>();
