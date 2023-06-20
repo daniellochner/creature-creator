@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class GardenWarfare : TeamMinigame
+    public class FruitFight : TeamMinigame
     {
         #region Fields
-        [Header("Apples Vs Oranges")]
-        [SerializeField] private TrackRegion[] teamRegions;
-        [SerializeField] private FoodSpawner[] foodSpawners;
+        [Header("Fruit Fight")]
+        [SerializeField] private TrackRegion[] fruitBaskets;
+        [SerializeField] private FoodSpawner[] fruitSpawners;
         [SerializeField] private float respawnFruitTime;
         #endregion
 
@@ -20,12 +20,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsServer)
             {
-                for (int i = 0; i < teamRegions.Length; i++)
+                for (int i = 0; i < fruitBaskets.Length; i++)
                 {
                     int index = i;
-                    teamRegions[i].OnTrack = teamRegions[i].OnLoseTrackOf = delegate
+                    fruitBaskets[i].OnTrack = fruitBaskets[i].OnLoseTrackOf = delegate
                     {
-                        SetTeamScore(index, teamRegions[index].tracked.Count);
+                        SetTeamScore(index, fruitBaskets[index].tracked.Count);
                     };
                 }
             }
@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void RespawnFruit()
         {
-            foreach (FoodSpawner foodSpawner in foodSpawners)
+            foreach (FoodSpawner foodSpawner in fruitSpawners)
             {
                 foodSpawner.Despawn();
             }
