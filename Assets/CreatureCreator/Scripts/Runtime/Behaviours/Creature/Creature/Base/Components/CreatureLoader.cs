@@ -21,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private float loadTimeLeft;
         private int counter;
+        private string prevData;
         #endregion
 
         #region Properties
@@ -60,26 +61,36 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsHidden) return;
 
-            ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
-            OnShow?.Invoke();
-
-            if (RateLimit)
+            string nextData = JsonUtility.ToJson(Constructor.Data);
+            if (nextData != prevData)
             {
-                if (loadTimeLeft > 0)
+                ShowMeToOthersServerRpc(Constructor.Data, NetworkManager.Singleton.LocalClientId);
+                if (RateLimit)
                 {
-                    counter++;
-                    if (counter >= kickAt)
+                    if (loadTimeLeft > 0)
                     {
-                        NetworkConnectionManager.Instance.ForceDisconnect(LocalizationUtility.Localize("disconnect_message_construct-spam"));
+                        counter++;
+                        if (counter >= kickAt)
+                        {
+                            NetworkConnectionManager.Instance.ForceDisconnect(LocalizationUtility.Localize("disconnect_message_construct-spam"));
+                        }
+                        else
+                        if (counter >= warnAt)
+                        {
+                            InformationDialog.Inform(LocalizationUtility.Localize("cc_load-cooldown_title"), LocalizationUtility.Localize("cc_load-cooldown_message", loadCooldown, (counter - warnAt) + 1));
+                        }
                     }
-                    else
-                    if (counter >= warnAt)
-                    {
-                        InformationDialog.Inform(LocalizationUtility.Localize("cc_load-cooldown_title"), LocalizationUtility.Localize("cc_load-cooldown_message", loadCooldown, (counter - warnAt) + 1));
-                    }
+                    loadTimeLeft = loadCooldown;
                 }
-                loadTimeLeft = loadCooldown;
+
+                prevData = nextData;
             }
+            else
+            {
+                ShowMeToOthersServerRpc(null, NetworkManager.Singleton.LocalClientId);
+            }
+
+            OnShow?.Invoke();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -104,9 +115,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Show(CreatureData data)
         {
-            Constructor.Demolish();
+            if (data != null)
+            {
+                Constructor.Demolish();
+                Constructor.Construct(data);
+            }
             Constructor.Body.gameObject.SetActive(true);
-            Constructor.Construct(data);
+
             OnShow?.Invoke();
         }
         #endregion
