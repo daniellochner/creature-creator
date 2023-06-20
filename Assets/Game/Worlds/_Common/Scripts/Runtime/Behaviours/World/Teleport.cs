@@ -157,6 +157,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             cinematic.Begin();
 
+            Player.Instance.Holder.DropAll();
+
             Player.Instance.Rigidbody.isKinematic = true;
             Player.Instance.Collider.enabled = false;
         }
