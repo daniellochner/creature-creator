@@ -55,21 +55,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (minigame.State.Value == Minigame.MinigameStateType.Introducing) return;
-
-            if (IsServer)
+            if (IsServer && minigame.State.Value != Minigame.MinigameStateType.Introducing)
             {
                 CreatureBase creature = collision.gameObject.GetComponent<CreatureBase>();
-                if (creature != null)
+                if (creature != null && !creature.Health.IsDead)
                 {
                     creature.Health.Kill(DamageReason.ElectricShock);
-                    SpawnElectricShockClientRpc(collision.GetContact(0).point);
+                    SpawnShockAtPointClientRpc(collision.GetContact(0).point);
                 }
             }
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (IsClient && !minigame.InMinigame)
+            if (!minigame.InMinigame)
             {
                 CreaturePlayerLocal player = other.GetComponent<CreaturePlayerLocal>();
                 if (player != null)
@@ -81,9 +79,9 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [ClientRpc]
-        private void SpawnElectricShockClientRpc(Vector3 position)
+        private void SpawnShockAtPointClientRpc(Vector3 point)
         {
-            Instantiate(electricShockPrefab, position, Quaternion.identity, Dynamic.Transform);
+            Instantiate(electricShockPrefab, point, Quaternion.identity, Dynamic.Transform);
         }
 
         public void SetScale(float scale, bool instant)

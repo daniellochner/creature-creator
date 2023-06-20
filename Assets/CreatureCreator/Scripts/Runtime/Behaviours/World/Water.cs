@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (!player.Underwater.IsOnRaft && (!player.Abilities.Abilities.Contains(swimAbility) || !allowSwimming))
                     {
-                        player.Health.TakeDamage(player.Health.Health, DamageReason.Drowning);
+                        player.Health.Kill(DamageReason.Drowning);
                     }
                     else
                     {
