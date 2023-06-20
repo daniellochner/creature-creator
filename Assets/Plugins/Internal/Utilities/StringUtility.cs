@@ -24,7 +24,17 @@ namespace DanielLochner.Assets
             }
             else
             {
-                return string.Join(", ", list.ToArray(), 0, list.Count - 1) + " and " + list.LastOrDefault();
+                string buffer = "";
+                int n = list.Count;
+                for (int i = 0; i < n; i++)
+                {
+                    buffer += list[i];
+                    if (i < n - 1)
+                    {
+                        buffer += ", ";
+                    }
+                }
+                return buffer + " and " + list[n - 1];
             }
         }
     }
