@@ -45,10 +45,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 foreach (LegAnimator leg in Animator.Legs)
                 {
-                    if (CheckLeg(leg) || CheckLeg(leg.FlippedLeg))
+                    if (leg != null)
                     {
-                        isGrounded = true;
-                        break;
+                        if (CheckLeg(leg) || CheckLeg(leg.FlippedLeg))
+                        {
+                            isGrounded = true;
+                            break;
+                        }
                     }
                 }
             }
