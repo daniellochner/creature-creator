@@ -1519,6 +1519,41 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public void ApplyPrimaryColour()
+        {
+            Color colour = primaryColourPalette.Colour;
+
+            BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
+            if (bodyPart)
+            {
+                bodyPart.BodyPartConstructor.SetPrimaryColour(colour);
+            }
+            else
+            {
+                Creature.Constructor.SetPrimaryColour(colour);
+                TakeSnapshot(Change.SetBodyPrimaryColor);
+            }
+
+            UpdatePrimaryColour();
+        }
+        public void ApplySecondaryColour()
+        {
+            Color colour = secondaryColourPalette.Colour;
+
+            BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
+            if (bodyPart)
+            {
+                bodyPart.BodyPartConstructor.SetSecondaryColour(colour);
+            }
+            else
+            {
+                Creature.Constructor.SetSecondaryColour(secondaryColourPalette.Colour);
+                TakeSnapshot(Change.SetBodySecondaryColor);
+            }
+
+            UpdateSecondaryColour();
+        }
+
         public void UpdateUsability()
         {
             foreach (BodyPartUI bodyPartUI in bodyPartsRT.GetComponentsInChildren<BodyPartUI>())
@@ -1542,38 +1577,28 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UpdatePrimaryColour()
         {
-            Color colour = primaryColourPalette.Colour;
             BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
             if (bodyPart)
             {
-                bodyPart.BodyPartConstructor.SetPrimaryColour(colour);
                 SetPrimaryColourOverrideUI(bodyPart.BodyPartConstructor.IsPrimaryOverridden);
             }
             else
             {
-                Creature.Constructor.SetPrimaryColour(colour);
-                patternMaterial.SetColor("_PrimaryCol", colour);
+                patternMaterial.SetColor("_PrimaryCol", Creature.Constructor.Data.PrimaryColour);
                 SetPrimaryColourOverrideUI(false);
-
-                TakeSnapshot(Change.SetBodyPrimaryColor);
             }
         }
         public void UpdateSecondaryColour()
         {
-            Color colour = secondaryColourPalette.Colour;
             BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
             if (bodyPart)
             {
-                bodyPart.BodyPartConstructor.SetSecondaryColour(colour);
                 SetSecondaryColourOverrideUI(bodyPart.BodyPartConstructor.IsSecondaryOverridden);
             }
             else
             {
-                Creature.Constructor.SetSecondaryColour(secondaryColourPalette.Colour);
-                patternMaterial.SetColor("_SecondaryCol", colour);
+                patternMaterial.SetColor("_SecondaryCol", Creature.Constructor.Data.SecondaryColour);
                 SetSecondaryColourOverrideUI(false);
-
-                TakeSnapshot(Change.SetBodySecondaryColor);
             }
         }
         public void UpdatePattern()
