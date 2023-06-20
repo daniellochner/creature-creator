@@ -36,12 +36,14 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 #endif
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             Players.Add(this);
         }
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             Players.Remove(this);
         }
 

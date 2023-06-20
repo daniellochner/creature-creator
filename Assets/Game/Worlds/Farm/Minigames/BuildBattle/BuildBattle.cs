@@ -246,6 +246,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         break;
                     }
                 }
+                ratingToggles[0].SetIsOnWithoutNotify(true);
             }
 
             creatureToRate.Body.gameObject.SetActive(false);
@@ -257,10 +258,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (InMinigame)
             {
                 ratingPad.SetActive(isActive);
-                if (isActive)
-                {
-                    ratingToggles[0].SetIsOnWithoutNotify(true);
-                }
             }
         }
 

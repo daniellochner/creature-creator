@@ -115,11 +115,11 @@ namespace DanielLochner.Assets.CreatureCreator
             optimizer = GetComponent<CreatureOptimizer>();
         }
 #endif
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             Creatures.Add(this);
         }
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             Creatures.Remove(this);
         }

@@ -81,8 +81,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 IsVisible = false;
                 SignOut();
-
-                Debug.Log(col.name, col);
             }
         }
 
