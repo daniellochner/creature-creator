@@ -26,10 +26,10 @@ namespace DanielLochner.Assets
             {
                 string buffer = "";
                 int n = list.Count;
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < n - 1; i++)
                 {
                     buffer += list[i];
-                    if (i < n - 1)
+                    if (i < n - 2)
                     {
                         buffer += ", ";
                     }
