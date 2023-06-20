@@ -105,7 +105,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void SetTopicClientRpc(bool isVisible)
         {
-            MinigameManager.Instance.SetTitle(isVisible ? LocalizationUtility.Localize(topicIds[TopicId.Value]) : null);
+            if (InMinigame)
+            {
+                MinigameManager.Instance.SetTitle(isVisible ? LocalizationUtility.Localize(topicIds[TopicId.Value]) : null);
+            }
         }
         #endregion
 
@@ -132,7 +135,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 foreach (CreaturePlayer player in CreaturePlayer.Players)
                 {
-                    player.Namer.enabled = isActive;
+                    if (player is CreaturePlayerRemote)
+                    {
+                        player.Namer.enabled = isActive;
+                    }
                 }
             }
         }
