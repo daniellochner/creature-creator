@@ -51,8 +51,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (mineTimeLeft < 0 && netObj.TryGet(out NetworkObject obj))
             {
-                List<Holdable> held = new List<Holdable>(obj.GetComponent<CreatureBase>().Holder.Held.Values);
-                if (held.Find(x => x is Pickaxe))
+                List<Held> held = new List<Held>(obj.GetComponent<CreatureBase>().Holder.Held.Values);
+                if (held.Find(x => x.Holdable is Pickaxe))
                 {
                     hits.Value++;
 

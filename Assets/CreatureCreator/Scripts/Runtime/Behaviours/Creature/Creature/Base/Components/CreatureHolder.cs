@@ -11,15 +11,15 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureHolder : NetworkBehaviour
     {
         #region Fields
-        private Dictionary<ArmAnimator, Holdable> held = new Dictionary<ArmAnimator, Holdable>();
+        private Dictionary<ArmAnimator, Held> held = new Dictionary<ArmAnimator, Held>();
         #endregion
 
         #region Properties
         public CreatureAnimator Animator { get; private set; }
 
-        public Dictionary<ArmAnimator, Holdable> Held => held;
+        public Dictionary<ArmAnimator, Held> Held => held;
 
-        public bool IsHolding { get; private set; }
+        public NetworkVariable<bool> IsHolding { get; set; } = new NetworkVariable<bool>(false); 
         #endregion
 
         #region Methods
@@ -28,19 +28,18 @@ namespace DanielLochner.Assets.CreatureCreator
             Animator = GetComponent<CreatureAnimator>();
         }
 
-        public void TryHold(Holder holder)
+        public void TryHold(Held holder)
         {
             HoldServerRpc(holder.NetworkObject);
         }
         [ServerRpc(RequireOwnership = false)]
         private void HoldServerRpc(NetworkObjectReference networkObjectRef)
         {
-            Holdable holdable = null;
             if (networkObjectRef.TryGet(out NetworkObject networkObject))
             {
-                holdable = networkObject.GetComponent<Holdable>();
+                Held holder = networkObject.GetComponent<Held>();
 
-                if (!holdable.IsHeld)
+                if (!holder.IsHeld)
                 {
                     ArmAnimator nearestArm = null;
                     float minDistance = Mathf.Infinity;
@@ -49,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     {
                         if (held.ContainsKey(arm)) continue;
 
-                        float d = Vector3.Distance(arm.LimbConstructor.Extremity.position, holdable.transform.position);
+                        float d = Vector3.Distance(arm.LimbConstructor.Extremity.position, holder.transform.position);
                         if (d < minDistance)
                         {
                             minDistance = d;
@@ -59,18 +58,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
                     if (nearestArm != null)
                     {
-                        holdable.Hold(nearestArm.LimbConstructor);
-                        held[nearestArm] = holdable;
+                        holder.Hand.Value = new Held.HeldData()
+                        {
+                            networkObjectId = NetworkObjectId,
+                            armGUID = nearestArm.name
+                        };
+                        held[nearestArm] = holder;
                     }
 
-                    HoldClientRpc();
+                    IsHolding.Value = true;
                 }
             }
-        }
-        [ClientRpc]
-        private void HoldClientRpc()
-        {
-            IsHolding = true;
         }
 
         public void DropAll()
@@ -80,19 +78,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void DropAllServerRpc()
         {
-            foreach (Holdable h in held.Values)
+            foreach (Held h in held.Values)
             {
                 if (h == null) continue;
-                h.Drop();
+                h.Hand.Value = default;
             }
             held.Clear();
 
-            DropClientRpc();
-        }
-        [ClientRpc]
-        private void DropClientRpc()
-        {
-            IsHolding = false;
+            IsHolding.Value = false;
         }
         #endregion
     }

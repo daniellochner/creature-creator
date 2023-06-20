@@ -10,13 +10,11 @@ namespace DanielLochner.Assets.CreatureCreator
     public class HoldableDummy : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private float checkTime;
-
         private MeshRenderer mr;
         private MeshFilter mf;
         private Follower f;
 
-        private Holdable holdable;
+        private Held held;
         private Transform hand;
         #endregion
 
@@ -29,41 +27,39 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
-            if (!NetworkManager.Singleton.IsServer) return;
-            if (!hand)
+            if (NetworkManager.Singleton.IsServer && !hand)
             {
-                holdable.Drop();
+                held.Hand.Value = default;
             }
         }
 
-        public void Setup(Holdable holdable, string limbGUID)
+        public void Setup(Held held, Held.HeldData data)
         {
-            this.holdable = holdable;
-            StartCoroutine(SetupRoutine(holdable, limbGUID));
-        }
-        private IEnumerator SetupRoutine(Holdable holdable, string limbGUID)
-        {
-            while (!hand)
+            this.held = held;
+
+            // Hand
+            foreach (CreatureBase creature in CreatureBase.Creatures)
             {
-                GameObject h = GameObject.Find(limbGUID);
-                if (h != null)
+                if (creature.NetworkObjectId == data.networkObjectId)
                 {
-                    ArmConstructor arm = h.GetComponent<ArmConstructor>();
-                    if (arm.ConnectedHand != null)
+                    ArmAnimator arm = creature.Animator.Arms.Find(x => x.name == data.armGUID.ToString());
+                    if (arm.ArmConstructor.ConnectedHand != null)
                     {
-                        hand = arm.ConnectedHand.Palm;
+                        hand = arm.ArmConstructor.ConnectedHand.Palm;
                     }
                     else
                     {
-                        hand = arm.Extremity;
+                        hand = arm.ArmConstructor.Extremity;
                     }
+
+                    break;
                 }
-                else yield return new WaitForSeconds(checkTime);
             }
 
-            transform.localScale = this.holdable.transform.localScale;
-            mr.materials = holdable.GetComponent<MeshRenderer>().materials;
-            mf.mesh = holdable.GetComponent<MeshFilter>().mesh;
+            // Dummy
+            transform.localScale = this.held.transform.localScale;
+            mr.materials = held.GetComponent<MeshRenderer>().materials;
+            mf.mesh = held.GetComponent<MeshFilter>().mesh;
             f.SetFollow(hand, true);
         }
         #endregion

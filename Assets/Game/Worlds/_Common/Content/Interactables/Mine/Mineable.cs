@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override bool CanHighlight(Interactor interactor)
         {
-            return base.CanHighlight(interactor) && Player.Instance.Holder.IsHolding;
+            return base.CanHighlight(interactor) && Player.Instance.Holder.IsHolding.Value;
         }
         protected override void OnInteract(Interactor interactor)
         {

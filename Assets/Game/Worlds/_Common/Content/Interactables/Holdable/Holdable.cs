@@ -5,42 +5,27 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [RequireComponent(typeof(Holder))]
+    [RequireComponent(typeof(Held))]
     public class Holdable : CreatureInteractable
     {
-        #region Fields
-        private Holder holder;
-        #endregion
-
         #region Properties
-        public HoldableDummy Dummy => holder.Dummy;
-
-        public bool IsHeld => holder.IsHeld;
+        public Held Held { get; private set; }
         #endregion
 
         #region Methods
         protected override void Awake()
         {
             base.Awake();
-            holder = GetComponent<Holder>();
+            Held = GetComponent<Held>();
         }
         public override bool CanInteract(Interactor interactor)
         {
-            return base.CanInteract(interactor) && !EditorManager.Instance.IsEditing && Player.Instance.Holder.enabled && interactor.GetComponent<CreatureAnimator>().Arms.Count > 0;
+            return base.CanInteract(interactor) && !Held.IsHeld && !EditorManager.Instance.IsEditing && Player.Instance.Holder.enabled && Player.Instance.Animator.Arms.Count > 0;
         }
         protected override void OnInteract(Interactor interactor)
         {
             base.OnInteract(interactor);
-            Player.Instance.Holder.TryHold(holder);
-        }
-        
-        public void Hold(LimbConstructor arm)
-        {
-            holder.Hand.Value = arm.name;
-        }
-        public void Drop()
-        {
-            holder.Hand.Value = "";
+            Player.Instance.Holder.TryHold(Held);
         }
         #endregion
     }

@@ -30,8 +30,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     CreatureBase creature = col.GetComponent<CreatureBase>();
 
-                    List<Holdable> held = new List<Holdable>(creature.Holder.Held.Values);
-                    dogBone = held.Find(x => x is DogBone) as DogBone;
+                    List<Held> held = new List<Held>(creature.Holder.Held.Values);
+                    dogBone = held.Find(x => x.Holdable is DogBone).Holdable as DogBone;
                     if (dogBone != null)
                     {
                         ChangeState("PAN");
@@ -97,13 +97,13 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void UpdateLogic()
             {
                 Transform targetBone = null;
-                if (DogAI.dogBone.Dummy == null)
+                if (DogAI.dogBone.Held.Dummy == null)
                 {
                     targetBone = DogAI.dogBone.transform;
                 }
                 else
                 {
-                    targetBone = DogAI.dogBone.Dummy.transform;
+                    targetBone = DogAI.dogBone.Held.Dummy.transform;
                 }
 
                 Vector3 lookDir = Vector3.ProjectOnPlane(targetBone.position - DogAI.transform.position, DogAI.transform.up).normalized;

@@ -8,7 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
     [CreateAssetMenu(menuName = "Creature Creator/Ability/Drop")]
     public class Drop : Ability
     {
-        public override bool CanPerform => base.CanPerform && Player.Instance.Holder.IsHolding;
+        public override bool CanPerform => base.CanPerform && Player.Instance.Holder.IsHolding.Value;
 
         public override void OnPerform()
         {

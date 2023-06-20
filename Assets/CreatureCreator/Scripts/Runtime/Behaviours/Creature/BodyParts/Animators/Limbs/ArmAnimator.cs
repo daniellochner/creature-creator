@@ -5,5 +5,6 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class ArmAnimator : LimbAnimator
     {
+        public ArmConstructor ArmConstructor => LimbConstructor as ArmConstructor;
     }
 }
