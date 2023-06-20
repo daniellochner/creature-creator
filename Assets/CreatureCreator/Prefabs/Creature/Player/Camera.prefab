@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7432110781478147908}
   - component: {fileID: 3800948856378999643}
   - component: {fileID: 608273419105254252}
+  - component: {fileID: 8800167600357481062}
   m_Layer: 13
   m_Name: Main
   m_TagString: MainCamera
@@ -78,7 +79,7 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!114 &2862971131670024434
@@ -205,6 +206,39 @@ MonoBehaviour:
   m_AfterStackBundles:
   - assemblyQualifiedName: UnityEngine.Rendering.PostProcessing.Blur, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &8800167600357481062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041236049360367948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1faf7b026177a64fb1d6af18a6c7818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStandalone:
+    m_PersistentCalls:
+      m_Calls: []
+  onHandheld:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4041236049360367945}
+        m_TargetAssemblyTypeName: UnityEngine.Camera, UnityEngine
+        m_MethodName: set_useOcclusionCulling
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onConsole:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4041236049601487436
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +397,7 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!1 &4041236050173656928
