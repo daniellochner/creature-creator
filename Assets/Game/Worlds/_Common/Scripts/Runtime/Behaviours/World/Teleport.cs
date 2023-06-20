@@ -177,7 +177,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (ShowCount)
             {
-                text += $"{TextUtility.FormatError(NumPlayers, !CanTeleport)}/{MaxPlayers}<br>";
+                text += $"{TextUtility.FormatError(NumPlayers, NumPlayers != MaxPlayers)}/{MaxPlayers}<br>";
             }
             if (SystemUtility.IsDevice(DeviceType.Desktop) && CanTeleport)
             {
