@@ -367,7 +367,7 @@ namespace DanielLochner.Assets.CreatureCreator
             MasterVolume = 1f;
             MusicVolume = 0.5f;
             SoundEffectsVolume = 0.75f;
-            InGameMusic = InGameMusicType.WhistfulHarp;
+            InGameMusic = InGameMusicType.WistfulHarp;
 
             OnlineUsername = "";
             CreaturePresets.Clear();
@@ -487,7 +487,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public enum InGameMusicType
         {
             None,
-            WhistfulHarp,
+            WistfulHarp,
         }
         public enum JoystickType
         {
