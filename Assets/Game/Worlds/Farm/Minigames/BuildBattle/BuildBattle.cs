@@ -87,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
             topicText.gameObject.SetActive(newTopicId != -1);
             if (newTopicId != -1)
             {
-                topicText.text = LocalizationUtility.Localize(topicIds[newTopicId]);
+                topicText.text = topicIds[newTopicId];
             }
         }
         #endregion
@@ -107,7 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                MinigameManager.Instance.SetTitle(isVisible ? LocalizationUtility.Localize(topicIds[TopicId.Value]) : null);
+                MinigameManager.Instance.SetTitle(isVisible ? topicIds[TopicId.Value] : null);
             }
         }
         #endregion
@@ -116,7 +116,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnStartingEnter()
         {
             SetScoreboardActiveClientRpc(false);
-            SetPlayerNameActiveClientRpc(false);
         }
 
         [ClientRpc]
@@ -125,21 +124,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (InMinigame)
             {
                 MinigameManager.Instance.Scoreboard.gameObject.SetActive(isActive);
-            }
-        }
-
-        [ClientRpc]
-        private void SetPlayerNameActiveClientRpc(bool isActive)
-        {
-            if (InMinigame)
-            {
-                foreach (CreaturePlayer player in CreaturePlayer.Players)
-                {
-                    if (player is CreaturePlayerRemote)
-                    {
-                        player.Namer.enabled = isActive;
-                    }
-                }
             }
         }
         #endregion
@@ -152,7 +136,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnPlayingExit()
         {
             StopRatingClientRpc();
-            SetPlayerNameActiveClientRpc(true);
         }
 
         protected override IEnumerator GameplayLogicRoutine()
@@ -190,7 +173,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 int rating = 0;
                 foreach (ulong ratingClientId in players)
                 {
-                    rating += playerRatings[ratedClientId][ratingClientId];
+                    if (playerRatings[ratedClientId].TryGetValue(ratingClientId, out int r))
+                    {
+                        rating += r;
+                    }
                 }
                 SetScore(ratedClientId, rating);
             }
@@ -216,7 +202,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void SetRatingServerRpc(int rating, ulong ratingClientId)
         {
-            playerRatings[currentClientId][ratingClientId] = rating;
+            if (currentClientId != ratingClientId)
+            {
+                playerRatings[currentClientId][ratingClientId] = rating;
+            }
         }
 
         [ClientRpc]
@@ -246,7 +235,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         break;
                     }
                 }
-                ratingToggles[0].SetIsOnWithoutNotify(true);
+                ratingToggles[ratingToggles.Length - 1].SetIsOnWithoutNotify(true);
             }
 
             creatureToRate.Body.gameObject.SetActive(false);
