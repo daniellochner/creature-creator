@@ -2,6 +2,7 @@
 // Copyright (c) Daniel Lochner
 
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,6 +27,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     return true;
                 }
 
+                if (MinigameManager.Instance.CurrentPad != null)
+                {
+                    return false;
+                }
+
                 if (MinigameManager.Instance.CurrentMinigame != null)
                 {
                     return MinigameManager.Instance.CurrentMinigame.EnablePVP;
@@ -47,7 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkShutdownManager.Instance.OnShutdown += OnShutdown;
         }
 
-        private void OnLoadCompleted(string sceneName, LoadSceneMode loadSceneMode, System.Collections.Generic.List<ulong> clientsCompleted, System.Collections.Generic.List<ulong> clientsTimedOut)
+        private void OnLoadCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
             if (GameSetup.Instance && !GameSetup.Instance.IsSetup)
             {

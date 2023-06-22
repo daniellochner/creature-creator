@@ -111,10 +111,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void SignUp()
         {
+            MinigameManager.Instance.CurrentPad = this;
             minigame.SignMeUp(true);
         }
         public void SignOut()
         {
+            MinigameManager.Instance.CurrentPad = null;
             minigame.SignMeUp(false);
         }
         #endregion

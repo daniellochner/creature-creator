@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set => infoRT.offsetMax = new Vector2(0, value);
         }
 
+        public MinigamePad CurrentPad { get; set; }
         public Minigame CurrentMinigame { get; set; }
         #endregion
 
