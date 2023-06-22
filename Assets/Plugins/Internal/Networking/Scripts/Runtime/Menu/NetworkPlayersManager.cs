@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace DanielLochner.Assets
         [SerializeField] private NetworkPlayersMenu networkMenuPrefab;
 
         private NetworkPlayersMenu networkMenu;
+        private bool hasHandledExistingPlayers;
         #endregion
 
         #region Properties
@@ -62,27 +64,34 @@ namespace DanielLochner.Assets
         }
         private void OnPlayerJoin(PlayerData playerData)
         {
-            NotificationsManager.Notify(LocalizationUtility.Localize("player-join", playerData.username));
-            NetworkPlayersMenu.Instance.AddPlayer(playerData);
+            if (hasHandledExistingPlayers)
+            {
+                NotificationsManager.Notify(LocalizationUtility.Localize("player-join", playerData.username));
+                NetworkPlayersMenu.Instance.AddPlayer(playerData);
+            }
         }
         private void OnPlayerLeave(PlayerData playerData)
         {
-            NotificationsManager.Notify(LocalizationUtility.Localize("player-leave", playerData.username));
-            NetworkPlayersMenu.Instance.RemovePlayer(playerData.clientId);
+            if (hasHandledExistingPlayers)
+            {
+                NotificationsManager.Notify(LocalizationUtility.Localize("player-leave", playerData.username));
+                NetworkPlayersMenu.Instance.RemovePlayer(playerData.clientId);
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void HandleExistingPlayersServerRpc(ulong clientId)
         {
-            foreach (PlayerData data in NetworkHostManager.Instance.Players.Values)
-            {
-                HandleExistingPlayersClientRpc(data, NetworkUtils.SendTo(clientId));
-            }
+            HandleExistingPlayersClientRpc(NetworkHostManager.Instance.Players.Values.ToArray(), NetworkUtils.SendTo(clientId));
         }
         [ClientRpc]
-        public void HandleExistingPlayersClientRpc(PlayerData data, ClientRpcParams clientRpcParams)
+        public void HandleExistingPlayersClientRpc(PlayerData[] players, ClientRpcParams clientRpcParams)
         {
-            NetworkPlayersMenu.Instance.AddPlayer(data);
+            foreach (PlayerData player in players)
+            {
+                NetworkPlayersMenu.Instance.AddPlayer(player);
+            }
+            hasHandledExistingPlayers = true;
         }
         public void HandleExistingPlayers()
         {
