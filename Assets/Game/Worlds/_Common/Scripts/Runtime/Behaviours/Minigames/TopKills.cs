@@ -73,6 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected virtual AnimalLocal SpawnEnemy()
         {
             AnimalSpawner spawner = enemySpawners[Random.Range(0, enemySpawners.Length)];
+            spawner.transform.position = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)].position;
             spawner.Spawn();
 
             AnimalAI animalAI = spawner.SpawnedNPC.GetComponent<AnimalAI>();
@@ -80,9 +81,6 @@ namespace DanielLochner.Assets.CreatureCreator
             animalAI.Region = region;
             animalAI.Creature.Health.OnDie += OnDie;
             SetupCorpse(animalAI.Creature, false);
-
-            Transform spawnPoint = enemySpawnPoints[Random.Range(0, enemySpawnPoints.Length)];
-            animalAI.GetComponent<ClientNetworkTransform>().Teleport(spawnPoint.position, spawnPoint.rotation, animalAI.transform.localScale);
 
             return animalAI.Creature as AnimalLocal;
         }
