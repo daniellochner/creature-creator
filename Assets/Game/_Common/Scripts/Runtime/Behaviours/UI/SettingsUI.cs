@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Purchasing;
 using UnityEngine.UI;
 using static DanielLochner.Assets.CreatureCreator.Settings;
 
@@ -63,7 +64,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle mapToggle;
         [SerializeField] private Toggle footstepsToggle;
         [SerializeField] private Button resetProgressButton;
-        [SerializeField] private GameObject[] premiumButtons;
 
         [Header("Controls")]
         [SerializeField] private Slider sensitivityHorizontalSlider;
@@ -514,15 +514,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("settings_reset-progress_title"), LocalizationUtility.Localize("settings_reset-progress_message"), onYes: ResetProgress);
             });
-
-            // Premium
-            if (SystemUtility.IsDevice(DeviceType.Handheld))
-            {
-                foreach (GameObject button in premiumButtons)
-                {
-                    button.SetActive(!PremiumManager.Data.IsPremium && !SettingsManager.Instance.ShowTutorial);
-                }
-            }
             #endregion
 
             #region Controls
@@ -657,8 +648,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Gameplay
-        public void OnRestorePurchases(bool b, string s)
+        public void RestorePurchases()
         {
+            PremiumManager.Instance.Extensions.GetExtension<IAppleExtensions>().RestoreTransactions(delegate (bool isRestored, string message) 
+            {
+                if (isRestored)
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("settings_gameplay_purchases-restored_title"), LocalizationUtility.Localize("settings_gameplay_purchases-restored_message"));
+                }
+            });
         }
         public void ViewPremium()
         {

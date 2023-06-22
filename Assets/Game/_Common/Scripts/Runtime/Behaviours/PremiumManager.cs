@@ -4,6 +4,7 @@ using UnityEngine.Purchasing;
 using System;
 using System.IO;
 using GoogleMobileAds.Api;
+using Unity.Services.Core;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -11,7 +12,7 @@ using Steamworks;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class PremiumManager : DataManager<PremiumManager, Premium>
+    public class PremiumManager : DataManager<PremiumManager, Premium>, IStoreListener
     {
         #region Fields
         private BannerView bannerAd;
@@ -21,6 +22,18 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public override string SALT
+        {
+            get
+            {
+#if UNITY_STANDALONE
+                return SteamUser.GetSteamID().ToString();
+#elif UNITY_IOS || UNITY_ANDROID
+                return SystemInfo.deviceUniqueIdentifier;
+#endif
+            }
+        }
+
         private string BannerAdUnitId
         {
             get
@@ -53,16 +66,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 return adUnitId;
             }
         }
-
-        public override string SALT
+        private int BannerAdWidth
         {
             get
             {
-#if UNITY_STANDALONE
-                return SteamUser.GetSteamID().ToString();
-#elif UNITY_IOS || UNITY_ANDROID
-                return SystemInfo.deviceUniqueIdentifier;
-#endif
+                float p = Screen.safeArea.width / Screen.width;
+                return 160 * Mathf.RoundToInt((p * Display.main.systemWidth / Screen.dpi) / 3f);
             }
         }
 
@@ -71,18 +80,30 @@ namespace DanielLochner.Assets.CreatureCreator
             get;
             set;
         }
+        public Action OnPurchaseComplete
+        {
+            get;
+            set;
+        }
 
+        public IExtensionProvider Extensions
+        {
+            get;
+            private set;
+        }
+        public IStoreController Controller
+        {
+            get;
+            private set;
+        }
+
+        public bool IsInitialized
+        {
+            get => Controller != null && Extensions != null;
+        }
         public bool IsRewardAdLoaded
         {
             get => rewardAd != null && rewardAd.CanShowAd();
-        }
-        private int BannerAdWidth
-        {
-            get
-            {
-                float p = Screen.safeArea.width / Screen.width;
-                return 160 * Mathf.RoundToInt((p * Display.main.systemWidth / Screen.dpi) / 3f);
-            }
         }
         #endregion
 
@@ -104,13 +125,20 @@ namespace DanielLochner.Assets.CreatureCreator
                 Save();
             }
 
-            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            if (SystemUtility.IsDevice(DeviceType.Handheld) || Application.isEditor)
             {
-                MobileAds.SetiOSAppPauseOnBackground(true);
-                MobileAds.RaiseAdEventsOnUnityMainThread = true;
-
-                MobileAds.Initialize(OnInitialized);
+                InitializeAds();
+                InitializePurchasesAsync();
             }
+        }
+
+        #region Ads
+        private void InitializeAds()
+        {
+            MobileAds.SetiOSAppPauseOnBackground(true);
+            MobileAds.RaiseAdEventsOnUnityMainThread = true;
+
+            MobileAds.Initialize(OnInitialized);
         }
 
         public void OnInitialized(InitializationStatus status)
@@ -264,21 +292,60 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
         #endregion
+        #endregion
 
-        #region Premium
-        public void OnPremiumPurchased()
+        #region IAPs
+        private async void InitializePurchasesAsync()
         {
-            Data.IsPremium = true;
-            Save();
+            await UnityServices.InitializeAsync();
 
-            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
-
-            EditorManager.Instance?.UpdateUsability();
-            HideBannerAd();
+            UnityPurchasing.Initialize(this, GetConfig());
         }
-        public void OnPremiumFailed(string reason)
+
+        private ConfigurationBuilder GetConfig()
         {
-            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_failed_title"), LocalizationUtility.Localize("premium_paid_failed_message", reason));
+            ConfigurationBuilder builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+            builder.AddProduct("cc_premium", ProductType.NonConsumable, new IDs()
+            {
+                { "cc_premium", GooglePlay.Name },
+                { "cc_premium", AppleAppStore.Name}
+            });
+            return builder;
+        }
+
+        public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
+        {
+            Controller = controller;
+            Extensions = extensions;
+        }
+        public void OnInitializeFailed(InitializationFailureReason error)
+        {
+        }
+        public void OnInitializeFailed(InitializationFailureReason error, string message)
+        {
+        }
+        public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchaseEvent)
+        {
+            if (purchaseEvent.purchasedProduct.definition.id == "cc_premium")
+            {
+                Data.IsPremium = true;
+                Save();
+
+                InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
+
+                EditorManager.Instance?.UpdateUsability();
+                HideBannerAd();
+            }
+
+            OnPurchaseComplete?.Invoke();
+
+            return PurchaseProcessingResult.Complete;
+        }
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
+        {
+            OnPurchaseComplete?.Invoke();
+
+            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_failed_title"), LocalizationUtility.Localize("premium_paid_failed_message", failureReason));
         }
         #endregion
 

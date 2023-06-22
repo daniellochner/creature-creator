@@ -8856,6 +8856,34 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8390203517075213143}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RestorePurchases
+      objectReference: {fileID: 0}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DanielLochner.Assets.CreatureCreator.SettingsUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2984606728186128788, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3982693607497997970, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
       propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
       value: 36867771102597120
@@ -8905,51 +8933,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPlatform: 1
---- !u!1 &3430300630896433279 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 773319567290877596, guid: 7f76f80bd110b66498dccc34890d354e, type: 3}
-  m_PrefabInstance: {fileID: 2675562810453925603}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4408343051419262117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3430300630896433279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a5f511b0d8142cba0aeb92d0b264c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  productId: 
-  buttonType: 1
-  consumePurchase: 1
-  onTransactionsRestored:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8390203517075213143}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.SettingsUI,
-          Assembly-CSharp
-        m_MethodName: OnRestorePurchases
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onPurchaseComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onPurchaseFailed:
-    m_PersistentCalls:
-      m_Calls: []
-  titleText: {fileID: 0}
-  descriptionText: {fileID: 0}
-  priceText: {fileID: 0}
 --- !u!1001 &2823268011995299490
 PrefabInstance:
   m_ObjectHideFlags: 0

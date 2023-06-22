@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button buyButton;
         [SerializeField] private TextMeshProUGUI buyText;
         [SerializeField] private GameObject buyLoadIcon;
+        [SerializeField] private GameObject[] premiumButtons;
 
         [Header("Free")]
         [SerializeField] private RectTransform freeRT;
@@ -58,6 +59,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 freeRT.gameObject.SetActive(false);
             }
+            HandlePremiumButtons();
+        }
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            PremiumManager.Instance.OnPurchaseComplete += OnPurchaseComplete;
+        }
+        private void OnDisable()
+        {
+            if (PremiumManager.Instance)
+            {
+                PremiumManager.Instance.OnPurchaseComplete -= OnPurchaseComplete;
+            }
         }
 
         public void RequestBodyPart(string bodyPartId)
@@ -77,13 +91,13 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Setup(Sprite icon, bool isBlinking)
         {
-            if (!CodelessIAPStoreListener.initializationComplete)
+            if (!PremiumManager.Instance.IsInitialized)
             {
                 return;
             }
 
             // Paid
-            buyText.text = CodelessIAPStoreListener.Instance.GetProduct("cc_premium").metadata.localizedPriceString;
+            buyText.text = PremiumManager.Instance.Controller.products.WithID("cc_premium").metadata.localizedPriceString;
 
             // Free
             requestedItemBCG.IsBlinking = isBlinking;
@@ -122,19 +136,21 @@ namespace DanielLochner.Assets.CreatureCreator
         public void OnPurchaseClicked()
         {
             IsLoadingPurchase = true;
+            PremiumManager.Instance.Controller.InitiatePurchase("cc_premium");
         }
-        public void OnPurchaseComplete(Product product)
+        public void OnPurchaseComplete()
         {
-            if (product.definition.id == "cc_premium")
-            {
-                PremiumManager.Instance.OnPremiumPurchased();
-                IsLoadingPurchase = false;
-            }
-        }
-        public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
-        {
-            PremiumManager.Instance.OnPremiumFailed(reason.ToString());
             IsLoadingPurchase = false;
+            HandlePremiumButtons();
+            Close();
+        }
+
+        private void HandlePremiumButtons()
+        {
+            foreach (GameObject button in premiumButtons)
+            {
+                button.SetActive(!PremiumManager.Data.IsPremium && !SettingsManager.Instance.ShowTutorial);
+            }
         }
         #endregion
         #endregion
