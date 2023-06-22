@@ -10,7 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Race : IndividualMinigame
     {
         #region Fields
-        [SerializeField] private GameObject border;
         [SerializeField] private RaceCheckpoint startCheckpoint;
         [SerializeField] private PathCreator path;
         [SerializeField] private int laps;
@@ -29,22 +28,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected override void Start()
-        {
-            base.Start();
-
-            if (IsClient)
-            {
-                border.SetActive(State.Value != MinigameStateType.WaitingForPlayers);
-            }
-        }
-
         protected override void Setup()
         {
             base.Setup();
-
-            waitingForPlayers.onEnter += OnWaitingForPlayersEnter;
-            waitingForPlayers.onExit += OnWaitingForPlayersExit;
 
             starting.onEnter += OnStartingEnter;
 
@@ -52,23 +38,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             completing.onExit += OnCompletingExit;
         }
-
-        #region Waiting For Players
-        private void OnWaitingForPlayersEnter()
-        {
-            SetBorderActiveClientRpc(false);
-        }
-        private void OnWaitingForPlayersExit()
-        {
-            SetBorderActiveClientRpc(true);
-        }
-
-        [ClientRpc]
-        private void SetBorderActiveClientRpc(bool isActive)
-        {
-            border.SetActive(isActive);
-        }
-        #endregion
 
         #region Starting
         private void OnStartingEnter()
