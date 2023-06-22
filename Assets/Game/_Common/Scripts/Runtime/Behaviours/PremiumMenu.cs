@@ -59,7 +59,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 freeRT.gameObject.SetActive(false);
             }
-            HandlePremiumButtons();
+
+            if (SystemUtility.IsDevice(DeviceType.Handheld))
+            {
+                HandlePremiumButtons();
+            }
         }
         protected override void OnEnable()
         {

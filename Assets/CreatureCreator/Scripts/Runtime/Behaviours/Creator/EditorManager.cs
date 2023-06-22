@@ -1363,7 +1363,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (update)
             {
                 UpdateBodyPartTotals();
-                LayoutRebuilder.MarkLayoutForRebuild(bodyPartsRT);
             }
 
             return bodyPartUI;
