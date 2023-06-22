@@ -35,8 +35,6 @@ namespace DanielLochner.Assets.CreatureCreator
             starting.onEnter += OnStartingEnter;
 
             playing.onEnter += OnPlayingEnter;
-
-            completing.onExit += OnCompletingExit;
         }
 
         #region Starting
@@ -163,24 +161,22 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Completing
-        private void OnCompletingExit()
+        protected override void OnServerShutdown()
         {
-            hasAnyoneFinished = false;
-
             playerDistances.Clear();
             playerLaps.Clear();
+            hasAnyoneFinished = false;
 
-            ResetCheckpointClientRpc();
+            base.OnServerShutdown();
         }
-
-        [ClientRpc]
-        private void ResetCheckpointClientRpc()
+        protected override void OnClientShutdown()
         {
             if (InMinigame)
             {
-                MinigameManager.Instance.SetTitle(null);
                 CurrentCheckpoint = null;
             }
+
+            base.OnClientShutdown();
         }
         #endregion
         #endregion

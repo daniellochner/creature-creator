@@ -38,6 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] protected int playTime;
         [SerializeField] protected bool enablePVP;
+        [SerializeField] protected bool spawnCorpses;
         [SerializeField] protected bool isAscendingOrder;
         [Space]
         [SerializeField] protected MinMax minMaxFireworksCooldown;
@@ -59,7 +60,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public int WaitTime => waitTime;
         public bool EnablePVP => enablePVP;
 
+
+        public bool InPad => MinigameManager.Instance.CurrentPad == pad;
         public bool InMinigame => MinigameManager.Instance.CurrentMinigame == this;
+
 
         public NetworkVariable<MinigameStateType> State { get; set; } = new NetworkVariable<MinigameStateType>(MinigameStateType.WaitingForPlayers);
 
@@ -79,8 +83,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected virtual void Awake()
         {
-            Scoreboard = new NetworkList<Score>();
             audioSource = GetComponent<AudioSource>();
+
+            Scoreboard = new NetworkList<Score>();
         }
         protected virtual void Start()
         {
@@ -169,10 +174,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            // Setup Players
-            SetupMinigameClientRpc(NetworkUtils.SendTo(players.ToArray()));
-
+            // Hide Pad
             IsPadVisible.Value = false;
+
+            // Setup
+            SetupClientRpc(NetworkUtils.SendTo(players.ToArray()));
         }
 
         public void SignMeUp(bool isSignUp)
@@ -196,21 +202,25 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [ClientRpc]
-        private void SetupMinigameClientRpc(ClientRpcParams clientRpcParams = default)
+        private void SetupClientRpc(ClientRpcParams clientRpcParams = default)
+        {
+            OnClientSetup();
+        }
+
+        private void OnIsZoneVisibleChanged(bool oldV, bool newV)
+        {
+            zone.gameObject.SetActive(newV);
+        }
+        private void OnIsPadVisibleChanged(bool oldV, bool newV)
+        {
+            pad.gameObject.SetActive(newV);
+        }
+
+        protected virtual void OnClientSetup()
         {
             MinigameManager.Instance.CurrentMinigame = this;
-            MinigameManager.Instance.Scoreboard.Setup(this);
 
             NotificationsManager.Instance.IsHidden = true;
-        }
-
-        private void OnIsZoneVisibleChanged(bool oldVisible, bool newVisible)
-        {
-            zone.gameObject.SetActive(newVisible);
-        }
-        private void OnIsPadVisibleChanged(bool oldVisible, bool newVisible)
-        {
-            pad.gameObject.SetActive(newVisible);
         }
         #endregion
 
@@ -446,8 +456,12 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Playing
         private IEnumerator PlayingRoutine()
         {
+            SetupPlayerCorpses(spawnCorpses);
+
             yield return new WaitAny(this, TimerRoutine(), GameplayLogicRoutine());
             PlayTimeLeft.Value = 0;
+
+            SetupPlayerCorpses(true);
         }
 
         private IEnumerator TimerRoutine()
@@ -497,6 +511,18 @@ namespace DanielLochner.Assets.CreatureCreator
             int secs = seconds % 60;
             return $"{mins:00}:{secs:00}";
         }
+
+        protected void SetupPlayerCorpses(bool isActive)
+        {
+            foreach (ulong clientId in players)
+            {
+                SetupCorpse(NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<CreatureBase>(), isActive);
+            }
+        }
+        protected void SetupCorpse(CreatureBase creature, bool isActive)
+        {
+            creature.Corpse.GenerateRagdoll.Value = isActive;
+        }
         #endregion
 
         #region Completing
@@ -504,12 +530,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitForSeconds(1f);
 
-            // Notify everyone of the minigame's winner(s)
+            // Notify Of Winners
             NotifyOfWinnerClientRpc(GetWinnerName());
 
+            // Celebrate
             ulong[] winnerClientIds = GetWinnerClientIds().ToArray();
-
-            // Celebrate with fireworks if there are winners (for a slightly longer celebration time)
             if (winnerClientIds.Length > 0)
             {
                 LoseClientRpc(NetworkUtils.DontSendTo(winnerClientIds));
@@ -525,8 +550,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 yield return new WaitForSeconds(completeTime);
             }
 
-            // Shutdown minigame
-            OnShutdown();
+            // Shutdown
+            OnServerShutdown();
+            ShutdownClientRpc();
         }
         private IEnumerator SpawnFireworksRoutine(ulong[] winnerClientIds)
         {
@@ -551,20 +577,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     yield return new WaitForSeconds(minMaxFireworksCooldown.Random);
                 }
             }
-        }
-
-        protected virtual void OnShutdown()
-        {
-            Scoreboard.Clear();
-            players.Clear();
-
-            zone.SetScale(0f, true);
-
-            WaitingPlayers.Value = 0;
-            IsZoneVisible.Value = false;
-            IsPadVisible.Value = true;
-
-            ShutdownClientRpc();
         }
 
         protected abstract List<ulong> GetWinnerClientIds();
@@ -614,6 +626,22 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void ShutdownClientRpc()
         {
+            OnClientShutdown();
+        }
+
+        protected virtual void OnServerShutdown()
+        {
+            Scoreboard.Clear();
+            players.Clear();
+
+            zone.SetScale(0f, true);
+
+            WaitingPlayers.Value = 0;
+            IsZoneVisible.Value = false;
+            IsPadVisible.Value = true;
+        }
+        protected virtual void OnClientShutdown()
+        {
             if (InMinigame)
             {
 #if USE_STATS
@@ -623,7 +651,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 EditorManager.Instance.ResetRestrictions();
 
                 MinigameManager.Instance.SetTitle(null);
+                MinigameManager.Instance.SetSubtitle(null, Color.white);
                 MinigameManager.Instance.Scoreboard.Clear();
+
                 MinigameManager.Instance.CurrentMinigame = null;
 
                 NotificationsManager.Instance.IsHidden = false;

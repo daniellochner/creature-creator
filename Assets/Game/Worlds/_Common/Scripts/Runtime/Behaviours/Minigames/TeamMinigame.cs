@@ -177,11 +177,20 @@ namespace DanielLochner.Assets.CreatureCreator
             return winningTeam;
         }
 
-        protected override void OnShutdown()
+        protected override void OnServerShutdown()
         {
-            base.OnShutdown();
-
             teamPlayers.Clear();
+
+            base.OnServerShutdown();
+        }
+        protected override void OnClientShutdown()
+        {
+            if (InMinigame)
+            {
+                myTeamId = myTeamIndex = 0;
+            }
+
+            base.OnClientShutdown();
         }
         #endregion
         #endregion

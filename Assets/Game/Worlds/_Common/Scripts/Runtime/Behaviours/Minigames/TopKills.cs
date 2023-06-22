@@ -31,12 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Playing
         private void OnPlayingEnter()
         {
-            SetupPlayerCorpses(false);
             StartCoroutine(SpawnRoutine());
-        }
-        private void OnPlayingExit()
-        {
-            SetupPlayerCorpses(true);
         }
 
         private IEnumerator SpawnRoutine()
@@ -99,18 +94,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
             }
-        }
-
-        private void SetupPlayerCorpses(bool isActive)
-        {
-            foreach (ulong clientId in players)
-            {
-                SetupCorpse(NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<CreatureBase>(), isActive);
-            }
-        }
-        private void SetupCorpse(CreatureBase creature, bool isActive)
-        {
-            creature.Corpse.GenerateRagdoll.Value = isActive;
         }
         #endregion
 

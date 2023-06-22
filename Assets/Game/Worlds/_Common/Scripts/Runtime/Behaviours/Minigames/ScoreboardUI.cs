@@ -27,11 +27,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Setup(Minigame minigame)
-        {
-            Clear();
-        }
-
         public void Add(string id, string displayName, int score)
         {
             ScoreUI scoreUI = Instantiate(scorePrefab, RectTransform);

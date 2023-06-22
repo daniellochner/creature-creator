@@ -20,7 +20,6 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
 
             waitingForPlayers.onExit += OnWaitingForPlayersExit;
-            completing.onExit += OnCompletingExit;
         }
 
         #region Waiting For Players
@@ -80,11 +79,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Completing
-        private void OnCompletingExit()
-        {
-            playerIndices.Clear();
-        }
-
         protected override List<ulong> GetWinnerClientIds()
         {
             List<ulong> winnerClientIds = new List<ulong>();
@@ -127,6 +121,22 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             return winnerNames;
+        }
+
+        protected override void OnServerShutdown()
+        {
+            playerIndices.Clear();
+
+            base.OnServerShutdown();
+        }
+        protected override void OnClientShutdown()
+        {
+            if (InMinigame)
+            {
+                myIndex = 0;
+            }
+
+            base.OnClientShutdown();
         }
         #endregion
         #endregion

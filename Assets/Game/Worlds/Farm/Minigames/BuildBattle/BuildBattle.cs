@@ -56,7 +56,6 @@ namespace DanielLochner.Assets.CreatureCreator
             playing.onExit += OnPlayingExit;
 
             completing.onEnter += OnCompletingEnter;
-            completing.onExit += OnCompletingExit;
         }
 
         #region Introducing
@@ -272,16 +271,18 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnCompletingEnter()
         {
             SetScoreboardActiveClientRpc(true);
-
             SetRatingPadActiveClientRpc(false);
+
             ClearCreatureClientRpc();
         }
 
-        private void OnCompletingExit()
+        protected override void OnServerShutdown()
         {
             playerRatings.Clear();
-
+            currentClientId = 0;
             TopicId.Value = -1;
+
+            base.OnServerShutdown();
         }
         #endregion
         #endregion
