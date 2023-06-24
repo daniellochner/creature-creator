@@ -118,9 +118,13 @@ namespace DanielLochner.Assets.CreatureCreator
             if (data != null)
             {
                 Constructor.Demolish();
+                Constructor.Body.gameObject.SetActive(true);
                 Constructor.Construct(data);
             }
-            Constructor.Body.gameObject.SetActive(true);
+            else
+            {
+                Constructor.Body.gameObject.SetActive(true);
+            }
 
             OnShow?.Invoke();
         }
