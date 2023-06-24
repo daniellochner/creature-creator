@@ -62,19 +62,25 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
-                HandlePremiumButtons();
+                SetPremiumButtonsVisible(!PremiumManager.Data.IsPremium && !SettingsManager.Instance.ShowTutorial);
             }
         }
         protected override void OnEnable()
         {
             base.OnEnable();
-            PremiumManager.Instance.OnPurchaseComplete += OnPurchaseComplete;
+
+            if (PremiumManager.Instance != null)
+            {
+                PremiumManager.Instance.OnPremiumPurchased += OnPremiumPurchased;
+                PremiumManager.Instance.OnPremiumFailed += OnPremiumFailed;
+            }
         }
         private void OnDisable()
         {
-            if (PremiumManager.Instance)
+            if (PremiumManager.Instance != null)
             {
-                PremiumManager.Instance.OnPurchaseComplete -= OnPurchaseComplete;
+                PremiumManager.Instance.OnPremiumPurchased -= OnPremiumPurchased;
+                PremiumManager.Instance.OnPremiumFailed -= OnPremiumFailed;
             }
         }
 
@@ -95,7 +101,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Setup(Sprite icon, bool isBlinking)
         {
-            if (!PremiumManager.Instance.IsInitialized)
+            if (!PremiumManager.Instance.IsIAPInitialized)
             {
                 return;
             }
@@ -137,23 +143,40 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Paid
-        public void OnPurchaseClicked()
+        public void OnPremiumClicked()
         {
             IsLoadingPurchase = true;
             PremiumManager.Instance.Controller.InitiatePurchase("cc_premium");
         }
-        public void OnPurchaseComplete()
+
+        public void OnPremiumCompleted()
         {
             IsLoadingPurchase = false;
-            HandlePremiumButtons();
             Close();
         }
+        public void OnPremiumPurchased()
+        {
+            OnPremiumCompleted();
 
-        private void HandlePremiumButtons()
+            SetPremiumButtonsVisible(false);
+
+            EditorManager.Instance?.UpdateUsability();
+            PremiumManager.Instance?.HideBannerAd();
+
+            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
+        }
+        public void OnPremiumFailed(PurchaseFailureReason reason)
+        {
+            OnPremiumCompleted();
+
+            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_failed_title"), LocalizationUtility.Localize("premium_paid_failed_message", reason));
+        }
+
+        public void SetPremiumButtonsVisible(bool visible)
         {
             foreach (GameObject button in premiumButtons)
             {
-                button.SetActive(!PremiumManager.Data.IsPremium && !SettingsManager.Instance.ShowTutorial);
+                button.SetActive(visible);
             }
         }
         #endregion

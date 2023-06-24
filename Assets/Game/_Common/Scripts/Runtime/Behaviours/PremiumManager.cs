@@ -74,13 +74,18 @@ namespace DanielLochner.Assets.CreatureCreator
                 return 160 * Mathf.RoundToInt((p * Display.main.systemWidth / Screen.dpi) / 3f);
             }
         }
-
         public RewardedItem RequestedItem
         {
             get;
             set;
         }
-        public Action OnPurchaseComplete
+
+        public Action<PurchaseFailureReason> OnPremiumFailed
+        {
+            get;
+            set;
+        }
+        public Action OnPremiumPurchased
         {
             get;
             set;
@@ -97,7 +102,7 @@ namespace DanielLochner.Assets.CreatureCreator
             private set;
         }
 
-        public bool IsInitialized
+        public bool IsIAPInitialized
         {
             get => Controller != null && Extensions != null;
         }
@@ -324,28 +329,24 @@ namespace DanielLochner.Assets.CreatureCreator
         public void OnInitializeFailed(InitializationFailureReason error, string message)
         {
         }
-        public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchaseEvent)
+        public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchase)
         {
-            if (purchaseEvent.purchasedProduct.definition.id == "cc_premium")
+            if (purchase.purchasedProduct.definition.id == "cc_premium")
             {
                 Data.IsPremium = true;
                 Save();
 
-                InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
-
-                EditorManager.Instance?.UpdateUsability();
-                HideBannerAd();
+                OnPremiumPurchased?.Invoke();
             }
-
-            OnPurchaseComplete?.Invoke();
 
             return PurchaseProcessingResult.Complete;
         }
-        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
         {
-            OnPurchaseComplete?.Invoke();
-
-            InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_failed_title"), LocalizationUtility.Localize("premium_paid_failed_message", failureReason));
+            if (product.definition.id == "cc_premium")
+            {
+                OnPremiumFailed?.Invoke(reason);
+            }
         }
         #endregion
 
