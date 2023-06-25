@@ -332,7 +332,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator StartingRoutine()
         {
             // Setup the scoreboard
-            Scoreboard.Clear();
             OnSetupScoreboard();
 
             // Switch everyone to play mode
@@ -340,10 +339,7 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return new WaitForSeconds(switchTime);
 
             // Teleport everyone to their starting positions
-            for (int i = 0; i < players.Count; i++)
-            {
-                TeleportToStartClientRpc();
-            }
+            TeleportToStartClientRpc();
             yield return new WaitForSeconds(teleportTime);
 
             // Countdown to start the minigame
