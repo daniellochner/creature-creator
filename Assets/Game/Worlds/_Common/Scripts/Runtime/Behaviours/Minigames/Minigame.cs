@@ -107,21 +107,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsServer)
             {
+                NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
+
                 Setup();
 
                 StartCoroutine(MinigameRoutine());
             }
         }
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
 
-        private void OnEnable()
-        {
-            if (IsServer)
-            {
-                NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
-            }
-        }
-        private void OnDisable()
-        {
             if (IsServer && NetworkManager.Singleton != null)
             {
                 NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
