@@ -303,6 +303,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7dccbb176ac7d44a30f9b02d630ce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  follower: {fileID: 0}
+  wheelsLeft:
+  - {fileID: 7981500494947986499}
+  - {fileID: 7658919825600912908}
+  wheelsRight:
+  - {fileID: 4716401674780074134}
+  - {fileID: 1018039532311491491}
+  speed: 5
+  radius: 0.25
 --- !u!82 &322935780509267614
 AudioSource:
   m_ObjectHideFlags: 0
@@ -481,7 +490,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf4886f4f4de3ba4b9ccb7e1158f282b, type: 3}
 --- !u!1001 &4716401674780211734
@@ -566,7 +575,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf4886f4f4de3ba4b9ccb7e1158f282b, type: 3}
 --- !u!1001 &7658919825601037452
@@ -651,7 +660,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf4886f4f4de3ba4b9ccb7e1158f282b, type: 3}
 --- !u!1001 &7981500494948120259
@@ -736,6 +745,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf4886f4f4de3ba4b9ccb7e1158f282b, type: 3}

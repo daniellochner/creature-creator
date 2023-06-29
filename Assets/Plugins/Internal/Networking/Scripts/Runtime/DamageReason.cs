@@ -17,6 +17,7 @@ namespace DanielLochner.Assets
         Charge,
         Bite,
         Projectile,
-        Bees
+        Bees,
+        Vehicle
     }
 }

@@ -62,6 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle profanityToggle;
         [SerializeField] private Image sortByIcon;
         [SerializeField] private MapUI mapUI;
+        [SerializeField] private bool showComingSoon;
 
         private ProfanityFilter filter = new ProfanityFilter();
         private SHA256 sha256 = SHA256.Create();
@@ -179,6 +180,10 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Setup()
         {
             mapOS.SetupUsingEnum<Map>();
+            if (!showComingSoon)
+            {
+                mapOS.Options.RemoveAt(mapOS.Options.Count - 1);
+            }
             mapOS.Select(Map.Island, false);
             multiplayerMenu.OnOpen += UpdateMap;
 

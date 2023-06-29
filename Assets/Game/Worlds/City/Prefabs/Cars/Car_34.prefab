@@ -304,6 +304,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7dccbb176ac7d44a30f9b02d630ce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  follower: {fileID: 0}
+  wheelsLeft:
+  - {fileID: 4944194054973868691}
+  - {fileID: 1815627031128801224}
+  - {fileID: 7296021931693520185}
+  wheelsRight:
+  - {fileID: 8217411965931685385}
+  - {fileID: 5957080825730850041}
+  - {fileID: 5850602079445865196}
+  speed: 5
+  radius: 0.25
 --- !u!1001 &1815627031128401224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -381,7 +392,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
 --- !u!4 &1815627031128801224 stripped
@@ -422,15 +433,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -471,7 +482,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
 --- !u!1001 &5850602079446255724
@@ -507,7 +518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalRotation.y
@@ -515,7 +526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -556,7 +567,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
 --- !u!1001 &5957080825730975353
@@ -641,7 +652,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
 --- !u!1001 &7296021931693387705
@@ -721,7 +732,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
 --- !u!4 &7296021931693520185 stripped
@@ -806,7 +817,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: cf88f968602da8f47adc6c181fc6ea27, type: 3}
 --- !u!4 &8217411965931685385 stripped

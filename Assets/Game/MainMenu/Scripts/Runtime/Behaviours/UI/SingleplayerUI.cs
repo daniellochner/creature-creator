@@ -26,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private BlinkingText statusBT;
         [SerializeField] private MapUI mapUI;
+        [SerializeField] private bool showComingSoon;
 
         private Coroutine updateStatusCoroutine;
         #endregion
@@ -56,6 +57,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup()
         {
             mapOS.SetupUsingEnum<Map>();
+            if (!showComingSoon)
+            {
+                mapOS.Options.RemoveAt(mapOS.Options.Count - 1);
+            }
             mapOS.Select(Map.Island, false);
             singleplayerMenu.OnOpen += UpdateMap;
 
