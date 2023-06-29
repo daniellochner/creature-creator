@@ -17,7 +17,7 @@ namespace PathCreation {
 
         public readonly PathSpace space;
         public readonly bool isClosedLoop;
-        public  Vector3[] localPoints;
+        public readonly Vector3[] localPoints;
         public readonly Vector3[] localTangents;
         public readonly Vector3[] localNormals;
 
