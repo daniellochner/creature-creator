@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -7340957777810597891}
   - component: {fileID: -1759040687147136224}
   - component: {fileID: 4859028404775143281}
+  - component: {fileID: -7844884039547956593}
   m_Layer: 0
   m_Name: Train_01
   m_TagString: Untagged
@@ -100,7 +101,7 @@ MeshCollider:
   m_GameObject: {fileID: 8230453785477030992}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -299,6 +300,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   follower: {fileID: 0}
-  wheels: []
+  wheelsLeft: []
+  wheelsRight: []
   speed: 10
   radius: 0
+--- !u!65 &-7844884039547956593
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8230453785477030992}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.5, y: 4.78262, z: 21.302551}
+  m_Center: {x: 0, y: 2.3797815, z: 0.8597655}
