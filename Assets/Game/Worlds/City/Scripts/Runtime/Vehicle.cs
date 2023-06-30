@@ -20,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             follower.enabled = IsServer;
         }
+
+#if UNITY_STANDALONE
         private void FixedUpdate()
         {
             float w = (speed / radius) * Mathf.Rad2Deg;
@@ -34,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 wheel.Rotate(Vector3.left, a, Space.Self);
             }
         }
+#endif
 
         private void OnCollisionEnter(Collision collision)
         {
