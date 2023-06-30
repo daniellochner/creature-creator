@@ -33,7 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Randomize ordering of players
             players.Shuffle();
 
-            // Assign indexes
+            // Assign indices
             for (int i = 0; i < players.Count; i++)
             {
                 AssignClientRpc(i, NetworkUtils.SendTo(players[i]));
