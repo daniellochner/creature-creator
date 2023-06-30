@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ArriveOnRaftCinematic arriveOnRaftCinematic;
         [SerializeField] private ExpandInSandboxCinematic expandInSandboxCinematic;
         [SerializeField] private ExitCrackCinematic exitCrackCinematic;
+        [SerializeField] private BusCinematic arriveOnBusCinematic;
         [Space]
         [SerializeField] private Platform beachPlatform;
         [SerializeField] private Water ocean;
@@ -52,6 +53,11 @@ namespace DanielLochner.Assets.CreatureCreator
             if (prevScene == "Cave")
             {
                 exitCrackCinematic.Begin();
+            }
+            else
+            if (prevScene == "City")
+            {
+                arriveOnBusCinematic.Begin();
             }
         }
         #endregion
