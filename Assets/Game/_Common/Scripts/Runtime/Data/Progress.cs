@@ -36,7 +36,10 @@ namespace DanielLochner.Assets.CreatureCreator
             "quest_9js6hk4",
 
             // Cave
-            "quest_k2nx0l"
+            "quest_k2nx0l",
+
+            // City
+            "quest_fkfnwa"
         };
         #endregion
 
