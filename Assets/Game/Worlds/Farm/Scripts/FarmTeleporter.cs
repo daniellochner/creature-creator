@@ -17,14 +17,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Zone beach;
         #endregion
 
-        #region Properties
-        private bool HasRequestedReview
-        {
-            get => PlayerPrefs.GetInt("REQUESTED_REVIEW", 0) == 1;
-            set => PlayerPrefs.SetInt("REQUESTED_REVIEW", value ? 1 : 0);
-        }
-        #endregion
-
         #region Methods
         public override void OnEnter(string prevScene, string nextScene)
         {

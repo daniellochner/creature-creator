@@ -10,6 +10,14 @@ namespace DanielLochner.Assets.CreatureCreator
         public static CreatureData dataBuffer;
         #endregion
 
+        #region Properties
+        private bool HasRequestedReview
+        {
+            get => PlayerPrefs.GetInt("REQUESTED_REVIEW", 0) == 1;
+            set => PlayerPrefs.SetInt("REQUESTED_REVIEW", value ? 1 : 0);
+        }
+        #endregion
+
         #region Methods
         public virtual void TeleportTo(string map, CreatureData data)
         {
