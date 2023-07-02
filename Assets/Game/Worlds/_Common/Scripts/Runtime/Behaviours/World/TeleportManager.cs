@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -11,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        private bool HasRequestedReview
+        protected bool HasRequestedReview
         {
             get => PlayerPrefs.GetInt("REQUESTED_REVIEW", 0) == 1;
             set => PlayerPrefs.SetInt("REQUESTED_REVIEW", value ? 1 : 0);

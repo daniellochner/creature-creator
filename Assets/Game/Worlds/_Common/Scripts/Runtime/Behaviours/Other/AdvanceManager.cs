@@ -9,8 +9,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private UnlockableBodyPart[] bodyParts;
         [SerializeField] private UnlockablePattern[] patterns;
         [SerializeField] private Quest[] quests;
-        [SerializeField] private Teleport[] teleports;
-        [SerializeField] private Map nextMap;
+        [SerializeField] private Battle[] battles;
+        [SerializeField, DrawIf("isFinalMap", false)] private Teleport[] teleports;
+        [SerializeField, DrawIf("isFinalMap", false)] private Map nextMap;
+        [SerializeField] private bool isFinalMap;
         [Space]
         [SerializeField] private GameObject progress;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
