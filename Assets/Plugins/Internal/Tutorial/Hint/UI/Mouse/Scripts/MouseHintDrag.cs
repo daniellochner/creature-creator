@@ -8,13 +8,25 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] protected Sprite left;
         [SerializeField] protected Sprite right;
+
+        private IEnumerator anim;
         #endregion
 
         #region Methods
+        private void OnEnable()
+        {
+            if (anim != null)
+            {
+                StartCoroutine(anim);
+            }
+        }
+
         public virtual void Setup(int button, Transform sT, Transform eT, bool sInWorld, bool eInWorld, float t1 = 1f, float t2 = 2f, float t3 = 1f)
         {
             icon.sprite = (button == 0) ? left : right;
-            StartCoroutine(AnimateRoutine(sT, eT, sInWorld, eInWorld, t1, t2, t3));
+
+            anim = AnimateRoutine(sT, eT, sInWorld, eInWorld, t1, t2, t3);
+            StartCoroutine(anim);
         }
 
         private IEnumerator AnimateRoutine(Transform sT, Transform eT, bool sInWorld, bool eInWorld, float t1, float t2, float t3)

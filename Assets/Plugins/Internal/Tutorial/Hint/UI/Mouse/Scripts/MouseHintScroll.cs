@@ -7,13 +7,25 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private RectTransform arrow;
+
+        private IEnumerator anim;
         #endregion
 
         #region Methods
+        private void OnEnable()
+        {
+            if (anim != null)
+            {
+                StartCoroutine(anim);
+            }
+        }
+
         public void Setup(int dir, Transform pos, bool inWorld, float t1 = 2f)
         {
             arrow.localScale = new Vector3(1, dir, 1);
-            StartCoroutine(AnimateRoutine(dir, pos, inWorld, t1));
+
+            anim = AnimateRoutine(dir, pos, inWorld, t1);
+            StartCoroutine(anim);
         }
 
         private IEnumerator AnimateRoutine(int dir, Transform pos, bool inWorld, float t1)
