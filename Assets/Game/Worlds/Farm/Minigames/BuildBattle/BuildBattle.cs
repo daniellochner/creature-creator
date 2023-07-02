@@ -184,13 +184,19 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void StartRatingClientRpc()
         {
-            ratingCinematic.Begin();
+            if (InMinigame)
+            {
+                ratingCinematic.Begin();
+            }
         }
 
         [ClientRpc]
         private void StopRatingClientRpc()
         {
-            ratingCinematic.Unpause();
+            if (InMinigame)
+            {
+                ratingCinematic.Unpause();
+            }
         }
 
         private void SetMyRating(int rating)
