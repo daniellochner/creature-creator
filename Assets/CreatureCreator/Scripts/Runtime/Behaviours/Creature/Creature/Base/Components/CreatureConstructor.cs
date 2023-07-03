@@ -156,7 +156,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 AttachedBodyPart attachedBodyPart = data.AttachedBodyParts[i];
                 BodyPartConstructor main = AddBodyPart(attachedBodyPart.bodyPartID);
                 main.Attach(attachedBodyPart);
-                main.Flip(false);
             }
             SetPrimaryColour(data.PrimaryColour);
             SetSecondaryColour(data.SecondaryColour);

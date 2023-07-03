@@ -198,6 +198,8 @@ namespace DanielLochner.Assets.CreatureCreator
             SetupAttachment(attachedBodyPart);
             SetAttached(attachedBodyPart);
 
+            Flip(false);
+
             OnAttach?.Invoke();
         }
         public virtual void Detach()
@@ -285,6 +287,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     Vector3 localDirection = localRotation * Vector3.forward;
                     localDirection.x = 0;
                     transform.rotation = Flipped.transform.rotation = CreatureConstructor.transform.rotation * Quaternion.LookRotation(localDirection);
+                }
+                else
+                {
+                    Flipped.transform.position = transform.position;
+                    Flipped.transform.rotation = transform.rotation;
                 }
             }
 
