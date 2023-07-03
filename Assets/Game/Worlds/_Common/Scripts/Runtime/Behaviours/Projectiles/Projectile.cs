@@ -44,7 +44,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public override void OnDestroy()
         {
             base.OnDestroy();
-            Group.Count--;
+            if (Group != null)
+            {
+                Group.Count--;
+            }
         }
 
         private void OnCollisionEnter(Collision collision)
