@@ -61,7 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                SnakeAI.Agent.ResetPath();
+                SnakeAI.ResetPath();
                 strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
             }
             public override void UpdateLogic()

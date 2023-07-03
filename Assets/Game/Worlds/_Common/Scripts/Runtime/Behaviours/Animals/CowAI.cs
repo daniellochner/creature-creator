@@ -63,7 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             public override void Enter()
             {
-                CowAI.Agent.ResetPath();
+                CowAI.ResetPath();
                 CowAI.Agent.speed *= chargeSpeedMultiplier;
 
                 Charge(CowAI.trackRegion.Nearest.transform);

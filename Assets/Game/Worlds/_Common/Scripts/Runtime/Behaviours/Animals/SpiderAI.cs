@@ -61,7 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                SpiderAI.Agent.ResetPath();
+                SpiderAI.ResetPath();
 
                 bitingCoroutine = SpiderAI.StartCoroutine(BitingRoutine());
             }

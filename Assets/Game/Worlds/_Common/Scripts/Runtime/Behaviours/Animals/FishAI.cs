@@ -59,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                AnimalAI.Agent.ResetPath();
+                AnimalAI.ResetPath();
             }
             public override void UpdateLogic()
             {
@@ -107,7 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 base.Enter();
                 UpdateTarget();
 
-                FishAI.Agent.ResetPath();
+                FishAI.ResetPath();
                 bitingCoroutine = FishAI.StartCoroutine(BitingRoutine());
             }
             public override void UpdateLogic()

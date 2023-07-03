@@ -153,6 +153,14 @@ namespace DanielLochner.Assets.CreatureCreator
             return Animator.GetCurrentAnimatorStateInfo(0).IsName(state);
         }
 
+        public void ResetPath()
+        {
+            if (Agent.isOnNavMesh)
+            {
+                Agent.ResetPath();
+            }
+        }
+
         public static float GetTargetDistance(CreatureBase creature, CreatureBase other, float offset = 0f)
         {
             return (creature.Constructor.Dimensions.Radius + other.Constructor.Dimensions.Radius) / 2f + offset;
@@ -236,7 +244,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                AnimalAI.Agent?.ResetPath();
+                AnimalAI.ResetPath();
                 idleTimeLeft = wanderCooldown.Random;
                 AnimalAI.Creature.Health.OnTakeDamage += OnTakeDamage;
             }

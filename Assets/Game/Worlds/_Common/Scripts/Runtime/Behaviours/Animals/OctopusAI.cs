@@ -27,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 base.Enter();
                 UpdateTarget();
 
-                OctopusAI.Agent.ResetPath();
+                OctopusAI.ResetPath();
                 spinningCoroutine = OctopusAI.StartCoroutine(SpinningRoutine());
             }
             public override void UpdateLogic()

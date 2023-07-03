@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] protected TrackRegion trackRegion;
 
-        private DogBone dogBone;
+        private Held dogBone;
         #endregion
 
         #region Methods
@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureBase creature = col.GetComponent<CreatureBase>();
 
                     List<Held> held = new List<Held>(creature.Holder.Held.Values);
-                    dogBone = held.Find(x => x.Holdable is DogBone).Holdable as DogBone;
+                    dogBone = held.Find(x => x.Holdable is DogBone);
                     if (dogBone != null)
                     {
                         ChangeState("PAN");
@@ -97,13 +97,13 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void UpdateLogic()
             {
                 Transform targetBone = null;
-                if (DogAI.dogBone.Held.Dummy == null)
+                if (DogAI.dogBone.Dummy == null)
                 {
                     targetBone = DogAI.dogBone.transform;
                 }
                 else
                 {
-                    targetBone = DogAI.dogBone.Held.Dummy.transform;
+                    targetBone = DogAI.dogBone.Dummy.transform;
                 }
 
                 Vector3 lookDir = Vector3.ProjectOnPlane(targetBone.position - DogAI.transform.position, DogAI.transform.up).normalized;
@@ -137,7 +137,7 @@ namespace DanielLochner.Assets.CreatureCreator
             
             public override void Enter()
             {
-                DogAI.Agent.ResetPath();
+                DogAI.ResetPath();
                 UpdateTarget();
                 barkingCoroutine = DogAI.StartCoroutine(BarkingRoutine());
             }
@@ -254,7 +254,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                DogAI.Agent.ResetPath();
+                DogAI.ResetPath();
 
                 bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
             }
