@@ -11,14 +11,18 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float blastRadius;
         [SerializeField] private GameObject collidePrefab;
         [SerializeField] private float lifetime;
+        #endregion
 
-        private Rigidbody rb;
+        #region Properties
+        public Rigidbody Rigidbody { get; private set; }
+
+        public ulong? LauncherClientId { get; set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            Rigidbody = GetComponent<Rigidbody>();
         }
         private IEnumerator Start()
         {
@@ -32,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsServer)
             {
-                transform.forward = rb.velocity;
+                transform.forward = Rigidbody.velocity;
             }
         }
 
@@ -48,10 +52,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
                     if (creature != null)
                     {
-                        bool ignore = (creature is CreaturePlayer) && (creature.OwnerClientId == OwnerClientId || !WorldManager.Instance.EnablePVP);
+                        bool ignore = (creature is CreaturePlayer) && (creature.OwnerClientId == LauncherClientId || !WorldManager.Instance.EnablePVP);
                         if (!ignore)
                         {
-                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, OwnerClientId.ToString());
+                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, LauncherClientId.ToString());
                         }
                     }
                 }

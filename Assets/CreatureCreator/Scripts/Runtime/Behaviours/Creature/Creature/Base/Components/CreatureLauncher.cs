@@ -10,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreatureLauncher : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private SerializableDictionaryBase<string, NetworkObject> projectiles;
+        [SerializeField] private SerializableDictionaryBase<string, Projectile> projectiles;
         [SerializeField] private PlayerEffects.Sound[] launchSounds;
         #endregion
 
@@ -55,20 +55,20 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc]
         private void LaunchServerRpc(string projectileId, Vector3 position, Quaternion rotation, float scale, float speed)
         {
-            NetworkObject projectile = Instantiate(projectiles[projectileId], position, rotation, Dynamic.Transform);
+            Projectile projectile = Instantiate(projectiles[projectileId], position, rotation, Dynamic.Transform);
             projectile.transform.localScale *= scale;
+            projectile.Rigidbody.velocity = speed * projectile.transform.forward;
 
-            projectile.GetComponent<Rigidbody>().velocity = speed * projectile.transform.forward;
+            if (GetComponent<CreaturePlayer>())
+            {
+                projectile.LauncherClientId = OwnerClientId;
+            }
+
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), GetComponent<Collider>()); // Ignore collision between this creature and the projectile!
 
             PlayerEffects.PlaySound(launchSounds);
 
-            if (GetComponent<CreaturePlayer>() != null)
-            {
-                projectile.GetComponent<Projectile>().LauncherClientId = OwnerClientId;
-            }
-
-            projectile.SpawnWithOwnership(OwnerClientId, true);
+            projectile.NetworkObject.SpawnWithOwnership(OwnerClientId, true);
         }
         #endregion
     }
