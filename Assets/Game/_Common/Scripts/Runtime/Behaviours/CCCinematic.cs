@@ -39,6 +39,19 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 PremiumManager.Instance?.ShowBannerAd();
             }
+
+            InformationDialog.Instance?.Close();
+            InputDialog.Instance?.Close();
+            ConfirmationDialog.Instance?.Close();
+            KeybindingsDialog.Instance?.Close();
+            UnlockableBodyPartsMenu.Instance?.Close();
+            UnlockablePatternsMenu.Instance?.Close();
+            AchievementsMenu.Instance?.Close();
+            LocalizationMenu.Instance?.Close();
+            PremiumMenu.Instance?.Close();
+            RewardsMenu.Instance?.Close();
+            PauseMenu.Instance?.Close();
+            NetworkPlayersMenu.Instance?.Close();
         }
         public override void End()
         {

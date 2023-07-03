@@ -51,6 +51,8 @@ namespace DanielLochner.Assets
         }
         public virtual void Close(bool instant = false)
         {
+            if (!IsOpen) return;
+
             if (instant)
             {
                 animator.Play("Close", 0, 1);
