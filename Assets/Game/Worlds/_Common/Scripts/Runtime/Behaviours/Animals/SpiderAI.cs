@@ -123,7 +123,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         CreatureBase creature = collider.GetComponent<CreatureBase>();
                         if (creature != null && creature != SpiderAI.Creature)
                         {
-                            creature.Health.TakeDamage(biteDamage.Random, DamageReason.Bite, SpiderAI.Creature.Constructor.Data.Name);
+                            creature.Health.TakeDamage(biteDamage.Random, DamageReason.Bite);
                             hasDealtDamage = true;
                         }
                     }

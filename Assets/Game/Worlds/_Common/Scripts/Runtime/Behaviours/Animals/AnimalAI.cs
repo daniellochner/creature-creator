@@ -236,7 +236,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                AnimalAI.Agent.ResetPath();
+                AnimalAI.Agent?.ResetPath();
                 idleTimeLeft = wanderCooldown.Random;
                 AnimalAI.Creature.Health.OnTakeDamage += OnTakeDamage;
             }

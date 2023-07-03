@@ -111,7 +111,7 @@ namespace DanielLochner.Assets.CreatureCreator
                             Vector3 dir = (creature.transform.position - CowAI.transform.position).normalized;
                             Vector3 force = dir * chargeForce.z + creature.transform.up * chargeForce.y;
 
-                            creature.Health.TakeDamage(chargeDamage.Random, DamageReason.Charge, CowAI.Creature.Constructor.Data.Name);
+                            creature.Health.TakeDamage(chargeDamage.Random, DamageReason.Charge);
                             CowAI.Creature.Effects.PlaySound(impactSounds);
                         }
                     }
