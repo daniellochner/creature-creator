@@ -55,9 +55,9 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             base.Shutdown();
             foreach (BodyPartLauncher launcher in Launchers)
             {
-                foreach (Trajectory trajectory in launcher.SpawnPoints)
+                foreach (Transform spawnPoint in launcher.SpawnPoints)
                 {
-                    trajectory.enabled = false;
+                    spawnPoint.gameObject.SetActive(false);
                 }
             }
         }
@@ -66,10 +66,10 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
         {
             foreach (BodyPartLauncher launcher in Launchers)
             {
-                foreach (Trajectory trajectory in launcher.SpawnPoints)
+                foreach (Transform spawnPoint in launcher.SpawnPoints)
                 {
-                    trajectory.Setup(launcher.Speed, 1f);
-                    trajectory.enabled = true;
+                    spawnPoint.GetComponent<Trajectory>().Setup(launcher.Speed, 1f);
+                    spawnPoint.gameObject.SetActive(true);
                 }
             }
         }
@@ -78,9 +78,9 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             foreach (BodyPartLauncher launcher in Launchers)
             {
                 CreatureLauncher.Launch(launcher);
-                foreach (Trajectory trajectory in launcher.SpawnPoints)
+                foreach (Transform spawnPoint in launcher.SpawnPoints)
                 {
-                    trajectory.enabled = false;
+                    spawnPoint.gameObject.SetActive(false);
                 }
             }
         }

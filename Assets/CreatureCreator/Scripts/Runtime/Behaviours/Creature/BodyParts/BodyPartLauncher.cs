@@ -9,14 +9,18 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private string projectileId;
-        [SerializeField] private Trajectory[] spawnPoints;
+        [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float speed;
         #endregion
 
         #region Properties
         public string ProjectileId => projectileId;
-        public Trajectory[] SpawnPoints => spawnPoints;
-        public float Speed => speed;
+        public Transform[] SpawnPoints => spawnPoints;
+        public float Speed
+        {
+            get => speed;
+            set => speed = value;
+        }
 
         public CreatureLauncher CreatureLauncher { get; private set; }
         public BodyPartConstructor Constructor { get; private set; }

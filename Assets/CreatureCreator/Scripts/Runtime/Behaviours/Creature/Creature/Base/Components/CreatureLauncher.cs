@@ -46,9 +46,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Launch(BodyPartLauncher bpl)
         {
-            foreach (Trajectory spawnPoint in bpl.SpawnPoints)
+            foreach (Transform spawnPoint in bpl.SpawnPoints)
             {
-                LaunchServerRpc(bpl.ProjectileId, spawnPoint.transform.position, spawnPoint.transform.rotation, bpl.transform.localScale.x, bpl.Speed);
+                LaunchServerRpc(bpl.ProjectileId, spawnPoint.position, spawnPoint.rotation, bpl.transform.localScale.x, bpl.Speed);
             }
         }
 
@@ -62,6 +62,11 @@ namespace DanielLochner.Assets.CreatureCreator
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), GetComponent<Collider>()); // Ignore collision between this creature and the projectile!
 
             PlayerEffects.PlaySound(launchSounds);
+
+            if (GetComponent<CreaturePlayer>() != null)
+            {
+                projectile.GetComponent<Projectile>().LauncherClientId = OwnerClientId;
+            }
 
             projectile.SpawnWithOwnership(OwnerClientId, true);
         }
