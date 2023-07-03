@@ -16,7 +16,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public Rigidbody Rigidbody { get; private set; }
 
-        public ulong? LauncherClientId { get; set; }
+        public CreatureLauncher Launcher { get; set; }
+        public ProjectileGroup Group { get; set; }
         #endregion
 
         #region Methods
@@ -40,6 +41,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            Group.Count--;
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (IsServer)
@@ -52,10 +59,17 @@ namespace DanielLochner.Assets.CreatureCreator
                     CreatureBase creature = collider.GetComponent<CreatureBase>();
                     if (creature != null)
                     {
-                        bool ignore = (creature is CreaturePlayer) && (creature.OwnerClientId == LauncherClientId || !WorldManager.Instance.EnablePVP);
-                        if (!ignore)
+                        bool ignore = (creature is CreaturePlayer) && (creature.NetworkObjectId == Launcher.NetworkObjectId || !WorldManager.Instance.EnablePVP);
+                        if (!ignore && !Group.HasDamaged)
                         {
-                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, LauncherClientId.ToString());
+                            string inflicter = null;
+                            if (Launcher.GetComponent<CreaturePlayer>())
+                            {
+                                inflicter = Launcher.OwnerClientId.ToString(); // TODO: Tidy up...
+                            }
+
+                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, inflicter);
+                            Group.HasDamaged = true;
                         }
                     }
                 }

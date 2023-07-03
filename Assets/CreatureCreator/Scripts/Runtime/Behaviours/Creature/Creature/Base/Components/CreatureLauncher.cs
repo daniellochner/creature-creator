@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private SerializableDictionaryBase<string, Projectile> projectiles;
         [SerializeField] private PlayerEffects.Sound[] launchSounds;
+        [SerializeField] private ProjectileGroup groupPrefab;
         #endregion
 
         #region Properties
@@ -46,23 +47,35 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Launch(BodyPartLauncher bpl)
         {
-            foreach (Transform spawnPoint in bpl.SpawnPoints)
+            SerializableTransform[] spawnPoints = new SerializableTransform[bpl.SpawnPoints.Length];
+            for (int i = 0; i < spawnPoints.Length; i++)
             {
-                LaunchServerRpc(bpl.ProjectileId, spawnPoint.position, spawnPoint.rotation, bpl.transform.localScale.x, bpl.Speed);
+                spawnPoints[i] = new SerializableTransform(bpl.SpawnPoints[i], Dynamic.Transform);
             }
+
+            LaunchServerRpc(bpl.ProjectileId, spawnPoints, bpl.transform.localScale.x, bpl.Speed);
         }
 
         [ServerRpc]
-        private void LaunchServerRpc(string projectileId, Vector3 position, Quaternion rotation, float scale, float speed)
+        private void LaunchServerRpc(string projectileId, SerializableTransform[] spawnPoints, float scale, float speed)
         {
-            Projectile projectile = Instantiate(projectiles[projectileId], position, rotation, Dynamic.Transform);
+            ProjectileGroup group = new GameObject("_ProjectileGroup").AddComponent<ProjectileGroup>();
+            group.transform.SetParent(Dynamic.Transform);
+            group.Count = spawnPoints.Length;
+
+            foreach (SerializableTransform spawnPoint in spawnPoints)
+            {
+                LaunchProjectile(projectileId, group, spawnPoint.position, spawnPoint.rotation, spawnPoint.scale.x, speed);
+            }
+        }
+
+        private void LaunchProjectile(string projectileId, ProjectileGroup group, Vector3 position, Quaternion rotation, float scale, float speed)
+        {
+            Projectile projectile = Instantiate(projectiles[projectileId], position, rotation, group.transform);
             projectile.transform.localScale *= scale;
             projectile.Rigidbody.velocity = speed * projectile.transform.forward;
-
-            if (GetComponent<CreaturePlayer>())
-            {
-                projectile.LauncherClientId = OwnerClientId;
-            }
+            projectile.Launcher = this;
+            projectile.Group = group;
 
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), GetComponent<Collider>()); // Ignore collision between this creature and the projectile!
 
