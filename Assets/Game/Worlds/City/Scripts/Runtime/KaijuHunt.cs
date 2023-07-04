@@ -73,7 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
                 {
                     BodyPart bodyPart = obj.Value as BodyPart;
-                    if (bodyPart.Abilities.Find(x => (x.Level > 1) || (x is Abilities.Spit || x is Abilities.Spin || x is Abilities.Shoot)))
+                    if (bodyPart.Abilities.Find(x => x is Abilities.Launch || x is Abilities.Spin || (x is Abilities.Bite && x.Level > 1)))
                     {
                         bodyParts.Add(obj.Key);
                     }
