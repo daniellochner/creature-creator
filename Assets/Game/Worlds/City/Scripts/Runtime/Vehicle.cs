@@ -19,6 +19,11 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Start()
         {
             follower.enabled = IsServer;
+
+            if (!IsServer && !NetworkObject.IsSpawned)
+            {
+                Destroy(gameObject);
+            }
         }
 
 #if UNITY_STANDALONE

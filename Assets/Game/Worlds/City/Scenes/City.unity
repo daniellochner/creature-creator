@@ -11153,6 +11153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1108484690}
+  - component: {fileID: 1108484692}
   - component: {fileID: 1108484691}
   m_Layer: 0
   m_Name: Cars
@@ -11276,7 +11277,23 @@ MonoBehaviour:
   - {fileID: 1423493587}
   - {fileID: 1420026174}
   - {fileID: 1449225398}
-  factor: 0.6
+  factor: 0.4
+--- !u!114 &1108484692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108484689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4282593642
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &1112480812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31510,6 +31527,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1844563260}
     m_Modifications:
+    - target: {fileID: 401383934677189643, guid: 6e293fd52dd38c5499efa3bb93f46947, type: 3}
+      propertyPath: minigame
+      value: 
+      objectReference: {fileID: 1981904095}
     - target: {fileID: 401383934677189644, guid: 6e293fd52dd38c5499efa3bb93f46947, type: 3}
       propertyPath: m_LocalPosition.x
       value: -34.66
@@ -31574,6 +31595,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.24196519
       objectReference: {fileID: 0}
+    - target: {fileID: 1215098520626979293, guid: 6e293fd52dd38c5499efa3bb93f46947, type: 3}
+      propertyPath: minigame
+      value: 
+      objectReference: {fileID: 1981904095}
     - target: {fileID: 5279213318942869848, guid: 6e293fd52dd38c5499efa3bb93f46947, type: 3}
       propertyPath: m_LocalPosition.x
       value: -43.79248

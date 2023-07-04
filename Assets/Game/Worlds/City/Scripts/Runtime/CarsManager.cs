@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CarsManager : MonoBehaviour
+    public class CarsManager : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private Vehicle[] cars;
@@ -13,14 +14,15 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (!WorldManager.Instance.IsMultiplayer) return;
-
-            List<Vehicle> tmp = new List<Vehicle>(cars);
-            tmp.Shuffle();
-
-            for (int i = 0; i < (int)(tmp.Count * factor); i++)
+            if (IsServer && WorldManager.Instance.IsMultiplayer)
             {
-                tmp[i].NetworkObject.Despawn();
+                List<Vehicle> tmp = new List<Vehicle>(cars);
+                tmp.Shuffle();
+
+                for (int i = 0; i < (int)(tmp.Count * factor); i++)
+                {
+                    tmp[i].NetworkObject.Despawn();
+                }
             }
         }
         #endregion
