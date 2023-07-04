@@ -1,6 +1,7 @@
 using PathCreation.Examples;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -13,9 +14,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<Transform> wheelsRight;
         [SerializeField] private float speed;
         [SerializeField] private float radius;
+
+        private NetworkTransform networkTransform;
         #endregion
 
         #region Methods
+        private void Awake()
+        {
+            networkTransform = GetComponent<NetworkTransform>();
+        }
         private void Start()
         {
             follower.enabled = IsServer;
@@ -23,6 +30,18 @@ namespace DanielLochner.Assets.CreatureCreator
             if (!IsServer && !NetworkObject.IsSpawned)
             {
                 Destroy(gameObject);
+            }
+        }
+
+        private void Update()
+        {
+            if (IsServer && (follower.endOfPathInstruction == PathCreation.EndOfPathInstruction.Stop))
+            {
+                if (follower.distanceTravelled >= follower.pathCreator.path.length)
+                {
+                    networkTransform.Teleport(follower.pathCreator.path.GetPoint(0), transform.rotation, transform.localScale);
+                    follower.distanceTravelled = 0f;
+                }
             }
         }
 
