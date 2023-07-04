@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private int myIndex;
         private CreatureBase kaiju;
+        private bool isKaijuDead;
         #endregion
 
         #region Properties
@@ -112,18 +113,22 @@ namespace DanielLochner.Assets.CreatureCreator
                 Scoreboard[0] = new Score(Scoreboard[0], (int)kaiju.Health.Health);
                 yield return new WaitForSeconds(trackHealthCooldown);
             }
+            if (isKaijuDead)
+            {
+                Scoreboard[0] = new Score(Scoreboard[0], 0);
+            }
         }
 
         protected override IEnumerator GameplayLogicRoutine()
         {
-            yield return new WaitUntil(() => kaiju == null || kaiju.Health.IsDead);
+            yield return new WaitUntil(() => kaiju == null || (isKaijuDead = kaiju.Health.IsDead));
         }
         #endregion
 
         #region Completing
         protected override List<ulong> GetWinnerClientIds()
         {
-            if (PlayTimeLeft.Value > 0)
+            if (isKaijuDead)
             {
                 List<ulong> hunters = new List<ulong>(players);
                 hunters.RemoveAt(0);
@@ -136,7 +141,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         protected override string GetWinnerName()
         {
-            if (PlayTimeLeft.Value > 0)
+            if (isKaijuDead)
             {
                 return LocalizationUtility.Localize("minigame_kaiju-hunt_hunters");
             }
@@ -149,6 +154,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void OnServerShutdown()
         {
             kaiju = null;
+            isKaijuDead = false;
 
             base.OnServerShutdown();
         }
