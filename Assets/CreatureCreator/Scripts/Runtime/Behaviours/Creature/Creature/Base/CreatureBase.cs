@@ -140,7 +140,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void OnDie(DamageReason reason, string inflicter)
         {
-            Collider.enabled = false;
+            OnHide();
+
             MinimapIcon.enabled = false;
 
 #if USE_STATS

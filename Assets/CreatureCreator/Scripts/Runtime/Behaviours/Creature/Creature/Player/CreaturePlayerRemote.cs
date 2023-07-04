@@ -49,6 +49,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public override void OnDie(DamageReason reason, string inflicter)
+        {
+            base.OnDie(reason, inflicter);
+            Selectable.SetSelected(false, true);
+        }
+
         public override void OnShow()
         {
             base.OnShow();

@@ -69,16 +69,14 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor.Body.gameObject.SetActive(false);
             Rigidbody.isKinematic = true;
 
+            Collider.enabled = false;
             Animator.enabled = false;
-
             Abilities.enabled = false;
             Mover.enabled = false;
             Interactor.enabled = false;
 
             Holder.DropAll();
             Holder.enabled = false;
-
-            Loader.HideFromOthers();
 
             Spawner.Despawn();
 
