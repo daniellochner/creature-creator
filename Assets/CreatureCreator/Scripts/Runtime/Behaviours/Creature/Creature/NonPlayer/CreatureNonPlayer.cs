@@ -40,14 +40,8 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
             Selectable.Setup();
 
-            if (!Loader.IsHidden)
-            {
-                Loader.ShowToMe();
-            }
-            else
-            {
-                Loader.OnHide();
-            }
+            Loader.OnShow += OnFirstTimeShown;
+            Loader.ShowToMe();
         }
 
         public override void OnDie(DamageReason reason, string inflicter)
@@ -80,6 +74,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Collider.enabled = false;
             Animator.enabled = false;
+        }
+
+        private void OnFirstTimeShown()
+        {
+            if (Loader.IsHidden)
+            {
+                Loader.OnHide();
+            }
+            Loader.OnShow -= OnFirstTimeShown;
         }
         #endregion
     }
