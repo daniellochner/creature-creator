@@ -63,6 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Collider.enabled = true;
             Animator.enabled = true;
+            Underwater.enabled = true;
         }
         public override void OnHide()
         {
@@ -74,6 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Collider.enabled = false;
             Animator.enabled = false;
+            Underwater.enabled = false;
         }
 
         private void OnFirstTimeShown()

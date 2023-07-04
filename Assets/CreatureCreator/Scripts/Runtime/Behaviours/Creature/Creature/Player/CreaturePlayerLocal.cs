@@ -74,6 +74,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Abilities.enabled = false;
             Mover.enabled = false;
             Interactor.enabled = false;
+            Underwater.enabled = false;
 
             Holder.DropAll();
             Holder.enabled = false;
@@ -133,6 +134,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Mover.enabled = true;
             Interactor.enabled = true;
             Holder.enabled = true;
+            Underwater.enabled = true;
 
             Spawner.Spawn();
 

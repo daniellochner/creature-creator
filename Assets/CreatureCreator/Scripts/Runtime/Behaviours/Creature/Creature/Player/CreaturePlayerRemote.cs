@@ -62,6 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Collider.enabled = true;
             Animator.enabled = true;
+            Underwater.enabled = true;
 
             Namer.enabled = true;
         }
@@ -75,6 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Collider.enabled = false;
             Animator.enabled = false;
+            Underwater.enabled = false;
 
             Namer.enabled = false;
         }
