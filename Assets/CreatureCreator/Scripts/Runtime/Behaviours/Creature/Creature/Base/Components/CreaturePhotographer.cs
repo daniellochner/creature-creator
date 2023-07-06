@@ -15,13 +15,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Settings")]
         [SerializeField] private Vector3 cameraPosition;
         [SerializeField] private Vector3 cameraRotation;
+
+        private static float offset;
         #endregion
 
         #region Properties
         public CreatureCloner CreatureCloner { get; private set; }
 
         public Action<Texture2D> OnTakePhoto { get; set; }
-        public static bool IsTakingPhoto { get; private set; }
         #endregion
 
         #region Methods
@@ -41,11 +42,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public IEnumerator TakePhotoRoutine(int resolution, Action<Texture2D> onPhotoTaken, CreatureData dataOverride = null)
         {
-            yield return new WaitWhile(() => IsTakingPhoto); // Prevent rare case when creatures are photographed in the same frame.
-            IsTakingPhoto = true;
-
             // Clone creature (to world origin).
-            CreatureConstructor tmpCreature = CreatureCloner.Clone(creatureData: dataOverride, parent: Dynamic.Transform);
+            CreatureConstructor tmpCreature = CreatureCloner.Clone(creatureData: dataOverride, position: Vector3.up * offset, parent: Dynamic.Transform);
             tmpCreature.gameObject.SetLayerRecursively(LayerMask.NameToLayer("Photography"));
             tmpCreature.SkinnedMeshRenderer.lightProbeUsage = LightProbeUsage.Off;
             foreach (BodyPartConstructor bpc in tmpCreature.BodyParts)
@@ -53,6 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bpc.Renderer.lightProbeUsage = LightProbeUsage.Off;
                 bpc.Flipped.Renderer.lightProbeUsage = LightProbeUsage.Off;
             }
+            offset = (offset + 10f) % 1000f;
 
             GameObject photoCamGO = new GameObject("Camera");
             photoCamGO.transform.SetParent(tmpCreature.Body);
@@ -74,9 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
             onPhotoTaken(photoCam.targetTexture.ToTexture2D(resolution));
 
             // Destroy temporary creature.
-            DestroyImmediate(tmpCreature.gameObject); // Must be immediate to prevent creature from showing in next photo.
-
-            IsTakingPhoto = false;
+            Destroy(tmpCreature.gameObject);
         }
         #endregion
     }
