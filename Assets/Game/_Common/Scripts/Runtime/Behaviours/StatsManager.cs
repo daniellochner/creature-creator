@@ -20,8 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public int UnlockedPatterns
         {
-            get => GetStat("STA_UNLOCKED_PATTERNS1", ProgressManager.Data.UnlockedPatterns.Count);
-            set => SetStat("STA_UNLOCKED_PATTERNS1", value, new StatAchievement("ACH_PAINTER", 49));
+            get => GetStat("STA_UNLOCKED_PATTERNS", ProgressManager.Data.UnlockedPatterns.Count);
+            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 49));
         }
         public int DistanceTravelled
         {
