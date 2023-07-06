@@ -12,12 +12,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PathCreator pathCreator;
         [SerializeField] private float moveSpeed;
         [SerializeField] private float moveDelay;
-        [SerializeField] private NetworkVariable<bool> isMoving;
 
         private TrackRegion region;
         private Coroutine moveCoroutine;
         private float distance;
         private bool isReady = true;
+        #endregion
+
+        #region Properties
+        private NetworkVariable<bool> IsMoving { get; set; } = new NetworkVariable<bool>(false);
         #endregion
 
         #region Methods
@@ -27,29 +30,17 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            SnapToPath(0);
+            if (IsServer)
+            {
+                SnapToPath(0);
+            }
 
             region.OnTrack += OnTrack;
             region.OnLoseTrackOf += OnLoseTrackOf;
         }
-
         private void OnTriggerStay(Collider other)
         {
-            OnCreature(other, delegate (CreatureBase creature)
-            {
-                foreach (LegAnimator leg in creature.Animator.Legs)
-                {
-                    Vector3 pos = creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos);
-                    leg.Target.position = leg.Anchor.position = pos;
-                    leg.Target.rotation = leg.Anchor.rotation = Quaternion.identity;
-                }
-
-                CreaturePlayerLocal player = creature as CreaturePlayerLocal;
-                if (player)
-                {
-                    player.Mover.enabled = !isMoving.Value;
-                }
-            });
+            OnTracking(other);
         }
 
         private void OnTrack(Collider other)
@@ -58,7 +49,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 OnCreature(other, delegate
                 {
-                    if (!isMoving.Value && isReady)
+                    if (!IsMoving.Value && isReady)
                     {
                         this.StopStartCoroutine(MoveRoutine(), ref moveCoroutine);
                     }
@@ -69,11 +60,24 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             OnCreature(other, delegate (CreatureBase creature)
             {
-                CreaturePlayerLocal player = creature as CreaturePlayerLocal;
-                if (player)
+                SetMover(creature as CreaturePlayerLocal, true);
+            });
+        }
+        private void OnTracking(Collider other)
+        {
+            OnCreature(other, delegate (CreatureBase creature)
+            {
+                if (IsMoving.Value)
                 {
-                    player.Mover.enabled = true;
+                    foreach (LegAnimator leg in creature.Animator.Legs)
+                    {
+                        Vector3 pos = creature.Constructor.transform.L2WSpace(leg.DefaultFootLocalPos);
+                        leg.Target.position = leg.Anchor.position = pos;
+                        leg.Target.rotation = leg.Anchor.rotation = Quaternion.identity;
+                    }
                 }
+
+                SetMover(creature as CreaturePlayerLocal, !IsMoving.Value);
             });
         }
 
@@ -83,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             isReady = false;
             {
-                isMoving.Value = true;
+                IsMoving.Value = true;
                 {
                     float target = distance + pathCreator.path.length;
                     while (distance <= target)
@@ -94,13 +98,20 @@ namespace DanielLochner.Assets.CreatureCreator
                         yield return new WaitForFixedUpdate();
                     }
                 }
-                isMoving.Value = false;
+                IsMoving.Value = false;
 
                 yield return new WaitUntil(() => region.tracked.Count == 0);
             }
             isReady = true;
         }
 
+        private void SetMover(CreaturePlayerLocal player, bool canMove)
+        {
+            if (player != null)
+            {
+                player.Mover.enabled = !IsMoving.Value;
+            }
+        }
         private void OnCreature(Collider other, UnityAction<CreatureBase> onCreature)
         {
             CreatureBase creature = other.GetComponent<CreatureBase>();

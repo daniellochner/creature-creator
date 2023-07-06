@@ -36,7 +36,7 @@ namespace DanielLochner.Assets
         {
             if (networkObjectRef.TryGet(out NetworkObject networkObject))
             {
-                networkObject.transform.parent = isParented ? transform : null;
+                networkObject.transform.SetParent(isParented ? transform : null, true);
             }
         }
         #endregion

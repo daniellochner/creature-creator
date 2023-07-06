@@ -18,7 +18,11 @@ namespace DanielLochner.Assets
         }
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
         {
-            return Quaternion.Euler(angles) * (point - pivot) + pivot;
+            if (angles != Vector3.zero)
+            {
+                return Quaternion.Euler(angles) * (point - pivot) + pivot;
+            }
+            return point;
         }
 
         /// <summary>

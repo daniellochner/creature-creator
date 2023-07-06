@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Text;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
