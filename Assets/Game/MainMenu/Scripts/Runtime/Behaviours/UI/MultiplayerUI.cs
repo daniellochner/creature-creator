@@ -308,7 +308,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (Exception e)
             {
-                if (e is NullReferenceException)
+                if (e is NullReferenceException || (e is LobbyServiceException && (e as LobbyServiceException).Reason == LobbyExceptionReason.LobbyConflict))
                 {
                     UpdateStatus(LocalizationUtility.Localize("network_status_lobby-error"), Color.red); // TODO: Bug with Lobby returning NullReferenceException?
                 }
