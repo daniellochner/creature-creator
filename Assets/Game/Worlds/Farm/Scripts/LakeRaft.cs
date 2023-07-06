@@ -1,3 +1,4 @@
+using PathCreation;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,27 +9,30 @@ namespace DanielLochner.Assets.CreatureCreator
     public class LakeRaft : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private Transform pos1;
-        [SerializeField] private Transform pos2;
-        [SerializeField] private float moveTime;
-        [SerializeField] private float moveCooldown;
+        [SerializeField] private PathCreator pathCreator;
+        [SerializeField] private float moveSpeed;
         [SerializeField] private float moveDelay;
         [SerializeField] private NetworkVariable<bool> isMoving;
 
-        private bool canMove = true;
+        private TrackRegion region;
+        private Coroutine moveCoroutine;
+        private float distance;
+        private bool isReady = true;
         #endregion
 
         #region Methods
-        private void OnTriggerEnter(Collider other)
+        private void Awake()
         {
-            OnCreature(other, delegate (CreatureBase creature)
-            {
-                if (creature is CreaturePlayerLocal)
-                {
-                    TryMoveServerRpc();
-                }
-            });
+            region = GetComponent<TrackRegion>();
         }
+        private void Start()
+        {
+            SnapToPath(0);
+
+            region.OnTrack += OnTrack;
+            region.OnLoseTrackOf += OnLoseTrackOf;
+        }
+
         private void OnTriggerStay(Collider other)
         {
             OnCreature(other, delegate (CreatureBase creature)
@@ -39,33 +43,62 @@ namespace DanielLochner.Assets.CreatureCreator
                     leg.Target.position = leg.Anchor.position = pos;
                     leg.Target.rotation = leg.Anchor.rotation = Quaternion.identity;
                 }
+
+                CreaturePlayerLocal player = creature as CreaturePlayerLocal;
+                if (player)
+                {
+                    player.Mover.enabled = !isMoving.Value;
+                }
             });
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void TryMoveServerRpc()
+        private void OnTrack(Collider other)
         {
-            if (!isMoving.Value && canMove) StartCoroutine(MoveRoutine());
+            if (IsServer)
+            {
+                OnCreature(other, delegate
+                {
+                    if (!isMoving.Value && isReady)
+                    {
+                        this.StopStartCoroutine(MoveRoutine(), ref moveCoroutine);
+                    }
+                });
+            }
         }
+        private void OnLoseTrackOf(Collider other)
+        {
+            OnCreature(other, delegate (CreatureBase creature)
+            {
+                CreaturePlayerLocal player = creature as CreaturePlayerLocal;
+                if (player)
+                {
+                    player.Mover.enabled = true;
+                }
+            });
+        }
+
         private IEnumerator MoveRoutine()
         {
-            canMove = false;
             yield return new WaitForSeconds(moveDelay);
-            isMoving.Value = true;
 
-            yield return InvokeUtility.InvokeOverTimeRoutine(delegate (float p)
+            isReady = false;
             {
-                transform.position = Vector3.Lerp(pos1.position, pos2.position, p);
-            }, 
-            moveTime);
+                isMoving.Value = true;
+                {
+                    float target = distance + pathCreator.path.length;
+                    while (distance <= target)
+                    {
+                        distance += moveSpeed * Time.fixedDeltaTime;
+                        SnapToPath(distance);
 
-            Vector3 tmp = pos1.position;
-            pos1.position = pos2.position;
-            pos2.position = tmp;
+                        yield return new WaitForFixedUpdate();
+                    }
+                }
+                isMoving.Value = false;
 
-            isMoving.Value = false;
-            yield return new WaitForSeconds(moveCooldown);
-            canMove = true;
+                yield return new WaitUntil(() => region.tracked.Count == 0);
+            }
+            isReady = true;
         }
 
         private void OnCreature(Collider other, UnityAction<CreatureBase> onCreature)
@@ -75,6 +108,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 onCreature?.Invoke(creature);
             }
+        }
+        private void SnapToPath(float distance)
+        {
+            transform.position = pathCreator.path.GetPointAtDistance(distance, EndOfPathInstruction.Reverse);
+            transform.rotation = pathCreator.path.GetRotationAtDistance(distance, EndOfPathInstruction.Reverse);
         }
         #endregion
     }

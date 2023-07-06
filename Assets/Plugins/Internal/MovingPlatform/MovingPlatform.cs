@@ -6,27 +6,33 @@ namespace DanielLochner.Assets
     public class MovingPlatform : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private string playerTag;
+        private TrackRegion region;
         #endregion
 
         #region Methods
-        public void OnTriggerEnter(Collider other)
+        private void Awake()
         {
-            if (other.CompareTag(playerTag))
-            {
-                SetParentServerRpc(new NetworkObjectReference(other.gameObject), true);
-            }
+            region = GetComponent<TrackRegion>();
         }
-        private void OnTriggerExit(Collider other)
+        private void Start()
         {
-            if (other.CompareTag(playerTag))
+            if (IsServer)
             {
-                SetParentServerRpc(new NetworkObjectReference(other.gameObject), false);
+                region.OnTrack += OnTrack;
+                region.OnLoseTrackOf += OnLoseTrackOf;
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void SetParentServerRpc(NetworkObjectReference networkObjectRef, bool isParented)
+        private void OnTrack(Collider other)
+        {
+            SetParent(new NetworkObjectReference(other.gameObject), true);
+        }
+        private void OnLoseTrackOf(Collider other)
+        {
+            SetParent(new NetworkObjectReference(other.gameObject), false);
+        }
+
+        private void SetParent(NetworkObjectReference networkObjectRef, bool isParented)
         {
             if (networkObjectRef.TryGet(out NetworkObject networkObject))
             {

@@ -121,15 +121,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 Editor.Platform.TeleportTo(false, true);
             }
 
-
             Constructor.Body.gameObject.SetActive(true);
             Rigidbody.isKinematic = false;
-            transform.parent = null;
 
             Collider.enabled = true;
-
             Animator.enabled = true;
-
             Abilities.enabled = true;
             Mover.enabled = true;
             Interactor.enabled = true;
