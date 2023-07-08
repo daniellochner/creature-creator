@@ -41,6 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
         public bool IsMultiplayer => World is WorldMP;
+        public bool IsCreative => World.CreativeMode;
         public bool IsUsingTeleport { get; set; }
         #endregion
 

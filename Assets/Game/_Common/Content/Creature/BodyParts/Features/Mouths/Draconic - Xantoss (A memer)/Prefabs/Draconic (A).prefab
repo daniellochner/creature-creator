@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 404368826990608976}
   - component: {fileID: -7058797305444285339}
   - component: {fileID: 9050471507661963729}
+  - component: {fileID: 5191639580728019429}
   m_Layer: 0
   m_Name: Draconic (A)
   m_TagString: Untagged
@@ -31,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7829106416119248802}
+  - {fileID: 4545597577180718723}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -50,21 +52,21 @@ MonoBehaviour:
   model: {fileID: 7829106416119248802}
   stretchMap:
     reorderableList:
-      canAdd: 0
-      canRemove: 0
-      draggable: 0
-      expandable: 0
-      multipleSelection: 0
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
       isExpanded: 0
       label:
-        m_Text: 
+        m_Text: Keys
         m_Image: {fileID: 0}
         m_Tooltip: 
-      headerHeight: 0
-      footerHeight: 0
-      slideEasing: 0
-      verticalSpacing: 0
-      showDefaultBackground: 0
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
       elementDisplayType: 0
       elementNameProperty: 
       elementNameOverride: 
@@ -88,6 +90,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oIndex: -1
   cIndex: -1
+--- !u!114 &5191639580728019429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500832116254435422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9acd1da9ac22547802d5beef400c5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emissionId: fire
+  spawnPoint: {fileID: 4545597577180718723}
+--- !u!1 &2375622138551988504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4545597577180718723}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4545597577180718723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2375622138551988504}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.035, z: 0.425}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 404368826990608976}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3498524768877165226
 GameObject:
   m_ObjectHideFlags: 0

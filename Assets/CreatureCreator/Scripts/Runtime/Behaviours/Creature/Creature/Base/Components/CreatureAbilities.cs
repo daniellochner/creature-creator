@@ -3,13 +3,14 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using static DanielLochner.Assets.CreatureCreator.Ability;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor), typeof(CreatureMover))]
-    public class CreatureAbilities : MonoBehaviour
+    public class CreatureAbilities : NetworkBehaviour
     {
         #region Fields
         [Header("Setup")]
@@ -44,6 +45,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDisable()
         {
+            if (!NetworkObject.IsSpawned) return;
+
             foreach (Ability ability in Abilities)
             {
                 ability.Shutdown();

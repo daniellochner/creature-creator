@@ -1,3 +1,6 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,15 +10,15 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Projectile : NetworkBehaviour
     {
         #region Fields
+        [SerializeField] private GameObject collidePrefab;
         [SerializeField] private MinMax minMaxDamage;
         [SerializeField] private float blastRadius;
-        [SerializeField] private GameObject collidePrefab;
         [SerializeField] private float lifetime;
+
+        private Rigidbody rb;
         #endregion
 
         #region Properties
-        public Rigidbody Rigidbody { get; private set; }
-
         public CreatureLauncher Launcher { get; set; }
         public ProjectileGroup Group { get; set; }
         #endregion
@@ -23,7 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Awake()
         {
-            Rigidbody = GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
         }
         private IEnumerator Start()
         {
@@ -33,14 +36,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 NetworkObject.Despawn();
             }
         }
-        private void LateUpdate()
-        {
-            if (IsServer)
-            {
-                transform.forward = Rigidbody.velocity;
-            }
-        }
-
         public override void OnDestroy()
         {
             base.OnDestroy();
@@ -49,40 +44,58 @@ namespace DanielLochner.Assets.CreatureCreator
                 Group.Count--;
             }
         }
-
+        private void LateUpdate()
+        {
+            if (IsServer)
+            {
+                transform.forward = rb.velocity;
+            }
+        }
         private void OnCollisionEnter(Collision collision)
         {
             if (IsServer)
             {
-                Vector3 point = collision.GetContact(0).point;
-
-                Collider[] colliders = Physics.OverlapSphere(point, blastRadius);
-                foreach (Collider collider in colliders)
-                {
-                    CreatureBase creature = collider.GetComponent<CreatureBase>();
-                    if (creature != null)
-                    {
-                        bool ignore = (creature is CreaturePlayer) && (creature.NetworkObjectId == Launcher.NetworkObjectId || !WorldManager.Instance.EnablePVP);
-                        if (!ignore && !Group.HasDamaged)
-                        {
-                            string inflicter = null;
-                            if (Launcher.GetComponent<CreaturePlayer>())
-                            {
-                                inflicter = Launcher.OwnerClientId.ToString(); // TODO: Tidy up...
-                            }
-
-                            creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, inflicter);
-                            Group.HasDamaged = true;
-                        }
-                    }
-                }
-
-                CollideClientRpc(point);
+                CollideAt(collision.GetContact(0).point);
             }
         }
 
+        public virtual void Launch(CreatureLauncher launcher, ProjectileGroup group, float speed)
+        {
+            Launcher = launcher;
+            Group = group;
+
+            rb.velocity = speed * transform.forward;
+
+            Physics.IgnoreCollision(Launcher.GetComponent<Collider>(), GetComponent<Collider>());
+        }
+
+        private void CollideAt(Vector3 point)
+        {
+            Collider[] colliders = Physics.OverlapSphere(point, blastRadius);
+            foreach (Collider collider in colliders)
+            {
+                CreatureBase creature = collider.GetComponent<CreatureBase>();
+                if (creature != null)
+                {
+                    bool ignore = (creature is CreaturePlayer) && (creature.NetworkObjectId == Launcher.NetworkObjectId || !WorldManager.Instance.EnablePVP);
+                    if (!ignore && !Group.HasDamaged)
+                    {
+                        string inflicter = null;
+                        if (Launcher.GetComponent<CreaturePlayer>())
+                        {
+                            inflicter = Launcher.OwnerClientId.ToString(); // TODO: Tidy up...
+                        }
+
+                        creature.Health.TakeDamage(minMaxDamage.Random, DamageReason.Projectile, inflicter);
+                        Group.HasDamaged = true;
+                    }
+                }
+            }
+
+            CollideAtClientRpc(point);
+        }
         [ClientRpc]
-        private void CollideClientRpc(Vector3 point)
+        private void CollideAtClientRpc(Vector3 point)
         {
             Instantiate(collidePrefab, point, Quaternion.identity, Dynamic.Transform);
 

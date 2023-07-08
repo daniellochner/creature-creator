@@ -306,6 +306,8 @@ GameObject:
   - component: {fileID: -746940629120589561}
   - component: {fileID: 1118714425098495938}
   - component: {fileID: -4925696004417530908}
+  - component: {fileID: -6441557127254294913}
+  - component: {fileID: 6627301565326724414}
   m_Layer: 18
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -1079,9 +1081,6 @@ MonoBehaviour:
     - {fileID: -7866358497527998615, guid: a7b6f98c7302aae438b568bcf13deadf, type: 3}
     - {fileID: 1541411125822107933, guid: cbbcb57ef2197a343bf492669953e33b, type: 3}
     - {fileID: 76745414110190661, guid: 774b3e252b5f9544aa4f85581e4efc47, type: 3}
-  launchSounds:
-  - name: Swoosh
-    volume: 0.25
 --- !u!114 &3575083059256352896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1213,6 +1212,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAnimated: 1
   optimize: 0
+--- !u!114 &-6441557127254294913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff2cd2d12eba98c4c88718670fc1c535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emissions:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - fire
+    _keys:
+    - fire
+    _values:
+    - {fileID: -4165366653917624783, guid: 5a2dded03d531d34082620c669ce3b77, type: 3}
+--- !u!114 &6627301565326724414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76cbedd75386fad4283da3f57081ebe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7193793692236944224
 GameObject:
   m_ObjectHideFlags: 0

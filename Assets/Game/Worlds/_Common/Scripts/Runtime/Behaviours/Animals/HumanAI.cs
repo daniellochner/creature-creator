@@ -108,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     foreach (BodyPartLauncher launcher in Launchers)
                     {
                         launcher.Speed = baseShootSpeed * (distance / baseShootDistance);
-                        HumanAI.Creature.Launcher.Launch(launcher);
+                        HumanAI.Creature.Launcher.LaunchFrom(launcher);
                     }
 
                     // Wait...

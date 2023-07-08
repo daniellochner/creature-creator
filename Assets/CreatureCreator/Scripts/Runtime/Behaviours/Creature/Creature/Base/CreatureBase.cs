@@ -26,6 +26,8 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureUnderwater))]
     [RequireComponent(typeof(MinimapIcon))]
     [RequireComponent(typeof(CreatureLauncher))]
+    [RequireComponent(typeof(CreatureEmitter))]
+    [RequireComponent(typeof(CreatureBurner))]
     [RequireComponent(typeof(CreatureOptimizer))]
     public class CreatureBase : NetworkBehaviour
     {
@@ -53,6 +55,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureGrounded grounded;
         [SerializeField] private MinimapIcon minimapIcon;
         [SerializeField] private CreatureLauncher launcher;
+        [SerializeField] private CreatureEmitter emitter;
+        [SerializeField] private CreatureBurner burner;
         [SerializeField] private CreatureOptimizer optimizer;
         #endregion
 
@@ -80,6 +84,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureGrounded Grounded => grounded;
         public MinimapIcon MinimapIcon => minimapIcon;
         public CreatureLauncher Launcher => launcher;
+        public CreatureEmitter Emitter => emitter;
+        public CreatureBurner Burner => burner;
         public CreatureOptimizer Optimizer => optimizer;
 
         public static List<CreatureBase> Creatures { get; set; } = new List<CreatureBase>();
@@ -112,6 +118,8 @@ namespace DanielLochner.Assets.CreatureCreator
             grounded = GetComponent<CreatureGrounded>();
             minimapIcon = GetComponent<MinimapIcon>();
             launcher = GetComponent<CreatureLauncher>();
+            emitter = GetComponent<CreatureEmitter>();
+            burner = GetComponent<CreatureBurner>();
             optimizer = GetComponent<CreatureOptimizer>();
         }
 #endif
@@ -128,6 +136,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Animator.Setup();
             Launcher.Setup();
+            Emitter.Setup();
 
             MinimapIcon.enabled = true;
 
@@ -155,10 +164,12 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             MinimapIcon.enabled = true;
             Launcher.enabled = true;
+            Emitter.enabled = true;
         }
         public virtual void OnDespawn()
         {
             Launcher.enabled = false;
+            Emitter.enabled = false;
         }
         public virtual void OnHide()
         {
