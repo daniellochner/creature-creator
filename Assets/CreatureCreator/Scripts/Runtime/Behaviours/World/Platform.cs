@@ -54,12 +54,16 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Enter()
         {
             Player.Instance.Holder.DropAll();
-            Player.Instance.Loader.HideFromOthers();
+            Player.Instance.Emitter.StopEmitting();
             Player.Instance.SpeedUp.SlowDown();
+            Player.Instance.Loader.HideFromOthers();
 
             Player.Instance.Editor.Platform = this;
 
-            EditorManager.Instance.UpdateLoadableCreatures();
+            if (!WorldManager.Instance.IsCreative)
+            {
+                EditorManager.Instance.UpdateLoadableCreatures();
+            }
             EditorManager.Instance.SetEditing(true);
 
             HasEntered = true;
