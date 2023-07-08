@@ -39,14 +39,20 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public virtual void Setup(CreatureAbilities creatureAbilities)
-        {
-            CreatureAbilities = creatureAbilities;
-        }
-        public virtual void Shutdown()
+        private void Reset()
         {
             CooldownTimeLeft = 0f;
             IsPrepared = false;
+        }
+
+        public virtual void Setup(CreatureAbilities creatureAbilities)
+        {
+            CreatureAbilities = creatureAbilities;
+            Reset();
+        }
+        public virtual void Shutdown()
+        {
+            Reset();
         }
 
         public bool OnTryPrepare()

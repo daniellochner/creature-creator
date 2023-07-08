@@ -16,7 +16,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private AudioClip extinguishFX;
 
         private Follower follower;
-        private ParticleSystem[] particles;
+        private ParticleSystem particles;
+        private AudioSource source;
+
         private Coroutine burnCoroutine;
         #endregion
 
@@ -28,7 +30,8 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             follower = GetComponent<Follower>();
-            particles = GetComponentsInChildren<ParticleSystem>();
+            particles = GetComponent<ParticleSystem>();
+            source = GetComponent<AudioSource>();
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -72,12 +75,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void ExtinguishClientRpc()
         {
-            AudioSource.PlayClipAtPoint(extinguishFX, transform.position);
+            source.PlayOneShot(extinguishFX);
 
-            foreach (ParticleSystem particle in particles)
-            {
-                particle.Stop();
-            }
+            particles.Stop();
+            StartCoroutine(source.FadeRoutine(1f, 0f));
 
             if (IsServer)
             {

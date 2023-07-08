@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private Follower follower;
         private ParticleSystem[] particles;
+        private AudioSource[] sources;
 
         private bool hasStoppedEmitting;
         private float tickTimeLeft;
@@ -28,6 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             follower = GetComponent<Follower>();
             particles = GetComponentsInChildren<ParticleSystem>();
+            sources = GetComponents<AudioSource>();
 
             tickTimeLeft = tickCooldown;
         }
@@ -61,6 +63,10 @@ namespace DanielLochner.Assets.CreatureCreator
             foreach (ParticleSystem particle in particles)
             {
                 particle.Stop();
+            }
+            foreach (AudioSource source in sources)
+            {
+                StartCoroutine(source.FadeRoutine(1f, 0f));
             }
 
             if (IsServer && !hasStoppedEmitting)
