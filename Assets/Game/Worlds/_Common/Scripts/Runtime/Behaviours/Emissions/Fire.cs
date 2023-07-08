@@ -18,6 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private Follower follower;
         private ParticleSystem particles;
         private AudioSource source;
+        private new Light light;
 
         private Coroutine burnCoroutine;
         #endregion
@@ -32,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
             follower = GetComponent<Follower>();
             particles = GetComponent<ParticleSystem>();
             source = GetComponent<AudioSource>();
+            light = GetComponent<Light>();
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -79,6 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             particles.Stop();
             StartCoroutine(source.FadeRoutine(1f, 0f));
+            StartCoroutine(light.FadeRoutine(1f, 0f));
 
             if (IsServer)
             {
