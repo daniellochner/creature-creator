@@ -11,25 +11,16 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private SerializableDictionaryBase<string, Projectile> projectiles;
-        [SerializeField] private PlayerEffects.Sound[] launchSounds;
-        [SerializeField] private ProjectileGroup groupPrefab;
         #endregion
 
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
-        public PlayerEffects PlayerEffects { get; private set; }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
             Constructor = GetComponent<CreatureConstructor>();
-            PlayerEffects = GetComponent<PlayerEffects>();
         }
 
         public void Setup()
@@ -45,43 +36,48 @@ namespace DanielLochner.Assets.CreatureCreator
             };
         }
 
-        public void Launch(BodyPartLauncher bpl)
+        public void LaunchFrom(BodyPartLauncher launcher)
         {
-            SerializableTransform[] spawnPoints = new SerializableTransform[bpl.SpawnPoints.Length];
-            for (int i = 0; i < spawnPoints.Length; i++)
-            {
-                spawnPoints[i] = new SerializableTransform(bpl.SpawnPoints[i], Dynamic.Transform);
-            }
-
-            LaunchServerRpc(bpl.ProjectileId, spawnPoints, bpl.transform.localScale.x, bpl.Speed);
+            LaunchFromServerRpc(launcher.name);
         }
-
         [ServerRpc]
-        private void LaunchServerRpc(string projectileId, SerializableTransform[] spawnPoints, float scale, float speed)
+        private void LaunchFromServerRpc(string launcherGUID)
         {
-            ProjectileGroup group = new GameObject("_ProjectileGroup").AddComponent<ProjectileGroup>();
-            group.transform.SetParent(Dynamic.Transform);
-            group.Count = spawnPoints.Length;
-
-            foreach (SerializableTransform spawnPoint in spawnPoints)
+            if (TryGetLauncher(launcherGUID, out BodyPartLauncher launcher))
             {
-                LaunchProjectile(projectileId, group, spawnPoint.position, spawnPoint.rotation, spawnPoint.scale.x, speed);
+                ProjectileGroup group = new GameObject("_ProjectileGroup").AddComponent<ProjectileGroup>();
+                group.transform.SetParent(Dynamic.Transform);
+                group.Count = launcher.SpawnPoints.Length;
+
+                foreach (Transform spawnPoint in launcher.SpawnPoints)
+                {
+                    Projectile projectile = Instantiate(projectiles[launcher.ProjectileId], spawnPoint.position, spawnPoint.rotation, group.transform);
+                    projectile.transform.localScale *= launcher.transform.localScale.x;
+
+                    projectile.Launch(this, group, launcher.Speed);
+
+                    projectile.NetworkObject.SpawnWithOwnership(OwnerClientId, true);
+                }
             }
         }
-
-        private void LaunchProjectile(string projectileId, ProjectileGroup group, Vector3 position, Quaternion rotation, float scale, float speed)
+        private bool TryGetLauncher(string launcherGUID, out BodyPartLauncher launcher)
         {
-            Projectile projectile = Instantiate(projectiles[projectileId], position, rotation, group.transform);
-            projectile.transform.localScale *= scale;
-            projectile.Rigidbody.velocity = speed * projectile.transform.forward;
-            projectile.Launcher = this;
-            projectile.Group = group;
-
-            Physics.IgnoreCollision(projectile.GetComponent<Collider>(), GetComponent<Collider>()); // Ignore collision between this creature and the projectile!
-
-            PlayerEffects.PlaySound(launchSounds);
-
-            projectile.NetworkObject.SpawnWithOwnership(OwnerClientId, true);
+            foreach (BodyPartConstructor constructor in Constructor.BodyParts)
+            {
+                if (constructor.name == launcherGUID && constructor.IsVisible)
+                {
+                    launcher = constructor.GetComponent<BodyPartLauncher>();
+                    return true;
+                }
+                else
+                if (constructor.Flipped.name == launcherGUID && constructor.Flipped.IsVisible)
+                {
+                    launcher = constructor.Flipped.GetComponent<BodyPartLauncher>();
+                    return true;
+                }
+            }
+            launcher = null;
+            return false;
         }
         #endregion
     }
