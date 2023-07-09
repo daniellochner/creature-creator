@@ -21,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public NetworkVariable<HeldData> Hand { get; set; } = new NetworkVariable<HeldData>();
+        public NetworkVariable<bool> CanHold { get; set; } = new NetworkVariable<bool>(true);
 
         public Holdable Holdable { get; private set; }
         public HoldableDummy Dummy { get; private set; }

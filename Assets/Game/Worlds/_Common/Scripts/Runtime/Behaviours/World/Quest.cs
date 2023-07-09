@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string description;
         [SerializeField] private string id;
         [SerializeField] private int reward;
-        [SerializeField] private Holdable[] items;
+        [SerializeField] private QuestItem[] items;
         [SerializeField] public UnityEvent onComplete;
 
         private TrackRegion region;
@@ -38,9 +38,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                foreach (Holdable item in items)
+                foreach (QuestItem item in items)
                 {
-                    if (region.tracked.Contains(item.Col))
+                    if (region.tracked.Contains(item.Holdable.Col))
                     {
                         return true;
                     }
@@ -52,9 +52,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                foreach (Holdable item in items)
+                foreach (QuestItem item in items)
                 {
-                    if (!region.tracked.Contains(item.Col))
+                    if (!region.tracked.Contains(item.Holdable.Col))
                     {
                         return false;
                     }
@@ -103,23 +103,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!IsCompleted && other.CompareTag("Player/Local") && (type == QuestType.All ? HasAll : HasAny))
             {
-                ProgressManager.Data.Cash += reward;
-                ProgressManager.Instance.Save();
-
-                Player.Instance.Editor.Cash += reward; // Also update the player's current cash!
-
-                NotificationsManager.Notify(LocalizationUtility.Localize("quest-complete", reward));
-                source.Play();
-                onComplete.Invoke();
-                minimapIcon.enabled = false;
-
-                IsCompleted = true;
-                
-#if USE_STATS
-                StatsManager.Instance.CompletedQuests++;
-#endif
-
-                MMVibrationManager.Haptic(HapticTypes.Success);
+                Complete();
             }
         }
         private void OnTriggerExit(Collider other)
@@ -136,9 +120,9 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 int required = (type == QuestType.All) ? items.Length : 1;
                 int current = 0;
-                foreach (Holdable item in items)
+                foreach (QuestItem item in items)
                 {
-                    if (region.tracked.Contains(item.Col))
+                    if (region.tracked.Contains(item.Holdable.Col))
                     {
                         current++;
                     }
@@ -150,6 +134,31 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 questText.text = "";
             }
+        }
+        private void Complete()
+        {
+            ProgressManager.Data.Cash += reward;
+            ProgressManager.Instance.Save();
+
+            Player.Instance.Editor.Cash += reward; // Also update the player's current cash!
+
+            NotificationsManager.Notify(LocalizationUtility.Localize("quest-complete", reward));
+            source.Play();
+            onComplete.Invoke();
+            minimapIcon.enabled = false;
+
+            foreach (QuestItem item in items)
+            {
+                item.Snap();
+            }
+
+            IsCompleted = true;
+
+#if USE_STATS
+            StatsManager.Instance.CompletedQuests++;
+#endif
+
+            MMVibrationManager.Haptic(HapticTypes.Success);
         }
         #endregion
 

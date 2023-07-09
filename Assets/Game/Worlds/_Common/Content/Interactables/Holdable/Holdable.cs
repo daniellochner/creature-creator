@@ -20,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public override bool CanInteract(Interactor interactor)
         {
-            return base.CanInteract(interactor) && !Held.IsHeld && !EditorManager.Instance.IsEditing && Player.Instance.Holder.enabled && Player.Instance.Animator.Arms.Count > 0;
+            return base.CanInteract(interactor) && Held.CanHold.Value && !Held.IsHeld && !EditorManager.Instance.IsEditing && Player.Instance.Holder.enabled && Player.Instance.Animator.Arms.Count > 0;
         }
         protected override void OnInteract(Interactor interactor)
         {
