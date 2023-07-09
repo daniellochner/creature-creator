@@ -6,7 +6,8 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CaveTeleporter : TeleportManager
     {
         #region Fields
-        [SerializeField] private ExitCrackCinematic exitCrackCinematic;
+        [SerializeField] private Cinematic exitCrackCinematic;
+        [SerializeField] private Cinematic enterMineshaftCinematic;
         #endregion
 
         #region Methods
@@ -17,6 +18,11 @@ namespace DanielLochner.Assets.CreatureCreator
             if (prevScene == "Farm")
             {
                 exitCrackCinematic.Begin();
+            }
+            else
+            if (prevScene == "City")
+            {
+                enterMineshaftCinematic.Begin();
             }
         }
         #endregion
