@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets.CreatureCreator.Abilities
 {
     public class Emit : Ability
     {
