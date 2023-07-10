@@ -10,9 +10,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private UnlockablePattern[] patterns;
         [SerializeField] private Quest[] quests;
         [SerializeField] private Battle[] battles;
-        [SerializeField, DrawIf("isFinalMap", false)] private Teleport[] teleports;
-        [SerializeField, DrawIf("isFinalMap", false)] private Map nextMap;
-        [SerializeField] private bool isFinalMap;
+        [SerializeField] private Teleport[] teleports;
+        [SerializeField] private Map nextMap;
         [Space]
         [SerializeField] private GameObject progress;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
@@ -21,11 +20,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private WorldHint worldHintPrefab;
 
         private int unlockedBodyParts, unlockedPatterns, completedQuests;
-        private bool allowAdvance = false;
+        private bool isAllowedToAdvance = false;
         #endregion
 
         #region Properties
-        private int UnlockedBodyParts
+        public int BodyParts => bodyParts.Length;
+        public int Patterns => patterns.Length;
+        public int Quests => quests.Length;
+
+        public int UnlockedBodyParts
         {
             get => unlockedBodyParts;
             set
@@ -35,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 TryAdvance();
             }
         }
-        private int UnlockedPatterns
+        public int UnlockedPatterns
         {
             get => unlockedPatterns;
             set
@@ -45,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 TryAdvance();
             }
         }
-        private int CompletedQuests
+        public int CompletedQuests
         {
             get => completedQuests;
             set
@@ -56,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private bool CanAdvance
+        public bool CanAdvance
         {
             get => (bodyParts.Length + patterns.Length + quests.Length) == (UnlockedBodyParts + UnlockedPatterns + CompletedQuests);
         }
@@ -111,13 +114,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                allowAdvance = true;
+                isAllowedToAdvance = true;
             }
         }
 
         private void TryAdvance()
         {
-            if (allowAdvance && CanAdvance)
+            if (isAllowedToAdvance && CanAdvance)
             {
                 InformationDialog.Inform(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onOkay: delegate
                 {

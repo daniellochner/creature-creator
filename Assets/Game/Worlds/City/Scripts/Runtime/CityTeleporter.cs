@@ -15,10 +15,11 @@ namespace DanielLochner.Assets.CreatureCreator
         private IEnumerator Start()
 		{
 			yield return new WaitForSeconds(1f);
-			if (!HasRequestedReview)
+			if (!HasRequestedReview && WorldManager.Instance.IsCreative)
 			{
 				RatingManager.Instance.Rate();
-			}
+                HasRequestedReview = true;
+            }
 		}
 		
         public override void OnEnter(string prevScene, string nextScene)

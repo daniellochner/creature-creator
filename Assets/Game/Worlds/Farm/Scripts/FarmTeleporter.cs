@@ -29,12 +29,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 ZoneManager.Instance.EnterZone(beach, false);
                 ocean.SetVisibility(true);
 
-                arriveOnRaftCinematic.Begin();
-
                 if (!HasRequestedReview)
                 {
                     arriveOnRaftCinematic.OnEnd += RatingManager.Instance.Rate;
+                    HasRequestedReview = true;
                 }
+                arriveOnRaftCinematic.Begin();
             }
             else
             if (prevScene == "Sandbox")
