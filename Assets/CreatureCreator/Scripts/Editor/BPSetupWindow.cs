@@ -99,7 +99,7 @@ namespace DanielLochner.Assets.CreatureCreator
             string bodyPartName = model.name;
 
             Transform root = new GameObject(bodyPartName).transform;
-            GameObject copy = Instantiate(model, root);
+            GameObject copy = PrefabUtility.InstantiatePrefab(model, root) as GameObject;
             copy.name = bodyPartName;
 
             // 0. Prepare
@@ -115,27 +115,38 @@ namespace DanielLochner.Assets.CreatureCreator
 
             // 1. Add To Database
             BodyPart bodyPart = AddToDatabase(type, database);
+            string bodyPartDir = Path.Combine(outputDirectory, bodyPartName);
+            if (!AssetDatabase.IsValidFolder(bodyPartDir))
+            {
+                AssetDatabase.CreateFolder(outputDirectory, bodyPartName);
+
+                // Item
+                AssetDatabase.CreateAsset(bodyPart, Path.Combine(bodyPartDir, $"{bodyPartName}.asset"));
+
+                // Prefabs
+                AssetDatabase.CreateFolder(bodyPartDir, "Prefabs");
+            }
 
             // 2. Convert...
             // 2.1. ...to Constructible
             BodyPartConstructor constructible = ConvertToConstructible(prepared, bodyPart);
             constructible.transform.SetParent(root);
             constructible.name = $"{bodyPartName} (C)";
+            BodyPartConstructor constructiblePrefab = Save(bodyPartDir, constructible.gameObject, bodyPart, outputDirectory, type, database).GetComponent<BodyPartConstructor>();
 
             // 2.2. ...to Animatable
-            BodyPartConstructor animatable = Instantiate(constructible, root); // Copy constructible
+            BodyPartConstructor animatable = PrefabUtility.InstantiatePrefab(constructiblePrefab, root) as BodyPartConstructor; // Copy constructible
             animatable.name = $"{bodyPartName} (A)";
             ConvertToAnimatable(animatable);
+            BodyPartConstructor animatablePrefab = Save(bodyPartDir, animatable.gameObject, bodyPart, outputDirectory, type, database).GetComponent<BodyPartConstructor>();
 
             // 2.3. ...to Editable
-            BodyPartConstructor editable = Instantiate(animatable, root); // Copy animatable
+            BodyPartConstructor editable = PrefabUtility.InstantiatePrefab(animatablePrefab, root) as BodyPartConstructor; // Copy animatable
             editable.name = $"{bodyPartName} (E)";
             ConvertToEditable(editable, moveToolPrefab);
+            Save(bodyPartDir, editable.gameObject, bodyPart, outputDirectory, type, database);
 
-            // 3. Save
-            Save(root, bodyPart, outputDirectory, type, database);
-
-            // 4. Clean Up
+            // 3. Clean Up
             DestroyImmediate(root.gameObject);
         }
         public GameObject Prepare(GameObject model, Transform parent)
@@ -346,45 +357,24 @@ namespace DanielLochner.Assets.CreatureCreator
 
             return editor;
         }
-        public void Save(Transform bodyPartRoot, BodyPart bodyPart, string outputDirectory, SaveType type, Database database)
+        public GameObject Save(string bodyPartDir, GameObject bodyPartPrefab, BodyPart bodyPart, string outputDirectory, SaveType type, Database database)
         {
-            string bodyPartName = bodyPartRoot.name;
+            string prefabName = bodyPartPrefab.name;
 
-            if (AssetDatabase.IsValidFolder(Path.Combine(outputDirectory, bodyPartName)))
+            string prefabPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(bodyPartDir, "Prefabs", $"{prefabName}.prefab"));
+            GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(bodyPartPrefab, prefabPath, InteractionMode.UserAction);
+
+            string prefabType = prefabName.Substring(prefabName.Length - 2, 1);
+            switch (prefabType)
             {
-                Debug.Log($"{bodyPartName} already exists!");
-                return;
+                case "C":
+                    return bodyPart.Prefab.constructible = prefab;
+                case "A":
+                    return bodyPart.Prefab.animatable = prefab;
+                case "E":
+                    return bodyPart.Prefab.editable = prefab;
             }
-
-            AssetDatabase.CreateFolder(outputDirectory, bodyPartName);
-            string bodyPartDir = Path.Combine(outputDirectory, $"{bodyPartName}");
-
-            // Item
-            AssetDatabase.CreateAsset(bodyPart, Path.Combine(bodyPartDir, $"{bodyPartName}.asset"));
-
-            // Prefabs
-            AssetDatabase.CreateFolder(bodyPartDir, "Prefabs");
-            foreach (Transform prefabT in bodyPartRoot)
-            {
-                string prefabName = prefabT.name;
-
-                string prefabPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(bodyPartDir, "Prefabs", $"{prefabName}.prefab"));
-                GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(prefabT.gameObject, prefabPath, InteractionMode.UserAction);
-
-                string prefabType = prefabName.Substring(prefabName.Length - 2, 1);
-                switch (prefabType)
-                {
-                    case "C":
-                        bodyPart.Prefab.constructible = prefab;
-                        break;
-                    case "A":
-                        bodyPart.Prefab.animatable = prefab;
-                        break;
-                    case "E":
-                        bodyPart.Prefab.editable = prefab;
-                        break;
-                }
-            }
+            return null;
         }
 
         public void UpdateMissing()
