@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
+using Unity.Services.RemoteConfig;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -24,7 +26,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return new WaitUntil(() => WorldTimeManager.Instance.IsInitialized);
 
-            DateTime releaseDateTime = new DateTime(2023, 7, 21, 18, 0, 0);
+            Task task = RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            DateTime releaseDateTime = new DateTime(RemoteConfigService.Instance.appConfig.GetLong("city_release_date"));
             if ((releaseDateTime - (DateTime)WorldTimeManager.Instance.UtcNow).TotalSeconds > 0)
             {
                 countdownUI.Setup(releaseDateTime, OnComplete);
@@ -47,6 +52,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             IsCityReleased = true;
         }
+        #endregion
+
+        #region Nested
+        private struct UserAttributes { }
+        private struct AppAttributes { }
         #endregion
     }
 }
