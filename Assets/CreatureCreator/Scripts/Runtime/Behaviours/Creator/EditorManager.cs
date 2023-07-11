@@ -1064,13 +1064,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > MaxComplexity;
             bool notEnoughCash = bodyPart.Price > Creature.Editor.Cash;
+            bool isReleased = bodyPart.Released;
             bool isPremium = !PremiumManager.Instance.IsBodyPartUsable(bodyPartID);
             bool isRestricted = restrictedBodyParts.Contains(bodyPartID);
 
-            if (notEnoughCash || tooComplicated || isPremium || isRestricted)
+            if (notEnoughCash || tooComplicated || isPremium || isRestricted || !isReleased)
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
+                if (!isReleased)
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_item-coming-soon_title"), LocalizationUtility.Localize("cc_item-coming-soon_message", bodyPart.name));
+                }
+                else
                 if (isRestricted)
                 {
                     InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_body-part_title"), LocalizationUtility.Localize("cc_restriction_body-part_message", bodyPart.name));
@@ -1103,13 +1109,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
 
+            bool isReleased = pattern.Released;
             bool isPremium = !PremiumManager.Instance.IsPatternUsable(patternID);
             bool isRestricted = restrictedPatterns.Contains(patternID);
 
-            if (isPremium || isRestricted)
+            if (isPremium || isRestricted || !isReleased)
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
+                if (!isReleased)
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_item-coming-soon_title"), LocalizationUtility.Localize("cc_item-coming-soon_message", pattern.name));
+                }
+                else
                 if (isRestricted)
                 {
                     InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_pattern_title"), LocalizationUtility.Localize("cc_restriction_pattern_message", pattern.name));
@@ -1299,7 +1311,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid.transform as RectTransform);
             bodyPartUI.Setup(bodyPart, isNew);
             bodyPartUI.name = bodyPartID;
-            bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartID));
+            bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartID) && bodyPart.Released);
             noPartsText.SetActive(false);
             grid.CalculateLayoutInputVertical();
 
@@ -1375,7 +1387,7 @@ namespace DanielLochner.Assets.CreatureCreator
             patternsUI.Add(patternUI);
             patternUI.Setup(pattern, patternMaterial, isNew);
             patternUI.name = patternID;
-            patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternID));
+            patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternID) && pattern.Released);
             noPatternsText.SetActive(false);
 
             patternUI.SelectToggle.group = patternsToggleGroup;
