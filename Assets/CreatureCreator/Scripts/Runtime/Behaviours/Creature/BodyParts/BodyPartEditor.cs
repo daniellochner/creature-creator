@@ -93,8 +93,18 @@ namespace DanielLochner.Assets.CreatureCreator
             Select = GetComponent<Select>();
 
             Drag[] drags = GetComponents<Drag>();
-            LDrag = drags[0];
-            RDrag = drags[1];
+            foreach (Drag drag in drags)
+            {
+                switch (drag.mouseButton)
+                {
+                    case 0:
+                        LDrag = drag;
+                        break;
+                    case 1:
+                        RDrag = drag;
+                        break;
+                }
+            }
 
             connectionPoint = new GameObject("Connection.Point").transform;
             connectionPoint.SetParent(Dynamic.Transform);
