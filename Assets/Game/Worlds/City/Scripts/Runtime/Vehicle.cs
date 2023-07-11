@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private List<Transform> wheelsRight;
         [SerializeField] private float speed;
         [SerializeField] private float radius;
+        [SerializeField] private bool canCollide = true;
 
         private NetworkTransform networkTransform;
         #endregion
@@ -64,7 +65,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (IsServer)
+            if (IsServer && canCollide)
             {
                 CreatureBase creature = collision.collider.GetComponent<CreatureBase>();
                 if (creature != null && !creature.Health.IsDead)
