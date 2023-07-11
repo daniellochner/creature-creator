@@ -36,11 +36,9 @@ namespace DanielLochner.Assets
                 yield return new WaitForSeconds(1f);
             }
             while (difference.TotalSeconds > 0);
-            daysText.text = hoursText.text = minsText.text = secsText.text = "00";
 
             onComplete?.Invoke();
 
-            yield return new WaitForSeconds(1f);
             gameObject.SetActive(false);
         }
         #endregion
