@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -17,12 +18,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        private IEnumerator Start()
         {
-            if (SettingsManager.Instance.ShowTutorial) return;
+            if (SettingsManager.Instance.ShowTutorial) yield break;
+
+            yield return new WaitUntil(() => WorldTimeManager.Instance.IsInitialized);
 
             DateTime releaseDateTime = new DateTime(2023, 7, 21);
-            if ((releaseDateTime - DateTime.UtcNow).Seconds > 0)
+            if ((releaseDateTime - (DateTime)WorldTimeManager.Instance.UtcNow).TotalSeconds > 0)
             {
                 countdownUI.Setup(releaseDateTime, OnComplete);
             }

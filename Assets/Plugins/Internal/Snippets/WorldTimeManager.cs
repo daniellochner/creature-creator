@@ -4,7 +4,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using UnityEngine.Networking;
 
-namespace DanielLochner.Assets.CreatureCreator
+namespace DanielLochner.Assets
 {
     public class WorldTimeManager : MonoBehaviourSingleton<WorldTimeManager>
     {

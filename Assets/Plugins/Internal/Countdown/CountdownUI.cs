@@ -26,7 +26,7 @@ namespace DanielLochner.Assets
             TimeSpan difference = TimeSpan.Zero;
             do
             {
-                difference = target - DateTime.UtcNow;
+                difference = target - (DateTime)WorldTimeManager.Instance.UtcNow;
 
                 daysText.text = $"{difference.Days:00}";
                 hoursText.text = $"{difference.Hours:00}";
@@ -35,11 +35,13 @@ namespace DanielLochner.Assets
 
                 yield return new WaitForSeconds(1f);
             }
-            while (difference.Seconds > 0);
-
-            gameObject.SetActive(false);
+            while (difference.TotalSeconds > 0);
+            daysText.text = hoursText.text = minsText.text = secsText.text = "00";
 
             onComplete?.Invoke();
+
+            yield return new WaitForSeconds(1f);
+            gameObject.SetActive(false);
         }
         #endregion
     }
