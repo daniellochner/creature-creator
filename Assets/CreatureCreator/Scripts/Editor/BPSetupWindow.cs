@@ -86,7 +86,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateMissing();
                 UpdateStats();
-                UpdateComponentTypes();
+                //UpdateComponentTypes();
             }
             GUI.enabled = true;
             EditorGUILayout.Space();
@@ -470,14 +470,14 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Animators
                 Type expectedAnimatorType = GetAnimatorType(bodyPart.GetType());
                 GameObject animatable = bodyPart.GetPrefab(BodyPart.PrefabType.Animatable);
-                CheckTypeMismatch(editable.GetComponent<BodyPartAnimator>(), expectedAnimatorType);
+                //CheckTypeMismatch(editable.GetComponent<BodyPartAnimator>(), expectedAnimatorType);
                 CheckTypeMismatch(animatable.GetComponent<BodyPartAnimator>(), expectedAnimatorType);
 
                 // Constructors
                 Type expectedConstructorType = GetConstructorType(bodyPart.GetType());
                 GameObject constructible = bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
-                CheckTypeMismatch(editable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
-                CheckTypeMismatch(animatable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
+                //CheckTypeMismatch(editable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
+                //CheckTypeMismatch(animatable.GetComponent<BodyPartConstructor>(), expectedConstructorType);
                 CheckTypeMismatch(constructible.GetComponent<BodyPartConstructor>(), expectedConstructorType);
 
                 EditorUtility.SetDirty(bodyPart);
