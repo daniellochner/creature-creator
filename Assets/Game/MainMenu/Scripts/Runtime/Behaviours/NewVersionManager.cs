@@ -33,6 +33,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
+            if (SettingsManager.Instance.ShowTutorial) yield break;
+
             Task task = RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
             yield return new WaitUntil(() => task.IsCompleted);
 
