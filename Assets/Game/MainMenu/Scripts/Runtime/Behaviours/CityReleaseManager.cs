@@ -24,7 +24,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             yield return new WaitUntil(() => WorldTimeManager.Instance.IsInitialized);
 
-            DateTime releaseDateTime = new DateTime(2023, 7, 21);
+            DateTime releaseDateTime = new DateTime(2023, 7, 21, 18, 0, 0);
             if ((releaseDateTime - (DateTime)WorldTimeManager.Instance.UtcNow).TotalSeconds > 0)
             {
                 countdownUI.Setup(releaseDateTime, OnComplete);

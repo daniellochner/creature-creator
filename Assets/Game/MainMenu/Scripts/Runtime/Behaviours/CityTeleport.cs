@@ -1,18 +1,21 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using Unity.Netcode;
+
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class CityTeleport : Teleport
+    public class CityTeleport : NetworkBehaviour
     {
-        protected override void Awake()
-        {
-            base.Awake();
+        public NetworkVariable<bool> IsVisible { get; set; } = new NetworkVariable<bool>(false);
 
-            if (!CityReleaseManager.IsCityReleased)
+        private void Start()
+        {
+            if (IsServer)
             {
-                gameObject.SetActive(false);
+                IsVisible.Value = CityReleaseManager.IsCityReleased;
             }
+            gameObject.SetActive(IsVisible.Value);
         }
     }
 }

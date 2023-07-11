@@ -98,8 +98,12 @@ namespace DanielLochner.Assets.CreatureCreator
                     throw new Exception(LocalizationUtility.Localize("mainmenu_premium_unlimited"));
                 }
 
-                // Check Unlocked Map
+                // Check Map
                 Map map = Enum.Parse<Map>(mapName);
+                if (map == Map.City && !CityReleaseManager.IsCityReleased)
+                {
+                    throw new Exception(LocalizationUtility.Localize("mainmenu_city-not-released"));
+                }
                 if (map == Map.ComingSoon)
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));

@@ -55,7 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        protected virtual void Awake()
+        private void Awake()
         {
             region = GetComponent<TrackRegion>();
         }
