@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ContextMenu("Add Placed")]
         public void AddPlaced()
         {
-            foreach (var bp in FindObjectsOfType<UnlockableBodyPart>())
+            foreach (var bp in FindObjectsOfType<UnlockableBodyPart>(true))
             {
                 if (bp.BodyPartID != "" && !placed.bodyparts.Contains(bp.BodyPartID))
                 {
@@ -25,7 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            foreach (var p in FindObjectsOfType<UnlockablePattern>())
+            foreach (var p in FindObjectsOfType<UnlockablePattern>(true))
             {
                 if (p.PatternID != "" && !placed.patterns.Contains(p.PatternID))
                 {
@@ -42,7 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void CheckPlaced()
         {
             List<string> placedBP = new List<string>();
-            foreach (var bp in FindObjectsOfType<UnlockableBodyPart>())
+            foreach (var bp in FindObjectsOfType<UnlockableBodyPart>(true))
             {
                 if (string.IsNullOrEmpty(bp.BodyPartID))
                 {
@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             List<string> placedP = new List<string>();
-            foreach (var p in FindObjectsOfType<UnlockablePattern>())
+            foreach (var p in FindObjectsOfType<UnlockablePattern>(true))
             {
                 if (string.IsNullOrEmpty(p.PatternID))
                 {
