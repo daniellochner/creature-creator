@@ -7,7 +7,6 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.Animations;
-using UnityEngine.Events;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -56,7 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Awake()
+        protected virtual void Awake()
         {
             region = GetComponent<TrackRegion>();
         }
