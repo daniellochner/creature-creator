@@ -16,12 +16,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int UnlockedBodyParts
         {
             get => GetStat("STA_UNLOCKED_BODY_PARTS", ProgressManager.Data.UnlockedBodyParts.Count);
-            set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", 117));
+            set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", 135));
         }
         public int UnlockedPatterns
         {
             get => GetStat("STA_UNLOCKED_PATTERNS", ProgressManager.Data.UnlockedPatterns.Count);
-            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 49));
+            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 54));
         }
         public int DistanceTravelled
         {
@@ -41,12 +41,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int ReachedPeaks
         {
             get => GetStat("STA_REACHED_PEAKS", 0);
-            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 4));
+            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 5));
         }
         public int CompletedQuests
         {
             get => GetStat("STA_COMPLETED_QUESTS", 0);
-            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 11));
+            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 13));
         }
         public int Kills
         {
