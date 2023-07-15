@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public CreatureConstructor Constructor { get; private set; }
+        public CreatureHealth Health { get; private set; }
 
         public Dictionary<string, Emission> Emitting { get; set; } = new Dictionary<string, Emission>();
         #endregion
@@ -24,6 +25,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void Awake()
         {
             Constructor = GetComponent<CreatureConstructor>();
+            Health = GetComponent<CreatureHealth>();
         }
 
         public void Setup()
@@ -37,6 +39,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 flippedBPE?.SetFlipped(mainBPE);
                 flippedBPE?.Setup(this);
             };
+
+            if (IsServer)
+            {
+                Health.OnDie += delegate { StopEmitting(); };
+            }
         }
 
         public void EmitFrom(BodyPartEmitter emitter, float duration)
