@@ -1,15 +1,17 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using System.Collections;
-using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.RemoteConfig;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    public class NewVersionManager : MonoBehaviour
+    public class NewVersionManager : MonoBehaviourSingleton<NewVersionManager>
     {
         #region Fields
-        [SerializeField] private TextMeshProUGUI newUpdateText;
+        [SerializeField] private TextMeshProUGUI newVersionText;
         #endregion
 
         #region Properties
@@ -33,38 +35,26 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
+            yield return new WaitForSeconds(0.5f);
+
             if (SettingsManager.Instance.ShowTutorial) yield break;
 
-            Task task = RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
-            yield return new WaitUntil(() => task.IsCompleted);
+            yield return RemoteConfigUtility.FetchConfigRoutine();
 
-            yield return new WaitForSeconds(0.5f);
-            yield return new WaitUntil(() => !RewardsMenu.Instance.IsOpen);
-
-            var v1 = GetVersion(RemoteConfigService.Instance.appConfig.GetString("latest_version"));
-            var v2 = GetVersion(Application.version);
+            var v1 = VersionUtility.GetVersion(RemoteConfigService.Instance.appConfig.GetString("latest_version"));
+            var v2 = VersionUtility.GetVersion(Application.version);
             if (v1.CompareTo(v2) > 0)
             {
+                yield return new WaitUntil(() => !RewardsMenu.Instance.IsOpen);
+
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("new-version_title"), LocalizationUtility.Localize("new-version_message", v1), onYes: () => Application.OpenURL(StoreURL));
 
                 yield return new WaitUntil(() => !ConfirmationDialog.Instance.IsOpen);
 
-                newUpdateText.gameObject.SetActive(true);
-                newUpdateText.SetArguments(v1);
+                newVersionText.gameObject.SetActive(true);
+                newVersionText.SetArguments(v1);
             }
         }
-
-        #region Helper
-        private System.Version GetVersion(string version)
-        {
-            return new System.Version(version.Replace("-beta", ""));
-        }
-        #endregion
-        #endregion
-
-        #region Nested
-        private struct UserAttributes { }
-        private struct AppAttributes { }
         #endregion
     }
 }

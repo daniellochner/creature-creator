@@ -8,6 +8,8 @@ namespace DanielLochner.Assets
     public class CountdownUI : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private TextMeshProUGUI titleText;
+        [Space]
         [SerializeField] private TextMeshProUGUI daysText;
         [SerializeField] private TextMeshProUGUI hoursText;
         [SerializeField] private TextMeshProUGUI minsText;
@@ -15,10 +17,11 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void Setup(DateTime target, Action onComplete)
+        public void Setup(string title, DateTime date, Action onComplete)
         {
             gameObject.SetActive(true);
-            StartCoroutine(CountdownRoutine(target, onComplete));
+            titleText.text = title;
+            StartCoroutine(CountdownRoutine(date, onComplete));
         }
 
         private IEnumerator CountdownRoutine(DateTime target, Action onComplete)

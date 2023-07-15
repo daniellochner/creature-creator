@@ -1,3 +1,6 @@
+// Creature Creator - https://github.com/daniellochner/Creature-Creator
+// Copyright (c) Daniel Lochner
+
 using System.Collections;
 using UnityEngine;
 
@@ -5,11 +8,13 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class DailyRewardManager : MonoBehaviourSingleton<DailyRewardManager>
     {
+        #region Methods
         private IEnumerator Start()
         {
+            yield return new WaitForSeconds(0.5f);
+
             if (SettingsManager.Instance.ShowTutorial || PremiumManager.Instance.IsEverythingUsable()) yield break;
 
-            yield return new WaitForSeconds(0.5f);
             yield return new WaitUntil(() => WorldTimeManager.Instance.IsInitialized);
 
             string today = WorldTimeManager.Instance.UtcNow.Value.ToShortDateString();
@@ -23,5 +28,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 PlayerPrefs.SetString("DAILY_REWARD", today);
             }
         }
+        #endregion
     }
 }

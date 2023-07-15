@@ -397,9 +397,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 await Authenticate();
 
                 // Version
-                await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
-                var v1 = GetVersion(RemoteConfigService.Instance.appConfig.GetString("min_online_version"));
-                var v2 = GetVersion(Application.version);
+                await RemoteConfigUtility.FetchConfigAsync();
+                var v1 = VersionUtility.GetVersion(RemoteConfigService.Instance.appConfig.GetString("min_online_version"));
+                var v2 = VersionUtility.GetVersion(Application.version);
                 if (v1.CompareTo(v2) > 0)
                 {
                     throw new Exception(LocalizationUtility.Localize("network_status_outdated-version"));
@@ -471,8 +471,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     WorldMP world = new WorldMP(lobby);
                     if (!world.IsPrivate)
                     {
-                        var v1 = GetVersion(world.Version);
-                        var v2 = GetVersion(Application.version);
+                        var v1 = VersionUtility.GetVersion(world.Version);
+                        var v2 = VersionUtility.GetVersion(Application.version);
 
                         if (v1.CompareTo(v2) >= 0)
                         {
@@ -611,13 +611,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             statusText.CrossFadeAlpha(0, 0.25f, true);
         }
-
-        #region Helper
-        private System.Version GetVersion(string version)
-        {
-            return new System.Version(version.Replace("-beta", ""));
-        }
-        #endregion
         #endregion
 
         #region Enum
@@ -632,11 +625,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Public,
             Private
         }
-        #endregion
-
-        #region Nested
-        private struct UserAttributes { }
-        private struct AppAttributes { }
         #endregion
     }
 }

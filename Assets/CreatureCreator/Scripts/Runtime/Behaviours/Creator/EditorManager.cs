@@ -1064,7 +1064,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > MaxComplexity;
             bool notEnoughCash = bodyPart.Price > Creature.Editor.Cash;
-            bool isReleased = bodyPart.Released;
+            bool isReleased = bodyPart.IsReleased;
             bool isPremium = !PremiumManager.Instance.IsBodyPartUsable(bodyPartID);
             bool isRestricted = restrictedBodyParts.Contains(bodyPartID);
 
@@ -1109,7 +1109,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
 
-            bool isReleased = pattern.Released;
+            bool isReleased = pattern.IsReleased;
             bool isPremium = !PremiumManager.Instance.IsPatternUsable(patternID);
             bool isRestricted = restrictedPatterns.Contains(patternID);
 
@@ -1311,7 +1311,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartUI bodyPartUI = Instantiate(bodyPartUIPrefab, grid.transform as RectTransform);
             bodyPartUI.Setup(bodyPart, isNew);
             bodyPartUI.name = bodyPartID;
-            bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartID) && bodyPart.Released);
+            bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartID) && bodyPart.IsReleased);
             noPartsText.SetActive(false);
             grid.CalculateLayoutInputVertical();
 
@@ -1387,7 +1387,7 @@ namespace DanielLochner.Assets.CreatureCreator
             patternsUI.Add(patternUI);
             patternUI.Setup(pattern, patternMaterial, isNew);
             patternUI.name = patternID;
-            patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternID) && pattern.Released);
+            patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternID) && pattern.IsReleased);
             noPatternsText.SetActive(false);
 
             patternUI.SelectToggle.group = patternsToggleGroup;
@@ -1569,11 +1569,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             foreach (BodyPartUI bodyPartUI in bodyPartsRT.GetComponentsInChildren<BodyPartUI>())
             {
-                bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartUI.name));
+                bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartUI.name) && bodyPartUI.BodyPart.IsReleased);
             }
             foreach (PatternUI patternUI in patternsRT.GetComponentsInChildren<PatternUI>())
             {
-                patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternUI.name));
+                patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternUI.name) && patternUI.Pattern.IsReleased);
             }
         }
         public void UpdateBodyPartTotals()
@@ -1845,7 +1845,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Body Parts
             foreach (BodyPartUI bodyPartUI in bodyPartsRT.GetComponentsInChildren<BodyPartUI>(true))
             {
-                bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartUI.name));
+                bodyPartUI.SetUsable(PremiumManager.Instance.IsBodyPartUsable(bodyPartUI.name) && bodyPartUI.BodyPart.IsReleased);
             }
             restrictedBodyParts.Clear();
             bodyPartsTitleText.SetArguments("");
@@ -1858,7 +1858,7 @@ namespace DanielLochner.Assets.CreatureCreator
             // Patterns
             foreach (PatternUI patternUI in patternsRT.GetComponentsInChildren<PatternUI>(true))
             {
-                patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternUI.name));
+                patternUI.SetUsable(PremiumManager.Instance.IsPatternUsable(patternUI.name) && patternUI.Pattern.IsReleased);
                 patternUI.gameObject.SetActive(true);
             }
             restrictedPatterns.Clear();

@@ -2648,7 +2648,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1314837234}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &148610747
 MonoBehaviour:
@@ -8386,9 +8386,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 502288400}
+  - component: {fileID: 502288402}
   - component: {fileID: 502288401}
   m_Layer: 0
-  m_Name: CityReleaseManager
+  m_Name: Countdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8407,7 +8408,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1314837234}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &502288401
 MonoBehaviour:
@@ -8421,32 +8422,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be94aef2c20c3cb4184b4d49c8549a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &502288402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502288399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f24377456a31145ae93638176823e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   countdownUI: {fileID: 6146610623334167439}
-  bodyParts:
-  - {fileID: 11400000, guid: a86d3fa49f7421643975de9ff4ba6114, type: 2}
-  - {fileID: 11400000, guid: 2dc9a9a045f052f43940cf1f14876ccf, type: 2}
-  - {fileID: 11400000, guid: c1050d56638bf99468091bad0759ecd7, type: 2}
-  - {fileID: 11400000, guid: 378ecdfb7eb410f478ba334fa80297d5, type: 2}
-  - {fileID: 11400000, guid: 5144267d95dac1849889b68f07b2f145, type: 2}
-  - {fileID: 11400000, guid: 50bd7a2ad24ec1d4e98930ad226e62e4, type: 2}
-  - {fileID: 11400000, guid: adf82159768fae54280a2c4e73219b77, type: 2}
-  - {fileID: 11400000, guid: 67bf56f791f6f2f4f8974037e214fefc, type: 2}
-  - {fileID: 11400000, guid: 342a06c122c57594bbc537dcb77c5287, type: 2}
-  - {fileID: 11400000, guid: c2f959d21e55b354cb71c37d904b3053, type: 2}
-  - {fileID: 11400000, guid: 301ea50e4a8148e44bea15042b429f77, type: 2}
-  - {fileID: 11400000, guid: 33c2447fa5fd9b447a7ed6543485d20d, type: 2}
-  - {fileID: 11400000, guid: be10ca84bfbd2324f8344a559b078f37, type: 2}
-  - {fileID: 11400000, guid: fe6140ceb357f9e4488da5db9a8c6818, type: 2}
-  - {fileID: 11400000, guid: bd9255f85eb8e9c4abc733eb929d4d2c, type: 2}
-  - {fileID: 11400000, guid: 887f03fb7bcd78f43b8b9581609f1290, type: 2}
-  - {fileID: 11400000, guid: 8cc7d4f4637cd0b43b32b11f6b03d3d5, type: 2}
-  - {fileID: 11400000, guid: 7a625105a5650b14ebe1225bce3d0849, type: 2}
-  patterns:
-  - {fileID: 11400000, guid: fac27f84d81535b4f9df1cc013ee82cb, type: 2}
-  - {fileID: 11400000, guid: bfc3b39ecd24e7e4cb1c05f1a5999a30, type: 2}
-  - {fileID: 11400000, guid: 3bc2b88335a284c4ba6483ed143287d4, type: 2}
-  - {fileID: 11400000, guid: 7f46b1dd80df4d3498cd0dd2f67cd44c, type: 2}
-  - {fileID: 11400000, guid: 1bcf098514f35484092480bb9f1b595b, type: 2}
+  onComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 502288401}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CityReleaseManager,
+          Assembly-CSharp
+        m_MethodName: OnComplete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &503577891
 GameObject:
   m_ObjectHideFlags: 0
@@ -11788,7 +11792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5fc675d12236ad419914c6df830f741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newUpdateText: {fileID: 2003276747}
+  newVersionText: {fileID: 2003276747}
 --- !u!1 &782187681
 GameObject:
   m_ObjectHideFlags: 0
@@ -22918,9 +22922,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 502288400}
   - {fileID: 148610746}
   - {fileID: 2120776565}
-  - {fileID: 502288400}
   - {fileID: 781060671}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -36785,7 +36789,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1314837234}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2120776566
 MonoBehaviour:
@@ -39008,7 +39012,7 @@ Animator:
   m_GameObject: {fileID: 6146610623334167440}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 69edca2d9395fb84a82410f80e47bd7c, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4d3e63835d178724f911745f1b0f2bce, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -39298,7 +39302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 370
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.y
@@ -39306,7 +39310,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 385
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.y

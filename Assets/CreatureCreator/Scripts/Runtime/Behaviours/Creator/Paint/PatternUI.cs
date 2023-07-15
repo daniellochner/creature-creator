@@ -22,11 +22,15 @@ namespace DanielLochner.Assets.CreatureCreator
         public ClickUI ClickUI => clickUI;
         public HoverUI HoverUI => hoverUI;
         public CanvasGroup CanvasGroup => canvasGroup;
+
+        public Pattern Pattern { get; private set; }
         #endregion
 
         #region Methods
         public void Setup(Pattern pattern, Material material, bool isNew = false)
         {
+            Pattern = pattern;
+
             Image graphic = selectToggle.graphic as Image;
             Image targetGraphic = transform.GetChild(0).GetComponent<Image>();
 

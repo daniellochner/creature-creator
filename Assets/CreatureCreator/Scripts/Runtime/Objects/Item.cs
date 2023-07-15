@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public string Author => author;
         public virtual Sprite Icon => icon;
         public bool Premium => premium;
-        public bool Released => released;
+        public bool IsReleased => released;
         #endregion
     }
 }
