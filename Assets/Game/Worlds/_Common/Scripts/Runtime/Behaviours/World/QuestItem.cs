@@ -8,6 +8,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Transform snapPoint;
+        [SerializeField] private Transform snapParent;
 
         private NetworkTransform networkTransform;
         private Rigidbody rb;
@@ -47,11 +48,18 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Snap()
         {
-            if (snapPoint != null)
+            if (IsServer)
             {
-                networkTransform.Teleport(snapPoint.position, snapPoint.rotation, transform.localScale);
-                rb.isKinematic = true;
-                Holdable.Held.CanHold.Value = false;
+                if (snapPoint != null)
+                {
+                    networkTransform.Teleport(snapPoint.position, snapPoint.rotation, transform.localScale);
+                    rb.isKinematic = true;
+                    Holdable.Held.CanHold.Value = false;
+                }
+                if (snapParent != null)
+                {
+                    transform.SetParent(snapParent, true);
+                }
             }
         }
         #endregion
