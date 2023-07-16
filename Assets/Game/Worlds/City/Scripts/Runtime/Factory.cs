@@ -9,17 +9,32 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject[] effects;
         #endregion
 
+        #region Properties
+        public NetworkVariable<bool> IsSmoking { get; set; } = new NetworkVariable<bool>(false);
+        #endregion
+
         #region Methods
+        private void Start()
+        {
+            IsSmoking.OnValueChanged += OnSmokingChanged;
+            OnSmokingChanged(default, IsSmoking.Value);
+        }
+
         public void Smoke()
         {
-            SmokeClientRpc();
+            SmokeServerRpc();
         }
-        [ClientRpc]
-        private void SmokeClientRpc()
+        [ServerRpc(RequireOwnership = false)]
+        private void SmokeServerRpc()
+        {
+            IsSmoking.Value = true;
+        }
+
+        private void OnSmokingChanged(bool oldValue, bool newValue)
         {
             foreach (GameObject effect in effects)
             {
-                effect.SetActive(true);
+                effect.SetActive(newValue);
             }
         }
         #endregion
