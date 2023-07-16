@@ -167,7 +167,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -5561601583770752817, guid: 35c93c1f08ef9b644bef95382880803e, type: 2}
   m_audioClip: {fileID: 8300000, guid: 69ff419354f32da4f915df05bd3f0093, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -282,6 +282,7 @@ MonoBehaviour:
   pathCreator: {fileID: 0}
   endOfPathInstruction: 0
   speed: 5
+  distanceTravelled: 0
 --- !u!114 &9017997104997112664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,6 +339,7 @@ MonoBehaviour:
   wheelsRight: []
   speed: 25
   radius: 1
+  canCollide: 1
 --- !u!65 &-7520115708190299741
 BoxCollider:
   m_ObjectHideFlags: 0
