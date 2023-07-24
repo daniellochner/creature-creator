@@ -8387,7 +8387,6 @@ GameObject:
   m_Component:
   - component: {fileID: 502288400}
   - component: {fileID: 502288402}
-  - component: {fileID: 502288401}
   m_Layer: 0
   m_Name: Countdown
   m_TagString: Untagged
@@ -8410,18 +8409,6 @@ Transform:
   m_Father: {fileID: 1314837234}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &502288401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 502288399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be94aef2c20c3cb4184b4d49c8549a6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &502288402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8437,20 +8424,7 @@ MonoBehaviour:
   countdownUI: {fileID: 6146610623334167439}
   onComplete:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 502288401}
-        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CityReleaseManager,
-          Assembly-CSharp
-        m_MethodName: OnComplete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &503577891
 GameObject:
   m_ObjectHideFlags: 0
@@ -39302,7 +39276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.y
@@ -39310,7 +39284,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 385
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.y

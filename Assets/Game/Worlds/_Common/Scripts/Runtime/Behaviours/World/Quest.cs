@@ -70,23 +70,21 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             region = GetComponent<TrackRegion>();
             source = GetComponent<AudioSource>();
+
+            if (WorldManager.Instance.World.CreativeMode)
+            {
+                gameObject.SetActive(false);
+            }
         }
         private IEnumerator Start()
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
 
-            if (!WorldManager.Instance.World.CreativeMode)
-            {
-                UpdateInfo();
-                minimapIcon.enabled = !IsCompleted;
+            UpdateInfo();
+            minimapIcon.enabled = !IsCompleted;
 
-                yield return new WaitUntil(() => Player.Instance.IsSetup);
-                questLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            yield return new WaitUntil(() => Player.Instance.IsSetup);
+            questLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
         }
         private void OnTriggerEnter(Collider other)
         {
