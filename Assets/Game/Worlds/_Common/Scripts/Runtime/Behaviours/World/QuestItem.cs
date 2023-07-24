@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public NetworkVariable<bool> IsSnapped { get; set; } = new NetworkVariable<bool>();
+
         public Holdable Holdable { get; private set; }
         #endregion
 
@@ -48,19 +50,27 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Snap()
         {
-            if (IsServer)
+            if (!IsSnapped.Value)
             {
-                if (snapPoint != null)
-                {
-                    networkTransform.Teleport(snapPoint.position, snapPoint.rotation, transform.localScale);
-                    rb.isKinematic = true;
-                    Holdable.Held.CanHold.Value = false;
-                }
-                if (snapParent != null)
-                {
-                    transform.SetParent(snapParent, true);
-                }
+                SnapServerRpc();
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SnapServerRpc()
+        {
+            if (snapPoint != null)
+            {
+                networkTransform.Teleport(snapPoint.position, snapPoint.rotation, transform.localScale);
+                rb.isKinematic = true;
+                Holdable.Held.CanHold.Value = false;
+            }
+            if (snapParent != null)
+            {
+                transform.SetParent(snapParent, true);
+            }
+
+            IsSnapped.Value = true;
         }
         #endregion
     }

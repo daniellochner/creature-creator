@@ -1,6 +1,7 @@
 using MoreMountains.NiceVibrations;
 using System.Collections;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Events;
@@ -9,7 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(TrackRegion))]
     [RequireComponent(typeof(AudioSource))]
-    public class Quest : MonoBehaviour
+    public class Quest : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private TextMeshProUGUI questText;
@@ -101,9 +102,12 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnTriggerStay(Collider other)
         {
-            if (!IsCompleted && other.CompareTag("Player/Local") && (type == QuestType.All ? HasAll : HasAny))
+            if (other.CompareTag("Player/Local"))
             {
-                Complete();
+                if (!IsCompleted && (type == QuestType.All ? HasAll : HasAny))
+                {
+                    Complete();
+                }
             }
         }
         private void OnTriggerExit(Collider other)
@@ -137,26 +141,29 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Complete()
         {
-            ProgressManager.Data.Cash += reward;
-            ProgressManager.Instance.Save();
+            IsCompleted = true;
 
-            Player.Instance.Editor.Cash += reward; // Also update the player's current cash!
-
-            NotificationsManager.Notify(LocalizationUtility.Localize("quest-complete", reward));
-            source.Play();
-            onComplete.Invoke();
-            minimapIcon.enabled = false;
-
+            // Items
             foreach (QuestItem item in items)
             {
                 item.Snap();
             }
 
-            IsCompleted = true;
+            // Reward
+            ProgressManager.Data.Cash += reward;
+            ProgressManager.Instance.Save();
+            Player.Instance.Editor.Cash += reward;
 
+            // Stats
 #if USE_STATS
             StatsManager.Instance.CompletedQuests++;
 #endif
+
+            // Other
+            NotificationsManager.Notify(LocalizationUtility.Localize("quest-complete", reward));
+            source.Play();
+            minimapIcon.enabled = false;
+            onComplete.Invoke();
 
             MMVibrationManager.Haptic(HapticTypes.Success);
         }
