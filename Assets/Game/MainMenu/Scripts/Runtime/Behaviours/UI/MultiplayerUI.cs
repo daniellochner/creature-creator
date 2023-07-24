@@ -237,10 +237,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Check Unlocked Map
                 WorldMP world = new WorldMP(await Lobbies.Instance.GetLobbyAsync(id));
                 Map map = Enum.Parse<Map>(world.MapName);
-                if (map == Map.City && !CityReleaseManager.IsCityReleased)
-                {
-                    throw new Exception(LocalizationUtility.Localize("mainmenu_city-not-released"));
-                }
                 if (map == Map.ComingSoon)
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
@@ -374,10 +370,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Check Map
                 Map map = (Map)mapOS.Selected;
-                if (map == Map.City && !CityReleaseManager.IsCityReleased)
-                {
-                    throw new Exception(LocalizationUtility.Localize("mainmenu_city-not-released"));
-                }
                 if (map == Map.ComingSoon)
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));

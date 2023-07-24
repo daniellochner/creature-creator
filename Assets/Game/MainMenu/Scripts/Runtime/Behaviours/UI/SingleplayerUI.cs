@@ -100,10 +100,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Check Map
                 Map map = Enum.Parse<Map>(mapName);
-                if (map == Map.City && !CityReleaseManager.IsCityReleased)
-                {
-                    throw new Exception(LocalizationUtility.Localize("mainmenu_city-not-released"));
-                }
                 if (map == Map.ComingSoon)
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
