@@ -66,8 +66,8 @@ namespace DanielLochner.Assets.CreatureCreator
             if (!IsKaiju)
             {
                 EditorManager.Instance.SetRestrictedBones(5);
-                EditorManager.Instance.SetRestrictedCash(100);
-                EditorManager.Instance.SetRestrictedComplexity(25);
+                EditorManager.Instance.SetRestrictedCash(250);
+                EditorManager.Instance.SetRestrictedComplexity(50);
 
                 List<string> bodyParts = new List<string>();
                 foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
