@@ -114,7 +114,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void Revert()
         {
-            PlayerPrefs.DeleteAll();
+            PlayerPrefs.DeleteAll(); // TODO: Deleting all PlayerPrefs causes issues with NGO... This should be more specific!
+
             Experience = 0;
             Level = 0;
             Cash = 500;
