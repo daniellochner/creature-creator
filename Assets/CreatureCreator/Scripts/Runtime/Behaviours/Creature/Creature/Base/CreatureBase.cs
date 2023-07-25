@@ -149,7 +149,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void OnDie(DamageReason reason, string inflicter)
         {
-            OnHide();
+            if (IsServer)
+            {
+                Loader.IsHidden.Value = true;
+            }
+            Loader.OnHide();
 
             MinimapIcon.enabled = false;
 

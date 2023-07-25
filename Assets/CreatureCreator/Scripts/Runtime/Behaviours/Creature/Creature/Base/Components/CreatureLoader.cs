@@ -17,7 +17,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField, DrawIf("rateLimit", true)] private int warnAt;
         [SerializeField, DrawIf("rateLimit", true)] private int kickAt;
         [SerializeField] private TextAsset cachedData;
-        [SerializeField, ReadOnly] private NetworkVariable<bool> isHidden = new NetworkVariable<bool>();
 
         private float loadTimeLeft;
         private int counter;
@@ -31,8 +30,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public Action OnShow { get; set; }
         public Action OnHide { get; set; }
 
-        public bool IsHidden => isHidden.Value;
         private bool RateLimit => rateLimit && WorldManager.Instance.IsMultiplayer;
+
+        public NetworkVariable<bool> IsHidden { get; set; } = new NetworkVariable<bool>();
         #endregion
 
         #region Methods
@@ -59,7 +59,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ShowMeToOthers()
         {
-            if (!IsHidden) return;
+            if (!IsHidden.Value) return;
 
             string nextData = JsonUtility.ToJson(Constructor.Data);
             if (nextData != prevData)
@@ -104,7 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
             List<ulong> clientIds = new List<ulong>(NetworkManager.Singleton.ConnectedClientsIds);
             clientIds.Remove(clientId); // Don't show me to me!
             ShowClientRpc(data, NetworkUtils.SendTo(clientIds.ToArray()));
-            isHidden.Value = false;
+            IsHidden.Value = false;
         }
 
         [ClientRpc]
@@ -133,14 +133,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Hide
         public void HideFromOthers()
         {
-            if (IsHidden) return;
+            if (IsHidden.Value) return;
             HideFromOthersServerRpc();
         }
         [ServerRpc(RequireOwnership = false)]
         private void HideFromOthersServerRpc()
         {
             HideFromOthersClientRpc();
-            isHidden.Value = true;
+            IsHidden.Value = true;
         }
         [ClientRpc]
         private void HideFromOthersClientRpc()

@@ -83,7 +83,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnFirstTimeShown()
         {
-            if (Loader.IsHidden)
+            if (Loader.IsHidden.Value)
             {
                 Loader.OnHide();
             }
