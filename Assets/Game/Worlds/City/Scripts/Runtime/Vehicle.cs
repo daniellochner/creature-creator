@@ -1,4 +1,5 @@
 using PathCreation.Examples;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -9,41 +10,59 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Vehicle : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private PathFollower follower;
         [SerializeField] private List<Transform> wheelsLeft;
         [SerializeField] private List<Transform> wheelsRight;
         [SerializeField] private float speed;
         [SerializeField] private float radius;
         [SerializeField] private bool canCollide = true;
+        [SerializeField] private float syncCooldown = 10f;
 
         private NetworkTransform networkTransform;
+        private PathFollower follower;
+        #endregion
+
+        #region Properties
+        public NetworkVariable<float> DistanceTravelled { get; set; } = new NetworkVariable<float>();
         #endregion
 
         #region Methods
         private void Awake()
         {
             networkTransform = GetComponent<NetworkTransform>();
+            follower = GetComponent<PathFollower>();
         }
         private void Start()
         {
-            follower.enabled = IsServer;
-
-            if (!IsServer && !NetworkObject.IsSpawned)
+            if (IsServer)
             {
-                Destroy(gameObject);
+                StartCoroutine(SyncDistanceTravelledRoutine());
+            }
+            else
+            {
+                if (NetworkObject.IsSpawned)
+                {
+                    DistanceTravelled.OnValueChanged += OnDistanceTravelledChanged;
+                    OnDistanceTravelledChanged(0f, DistanceTravelled.Value);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
-        private void Update()
+        private IEnumerator SyncDistanceTravelledRoutine()
         {
-            if (IsServer && (follower.endOfPathInstruction == PathCreation.EndOfPathInstruction.Stop))
+            while (true)
             {
-                if (follower.distanceTravelled >= follower.pathCreator.path.length)
-                {
-                    networkTransform.Teleport(follower.pathCreator.path.GetPoint(0), transform.rotation, transform.localScale);
-                    follower.distanceTravelled = 0f;
-                }
+                DistanceTravelled.Value = follower.distanceTravelled;
+                yield return new WaitForSeconds(syncCooldown);
             }
+        }
+        private void OnDistanceTravelledChanged(float oldDT, float newDT)
+        {
+            Debug.Log(newDT);
+            follower.distanceTravelled = newDT;
         }
 
 #if UNITY_STANDALONE
