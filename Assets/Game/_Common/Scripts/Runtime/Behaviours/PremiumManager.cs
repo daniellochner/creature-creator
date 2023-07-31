@@ -27,7 +27,14 @@ namespace DanielLochner.Assets.CreatureCreator
             get
             {
 #if UNITY_STANDALONE
-                return SteamUser.GetSteamID().ToString();
+                if (EducationManager.Instance.IsEducational)
+                {
+                    return SystemInfo.deviceUniqueIdentifier;
+                }
+                else
+                {
+                    return SteamUser.GetSteamID().ToString();
+                }
 #elif UNITY_IOS || UNITY_ANDROID
                 return SystemInfo.deviceUniqueIdentifier;
 #endif

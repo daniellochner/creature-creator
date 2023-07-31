@@ -94,7 +94,10 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized)
             {
 #if UNITY_STANDALONE
-                SteamUserStats.ResetAllStats(achievementsToo);
+                if (!EducationManager.Instance.IsEducational)
+                {
+                    SteamUserStats.ResetAllStats(achievementsToo);
+                }
 #elif UNITY_IOS || UNITY_ANDROID
 #endif
             }
@@ -106,9 +109,16 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized)
             {
 #if UNITY_STANDALONE
-                if (!SteamUserStats.GetStat(statId, out value))
+                if (EducationManager.Instance.IsEducational)
                 {
-                    value = defaultValue;
+                    value = PlayerPrefs.GetInt(statId);
+                }
+                else
+                {
+                    if (!SteamUserStats.GetStat(statId, out value))
+                    {
+                        value = defaultValue;
+                    }
                 }
 #elif UNITY_IOS || UNITY_ANDROID
                 value = PlayerPrefs.GetInt(statId);
@@ -121,8 +131,15 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized)
             {
 #if UNITY_STANDALONE
-                SteamUserStats.SetStat(statId, value);
-                SteamUserStats.StoreStats();
+                if (EducationManager.Instance.IsEducational)
+                {
+                    PlayerPrefs.SetInt(statId, value);
+                }
+                else
+                {
+                    SteamUserStats.SetStat(statId, value);
+                    SteamUserStats.StoreStats();
+                }
 #elif UNITY_IOS || UNITY_ANDROID
                 PlayerPrefs.SetInt(statId, value);
 #endif
@@ -146,9 +163,16 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized)
             {
 #if UNITY_STANDALONE
-                if (SteamUserStats.GetAchievement(achievementId, out bool achieved))
+                if (EducationManager.Instance.IsEducational)
                 {
-                    return achieved;
+                    return PlayerPrefs.GetInt(achievementId) == 1;
+                }
+                else
+                {
+                    if (SteamUserStats.GetAchievement(achievementId, out bool achieved))
+                    {
+                        return achieved;
+                    }
                 }
 #elif UNITY_IOS || UNITY_ANDROID
                 return PlayerPrefs.GetInt(achievementId) == 1;
@@ -161,8 +185,15 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized && !IsAchievementUnlocked(achievementId))
             {
 #if UNITY_STANDALONE
-                SteamUserStats.SetAchievement(achievementId);
-                SteamUserStats.StoreStats();
+                if (EducationManager.Instance.IsEducational)
+                {
+                    PlayerPrefs.SetInt(achievementId, 1);
+                }
+                else
+                {
+                    SteamUserStats.SetAchievement(achievementId);
+                    SteamUserStats.StoreStats();
+                }
 #elif UNITY_IOS || UNITY_ANDROID
                 if (GameServices.Instance.IsLoggedIn())
                 {
@@ -182,7 +213,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (Initialized)
             {
 #if UNITY_STANDALONE
-                // TODO: Implement leaderboards for Steam
+                // TODO: implement Steam leaderboards
 #elif UNITY_IOS || UNITY_ANDROID
                 if (GameServices.Instance.IsLoggedIn())
                 {

@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private IEnumerator Start()
         {
+            if (EducationManager.Instance.IsEducational) yield break;
+
             yield return new WaitUntil(() => SteamManager.Initialized);
             LoadWorkshopItems();
         }

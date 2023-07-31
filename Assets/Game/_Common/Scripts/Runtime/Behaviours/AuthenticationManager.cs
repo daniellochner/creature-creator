@@ -10,26 +10,31 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
-        {
-            Authenticate();
-        }
-
         public void Authenticate()
         {
             Status = AuthStatus.Busy;
-            
+
 #if UNITY_EDITOR
             Status = AuthStatus.Success;
 #elif UNITY_STANDALONE
-            if (SteamManager.Initialized)
+            if (EducationManager.Instance.IsEducational)
             {
-                Steamworks.SteamUserStats.StoreStats();
-                Status = AuthStatus.Success;
+                EducationManager.Instance.Verify(delegate (bool success)
+                {
+                    Status = success ? AuthStatus.Success : AuthStatus.Fail;
+                });
             }
             else
             {
-                Status = AuthStatus.Fail;
+                if (SteamManager.Initialized)
+                {
+                    Steamworks.SteamUserStats.StoreStats();
+                    Status = AuthStatus.Success;
+                }
+                else
+                {
+                    Status = AuthStatus.Fail;
+                }
             }
 #elif UNITY_IOS || UNITY_ANDROID
             GameServices.Instance.LogIn(delegate (bool success)

@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitForSeconds(0.5f);
 
-            if (SettingsManager.Instance.ShowTutorial) yield break;
+            if (SettingsManager.Instance.ShowTutorial || EducationManager.Instance.IsEducational) yield break;
 
             yield return RemoteConfigUtility.FetchConfigRoutine();
 

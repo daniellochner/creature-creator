@@ -20,8 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
         [SerializeField] private TextMeshProUGUI promptText;
+        [SerializeField] private TMP_InputField institutionIdInputField;
 
-        private string prompt;
+        private string currentPrompt;
         #endregion
 
         #region Properties
@@ -43,7 +44,20 @@ namespace DanielLochner.Assets.CreatureCreator
             LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
             yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
 
+            // Link
+            if (EducationManager.Instance.IsEducational && !EducationManager.Instance.IsLinked)
+            {
+                SetPrompt(null);
+                institutionIdInputField.gameObject.SetActive(true);
+                yield return new WaitUntil(() => !string.IsNullOrEmpty(institutionIdInputField.text) && Input.GetKeyDown(KeyCode.Return));
+                institutionIdInputField.gameObject.SetActive(false);
+
+                SetPrompt("startup_linking");
+                yield return EducationManager.Instance.Link(institutionIdInputField.text);
+            }
+
             // Authenticate
+            AuthenticationManager.Instance.Authenticate();
             while (AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Success)
             {
                 SetPrompt("startup_authenticating");
@@ -100,11 +114,14 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void SetPrompt(string p)
         {
-            promptText.text = LocalizationUtility.Localize(prompt = p);
+            if (p != null)
+            {
+                promptText.text = LocalizationUtility.Localize(currentPrompt = p);
+            }
         }
         private void OnLocaleChanged(Locale locale)
         {
-            SetPrompt(prompt);
+            SetPrompt(currentPrompt);
         }
         #endregion
     }
