@@ -37,11 +37,7 @@ namespace DanielLochner.Assets
             createdLobbyIds.Enqueue(lobby.Id);
             JoinedLobby = lobby;
 
-            if (heartbeatLobbyCoroutine != null)
-            {
-                StopCoroutine(heartbeatLobbyCoroutine);
-            }
-            heartbeatLobbyCoroutine = StartCoroutine(HeartbeatLobbyRoutine(lobby.Id, 10));
+            CoroutineUtility.StopStartCoroutine(this, HeartbeatLobbyRoutine(lobby.Id, 10), ref heartbeatLobbyCoroutine);
 
             return lobby;
         }
