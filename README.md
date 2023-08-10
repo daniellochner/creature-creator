@@ -17,7 +17,7 @@
 
 Join the community Discord server and follow me on YouTube and Twitter to stay updated on the latest developments. Once you're a member, there are many ways you can get involved and contribute to this open source project:
 1. **Players** can contribute by submitting bug reports, feedback, and suggestions [here](https://github.com/daniellochner/creature-creator-game/issues). This is a great way to get involved even if you don't have any game development experience.
-2. **Artistis** can design new body parts for the game using any 3D modeling software and submit them on the Discord server. Our developers will then import your models into the game.
+2. **Artists** can design new body parts for the game using any 3D modeling software and submit them on the Discord server. Our developers will then import your models into the game.
 3. **Developers** can fork this repository and dive into the codebase! Please note, however, that this project uses several paid assets from the Unity Asset Store that cannot be included in this public repository. We welcome and appreciate contributions from anyone, regardless of your expertise. Contributions are managed through pull requests, which we will need to confirm before they are applied to the main branch.
 
 
