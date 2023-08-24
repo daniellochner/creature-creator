@@ -902,7 +902,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (SystemUtility.IsDevice(DeviceType.Desktop))
             {
 #if UNITY_STANDALONE
-                if (SteamManager.Initialized)
+                if (SteamManager.Initialized && !EducationManager.Instance.IsEducational)
                 {
                     string t = LocalizationUtility.Localize("share_title");
                     string m = LocalizationUtility.Localize("share_message", title);

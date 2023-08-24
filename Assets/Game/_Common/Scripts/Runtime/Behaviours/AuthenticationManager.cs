@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
-    [DefaultExecutionOrder(1)]
     public class AuthenticationManager : MonoBehaviourSingleton<AuthenticationManager>
     {
         #region Properties
@@ -10,31 +9,34 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
-        {
-            Authenticate();
-        }
-
         public void Authenticate()
         {
             Status = AuthStatus.Busy;
-            
-#if UNITY_EDITOR
-            Status = AuthStatus.Success;
-#elif UNITY_STANDALONE
-            if (SteamManager.Initialized)
+
+#if UNITY_STANDALONE
+            if (EducationManager.Instance.IsEducational)
             {
-                Steamworks.SteamUserStats.StoreStats();
-                Status = AuthStatus.Success;
+                EducationManager.Instance.StartCoroutine(EducationManager.Instance.VerifyRoutine(delegate (bool isVerified)
+                {
+                    Status = isVerified ? AuthStatus.Success : AuthStatus.Fail;
+                }));
             }
             else
             {
-                Status = AuthStatus.Fail;
+                if (SteamManager.Initialized)
+                {
+                    Steamworks.SteamUserStats.StoreStats();
+                    Status = AuthStatus.Success;
+                }
+                else
+                {
+                    Status = AuthStatus.Fail;
+                }
             }
 #elif UNITY_IOS || UNITY_ANDROID
-            GameServices.Instance.LogIn(delegate (bool success)
+            GameServices.Instance.LogIn(delegate (bool isLoggedIn)
             {
-                Status = AuthStatus.Success;//success ? AuthStatus.Success : AuthStatus.Fail;
+                Status = AuthStatus.Success; // isLoggedIn ? AuthStatus.Success : AuthStatus.Fail;
             });
 #endif
         }

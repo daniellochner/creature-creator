@@ -31,10 +31,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private Coroutine updateStatusCoroutine;
         #endregion
 
-        #region Properties
-        private UnityTransport NetworkTransport => NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
-        #endregion
-
         #region Methods
         private void Start()
         {
@@ -84,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             try
             {
-                // Set Up World
+                // Setup World
                 string mapName = ((Map)mapOS.Selected).ToString();
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 bool spawnNPC = npcToggle.isOn;
@@ -109,10 +105,10 @@ namespace DanielLochner.Assets.CreatureCreator
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())));
                 }
 
-                // Set Up Connection Data
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransport;
+                // Set Connection Data
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
                 NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
-                
+
                 // Start Host
                 NetworkManager.Singleton.StartHost();
             }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 
@@ -33,6 +35,19 @@ namespace DanielLochner.Assets
                 return (T)Convert.ChangeType(lobby.Data[key].Value, typeof(T));
             }
             return fallback;
+        }
+
+        public static string GetLocalAddressIPv4()
+        {
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress address in host.AddressList)
+            {
+                if (address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return address.ToString();
+                }
+            }
+            throw new Exception("No network adapters were found with an IPv4 address!");
         }
     }
 }

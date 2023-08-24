@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using UnityEngine.SceneManagement;
 
 #if UNITY_IOS
 using Unity.Advertisement.IosSupport;
@@ -20,8 +21,10 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Animator logoAnimator;
         [SerializeField] private AudioSource enterAudioSource;
         [SerializeField] private TextMeshProUGUI promptText;
+        [SerializeField] private TextMeshProUGUI eduLinkText;
+        [SerializeField] private TMP_InputField institutionIdInputField;
 
-        private string prompt;
+        private string currentPromptId;
         #endregion
 
         #region Properties
@@ -39,42 +42,16 @@ namespace DanielLochner.Assets.CreatureCreator
             float s = 1f / scale;
             gridMaterial.mainTextureScale = (n * s) * new Vector2(Screen.width, Screen.height);
 
-            // Localize
-            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
-            yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
+            yield return LocalizeRoutine();
+            yield return LinkRoutine();
+            yield return AuthenticateRoutine();
+            yield return WaitRoutine();
 
-            // Authenticate
-            while (AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Success)
-            {
-                SetPrompt("startup_authenticating");
-
-                yield return new WaitUntil(() => AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Busy);
-
-                if (AuthenticationManager.Instance.Status == AuthenticationManager.AuthStatus.Fail)
-                {
-                    SetPrompt("startup_failed-to-authenticate");
-                    yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
-                    AuthenticationManager.Instance.Authenticate();
-                }
-            }
-
-            // Track
-#if UNITY_IOS
-            if (ATTrackingStatusBinding.GetAuthorizationTrackingStatus() == ATTrackingStatusBinding.AuthorizationTrackingStatus.NOT_DETERMINED)
-            {
-                ATTrackingStatusBinding.RequestAuthorizationTracking();
-            }
-#endif
-
-            // Start
-            SetPrompt(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
-            yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
-
-            if (ShowIntro)
+            if (ShowIntro && !EducationManager.Instance.IsEducational)
             {
                 Fader.FadeInOut(1f, delegate
                 {
-                    LoadingManager.Instance.Load("Intro");
+                    SceneManager.LoadScene("Intro");
                 });
                 ShowIntro = false;
             }
@@ -85,10 +62,14 @@ namespace DanielLochner.Assets.CreatureCreator
             logoAnimator.SetTrigger("Hide");
             enterAudioSource.Play();
         }
-
         private void Update()
         {
             gridMaterial.mainTextureOffset -= speed * Time.deltaTime * Vector2.one;
+
+            if (EducationManager.Instance.IsEducational)
+            {
+                eduLinkText.gameObject.SetActive(Input.GetKey(KeyCode.Tab));
+            }
         }
         private void OnDestroy()
         {
@@ -97,14 +78,82 @@ namespace DanielLochner.Assets.CreatureCreator
 
             LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
         }
-
-        private void SetPrompt(string p)
+        
+        private IEnumerator LocalizeRoutine()
         {
-            promptText.text = LocalizationUtility.Localize(prompt = p);
+            LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+            yield return new WaitUntil(() => LocalizationSettings.InitializationOperation.IsDone);
         }
+        private IEnumerator LinkRoutine()
+        {
+            if (EducationManager.Instance.IsEducational)
+            {
+                eduLinkText.text = SystemInfo.deviceUniqueIdentifier;
+
+                while (!EducationManager.Instance.IsLinked)
+                {
+                    SetPrompt(null);
+                    SetInstitutionIdInputField(true);
+                    yield return new WaitUntil(() => !string.IsNullOrEmpty(institutionIdInputField.text) && Input.GetKeyDown(KeyCode.Return));
+                    SetInstitutionIdInputField(false);
+
+                    SetPromptId("startup_linking");
+                    yield return EducationManager.Instance.LinkRoutine(institutionIdInputField.text, (bool isLinked, string response) => SetPrompt(response));
+                    yield return new WaitForSeconds(2.5f);
+                }
+
+                eduLinkText.text = $"{SystemInfo.deviceUniqueIdentifier} - {EducationManager.Instance.InstitutionId}";
+            }
+        }
+        private IEnumerator AuthenticateRoutine()
+        {
+            AuthenticationManager.Instance.Authenticate();
+            while (AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Success)
+            {
+                SetPromptId("startup_authenticating");
+
+                yield return new WaitUntil(() => AuthenticationManager.Instance.Status != AuthenticationManager.AuthStatus.Busy);
+
+                if (AuthenticationManager.Instance.Status == AuthenticationManager.AuthStatus.Fail)
+                {
+                    SetPromptId("startup_failed-to-authenticate");
+                    yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
+                    AuthenticationManager.Instance.Authenticate();
+                }
+            }
+        }
+        private IEnumerator WaitRoutine()
+        {
+#if UNITY_IOS
+            if (ATTrackingStatusBinding.GetAuthorizationTrackingStatus() == ATTrackingStatusBinding.AuthorizationTrackingStatus.NOT_DETERMINED)
+            {
+                ATTrackingStatusBinding.RequestAuthorizationTracking();
+            }
+#endif
+            SetPromptId(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
+            yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
+        }
+
+        private void SetInstitutionIdInputField(bool isActive)
+        {
+            institutionIdInputField.gameObject.SetActive(isActive);
+        }
+        private void SetPromptId(string promptId)
+        {
+            promptText.text = LocalizationUtility.Localize(currentPromptId = promptId);
+        }
+        private void SetPrompt(string prompt)
+        {
+            promptText.text = prompt;
+            currentPromptId = null;
+        }
+
         private void OnLocaleChanged(Locale locale)
         {
-            SetPrompt(prompt);
+            if (currentPromptId != null)
+            {
+                SetPromptId(currentPromptId);
+            }
         }
         #endregion
     }

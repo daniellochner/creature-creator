@@ -24,6 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public string HostPlayerId { get; private set; }
 
         public List<string> KickedPlayers { get; private set; }
+
+        public string InstitutionId { get; private set; }
         #endregion
 
         #region Methods
@@ -47,6 +49,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             HostPlayerId = lobby.TryGetValue<string>("hostPlayerId");
             KickedPlayers = new List<string>(lobby.TryGetValue("kickedPlayers", "").Split(","));
+
+            InstitutionId = lobby.TryGetValue<string>("institutionId");
         }
         #endregion
     }

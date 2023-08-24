@@ -96,7 +96,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
 #if UNITY_STANDALONE
-            FactoryManager.Instance.LoadWorkshopItems();
+            if (!EducationManager.Instance.IsEducational)
+            {
+                FactoryManager.Instance.LoadWorkshopItems();
+            }
 #endif
 
             IsSetup = true;

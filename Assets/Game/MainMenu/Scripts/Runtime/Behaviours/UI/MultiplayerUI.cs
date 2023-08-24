@@ -18,8 +18,8 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 using Unity.Netcode.Transports.UTP;
-using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
 using Unity.Services.RemoteConfig;
+using LobbyPlayer = Unity.Services.Lobbies.Models.Player;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -273,7 +273,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     throw new Exception(LocalizationUtility.Localize("network_status_kicked"));
                 }
 
-                // Set Up Connection Data
+                // Set Connection Data
                 string username = onlineUsernameInputField.text;
                 SetConnectionData(playerId, username, password);
 
@@ -286,19 +286,28 @@ namespace DanielLochner.Assets.CreatureCreator
                 };
                 world = new WorldMP(await LobbyHelper.Instance.JoinLobbyByIdAsync(id, options));
 
-                // Join Relay
-                UpdateStatus(LocalizationUtility.Localize("network_status_joining-via-relay"), Color.yellow, -1);
-                string joinCode = world.JoinCode;
-                JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
-
-                await Lobbies.Instance.UpdatePlayerAsync(world.Id, player.Id, new UpdatePlayerOptions()
+                if (EducationManager.Instance.IsEducational)
                 {
-                    AllocationId = join.AllocationId.ToString(),
-                    ConnectionInfo = joinCode
-                });
-                UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
-                unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                    UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localarea");
+                    NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
+                    unityTransport.ConnectionData.Address = world.JoinCode;
+                }
+                else
+                {
+                    // Join Relay
+                    UpdateStatus(LocalizationUtility.Localize("network_status_joining-via-relay"), Color.yellow, -1);
+                    string joinCode = world.JoinCode;
+                    JoinAllocation join = await Relay.Instance.JoinAllocationAsync(joinCode);
+
+                    await Lobbies.Instance.UpdatePlayerAsync(world.Id, player.Id, new UpdatePlayerOptions()
+                    {
+                        AllocationId = join.AllocationId.ToString(),
+                        ConnectionInfo = joinCode
+                    });
+                    UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+                    NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
+                    unityTransport.SetClientRelayData(join.RelayServer.IpV4, (ushort)join.RelayServer.Port, join.AllocationIdBytes, join.Key, join.ConnectionData, join.HostConnectionData);
+                }
 
                 // Start Client
                 UpdateStatus(LocalizationUtility.Localize("network_status_starting-client"), Color.yellow, -1);
@@ -329,7 +338,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             try
             {
-                // Set Up World
+                // Setup World
                 bool isPrivate = (Visibility)visibilityOS.Selected == Visibility.Private;
                 bool usePassword = passwordToggle.isOn && !isPrivate && !string.IsNullOrEmpty(passwordInputField.text);
                 string worldName = worldNameInputField.text;
@@ -344,9 +353,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
+                string institutionId = EducationManager.Instance.InstitutionId;
                 bool isBeta = Application.version.EndsWith("beta");
 
-                // Beta
+                // Check Beta
                 if (isBeta)
                 {
                     worldName = $"[BETA] {worldName}";
@@ -379,7 +389,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(mapId)));
                 }
 
-                // Set Up Connection Data
+                // Set Connection Data
                 string username = onlineUsernameInputField.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
@@ -388,7 +398,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 // Authenticate
                 await Authenticate();
 
-                // Version
+                // Check Version
                 await RemoteConfigUtility.FetchConfigAsync();
                 var v1 = VersionUtility.GetVersion(RemoteConfigService.Instance.appConfig.GetString("min_online_version"));
                 var v2 = VersionUtility.GetVersion(Application.version);
@@ -397,16 +407,28 @@ namespace DanielLochner.Assets.CreatureCreator
                     throw new Exception(LocalizationUtility.Localize("network_status_outdated-version"));
                 }
 
-                // Allocate Relay
-                UpdateStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
-                Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
-                UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
-                unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
+                string joinCode = null;
+                string allocationId = null;
+                if (EducationManager.Instance.IsEducational)
+                {
+                    UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localarea");
+                    NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
+                    unityTransport.ConnectionData.Address = joinCode = NetworkUtils.GetLocalAddressIPv4();
+                }
+                else
+                {
+                    // Allocate Relay
+                    UpdateStatus(LocalizationUtility.Localize("network_status_allocating-relay"), Color.yellow, -1);
+                    Allocation allocation = await Relay.Instance.CreateAllocationAsync(maxPlayers);
+                    UnityTransport unityTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("relay");
+                    NetworkManager.Singleton.NetworkConfig.NetworkTransport = unityTransport;
+                    unityTransport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
 
-                // Generate Join Code
-                UpdateStatus(LocalizationUtility.Localize("network_status_generating-join-code"), Color.yellow, -1);
-                string joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
+                    // Generate Join Code
+                    UpdateStatus(LocalizationUtility.Localize("network_status_generating-join-code"), Color.yellow, -1);
+                    joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
+                    allocationId = allocation.AllocationId.ToString();
+                }
 
                 // Create Lobby
                 UpdateStatus(LocalizationUtility.Localize("network_status_creating-lobby"), Color.yellow, -1);
@@ -427,9 +449,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
                         { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
                         { "hostPlayerId", new DataObject(DataObject.VisibilityOptions.Public, hostPlayerId) },
-                        { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) }
+                        { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) },
+                        { "institutionId", new DataObject(DataObject.VisibilityOptions.Public, institutionId) }
                     },
-                    Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocation.AllocationId.ToString())
+                    Player = new LobbyPlayer(AuthenticationService.Instance.PlayerId, joinCode, null, allocationId)
                 };
                 await LobbyHelper.Instance.CreateLobbyAsync(worldName, maxPlayers, options);
 
@@ -461,6 +484,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (Lobby lobby in lobbies)
                 {
                     WorldMP world = new WorldMP(lobby);
+
+                    if (EducationManager.Instance.IsEducational && world.InstitutionId != EducationManager.Instance.InstitutionId)
+                    {
+                        continue;
+                    }
+
                     if (!world.IsPrivate)
                     {
                         var v1 = VersionUtility.GetVersion(world.Version);

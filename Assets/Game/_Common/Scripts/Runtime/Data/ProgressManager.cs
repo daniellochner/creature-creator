@@ -12,11 +12,24 @@ namespace DanielLochner.Assets.CreatureCreator
     public class ProgressManager : DataManager<ProgressManager, Progress>
     {
         #region Properties
+        public override string SALT
+        {
+            get
+            {
 #if UNITY_STANDALONE
-        public override string SALT => SteamUser.GetSteamID().ToString();
+                if (EducationManager.Instance.IsEducational)
+                {
+                    return SystemInfo.deviceUniqueIdentifier;
+                }
+                else
+                {
+                    return SteamUser.GetSteamID().ToString();
+                }
 #elif UNITY_IOS || UNITY_ANDROID
-        public override string SALT => SystemInfo.deviceUniqueIdentifier;
+                return SystemInfo.deviceUniqueIdentifier;
 #endif
+            }
+        }
         #endregion
 
         #region Methods

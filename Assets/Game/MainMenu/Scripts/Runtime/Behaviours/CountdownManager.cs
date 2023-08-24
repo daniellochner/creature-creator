@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private IEnumerator Start()
         {
-            if (SettingsManager.Instance.ShowTutorial) yield break;
+            if (SettingsManager.Instance.ShowTutorial || EducationManager.Instance.IsEducational) yield break;
 
             yield return RemoteConfigUtility.FetchConfigRoutine();
 

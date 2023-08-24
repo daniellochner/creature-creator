@@ -36,7 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
 #if UNITY_STANDALONE
         private void Start()
         {
-            if (Application.internetReachability != NetworkReachability.NotReachable && !SettingsManager.Instance.ShowTutorial)
+            if (Application.internetReachability != NetworkReachability.NotReachable && !SettingsManager.Instance.ShowTutorial && !EducationManager.Instance.IsEducational)
             {
                 Setup();
             }

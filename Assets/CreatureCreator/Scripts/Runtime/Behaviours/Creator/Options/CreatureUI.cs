@@ -48,14 +48,21 @@ namespace DanielLochner.Assets.CreatureCreator
             transform.SetAsFirstSibling();
 
 #if UNITY_STANDALONE
-            foreach (PublishedFileId_t fileId in FactoryManager.Instance.Files)
+            if (EducationManager.Instance.IsEducational)
             {
-                if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
+                shareButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                foreach (PublishedFileId_t fileId in FactoryManager.Instance.Files)
                 {
-                    if (Path.GetFileNameWithoutExtension(Directory.GetFiles(folder)[0]) == creatureName)
+                    if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
                     {
-                        shareButton.gameObject.SetActive(false);
-                        break;
+                        if (Path.GetFileNameWithoutExtension(Directory.GetFiles(folder)[0]) == creatureName)
+                        {
+                            shareButton.gameObject.SetActive(false);
+                            break;
+                        }
                     }
                 }
             }
