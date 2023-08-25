@@ -49,7 +49,7 @@ namespace DanielLochner.Assets
         [ClientRpc]
         private void SetNameClientRpc(string name, ClientRpcParams clientRpc = default)
         {
-            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name;
+            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name.NoParse();
             nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = CameraUtility.MainCamera.transform, weight = 1f });
         }
         #endregion

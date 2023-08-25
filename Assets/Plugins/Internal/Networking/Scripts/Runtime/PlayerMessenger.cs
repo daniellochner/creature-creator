@@ -99,7 +99,7 @@ namespace DanielLochner.Assets
             }
             messageGO = Instantiate(messagePrefab, transform.position + transform.up * height, transform.rotation, transform);
 
-            messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
+            messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message.NoParse();
             messageGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
         }
 

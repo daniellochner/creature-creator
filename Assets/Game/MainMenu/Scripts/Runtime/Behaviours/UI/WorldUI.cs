@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Players = lobby.Players.Count;
 
             playersText.text = $"{Players}/{lobby.MaxPlayers}";
-            nameText.text = lobby.Name;
+            nameText.text = lobby.Name.NoParse();
             joinButton.onClick.AddListener(delegate 
             {
                 multiplayerUI.Join(lobby.Id);

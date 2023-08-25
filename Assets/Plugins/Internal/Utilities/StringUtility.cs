@@ -11,6 +11,11 @@ namespace DanielLochner.Assets
             return Regex.Replace(Regex.Replace(str, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
         }
 
+        public static string NoParse(this string str)
+        {
+            return $"<noparse>{str}</noparse>";
+        }
+
         public static string JoinAnd<T>(this List<T> list)
         {
             if (list.Count == 0)

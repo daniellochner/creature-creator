@@ -41,7 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void UpdateInfo()
         {
-            nameAgeText.text = $"<u>{information.Name}</u> ({information.FormattedAge})";
+            nameAgeText.text = $"<u>{information.Name.NoParse()}</u> ({information.FormattedAge})";
             healthSlider.value = information.Health;
             energySlider.value = information.Hunger;
 
