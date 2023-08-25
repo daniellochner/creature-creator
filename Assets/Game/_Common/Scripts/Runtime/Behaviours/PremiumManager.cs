@@ -131,7 +131,7 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void Start()
         {
             base.Start();
-            if (wasPrevPurchased)
+            if (SystemUtility.IsDevice(DeviceType.Desktop) || wasPrevPurchased)
             {
                 Data.IsPremium = true;
                 Save();
