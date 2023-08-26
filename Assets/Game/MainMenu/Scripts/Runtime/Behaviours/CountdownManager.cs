@@ -17,12 +17,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        public IEnumerator Setup(bool fetchConfig)
         {
-            if (SettingsManager.Instance.ShowTutorial || EducationManager.Instance.IsEducational) yield break;
+            if (fetchConfig)
+            {
+                yield return RemoteConfigUtility.FetchConfigRoutine();
+            }
 
-            yield return RemoteConfigUtility.FetchConfigRoutine();
-
+            // Check Countdown
             CountdownData countdownData = JsonUtility.FromJson<CountdownData>(RemoteConfigService.Instance.appConfig.GetJson("countdown_data"));
             if (countdownData.date != -1)
             {
@@ -37,6 +39,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     onComplete.Invoke();
                 }
+
+                yield return new WaitForSeconds(1f);
             }
         }
         #endregion

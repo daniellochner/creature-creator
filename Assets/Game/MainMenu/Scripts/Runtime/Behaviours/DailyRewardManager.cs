@@ -9,14 +9,12 @@ namespace DanielLochner.Assets.CreatureCreator
     public class DailyRewardManager : MonoBehaviourSingleton<DailyRewardManager>
     {
         #region Methods
-        private IEnumerator Start()
+        public IEnumerator Setup()
         {
-            yield return new WaitForSeconds(0.5f);
-
-            if (SettingsManager.Instance.ShowTutorial || PremiumManager.Instance.IsEverythingUsable()) yield break;
-
+            // Initialize
             yield return new WaitUntil(() => WorldTimeManager.Instance.IsInitialized);
 
+            // Check Daily Reward
             string today = WorldTimeManager.Instance.UtcNow.Value.ToShortDateString();
             if (PlayerPrefs.GetString("DAILY_REWARD") != today)
             {
@@ -26,6 +24,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 RewardsMenu.Instance.Open(false, LocalizationUtility.Localize("daily-reward_title"));
 
                 PlayerPrefs.SetString("DAILY_REWARD", today);
+
+                yield return new WaitUntil(() => !RewardsMenu.Instance.IsOpen);
             }
         }
         #endregion

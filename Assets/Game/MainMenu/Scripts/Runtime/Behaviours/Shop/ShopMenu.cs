@@ -17,12 +17,6 @@ namespace DanielLochner.Assets.CreatureCreator
             shopButton.SetActive(!SettingsManager.Instance.ShowTutorial);
         }
 
-        public override void OnEndOpen()
-        {
-            base.OnEndOpen();
-            Visit();
-        }
-
         public void Visit()
         {
             Application.OpenURL("https://playcreature.com/merch");

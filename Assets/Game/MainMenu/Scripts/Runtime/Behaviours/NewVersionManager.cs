@@ -33,20 +33,18 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private IEnumerator Start()
+        public IEnumerator Setup(bool fetchConfig)
         {
-            yield return new WaitForSeconds(0.5f);
+            if (fetchConfig)
+            {
+                yield return RemoteConfigUtility.FetchConfigRoutine();
+            }
 
-            if (SettingsManager.Instance.ShowTutorial || EducationManager.Instance.IsEducational) yield break;
-
-            yield return RemoteConfigUtility.FetchConfigRoutine();
-
+            // Check Version
             var v1 = VersionUtility.GetVersion(RemoteConfigService.Instance.appConfig.GetString("latest_version"));
             var v2 = VersionUtility.GetVersion(Application.version);
             if (v1.CompareTo(v2) > 0)
             {
-                yield return new WaitUntil(() => !RewardsMenu.Instance.IsOpen);
-
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("new-version_title"), LocalizationUtility.Localize("new-version_message", v1), onYes: () => Application.OpenURL(StoreURL));
 
                 yield return new WaitUntil(() => !ConfirmationDialog.Instance.IsOpen);
