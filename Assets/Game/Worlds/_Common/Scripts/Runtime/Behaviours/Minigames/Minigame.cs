@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [Header("Minigame")]
         [SerializeField] protected string nameId;
+        [SerializeField] private Sprite icon;
         [Space]
         [SerializeField] protected MinigamePad pad;
         [SerializeField] protected int waitTime;
@@ -189,6 +190,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (isSignUp)
             {
+                if (WaitingPlayers.Value == 0)
+                {
+                    RequestClientRpc(NetworkHostManager.Instance.Players[clientId].username);
+                }
+
                 players.Add(clientId);
             }
             else
@@ -201,6 +207,18 @@ namespace DanielLochner.Assets.CreatureCreator
         private void SetupClientRpc(ClientRpcParams clientRpcParams = default)
         {
             OnClientSetup();
+        }
+
+        [ClientRpc]
+        private void RequestClientRpc(string playerName)
+        {
+            NotificationsManager.Notify(icon, LocalizationUtility.Localize("minigame_request_title", playerName, LocalizationUtility.Localize(nameId)), LocalizationUtility.Localize("minigame_request_description"), delegate
+            {
+                if (!EditorManager.Instance.IsEditing && !MinigameManager.Instance.CurrentMinigame && !MinigameManager.Instance.CurrentPad)
+                {
+                    Player.Instance.Mover.Teleport(pad.transform.position, Player.Instance.transform.rotation, true);
+                }
+            });
         }
 
         private void OnIsZoneVisibleChanged(bool oldV, bool newV)
