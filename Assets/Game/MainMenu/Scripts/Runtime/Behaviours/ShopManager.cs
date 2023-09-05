@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         public IEnumerator Setup()
         {
-            if (ShownAttempts % 10 == 0)
+            if (ShownAttempts % 10 == 1)
             {
                 ShopMenu.Instance.Open();
 
