@@ -61,7 +61,6 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDistanceTravelledChanged(float oldDT, float newDT)
         {
-            Debug.Log(newDT);
             follower.distanceTravelled = newDT;
         }
 
