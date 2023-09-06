@@ -10,18 +10,23 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField, Button("Revert", 25, true)] private bool revert;
+
+        public static readonly int NUM_BODY_PARTS = 135;
+        public static readonly int NUM_PATTERNS = 54;
+        public static readonly int NUM_QUESTS = 13;
+        public static readonly int NUM_MAPS = 5;
         #endregion
 
         #region Properties
         public int UnlockedBodyParts
         {
             get => GetStat("STA_UNLOCKED_BODY_PARTS", ProgressManager.Data.UnlockedBodyParts.Count);
-            set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", 135));
+            set => SetStat("STA_UNLOCKED_BODY_PARTS", value, new StatAchievement("ACH_TAXIDERMIST", NUM_BODY_PARTS));
         }
         public int UnlockedPatterns
         {
             get => GetStat("STA_UNLOCKED_PATTERNS", ProgressManager.Data.UnlockedPatterns.Count);
-            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", 54));
+            set => SetStat("STA_UNLOCKED_PATTERNS", value, new StatAchievement("ACH_PAINTER", NUM_PATTERNS));
         }
         public int DistanceTravelled
         {
@@ -41,12 +46,12 @@ namespace DanielLochner.Assets.CreatureCreator
         public int ReachedPeaks
         {
             get => GetStat("STA_REACHED_PEAKS", 0);
-            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", 5));
+            set => SetStat("STA_REACHED_PEAKS", value, new StatAchievement("ACH_MOUNTAINEER", NUM_MAPS));
         }
         public int CompletedQuests
         {
             get => GetStat("STA_COMPLETED_QUESTS", 0);
-            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", 13));
+            set => SetStat("STA_COMPLETED_QUESTS", value, new StatAchievement("ACH_ON_A_MISSION", NUM_QUESTS));
         }
         public int Kills
         {

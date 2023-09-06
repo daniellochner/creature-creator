@@ -21,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Quests")]
         [SerializeField] private Slider questsSlider;
         [SerializeField] private TextMeshProUGUI questsText;
+        [SerializeField] private Button questsButton;
 
         [Header("Unlocked Body Parts")]
         [SerializeField] private Slider bodyPartsSlider;
@@ -61,15 +62,18 @@ namespace DanielLochner.Assets.CreatureCreator
             cashText.text = $"${ProgressManager.Data.Cash}";
 
             // Quests
-            int completedQuests = ProgressManager.Data.CompletedQuests;
-            questsText.text = $"{completedQuests}/{ProgressManager.Data.QUESTS.Length}";
-            questsSlider.maxValue = ProgressManager.Data.QUESTS.Length;
+            int completedQuests = ProgressManager.Data.CompletedQuests.Count;
+            questsText.text = $"{completedQuests}/{StatsManager.NUM_QUESTS}";
+            questsSlider.maxValue = StatsManager.NUM_QUESTS;
             questsSlider.value = completedQuests;
+            questsButton.onClick.AddListener(delegate
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("mainmenu_completed-quests_title"), LocalizationUtility.Localize("mainmenu_completed-quests_description", ProgressManager.Data.CompletedQuests.Count, StatsManager.NUM_QUESTS));
+            });
 
             // Body Parts
-            Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
-            bodyPartsText.text = $"{ProgressManager.Data.UnlockedBodyParts.Count}/{bodyParts.Objects.Count}";
-            bodyPartsSlider.maxValue = bodyParts.Objects.Count;
+            bodyPartsText.text = $"{ProgressManager.Data.UnlockedBodyParts.Count}/{StatsManager.NUM_BODY_PARTS}";
+            bodyPartsSlider.maxValue = StatsManager.NUM_BODY_PARTS;
             bodyPartsSlider.value = ProgressManager.Data.UnlockedBodyParts.Count;
             bodyPartsButton.onClick.AddListener(delegate
             {
@@ -77,9 +81,8 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             // Patterns
-            Database patterns = DatabaseManager.GetDatabase("Patterns");
-            patternsText.text = $"{ProgressManager.Data.UnlockedPatterns.Count}/{patterns.Objects.Count}";
-            patternsSlider.maxValue = patterns.Objects.Count;
+            patternsText.text = $"{ProgressManager.Data.UnlockedPatterns.Count}/{StatsManager.NUM_PATTERNS}";
+            patternsSlider.maxValue = StatsManager.NUM_PATTERNS;
             patternsSlider.value = ProgressManager.Data.UnlockedPatterns.Count;
             patternsButton.onClick.AddListener(delegate
             {
