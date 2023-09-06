@@ -61,8 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 Mode mode = (Mode)modeOS.Selected;
                 if (mode == Mode.Adventure)
                 {
-                    string mapId = $"map_unlocked_{map}".ToLower();
-                    if (PlayerPrefs.GetInt(mapId) == 0)
+                    if (!ProgressManager.Instance.IsMapUnlocked(map))
                     {
                         unlocked = false;
                     }

@@ -16,23 +16,35 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI questText;
         [SerializeField] private LookAtConstraint questLookAtConstraint;
         [SerializeField] private MinimapIcon minimapIcon;
-        [SerializeField] private float disappearTime;
-        [SerializeField] private QuestType type;
-        [SerializeField] private string description;
+        [Space]
         [SerializeField] private string id;
+        [SerializeField] private string description;
+        [SerializeField] private QuestType type;
         [SerializeField] private int reward;
+        [SerializeField] private float disappearTime;
         [SerializeField] private QuestItem[] items;
         [SerializeField] public UnityEvent onComplete;
 
         private TrackRegion region;
         private AudioSource source;
+        private bool? isCompleted;
         #endregion
 
         #region Properties
         public bool IsCompleted
         {
-            get => PlayerPrefs.GetInt(id) == 1;
-            set => PlayerPrefs.SetInt(id, value ? 1 : 0);
+            get
+            {
+                if (isCompleted == null)
+                {
+                    isCompleted = ProgressManager.Data.CompletedQuests.Contains(id);
+                }
+                return (bool)isCompleted;
+            }
+            set
+            {
+                isCompleted = value;
+            }
         }
 
         private bool HasAny
@@ -142,6 +154,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Complete()
         {
+            ProgressManager.Data.CompletedQuests.Add(id);
+            ProgressManager.Instance.Save();
             IsCompleted = true;
 
             // Items
@@ -165,7 +179,6 @@ namespace DanielLochner.Assets.CreatureCreator
             source.Play();
             minimapIcon.enabled = false;
             onComplete.Invoke();
-
             MMVibrationManager.Haptic(HapticTypes.Success);
         }
         #endregion

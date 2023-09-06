@@ -691,6 +691,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ProgressManager.Instance.Revert();
 
+#if USE_STATS
+            StatsManager.Instance.Revert();
+#endif
+
             ProgressUI.Instance.UpdateInfo();
             UnlockableBodyPartsMenu.Instance.UpdateInfo();
             UnlockablePatternsMenu.Instance.UpdateInfo();

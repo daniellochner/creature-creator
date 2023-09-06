@@ -94,17 +94,21 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public void Revert(bool achievementsToo = false)
+        public void Revert()
         {
             if (Initialized)
             {
-#if UNITY_STANDALONE
-                if (!EducationManager.Instance.IsEducational)
-                {
-                    SteamUserStats.ResetAllStats(achievementsToo);
-                }
-#elif UNITY_IOS || UNITY_ANDROID
-#endif
+                UnlockedBodyParts = 0;
+                UnlockedPatterns = 0;
+                DistanceTravelled = 0;
+                Deaths = 0;
+                CashSpent = 0;
+                ReachedPeaks = 0;
+                CompletedQuests = 0;
+                Kills = 0;
+                CompletedBattles = 0;
+                MinigamesWon = 0;
+                MinigamesCompleted = 0;
             }
         }
 

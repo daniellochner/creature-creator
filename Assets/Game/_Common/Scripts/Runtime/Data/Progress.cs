@@ -16,32 +16,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private int cash = 500;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
-
-        public readonly string[] QUESTS = new string[]
-        {
-            // Island
-            "quest_27dh3g2",
-
-            // Farm
-            "quest_9n5pdf6",
-            "quest_j5pz7s0",
-            "quest_8s7s83i",
-            "quest_lo4zz8f",
-            "quest_01lfpx7",
-            "quest_mn72a0b",
-            "quest_f8s5x02",
-
-            // Sandbox
-            "quest_8nsgy3m",
-            "quest_9js6hk4",
-
-            // Cave
-            "quest_k2nx0l",
-
-            // City
-            "quest_fkfnwa",
-            "quest_s9f2ln"
-        };
+        [SerializeField] private List<string> completedQuests = new List<string>();
+        [SerializeField] private List<Map> unlockedMaps = new List<Map>();
+        [SerializeField] private List<Map> reachedPeaks = new List<Map>();
         #endregion
 
         #region Properties
@@ -94,33 +71,33 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => unlockedPatterns;
         }
-        public int CompletedQuests
+        public List<string> CompletedQuests
         {
-            get
-            {
-                int counter = 0;
-                foreach (string quest in QUESTS)
-                {
-                    if (PlayerPrefs.GetInt(quest) == 1)
-                    {
-                        counter++;
-                    }
-                }
-                return counter;
-            }
+            get => completedQuests;
+        }
+        public List<Map> UnlockedMaps
+        {
+            get => unlockedMaps;
+        }
+        public List<Map> ReachedPeaks
+        {
+            get => reachedPeaks;
         }
         #endregion
 
         #region Methods
         public override void Revert()
         {
-            PlayerPrefs.DeleteAll(); // TODO: Deleting all PlayerPrefs causes issues with NGO... This should be more specific!
-
             Experience = 0;
             Level = 0;
             Cash = 500;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
+            CompletedQuests.Clear();
+            UnlockedMaps.Clear();
+            ReachedPeaks.Clear();
+
+            UnlockedMaps.Add(Map.Island);
         }
         #endregion
     }

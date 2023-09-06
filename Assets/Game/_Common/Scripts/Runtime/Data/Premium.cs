@@ -26,9 +26,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public override void Revert()
         {
-            isPremium = SystemUtility.IsDevice(DeviceType.Desktop);
-            usableBodyParts.Clear();
-            usablePatterns.Clear();
+            IsPremium = SystemUtility.IsDevice(DeviceType.Desktop);
+            UsableBodyParts.Clear();
+            UsablePatterns.Clear();
         }
         #endregion
 

@@ -36,38 +36,86 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void Start()
         {
             base.Start();
-            UnlockMap(Map.Island);
+            MigrateLegacy();
         }
 
-        public override void Revert()
-        {
-            base.Revert();
-
-#if USE_STATS
-            StatsManager.Instance.Revert();
-#endif
-
-            UnlockMap(Map.Island);
-        }
-
-        public bool UnlockMap(Map map)
+        public void UnlockMap(Map map)
         {
             if (!IsMapUnlocked(map))
             {
-                PlayerPrefs.SetInt(MapId(map), 1);
-                return true;
+                Data.UnlockedMaps.Add(map);
+                Save();
             }
-            return false;
         }
         public bool IsMapUnlocked(Map map)
         {
-            return PlayerPrefs.GetInt(MapId(map)) == 1;
+            return Data.UnlockedMaps.Contains(map);
         }
 
-        private string MapId(Map map)
+        #region Legacy
+        private static readonly Map[] MAPS = new Map[]
         {
-            return $"map_unlocked_{map}".ToLower();
+            Map.Island,
+            Map.Farm,
+            Map.Sandbox,
+            Map.Cave,
+            Map.City
+        };
+        private static readonly string[] QUESTS = new string[]
+        {
+            // Island
+            "27dh3g2",
+
+            // Farm
+            "9n5pdf6",
+            "j5pz7s0",
+            "8s7s83i",
+            "lo4zz8f",
+            "01lfpx7",
+            "mn72a0b",
+            "f8s5x02",
+
+            // Sandbox
+            "8nsgy3m",
+            "9js6hk4",
+
+            // Cave
+            "k2nx0l",
+
+            // City
+            "fkfnwa",
+            "s9f2ln"
+        };
+
+        private void MigrateLegacy()
+        {
+            foreach (string questId in QUESTS)
+            {
+                if (PlayerPrefs.GetInt($"quest_{questId}") == 1 && !Data.CompletedQuests.Contains(questId))
+                {
+                    Data.CompletedQuests.Add(questId);
+                }
+            }
+
+            foreach (Map map in MAPS)
+            {
+                if (PlayerPrefs.GetInt($"map_unlocked_{map}".ToLower()) == 1 && !Data.UnlockedMaps.Contains(map))
+                {
+                    Data.UnlockedMaps.Add(map);
+                }
+            }
+
+            foreach (Map map in MAPS)
+            {
+                if (PlayerPrefs.GetInt($"HP_{map}".ToUpper()) == 1 && !Data.ReachedPeaks.Contains(map))
+                {
+                    Data.ReachedPeaks.Add(map);
+                }
+            }
+
+            Save();
         }
+        #endregion
         #endregion
     }
 }

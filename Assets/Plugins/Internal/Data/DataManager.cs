@@ -21,6 +21,8 @@ namespace DanielLochner.Assets
 
         public virtual string SALT { get; }
         private string EncryptionKeyValue => (encryptionKey != null) ? (encryptionKey.Value + SALT) : "";
+
+        public bool HasFailed { get; set; } = false;
         #endregion
 
         #region Methods
@@ -45,14 +47,18 @@ namespace DanielLochner.Assets
         [ContextMenu("Load")]
         public virtual void Load()
         {
-            M loaded = SaveUtility.Load<M>(Path.Combine(Application.persistentDataPath, fileName), EncryptionKeyValue);        
-            if (loaded != null)
+            M loaded = SaveUtility.Load<M>(Path.Combine(Application.persistentDataPath, fileName), EncryptionKeyValue);
+
+            HasFailed = (loaded == null);
+
+            if (!HasFailed)
             {
                 data = loaded;
             }
             else
             {
                 Debug.Log($"Failed to load {Path.Combine(Application.persistentDataPath, fileName)}.");
+                data.Revert();
             }
         }
         [ContextMenu("Revert")]

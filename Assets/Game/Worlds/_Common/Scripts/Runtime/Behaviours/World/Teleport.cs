@@ -13,10 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Teleport : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private string targetMapName;
-        [SerializeField] private string targetMapId;
-        [SerializeField] private Keybind keybind;
+        [SerializeField] private Map targetMap;
         [SerializeField] private TeleportCinematic cinematic;
+        [SerializeField] private Keybind keybind;
         [Space]
         [SerializeField] private TextMeshProUGUI teleportText;
         [SerializeField] private LookAtConstraint teleportLookAtConstraint;
@@ -26,6 +25,9 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        private string TargetMapName => targetMap.ToString();
+        private string TargetMapId => $"option_map_{TargetMapName.ToLower()}";
+
         private bool CanTeleport
         {
             get => (WorldManager.Instance.World is WorldSP) || (NetworkManager.Singleton.IsServer && (NumPlayers == MaxPlayers));
@@ -107,7 +109,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void RequestTeleport()
         {
-            ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title"), LocalizationUtility.Localize("teleport_message", LocalizationUtility.Localize(targetMapId)), onYes: delegate
+            ConfirmationDialog.Confirm(LocalizationUtility.Localize("teleport_title"), LocalizationUtility.Localize("teleport_message", LocalizationUtility.Localize(TargetMapId)), onYes: delegate
             {
                 UnlockMapClientRpc();
 
@@ -132,8 +134,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Data = new System.Collections.Generic.Dictionary<string, DataObject>()
                     {
-                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, targetMapName) },
-                        { "mapId", new DataObject(DataObject.VisibilityOptions.Public, targetMapId) }
+                        { "mapName", new DataObject(DataObject.VisibilityOptions.Public, TargetMapName) },
+                        { "mapId", new DataObject(DataObject.VisibilityOptions.Public, TargetMapId) }
                     }
                 };
                 options.HostId = AuthenticationService.Instance.PlayerId;
@@ -145,7 +147,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void TeleportClientRpc()
         {
-            TeleportManager.Instance.TeleportTo(targetMapName, JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data)));
+            TeleportManager.Instance.TeleportTo(TargetMapName, JsonUtility.FromJson<CreatureData>(JsonUtility.ToJson(Player.Instance.Constructor.Data)));
         }
         [ClientRpc]
         private void TeleportCinematicClientRpc()
@@ -164,15 +166,16 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void UnlockMapClientRpc()
         {
-            if (!WorldManager.Instance.World.CreativeMode && ProgressManager.Instance.UnlockMap(Enum.Parse<Map>(targetMapName)))
+            if (!WorldManager.Instance.World.CreativeMode && !ProgressManager.Instance.IsMapUnlocked(targetMap))
             {
-                NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(targetMapId)));
+                ProgressManager.Instance.UnlockMap(targetMap);
+                NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(TargetMapId)));
             }
         }
 
         private void UpdateInfo()
         {
-            string text = $"{LocalizationUtility.Localize(targetMapId)}<br>";
+            string text = $"{LocalizationUtility.Localize(TargetMapId)}<br>";
 
             if (ShowCount)
             {

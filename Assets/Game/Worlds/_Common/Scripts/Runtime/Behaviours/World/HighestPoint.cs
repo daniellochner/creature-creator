@@ -1,4 +1,5 @@
 using MoreMountains.NiceVibrations;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,46 +8,68 @@ namespace DanielLochner.Assets.CreatureCreator
     public class HighestPoint : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private Map map;
         [SerializeField] private GameObject flag;
-        private AudioSource audioSource;
+        private AudioSource source;
+
+        private bool? hasReached;
         #endregion
 
         #region Properties
-        private string SceneId => $"HP_{SceneManager.GetActiveScene().name.ToUpper()}";
-
-        private bool Reached
+        private bool HasReached
         {
-            get => PlayerPrefs.GetInt(SceneId) == 1;
-            set => PlayerPrefs.SetInt(SceneId, value ? 1 : 0);
+            get
+            {
+                if (hasReached == null)
+                {
+                    hasReached = ProgressManager.Data.ReachedPeaks.Contains(map);
+                }
+                return (bool)hasReached;
+            }
+            set
+            {
+                hasReached = value;
+            }
         }
         #endregion
 
         #region Methods
         private void Awake()
         {
-            audioSource = GetComponent<AudioSource>();
+            source = GetComponent<AudioSource>();
         }
         private void Start()
         {
-            if (Reached)
+            if (HasReached)
             {
                 flag.SetActive(false);
             }
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player/Local") && !Reached)
+            if (other.CompareTag("Player/Local") && !HasReached)
             {
-#if USE_STATS
-                StatsManager.Instance.ReachedPeaks++;
-#endif
-                Reached = true;
-                flag.SetActive(false);
-
-                audioSource.Play();
-
-                MMVibrationManager.Haptic(HapticTypes.Success);
+                Reach();
             }
+        }
+
+        public void Reach()
+        {
+            ProgressManager.Data.ReachedPeaks.Add(map);
+            ProgressManager.Instance.Save();
+            HasReached = true;
+
+            // Flag
+            flag.SetActive(false);
+
+            // Stats
+#if USE_STATS
+            StatsManager.Instance.ReachedPeaks++;
+#endif
+
+            // Other
+            source.Play();
+            MMVibrationManager.Haptic(HapticTypes.Success);
         }
         #endregion
     }
