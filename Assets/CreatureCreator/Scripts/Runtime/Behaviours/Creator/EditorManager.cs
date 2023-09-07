@@ -788,7 +788,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureData data = Creature.Constructor.Data;
 
-            if (exportAll && SettingsManager.Data.PreviewFeatures)
+            if (exportAll && SettingsManager.Data.ExportAll)
             {
                 string creaturePath = Path.Combine(folderPath, data.Name);
                 if (!Directory.Exists(creaturePath))

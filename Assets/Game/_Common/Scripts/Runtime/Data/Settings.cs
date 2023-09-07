@@ -58,6 +58,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool worldChat;
         [SerializeField] private bool footsteps = true;
         [SerializeField] private bool map = true;
+        [SerializeField] private bool exportAll = false;
 
         [Header("Controls")]
         [SerializeField, Range(0, 3)] private float sensitivityHorizontal;
@@ -294,6 +295,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => map;
             set => map = value;
         }
+        public bool ExportAll
+        {
+            get => exportAll;
+            set => exportAll = value;
+        }
 
         public float SensitivityHorizontal
         {
@@ -382,6 +388,7 @@ namespace DanielLochner.Assets.CreatureCreator
             WorldChat = true;
             Map = true;
             Footsteps = true;
+            ExportAll = false;
 
             SensitivityHorizontal = 1f;
             SensitivityVertical = 1f;

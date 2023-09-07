@@ -76,6 +76,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetOnlineUsername(Data.OnlineUsername);
             SetExportPrecision(Data.ExportPrecision);
             SetTouchOffset(Data.TouchOffset);
+            SetExportAll(Data.ExportAll);
             SetCameraShake(Data.CameraShake);
             SetDebugMode(Data.DebugMode);
             SetPreviewFeatures(Data.PreviewFeatures);
@@ -547,6 +548,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             CreatureEditor editor = creaturePlayerPrefab.GetComponent<CreatureEditor>();
             editor.TouchOffset = Data.TouchOffset = touchOffset;
+        }
+        public void SetExportAll(bool exportAll)
+        {
+            Data.ExportAll = exportAll;
         }
         public void SetCameraShake(bool cameraShake, bool updateMain = false)
         {

@@ -54,6 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
+        [SerializeField] private Toggle exportAllToggle;
         [SerializeField] private Toggle cameraShakeToggle;
         [SerializeField] private Toggle vibrationsToggle;
         [SerializeField] private Toggle debugModeToggle;
@@ -440,6 +441,13 @@ namespace DanielLochner.Assets.CreatureCreator
                     Player.Instance.Editor.TouchOffset = value;
                 }
                 SettingsManager.Instance.SetTouchOffset((int)value);
+            });
+
+            // Export All
+            exportAllToggle.SetIsOnWithoutNotify(SettingsManager.Data.ExportAll);
+            exportAllToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetExportAll(isOn);
             });
 
             // Camera Shake
