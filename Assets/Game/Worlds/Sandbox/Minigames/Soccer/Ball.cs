@@ -8,6 +8,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private GameObject bouncePrefab;
         [SerializeField] private float kickForce;
+        [SerializeField] private float correctionFactor;
+        [SerializeField] private Transform[] goals;
 
         private Rigidbody rb;
         private Unity.Netcode.Components.NetworkTransform networkTransform;
@@ -32,7 +34,29 @@ namespace DanielLochner.Assets.CreatureCreator
             if (player != null)
             {
                 Vector3 force = (transform.position - point).normalized * player.Velocity.LSpeedPercentage * kickForce;
-                KickServerRpc(point, force);
+
+                // Target goal
+                Transform targetGoal = null;
+                float maxDot = Mathf.NegativeInfinity;
+                foreach (Transform goal in goals)
+                {
+                    Vector3 dir = goal.position - point;
+                    float dot = Vector3.Dot(force, dir);
+
+                    if (dot > maxDot)
+                    {
+                        targetGoal = goal;
+                        maxDot = dot;
+                    }
+                }
+                
+                // Perfect force towards targeted goal
+                Vector3 perfectForce = (targetGoal.position - point).normalized * force.magnitude;
+
+                // Corrected force
+                Vector3 correctedForce = (correctionFactor * perfectForce) + ((1f - correctionFactor) * force);
+
+                KickServerRpc(point, correctedForce);
             }
             else if (IsServer)
             {
