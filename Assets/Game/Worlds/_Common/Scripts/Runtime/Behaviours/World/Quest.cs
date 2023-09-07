@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (hasCompleted == null)
                 {
-                    hasCompleted = ProgressManager.Data.CompletedQuests.Contains(id);
+                    hasCompleted = ProgressManager.Instance.IsQuestCompleted(id);
                 }
                 return (bool)hasCompleted;
             }
@@ -152,11 +152,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 questText.text = "";
             }
         }
-
         private void Complete()
         {
-            ProgressManager.Data.CompletedQuests.Add(id);
-            ProgressManager.Instance.Save();
+            ProgressManager.Instance.CompleteQuest(id);
             HasCompleted = true;
 
             // Items

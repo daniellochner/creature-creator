@@ -39,6 +39,24 @@ namespace DanielLochner.Assets.CreatureCreator
             MigrateLegacy();
         }
 
+        // Body Parts
+        // Patterns
+
+        // Completed Quests
+        public void CompleteQuest(string questId)
+        {
+            if (!IsQuestCompleted(questId))
+            {
+                Data.CompletedQuests.Add(questId);
+                Save();
+            }
+        }
+        public bool IsQuestCompleted(string questId)
+        {
+            return Data.CompletedQuests.Contains(questId);
+        }
+
+        // Unlocked Maps
         public void UnlockMap(Map map)
         {
             if (!IsMapUnlocked(map))
@@ -50,6 +68,20 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsMapUnlocked(Map map)
         {
             return Data.UnlockedMaps.Contains(map);
+        }
+
+        // Reached Peaks
+        public void ReachPeak(Map map)
+        {
+            if (!IsPeakReached(map))
+            {
+                Data.ReachedPeaks.Add(map);
+                Save();
+            }
+        }
+        public bool IsPeakReached(Map map)
+        {
+            return Data.ReachedPeaks.Contains(map);
         }
 
         #region Legacy
@@ -89,6 +121,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void MigrateLegacy()
         {
+            // Completed Quests
             foreach (string questId in QUESTS)
             {
                 if (PlayerPrefs.GetInt($"quest_{questId}") == 1 && !Data.CompletedQuests.Contains(questId))
@@ -97,6 +130,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
+            // Unlocked Maps
             foreach (Map map in MAPS)
             {
                 if (PlayerPrefs.GetInt($"map_unlocked_{map}".ToLower()) == 1 && !Data.UnlockedMaps.Contains(map))
@@ -105,9 +139,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
+            // Reached Peaks
             foreach (Map map in MAPS)
             {
-                if (PlayerPrefs.GetInt($"HP_{map}".ToUpper()) == 1 && !Data.ReachedPeaks.Contains(map))
+                if (PlayerPrefs.GetInt($"hp_{map}".ToUpper()) == 1 && !Data.ReachedPeaks.Contains(map))
                 {
                     Data.ReachedPeaks.Add(map);
                 }

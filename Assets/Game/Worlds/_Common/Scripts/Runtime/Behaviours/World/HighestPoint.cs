@@ -1,7 +1,5 @@
 using MoreMountains.NiceVibrations;
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -22,7 +20,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (hasReached == null)
                 {
-                    hasReached = ProgressManager.Data.ReachedPeaks.Contains(map);
+                    hasReached = ProgressManager.Instance.IsPeakReached(map);
                 }
                 return (bool)hasReached;
             }
@@ -55,8 +53,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Reach()
         {
-            ProgressManager.Data.ReachedPeaks.Add(map);
-            ProgressManager.Instance.Save();
+            ProgressManager.Instance.ReachPeak(map);
             HasReached = true;
 
             // Flag
