@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -16,13 +17,26 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
 
             playing.onEnter += OnPlayingEnter;
+            playing.onExit  += OnPlayingExit;
         }
 
         #region Playing
         private void OnPlayingEnter()
         {
+            SetRegionActiveClientRpc(true);
             StartCoroutine(ScoreRoutine());
         }
+        private void OnPlayingExit()
+        {
+            SetRegionActiveClientRpc(false);
+        }
+
+        [ClientRpc]
+        private void SetRegionActiveClientRpc(bool isActive)
+        {
+            region.gameObject.SetActive(isActive);
+        }
+
         private IEnumerator ScoreRoutine()
         {
             while (State.Value == MinigameStateType.Playing)
