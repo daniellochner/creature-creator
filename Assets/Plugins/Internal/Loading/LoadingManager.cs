@@ -36,10 +36,10 @@ namespace DanielLochner.Assets
 
         public void Load(string sceneName, Action onLoad = null)
         {
-            MusicManager.Instance.FadeTo(null);
             StartCoroutine(LoadRoutine(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single), onLoad));
         }
-        public IEnumerator LoadRoutine(AsyncOperation operation, Action onLoad)
+
+        public virtual IEnumerator LoadRoutine(AsyncOperation operation, Action onLoad)
         {
             Coroutine fadeIn = StartCoroutine(canvasGroup.FadeRoutine(true, 1f));
 
@@ -61,7 +61,6 @@ namespace DanielLochner.Assets
             yield return canvasGroup.FadeRoutine(false, 1f);
             canvasGroup.alpha = 0f;
         }
-
         public virtual IEnumerator WaitUntilRoutine()
         {
             yield return null;

@@ -104,7 +104,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 CompletedQuests = 0;
                 foreach (Quest quest in quests)
                 {
-                    if (quest.IsCompleted)
+                    if (quest.HasCompleted)
                     {
                         CompletedQuests++;
                     }

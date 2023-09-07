@@ -13,10 +13,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Quest : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private TextMeshProUGUI questText;
-        [SerializeField] private LookAtConstraint questLookAtConstraint;
-        [SerializeField] private MinimapIcon minimapIcon;
-        [Space]
         [SerializeField] private string id;
         [SerializeField] private string description;
         [SerializeField] private QuestType type;
@@ -24,26 +20,30 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float disappearTime;
         [SerializeField] private QuestItem[] items;
         [SerializeField] public UnityEvent onComplete;
+        [Space]
+        [SerializeField] private TextMeshProUGUI questText;
+        [SerializeField] private LookAtConstraint questLookAtConstraint;
+        [SerializeField] private MinimapIcon minimapIcon;
 
         private TrackRegion region;
         private AudioSource source;
-        private bool? isCompleted;
+        private bool? hasCompleted;
         #endregion
 
         #region Properties
-        public bool IsCompleted
+        public bool HasCompleted
         {
             get
             {
-                if (isCompleted == null)
+                if (hasCompleted == null)
                 {
-                    isCompleted = ProgressManager.Data.CompletedQuests.Contains(id);
+                    hasCompleted = ProgressManager.Data.CompletedQuests.Contains(id);
                 }
-                return (bool)isCompleted;
+                return (bool)hasCompleted;
             }
             set
             {
-                isCompleted = value;
+                hasCompleted = value;
             }
         }
 
@@ -91,7 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 UpdateInfo();
 
-                minimapIcon.enabled = !IsCompleted;
+                minimapIcon.enabled = !HasCompleted;
 
                 yield return new WaitUntil(() => Player.Instance.IsSetup);
                 questLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
@@ -117,7 +117,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (other.CompareTag("Player/Local"))
             {
-                if (!IsCompleted && (type == QuestType.All ? HasAll : HasAny))
+                if (!HasCompleted && (type == QuestType.All ? HasAll : HasAny))
                 {
                     Complete();
                 }
@@ -133,7 +133,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void UpdateInfo()
         {
-            if (!IsCompleted)
+            if (!HasCompleted)
             {
                 int required = (type == QuestType.All) ? items.Length : 1;
                 int current = 0;
@@ -152,11 +152,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 questText.text = "";
             }
         }
+
         private void Complete()
         {
             ProgressManager.Data.CompletedQuests.Add(id);
             ProgressManager.Instance.Save();
-            IsCompleted = true;
+            HasCompleted = true;
 
             // Items
             foreach (QuestItem item in items)

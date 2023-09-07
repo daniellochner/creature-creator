@@ -48,35 +48,27 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
             NetworkManager.Singleton.OnServerStarted += OnServerStarted;
+            NetworkManager.Singleton.OnClientStarted += OnClientStarted;
 
             NetworkShutdownManager.Instance.OnShutdown += OnShutdown;
         }
 
-        private void OnLoadCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
-        {
-            if (GameSetup.Instance && !GameSetup.Instance.IsSetup)
-            {
-                GameSetup.Instance.Setup();
-            }
-        }
         private void OnServerStarted()
         {
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadCompleted;
+            NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
+
             NetworkManager.Singleton.SceneManager.LoadScene(World.MapName, LoadSceneMode.Single);
         }
-        private void OnShutdown()
+        private void OnClientStarted()
         {
-            IsUsingTeleport = false;
-        }
-        private void OnClientConnect(ulong clientID)
-        {
-            if (NetworkManager.Singleton.IsHost && NetworkUtils.IsPlayer(clientID))
+            if (!NetworkManager.Singleton.IsHost)
             {
-                SetupSceneManager();
+                NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
             }
         }
+
         private void OnLoad(ulong clientId, string nextScene, LoadSceneMode loadSceneMode, AsyncOperation operation)
         {
             string prevScene = SceneManager.GetActiveScene().name;
@@ -95,10 +87,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }));
         }
-
-        public void SetupSceneManager()
+        private void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
-            NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
+            if (GameSetup.Instance && !GameSetup.Instance.IsSetup)
+            {
+                GameSetup.Instance.Setup();
+            }
+        }
+        private void OnShutdown()
+        {
+            IsUsingTeleport = false;
         }
         #endregion
     }
