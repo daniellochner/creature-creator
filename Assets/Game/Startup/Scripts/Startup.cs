@@ -49,6 +49,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (ShowIntro && !EducationManager.Instance.IsEducational)
             {
+                MusicManager.Instance.FadeTo(null);
+
                 Fader.FadeInOut(1f, delegate
                 {
                     SceneManager.LoadScene("Intro");

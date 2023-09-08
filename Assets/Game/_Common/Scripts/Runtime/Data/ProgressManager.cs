@@ -147,8 +147,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     Data.ReachedPeaks.Add(map);
                 }
             }
-
-            Save();
         }
         #endregion
         #endregion
