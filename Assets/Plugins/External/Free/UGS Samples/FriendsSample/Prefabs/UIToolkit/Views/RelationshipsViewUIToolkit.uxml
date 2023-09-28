@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="NavBarView" src="project://database/Assets/UGSSamples/FriendsSample/Prefabs/UIToolkit/Views/NavBarViewUIToolkit.uxml?fileID=9197481963319205126&amp;guid=2ea60cb6f283c4c0d818f542f2867f47&amp;type=3#NavBarViewUIToolkit" />
+    <ui:Template name="LocalPlayerView" src="project://database/Assets/UGSSamples/FriendsSample/Prefabs/UIToolkit/Views/LocalPlayerViewUIToolkit.uxml?fileID=9197481963319205126&amp;guid=569feef4c4ff04a1bafe96bb29b7f5ea&amp;type=3#LocalPlayerViewUIToolkit" />
+    <ui:Template name="AddFriendView" src="project://database/Assets/UGSSamples/FriendsSample/Prefabs/UIToolkit/Views/AddFriendViewUIToolkit.uxml?fileID=9197481963319205126&amp;guid=c17420b0e46527642ab34a5dd9003346&amp;type=3#AddFriendViewUIToolkit" />
+    <Style src="project://database/Assets/UGSSamples/FriendsSample/Prefabs/UIToolkit/Settings/RelationshipsStyle.uss?fileID=7433441132597879392&amp;guid=947b3ef19af094ccca809ccb7e4ad0b2&amp;type=3#RelationshipsStyle" />
+    <ui:VisualElement name="full-screen" style="align-items: center; flex-grow: 1; justify-content: center; background-image: none; -unity-background-scale-mode: scale-and-crop; background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0.5); border-right-color: rgba(0, 0, 0, 0.5); border-top-color: rgba(0, 0, 0, 0.5); border-bottom-color: rgba(0, 0, 0, 0.5);">
+        <ui:VisualElement name="social-ui-group" style="align-items: stretch; width: 650px; flex-grow: 0; flex-shrink: 0; justify-content: space-between; height: auto; top: 0; right: 0; position: absolute; padding-left: 15px; padding-right: 15px; padding-top: 15px; padding-bottom: 15px; flex-direction: column-reverse;">
+            <ui:Instance template="NavBarView" name="NavBarView" />
+            <ui:Instance template="LocalPlayerView" name="LocalPlayerView" style="margin-bottom: 15px;" />
+        </ui:VisualElement>
+        <ui:Instance template="AddFriendView" name="AddFriendView" style="display: flex; visibility: visible;" />
+    </ui:VisualElement>
+</ui:UXML>

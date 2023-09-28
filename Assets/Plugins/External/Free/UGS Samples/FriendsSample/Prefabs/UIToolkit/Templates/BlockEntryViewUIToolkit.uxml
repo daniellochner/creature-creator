@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="PlayerView" src="project://database/Assets/FriendsSample/Prefabs/UIToolkit/Views/PlayerView.uxml?fileID=9197481963319205126&amp;guid=2e16355644bc145c496372991d4fac4c&amp;type=3#PlayerView" />
+    <Style src="project://database/Assets/FriendsSample/Prefabs/UIToolkit/Settings/RelationshipsStyle.uss?fileID=7433441132597879392&amp;guid=947b3ef19af094ccca809ccb7e4ad0b2&amp;type=3#RelationshipsStyle" />
+    <ui:VisualElement name="block-entry-view" picking-mode="Ignore" class="player-panel blocked-player-panel" style="flex-direction: column; justify-content: space-around; align-items: flex-start; -unity-text-align: lower-left; min-width: 450px; padding-left: 20px; border-top-width: 2px; border-top-color: rgb(101, 94, 188);">
+        <ui:Instance template="PlayerView" name="PlayerView" />
+        <ui:Button name="unblock-button" class="player-action-button" style="flex-direction: row; width: auto; border-left-color: rgba(255, 170, 248, 0); border-right-color: rgba(255, 170, 248, 0); border-top-color: rgba(255, 170, 248, 0); border-bottom-color: rgba(255, 170, 248, 0); border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; margin-left: 10px;">
+            <ui:VisualElement name="button-icon" style="height: 30px; width: 30px; background-image: url(&apos;project://database/Assets/FriendsSample/Art/Icons/unblock.png?fileID=2800000&amp;guid=85a05835e538049059f827aba3b61b25&amp;type=3#unblock&apos;); -unity-background-scale-mode: scale-and-crop; flex-shrink: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+            <ui:Label text="UNBLOCK" display-tooltip-when-elided="true" name="button-label" class="social-font" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; font-size: 10px;" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

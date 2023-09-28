@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/FriendsSample/Prefabs/UIToolkit/Settings/RelationshipsStyle.uss?fileID=7433441132597879392&amp;guid=947b3ef19af094ccca809ccb7e4ad0b2&amp;type=3#RelationshipsStyle" />
+    <ui:VisualElement name="nav-bar-view" picking-mode="Ignore" class="menu-panel social-font" style="justify-content: space-between; align-items: stretch; flex-direction: column; border-bottom-width: 15px; padding-bottom: 0; border-left-color: rgb(61, 55, 129); border-right-color: rgb(61, 55, 129); border-top-color: rgb(61, 55, 129); border-bottom-color: rgb(61, 55, 129);">
+        <ui:VisualElement name="tabs_bg" picking-mode="Ignore" style="width: auto; flex-direction: row; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; height: 80px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; align-items: center; justify-content: space-around; flex-shrink: 1; flex-grow: 1;">
+            <ui:VisualElement name="tabs-buttons" style="flex-direction: row; flex-grow: 1; justify-content: space-around; height: 100%; align-items: stretch;">
+                <ui:Button display-tooltip-when-elided="true" name="friends-button" class="social-tab-button" style="-unity-background-scale-mode: scale-to-fit; flex-basis: auto; justify-content: space-around; flex-direction: column; align-items: stretch; width: 75px; height: 100%; display: flex; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:VisualElement name="friends-icon" style="background-image: url(&apos;project://database/Assets/FriendsSample/Art/Icons/friends.png?fileID=2800000&amp;guid=5a4d659f615eb461a9e43470b61760bb&amp;type=3#friends&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop;" />
+                </ui:Button>
+                <ui:Button display-tooltip-when-elided="true" name="requests-button" tabindex="1" class="social-tab-button" style="-unity-background-scale-mode: scale-to-fit; width: 75px; height: 100%; flex-basis: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:VisualElement name="requests-icon" style="width: 100%; height: 100%; background-image: url(&apos;project://database/Assets/FriendsSample/Art/Icons/friend_request.png?fileID=2800000&amp;guid=05ecba458c601454c8b686c3ef0b3ba7&amp;type=3#friend_request&apos;); -unity-background-scale-mode: scale-and-crop;" />
+                </ui:Button>
+                <ui:Button display-tooltip-when-elided="true" name="blocks-button" tabindex="2" class="social-tab-button" style="width: 75px; height: 100%; flex-basis: auto; -unity-background-scale-mode: scale-to-fit; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                    <ui:VisualElement name="blocks-icon" style="background-image: url(&apos;project://database/Assets/FriendsSample/Art/Icons/block.png?fileID=2800000&amp;guid=a8eafe4d416814d9298f37f33c84133a&amp;type=3#block&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:Button name="add-friend-button" text="Add Friend" focusable="false" class="add-friend-button" style="position: relative; width: 88px; overflow: visible; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; height: 35px; margin-right: 15px; background-image: none;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="friends-list-view" class="list-view-bg" style="display: flex; padding-bottom: 2px;">
+            <ui:Label text="Friends" display-tooltip-when-elided="true" name="list-label" style="color: rgb(253, 204, 81);" />
+            <ui:ListView name="friends-list" fixed-item-height="70" virtualization-method="DynamicHeight" header-title="Friends" show-foldout-header="false" show-add-remove-footer="false" item-height="140" selection-type="None" focusable="false" class="relationships_lists" />
+        </ui:VisualElement>
+        <ui:VisualElement name="requests-list-view" class="list-view-bg" style="display: flex; padding-bottom: 2px;">
+            <ui:Label text="Requests" display-tooltip-when-elided="true" name="list-label" style="color: rgb(253, 204, 81);" />
+            <ui:ListView name="request-list" fixed-item-height="70" virtualization-method="DynamicHeight" header-title="Requests" item-height="140" selection-type="None" focusable="false" class="relationships_lists" />
+        </ui:VisualElement>
+        <ui:VisualElement name="blocks-list-view" class="list-view-bg" style="display: flex; padding-bottom: 2px;">
+            <ui:Label text="Blocks" display-tooltip-when-elided="true" name="list-label" style="color: rgb(253, 204, 81);" />
+            <ui:ListView name="blocked-list" fixed-item-height="70" virtualization-method="DynamicHeight" header-title="Blocked" item-height="140" selection-type="None" focusable="false" class="relationships_lists" style="justify-content: flex-start;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

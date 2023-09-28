@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="PlayerTabLayout" src="project://database/Assets/FriendsSample/Prefabs/UIToolkit/Views/PlayerView.uxml?fileID=9197481963319205126&amp;guid=2e16355644bc145c496372991d4fac4c&amp;type=3#PlayerView" />
+    <Style src="project://database/Assets/FriendsSample/Prefabs/UIToolkit/RelationshipsStyle.uss?fileID=7433441132597879392&amp;guid=947b3ef19af094ccca809ccb7e4ad0b2&amp;type=3#RelationshipsStyle" />
+    <ui:VisualElement picking-mode="Ignore" name="local-player-entry" class="menu-panel" style="flex-direction: column-reverse; width: 100%; height: 100%; justify-content: center; align-items: flex-start; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+        <ui:Instance template="PlayerTabLayout" name="PlayerView" class="local-player-panel social-dropdown" style="opacity: 1; display: flex; align-items: center;" />
+    </ui:VisualElement>
+</ui:UXML>
