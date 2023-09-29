@@ -46,7 +46,7 @@ namespace DanielLochner.Assets
 
         public void SetName(string name)
         {
-            nameText.text = name;
+            nameText.text = name.NoParse();
         }
         public void SetColour(Color colour)
         {
