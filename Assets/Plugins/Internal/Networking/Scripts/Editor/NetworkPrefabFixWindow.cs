@@ -7,9 +7,9 @@ namespace DanielLochner.Assets
     public class NetworkPrefabFixWindow : EditorWindow
     {
         #region Fields
-        [SerializeField] private NetworkObject[] objects;
+        [SerializeField] private NetworkPrefabsList prefabs;
 
-        private SerializedProperty _objects;
+        private SerializedProperty _prefabs;
         private SerializedObject target;
         #endregion
 
@@ -22,13 +22,13 @@ namespace DanielLochner.Assets
         {
             target = new SerializedObject(this);
 
-            _objects = target.FindProperty("objects");
+            _prefabs = target.FindProperty("prefabs");
         }
         private void OnGUI()
         {
             target.Update();
 
-            EditorGUILayout.PropertyField(_objects);
+            EditorGUILayout.PropertyField(_prefabs);
             if (GUILayout.Button("Fix"))
             {
                 Fix();
@@ -38,8 +38,9 @@ namespace DanielLochner.Assets
 
         public void Fix()
         {
-            foreach (NetworkObject obj in objects)
+            foreach (NetworkPrefab prefab in prefabs.PrefabList)
             {
+                NetworkObject obj = prefab.Prefab.GetComponent<NetworkObject>();
                 obj.AlwaysReplicateAsRoot = !obj.AlwaysReplicateAsRoot;
                 obj.AlwaysReplicateAsRoot = !obj.AlwaysReplicateAsRoot;
             }
