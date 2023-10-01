@@ -14,7 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            shopButton.SetActive(!SettingsManager.Instance.ShowTutorial);
+            shopButton.SetActive(!SettingsManager.Instance.ShowTutorial && ShopManager.Instance.ShownAttempts > 5);
         }
 
         public void Visit()
