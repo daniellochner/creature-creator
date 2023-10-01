@@ -40,6 +40,11 @@ namespace DanielLochner.Assets
                 iconCG.interactable = iconCG.blocksRaycasts = false;
             }
         }
+
+        public void SetColour(Color color)
+        {
+            iconImg.color = color;
+        }
         #endregion
     }
 }

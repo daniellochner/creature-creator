@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,12 +10,16 @@ namespace DanielLochner.Assets
     {
         #region Fields
         [SerializeField] private NetworkPlayersMenu networkMenuPrefab;
+        [SerializeField] private Sprite friendReqIcon;
+        [SerializeField] private Color friendColour;
 
         private NetworkPlayersMenu networkMenu;
         private bool hasHandledExistingPlayers;
         #endregion
 
         #region Properties
+        public Action<PlayerData> OnConfirmFriendRequest { get; set; }
+
         public int NumPlayers => networkMenu.NumPlayers;
         #endregion
 
@@ -66,7 +71,13 @@ namespace DanielLochner.Assets
         {
             if (hasHandledExistingPlayers)
             {
-                NotificationsManager.Notify(LocalizationUtility.Localize("player-join", playerData.username));
+                string notification = LocalizationUtility.Localize("player-join", playerData.username.NoParse());
+                if (FriendsManager.Instance.IsFriended(playerData.playerId))
+                {
+                    notification = notification.ToColour(friendColour);
+                }
+                NotificationsManager.Notify(notification);
+
                 NetworkPlayersMenu.Instance.AddPlayer(playerData);
             }
         }
@@ -74,7 +85,13 @@ namespace DanielLochner.Assets
         {
             if (hasHandledExistingPlayers)
             {
-                NotificationsManager.Notify(LocalizationUtility.Localize("player-leave", playerData.username));
+                string notification = LocalizationUtility.Localize("player-leave", playerData.username.NoParse());
+                if (FriendsManager.Instance.IsFriended(playerData.playerId))
+                {
+                    notification = notification.ToColour(friendColour);
+                }
+                NotificationsManager.Notify(notification);
+
                 NetworkPlayersMenu.Instance.RemovePlayer(playerData.clientId);
             }
         }
@@ -96,6 +113,52 @@ namespace DanielLochner.Assets
         public void HandleExistingPlayers()
         {
             HandleExistingPlayersServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SendFriendRequestServerRpc(ulong fromClientId, ulong toClientId)
+        {
+            SendFriendRequestClientRpc(NetworkHostManager.Instance.Players[fromClientId], NetworkUtils.SendTo(toClientId));
+        }
+        [ClientRpc]
+        public void SendFriendRequestClientRpc(PlayerData playerData, ClientRpcParams sendTo)
+        {
+            if (!FriendsManager.Instance.IsFriended(playerData.playerId) && !FriendsManager.Instance.IsBlocked(playerData.playerId))
+            {
+                NotificationsManager.Notify(friendReqIcon, LocalizationUtility.Localize("friends_notification_request_title", playerData.username), LocalizationUtility.Localize("friends_notification_request_description"), delegate
+                {
+                    FriendsManager.Instance.AcceptFriendRequest(playerData.playerId);
+
+                    NetworkPlayersMenu.Instance.SetFriend(playerData.clientId, true);
+
+                    OnConfirmFriendRequest?.Invoke(playerData);
+
+                    ConfirmFriendRequest(playerData.clientId);
+                });
+            }
+        }
+        public void SendFriendRequest(ulong clientId)
+        {
+            SendFriendRequestServerRpc(NetworkManager.Singleton.LocalClientId, clientId);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ConfirmFriendRequestServerRpc(ulong fromClientId, ulong toClientId)
+        {
+            ConfirmFriendRequestClientRpc(NetworkHostManager.Instance.Players[fromClientId], NetworkUtils.SendTo(toClientId));
+        }
+        [ClientRpc]
+        public void ConfirmFriendRequestClientRpc(PlayerData playerData, ClientRpcParams sendTo)
+        {
+            NotificationsManager.Notify(LocalizationUtility.Localize("friends_notification_accept", playerData.username).ToColour(friendColour));
+
+            NetworkPlayersMenu.Instance.SetFriend(playerData.clientId, true);
+
+            OnConfirmFriendRequest?.Invoke(playerData);
+        }
+        public void ConfirmFriendRequest(ulong clientId)
+        {
+            ConfirmFriendRequestServerRpc(NetworkManager.Singleton.LocalClientId, clientId);
         }
         #endregion
     }
