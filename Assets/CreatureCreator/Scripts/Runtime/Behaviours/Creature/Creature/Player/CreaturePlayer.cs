@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PlayerDeathMessenger deathMessenger;
         [SerializeField] private PlayerMessenger messenger;
         [SerializeField] private CreatureSpeedup speedup;
+        [SerializeField] private PlayerDataContainer dataContainer;
         #endregion
 
         #region Properties
@@ -20,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public PlayerDeathMessenger DeathMessenger => deathMessenger;
         public PlayerMessenger Messenger => messenger;
         public CreatureSpeedup Speedup => speedup;
+        public PlayerDataContainer DataContainer => dataContainer;
 
         public static List<CreaturePlayer> Players { get; } = new List<CreaturePlayer>();
         #endregion
@@ -33,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
             deathMessenger = GetComponent<PlayerDeathMessenger>();
             messenger = GetComponent<PlayerMessenger>();
             speedup = GetComponent<CreatureSpeedup>();
+            dataContainer = GetComponent<PlayerDataContainer>();
         }
 #endif
 

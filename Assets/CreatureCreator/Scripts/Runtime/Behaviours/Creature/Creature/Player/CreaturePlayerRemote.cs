@@ -11,10 +11,12 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private CreatureSelectable selectable;
+        [SerializeField] private PlayerFriend friend;
         #endregion
 
         #region Properties
         public CreatureSelectable Selectable => selectable;
+        public PlayerFriend Friend => friend;
         #endregion
 
         #region Methods
@@ -24,6 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnValidate();
 
             selectable = GetComponent<CreatureSelectable>();
+            friend = GetComponent<PlayerFriend>();
         }
 #endif
         private IEnumerator Start()
@@ -38,6 +41,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Selectable.Setup();
             Namer.Setup();
+            Friend.Setup();
 
             Loader.OnShow += OnFirstTimeShown;
             Loader.ShowToMe();

@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Friends.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -67,6 +68,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
             }
+
+            if (IsMultiplayer)
+            {
+                FriendsManager.Instance.SetStatus(Availability.Online, (World as WorldMP).Id);
+            }
         }
 
         private void OnLoad(ulong clientId, string nextScene, LoadSceneMode loadSceneMode, AsyncOperation operation)
@@ -96,6 +102,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnShutdown()
         {
+            FriendsManager.Instance.SetStatus(Availability.Online, null);
+
             IsUsingTeleport = false;
         }
         #endregion
