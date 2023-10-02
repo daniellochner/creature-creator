@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace DanielLochner.Assets
 {
@@ -14,6 +15,11 @@ namespace DanielLochner.Assets
         public static string NoParse(this string str)
         {
             return $"<noparse>{str}</noparse>";
+        }
+
+        public static string ToColour(this string str, Color colour)
+        {
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(colour)}>{str}</color>";
         }
 
         public static string JoinAnd<T>(this List<T> list)

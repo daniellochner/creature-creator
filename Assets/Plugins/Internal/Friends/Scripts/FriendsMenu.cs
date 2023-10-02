@@ -30,6 +30,14 @@ namespace DanielLochner.Assets
         private CanvasGroup canvasGroup;
         #endregion
 
+        #region Properties
+        protected bool HasShownFriendsHint
+        {
+            get => PlayerPrefs.GetInt("SHOWN_FRIENDS_HINT", 0) == 1;
+            set => PlayerPrefs.SetInt("SHOWN_FRIENDS_HINT", value ? 1 : 0);
+        }
+        #endregion
+
         #region Methods
         private void Awake()
         {
@@ -116,6 +124,14 @@ namespace DanielLochner.Assets
             return requestUI;
         }
 
+        public void Hint()
+        {
+            if (!HasShownFriendsHint)
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("friends_hint_title"), LocalizationUtility.Localize("friends_hint_message"));
+                HasShownFriendsHint = true;
+            }
+        }
         public void Join(string lobbyId)
         {
             onJoin?.Invoke(lobbyId);

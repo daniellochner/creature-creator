@@ -9,14 +9,14 @@ namespace DanielLochner.Assets.CreatureCreator
     public class ShopManager : MonoBehaviourSingleton<ShopManager>
     {
         #region Properties
-        private int ShownAttempts
+        public int ShownAttempts
         {
             get => PlayerPrefs.GetInt("SHOWN_ATTEMPTS", 0);
             set => PlayerPrefs.SetInt("SHOWN_ATTEMPTS", value);
         }
         #endregion
 
-        #region Fields
+        #region Methods
         public IEnumerator Setup()
         {
             if (ShownAttempts % 10 == 1)

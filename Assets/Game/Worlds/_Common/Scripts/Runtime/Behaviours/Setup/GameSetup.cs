@@ -125,6 +125,7 @@ namespace DanielLochner.Assets.CreatureCreator
             NetworkInactivityManager.Instance.OnInactivityWarn += OnInactivityWarn;
 
 
+
             WorldMP world = WorldManager.Instance.World as WorldMP;
 
             if (NetworkManager.Singleton.IsHost)
