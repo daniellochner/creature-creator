@@ -10,6 +10,7 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private GameObject namePrefab;
         [SerializeField] protected float height;
+        [SerializeField] private Color colour = Color.white;
 
         protected GameObject nameGO;
         #endregion
@@ -49,8 +50,18 @@ namespace DanielLochner.Assets
         [ClientRpc]
         private void SetNameClientRpc(string name, ClientRpcParams clientRpc = default)
         {
-            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name.NoParse();
+            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name.NoParse().ToColour(colour);
             nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = CameraUtility.MainCamera.transform, weight = 1f });
+        }
+
+        public void SetColour(Color colour)
+        {
+            this.colour = colour;
+
+            if (nameGO != null)
+            {
+                nameGO.GetComponentInChildren<TextMeshProUGUI>().color = colour;
+            }
         }
         #endregion
     }

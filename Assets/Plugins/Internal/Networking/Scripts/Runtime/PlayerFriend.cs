@@ -11,6 +11,8 @@ namespace DanielLochner.Assets
 
         #region Properties
         private MinimapIcon MinimapIcon { get; set; }
+        private PlayerNamer Namer { get; set; }
+        private PlayerDeathMessenger DeathMessenger { get; set; }
         private PlayerDataContainer DataContainer { get; set; }
         #endregion
 
@@ -18,6 +20,8 @@ namespace DanielLochner.Assets
         private void Awake()
         {
             MinimapIcon = GetComponent<MinimapIcon>();
+            Namer = GetComponent<PlayerNamer>();
+            DeathMessenger = GetComponent<PlayerDeathMessenger>();
             DataContainer = GetComponent<PlayerDataContainer>();
         }
 
@@ -30,7 +34,10 @@ namespace DanielLochner.Assets
 
         public void SetFriend(bool isFriend)
         {
-            MinimapIcon.MinimapIconUI.SetColour(isFriend ? friendColour : nonFriendColour);
+            Color colour = isFriend ? friendColour : nonFriendColour;
+            MinimapIcon.MinimapIconUI.SetColour(colour);
+            Namer.SetColour(colour);
+            DeathMessenger.SetColour(colour);
         }
 
         private void OnConfirmFriendRequest(PlayerData playerData)
