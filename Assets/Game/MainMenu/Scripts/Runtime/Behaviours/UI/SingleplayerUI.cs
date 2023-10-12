@@ -15,7 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Menu singleplayerMenu;
-        [SerializeField] private TMP_InputField usernameInputField;
         [SerializeField] private OptionSelector mapOS;
         [SerializeField] private OptionSelector modeOS;
         [SerializeField] private Toggle npcToggle;
@@ -107,7 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Set Connection Data
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
-                NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", usernameInputField.text, "")));
+                NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", "", "")));
 
                 // Start Host
                 NetworkManager.Singleton.StartHost();

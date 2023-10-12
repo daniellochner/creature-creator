@@ -20,6 +20,9 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
+                // Account
+                AccountManager.Instance.Setup();
+
                 // Daily Reward
                 if (!PremiumManager.Instance.IsEverythingUsable())
                 {

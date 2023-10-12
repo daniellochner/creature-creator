@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class MultiplayerUI : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private TMP_InputField onlineUsernameInputField;
+        [SerializeField] private TextMeshProUGUI onlineUsernameText;
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private BlinkingText statusBT;
         [SerializeField] private Button createButton;
@@ -88,7 +88,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                string username = onlineUsernameInputField.text;
+                string username = onlineUsernameText.text;
                 if (string.IsNullOrEmpty(username))
                 {
                     UpdateStatus(LocalizationUtility.Localize("network_status_username"), Color.white);
@@ -274,7 +274,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Set Connection Data
-                string username = onlineUsernameInputField.text;
+                string username = onlineUsernameText.text;
                 SetConnectionData(playerId, username, password);
 
                 // Join Lobby
@@ -389,7 +389,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Set Connection Data
-                string username = onlineUsernameInputField.text;
+                string username = onlineUsernameText.text;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
                 SetConnectionData(hostPlayerId.ToString(), username, password);
@@ -587,11 +587,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private async Task Authenticate()
         {
-            await UnityServices.InitializeAsync();
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 UpdateStatus(LocalizationUtility.Localize("network_status_authenticating"), Color.yellow, -1);
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                await AccountManager.Instance.SignInAsync();
                 HideStatus();
             }
         }

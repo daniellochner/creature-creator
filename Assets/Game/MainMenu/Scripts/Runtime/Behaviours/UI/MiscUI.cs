@@ -46,15 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Application.OpenURL("https://discord.gg/sJysbdu");
         }
-        public void ViewGitHubSourceCode()
-        {
-            Application.OpenURL("https://github.com/daniellochner/creature-creator");
-            Application.OpenURL("https://github.com/daniellochner/creature-creator-game");
 
-#if USE_STATS
-            StatsManager.Instance.UnlockAchievement("ACH_HACKERMAN");
-#endif
-        }
         public void Quit()
         {
             ConfirmationDialog.Confirm(LocalizationUtility.Localize("mainmenu_quit_title"), LocalizationUtility.Localize("mainmenu_quit_message"), onYes: Application.Quit);
