@@ -50,7 +50,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector inGameMusicOS;
 
         [Header("Gameplay")]
-        [SerializeField] private TMP_InputField onlineUsernameTextField;
         [SerializeField] private TextMeshProUGUI creaturePresetsText;
         [SerializeField] private Slider exportPrecisionSlider;
         [SerializeField] private Button creaturePresetsButton;
@@ -402,13 +401,6 @@ namespace DanielLochner.Assets.CreatureCreator
             #endregion
 
             #region Gameplay
-            // Online Username
-            onlineUsernameTextField.text = SettingsManager.Data.OnlineUsername;
-            onlineUsernameTextField.onValueChanged.AddListener(delegate (string text) 
-            {
-                SettingsManager.Instance.SetOnlineUsername(text);
-            });
-            
             // Creature Preset(s)
             int presets = SettingsManager.Data.CreaturePresets.Count;
             creaturePresetsText.text = presets.ToString();
@@ -689,6 +681,14 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 AchievementsMenu.Instance.Open();
             }
+        }
+        public void ViewSourceCode()
+        {
+            Application.OpenURL("https://github.com/daniellochner/creature-creator");
+
+#if USE_STATS
+            StatsManager.Instance.UnlockAchievement("ACH_HACKERMAN");
+#endif
         }
         public void ChooseLanguage()
         {
