@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.Services.Authentication;
 using Unity.Services.Friends;
+using Unity.Services.Friends.Exceptions;
 using Unity.Services.Friends.Models;
 using Unity.Services.Friends.Notifications;
 using UnityEngine;
@@ -10,60 +10,126 @@ using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
-    public class FriendsMenu : MonoBehaviour
+    public class FriendsMenu : MonoBehaviourSingleton<FriendsMenu>
     {
         #region Fields
         [SerializeField] private LocalizedText titleText;
         [SerializeField] private TextMeshProUGUI statusText;
-        [SerializeField] private TextMeshProUGUI playerIdText;
+        [SerializeField] private TextMeshProUGUI connectionText;
         [SerializeField] private RectTransform contentRT;
-        [Space]
         [SerializeField] private RequestUI requestPrefab;
         [SerializeField] private FriendUI friendPrefab;
         [SerializeField] private Toggle requestsToggle;
         [SerializeField] private Toggle friendsToggle;
+        [SerializeField] private GameObject listGO;
+        [SerializeField] private GameObject refreshGO;
+        [SerializeField] private GameObject titleOnlineGO;
+        [SerializeField] private GameObject titleNoneOnlineGO;
         [Space]
         [SerializeField] private UnityEvent<string> onJoin;
 
         private Dictionary<string, RequestUI> requests = new Dictionary<string, RequestUI>();
         private Dictionary<string, FriendUI> friends = new Dictionary<string, FriendUI>();
+        private SimpleSideMenu simpleSideMenu;
         private CanvasGroup canvasGroup;
         #endregion
 
-        #region Properties
-        protected bool HasShownFriendsHint
-        {
-            get => PlayerPrefs.GetInt("SHOWN_FRIENDS_HINT", 0) == 1;
-            set => PlayerPrefs.SetInt("SHOWN_FRIENDS_HINT", value ? 1 : 0);
-        }
-        #endregion
-
         #region Methods
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
+            simpleSideMenu = GetComponent<SimpleSideMenu>();
             canvasGroup = GetComponent<CanvasGroup>();
         }
-        private void Start()
+        protected override void OnDestroy()
         {
-            Setup();
-        }
-        private void OnDestroy()
-        {
+            base.OnDestroy();
+
             Shutdown();
         }
 
-        private async void Setup()
+        public async void Setup()
         {
             await FriendsManager.Instance.Initialize();
 
-            // Title
-            RefreshOnline();
-
-            // Player Id
-            SetPlayerId(AuthenticationService.Instance.PlayerId);
-
-            // Status
+            Refresh();
             SetStatus(Availability.Online);
+
+            StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
+
+            FriendsService.Instance.PresenceUpdated += OnPresenceUpdated;
+            FriendsService.Instance.RelationshipAdded += OnRelationshipAdded;
+            FriendsService.Instance.RelationshipDeleted += OnRelationshipDeleted;
+        }
+        private void Shutdown()
+        {
+            FriendsService.Instance.PresenceUpdated -= OnPresenceUpdated;
+            FriendsService.Instance.RelationshipAdded -= OnRelationshipAdded;
+            FriendsService.Instance.RelationshipDeleted -= OnRelationshipDeleted;
+        }
+
+        public void Hint()
+        {
+            InformationDialog.Inform(LocalizationUtility.Localize("friends_hint_title"), LocalizationUtility.Localize("friends_hint_message"));
+        }
+        public void Join(string lobbyId)
+        {
+            onJoin?.Invoke(lobbyId);
+        }
+        public void Request()
+        {
+            InputDialog.Input(LocalizationUtility.Localize("friends_request_title"), LocalizationUtility.Localize("friends_request_placeholder"), LocalizationUtility.Localize("friends_request_submit"), onSubmit: delegate (string playerName)
+            {
+                foreach (Relationship request in FriendsService.Instance.IncomingFriendRequests)
+                {
+                    if (request.Member.Profile.Name == playerName)
+                    {
+                        requests[request.Member.Id].Accept();
+                        return;
+                    }
+                }
+                FriendsManager.Instance.SendFriendRequestByName(playerName);
+            });
+        }
+        public void CountOnline()
+        {
+            int online = 0;
+            foreach (Relationship friend in FriendsService.Instance.Friends)
+            {
+                if (friend.Member.Presence.Availability == Availability.Online)
+                {
+                    online++;
+                }
+            }
+            SetOnline(online);
+        }
+        public async void Refresh()
+        {
+            SetRefreshing(true);
+
+            // Clear
+            List<RelationshipUI> relationships = new List<RelationshipUI>();
+            relationships.AddRange(requests.Values);
+            relationships.AddRange(friends.Values);
+
+            for (int i = 0; i < relationships.Count; i++)
+            {
+                Destroy(relationships[i].gameObject);
+            }
+            requests.Clear();
+            friends.Clear();
+
+            // Refresh
+            try
+            {
+                await FriendsService.Instance.ForceRelationshipsRefreshAsync();
+            }
+            catch (FriendsServiceException e)
+            {
+                connectionText.text = e.Message;
+                Debug.Log(e);
+            }
 
             // Requests
             foreach (Relationship request in FriendsService.Instance.IncomingFriendRequests)
@@ -77,25 +143,25 @@ namespace DanielLochner.Assets
                 AddFriendUI(friend);
             }
 
-            StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
+            // Count Online
+            CountOnline();
 
-
-            FriendsService.Instance.PresenceUpdated += OnPresenceUpdated;
-            FriendsService.Instance.RelationshipAdded += OnRelationshipAdded;
-            FriendsService.Instance.RelationshipDeleted += OnRelationshipDeleted;
+            SetRefreshing(false);
         }
-        private void Shutdown()
+
+        private void SetRefreshing(bool isRefreshing)
         {
-            FriendsService.Instance.PresenceUpdated -= OnPresenceUpdated;
-            FriendsService.Instance.RelationshipAdded -= OnRelationshipAdded;
-            FriendsService.Instance.RelationshipDeleted -= OnRelationshipDeleted;
+            refreshGO.SetActive(isRefreshing);
+            listGO.SetActive(!isRefreshing);
         }
-
-        public void SetPlayerId(string playerId)
+        private void SetOnline(int online)
         {
-            playerIdText.text = playerId;
+            titleText.SetArguments(online);
+
+            titleNoneOnlineGO.SetActive(online == 0);
+            titleOnlineGO.SetActive(online > 0);
         }
-        public void SetStatus(Availability status)
+        private void SetStatus(Availability status)
         {
             FriendsManager.Instance.SetStatus(status);
             statusText.text = status.ToString();
@@ -124,57 +190,6 @@ namespace DanielLochner.Assets
             return requestUI;
         }
 
-        public void Hint()
-        {
-            if (!HasShownFriendsHint)
-            {
-                InformationDialog.Inform(LocalizationUtility.Localize("friends_hint_title"), LocalizationUtility.Localize("friends_hint_message"));
-                HasShownFriendsHint = true;
-            }
-        }
-        public void Join(string lobbyId)
-        {
-            onJoin?.Invoke(lobbyId);
-        }
-        public void Request()
-        {
-            InputDialog.Input(LocalizationUtility.Localize("friends_request_title"), LocalizationUtility.Localize("friends_request_placeholder"), LocalizationUtility.Localize("friends_request_submit"), onSubmit: delegate (string playerId)
-            {
-                foreach (Relationship request in FriendsService.Instance.IncomingFriendRequests)
-                {
-                    if (request.Member.Id == playerId)
-                    {
-                        requests[playerId].Accept();
-                        return;
-                    }
-                }
-                FriendsManager.Instance.SendFriendRequest(playerId);
-            });
-        }
-        public void RefreshOnline()
-        {
-            int onlineFriends = 0;
-            foreach (Relationship friend in FriendsService.Instance.Friends)
-            {
-                if (friend.Member.Presence.Availability == Availability.Online)
-                {
-                    onlineFriends++;
-                }
-            }
-            titleText.SetArguments(onlineFriends);
-        }
-        public async void Refresh()
-        {
-            await FriendsService.Instance.ForceRelationshipsRefreshAsync();
-
-            foreach (Relationship friend in FriendsService.Instance.Friends)
-            {
-                friends[friend.Member.Id].Setup(this, friend);
-            }
-
-            RefreshOnline();
-        }
-
         public void OnStatusSelected(int index)
         {
             if (!FriendsManager.Instance.Initialized) return;
@@ -197,7 +212,7 @@ namespace DanielLochner.Assets
             if (friends.ContainsKey(updateEvent.ID))
             {
                 friends[updateEvent.ID]?.SetPresence(updateEvent.Presence);
-                RefreshOnline();
+                CountOnline();
             }
         }
         public void OnRelationshipDeleted(IRelationshipDeletedEvent deleteEvent)
@@ -219,7 +234,7 @@ namespace DanielLochner.Assets
                         Destroy(friends[playerId].gameObject);
                         friends.Remove(playerId);
                     }
-                    RefreshOnline();
+                    CountOnline();
                     break;
             }
         }
@@ -233,7 +248,7 @@ namespace DanielLochner.Assets
                     break;
                 case RelationshipType.Friend:
                     AddFriendUI(relationship);
-                    RefreshOnline();
+                    CountOnline();
                     break;
             }
         }

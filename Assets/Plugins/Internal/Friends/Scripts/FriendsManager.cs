@@ -22,11 +22,7 @@ namespace DanielLochner.Assets
         {
             if (!Initialized)
             {
-                await UnityServices.InitializeAsync();
-
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 await FriendsService.Instance.InitializeAsync();
-
                 Initialized = true;
             }
         }
@@ -49,6 +45,11 @@ namespace DanielLochner.Assets
             onRemoved?.Invoke();
         }
 
+        public async void SendFriendRequestByName(string playerName, Action onSent = default)
+        {
+            await FriendsService.Instance.AddFriendByNameAsync(playerName);
+            onSent?.Invoke();
+        }
         public async void SendFriendRequest(string playerId, Action onSent = default)
         {
             await FriendsService.Instance.AddFriendAsync(playerId);

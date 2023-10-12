@@ -94,7 +94,7 @@ namespace DanielLochner.Assets
             {
                 FriendsManager.Instance.DeleteFriend(relationship.Member.Id, delegate
                 {
-                    menu.RefreshOnline();
+                    menu.CountOnline();
                 });
                 Destroy(gameObject);
             });

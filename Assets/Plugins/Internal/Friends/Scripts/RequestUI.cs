@@ -12,7 +12,7 @@ namespace DanielLochner.Assets
             FriendsManager.Instance.AcceptFriendRequest(relationship.Member.Id, delegate
             {
                 menu.AddFriendUI(relationship);
-                menu.Refresh();
+                menu.CountOnline();
             });
             Destroy(gameObject);
         }
