@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool RateLimit => rateLimit && WorldManager.Instance.IsMultiplayer;
 
-        public NetworkVariable<bool> IsHidden { get; set; } = new NetworkVariable<bool>();
+        public NetworkVariable<bool> IsHidden { get; set; } = new NetworkVariable<bool>(true);
         #endregion
 
         #region Methods
@@ -48,14 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Show
         public void ShowToMe()
         {
-            if (cachedData != null)
-            {
-                Show(JsonUtility.FromJson<CreatureData>(cachedData.text));
-            }
-            else
-            {
-                ShowToMeServerRpc(NetworkManager.Singleton.LocalClientId);
-            }
+            ShowToMeServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         public void ShowMeToOthers()
         {
@@ -96,7 +89,14 @@ namespace DanielLochner.Assets.CreatureCreator
         [ServerRpc(RequireOwnership = false)]
         private void ShowToMeServerRpc(ulong clientId)
         {
-            ShowClientRpc(Constructor.Data, NetworkUtils.SendTo(clientId));
+            if (cachedData != null)
+            {
+                ShowCachedClientRpc(NetworkUtils.SendTo(clientId));
+            }
+            else
+            {
+                ShowClientRpc(Constructor.Data, NetworkUtils.SendTo(clientId));
+            }
         }
         [ServerRpc]
         private void ShowMeToOthersServerRpc(CreatureData data, ulong clientId)
@@ -111,6 +111,11 @@ namespace DanielLochner.Assets.CreatureCreator
         private void ShowClientRpc(CreatureData data, ClientRpcParams clientRpcParams = default)
         {
             Show(data);
+        }
+        [ClientRpc]
+        private void ShowCachedClientRpc(ClientRpcParams clientRpcParams = default)
+        {
+            Show(JsonUtility.FromJson<CreatureData>(cachedData.text));
         }
 
         private void Show(CreatureData data)
@@ -134,6 +139,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void HideFromOthers()
         {
             if (IsHidden.Value) return;
+
             HideFromOthersServerRpc();
         }
         [ServerRpc(RequireOwnership = false)]

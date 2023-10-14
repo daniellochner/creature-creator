@@ -9,6 +9,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public override void Setup()
         {
+            Loader.IsHidden.Value = false;
+
             base.Setup();
             Spawner.Spawn();
         }
