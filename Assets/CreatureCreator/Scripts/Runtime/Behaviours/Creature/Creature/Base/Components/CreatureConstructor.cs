@@ -42,6 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
+        public Rigidbody Rigidbody => rb;
         public Transform Body => body;
         public Transform Root => root;
         public Transform Model => model;
