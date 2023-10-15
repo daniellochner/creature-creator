@@ -45,20 +45,20 @@ namespace DanielLochner.Assets
             onRemoved?.Invoke();
         }
 
-        public async void SendFriendRequestByName(string playerName, Action onSent = default)
+        public async void SendFriendRequestByName(string playerName, Action<Relationship> onSent = default)
         {
-            await FriendsService.Instance.AddFriendByNameAsync(playerName);
-            onSent?.Invoke();
+            Relationship friend = await FriendsService.Instance.AddFriendByNameAsync(playerName);
+            onSent?.Invoke(friend);
         }
-        public async void SendFriendRequest(string playerId, Action onSent = default)
+        public async void SendFriendRequest(string playerId, Action<Relationship> onSent = default)
         {
-            await FriendsService.Instance.AddFriendAsync(playerId);
-            onSent?.Invoke();
+            Relationship friend = await FriendsService.Instance.AddFriendAsync(playerId);
+            onSent?.Invoke(friend);
         }
-        public async void AcceptFriendRequest(string playerId, Action onAccepted = default)
+        public async void AcceptFriendRequest(string playerId, Action<Relationship> onAccepted = default)
         {
-            await FriendsService.Instance.AddFriendAsync(playerId);
-            onAccepted?.Invoke();
+            Relationship friend = await FriendsService.Instance.AddFriendAsync(playerId);
+            onAccepted?.Invoke(friend);
         }
         public async void RejectFriendRequest(string playerId, Action onRejected = default)
         {
@@ -77,10 +77,10 @@ namespace DanielLochner.Assets
             }
             return false;
         }
-        public async void BlockPlayer(string playerId, Action onBlocked = default)
+        public async void BlockPlayer(string playerId, Action<Relationship> onBlocked = default)
         {
-            await FriendsService.Instance.AddBlockAsync(playerId);
-            onBlocked?.Invoke();
+            Relationship player = await FriendsService.Instance.AddBlockAsync(playerId);
+            onBlocked?.Invoke(player);
         }
 
         public async void SetStatus(Availability status, string lobbyId = default, Action onSet = default)

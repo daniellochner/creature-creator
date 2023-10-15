@@ -9,9 +9,9 @@ namespace DanielLochner.Assets
         #region Methods
         public void Accept()
         {
-            FriendsManager.Instance.AcceptFriendRequest(relationship.Member.Id, delegate
+            FriendsManager.Instance.AcceptFriendRequest(relationship.Member.Id, delegate (Relationship friend)
             {
-                menu.AddFriendUI(relationship);
+                menu.AddFriendUI(friend);
                 menu.CountOnline();
             });
             Destroy(gameObject);

@@ -218,7 +218,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     Player.Instance.Mover.Teleport(pad.transform.position, Player.Instance.transform.rotation, true);
                 }
-            });
+            }, 0.75f);
         }
 
         private void OnIsZoneVisibleChanged(bool oldV, bool newV)

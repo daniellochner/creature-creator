@@ -34,6 +34,14 @@ namespace DanielLochner.Assets
         private CanvasGroup canvasGroup;
         #endregion
 
+        #region Properties
+        public Availability OnlineStatus
+        {
+            get => (Availability)PlayerPrefs.GetInt("ONLINE_STATUS", (int)Availability.Online);
+            set => PlayerPrefs.SetInt("ONLINE_STATUS", (int)value);
+        }
+        #endregion
+
         #region Methods
         protected override void Awake()
         {
@@ -51,12 +59,12 @@ namespace DanielLochner.Assets
 
         public async void Setup()
         {
+            StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
+
             await FriendsManager.Instance.Initialize();
 
             Refresh();
-            SetStatus(Availability.Online);
-
-            StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
+            SetStatus(OnlineStatus);
 
             FriendsService.Instance.PresenceUpdated += OnPresenceUpdated;
             FriendsService.Instance.RelationshipAdded += OnRelationshipAdded;
@@ -107,7 +115,7 @@ namespace DanielLochner.Assets
         public async void Refresh()
         {
             SetRefreshing(true);
-
+            
             // Clear
             List<RelationshipUI> relationships = new List<RelationshipUI>();
             relationships.AddRange(requests.Values);
@@ -163,6 +171,7 @@ namespace DanielLochner.Assets
         }
         private void SetStatus(Availability status)
         {
+            OnlineStatus = status;
             FriendsManager.Instance.SetStatus(status);
             statusText.text = status.ToString();
         }

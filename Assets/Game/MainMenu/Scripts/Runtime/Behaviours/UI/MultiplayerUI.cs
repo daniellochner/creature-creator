@@ -30,7 +30,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class MultiplayerUI : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private TextMeshProUGUI onlineUsernameText;
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private BlinkingText statusBT;
         [SerializeField] private Button createButton;
@@ -88,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                string username = onlineUsernameText.text;
+                string username = SettingsManager.Data.OnlineUsername;
                 if (string.IsNullOrEmpty(username))
                 {
                     UpdateStatus(LocalizationUtility.Localize("network_status_username"), Color.white);
@@ -274,7 +273,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Set Connection Data
-                string username = onlineUsernameText.text;
+                string username = SettingsManager.Data.OnlineUsername;
                 SetConnectionData(playerId, username, password);
 
                 // Join Lobby
@@ -389,7 +388,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
 
                 // Set Connection Data
-                string username = onlineUsernameText.text;
+                string username = SettingsManager.Data.OnlineUsername;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
                 SetConnectionData(hostPlayerId.ToString(), username, password);

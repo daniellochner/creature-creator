@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 6993366921603375727}
   - component: {fileID: 7212007876951032755}
   - component: {fileID: 7422901073086359494}
+  - component: {fileID: -442424232553638421}
   m_Layer: 5
   m_Name: PlayerName
   m_TagString: Untagged
@@ -239,7 +240,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 45.72, y: 21.16}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!223 &932973185674905354
 Canvas:
@@ -317,3 +318,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
+--- !u!114 &-442424232553638421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6993366921603375723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f41f96b9b62638c4d99908672f2fb660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 551189744683105955}
+  lookAtConstraint: {fileID: 7212007876951032755}

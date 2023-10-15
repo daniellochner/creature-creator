@@ -1,66 +1,45 @@
-using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace DanielLochner.Assets
 {
     public class PlayerNamer : NetworkBehaviour
     {
         #region Fields
-        [SerializeField] private GameObject namePrefab;
+        [SerializeField] private PlayerName namePrefab;
         [SerializeField] protected float height;
         [SerializeField] private Color colour = Color.white;
 
-        protected GameObject nameGO;
+        protected PlayerName playerName;
         #endregion
-        
+
+        #region Properties
+        public PlayerDataContainer DataContainer { get; set; }
+        #endregion
+
         #region Methods
-        protected virtual void OnEnable()
+        protected virtual void Awake()
         {
-            if (nameGO != null)
-            {
-                nameGO.SetActive(true);
-            }
-        }
-        protected virtual void OnDisable()
-        {
-            if (nameGO != null)
-            {
-                nameGO.SetActive(false);
-            }
+            DataContainer = GetComponent<PlayerDataContainer>();
         }
 
         public virtual void Setup()
         {
-            if (!IsOwner)
-            {
-                nameGO = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
-                nameGO.SetActive(false);
-
-                SetNameServerRpc(OwnerClientId, NetworkManager.Singleton.LocalClientId);
-            }
+            playerName = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
+            playerName.Setup(DataContainer.PlayerData.Value.username, colour);
+            SetVisible(false);
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void SetNameServerRpc(ulong clientId, ulong sendToClientId)
-        {
-            SetNameClientRpc(NetworkHostManager.Instance.Players[clientId].username, NetworkUtils.SendTo(sendToClientId));
-        }
-        [ClientRpc]
-        private void SetNameClientRpc(string name, ClientRpcParams clientRpc = default)
-        {
-            nameGO.GetComponentInChildren<TextMeshProUGUI>().text = name.NoParse().ToColour(colour);
-            nameGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = CameraUtility.MainCamera.transform, weight = 1f });
-        }
-
-        public void SetColour(Color colour)
+        public virtual void SetColour(Color colour)
         {
             this.colour = colour;
-
-            if (nameGO != null)
+            playerName.SetColour(colour);
+        }
+        public virtual void SetVisible(bool isActive)
+        {
+            if (playerName != null)
             {
-                nameGO.GetComponentInChildren<TextMeshProUGUI>().color = colour;
+                playerName.gameObject.SetActive(isActive);
             }
         }
         #endregion

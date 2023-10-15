@@ -27,17 +27,26 @@ namespace DanielLochner.Assets
 
         public void Setup()
         {
-            SetFriend(FriendsManager.Instance.IsFriended(DataContainer.PlayerData.Value.playerId));
-
-            NetworkPlayersManager.Instance.OnConfirmFriendRequest += OnConfirmFriendRequest;
+            if (FriendsManager.Instance.IsFriended(DataContainer.PlayerData.Value.playerId))
+            {
+                SetFriend(true);
+            }
+            else
+            {
+                NetworkPlayersManager.Instance.OnConfirmFriendRequest += OnConfirmFriendRequest;
+            }
         }
 
         public void SetFriend(bool isFriend)
         {
             Color colour = isFriend ? friendColour : nonFriendColour;
             MinimapIcon.MinimapIconUI.SetColour(colour);
-            Namer.SetColour(colour);
-            DeathMessenger.SetColour(colour);
+
+            if (isFriend)
+            {
+                Namer.SetColour(friendColour);
+                DeathMessenger.SetColour(friendColour);
+            }
         }
 
         private void OnConfirmFriendRequest(PlayerData playerData)

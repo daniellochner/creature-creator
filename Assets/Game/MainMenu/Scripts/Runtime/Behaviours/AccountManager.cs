@@ -1,13 +1,10 @@
 using Cysharp.Threading.Tasks;
-using System;
-using System.Collections;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.PlayerAccounts;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -44,6 +41,14 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void Start()
+        {
+            if (Application.internetReachability != NetworkReachability.NotReachable && !SettingsManager.Instance.ShowTutorial)
+            {
+                Setup();
+            }
+        }
+
         public async void Setup()
         {
             string username = ParseUsername(SettingsManager.Data.OnlineUsername);
@@ -156,13 +161,15 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
             {
+                // Replace Anonymous account with Unity account
+
                 if (AuthenticationService.Instance.IsSignedIn)
                 {
                     AuthenticationService.Instance.SignOut(); // Sign out of Anonymous account
                 }
                 await SignInAsync();
 
-                FriendsMenu.Instance.Refresh();
+                Refresh();
             }
             catch (AuthenticationException ex)
             {
@@ -301,6 +308,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             SetUnitySettingsVisibility(false);
             identityProviderImg.sprite = anonymousIcon;
+
+            Refresh();
+        }
+
+        private async void Refresh()
+        {
+            FriendsManager.Instance.Initialized = false;
+            await FriendsManager.Instance.Initialize();
+            FriendsMenu.Instance.Refresh();
         }
         #endregion
     }
