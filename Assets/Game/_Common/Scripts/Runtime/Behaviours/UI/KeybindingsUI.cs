@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI freeLookKUI;
         [SerializeField] private KeybindUI stopMoveKUI;
         [SerializeField] private KeybindUI respawnKUI;
+        [SerializeField] private KeybindUI dismountKUI;
         [SerializeField] private KeybindUI toggleUIKUI;
         [SerializeField] private KeybindUI biteKUI;
         [SerializeField] private KeybindUI shootKUI;
@@ -147,6 +148,13 @@ namespace DanielLochner.Assets.CreatureCreator
             respawnKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Data.Respawn = key;
+            });
+
+            // Dismount
+            dismountKUI.Rebind(KeybindingsManager.Data.Dismount, false);
+            dismountKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Data.Dismount = key;
             });
 
             // Toggle UI

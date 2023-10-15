@@ -22,6 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind freeLook = new Keybind(KeyCode.LeftAlt);
         [SerializeField] private Keybind stopMove = new Keybind(KeyCode.LeftControl);
         [SerializeField] private Keybind respawn = new Keybind(KeyCode.R, KeyCode.LeftControl);
+        [SerializeField] private Keybind dismount = new Keybind(KeyCode.Space, KeyCode.LeftControl);
         [SerializeField] private Keybind toggleUI = new Keybind(KeyCode.U, KeyCode.LeftControl);
         [SerializeField] private Keybind bite = new Keybind(KeyCode.F);
         [SerializeField] private Keybind dig = new Keybind(KeyCode.F);
@@ -118,6 +119,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => respawn;
             set => respawn = value;
+        }
+        public Keybind Dismount
+        {
+            get => dismount;
+            set => dismount = value;
         }
         public Keybind ToggleUI
         {
@@ -248,6 +254,7 @@ namespace DanielLochner.Assets.CreatureCreator
             FreeLook = new Keybind(KeyCode.LeftAlt);
             StopMove = new Keybind(KeyCode.LeftControl);
             Respawn = new Keybind(KeyCode.R, KeyCode.LeftControl);
+            Dismount = new Keybind(KeyCode.Space, KeyCode.LeftControl);
             ToggleUI = new Keybind(KeyCode.U, KeyCode.LeftControl);
             Bite = new Keybind(KeyCode.F);
             Dig = new Keybind(KeyCode.F);
