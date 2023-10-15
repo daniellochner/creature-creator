@@ -306,7 +306,7 @@ PrefabInstance:
     - target: {fileID: 2499678688202256925, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
       propertyPath: onSpawn.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 531273970923767167}
+      objectReference: {fileID: 0}
     - target: {fileID: 2499678688202256925, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
       propertyPath: onSpawn.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -314,7 +314,7 @@ PrefabInstance:
     - target: {fileID: 2499678688202256925, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
       propertyPath: onDespawn.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 531273970923767167}
+      objectReference: {fileID: 0}
     - target: {fileID: 2499678688202256925, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
       propertyPath: onDespawn.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -402,7 +402,7 @@ PrefabInstance:
     - target: {fileID: 3640509570676744940, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
       propertyPath: disabled.Array.data[2]
       value: 
-      objectReference: {fileID: 531273970923767167}
+      objectReference: {fileID: 0}
     - target: {fileID: 3640509570676744940, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
       propertyPath: disabled.Array.data[3]
       value: 
@@ -454,20 +454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3246ff9d87874db49acae8f61f928583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &531273970923767167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656765020233377470}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f6f6a28ab793048a0a3a66047c0a37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  namePrefab: {fileID: 6993366921603375723, guid: 441cc6b5b21e77248900b15eff4eb100, type: 3}
-  height: 0.15
 --- !u!114 &4770992976388664030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,7 +461,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656765020233377470}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10cce8e881a41f94096d163320011e47, type: 3}
   m_Name: 
@@ -485,6 +471,18 @@ MonoBehaviour:
   characterLimit: 64
   sendCooldown: 2
   height: 0.4
+--- !u!114 &4793381272954728519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656765020233377470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ab0665a25b47b4bb1c49b7890a285a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6039041179305091185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,20 +502,4 @@ MonoBehaviour:
   - death_message_4
   - death_message_5
   - death_message_6
---- !u!114 &4793381272954728519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656765020233377470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04ab0665a25b47b4bb1c49b7890a285a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerData:
-    m_InternalValue:
-      clientId: 0
-      playerId: 
-      username: 
+  colour: {r: 1, g: 1, b: 1, a: 1}

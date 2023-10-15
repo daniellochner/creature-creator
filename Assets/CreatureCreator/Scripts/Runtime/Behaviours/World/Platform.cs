@@ -53,9 +53,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Enter()
         {
+            Player.Instance.Rider.Dismount();
             Player.Instance.Holder.DropAll();
             Player.Instance.Emitter.StopEmitting();
             Player.Instance.SpeedUp.SlowDown();
+
             Player.Instance.Loader.HideFromOthers();
 
             Player.Instance.Editor.Platform = this;

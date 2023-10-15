@@ -61,11 +61,13 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureUnderwater Underwater { get; private set; }
         public BuoyantObject BuoyantObject { get; private set; }
         public CreatureAbilities Abilities { get; private set; }
+        public CreatureRider Rider { get; private set; }
 
         public Action<Vector3> OnMoveRequest { get; set; }
         public Action<float> OnTurnRequest { get; set; }
 
-        public bool CanMove = true, CanTurn = true;
+        public bool CanMove { get; set; } = true;
+        public bool CanTurn { get; set; } = true;
         public Vector3 Direction { get; set; } = Vector3.zero;
 
         public bool FreezeMove { get; set; }
@@ -141,6 +143,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Underwater = GetComponent<CreatureUnderwater>();
             Abilities = GetComponent<CreatureAbilities>();
             BuoyantObject = GetComponent<BuoyantObject>();
+            Rider = GetComponent<CreatureRider>();
 
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidbody = GetComponent<Rigidbody>();
@@ -158,6 +161,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (InputUtility.GetKey(KeybindingsManager.Data.WalkForwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkBackwards) || InputUtility.GetKey(KeybindingsManager.Data.WalkLeft) || InputUtility.GetKey(KeybindingsManager.Data.WalkRight))
                 {
                     inputMode = InputMode.Keyboard;
+
+                    if (Rider.IsRiding)
+                    {
+                        Rider.Dismount();
+                    }
                 }
                 else
                 if (Input.GetMouseButton(1))
@@ -171,6 +179,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (MobileControlsManager.Instance.Joystick.IsPressed)
                 {
                     inputMode = InputMode.Joystick;
+
+                    if (Rider.IsRiding)
+                    {
+                        Rider.Dismount();
+                    }
                 }
                 else
                 if (Input.GetMouseButtonDown(0))
@@ -301,6 +314,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleMovement()
         {
+            if (Rider.IsRiding)
+            {
+                return;
+            }
+
             if (Direction != Vector3.zero)
             {
                 float angle = Vector3.SignedAngle(transform.forward, Direction, transform.up);
