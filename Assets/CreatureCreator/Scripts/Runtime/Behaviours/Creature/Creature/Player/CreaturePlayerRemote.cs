@@ -12,11 +12,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private CreatureSelectable selectable;
         [SerializeField] private PlayerFriend friend;
+        [SerializeField] private CreatureNamer namer;
         #endregion
 
         #region Properties
         public CreatureSelectable Selectable => selectable;
         public PlayerFriend Friend => friend;
+        public CreatureNamer Namer => namer;
         #endregion
 
         #region Methods
@@ -27,6 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             selectable = GetComponent<CreatureSelectable>();
             friend = GetComponent<PlayerFriend>();
+            namer = GetComponent<CreatureNamer>();
         }
 #endif
         private IEnumerator Start()
@@ -64,11 +67,11 @@ namespace DanielLochner.Assets.CreatureCreator
             Collider.UpdateCollider();
             Optimizer.Optimize();
 
+            Namer.SetVisible(true);
+
             Collider.enabled = true;
             Animator.enabled = true;
             Underwater.enabled = true;
-
-            Namer.enabled = true;
         }
         public override void OnHide()
         {
@@ -78,11 +81,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Selectable.SetSelected(false);
 
+            Namer.SetVisible(false);
+
             Collider.enabled = false;
             Animator.enabled = false;
             Underwater.enabled = false;
-
-            Namer.enabled = false;
         }
 
         private void OnFirstTimeShown()

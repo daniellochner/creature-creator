@@ -9,7 +9,6 @@ namespace DanielLochner.Assets.CreatureCreator
     public class CreaturePlayer : CreatureBase
     {
         #region Fields
-        [SerializeField] private CreatureNamer namer;
         [SerializeField] private PlayerDeathMessenger deathMessenger;
         [SerializeField] private PlayerMessenger messenger;
         [SerializeField] private CreatureSpeedup speedup;
@@ -17,7 +16,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public CreatureNamer Namer => namer;
         public PlayerDeathMessenger DeathMessenger => deathMessenger;
         public PlayerMessenger Messenger => messenger;
         public CreatureSpeedup Speedup => speedup;
@@ -31,7 +29,6 @@ namespace DanielLochner.Assets.CreatureCreator
         protected override void OnValidate()
         {
             base.OnValidate();
-            namer = GetComponent<CreatureNamer>();
             deathMessenger = GetComponent<PlayerDeathMessenger>();
             messenger = GetComponent<PlayerMessenger>();
             speedup = GetComponent<CreatureSpeedup>();
