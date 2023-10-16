@@ -54,7 +54,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async void Setup()
         {
-            string username = ParseUsername(SettingsManager.Data.OnlineUsername);
+            string username = SettingsManager.Data.OnlineUsername;
             if (!HasCheckedUsername && !string.IsNullOrEmpty(username))
             {
                 await SignInAsync(username);

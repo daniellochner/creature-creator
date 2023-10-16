@@ -95,6 +95,11 @@ namespace DanielLochner.Assets
 
         public async void SetStatus(Availability status, string lobbyId = default, Action onSet = default)
         {
+            if (!Initialized)
+            {
+                return;
+            }
+
             await FriendsService.Instance.SetPresenceAsync(status, new FriendData()
             {
                 LobbyId = lobbyId
