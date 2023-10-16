@@ -29,6 +29,11 @@ namespace DanielLochner.Assets
 
         public bool IsFriended(string playerId)
         {
+            if (!Initialized)
+            {
+                return false;
+            }
+
             foreach (var friend in FriendsService.Instance.Friends)
             {
                 if (friend.Member.Id == playerId)
@@ -68,6 +73,11 @@ namespace DanielLochner.Assets
 
         public bool IsBlocked(string playerId)
         {
+            if (!Initialized)
+            {
+                return false;
+            }
+
             foreach (var player in FriendsService.Instance.Blocks)
             {
                 if (player.Member.Id == playerId)

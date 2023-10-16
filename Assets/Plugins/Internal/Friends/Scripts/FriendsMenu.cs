@@ -58,7 +58,10 @@ namespace DanielLochner.Assets
         {
             base.OnDestroy();
 
-            Shutdown();
+            if (FriendsManager.Instance.Initialized)
+            {
+                Shutdown();
+            }
         }
 
         public async void Setup()
