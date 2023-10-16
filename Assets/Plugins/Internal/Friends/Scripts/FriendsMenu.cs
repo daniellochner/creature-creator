@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Friends;
 using Unity.Services.Friends.Exceptions;
@@ -15,16 +17,17 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private LocalizedText titleText;
         [SerializeField] private TextMeshProUGUI statusText;
-        [SerializeField] private TextMeshProUGUI connectionText;
         [SerializeField] private RectTransform contentRT;
         [SerializeField] private RequestUI requestPrefab;
         [SerializeField] private FriendUI friendPrefab;
         [SerializeField] private Toggle requestsToggle;
         [SerializeField] private Toggle friendsToggle;
-        [SerializeField] private GameObject listGO;
+        [SerializeField] private GameObject relationshipsGO;
         [SerializeField] private GameObject refreshGO;
         [SerializeField] private GameObject titleOnlineGO;
         [SerializeField] private GameObject titleNoneOnlineGO;
+        [SerializeField] private GameObject errorGO;
+        [SerializeField] private GameObject nonErrorGO;
         [Space]
         [SerializeField] private UnityEvent<string> onJoin;
 
@@ -32,6 +35,7 @@ namespace DanielLochner.Assets
         private Dictionary<string, FriendUI> friends = new Dictionary<string, FriendUI>();
         private SimpleSideMenu simpleSideMenu;
         private CanvasGroup canvasGroup;
+        private string errorMessage;
         #endregion
 
         #region Properties
@@ -61,9 +65,8 @@ namespace DanielLochner.Assets
         {
             StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
 
-            await FriendsManager.Instance.Initialize();
+            await Refresh();
 
-            Refresh();
             SetStatus(OnlineStatus);
 
             FriendsService.Instance.PresenceUpdated += OnPresenceUpdated;
@@ -112,55 +115,74 @@ namespace DanielLochner.Assets
             }
             SetOnline(online);
         }
-        public async void Refresh()
+        public async Task Refresh()
         {
+            SetError(null);
             SetRefreshing(true);
-            
-            // Clear
-            List<RelationshipUI> relationships = new List<RelationshipUI>();
-            relationships.AddRange(requests.Values);
-            relationships.AddRange(friends.Values);
 
-            for (int i = 0; i < relationships.Count; i++)
-            {
-                Destroy(relationships[i].gameObject);
-            }
-            requests.Clear();
-            friends.Clear();
-
-            // Refresh
             try
             {
+                await FriendsManager.Instance.Initialize();
+
                 await FriendsService.Instance.ForceRelationshipsRefreshAsync();
-            }
-            catch (FriendsServiceException e)
-            {
-                connectionText.text = e.Message;
-                Debug.Log(e);
-            }
 
-            // Requests
-            foreach (Relationship request in FriendsService.Instance.IncomingFriendRequests)
-            {
-                AddRequestUI(request);
-            }
+                // Clear
+                List<RelationshipUI> relationships = new List<RelationshipUI>();
+                relationships.AddRange(requests.Values);
+                relationships.AddRange(friends.Values);
 
-            // Friends
-            foreach (Relationship friend in FriendsService.Instance.Friends)
-            {
-                AddFriendUI(friend);
-            }
+                for (int i = 0; i < relationships.Count; i++)
+                {
+                    Destroy(relationships[i].gameObject);
+                }
+                requests.Clear();
+                friends.Clear();
 
-            // Count Online
-            CountOnline();
+                // Requests
+                foreach (Relationship request in FriendsService.Instance.IncomingFriendRequests)
+                {
+                    AddRequestUI(request);
+                }
+
+                // Friends
+                foreach (Relationship friend in FriendsService.Instance.Friends)
+                {
+                    AddFriendUI(friend);
+                }
+
+                // Count Online
+                CountOnline();
+            }
+            catch (Exception ex)
+            {
+                SetError(ex.Message);
+                Debug.LogException(ex);
+            }
 
             SetRefreshing(false);
         }
 
+        private void SetError(string message)
+        {
+            bool isError = message != null;
+
+            if (!isError || errorMessage == null)
+            {
+                errorMessage = message;
+            }
+
+            errorGO.SetActive(isError);
+            nonErrorGO.SetActive(!isError);
+
+            if (isError)
+            {
+                SetOnline(0); // Online count should be zero when error is encountered
+            }
+        }
         private void SetRefreshing(bool isRefreshing)
         {
             refreshGO.SetActive(isRefreshing);
-            listGO.SetActive(!isRefreshing);
+            relationshipsGO.SetActive(!isRefreshing);
         }
         private void SetOnline(int online)
         {

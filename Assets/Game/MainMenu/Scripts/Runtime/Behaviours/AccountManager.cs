@@ -17,13 +17,16 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private Image refreshImg;
         [SerializeField] private Image identityProviderImg;
+        [SerializeField] private GameObject errorGO;
+        [SerializeField] private GameObject nonErrorGO;
         [Space]
         [SerializeField] private Sprite anonymousIcon;
         [SerializeField] private Sprite unityIcon;
-        [SerializeField] private Sprite errorIcon;
         [Space]
         [SerializeField] private GameObject[] signInSettings;
         [SerializeField] private GameObject[] signOutSettings;
+
+        private string errorMessage;
         #endregion
 
         #region Properties
@@ -43,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (Application.internetReachability != NetworkReachability.NotReachable && !SettingsManager.Instance.ShowTutorial)
+            if (!SettingsManager.Instance.ShowTutorial)
             {
                 Setup();
             }
@@ -67,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async Task SignInAsync(string username = "")
         {
+            SetError(null);
             SetRefreshing(true, "account_status_signing-in");
 
             try
@@ -84,6 +88,17 @@ namespace DanielLochner.Assets.CreatureCreator
                         await SignInWithUnityAsync();
                     }
                 }
+                else
+                {
+                    if (string.IsNullOrEmpty(AccessToken))
+                    {
+                        OnSignedInAnonymously();
+                    }
+                    else
+                    {
+                        OnSignedInWithUnity();
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(username))
                 {
@@ -98,10 +113,12 @@ namespace DanielLochner.Assets.CreatureCreator
             catch (AuthenticationException ex) // AuthenticationErrorCodes
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
             catch (RequestFailedException ex) // CommonErrorCodes
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
 
             SetRefreshing(false);
@@ -117,10 +134,12 @@ namespace DanielLochner.Assets.CreatureCreator
             catch (AuthenticationException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
             catch (RequestFailedException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
         }
         public async Task SignInWithUnityAsync()
@@ -138,14 +157,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 await SignInAnonymouslyAsync();
 
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
             catch (RequestFailedException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
         }
         public async Task LinkWithUnityAsync()
         {
+            SetError(null);
             SetRefreshing(true, "account_status_linking");
 
             try
@@ -174,21 +196,19 @@ namespace DanielLochner.Assets.CreatureCreator
             catch (AuthenticationException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
             catch (RequestFailedException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
-            
+
             SetRefreshing(false);
         }
         public async void UpdateUsernameAsync(string username)
         {
-            if (!AuthenticationService.Instance.IsSignedIn)
-            {
-                await SignInAsync();
-            }
-
+            SetError(null);
             SetRefreshing(true, "account_status_updating");
 
             try
@@ -198,10 +218,12 @@ namespace DanielLochner.Assets.CreatureCreator
             catch (AuthenticationException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
             catch (RequestFailedException ex)
             {
                 Debug.LogException(ex);
+                SetError(ex.Message);
             }
 
             SetRefreshing(false);
@@ -224,9 +246,22 @@ namespace DanielLochner.Assets.CreatureCreator
             Application.OpenURL("https://player-account.unity.com/delete-account");
             TrySignOutOfUnity();
         }
-        public void TryUpdateUsername()
+        public async void TryUpdateUsername()
         {
-            InputDialog.Input(LocalizationUtility.Localize("mainmenu_username_title"), LocalizationUtility.Localize("account_status_enter-a-username"), onSubmit: UpdateUsernameAsync);
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                await SignInAsync();
+                Refresh();
+            }
+
+            if (errorMessage != null)
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("account_status_error"), errorMessage);
+            }
+            else
+            {
+                InputDialog.Input(LocalizationUtility.Localize("mainmenu_username_title"), LocalizationUtility.Localize("account_status_enter-a-username"), onSubmit: UpdateUsernameAsync);
+            }
         }
 
         private string ParseUsername(string username)
@@ -241,6 +276,23 @@ namespace DanielLochner.Assets.CreatureCreator
             return username;
         }
 
+        private void SetError(string message = null)
+        {
+            bool isError = message != null;
+
+            if (!isError || errorMessage == null)
+            {
+                errorMessage = message;
+            }
+
+            errorGO.SetActive(isError);
+            nonErrorGO.SetActive(!isError);
+
+            if (isError)
+            {
+                SetUnitySettingsVisibility(false); // Can't be signed in if there is an error
+            }
+        }
         private void SetRefreshing(bool isRefreshing, string status = null)
         {
             identityProviderImg.gameObject.SetActive(!isRefreshing);
@@ -316,7 +368,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             FriendsManager.Instance.Initialized = false;
             await FriendsManager.Instance.Initialize();
-            FriendsMenu.Instance.Refresh();
+            await FriendsMenu.Instance.Refresh();
         }
         #endregion
     }
