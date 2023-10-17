@@ -159,6 +159,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Loader.OnHide();
 
+            Rider.Dismount();
+
             MinimapIcon.enabled = false;
 
 #if USE_STATS
