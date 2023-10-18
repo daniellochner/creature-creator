@@ -4,6 +4,8 @@
 using Unity.Netcode;
 using System.Collections.Generic;
 using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
+using UnityEngine;
+using System;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -58,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (baseRider != null)
                 {
-                    HandlePositionAndRotation();
+                    HandlePositionAndRotation(baseRider, Base.Value);
                 }
                 else
                 if (IsServer)
@@ -133,13 +135,25 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnBaseChanged(BaseData oldBase, BaseData newBase)
         {
-            bool isVisible = Constructor.gameObject.activeSelf;
-            bool isRiding = newBase != null;
+            bool isRiding  = newBase != null;
+            bool wasRiding = oldBase != null;
+
+            if (wasRiding)
+            {
+                CreatureRider oldBaseRider = GetRider(oldBase.reference);
+
+                HandlePositionAndRotation(oldBaseRider, oldBase);
+
+                Physics.IgnoreCollision(oldBaseRider.Collider.Hitbox, Collider.Hitbox, false);
+            }
 
             if (isRiding)
             {
                 baseRider = GetRider(newBase.reference);
-                HandlePositionAndRotation();
+
+                HandlePositionAndRotation(baseRider, newBase);
+
+                Physics.IgnoreCollision(baseRider.Collider.Hitbox, Collider.Hitbox, true);
             }
             else
             {
@@ -148,13 +162,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (IsLocalPlayer)
             {
-                Constructor.Rigidbody.isKinematic = isRiding;
                 clientNetworkTransform.Teleport(transform.position, transform.rotation, transform.localScale);
+                Constructor.Rigidbody.isKinematic = isRiding;
             }
 
             clientNetworkTransform.enabled = !isRiding;
-            Animator.enabled = !isRiding && isVisible;
-            Collider.enabled = !isRiding && isVisible;
+            Animator.enabled = !isRiding;
         }
 
         private void HandleInput()
@@ -164,9 +177,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 Dismount();
             }
         }
-        private void HandlePositionAndRotation()
+        private void HandlePositionAndRotation(CreatureRider baseRider, BaseData baseData)
         {
-            transform.position = baseRider.transform.position + (Base.Value.height * baseRider.transform.up);
+            transform.position = baseRider.transform.position + (baseData.height * baseRider.transform.up);
             transform.rotation = baseRider.transform.rotation;
         }
 
@@ -183,7 +196,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Nested
-        public class BaseData : INetworkSerializable
+        public class BaseData : INetworkSerializable, IEquatable<BaseData>
         {
             public NetworkObjectReference reference;
             public float height;
@@ -206,6 +219,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 serializer.SerializeValue(ref reference);
                 serializer.SerializeValue(ref height);
+            }
+
+            public bool Equals(BaseData other)
+            {
+                return (other.reference.NetworkObjectId == reference.NetworkObjectId) && (other.height == height);
             }
         }
         #endregion
