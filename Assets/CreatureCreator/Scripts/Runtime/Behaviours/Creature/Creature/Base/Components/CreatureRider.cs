@@ -49,23 +49,23 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Update()
         {
-            if (IsLocalPlayer)
+            if (IsLocalPlayer && InputUtility.GetKeyDown(KeybindingsManager.Data.Dismount))
             {
-                HandleInput();
+                Dismount();
             }
         }
         private void LateUpdate()
         {
-            if (Base.Value != null)
+            if (IsRiding)
             {
                 if (baseRider != null)
                 {
-                    HandlePositionAndRotation(baseRider, Base.Value);
+                    SetPositionAndRotation(baseRider, Base.Value);
                 }
                 else
                 if (IsServer)
                 {
-                    Dismount();
+                    Dismount(); // Handle case where base rider disconnects
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 CreatureRider oldBaseRider = GetRider(oldBase.reference);
 
-                HandlePositionAndRotation(oldBaseRider, oldBase);
+                SetPositionAndRotation(oldBaseRider, oldBase);
 
                 Physics.IgnoreCollision(oldBaseRider.Collider.Hitbox, Collider.Hitbox, false);
             }
@@ -151,7 +151,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 baseRider = GetRider(newBase.reference);
 
-                HandlePositionAndRotation(baseRider, newBase);
+                SetPositionAndRotation(baseRider, newBase);
 
                 Physics.IgnoreCollision(baseRider.Collider.Hitbox, Collider.Hitbox, true);
             }
@@ -167,23 +167,16 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             clientNetworkTransform.enabled = !isRiding;
-            Animator.enabled = !isRiding;
+            Animator.enabled = !isRiding && Constructor.Body.gameObject.activeSelf;
         }
-
-        private void HandleInput()
-        {
-            if (InputUtility.GetKeyDown(KeybindingsManager.Data.Dismount))
-            {
-                Dismount();
-            }
-        }
-        private void HandlePositionAndRotation(CreatureRider baseRider, BaseData baseData)
+        
+        #region Helper
+        private void SetPositionAndRotation(CreatureRider baseRider, BaseData baseData)
         {
             transform.position = baseRider.transform.position + (baseData.height * baseRider.transform.up);
             transform.rotation = baseRider.transform.rotation;
         }
 
-        #region Helper
         private CreatureRider GetRider(NetworkObjectReference reference)
         {
             if (reference.TryGet(out NetworkObject networkObject))

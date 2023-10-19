@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override bool CanInteract(Interactor interactor)
         {
-            return base.CanInteract(interactor) && !EditorManager.Instance.IsEditing && !Player.Instance.Rider.IsRiding && !Player.Instance.Rider.IsBase && MinigameManager.Instance.CurrentMinigame == null && FriendsManager.Instance.IsFriended(DataContainer.PlayerData.Value.playerId);
+            return base.CanInteract(interactor) && !EditorManager.Instance.IsEditing && !Player.Instance.Rider.IsRiding && !Player.Instance.Rider.IsBase && MinigameManager.Instance.CurrentMinigame == null && MinigameManager.Instance.CurrentPad == null && FriendsManager.Instance.IsFriended(DataContainer.PlayerData.Value.playerId);
         }
         protected override void OnInteract(Interactor interactor)
         {

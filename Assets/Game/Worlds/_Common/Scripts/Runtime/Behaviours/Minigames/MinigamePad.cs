@@ -113,6 +113,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             MinigameManager.Instance.CurrentPad = this;
             minigame.SignMeUp(true);
+
+            Player.Instance.Rider.Dismount();
         }
         public void SignOut()
         {
