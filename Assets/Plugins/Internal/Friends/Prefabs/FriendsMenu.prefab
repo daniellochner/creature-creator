@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 8724536795942208538}
   - component: {fileID: 9180008950310990500}
   - component: {fileID: 4718195369044262033}
+  - component: {fileID: 1672912929637377747}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -207,6 +208,62 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1672912929637377747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344399895698299225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 4718195369044262033}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6273587656885742571}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.FriendsMenu, Assembly-CSharp-firstpass
+        m_MethodName: Refresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &519920019668925583
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,7 +311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4619727721509270739}
   m_Layer: 0
-  m_Name: NonError
+  m_Name: NoError
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -296,7 +353,7 @@ GameObject:
   - component: {fileID: 9169271124943098022}
   - component: {fileID: 3921850766544994298}
   m_Layer: 5
-  m_Name: TitleOnline
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -510,7 +567,7 @@ GameObject:
   - component: {fileID: 3119403222853490747}
   - component: {fileID: 830919264874936355}
   m_Layer: 5
-  m_Name: TitleNoneOnline
+  m_Name: NoneTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1345,10 +1402,10 @@ MonoBehaviour:
   friendsToggle: {fileID: 6056526423565323103}
   relationshipsGO: {fileID: 334266826060238576}
   refreshGO: {fileID: 136526310906144586}
-  titleOnlineGO: {fileID: 2333681632773816816}
-  titleNoneOnlineGO: {fileID: 4077278197188375498}
+  titleGO: {fileID: 2333681632773816816}
+  noneTitleGO: {fileID: 4077278197188375498}
   errorGO: {fileID: 519920019668925583}
-  nonErrorGO: {fileID: 1782485700226047716}
+  noErrorGO: {fileID: 1782485700226047716}
   onJoin:
     m_PersistentCalls:
       m_Calls: []

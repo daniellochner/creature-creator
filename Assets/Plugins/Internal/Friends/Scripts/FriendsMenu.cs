@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Friends;
-using Unity.Services.Friends.Exceptions;
 using Unity.Services.Friends.Models;
 using Unity.Services.Friends.Notifications;
 using UnityEngine;
@@ -22,12 +21,13 @@ namespace DanielLochner.Assets
         [SerializeField] private FriendUI friendPrefab;
         [SerializeField] private Toggle requestsToggle;
         [SerializeField] private Toggle friendsToggle;
+        [Space]
         [SerializeField] private GameObject relationshipsGO;
         [SerializeField] private GameObject refreshGO;
-        [SerializeField] private GameObject titleOnlineGO;
-        [SerializeField] private GameObject titleNoneOnlineGO;
+        [SerializeField] private GameObject titleGO;
+        [SerializeField] private GameObject noneTitleGO;
         [SerializeField] private GameObject errorGO;
-        [SerializeField] private GameObject nonErrorGO;
+        [SerializeField] private GameObject noErrorGO;
         [Space]
         [SerializeField] private UnityEvent<string> onJoin;
 
@@ -58,7 +58,7 @@ namespace DanielLochner.Assets
         {
             base.OnDestroy();
 
-            if (FriendsManager.Instance.Initialized)
+            if (FriendsManager.Instance && FriendsManager.Instance.Initialized)
             {
                 Shutdown();
             }
@@ -68,15 +68,20 @@ namespace DanielLochner.Assets
         {
             StartCoroutine(canvasGroup.FadeRoutine(true, 0.25f));
 
-            await Refresh();
-
-            SetStatus(OnlineStatus);
+            if (NetworkUtils.IsConnectedToInternet)
+            {
+                await RefreshAsync();
+            }
+            else
+            {
+                SetError(LocalizationUtility.Localize("account_status_no-internet"));
+            }
 
             FriendsService.Instance.PresenceUpdated += OnPresenceUpdated;
             FriendsService.Instance.RelationshipAdded += OnRelationshipAdded;
             FriendsService.Instance.RelationshipDeleted += OnRelationshipDeleted;
         }
-        private void Shutdown()
+        public void Shutdown()
         {
             FriendsService.Instance.PresenceUpdated -= OnPresenceUpdated;
             FriendsService.Instance.RelationshipAdded -= OnRelationshipAdded;
@@ -118,7 +123,14 @@ namespace DanielLochner.Assets
             }
             SetOnline(online);
         }
-        public async Task Refresh()
+        public async void Refresh()
+        {
+            if (NetworkUtils.IsConnectedToInternet)
+            {
+                await RefreshAsync();
+            }
+        }
+        public async Task RefreshAsync()
         {
             SetError(null);
             SetRefreshing(true);
@@ -155,6 +167,9 @@ namespace DanielLochner.Assets
 
                 // Count Online
                 CountOnline();
+
+                // Status
+                SetStatus(OnlineStatus);
             }
             catch (Exception ex)
             {
@@ -175,7 +190,7 @@ namespace DanielLochner.Assets
             }
 
             errorGO.SetActive(isError);
-            nonErrorGO.SetActive(!isError);
+            noErrorGO.SetActive(!isError);
 
             if (isError)
             {
@@ -191,8 +206,8 @@ namespace DanielLochner.Assets
         {
             titleText.SetArguments(online);
 
-            titleNoneOnlineGO.SetActive(online == 0);
-            titleOnlineGO.SetActive(online > 0);
+            noneTitleGO.SetActive(online == 0);
+            titleGO.SetActive(online > 0);
         }
         private void SetStatus(Availability status)
         {

@@ -15,10 +15,11 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI usernameText;
         [SerializeField] private TextMeshProUGUI placeholderText;
         [SerializeField] private TextMeshProUGUI statusText;
+        [SerializeField] private TextMeshProUGUI errorText;
         [SerializeField] private Image refreshImg;
         [SerializeField] private Image identityProviderImg;
         [SerializeField] private GameObject errorGO;
-        [SerializeField] private GameObject nonErrorGO;
+        [SerializeField] private GameObject noErrorGO;
         [Space]
         [SerializeField] private Sprite anonymousIcon;
         [SerializeField] private Sprite unityIcon;
@@ -54,21 +55,32 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async void Setup()
         {
-            string username = SettingsManager.Data.OnlineUsername;
-            if (!HasCheckedUsername && !string.IsNullOrEmpty(username))
+            if (NetworkUtils.IsConnectedToInternet)
             {
-                await SignInAsync(username);
+                string username = SettingsManager.Data.OnlineUsername;
+                if (!HasCheckedUsername && !string.IsNullOrEmpty(username))
+                {
+                    await SignInAsync(username);
+                }
+                else
+                {
+                    await SignInAsync("");
+                }
+                HasCheckedUsername = true;
             }
             else
             {
-                await SignInAsync();
+                SetError(LocalizationUtility.Localize("account_status_no-internet"), true);
             }
-            HasCheckedUsername = true;
 
             OnSetup();
         }
 
-        public async Task SignInAsync(string username = "")
+        public async void SignIn()
+        {
+            await SignInAsync("");
+        }
+        public async Task SignInAsync(string username)
         {
             SetError(null);
             SetRefreshing(true, "account_status_signing-in");
@@ -188,10 +200,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (AuthenticationService.Instance.IsSignedIn)
                 {
                     AuthenticationService.Instance.SignOut(); // Sign out of Anonymous account
-                }
-                await SignInAsync();
 
-                Refresh();
+                    OnSignedOutOfAnonymous();
+                }
+                await SignInWithUnityAsync();
+
+                OnReplacedWithUnity();
             }
             catch (AuthenticationException ex)
             {
@@ -206,7 +220,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SetRefreshing(false);
         }
-        public async void UpdateUsernameAsync(string username)
+        public async void UpdateUsername(string username)
         {
             SetError(null);
             SetRefreshing(true, "account_status_updating");
@@ -231,7 +245,16 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async void TrySignInWithUnity()
         {
-            await LinkWithUnityAsync();
+            if (!NetworkUtils.IsConnectedToInternet)
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("account_status_no-internet"), LocalizationUtility.Localize("network_status_internet"));
+                return;
+            }
+
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                await LinkWithUnityAsync();
+            }
         }
         public void TrySignOutOfUnity()
         {
@@ -246,37 +269,26 @@ namespace DanielLochner.Assets.CreatureCreator
             Application.OpenURL("https://player-account.unity.com/delete-account");
             TrySignOutOfUnity();
         }
-        public async void TryUpdateUsername()
+        public void TryUpdateUsername()
         {
-            if (!AuthenticationService.Instance.IsSignedIn)
+            if (!NetworkUtils.IsConnectedToInternet)
             {
-                await SignInAsync();
-                Refresh();
+                InformationDialog.Inform(LocalizationUtility.Localize("account_status_no-internet"), LocalizationUtility.Localize("network_status_internet"));
+                return;
             }
 
-            if (errorMessage != null)
+            if (AuthenticationService.Instance.IsSignedIn)
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("account_status_error"), errorMessage);
+                InputDialog.Input(LocalizationUtility.Localize("mainmenu_username_title"), LocalizationUtility.Localize("account_status_enter-a-username"), onSubmit: UpdateUsername);
             }
             else
+            if (errorMessage != null)
             {
-                InputDialog.Input(LocalizationUtility.Localize("mainmenu_username_title"), LocalizationUtility.Localize("account_status_enter-a-username"), onSubmit: UpdateUsernameAsync);
+                InformationDialog.Inform(LocalizationUtility.Localize("account_status_error"), errorMessage, onOkay: SignIn);
             }
         }
 
-        private string ParseUsername(string username)
-        {
-            username = username.Replace(" ", "");
-
-            if (string.IsNullOrEmpty(username))
-            {
-                username = "Player";
-            }
-
-            return username;
-        }
-
-        private void SetError(string message = null)
+        private void SetError(string message = null, bool setTitle = false)
         {
             bool isError = message != null;
 
@@ -285,8 +297,17 @@ namespace DanielLochner.Assets.CreatureCreator
                 errorMessage = message;
             }
 
+            if (setTitle)
+            {
+                errorText.text = message;
+            }
+            else
+            {
+                errorText.text = LocalizationUtility.Localize("account_status_error");
+            }
+
             errorGO.SetActive(isError);
-            nonErrorGO.SetActive(!isError);
+            noErrorGO.SetActive(!isError);
 
             if (isError)
             {
@@ -338,8 +359,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnSetup()
         {
             FriendsMenu.Instance.Setup();
-
-            // TODO: Progress, Creatures
         }
         private void OnSignedInAnonymously()
         {
@@ -351,25 +370,41 @@ namespace DanielLochner.Assets.CreatureCreator
             SetUnitySettingsVisibility(true);
             identityProviderImg.sprite = unityIcon;
         }
-        private void OnLinkedWithUnity()
+        private void OnSignedOutOfAnonymous()
         {
-            SetUnitySettingsVisibility(true);
-            identityProviderImg.sprite = unityIcon;
+            FriendsManager.Instance.Initialized = false;
         }
         private void OnSignedOutOfUnity()
         {
             SetUnitySettingsVisibility(false);
             identityProviderImg.sprite = anonymousIcon;
 
-            Refresh();
+            FriendsManager.Instance.Initialized = false;
+            FriendsMenu.Instance.Refresh();
+        }
+        private void OnLinkedWithUnity()
+        {
+            SetUnitySettingsVisibility(true);
+            identityProviderImg.sprite = unityIcon;
+        }
+        private void OnReplacedWithUnity()
+        {
+            FriendsMenu.Instance.Refresh();
         }
 
-        private async void Refresh()
+        #region Helper
+        private string ParseUsername(string username)
         {
-            FriendsManager.Instance.Initialized = false;
-            await FriendsManager.Instance.Initialize();
-            await FriendsMenu.Instance.Refresh();
+            username = username.Replace(" ", "");
+
+            if (string.IsNullOrEmpty(username))
+            {
+                username = "Player";
+            }
+
+            return username;
         }
+        #endregion
         #endregion
     }
 }

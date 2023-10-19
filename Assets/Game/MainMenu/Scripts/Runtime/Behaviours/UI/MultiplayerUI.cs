@@ -589,7 +589,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 UpdateStatus(LocalizationUtility.Localize("network_status_authenticating"), Color.yellow, -1);
-                await AccountManager.Instance.SignInAsync();
+                await AccountManager.Instance.SignInAsync("");
                 HideStatus();
             }
         }

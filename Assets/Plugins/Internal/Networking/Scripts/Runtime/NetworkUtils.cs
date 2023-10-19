@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
+using UnityEngine;
 
 namespace DanielLochner.Assets
 {
@@ -35,6 +36,11 @@ namespace DanielLochner.Assets
                 return (T)Convert.ChangeType(lobby.Data[key].Value, typeof(T));
             }
             return fallback;
+        }
+
+        public static bool IsConnectedToInternet
+        {
+            get => Application.internetReachability != NetworkReachability.NotReachable;
         }
 
         public static string GetLocalAddressIPv4()

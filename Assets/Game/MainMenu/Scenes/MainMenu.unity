@@ -11371,7 +11371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 665537788}
   m_Layer: 5
-  m_Name: NonError
+  m_Name: NoError
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25337,10 +25337,11 @@ MonoBehaviour:
   usernameText: {fileID: 310663473}
   placeholderText: {fileID: 1869476959}
   statusText: {fileID: 401812528}
+  errorText: {fileID: 2030899247}
   refreshImg: {fileID: 474888203}
   identityProviderImg: {fileID: 1926046634}
   errorGO: {fileID: 1002313879}
-  nonErrorGO: {fileID: 665537787}
+  noErrorGO: {fileID: 665537787}
   anonymousIcon: {fileID: 21300000, guid: a28d7949af0402c4d9f166203b06621f, type: 3}
   unityIcon: {fileID: 21300000, guid: 658ef12b31bec4745b9d7f736d9aaa2a, type: 3}
   signInSettings:
@@ -37261,7 +37262,6 @@ GameObject:
   - component: {fileID: 2030899248}
   - component: {fileID: 2030899247}
   - component: {fileID: 2030899246}
-  - component: {fileID: 2030899245}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -37289,46 +37289,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -110, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2030899245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2030899243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_StringReference:
-    m_TableReference:
-      m_TableCollectionName: GUID:7fd94653ec287a64d8ae56e06fedb9f8
-    m_TableEntryReference:
-      m_KeyId: 95497295186432000
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  m_FormatArguments: []
-  m_UpdateString:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2030899247}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  references:
-    version: 2
-    RefIds: []
 --- !u!114 &2030899246
 MonoBehaviour:
   m_ObjectHideFlags: 0
