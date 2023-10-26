@@ -293,6 +293,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform(LocalizationUtility.Localize("account_status_error"), errorMessage, onOkay: SignIn);
             }
         }
+        public void TrySyncSaveData()
+        {
+
+        }
 
         private void SetError(string message = null, bool setTitle = false)
         {
