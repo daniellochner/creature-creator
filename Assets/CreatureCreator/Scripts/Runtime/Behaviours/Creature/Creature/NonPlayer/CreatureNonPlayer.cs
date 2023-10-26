@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Optimizer.Optimize();
 
             Collider.enabled = true;
-            Animator.enabled = true;
+            Animator.enabled = !Rider.IsRiding;
             Underwater.enabled = true;
         }
         public override void OnHide()

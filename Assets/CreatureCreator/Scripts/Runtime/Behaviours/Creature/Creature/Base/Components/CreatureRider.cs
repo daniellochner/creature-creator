@@ -158,19 +158,21 @@ namespace DanielLochner.Assets.CreatureCreator
             if (wasRiding)
             {
                 CreatureRider oldBaseRider = GetRider(oldBase.reference);
-
-                SetPositionAndRotation(oldBaseRider.transform, oldBase.height);
-
-                Physics.IgnoreCollision(oldBaseRider.Collider.Hitbox, Collider.Hitbox, false);
+                if (oldBaseRider != null)
+                {
+                    Physics.IgnoreCollision(oldBaseRider.Collider.Hitbox, Collider.Hitbox, false);
+                    SetPositionAndRotation(oldBaseRider.transform, oldBase.height);
+                }
             }
 
             if (isRiding)
             {
                 CreatureRider newBaseRider = GetRider(newBase.reference);
-
-                SetPositionAndRotation(newBaseRider.transform, newBase.height);
-
-                Physics.IgnoreCollision(newBaseRider.Collider.Hitbox, Collider.Hitbox, true);
+                if (newBaseRider != null)
+                {
+                    Physics.IgnoreCollision(newBaseRider.Collider.Hitbox, Collider.Hitbox, true);
+                    SetPositionAndRotation(newBaseRider.transform, newBase.height);
+                }
             }
 
             if (IsLocalPlayer)
@@ -187,7 +189,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsServer && IsBase)
             {
-                int numRemoved = riders.RemoveAll(x => x == null);
+                int numRemoved = riders.RemoveAll(x => (x == null) || (x.OwnerClientId == clientId));
                 if (numRemoved > 0)
                 {
                     float height = Constructor.Dimensions.Height;
