@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 using UnityEngine;
 using System;
+using System.Collections;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -15,13 +16,13 @@ namespace DanielLochner.Assets.CreatureCreator
         private List<CreatureRider> riders = new List<CreatureRider>();
 
         private ClientNetworkTransform clientNetworkTransform;
-        private CreatureRider baseRider;
         #endregion
 
         #region Properties
         public CreatureConstructor Constructor { get; set; }
         public CreatureCollider Collider { get; set; }
         public CreatureAnimator Animator { get; set; }
+        public CreatureMover Mover { get; set; }
 
         public NetworkVariable<BaseData> Base { get; set; } = new NetworkVariable<BaseData>();
 
@@ -35,8 +36,17 @@ namespace DanielLochner.Assets.CreatureCreator
             Constructor = GetComponent<CreatureConstructor>();
             Collider = GetComponent<CreatureCollider>();
             Animator = GetComponent<CreatureAnimator>();
+            Mover = GetComponent<CreatureMover>();
 
             clientNetworkTransform = GetComponent<ClientNetworkTransform>();
+        }
+        private void OnEnable()
+        {
+            NetworkManager.OnClientDisconnectCallback += OnClientDisconnected;
+        }
+        private void OnDisable()
+        {
+            NetworkManager.OnClientDisconnectCallback -= OnClientDisconnected;
         }
         private void Start()
         {
@@ -58,14 +68,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsRiding)
             {
-                if (baseRider != null)
+                if (Base.Value.reference.TryGet(out NetworkObject baseNetworkObj))
                 {
-                    SetPositionAndRotation(baseRider, Base.Value);
+                    SetPositionAndRotation(baseNetworkObj.transform, Base.Value.height);
                 }
                 else
                 if (IsServer)
                 {
-                    Dismount(); // Handle case where base rider disconnects
+                    Base.Value = null; // Handle case where base rider disconnects
                 }
             }
         }
@@ -92,6 +102,8 @@ namespace DanielLochner.Assets.CreatureCreator
             float height = baseRider.Constructor.Dimensions.Height;
             foreach (CreatureRider rider in baseRider.riders)
             {
+                if (rider == null) continue;
+
                 height += rider.Constructor.Dimensions.Height;
             }
             baseRider.riders.Add(this);
@@ -108,10 +120,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (IsBase)
             {
-                foreach (CreatureRider rider in new List<CreatureRider>(riders))
+                foreach (CreatureRider rider in riders)
                 {
-                    rider.Dismount();
+                    if (rider == null) continue;
+
+                    rider.Base.Value = null;
                 }
+                riders.Clear();
             }
             else
             if (IsRiding)
@@ -121,9 +136,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     foreach (CreatureRider rider in baseRider.riders)
                     {
+                        if (rider == null) continue;
+
                         if (rider.Base.Value.height > Base.Value.height)
                         {
-                            rider.Base.Value = new BaseData(rider.Base.Value, -Constructor.Dimensions.Height);
+                            rider.Base.Value.height -= Constructor.Dimensions.Height;
                         }
                     }
                     baseRider.riders.Remove(this);
@@ -142,39 +159,52 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 CreatureRider oldBaseRider = GetRider(oldBase.reference);
 
-                SetPositionAndRotation(oldBaseRider, oldBase);
+                SetPositionAndRotation(oldBaseRider.transform, oldBase.height);
 
                 Physics.IgnoreCollision(oldBaseRider.Collider.Hitbox, Collider.Hitbox, false);
             }
 
             if (isRiding)
             {
-                baseRider = GetRider(newBase.reference);
+                CreatureRider newBaseRider = GetRider(newBase.reference);
 
-                SetPositionAndRotation(baseRider, newBase);
+                SetPositionAndRotation(newBaseRider.transform, newBase.height);
 
-                Physics.IgnoreCollision(baseRider.Collider.Hitbox, Collider.Hitbox, true);
-            }
-            else
-            {
-                baseRider = null;
+                Physics.IgnoreCollision(newBaseRider.Collider.Hitbox, Collider.Hitbox, true);
             }
 
             if (IsLocalPlayer)
             {
                 clientNetworkTransform.Teleport(transform.position, transform.rotation, transform.localScale);
                 Constructor.Rigidbody.isKinematic = isRiding;
+                Mover?.StopMoving();
             }
 
             clientNetworkTransform.enabled = !isRiding;
             Animator.enabled = !isRiding && Constructor.Body.gameObject.activeSelf;
         }
-        
-        #region Helper
-        private void SetPositionAndRotation(CreatureRider baseRider, BaseData baseData)
+        private void OnClientDisconnected(ulong clientId)
         {
-            transform.position = baseRider.transform.position + (baseData.height * baseRider.transform.up);
-            transform.rotation = baseRider.transform.rotation;
+            if (IsServer && IsBase)
+            {
+                int numRemoved = riders.RemoveAll(x => x == null);
+                if (numRemoved > 0)
+                {
+                    float height = Constructor.Dimensions.Height;
+                    foreach (CreatureRider rider in riders)
+                    {
+                        rider.Base.Value.height = height;
+                        height += rider.Constructor.Dimensions.Height;
+                    }
+                }
+            }
+        }
+
+        #region Helper
+        private void SetPositionAndRotation(Transform baseT, float height)
+        {
+            transform.position = baseT.position + (height * baseT.up);
+            transform.rotation = baseT.rotation;
         }
 
         private CreatureRider GetRider(NetworkObjectReference reference)
@@ -201,11 +231,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 this.reference = reference;
                 this.height = height;
-            }
-            public BaseData(BaseData data, float offset)
-            {
-                this.reference = data.reference;
-                this.height = data.height + offset;
             }
 
             public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
