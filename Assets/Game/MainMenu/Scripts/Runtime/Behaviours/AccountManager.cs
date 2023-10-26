@@ -245,6 +245,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async void TrySignInWithUnity()
         {
+            if (!PremiumManager.Data.IsPremium)
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("account_premium_title"), LocalizationUtility.Localize("account_premium_message"));
+                return;
+            }
+
             if (!NetworkUtils.IsConnectedToInternet)
             {
                 InformationDialog.Inform(LocalizationUtility.Localize("account_status_no-internet"), LocalizationUtility.Localize("network_status_internet"));
