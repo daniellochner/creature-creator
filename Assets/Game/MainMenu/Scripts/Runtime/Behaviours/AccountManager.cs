@@ -245,12 +245,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async void TrySignInWithUnity()
         {
-            if (!PremiumManager.Data.IsPremium)
-            {
-                InformationDialog.Inform(LocalizationUtility.Localize("account_premium_title"), LocalizationUtility.Localize("account_premium_message"));
-                return;
-            }
-
             if (!NetworkUtils.IsConnectedToInternet)
             {
                 InformationDialog.Inform(LocalizationUtility.Localize("account_status_no-internet"), LocalizationUtility.Localize("network_status_internet"));
@@ -293,9 +287,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform(LocalizationUtility.Localize("account_status_error"), errorMessage, onOkay: SignIn);
             }
         }
-        public void TrySyncSaveData()
+        public void TrySyncData()
         {
+            //if (!PremiumManager.Data.IsPremium)
+            //{
+            //    InformationDialog.Inform(LocalizationUtility.Localize("account_sync-data_title"), LocalizationUtility.Localize("account_sync-data_message"));
+            //    return;
+            //}
 
+            // TODO: Implement cloud save for creatures/progress...
         }
 
         private void SetError(string message = null, bool setTitle = false)
