@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool SpawnNPC { get; protected set; }
         public string MapName { get; protected set; }
         public string MapId { get; protected set; }
+        public int SpawnPoint { get; protected set; }
         #endregion
     }
 }

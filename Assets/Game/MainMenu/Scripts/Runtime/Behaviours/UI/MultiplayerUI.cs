@@ -50,6 +50,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TMP_InputField passwordInputField;
         [SerializeField] private OptionSelector mapOS;
         [SerializeField] private OptionSelector modeOS;
+        [SerializeField] private OptionSelector spawnPointOS;
         [SerializeField] private OptionSelector visibilityOS;
         [SerializeField] private CanvasGroup passwordCG;
         [SerializeField] private Toggle passwordToggle;
@@ -183,6 +184,40 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 mapOS.Options.RemoveAt(mapOS.Options.Count - 1);
             }
+            mapOS.OnSelected.AddListener(delegate (int option)
+            {
+                int spawnPoints = 1;
+
+                Map map = (Map)option;
+                switch (map)
+                {
+                    case Map.Island:
+                        spawnPoints = 1;
+                        break;
+                    case Map.Farm:
+                        spawnPoints = 15;
+                        break;
+                    case Map.Sandbox:
+                        spawnPoints = 1;
+                        break;
+                    case Map.Cave:
+                        spawnPoints = 4;
+                        break;
+                    case Map.City:
+                        spawnPoints = 4;
+                        break;
+                }
+
+                spawnPointOS.Options.Clear();
+                for (int i = 0; i < spawnPoints; i++)
+                {
+                    spawnPointOS.Options.Add(new OptionSelector.Option()
+                    {
+                        Id = $"P{i}"
+                    });
+                }
+                spawnPointOS.Select(0);
+            });
             mapOS.Select(Map.Island, false);
             multiplayerMenu.OnOpen += UpdateMap;
 
@@ -349,6 +384,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool enablePVE = pveToggle.isOn;
                 bool allowProfanity = profanityToggle.isOn;
                 bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
+                int spawnPoint = spawnPointOS.Selected;
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
                 string institutionId = EducationManager.Instance.InstitutionId;
@@ -446,6 +482,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
                         { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
+                        { "spawnPoint", new DataObject(DataObject.VisibilityOptions.Public, spawnPoint.ToString()) },
                         { "hostPlayerId", new DataObject(DataObject.VisibilityOptions.Public, hostPlayerId) },
                         { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) },
                         { "institutionId", new DataObject(DataObject.VisibilityOptions.Public, institutionId) }

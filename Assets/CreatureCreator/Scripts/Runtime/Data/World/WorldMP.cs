@@ -46,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SpawnNPC = lobby.TryGetValue<bool>("spawnNPC");
             CreativeMode = lobby.TryGetValue<bool>("creativeMode");
             MapId = lobby.TryGetValue<string>("mapId");
+            SpawnPoint = lobby.TryGetValue<int>("spawnPoint");
 
             HostPlayerId = lobby.TryGetValue<string>("hostPlayerId");
             KickedPlayers = new List<string>(lobby.TryGetValue("kickedPlayers", "").Split(","));

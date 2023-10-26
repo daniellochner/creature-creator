@@ -18,13 +18,15 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private NetworkObject playerPrefabL;
         [SerializeField] private NetworkObject playerPrefabR;
-        [SerializeField] public Platform startingPlatform;
+        [SerializeField] private Platform[] platforms;
         [SerializeField] private NetworkObject[] helpers;
         [SerializeField] private UnityEvent onTutorial;
         #endregion
 
         #region Properties
         public bool IsSetup { get; set; }
+
+        public Platform StartingPlatform => platforms[WorldManager.Instance.World.SpawnPoint % platforms.Length];
         #endregion
 
         #region Methods
@@ -73,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetupSP();
             }
 
-            Player.Instance.Editor.Platform = startingPlatform;
+            Player.Instance.Editor.Platform = StartingPlatform;
             EditorManager.Instance.Setup();
 
             if (SettingsManager.Instance.ShowTutorial)
@@ -108,8 +110,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                NetworkHostManager.Instance.SpawnPosition = startingPlatform.Position;
-                NetworkHostManager.Instance.SpawnRotation = startingPlatform.Rotation;
+                NetworkHostManager.Instance.SpawnPosition = StartingPlatform.Position;
+                NetworkHostManager.Instance.SpawnRotation = StartingPlatform.Rotation;
 
                 foreach (NetworkObject helper in helpers)
                 {
@@ -197,7 +199,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnClientConnected(ulong clientId)
         {
-            NetworkObject obj = Instantiate(clientId == NetworkManager.Singleton.LocalClientId ? playerPrefabL : playerPrefabR, startingPlatform.Position, startingPlatform.Rotation);
+            NetworkObject obj = Instantiate(clientId == NetworkManager.Singleton.LocalClientId ? playerPrefabL : playerPrefabR, StartingPlatform.Position, StartingPlatform.Rotation);
             obj.SpawnAsPlayerObject(clientId, true);
         }
         private void OnUncontrolledShutdown()

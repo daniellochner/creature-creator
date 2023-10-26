@@ -10,7 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool hasEntered;
         [SerializeField] private Vector3 editOffset;
-        [SerializeField] private AudioSource teleportAS;
         [SerializeField] private MinimapIcon minimapIcon;
         #endregion
 
