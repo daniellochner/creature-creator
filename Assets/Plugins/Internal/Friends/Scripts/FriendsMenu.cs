@@ -36,6 +36,7 @@ namespace DanielLochner.Assets
         private SimpleSideMenu simpleSideMenu;
         private CanvasGroup canvasGroup;
         private string errorMessage;
+        private int siblingIndex;
         #endregion
 
         #region Properties
@@ -53,6 +54,9 @@ namespace DanielLochner.Assets
 
             simpleSideMenu = GetComponent<SimpleSideMenu>();
             canvasGroup = GetComponent<CanvasGroup>();
+
+            siblingIndex = transform.GetSiblingIndex();
+            OnMenuStateChanged();
         }
         protected override void OnDestroy()
         {
@@ -239,6 +243,18 @@ namespace DanielLochner.Assets
             return requestUI;
         }
 
+        public void OnMenuStateChanged()
+        {
+            switch (simpleSideMenu.CurrentState)
+            {
+                case SimpleSideMenu.State.Open:
+                    transform.SetSiblingIndex(siblingIndex);
+                    break;
+                case SimpleSideMenu.State.Closed:
+                    transform.SetAsFirstSibling();
+                    break;
+            }
+        }
         public void OnStatusSelected(int index)
         {
             if (!FriendsManager.Instance.Initialized) return;
