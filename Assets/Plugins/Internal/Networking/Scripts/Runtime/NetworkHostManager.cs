@@ -52,6 +52,8 @@ namespace DanielLochner.Assets
         }
         private void Remove(ulong clientId)
         {
+            if (!NetworkManager.Singleton.IsHost) return;
+
             // Remove disconnecting player from joined lobby immediately...
             try
             {
