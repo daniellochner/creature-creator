@@ -24,6 +24,13 @@ namespace DanielLochner.Assets
             DeathMessenger = GetComponent<PlayerDeathMessenger>();
             DataContainer = GetComponent<PlayerDataContainer>();
         }
+        private void OnDestroy()
+        {
+            if (NetworkPlayersManager.Instance)
+            {
+                NetworkPlayersManager.Instance.OnConfirmFriendRequest -= OnConfirmFriendRequest;
+            }
+        }
 
         public void Setup()
         {
