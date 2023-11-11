@@ -133,13 +133,15 @@ namespace DanielLochner.Assets
 
                     OnConfirmFriendRequest?.Invoke(playerData);
 
-                    ConfirmFriendRequest(playerData.clientId);
+                    ConfirmFriendRequest(playerData);
                 });
             }
         }
-        public void SendFriendRequest(ulong clientId)
+        public void SendFriendRequest(PlayerData playerData)
         {
-            SendFriendRequestServerRpc(NetworkManager.Singleton.LocalClientId, clientId);
+            SendFriendRequestServerRpc(NetworkManager.Singleton.LocalClientId, playerData.clientId);
+
+            NotificationsManager.Notify(LocalizationUtility.Localize("friends_notification_send", playerData.username).ToColour(friendColour));
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -156,9 +158,9 @@ namespace DanielLochner.Assets
 
             OnConfirmFriendRequest?.Invoke(playerData);
         }
-        public void ConfirmFriendRequest(ulong clientId)
+        public void ConfirmFriendRequest(PlayerData playerData)
         {
-            ConfirmFriendRequestServerRpc(NetworkManager.Singleton.LocalClientId, clientId);
+            ConfirmFriendRequestServerRpc(NetworkManager.Singleton.LocalClientId, playerData.clientId);
         }
         #endregion
     }

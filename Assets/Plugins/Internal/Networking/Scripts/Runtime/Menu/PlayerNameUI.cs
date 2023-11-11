@@ -68,7 +68,7 @@ namespace DanielLochner.Assets
                 ConfirmationDialog.Confirm(LocalizationUtility.Localize("friends_request_title"), LocalizationUtility.Localize("friends_request_message", playerData.username), onYes: delegate
                 {
                     FriendsManager.Instance.SendFriendRequest(playerData.playerId);
-                    NetworkPlayersManager.Instance.SendFriendRequest(playerData.clientId);
+                    NetworkPlayersManager.Instance.SendFriendRequest(playerData);
                 });
             }
         }
