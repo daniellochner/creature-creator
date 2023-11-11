@@ -187,40 +187,18 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             mapOS.OnSelected.AddListener(delegate (int option)
             {
-                int spawnPoints = 1;
-
-                Map map = (Map)option;
-                switch (map)
-                {
-                    case Map.Island:
-                        spawnPoints = 1;
-                        break;
-                    case Map.Farm:
-                        spawnPoints = 15;
-                        break;
-                    case Map.Sandbox:
-                        spawnPoints = 1;
-                        break;
-                    case Map.Cave:
-                        spawnPoints = 4;
-                        break;
-                    case Map.City:
-                        spawnPoints = 4;
-                        break;
-                }
+                int spawnPoints = DatabaseManager.GetDatabaseEntry<MapData>("Maps", ((Map)option).ToString())?.SpawnPoints ?? 1;
 
                 spawnPointOS.Options.Clear();
                 for (int i = 0; i < spawnPoints; i++)
                 {
                     spawnPointOS.Options.Add(new OptionSelector.Option()
                     {
-                        Id = $"P{i}"
+                        Id = $"P{i + 1}"
                     });
                 }
                 spawnPointOS.Select(0);
-
-                spawnPointCG.interactable = spawnPoints > 1;
-                spawnPointCG.alpha = spawnPoints > 1 ? 1f : 0.25f;
+                spawnPointCG.SetEnabled(spawnPoints > 1);
             });
             mapOS.Select(Map.Island, false);
             multiplayerMenu.OnOpen += UpdateMap;

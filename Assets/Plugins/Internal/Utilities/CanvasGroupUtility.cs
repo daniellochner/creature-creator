@@ -31,5 +31,11 @@ namespace DanielLochner.Assets
 
             onEnd?.Invoke();
         }
+
+        public static void SetEnabled(this CanvasGroup canvasGroup, bool isEnabled, float a = 0.25f)
+        {
+            canvasGroup.interactable = isEnabled;
+            canvasGroup.alpha = isEnabled ? 1f : a;
+        }
     }
 }
