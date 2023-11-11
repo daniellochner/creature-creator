@@ -51,6 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private OptionSelector mapOS;
         [SerializeField] private OptionSelector modeOS;
         [SerializeField] private OptionSelector spawnPointOS;
+        [SerializeField] private CanvasGroup spawnPointCG;
         [SerializeField] private OptionSelector visibilityOS;
         [SerializeField] private CanvasGroup passwordCG;
         [SerializeField] private Toggle passwordToggle;
@@ -217,6 +218,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     });
                 }
                 spawnPointOS.Select(0);
+
+                spawnPointCG.interactable = spawnPoints > 1;
+                spawnPointCG.alpha = spawnPoints > 1 ? 1f : 0.25f;
             });
             mapOS.Select(Map.Island, false);
             multiplayerMenu.OnOpen += UpdateMap;
