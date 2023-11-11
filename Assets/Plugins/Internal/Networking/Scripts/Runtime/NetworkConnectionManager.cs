@@ -62,6 +62,11 @@ namespace DanielLochner.Assets
 
         public void Kick(ulong clientId, string playerId, string reason = default)
         {
+            if (string.IsNullOrEmpty(reason))
+            {
+                reason = LocalizationUtility.Localize("disconnect_message_kicked");
+            }
+
             ForceDisconnectClientRpc(reason, NetworkUtils.SendTo(clientId));
 
             List<string> kickedPlayers = new List<string>(LobbyHelper.Instance.JoinedLobby.TryGetValue("kickedPlayers", "").Split(","));
