@@ -65,9 +65,11 @@ namespace DanielLochner.Assets.CreatureCreator
                     string creaturesDir = Path.Combine(Application.persistentDataPath, "creature");
                     if (Directory.Exists(creaturesDir))
                     {
-                        foreach (string creaturePath in Directory.GetFiles(creaturesDir))
+                        string[] creaturePaths = Directory.GetFiles(creaturesDir);
+                        creaturePaths.Shuffle();
+                        for (int i = 0; i < creaturePaths.Length && i < 10; i++)
                         {
-                            CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath, creatureEncryptionKey.Value);
+                            CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePaths[i], creatureEncryptionKey.Value);
                             if (creatureData != null)
                             {
                                 creatures.Add(JsonUtility.ToJson(creatureData));
