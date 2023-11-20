@@ -90,6 +90,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetSensitivityVertical(Data.SensitivityVertical);
             SetInvertHorizontal(Data.InvertHorizontal);
             SetInvertVertical(Data.InvertVertical);
+            SetFlipButton(Data.FlipButton);
 
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
@@ -680,6 +681,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetInterfaceScale(float scale)
         {
             Data.InterfaceScale = scale;
+        }
+        public void SetFlipButton(bool flipButton)
+        {
+            Data.FlipButton = flipButton;
         }
         #endregion
         #endregion

@@ -77,6 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CanvasGroup joystickHorizontalCG;
         [SerializeField] private CanvasGroup joystickVerticalCG;
         [SerializeField] private Slider touchOffsetSlider;
+        [SerializeField] private Toggle flipButtonToggle;
 
         private Coroutine previewMusicCoroutine;
         #endregion
@@ -544,6 +545,13 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SettingsManager.Instance.SetInvertVertical(isOn, inGame);
             });
+
+            // Flip Button
+            flipButtonToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetFlipButton(isOn);
+            });
+            flipButtonToggle.isOn = SettingsManager.Data.FlipButton;
 
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {

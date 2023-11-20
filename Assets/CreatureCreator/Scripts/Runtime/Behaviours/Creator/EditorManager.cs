@@ -925,6 +925,10 @@ namespace DanielLochner.Assets.CreatureCreator
 #endif
             }
         }
+        public void Flip()
+        {
+            Player.Instance.Constructor.Flip();
+        }
 
         public bool CanLoadCreature(CreatureData creatureData, out string errorTitle, out string errorMessage)
         {
@@ -2010,7 +2014,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             if (InputUtility.GetKeyDown(KeybindingsManager.Data.Flip))
             {
-                Player.Instance.Constructor.Flip();
+                Flip();
             }
         }
         private void HandlePlayShortcuts()

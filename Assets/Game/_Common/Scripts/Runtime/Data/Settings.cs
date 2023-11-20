@@ -69,6 +69,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float joystickPositionHorizontal = 0.2f;
         [SerializeField] private float joystickPositionVertical = 0.4f;
         [SerializeField] private float interfaceScale = 1f;
+        [SerializeField] private bool flipButton = false;
         #endregion
 
         #region Properties
@@ -342,6 +343,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => interfaceScale;
             set => interfaceScale = value;
         }
+        public bool FlipButton
+        {
+            get => flipButton;
+            set => flipButton = value;
+        }
         #endregion
 
         #region Methods
@@ -394,6 +400,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SensitivityVertical = 1f;
             InvertHorizontal = false;
             InvertVertical = false;
+            FlipButton = false;
 
             Joystick = JoystickType.Floating;
             JoystickPositionHorizontal = 0.2f;
@@ -413,6 +420,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 ScreenScale = Mathf.Min(720f / Display.main.systemHeight, 0.75f); // Minimum: 720p or 75%
                 VSync = true;
                 CreatureRenderDistance = 25f;
+                FlipButton = true;
 
                 if (SystemUtility.IsLowEndDevice)
                 {
