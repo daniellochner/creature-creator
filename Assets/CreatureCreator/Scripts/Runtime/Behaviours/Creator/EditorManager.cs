@@ -334,14 +334,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             foreach (string creaturePath in Directory.GetFiles(creaturesDirectory))
             {
-                CreatureData creatureData = SaveUtility.Load<CreatureData>(creaturePath, creatureEncryptionKey.Value);
-                if (creatureData != null)
-                {
-                    CreatureUI creatureUI = AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
-                    UpdateLoadableCreatureUI(creatureUI);
-                }
+                AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
             }
             UpdateNoCreatures();
+            UpdateLoadableCreatures();
 
             // Other
             LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
