@@ -214,6 +214,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void SetAmbientOcclusion(AmbientOcclusionType type)
         {
+            if (Application.platform != RuntimePlatform.WindowsPlayer && type == AmbientOcclusionType.MSVO) // TODO: Quick fix for AO issues on Mac and Linux...
+            {
+                type = AmbientOcclusionType.SAO;
+            }
+
             foreach (PostProcessProfile profile in profiles)
             {
                 if (profile.TryGetSettings(out AmbientOcclusion ao))
