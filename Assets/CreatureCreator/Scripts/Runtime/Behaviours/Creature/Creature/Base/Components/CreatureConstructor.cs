@@ -670,6 +670,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             BodyMat.SetFloat("_Glossiness", shine);
 
+            foreach (BodyPartConstructor bpc in BodyParts)
+            {
+                bpc.SetShine(shine);
+            }
+
             OnSetShine?.Invoke(shine);
         }
         public void SetMetallic(float metallic)
@@ -677,6 +682,11 @@ namespace DanielLochner.Assets.CreatureCreator
             data.Metallic = metallic;
 
             BodyMat.SetFloat("_Metallic", metallic);
+
+            foreach (BodyPartConstructor bpc in BodyParts)
+            {
+                bpc.SetMetallic(metallic);
+            }
 
             OnSetMetallic?.Invoke(metallic);
         }

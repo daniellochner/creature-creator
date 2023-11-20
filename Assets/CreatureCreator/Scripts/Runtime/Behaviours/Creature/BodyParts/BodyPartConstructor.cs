@@ -336,6 +336,17 @@ namespace DanielLochner.Assets.CreatureCreator
             OnSetSecondaryColour?.Invoke(colour);
         }
 
+        public void SetShine(float shine)
+        {
+            BodyPartPrimaryMat.SetFloat("_Glossiness", shine);
+            BodyPartSecondaryMat.SetFloat("_Glossiness", shine);
+        }
+        public void SetMetallic(float metallic)
+        {
+            BodyPartPrimaryMat.SetFloat("_Metallic", metallic);
+            BodyPartSecondaryMat.SetFloat("_Metallic", metallic);
+        }
+
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
         {
             transform.SetPositionAndRotation(position, rotation);
