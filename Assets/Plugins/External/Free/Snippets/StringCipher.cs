@@ -17,7 +17,7 @@ public static class StringCipher
 
     public static string Encrypt(string plainText, string passPhrase)
     {
-        if (string.IsNullOrEmpty(passPhrase)) return plainText;
+        if (string.IsNullOrEmpty(passPhrase)|| string.IsNullOrEmpty(plainText)) return plainText;
 
         // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
         // so that the same Salt and IV values can be used when decrypting.  
@@ -56,7 +56,7 @@ public static class StringCipher
 
     public static string Decrypt(string cipherText, string passPhrase)
     {
-        if (string.IsNullOrEmpty(passPhrase)) return cipherText;
+        if (string.IsNullOrEmpty(passPhrase) || string.IsNullOrEmpty(cipherText)) return cipherText;
 
         // Get the complete stream of bytes that represent:
         // [32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]
