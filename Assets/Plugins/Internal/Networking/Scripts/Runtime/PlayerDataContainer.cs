@@ -5,7 +5,9 @@ namespace DanielLochner.Assets
     public class PlayerDataContainer : NetworkBehaviour
     {
         #region Properties
-        public NetworkVariable<PlayerData> PlayerData { get; set; } = new NetworkVariable<PlayerData>();
+        private NetworkVariable<PlayerData> PlayerData { get; set; } = new NetworkVariable<PlayerData>();
+
+        public PlayerData Data => PlayerData.Value;
         #endregion
 
         #region Methods
