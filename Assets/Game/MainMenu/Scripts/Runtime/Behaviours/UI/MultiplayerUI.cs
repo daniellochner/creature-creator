@@ -291,8 +291,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Set Connection Data
                 string username = SettingsManager.Data.OnlineUsername;
-                bool isVIP = StatsManager.Instance.IsVIP;
-                SetConnectionData(playerId, username, password, isVIP);
+                SetConnectionData(playerId, username, password);
 
                 // Join Lobby
                 UpdateStatus(LocalizationUtility.Localize("network_status_joining-lobby"), Color.yellow, -1);
@@ -410,8 +409,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 string username = SettingsManager.Data.OnlineUsername;
                 string password = NetworkHostManager.Instance.Password = (usePassword ? passwordInputField.text : "");
                 string passwordHash = usePassword ? sha256.GetHash(password) : "";
-                bool isVIP = StatsManager.Instance.IsVIP;
-                SetConnectionData(hostPlayerId.ToString(), username, password, isVIP);
+                SetConnectionData(hostPlayerId.ToString(), username, password);
                 
                 // Authenticate
                 await Authenticate();
@@ -614,9 +612,9 @@ namespace DanielLochner.Assets.CreatureCreator
                 HideStatus();
             }
         }
-        private void SetConnectionData(string playerId, string username, string password, bool isVIP)
+        private void SetConnectionData(string playerId, string username, string password)
         {
-            ConnectionData data = new ConnectionData(playerId, username, password, isVIP);
+            ConnectionData data = new ConnectionData(playerId, username, password);
             NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
         }
         

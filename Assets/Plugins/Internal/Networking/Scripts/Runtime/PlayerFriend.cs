@@ -10,8 +10,11 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Properties
-        private PlayerRecolour Recolour { get; set; }
         private PlayerDataContainer DataContainer { get; set; }
+
+        private MinimapIcon MinimapIcon { get; set; }
+        private PlayerNamer Namer { get; set; }
+        private PlayerDeathMessenger DeathMessenger { get; set; }
 		
 		private PlayerNameUI NameUI => NetworkPlayersMenu.Instance?.GetPlayerNameUI(OwnerClientId);
         #endregion
@@ -19,8 +22,11 @@ namespace DanielLochner.Assets
         #region Methods
         private void Awake()
         {
-            Recolour = GetComponent<PlayerRecolour>();
             DataContainer = GetComponent<PlayerDataContainer>();
+
+            MinimapIcon = GetComponent<MinimapIcon>();
+            Namer = GetComponent<PlayerNamer>();
+            DeathMessenger = GetComponent<PlayerDeathMessenger>();
         }
         public override void OnDestroy()
         {
@@ -45,7 +51,10 @@ namespace DanielLochner.Assets
 
         public void SetAsFriend()
         {
-            Recolour.SetColour(friendColour);
+            MinimapIcon.MinimapIconUI?.SetColour(friendColour.Alpha(0.8f));
+
+            Namer?.SetColour(friendColour);
+            DeathMessenger?.SetColour(friendColour);
 
             NameUI?.SetFriend(true);
         }

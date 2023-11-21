@@ -10,5 +10,11 @@ namespace DanielLochner.Assets
             Vector3 v2 = new Vector3(c2.r, c2.g, c2.b);
             return Vector3.Distance(v1, v2);
         }
+
+        public static Color Alpha(this Color colour, float alpha)
+        {
+            colour.a = alpha;
+            return colour;
+        }
     }
 }

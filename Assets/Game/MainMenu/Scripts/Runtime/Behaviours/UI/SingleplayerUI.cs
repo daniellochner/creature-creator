@@ -106,7 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Set Connection Data
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
-                NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", "", "", false)));
+                NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", "", "")));
 
                 // Start Host
                 NetworkManager.Singleton.StartHost();
