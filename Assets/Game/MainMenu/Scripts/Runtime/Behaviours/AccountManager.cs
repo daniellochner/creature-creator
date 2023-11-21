@@ -2,8 +2,8 @@ using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
 using Unity.Services.Core;
-using Unity.Services.PlayerAccounts;
 using UnityEngine;
 using UnityEngine.UI;
 
