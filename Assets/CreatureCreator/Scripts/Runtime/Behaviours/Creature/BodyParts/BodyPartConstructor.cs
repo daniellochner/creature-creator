@@ -73,6 +73,20 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => gameObject.activeSelf;
         }
+        public bool IsHidden
+        {
+            get
+            {
+                if (IsFlipped)
+                {
+                    return AttachedBodyPart.hideFlipped;
+                }
+                else
+                {
+                    return AttachedBodyPart.hideMain;
+                }
+            }
+        }
 
         public bool CanOverridePrimary
         {
@@ -200,6 +214,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Flip(false);
 
+            gameObject.SetActive(!attachedBodyPart.hideMain);
+            Flipped.gameObject.SetActive(!attachedBodyPart.hideFlipped);
+
             OnAttach?.Invoke();
         }
         public virtual void Detach()
@@ -265,7 +282,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (CanMirror)
             {
-                Flipped.gameObject.SetActive(true);
+                Flipped.gameObject.SetActive(!Flipped.IsHidden);
 
                 localPosition.x *= -1;
                 Vector3 worldPosition = CreatureConstructor.transform.TransformPoint(localPosition);

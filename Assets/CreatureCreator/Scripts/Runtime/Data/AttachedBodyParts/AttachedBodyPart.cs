@@ -17,6 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public Vector3 stretch = default;
         public Color primaryColour = default;
         public Color secondaryColour = default;
+        public bool hideMain = false;
+        public bool hideFlipped = false;
 
         public AttachedBodyPart()
         {
@@ -38,6 +40,8 @@ namespace DanielLochner.Assets.CreatureCreator
             serializer.SerializeValue(ref stretch);
             serializer.SerializeValue(ref primaryColour);
             serializer.SerializeValue(ref secondaryColour);
+            serializer.SerializeValue(ref hideMain);
+            serializer.SerializeValue(ref hideFlipped);
         }
     }
 }

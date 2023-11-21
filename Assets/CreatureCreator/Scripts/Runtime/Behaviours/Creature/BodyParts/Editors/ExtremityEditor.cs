@@ -11,6 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public ExtremityConstructor ExtremityConstructor => BodyPartConstructor as ExtremityConstructor;
         public ExtremityEditor FlippedExtremity => Flipped as ExtremityEditor;
 
+        protected override bool IsHiding => false;
+
         public LimbEditor ConnectedLimb { get; set; }
         #endregion
 

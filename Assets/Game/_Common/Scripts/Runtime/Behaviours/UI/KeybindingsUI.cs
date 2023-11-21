@@ -37,6 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI undoKUI;
         [SerializeField] private KeybindUI redoKUI;
         [SerializeField] private KeybindUI flipKUI;
+        [SerializeField] private KeybindUI toggleAsymmetryKUI;
 
         [Header("General")]
         [SerializeField] private KeybindUI saveKUI;
@@ -248,6 +249,13 @@ namespace DanielLochner.Assets.CreatureCreator
             flipKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Data.Flip = key;
+            });
+
+            // Toggle Asymmetry
+            toggleAsymmetryKUI.Rebind(KeybindingsManager.Data.ToggleAsymmetry, false);
+            toggleAsymmetryKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Data.ToggleAsymmetry = key;
             });
             #endregion
 

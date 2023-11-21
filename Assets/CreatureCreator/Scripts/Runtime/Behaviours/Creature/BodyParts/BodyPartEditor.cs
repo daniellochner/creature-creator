@@ -63,6 +63,11 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        protected virtual bool IsHiding
+        {
+            get => InputUtility.GetKey(KeybindingsManager.Data.ToggleAsymmetry);
+        }
+
         public virtual bool CanCopy
         {
             get
@@ -253,6 +258,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         connectionPoint.position = aPosition;
                         Flipped.connectionPoint.position = Flipped.transform.position;
+
+                        
+                        Flipped.gameObject.SetActive(!IsHiding);
+
+                        BodyPartConstructor.AttachedBodyPart.hideMain = IsHiding && IsFlipped;
+                        BodyPartConstructor.AttachedBodyPart.hideFlipped = IsHiding && !IsFlipped;
                     }
                     else
                     {

@@ -23,6 +23,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public ExtremityEditor ConnectedExtremity { get; set; }
 
+        protected override bool IsHiding => false;
+
         public bool IsHandlingAlignment
         {
             get => isHandlingAlignment;
