@@ -13,6 +13,9 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private PlayerMessenger messenger;
         [SerializeField] private CreatureSpeedup speedup;
         [SerializeField] private PlayerDataContainer dataContainer;
+        [SerializeField] private PlayerRecolour recolour;
+        [SerializeField] private PlayerVIP vip;
+        [SerializeField] private PlayerVerified verified;
         #endregion
 
         #region Properties
@@ -20,6 +23,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public PlayerMessenger Messenger => messenger;
         public CreatureSpeedup Speedup => speedup;
         public PlayerDataContainer DataContainer => dataContainer;
+        public PlayerRecolour Recolour => recolour;
+        public PlayerVIP VIP => vip;
+        public PlayerVerified Verified => verified;
 
         public static List<CreaturePlayer> Players { get; } = new List<CreaturePlayer>();
         #endregion
@@ -33,6 +39,9 @@ namespace DanielLochner.Assets.CreatureCreator
             messenger = GetComponent<PlayerMessenger>();
             speedup = GetComponent<CreatureSpeedup>();
             dataContainer = GetComponent<PlayerDataContainer>();
+            recolour = GetComponent<PlayerRecolour>();
+            vip = GetComponent<PlayerVIP>();
+            verified = GetComponent<PlayerVerified>();
         }
 #endif
 
@@ -45,6 +54,14 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnDisable();
             Players.Remove(this);
+        }
+
+        public override void Setup()
+        {
+            base.Setup();
+
+            VIP.Setup();
+            Verified.Setup();
         }
 
         public override void OnShow()

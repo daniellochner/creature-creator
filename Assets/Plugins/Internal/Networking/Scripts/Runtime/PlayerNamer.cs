@@ -26,7 +26,7 @@ namespace DanielLochner.Assets
         public virtual void Setup()
         {
             playerName = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
-            playerName.Setup(DataContainer.PlayerData.Value.username, colour);
+            playerName.Setup(DataContainer.Data.username, colour);
             SetVisible(false);
         }
 

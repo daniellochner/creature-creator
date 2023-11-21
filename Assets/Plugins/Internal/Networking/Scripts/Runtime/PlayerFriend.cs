@@ -1,31 +1,30 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    public class PlayerFriend : MonoBehaviour
+    public class PlayerFriend : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private Color friendColour;
-        [SerializeField] private Color nonFriendColour;
         #endregion
 
         #region Properties
-        private MinimapIcon MinimapIcon { get; set; }
-        private PlayerNamer Namer { get; set; }
-        private PlayerDeathMessenger DeathMessenger { get; set; }
+        private PlayerRecolour Recolour { get; set; }
         private PlayerDataContainer DataContainer { get; set; }
+		
+		private PlayerNameUI NameUI => NetworkPlayersMenu.Instance?.GetPlayerNameUI(OwnerClientId);
         #endregion
 
         #region Methods
         private void Awake()
         {
-            MinimapIcon = GetComponent<MinimapIcon>();
-            Namer = GetComponent<PlayerNamer>();
-            DeathMessenger = GetComponent<PlayerDeathMessenger>();
+            Recolour = GetComponent<PlayerRecolour>();
             DataContainer = GetComponent<PlayerDataContainer>();
         }
-        private void OnDestroy()
+        public override void OnDestroy()
         {
+            base.OnDestroy();
             if (NetworkPlayersManager.Instance)
             {
                 NetworkPlayersManager.Instance.OnConfirmFriendRequest -= OnConfirmFriendRequest;
@@ -34,9 +33,9 @@ namespace DanielLochner.Assets
 
         public void Setup()
         {
-            if (FriendsManager.Instance.IsFriended(DataContainer.PlayerData.Value.playerId))
+            if (FriendsManager.Instance.IsFriended(DataContainer.Data.playerId))
             {
-                SetFriend(true);
+                SetAsFriend();
             }
             else
             {
@@ -44,23 +43,18 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void SetFriend(bool isFriend)
+        public void SetAsFriend()
         {
-            Color colour = isFriend ? friendColour : nonFriendColour;
-            MinimapIcon.MinimapIconUI.SetColour(colour);
+            Recolour.SetColour(friendColour);
 
-            if (isFriend)
-            {
-                Namer.SetColour(friendColour);
-                DeathMessenger.SetColour(friendColour);
-            }
+            NameUI?.SetFriend(true);
         }
 
         private void OnConfirmFriendRequest(PlayerData playerData)
         {
-            if (DataContainer.PlayerData.Value.clientId == playerData.clientId)
+            if (OwnerClientId == playerData.clientId)
             {
-                SetFriend(true);
+                SetAsFriend();
             }
         }
         #endregion

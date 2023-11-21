@@ -10,7 +10,6 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private Color playerColour;
         [SerializeField] private Color nonPlayerColour;
-        [SerializeField] private Color friendColour;
         [Space]
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image backgroundImage;
@@ -55,9 +54,12 @@ namespace DanielLochner.Assets
         {
             backgroundImage.color = colour;
         }
+        public void SetTextColour(Color colour)
+        {
+            nameText.color = colour;
+        }
         public void SetFriend(bool isFriend)
         {
-            nameText.color = isFriend ? friendColour : Color.white;
             friendButton.enabled = !isFriend;
         }
 

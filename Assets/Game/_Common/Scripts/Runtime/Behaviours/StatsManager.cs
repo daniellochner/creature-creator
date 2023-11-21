@@ -90,6 +90,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public bool IsVIP
+        {
+            get
+            {
+                return UnlockedBodyParts == NUM_BODY_PARTS && UnlockedPatterns == NUM_PATTERNS && CompletedQuests == NUM_QUESTS;
+            }
+        }
+
         private bool Initialized => AuthenticationManager.Instance.Status == AuthenticationManager.AuthStatus.Success;
         #endregion
 

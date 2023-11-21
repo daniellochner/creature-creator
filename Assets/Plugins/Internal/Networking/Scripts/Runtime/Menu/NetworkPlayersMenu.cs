@@ -54,25 +54,13 @@ namespace DanielLochner.Assets
             playerNames.Remove(clientId);
         }
 
-        private PlayerNameUI GetPlayerNameUI(ulong clientId)
+        public PlayerNameUI GetPlayerNameUI(ulong clientId)
         {
             if (string.IsNullOrEmpty(name) || !playerNames.ContainsKey(clientId))
             {
                 return null;
             }
             return playerNames[clientId];
-        }
-        public void SetName(ulong clientId, string name)
-        {
-            GetPlayerNameUI(clientId)?.SetName(name);
-        }
-        public void SetColour(ulong clientId, Color colour)
-        {
-            GetPlayerNameUI(clientId)?.SetColour(colour);
-        }
-        public void SetFriend(ulong clientId, bool isFriend)
-        {
-            GetPlayerNameUI(clientId)?.SetFriend(isFriend);
         }
 
         private void HandleMenuState()

@@ -129,8 +129,6 @@ namespace DanielLochner.Assets
                 {
                     FriendsManager.Instance.AcceptFriendRequest(playerData.playerId);
 
-                    NetworkPlayersMenu.Instance.SetFriend(playerData.clientId, true);
-
                     OnConfirmFriendRequest?.Invoke(playerData);
 
                     ConfirmFriendRequest(playerData);
@@ -153,8 +151,6 @@ namespace DanielLochner.Assets
         public void ConfirmFriendRequestClientRpc(PlayerData playerData, ClientRpcParams sendTo)
         {
             NotificationsManager.Notify(LocalizationUtility.Localize("friends_notification_accept", playerData.username).ToColour(friendColour));
-
-            NetworkPlayersMenu.Instance.SetFriend(playerData.clientId, true);
 
             OnConfirmFriendRequest?.Invoke(playerData);
         }
