@@ -31,10 +31,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 foreach (PublishedFileId_t fileId in Files)
                 {
-                    if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
+                    if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp) && Directory.Exists(folder))
                     {
                         string src = Directory.GetFiles(folder)[0];
-                        string dst = Path.Combine(Application.persistentDataPath, "creature", Path.GetFileName(src));
+
+                        string creaturesDir = Path.Combine(Application.persistentDataPath, "creature");
+                        if (!Directory.Exists(creaturesDir))
+                        {
+                            Directory.CreateDirectory(creaturesDir);
+                        }
+                        string dst = Path.Combine(creaturesDir, Path.GetFileName(src));
+
                         if (!File.Exists(dst))
                         {
                             File.Copy(src, dst);
