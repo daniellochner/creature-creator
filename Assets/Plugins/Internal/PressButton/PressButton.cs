@@ -6,18 +6,9 @@ namespace DanielLochner.Assets
 {
     public class PressButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
-        [SerializeField] private float pressedScale = 0.95f;
-        [SerializeField] private float pressTime = 0.25f;
+        [SerializeField] private float scaleTime = 0.1f;
 
-        private Coroutine pressCoroutine;
-
-        void Start()
-        {
-            if (GetComponent<Animator>() != null)
-            {
-                Debug.Log(gameObject, gameObject);
-            }
-        }
+        private Coroutine scaleCoroutine;
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -34,17 +25,35 @@ namespace DanielLochner.Assets
 
         private void SetPressed(bool isPressed)
         {
-            this.StopStartCoroutine(ScaleRoutine(isPressed ? pressedScale : 1f), ref pressCoroutine);
+
+            this.StopStartCoroutine(ScaleRoutine(isPressed), ref scaleCoroutine);
         }
 
-        private IEnumerator ScaleRoutine(float targetScale)
+        private IEnumerator ScaleRoutine(bool isScaled)
         {
             float initialScale = transform.localScale.x;
-            yield return this.InvokeOverTime(delegate (float t)
+            if (isScaled)
             {
-                transform.localScale = Vector3.one * Mathf.Lerp(initialScale, targetScale, t);
-            },
-            pressTime);
+                for (float i = initialScale; i > 0.95f; i -= (Time.unscaledDeltaTime / scaleTime) * 0.05f)
+                {
+                    SetScale(i);
+                    yield return null;
+                }
+                SetScale(0.95f);
+            }
+            else
+            {
+                for (float i = initialScale; i < 1f; i += (Time.unscaledDeltaTime / scaleTime) * 0.05f)
+                {
+                    SetScale(i);
+                    yield return null;
+                }
+                SetScale(1f);
+            }
+        }
+        private void SetScale(float scale)
+        {
+            transform.localScale = Vector3.one * scale;
         }
     }
 }
