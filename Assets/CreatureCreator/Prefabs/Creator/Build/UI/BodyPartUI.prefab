@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7746160181689217212}
   - component: {fileID: 5973400584851607694}
   - component: {fileID: 8148425820553024457}
-  - component: {fileID: 2501555089303285585}
   - component: {fileID: -5435175622451547420}
   - component: {fileID: -6463868399609350936}
   - component: {fileID: 1943533712774698695}
@@ -69,26 +68,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!95 &2501555089303285585
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6467549742658448689}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ebec456bfc1a1524d8a3d08da71f1fd6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &-5435175622451547420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275d72cda2d0b754b8e56ef37a1142b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2501555089303285585}
   hoverUI: {fileID: -6463868399609350936}
 --- !u!114 &2175721605441267044
 MonoBehaviour:
@@ -226,7 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 1286688342706361921}
-  animator: {fileID: 2501555089303285585}
+  expandOnHover: {fileID: 7462238181974368177}
   dragUI: {fileID: -5435175622451547420}
   hoverUI: {fileID: -6463868399609350936}
   clickUI: {fileID: 1943533712774698695}
@@ -281,7 +259,7 @@ MonoBehaviour:
   onHandheld:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2501555089303285585}
+      - m_Target: {fileID: 7462238181974368177}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
