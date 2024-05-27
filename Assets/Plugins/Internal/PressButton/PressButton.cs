@@ -1,41 +1,50 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace DanielLochner.Assets
 {
-    [RequireComponent(typeof(Animator))]
     public class PressButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
-        private Animator animator;
+        [SerializeField] private float pressedScale = 0.95f;
+        [SerializeField] private float pressTime = 0.25f;
 
-        public bool IsPressed
+        private Coroutine pressCoroutine;
+
+        void Start()
         {
-            get => animator.GetBool("IsPressed");
-            set
+            if (GetComponent<Animator>() != null)
             {
-                animator.SetBool("IsPressed", value && gameObject.IsInteractable());
+                Debug.Log(gameObject, gameObject);
             }
         }
 
-        private void Awake()
-        {
-            animator = GetComponent<Animator>();
-        }
         public void OnPointerDown(PointerEventData eventData)
         {
-            IsPressed = true;
+            SetPressed(true);
         }
         public void OnPointerUp(PointerEventData eventData)
         {
-            IsPressed = false;
+            SetPressed(false);
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (IsPressed)
+            SetPressed(false);
+        }
+
+        private void SetPressed(bool isPressed)
+        {
+            this.StopStartCoroutine(ScaleRoutine(isPressed ? pressedScale : 1f), ref pressCoroutine);
+        }
+
+        private IEnumerator ScaleRoutine(float targetScale)
+        {
+            float initialScale = transform.localScale.x;
+            yield return this.InvokeOverTime(delegate (float t)
             {
-                IsPressed = false;
-            }
+                transform.localScale = Vector3.one * Mathf.Lerp(initialScale, targetScale, t);
+            },
+            pressTime);
         }
     }
 }

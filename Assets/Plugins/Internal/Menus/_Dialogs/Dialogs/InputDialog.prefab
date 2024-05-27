@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8362114704558193566}
   - component: {fileID: 1419170690520569160}
   - component: {fileID: 673455470420883259}
-  - component: {fileID: 4443625218558653180}
   - component: {fileID: 6320860382915165788}
   m_Layer: 5
   m_Name: Icon
@@ -123,27 +122,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!95 &4443625218558653180
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 722783051880260037}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6320860382915165788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,6 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
 --- !u!1 &1296656002101881099
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +614,6 @@ GameObject:
   - component: {fileID: 5204932865937589806}
   - component: {fileID: 7346877964777106714}
   - component: {fileID: 8617434308018354226}
-  - component: {fileID: 417273044372512756}
   - component: {fileID: 3750840667193056653}
   - component: {fileID: 1993811706299480219}
   m_Layer: 5
@@ -747,27 +726,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!95 &417273044372512756
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3203744385642463316}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3750840667193056653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,6 +738,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
 --- !u!114 &1993811706299480219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1825,7 +1785,6 @@ GameObject:
   - component: {fileID: 8336037820990565270}
   - component: {fileID: 4955141737272370547}
   - component: {fileID: 1911056367340218105}
-  - component: {fileID: 1432800864487119002}
   - component: {fileID: 1114478948928928713}
   - component: {fileID: 4743706919362492180}
   m_Layer: 5
@@ -1938,27 +1897,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!95 &1432800864487119002
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8351157558331037696}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1114478948928928713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1971,6 +1909,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
 --- !u!114 &4743706919362492180
 MonoBehaviour:
   m_ObjectHideFlags: 0

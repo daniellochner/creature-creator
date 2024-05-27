@@ -105,7 +105,6 @@ GameObject:
   - component: {fileID: 4046300960107033393}
   - component: {fileID: 414911292299604554}
   - component: {fileID: 4377219292514546844}
-  - component: {fileID: 6880291585595035577}
   - component: {fileID: 2483167442487746407}
   - component: {fileID: 1632019352124283926}
   m_Layer: 5
@@ -217,27 +216,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!95 &6880291585595035577
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1953180147630180266}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2483167442487746407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +228,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
 --- !u!114 &1632019352124283926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,7 +793,6 @@ GameObject:
   - component: {fileID: 455983297220875767}
   - component: {fileID: 3816683446699291658}
   - component: {fileID: 7460450435683875668}
-  - component: {fileID: 415588714991597872}
   - component: {fileID: 6958920839387524842}
   m_Layer: 5
   m_Name: Remove
@@ -924,27 +903,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!95 &415588714991597872
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8479010064632293433}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6958920839387524842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -957,3 +915,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
