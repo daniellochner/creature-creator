@@ -6,51 +6,83 @@ namespace DanielLochner.Assets
 {
     public class PressButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
-        [SerializeField] private float scaleTime = 0.1f;
-
-        private Coroutine scaleCoroutine;
+        [SerializeField] private float pressScale = 0.95f;
+        [SerializeField] private float pressTime = 0.25f;
+        private bool isPressed, isScaling, isScaledIn;
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            SetPressed(true);
+            Press();
         }
         public void OnPointerUp(PointerEventData eventData)
         {
-            SetPressed(false);
+            Release();
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            SetPressed(false);
+            Release();
         }
 
-        private void SetPressed(bool isPressed)
+        private void Press()
         {
-
-            this.StopStartCoroutine(ScaleRoutine(isPressed), ref scaleCoroutine);
-        }
-
-        private IEnumerator ScaleRoutine(bool isScaled)
-        {
-            float initialScale = transform.localScale.x;
-            if (isScaled)
+            if (!isPressed)
             {
-                for (float i = initialScale; i > 0.95f; i -= (Time.unscaledDeltaTime / scaleTime) * 0.05f)
+                isPressed = true;
+
+                if (!isScaling && !isScaledIn)
                 {
-                    SetScale(i);
-                    yield return null;
+                    StartCoroutine(ScalingRoutine(ScaleInOutRoutine()));
                 }
-                SetScale(0.95f);
-            }
-            else
-            {
-                for (float i = initialScale; i < 1f; i += (Time.unscaledDeltaTime / scaleTime) * 0.05f)
-                {
-                    SetScale(i);
-                    yield return null;
-                }
-                SetScale(1f);
             }
         }
+        private void Release()
+        {
+            if (isPressed)
+            {
+                isPressed = false;
+
+                if (!isScaling && isScaledIn)
+                {
+                    StartCoroutine(ScalingRoutine(ScaleOutRoutine()));
+                }
+            }
+        }
+
+        private IEnumerator ScalingRoutine(IEnumerator routine)
+        {
+            isScaling = true;
+            yield return routine;
+            isScaling = false;
+        }
+        private IEnumerator ScaleInOutRoutine()
+        {
+            yield return ScaleInRoutine();
+            if (isPressed)
+            {
+                isScaling = false;
+                yield break;
+            }
+            yield return ScaleOutRoutine();
+        }
+        private IEnumerator ScaleInRoutine()
+        {
+            yield return ScaleRoutine(1f, pressScale);
+            isScaledIn = true;
+        }
+        private IEnumerator ScaleOutRoutine()
+        {
+            yield return ScaleRoutine(pressScale, 1f);
+            isScaledIn = false;
+        }
+        private IEnumerator ScaleRoutine(float initialScale, float targetScale)
+        {
+            yield return this.InvokeOverTime(delegate (float t)
+            {
+                SetScale(Mathf.Lerp(initialScale, targetScale, t));
+            },
+            pressTime);
+        }
+
         private void SetScale(float scale)
         {
             transform.localScale = Vector3.one * scale;
