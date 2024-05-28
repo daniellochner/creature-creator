@@ -8,6 +8,8 @@ namespace DanielLochner.Assets
     public class ExpandOnHover : MonoBehaviour
     {
         #region Fields
+        [SerializeField] private float expandScale = 1.075f;
+        [SerializeField] private float expandTime = 0.25f;
         [SerializeField] private HoverUI hoverUI;
 
         private Coroutine expandCoroutine;
@@ -43,16 +45,16 @@ namespace DanielLochner.Assets
             float initialScale = transform.localScale.x;
             if (isExpanded)
             {
-                for (float i = initialScale; i < 1.075f; i += (Time.unscaledDeltaTime / 0.25f) * 0.075f)
+                for (float i = initialScale; i < expandScale; i += (Time.unscaledDeltaTime / expandTime) * (expandScale - 1f))
                 {
                     SetScale(i);
                     yield return null;
                 }
-                SetScale(1.075f);
+                SetScale(expandScale);
             }
             else
             {
-                for (float i = initialScale; i > 1f; i -= (Time.unscaledDeltaTime / 0.25f) * 0.075f)
+                for (float i = initialScale; i > 1f; i -= (Time.unscaledDeltaTime / expandTime) * (expandScale - 1f))
                 {
                     SetScale(i);
                     yield return null;
