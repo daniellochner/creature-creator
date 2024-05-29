@@ -69,6 +69,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Begin()
         {
+            if (!eye || !pattern || !platform)
+            {
+                return;
+            }
+
             tutorialCoroutine = StartCoroutine(TutorialRoutine());
         }
         public void SetVisibility(bool v, float t = 0.25f)
