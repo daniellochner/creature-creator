@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Quest[] quests;
         [SerializeField] private Battle[] battles;
         [SerializeField] private Teleport[] teleports;
-        [SerializeField] private Map nextMap;
+        [SerializeField] private Map nextMap = Map.ComingSoon;
         [Space]
         [SerializeField] private GameObject progress;
         [SerializeField] private TextMeshProUGUI bodyPartsText;
@@ -61,7 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool CanAdvance
         {
-            get => (bodyParts.Length + patterns.Length + quests.Length) == (UnlockedBodyParts + UnlockedPatterns + CompletedQuests);
+            get => (nextMap != Map.ComingSoon) && (bodyParts.Length + patterns.Length + quests.Length) == (UnlockedBodyParts + UnlockedPatterns + CompletedQuests);
         }
         #endregion
 
