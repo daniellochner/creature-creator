@@ -96,5 +96,10 @@ namespace DanielLochner.Assets
 
             return component;
         }
+
+        public static bool IsInScene(this GameObject gameObject)
+        {
+            return !string.IsNullOrEmpty(gameObject.scene.name) && !string.IsNullOrEmpty(gameObject.scene.path);
+        }
     }
 }
