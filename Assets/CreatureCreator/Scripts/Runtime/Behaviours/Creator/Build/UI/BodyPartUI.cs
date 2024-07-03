@@ -12,7 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Image icon;
-        [SerializeField] private Animator animator;
+        [SerializeField] private ExpandOnHover expandOnHover;
         [SerializeField] private DragUI dragUI;
         [SerializeField] private HoverUI hoverUI;
         [SerializeField] private ClickUI clickUI;
@@ -57,7 +57,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Select();
 
-                animator.SetBool("Expanded", false);
+                expandOnHover.SetExpanded(false);
 
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
                 {

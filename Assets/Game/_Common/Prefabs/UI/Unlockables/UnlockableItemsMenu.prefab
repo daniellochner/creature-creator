@@ -249,7 +249,7 @@ CanvasGroup:
   m_IgnoreParentGroups: 0
 --- !u!95 &5877014122412773003
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -266,7 +266,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2538067379027851007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,7 +1119,6 @@ GameObject:
   - component: {fileID: 7485686073635108216}
   - component: {fileID: 7485686073635108231}
   - component: {fileID: 7485686073635108217}
-  - component: {fileID: 1529136530781187035}
   - component: {fileID: 2148827411941758386}
   m_Layer: 5
   m_Name: Icon
@@ -1241,26 +1241,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!95 &1529136530781187035
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7485686073635108229}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2148827411941758386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1273,6 +1253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
 --- !u!1 &7485686074002674834
 GameObject:
   m_ObjectHideFlags: 0

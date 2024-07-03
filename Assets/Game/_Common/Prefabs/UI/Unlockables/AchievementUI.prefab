@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5508569749822562769}
   - component: {fileID: 8035144329640878742}
   - component: {fileID: 2101010467113440918}
-  - component: {fileID: 4332700572742065678}
   - component: {fileID: 4097201294332872119}
   - component: {fileID: 1647315168428471228}
   - component: {fileID: 8725905944650870510}
@@ -96,26 +95,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &4332700572742065678
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5140521527615249518}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ebec456bfc1a1524d8a3d08da71f1fd6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &4097201294332872119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275d72cda2d0b754b8e56ef37a1142b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 4332700572742065678}
   hoverUI: {fileID: 4097201294332872119}
 --- !u!114 &8035144329640878743
 MonoBehaviour:
@@ -207,7 +185,7 @@ MonoBehaviour:
   onHandheld:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4332700572742065678}
+      - m_Target: {fileID: 8725905944650870510}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6

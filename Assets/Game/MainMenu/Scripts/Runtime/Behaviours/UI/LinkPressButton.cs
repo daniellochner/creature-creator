@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DanielLochner.Assets
 {
-    [RequireComponent(typeof(PressButton))]
     public class LinkPressButton : MonoBehaviour
     {
         #region Fields
@@ -17,7 +16,7 @@ namespace DanielLochner.Assets
         }
         private void Update()
         {
-            linked.IsPressed = source.IsPressed;
+            linked.transform.localScale = source.transform.localScale;
         }
         #endregion
     }

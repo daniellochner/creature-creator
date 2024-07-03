@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5788895343517791}
   - component: {fileID: 5498723830775783614}
   - component: {fileID: 5047197606708124079}
-  - component: {fileID: 6652834911112502654}
   - component: {fileID: 7296541302336667585}
   m_Layer: 0
   m_Name: MoreUI
@@ -124,27 +123,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!95 &6652834911112502654
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2219413007701965244}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc2fb33aec4a3cb4ca46c262da0dedbc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7296541302336667585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb64f99502f454589dc09abeae300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedScale: 0.95
+  pressTime: 0.25
 --- !u!1 &2224155076431012234
 GameObject:
   m_ObjectHideFlags: 0
