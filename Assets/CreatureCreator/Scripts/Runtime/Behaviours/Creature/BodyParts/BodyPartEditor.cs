@@ -259,9 +259,6 @@ namespace DanielLochner.Assets.CreatureCreator
                         connectionPoint.position = aPosition;
                         Flipped.connectionPoint.position = Flipped.transform.position;
 
-                        
-                        Flipped.gameObject.SetActive(!IsHiding);
-
                         BodyPartConstructor.AttachedBodyPart.hideMain = IsHiding && IsFlipped;
                         BodyPartConstructor.AttachedBodyPart.hideFlipped = IsHiding && !IsFlipped;
                     }

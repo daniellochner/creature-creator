@@ -214,8 +214,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Flip(false);
 
-            gameObject.SetActive(!attachedBodyPart.hideMain);
-            Flipped.gameObject.SetActive(!attachedBodyPart.hideFlipped);
+            if (CanMirror)
+            {
+                gameObject.SetActive(!attachedBodyPart.hideMain);
+                Flipped.gameObject.SetActive(!attachedBodyPart.hideFlipped);
+            }
 
             OnAttach?.Invoke();
         }
