@@ -11,8 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     public class Progress : Data
     {
         #region Fields
-        [SerializeField, Range(0, 1)] private float experience = 0;
-        [SerializeField, Range(0, 50)] private int level = 0;
+        [SerializeField] private int experience = 0;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
         [SerializeField] private List<string> completedQuests = new List<string>();
@@ -21,41 +20,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public static float MaxExperience = 100;
+        public static int ExperiencePerLevel = 100;
         public static int MaxLevel = 50;
 
-        public float Experience
+        public int Experience
         {
             get => experience;
-            set
-            {
-                experience = value;
-                if (experience >= MaxExperience)
-                {
-                    if (Level >= MaxLevel)
-                    {
-                        experience = MaxExperience;
-                    }
-                    else
-                    {
-                        float levels = experience / MaxExperience;
-                        Level += (int)levels;
-                        experience = (levels - (int)levels) * MaxExperience;
-                    }
-                }
-            }
-        }
-        public int Level
-        {
-            get => level;
-            set
-            {
-                level = value;
-                if (level >= MaxLevel)
-                {
-                    level = MaxLevel;
-                }
-            }
+            set => experience = value;
         }
         public List<string> UnlockedBodyParts
         {
@@ -77,13 +48,20 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => reachedPeaks;
         }
+
+        public int Level
+        {
+            get
+            {
+                return Mathf.Min(Experience / ExperiencePerLevel, MaxLevel);
+            }
+        }
         #endregion
 
         #region Methods
         public override void Revert()
         {
             Experience = 0;
-            Level = 0;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
             CompletedQuests.Clear();

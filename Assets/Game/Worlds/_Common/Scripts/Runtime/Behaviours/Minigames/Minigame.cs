@@ -46,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] protected int celebrateTime;
         [SerializeField] protected int completeTime;
         [SerializeField] protected GameObject[] fireworksPrefabs;
+        [SerializeField] protected int experience = 25;
 
         protected List<MinigameState> states = new List<MinigameState>();
         protected List<ulong> players = new List<ulong>();
@@ -610,11 +611,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                MusicManager.Instance.FadeTo(null); // TODO: Win music?
-
-#if USE_STATS
+                OnCompleted();
                 StatsManager.Instance.MinigamesWon++;
-#endif
             }
         }
 
@@ -623,7 +621,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                MusicManager.Instance.FadeTo(null); // TODO: Lose music?
+                OnCompleted();
             }
         }
 
@@ -637,6 +635,18 @@ namespace DanielLochner.Assets.CreatureCreator
         private void ShutdownClientRpc()
         {
             OnClientShutdown();
+        }
+
+        protected virtual void OnCompleted()
+        {
+            MusicManager.Instance.FadeTo(null);
+
+            ProgressManager.Data.Experience += experience;
+            ProgressManager.Instance.Save();
+
+            StatsManager.Instance.ExperienceEarned += experience;
+
+            NotificationsManager.Notify(LocalizationUtility.Localize("experience-earned", experience));
         }
 
         protected virtual void OnServerShutdown()
@@ -654,9 +664,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-#if USE_STATS
                 StatsManager.Instance.MinigamesCompleted++;
-#endif
 
                 EditorManager.Instance.ResetRestrictions();
 

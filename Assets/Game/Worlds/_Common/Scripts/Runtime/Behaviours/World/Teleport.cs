@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private Map targetMap;
+        [SerializeField] private int requiredExperience;
         [SerializeField] private TeleportCinematic cinematic;
         [SerializeField] private Keybind keybind;
         [Space]
@@ -30,11 +31,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool CanTeleport
         {
-            get => (WorldManager.Instance.World is WorldSP) || (NetworkManager.Singleton.IsServer && (NumPlayers == MaxPlayers));
+            get => (WorldManager.Instance.IsCreative || (ProgressManager.Data.Experience >= requiredExperience)) && (!WorldManager.Instance.IsMultiplayer || (IsServer && (NumPlayers == MaxPlayers)));
+        }
+        private bool ShowRequiredExperience
+        {
+            get => !WorldManager.Instance.IsCreative && (!WorldManager.Instance.IsMultiplayer || NetworkManager.Singleton.IsServer);
         }
         private bool ShowCount
         {
-            get => (WorldManager.Instance.World is WorldMP) && (MaxPlayers > 1);
+            get => WorldManager.Instance.IsMultiplayer && (MaxPlayers > 1);
         }
         private int NumPlayers
         {
@@ -180,6 +185,10 @@ namespace DanielLochner.Assets.CreatureCreator
             if (ShowCount)
             {
                 text += $"{TextUtility.FormatError(NumPlayers, NumPlayers != MaxPlayers)}/{MaxPlayers}<br>";
+            }
+            if (ShowRequiredExperience)
+            {
+                text += $"XP: {TextUtility.FormatError(ProgressManager.Data.Experience, ProgressManager.Data.Experience < requiredExperience)}/{requiredExperience}<br>";
             }
             if (SystemUtility.IsDevice(DeviceType.Desktop) && CanTeleport)
             {

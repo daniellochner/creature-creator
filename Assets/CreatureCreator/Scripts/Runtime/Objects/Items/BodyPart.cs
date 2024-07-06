@@ -13,7 +13,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [Header("Body Part")]
         [SerializeField] private BodyPartPrefab prefab;
         [SerializeField] private BodyPartDefaultColours defaultColours;
-        [SerializeField] private int price;
         [SerializeField] private int complexity;
         [SerializeField] private int health;
         [SerializeField] private float weight;
@@ -44,11 +43,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => transformations;
             set => transformations = value;
-        }
-        public int Price
-        {
-            get => price;
-            set => price = value;
         }
         public int Complexity
         {

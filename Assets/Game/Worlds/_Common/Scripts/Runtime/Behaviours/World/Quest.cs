@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string id;
         [SerializeField] private string description;
         [SerializeField] private QuestType type;
-        [SerializeField] private int reward;
+        [SerializeField] private int experience = 50;
         [SerializeField] private float disappearTime;
         [SerializeField] private QuestItem[] items;
         [SerializeField] public UnityEvent onComplete;
@@ -145,7 +145,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                questText.text = $"<size=7>{LocalizationUtility.Localize(description)}: ${reward}</size><br><size=14>{TextUtility.FormatError(current, current < required)}/{required}</size>";
+                questText.text = $"<size=7>{LocalizationUtility.Localize(description)}: ${experience}</size><br><size=14>{TextUtility.FormatError(current, current < required)}/{required}</size>";
             }
             else
             {
@@ -164,17 +164,15 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             // Reward
-            ProgressManager.Data.Cash += reward;
+            ProgressManager.Data.Experience += experience;
             ProgressManager.Instance.Save();
-            Player.Instance.Editor.Cash += reward;
 
             // Stats
-#if USE_STATS
             StatsManager.Instance.CompletedQuests++;
-#endif
+            StatsManager.Instance.ExperienceEarned += experience;
 
             // Other
-            NotificationsManager.Notify(LocalizationUtility.Localize("quest-complete", reward));
+            NotificationsManager.Notify(LocalizationUtility.Localize("experience-earned", experience));
             source.Play();
             minimapIcon.enabled = false;
             onComplete.Invoke();

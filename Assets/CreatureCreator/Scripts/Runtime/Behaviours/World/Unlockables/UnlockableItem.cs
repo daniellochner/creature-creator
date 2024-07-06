@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool isUnlockable = true;
         [SerializeField] private GameObject unlockFX;
         [SerializeField] public UnityEvent onUnlock;
+        [SerializeField] private int experience = 5;
         private bool hasSpawned = false;
         #endregion
 
@@ -40,7 +41,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 OnUnlock();
                 onUnlock.Invoke();
+
+                ProgressManager.Data.Experience += experience;
                 ProgressManager.Instance.Save();
+
+                StatsManager.Instance.ExperienceEarned += experience;
+
                 Instantiate(unlockFX, transform.position, transform.rotation);
                 Destroy(gameObject);
             }

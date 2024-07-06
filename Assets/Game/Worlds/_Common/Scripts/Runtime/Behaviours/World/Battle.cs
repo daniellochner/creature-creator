@@ -19,6 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Bounds bounds;
         [SerializeField] private GameObject info;
         [SerializeField] private string musicId;
+        [SerializeField] private int experience = 25;
 
         private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);
@@ -113,12 +114,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InBattle)
             {
+                MusicManager.Instance.FadeTo(SettingsManager.Data.InGameMusicId);
+
+                ProgressManager.Data.Experience += experience;
+                ProgressManager.Instance.Save();
+
+                StatsManager.Instance.ExperienceEarned += experience;
+
+                NotificationsManager.Notify(LocalizationUtility.Localize("experience-earned", experience));
+
                 victoryAS.Play();
                 MMVibrationManager.Haptic(HapticTypes.Success);
 
-#if USE_STATS
                 StatsManager.Instance.CompletedBattles++;
-#endif
             }
             HideBattle();
         }

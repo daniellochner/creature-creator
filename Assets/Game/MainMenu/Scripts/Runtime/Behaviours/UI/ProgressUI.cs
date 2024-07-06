@@ -15,9 +15,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Slider achievementsSlider;
         [SerializeField] private Button achievementsButton;
 
-        [Header("Cash")]
-        [SerializeField] private TextMeshProUGUI cashText;
-
         [Header("Quests")]
         [SerializeField] private Slider questsSlider;
         [SerializeField] private TextMeshProUGUI questsText;
@@ -57,9 +54,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     AchievementsMenu.Instance.Open();
                 }
             });
-
-            // Cash
-            cashText.text = $"${ProgressManager.Data.Cash}";
 
             // Quests
             int completedQuests = ProgressManager.Data.CompletedQuests.Count;
