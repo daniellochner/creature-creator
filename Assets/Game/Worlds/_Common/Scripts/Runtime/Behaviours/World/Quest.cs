@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private string id;
         [SerializeField] private string description;
         [SerializeField] private QuestType type;
-        [SerializeField] private int experience = 50;
+        [SerializeField] private int experience;
         [SerializeField] private float disappearTime;
         [SerializeField] private QuestItem[] items;
         [SerializeField] public UnityEvent onComplete;

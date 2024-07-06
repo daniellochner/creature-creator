@@ -19,7 +19,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Bounds bounds;
         [SerializeField] private GameObject info;
         [SerializeField] private string musicId;
-        [SerializeField] private int experience = 25;
+        [SerializeField] private int experience;
 
         private NetworkVariable<bool> complete = new NetworkVariable<bool>(false);
         private NetworkVariable<int> round = new NetworkVariable<int>(-1);

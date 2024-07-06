@@ -46,7 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] protected int celebrateTime;
         [SerializeField] protected int completeTime;
         [SerializeField] protected GameObject[] fireworksPrefabs;
-        [SerializeField] protected int experience = 25;
+        [SerializeField] protected int experience;
 
         protected List<MinigameState> states = new List<MinigameState>();
         protected List<ulong> players = new List<ulong>();
