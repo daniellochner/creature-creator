@@ -11,7 +11,6 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         #region Fields
         [SerializeField] private string collectionId;
-        [SerializeField] private int cash;
         [SerializeField] private List<Item> items;
         #endregion
 
@@ -20,18 +19,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return PlayerPrefs.GetInt(collectionId) == 1 || EditorManager.Instance.CreativeMode;
-                //List<Item> tmp = new List<Item>(items);
-                //foreach (Item item in items)
-                //{
-                //    if ((item.itemType == UnlockableItemType.BodyPart && ProgressManager.Data.UnlockedBodyParts.Contains(item.itemID)) || (item.itemType == UnlockableItemType.Pattern  && ProgressManager.Data.UnlockedPatterns.Contains(item.itemID)))
-                //    {
-                //        tmp.RemoveAll(x => x.itemID == item.itemID);
-                //        cash = 0;
-                //    }
-                //}
-                //items = tmp;
-                //return items.Count == 0;
+                foreach (var item in items)
+                {
+                    if ((item.itemType == UnlockableItemType.BodyPart) && !ProgressManager.Data.UnlockedBodyParts.Contains(item.itemID))
+                    {
+                        return false;
+                    }
+                    else
+                    if ((item.itemType == UnlockableItemType.Pattern) && !ProgressManager.Data.UnlockedPatterns.Contains(item.itemID))
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
         #endregion
@@ -39,12 +39,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected override void OnUnlock()
         {
-            if (cash > 0)
-            {
-                NotificationsManager.Notify($"You received ${cash}!");
-                ProgressManager.Data.Cash += cash;
-            }
-
             foreach (Item item in items)
             {
                 if (item.itemType == UnlockableItemType.BodyPart)
@@ -57,8 +51,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     EditorManager.Instance.UnlockPattern(item.itemID);
                 }
             }
-
-            PlayerPrefs.SetInt(collectionId, 1);
         }
         protected override void OnSpawn()
         {

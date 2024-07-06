@@ -451,8 +451,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 int nonFunctionalValue = bodyPart.Appeal + tValue;
                 int functionalValue = bodyPart.Health + bodyPart.Complexity;
 
-                bodyPart.Price = (int)(0.6f * functionalValue + 0.4f * nonFunctionalValue) * 5;
-
                 EditorUtility.SetDirty(bodyPart);
             }
         }

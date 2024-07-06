@@ -43,7 +43,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private float addedOrRemovedTime;
         private bool isInteractable, isDirty;
         private string loadedCreature;
-        private int cash;
         private Vector3? pointerPosOffset;
 
         private Outline tempModelOutline;
@@ -127,15 +126,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 loadedCreature = value;
                 EditorManager.Instance.UpdateCreaturesFormatting();
-            }
-        }
-        public int Cash
-        {
-            get => cash;
-            set
-            {
-                cash = value;
-                EditorManager.Instance.UpdateStatistics();
             }
         }
         public Platform Platform
@@ -689,11 +679,9 @@ namespace DanielLochner.Assets.CreatureCreator
             };
             Constructor.OnAddBodyPartData += delegate (BodyPart bodyPart)
             {
-                Cash -= bodyPart.Price;
             };
             Constructor.OnRemoveBodyPartData += delegate (BodyPart bodyPart)
             {
-                Cash += bodyPart.Price;
             };
             Constructor.OnBodyPartPrefabOverride += delegate (BodyPart bodyPart)
             {
@@ -705,7 +693,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Constructor.Demolish();
 
-            Cash = EditorManager.Instance.MaxCash;
             if (creatureData != null)
             {
                 Constructor.Construct(creatureData);

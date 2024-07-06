@@ -29,7 +29,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField] private bool creativeMode;
         [SerializeField] private bool checkForProfanity;
-        [SerializeField] private int creativeCash;
         [SerializeField] private SecretKey creatureEncryptionKey;
 
         [Header("General")]
@@ -43,7 +42,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private ToggleGraphic buildTG;
         [SerializeField] private BodyPartSettingsMenu bodyPartSettingsMenu;
         [SerializeField] private BodyPartUI bodyPartUIPrefab;
-        [SerializeField] private TextMeshProUGUI cashText;
         [SerializeField] private TextMeshProUGUI complexityText;
         [SerializeField] private TextMeshProUGUI heightText;
         [SerializeField] private TextMeshProUGUI weightText;
@@ -57,7 +55,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI statisticsTitleText;
         [SerializeField] private Toggle bodyPartsToggle;
         [SerializeField] private Toggle abilitiesToggle;
-        [SerializeField] private Animator cashWarningAnimator;
         [SerializeField] private Animator complexityWarningAnimator;
         [SerializeField] private Animator bonesWarningAnimator;
         [SerializeField] private AudioClip whooshAudioClip;
@@ -122,7 +119,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private Color? restrictedColour = null;
         private int restrictedComplexity = -1;
         private int restrictedBones = -1;
-        private int restrictedCash = -1;
 
         private Coroutine delayedRecordCoroutine;
         private Change prevDelayedChangeType;
@@ -149,11 +145,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => creativeMode;
             set => creativeMode = value;
-        }
-        public int CreativeCash
-        {
-            get => creativeCash;
-            set => creativeCash = value;
         }
 
         public bool IsEditing => isEditing;
@@ -193,29 +184,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 {
                     return (int)Creature.Constructor.MinMaxBones.max;
-                }
-            }
-        }
-        public int MaxCash
-        {
-            get
-            {
-                if (restrictedCash != -1)
-                {
-                    return restrictedCash;
-                }
-                else
-                if (Unlimited)
-                {
-                    return int.MaxValue;
-                }
-                if (CreativeMode)
-                {
-                    return CreativeCash;
-                }
-                else
-                {
-                    return ProgressManager.Data.Cash;
                 }
             }
         }
@@ -356,7 +324,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 Creature.Editor.Load(null);
             }
-            Creature.Editor.Cash = MaxCash;
             Creature.Informer.Setup(informationMenu);
             Creature.Editor.Platform.TeleportTo(true, false);
 
@@ -481,7 +448,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Creature.Optimizer.Optimize();
 
-#if USE_STATS
             if (Creature.Constructor.Statistics.Weight >= 500f)
             {
                 StatsManager.Instance.UnlockAchievement("ACH_HEAVYWEIGHT_CHAMPION");
@@ -496,7 +462,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 StatsManager.Instance.UnlockAchievement("ACH_SPEED_DEMON");
             }
-#endif
         }
         public void Paint()
         {
@@ -691,9 +656,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 secondaryColourPalette.SetColour((Color)restrictedColour, true);
             }
 
-#if USE_STATS
             StatsManager.Instance.UnlockAchievement("ACH_BACK_TO_BASICS");
-#endif
         }
         public void TryImport()
         {
@@ -950,13 +913,12 @@ namespace DanielLochner.Assets.CreatureCreator
 
             bool bodyPartsAreUnlocked = true;
             bool usesPremiumBodyPart = false, usesRestrictedBodyPart = false, usesRestrictedColour = false;
-            int totalCost = 0, totalComplexity = 0;
+            int totalComplexity = 0;
             foreach (AttachedBodyPart attachedBodyPart in creatureData.AttachedBodyParts)
             {
                 BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", attachedBodyPart.bodyPartID);
                 if (bodyPart != null)
                 {
-                    totalCost += bodyPart.Price;
                     totalComplexity += bodyPart.Complexity;
 
                     if (!PremiumManager.Instance.IsBodyPartUsable(attachedBodyPart.bodyPartID))
@@ -996,7 +958,6 @@ namespace DanielLochner.Assets.CreatureCreator
             totalComplexity += creatureData.Bones.Count;
 
             bool creatureIsTooComplicated = totalComplexity > MaxComplexity;
-            bool creatureIsTooExpensive = totalCost > MaxCash;
             bool creatureHasTooManyBones = creatureData.Bones.Count > MaxBones;
 
             // Error Message
@@ -1004,10 +965,6 @@ namespace DanielLochner.Assets.CreatureCreator
             if (creatureIsTooComplicated)
             {
                 errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_complicated", totalComplexity, MaxComplexity));
-            }
-            if (creatureIsTooExpensive)
-            {
-                errors.Add(LocalizationUtility.Localize("cc_cannot-load-creature_reason_expensive", totalCost, MaxCash));
             }
             if (creatureHasTooManyBones)
             {
@@ -1063,12 +1020,11 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
 
             bool tooComplicated = Creature.Constructor.Statistics.Complexity + bodyPart.Complexity > MaxComplexity;
-            bool notEnoughCash = bodyPart.Price > Creature.Editor.Cash;
             bool isReleased = bodyPart.IsReleased;
             bool isPremium = !PremiumManager.Instance.IsBodyPartUsable(bodyPartID);
             bool isRestricted = restrictedBodyParts.Contains(bodyPartID);
 
-            if (notEnoughCash || tooComplicated || isPremium || isRestricted || !isReleased)
+            if (tooComplicated || isPremium || isRestricted || !isReleased)
             {
                 editorAudioSource.PlayOneShot(errorAudioClip);
 
@@ -1087,15 +1043,9 @@ namespace DanielLochner.Assets.CreatureCreator
                     PremiumMenu.Instance.RequestBodyPart(bodyPartID);
                 }
                 else
+                if (tooComplicated && CanWarn(complexityWarningAnimator))
                 {
-                    if (notEnoughCash && CanWarn(cashWarningAnimator))
-                    {
-                        cashWarningAnimator.SetTrigger("Warn");
-                    }
-                    if (tooComplicated && CanWarn(complexityWarningAnimator))
-                    {
-                        complexityWarningAnimator.SetTrigger("Warn");
-                    }
+                    complexityWarningAnimator.SetTrigger("Warn");
                 }
 
                 return false;
@@ -1352,14 +1302,10 @@ namespace DanielLochner.Assets.CreatureCreator
                         }
                     }
 
-#if USE_STATS
-                    StatsManager.Instance.CashSpent += bodyPart.Price;
-
                     if (bodyPart is Eye)
                     {
                         StatsManager.Instance.UnlockAchievement("ACH_I_CAN_SEE_CLEARLY_NOW");
                     }
-#endif
                 }
             });
 
@@ -1632,8 +1578,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             UpdateStatisticsBodyParts();
             UpdateStatisticsAbilities();
-
-            cashText.text = $"${FormatInfinite(Creature.Editor.Cash)}";
         }
         public void UpdateStatisticsBodyParts()
         {
@@ -1831,14 +1775,6 @@ namespace DanielLochner.Assets.CreatureCreator
 
             statisticsTitleText.SetArguments("*");
         }
-        public void SetRestrictedCash(int cash)
-        {
-            restrictedCash = cash;
-
-            cashText.text = $"${cash}";
-
-            statisticsTitleText.SetArguments("*");
-        }
 
         public void ResetRestrictions()
         {
@@ -1851,7 +1787,7 @@ namespace DanielLochner.Assets.CreatureCreator
             bodyPartsTitleText.SetArguments("");
 
             // Statistics
-            restrictedComplexity = restrictedBones = restrictedCash = -1;
+            restrictedComplexity = restrictedBones = -1;
             statisticsTitleText.SetArguments("");
             UpdateStatistics();
 

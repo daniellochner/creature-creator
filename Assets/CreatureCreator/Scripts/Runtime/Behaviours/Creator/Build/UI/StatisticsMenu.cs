@@ -27,7 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         public void Setup(BodyPart bodyPart, Vector3 position)
         {
-            nameText.text = $"{bodyPart.name} (${bodyPart.Price})";
+            nameText.text = $"{bodyPart.name}";
             authorText.text = $"{bodyPart.Author}";
             complexityText.text = bodyPart.Complexity.ToString();
             healthText.text = bodyPart.Health.ToString();

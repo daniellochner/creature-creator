@@ -13,7 +13,6 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Fields
         [SerializeField, Range(0, 1)] private float experience = 0;
         [SerializeField, Range(0, 50)] private int level = 0;
-        [SerializeField] private int cash = 500;
         [SerializeField] private List<string> unlockedBodyParts = new List<string>();
         [SerializeField] private List<string> unlockedPatterns = new List<string>();
         [SerializeField] private List<string> completedQuests = new List<string>();
@@ -58,11 +57,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
         }
-        public int Cash
-        {
-            get => cash;
-            set => cash = value;
-        }
         public List<string> UnlockedBodyParts
         {
             get => unlockedBodyParts;
@@ -90,7 +84,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Experience = 0;
             Level = 0;
-            Cash = 500;
             UnlockedBodyParts.Clear();
             UnlockedPatterns.Clear();
             CompletedQuests.Clear();
