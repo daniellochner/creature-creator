@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
 {
     [RequireComponent(typeof(CreatureConstructor))]
-    public class CreatureComparer : MonoBehaviour
+    public class CreatureComparer : NetworkBehaviour
     {
         #region Fields
         [SerializeField] private int maxBonesDiff;
@@ -23,16 +24,13 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnCollisionEnter(Collision collision)
         {
-#if USE_STATS
-            if (collision.collider.CompareTag("Player/Local"))
+            if (IsLocalPlayer && collision.collider.gameObject.TryGetComponent(out CreatureNonPlayer npc))
             {
-                CreaturePlayerLocal player = collision.collider.GetComponent<CreaturePlayerLocal>();
-                if (player.Comparer.CompareTo(Constructor))
+                if (npc.Comparer.CompareTo(Constructor))
                 {
                     StatsManager.Instance.UnlockAchievement("ACH_WE_ARE_ALIKE");
                 }
             }
-#endif
         }
 
         public bool CompareTo(CreatureConstructor other)
