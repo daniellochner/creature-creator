@@ -27,6 +27,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI biteKUI;
         [SerializeField] private KeybindUI shootKUI;
         [SerializeField] private KeybindUI spitKUI;
+        [SerializeField] private KeybindUI breatheFireKUI;
         [SerializeField] private KeybindUI growlKUI;
         [SerializeField] private KeybindUI nightVisionKUI;
         [SerializeField] private KeybindUI danceKUI;
@@ -191,6 +192,13 @@ namespace DanielLochner.Assets.CreatureCreator
             spitKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Instance.RebindSpit(key);
+            });
+
+            // Breathe Fire
+            breatheFireKUI.Rebind(KeybindingsManager.Data.BreatheFire, false);
+            breatheFireKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindBreatheFire(key);
             });
 
             // Growl

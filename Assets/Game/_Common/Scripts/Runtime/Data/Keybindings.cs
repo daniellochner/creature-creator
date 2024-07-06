@@ -29,6 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind distract = new Keybind(KeyCode.F);
         [SerializeField] private Keybind shoot = new Keybind(KeyCode.F);
         [SerializeField] private Keybind spit = new Keybind(KeyCode.F);
+        [SerializeField] private Keybind breatheFire = new Keybind(KeyCode.F);
         [SerializeField] private Keybind growl = new Keybind(KeyCode.G);
         [SerializeField] private Keybind strike = new Keybind(KeyCode.F);
         [SerializeField] private Keybind nightVision = new Keybind(KeyCode.N);
@@ -156,6 +157,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => spit;
             set => spit = value;
         }
+        public Keybind BreatheFire
+        {
+            get => breatheFire;
+            set => breatheFire = value;
+        }
         public Keybind Growl
         {
             get => growl;
@@ -267,6 +273,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Distract = new Keybind(KeyCode.F);
             Shoot = new Keybind(KeyCode.F);
             Spit = new Keybind(KeyCode.F);
+            BreatheFire = new Keybind(KeyCode.F);
             Growl = new Keybind(KeyCode.G);
             Strike = new Keybind(KeyCode.F);
             NightVision = new Keybind(KeyCode.N);
