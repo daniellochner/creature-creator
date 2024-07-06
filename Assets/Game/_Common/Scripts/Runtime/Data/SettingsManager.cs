@@ -452,12 +452,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 }
             }
 
-            //foreach (PWaterProfile waterProfile in waterProfiles)
-            //{
-            //    waterProfile.LightingModel = PLightingModel.BlinnPhong;
-            //    waterProfile.EnableFoamHQ = false;
-            //}
-
             foreach (GRendering renderingProfile in renderingProfiles)
             {
                 foreach (GGrassPrototype grassPrototype in renderingProfile.TerrainData.Foliage.Grasses.Prototypes)
@@ -465,6 +459,8 @@ namespace DanielLochner.Assets.CreatureCreator
                     grassPrototype.ShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 }
             }
+
+            SetTargetFrameRate(60);
         }
         #endregion
 
