@@ -38,10 +38,10 @@ namespace DanielLochner.Assets.CreatureCreator
             get => GetStat("STA_DEATHS", 0);
             set => SetStat("STA_DEATHS", value, new StatAchievement("ACH_A_PART_OF_LIFE", 10));
         }
-        public int CashSpent
+        public int ExperienceEarned
         {
-            get => GetStat("STA_CASH_SPENT", 0);
-            set => SetStat("STA_CASH_SPENT", value, new StatAchievement("ACH_BIG_TIME_SPENDER", 10000));
+            get => GetStat("STA_EXPERIENCE_EARNED", 0);
+            set => SetStat("STA_EXPERIENCE_EARNED", value, new StatAchievement("ACH_EXPERIENCED_CREATOR", 10));
         }
         public int ReachedPeaks
         {
@@ -102,7 +102,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UnlockedPatterns = 0;
                 DistanceTravelled = 0;
                 Deaths = 0;
-                CashSpent = 0;
+                ExperienceEarned = 0;
                 ReachedPeaks = 0;
                 CompletedQuests = 0;
                 Kills = 0;
