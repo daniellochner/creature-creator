@@ -48,9 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private Quaternion? touchRot = null;
         private ClientNetworkTransform clientNetworkTransform;
 
-#if USE_STATS
         private float displacementBuffer = 0f;
-#endif
         #endregion
 
         #region Properties        
@@ -364,14 +362,12 @@ namespace DanielLochner.Assets.CreatureCreator
             moveDisplacement = Vector3.SmoothDamp(moveDisplacement, displacement, ref velocity, moveSmoothTime);
             rigidbody.position += moveDisplacement;
 
-#if USE_STATS
             displacementBuffer += moveDisplacement.magnitude;
             if (displacementBuffer >= 1)
             {
                 StatsManager.Instance.DistanceTravelled++;
                 displacementBuffer -= 1;
             }
-#endif
         }
         public void Turn(float angle)
         {

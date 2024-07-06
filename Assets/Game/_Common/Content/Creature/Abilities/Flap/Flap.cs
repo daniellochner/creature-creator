@@ -44,9 +44,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                 Player.Instance.Hunger.Hunger -= hungerCost;
             }
 
-#if USE_STATS
             StatsManager.Instance.UnlockAchievement("ACH_I_BELIEVE_I_CAN_FLY");
-#endif
         }
     }
 }

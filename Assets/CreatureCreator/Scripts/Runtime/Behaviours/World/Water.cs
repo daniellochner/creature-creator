@@ -51,9 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                     else
                     {
-#if USE_STATS
                         StatsManager.Instance.UnlockAchievement("ACH_MAKE_A_SPLASH");
-#endif
                     }
                     if (waterFX != null)
                     {

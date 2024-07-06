@@ -10,9 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (WorldManager.Instance.IsMultiplayer)
             {
                 yield return new WaitUntil(() => GameSetup.Instance && GameSetup.Instance.IsSetup && NetworkPlayersMenu.Instance && NetworkPlayersMenu.Instance.NumPlayers > 1);
-#if USE_STATS
                 StatsManager.Instance.UnlockAchievement("ACH_BETTER_TOGETHER");
-#endif
             }
         }
     }

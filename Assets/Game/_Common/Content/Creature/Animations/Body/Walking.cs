@@ -105,12 +105,10 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
 
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-#if USE_STATS
             if (animator.CompareTag("Player/Local"))
             {
                 StatsManager.Instance.UnlockAchievement("ACH_BABY_STEPS");
             }
-#endif
         }
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

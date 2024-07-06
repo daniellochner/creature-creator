@@ -90,19 +90,15 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform(LocalizationUtility.Localize("you-died_title"), LocalizationUtility.Localize("you-died_message", name, age), LocalizationUtility.Localize("you-died_okay"), false, Respawn, Respawn, Respawn);
             });
 
-#if USE_STATS
             StatsManager.Instance.Deaths++;
-#endif
         }
 
         private void OnAge(int age)
         {
-#if USE_STATS
             if (age > 3600)
             {
                 StatsManager.Instance.UnlockAchievement("ACH_GRAY_HAIRS");
             }
-#endif
         }
 
         private void Respawn()

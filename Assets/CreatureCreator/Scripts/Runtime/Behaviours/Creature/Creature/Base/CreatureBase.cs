@@ -163,12 +163,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             MinimapIcon.enabled = false;
 
-#if USE_STATS
             if (ulong.TryParse(inflicter, out ulong clientId) && NetworkUtils.IsPlayer(clientId))
             {
                 StatsManager.Instance.Kills++;
             }
-#endif
         }
         public virtual void OnSpawn()
         {

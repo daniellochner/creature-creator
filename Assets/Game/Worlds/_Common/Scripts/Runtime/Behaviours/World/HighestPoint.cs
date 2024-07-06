@@ -60,9 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
             flag.SetActive(false);
 
             // Stats
-#if USE_STATS
             StatsManager.Instance.ReachedPeaks++;
-#endif
 
             // Other
             source.Play();

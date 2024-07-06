@@ -26,9 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             EditorManager.Instance.UnlockPattern(patternID);
 
-#if USE_STATS
             StatsManager.Instance.UnlockedPatterns++;
-#endif
         }
         protected override void OnSpawn()
         {

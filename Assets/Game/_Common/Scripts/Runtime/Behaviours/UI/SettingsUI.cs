@@ -694,9 +694,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             Application.OpenURL("https://github.com/daniellochner/creature-creator");
 
-#if USE_STATS
             StatsManager.Instance.UnlockAchievement("ACH_HACKERMAN");
-#endif
         }
         public void ChooseLanguage()
         {
@@ -707,9 +705,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             ProgressManager.Instance.Revert();
 
-#if USE_STATS
             StatsManager.Instance.Revert();
-#endif
 
             ProgressUI.Instance.UpdateInfo();
             UnlockableBodyPartsMenu.Instance.UpdateInfo();
