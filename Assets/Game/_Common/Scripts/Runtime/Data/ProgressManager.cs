@@ -124,27 +124,28 @@ namespace DanielLochner.Assets.CreatureCreator
             // Completed Quests
             foreach (string questId in QUESTS)
             {
-                if (PlayerPrefs.GetInt($"quest_{questId}") == 1 && !Data.CompletedQuests.Contains(questId))
+                if (PlayerPrefs.GetInt($"quest_{questId}") == 1)
                 {
-                    Data.CompletedQuests.Add(questId);
+                    CompleteQuest(questId);
                 }
             }
 
             // Unlocked Maps
             foreach (Map map in MAPS)
             {
-                if (PlayerPrefs.GetInt($"map_unlocked_{map}".ToLower()) == 1 && !Data.UnlockedMaps.Contains(map))
+                if (PlayerPrefs.GetInt($"map_unlocked_{map}".ToLower()) == 1)
                 {
-                    Data.UnlockedMaps.Add(map);
+                    UnlockMap(map);
                 }
             }
+            UnlockMap(Map.Island);
 
             // Reached Peaks
             foreach (Map map in MAPS)
             {
-                if (PlayerPrefs.GetInt($"hp_{map}".ToUpper()) == 1 && !Data.ReachedPeaks.Contains(map))
+                if (PlayerPrefs.GetInt($"hp_{map}".ToUpper()) == 1)
                 {
-                    Data.ReachedPeaks.Add(map);
+                    ReachPeak(map);
                 }
             }
         }
