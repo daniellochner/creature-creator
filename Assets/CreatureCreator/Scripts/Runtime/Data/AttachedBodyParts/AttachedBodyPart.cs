@@ -17,6 +17,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public Vector3 stretch = default;
         public Color primaryColour = default;
         public Color secondaryColour = default;
+        public float shine = 0f;
+        public float metallic = 0f;
         public bool hideMain = false;
         public bool hideFlipped = false;
 
@@ -40,6 +42,8 @@ namespace DanielLochner.Assets.CreatureCreator
             serializer.SerializeValue(ref stretch);
             serializer.SerializeValue(ref primaryColour);
             serializer.SerializeValue(ref secondaryColour);
+            serializer.SerializeValue(ref shine);
+            serializer.SerializeValue(ref metallic);
             serializer.SerializeValue(ref hideMain);
             serializer.SerializeValue(ref hideFlipped);
         }

@@ -81,42 +81,7 @@ namespace DanielLochner.Assets.CreatureCreator
             set
             {
                 paintedBodyPart = value;
-
-                Color primaryColour = default, sColour = default;
-                bool isPrimaryOverridden = false, isSOverride = false;
-                if (paintedBodyPart)
-                {
-                    BodyPartConstructor bpc = paintedBodyPart.BodyPartConstructor;
-
-                    primaryColour = bpc.AttachedBodyPart.primaryColour;
-                    if (bpc.IsPrimaryOverridden)
-                    {
-                        isPrimaryOverridden = true;
-                    }
-                    else if (bpc.CanOverridePrimary)
-                    {
-                        primaryColour = Constructor.Data.PrimaryColour;
-                    }
-
-                    sColour = bpc.AttachedBodyPart.secondaryColour;
-                    if (bpc.IsSecondaryOverridden)
-                    {
-                        isSOverride = true;
-                    }
-                    else if (bpc.CanOverrideSecondary)
-                    {
-                        sColour = Constructor.Data.SecondaryColour;
-                    }
-                }
-                else
-                {
-                    primaryColour = Constructor.Data.PrimaryColour;
-                    sColour = Constructor.Data.SecondaryColour;
-                }
-                EditorManager.Instance.SetPrimaryColourUI(primaryColour, isPrimaryOverridden);
-                EditorManager.Instance.SetSecondaryColourUI(sColour, isSOverride);
-
-                if (UseTemporaryOutline) tempModelOutline.enabled = !paintedBodyPart;
+                UpdatePainted();
             }
         }
         public string LoadedCreature
@@ -660,14 +625,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 EditorManager.Instance.SetOffsetUI(offset);
             };
-            Constructor.OnSetShine += delegate (float shine)
-            {
-                EditorManager.Instance.SetShineUI(shine);
-            };
-            Constructor.OnSetMetallic += delegate (float metallic)
-            {
-                EditorManager.Instance.SetMetallicUI(metallic);
-            };
             Constructor.OnAddBodyPartPrefab += delegate (GameObject main, GameObject flipped)
             {
                 BodyPartEditor mainBPE = main.GetComponent<BodyPartEditor>();
@@ -928,6 +885,78 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             return Constructor.Bones[nearestBoneIndex];
+        }
+
+        public void UpdatePainted()
+        {
+            Color primaryColour = default, secondaryColour = default;
+            float metallic = 0f;
+            float shine = 0f;
+
+            bool isPrimaryOverridden = false, isSecondaryOverridden = false;
+            bool canOverridePrimary = false, canOverrideSecondary = false;
+            if (paintedBodyPart != null)
+            {
+                BodyPartConstructor bpc = paintedBodyPart.BodyPartConstructor;
+
+                // Primary
+                primaryColour = bpc.AttachedBodyPart.primaryColour;
+                if (bpc.IsPrimaryOverridden)
+                {
+                    isPrimaryOverridden = true;
+                }
+                else
+                if (bpc.CanOverridePrimary)
+                {
+                    primaryColour = Constructor.Data.PrimaryColour;
+                    canOverridePrimary = true;
+                }
+
+                // Secondary
+                secondaryColour = bpc.AttachedBodyPart.secondaryColour;
+                if (bpc.IsSecondaryOverridden)
+                {
+                    isSecondaryOverridden = true;
+                }
+                else
+                if (bpc.CanOverrideSecondary)
+                {
+                    secondaryColour = Constructor.Data.SecondaryColour;
+                    canOverrideSecondary = true;
+                }
+
+                // Shine
+                shine = bpc.AttachedBodyPart.shine;
+                if (canOverridePrimary || canOverrideSecondary)
+                {
+                    shine = Constructor.Data.Shine;
+                }
+
+                // Metallic
+                metallic = bpc.AttachedBodyPart.metallic;
+                if (canOverridePrimary || canOverrideSecondary)
+                {
+                    metallic = Constructor.Data.Metallic;
+                }
+            }
+            else
+            {
+                primaryColour = Constructor.Data.PrimaryColour;
+                secondaryColour = Constructor.Data.SecondaryColour;
+                shine = Constructor.Data.Shine;
+                metallic = Constructor.Data.Metallic;
+            }
+
+            // Body Outline
+            if (UseTemporaryOutline)
+            {
+                tempModelOutline.enabled = !paintedBodyPart;
+            }
+
+            EditorManager.Instance.SetPrimaryColourUI(primaryColour, isPrimaryOverridden);
+            EditorManager.Instance.SetSecondaryColourUI(secondaryColour, isSecondaryOverridden);
+            EditorManager.Instance.SetShineUI(shine);
+            EditorManager.Instance.SetMetallicUI(metallic);
         }
         #endregion
     }

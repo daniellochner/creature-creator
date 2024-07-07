@@ -342,7 +342,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     if (IsSelected)
                     {
-                        CreatureEditor.PaintedBodyPart = this;
+                        CreatureEditor.PaintedBodyPart = IsFlipped ? Flipped : this;
                     }
                     else if (Physics.Raycast(RectTransformUtility.ScreenPointToRay(CreatureEditor.Camera.CameraOrbit.Camera, Input.mousePosition), out RaycastHit hitInfo) && !hitInfo.collider.CompareTag("Body Part"))
                     {
@@ -377,22 +377,37 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual BodyPartEditor Copy()
         {
-            string bodyPartID = BodyPartConstructor.AttachedBodyPart.bodyPartID;
+            var abp = BodyPartConstructor.AttachedBodyPart;
+            string bodyPartID = abp.bodyPartID;
 
             BodyPartConstructor main = CreatureEditor.Constructor.AddBodyPart(bodyPartID);
             main.SetupAttachment(new AttachedBodyPart(bodyPartID));
 
-            Color pColour = BodyPartConstructor.AttachedBodyPart.primaryColour;
+            Color pColour = abp.primaryColour;
             if (pColour.a != 0)
             {
                 main.SetPrimaryColour(pColour);
             }
-            Color sColour = BodyPartConstructor.AttachedBodyPart.secondaryColour;
+
+            Color sColour = abp.secondaryColour;
             if (sColour.a != 0)
             {
                 main.SetSecondaryColour(sColour);
             }
-            main.SetStretch(BodyPartConstructor.AttachedBodyPart.stretch, Vector3Int.one);
+
+            float shine = abp.shine;
+            if (shine > 0f)
+            {
+                main.SetShine(shine);
+            }
+
+            float metallic = abp.metallic;
+            if (metallic > 0f)
+            {
+                main.SetMetallic(metallic);
+            }
+
+            main.SetStretch(abp.stretch, Vector3Int.one);
             main.transform.SetPositionAndRotation(transform.position, transform.rotation);
             main.transform.localScale = transform.localScale;
             main.transform.parent = Dynamic.Transform;

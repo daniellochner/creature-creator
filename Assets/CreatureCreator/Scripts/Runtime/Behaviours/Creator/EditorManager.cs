@@ -266,28 +266,6 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!SettingsManager.Data.HiddenBodyParts.Contains(patternID)) AddPatternUI(patternID);
             }
-            primaryColourPalette.ClickUI.OnRightClick.AddListener(delegate
-            {
-                if (primaryColourOverride.activeSelf)
-                {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_revert-colour"), LocalizationUtility.Localize("cc_revert-colour-primary"), onYes: delegate
-                    {
-                        Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsPrimaryOverridden = false;
-                        SetPrimaryColourUI(Creature.Constructor.Data.PrimaryColour, false);
-                    });
-                }
-            });
-            secondaryColourPalette.ClickUI.OnRightClick.AddListener(delegate
-            {
-                if (secondaryColourOverride.activeSelf)
-                {
-                    ConfirmationDialog.Confirm(LocalizationUtility.Localize("cc_revert-colour"), LocalizationUtility.Localize("cc_revert-colour-secondary"), onYes: delegate
-                    {
-                        Creature.Editor.PaintedBodyPart.BodyPartConstructor.IsSecondaryOverridden = false;
-                        SetSecondaryColourUI(Creature.Constructor.Data.SecondaryColour, false);
-                    });
-                }
-            });
             restrictedColoursClickUI.OnLeftClick.AddListener(delegate
             {
                 InformationDialog.Inform(LocalizationUtility.Localize("cc_restriction_colour_title"), LocalizationUtility.Localize("cc_restriction_colour_message"));
@@ -1418,7 +1396,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             colourSettingsMenu.MetallicSlider.SetValueWithoutNotify(metallic);
         }
-
         public void SetPrimaryColourUI(Color colour, bool isOverride)
         {
             primaryColourPalette.SetColour(colour);

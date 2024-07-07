@@ -40,15 +40,63 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             shineSlider.value = 0f;
             metallicSlider.value = 0f;
+
+            BodyPartEditor paintedBodyPart = EditorManager.Instance.Creature.Editor.PaintedBodyPart;
+            if (paintedBodyPart != null)
+            {
+                paintedBodyPart.BodyPartConstructor.ResetPrimaryColour();
+                paintedBodyPart.BodyPartConstructor.ResetSecondaryColour();
+            }
+            else
+            {
+                EditorManager.Instance.Creature.Constructor.SetPrimaryColour(Color.white);
+                EditorManager.Instance.Creature.Constructor.SetSecondaryColour(Color.black);
+            }
+
+            EditorManager.Instance.Creature.Editor.UpdatePainted();
         }
 
         private void UpdateShine(float shine)
         {
-            EditorManager.Instance.Creature.Constructor.SetShine(shine);
+            BodyPartEditor paintedBodyPart = EditorManager.Instance.Creature.Editor.PaintedBodyPart;
+            if (paintedBodyPart != null)
+            {
+                paintedBodyPart.BodyPartConstructor.SetShine(shine);
+
+                if (paintedBodyPart.BodyPartConstructor.IsPrimaryOverridden)
+                {
+                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
+                }
+                if (paintedBodyPart.BodyPartConstructor.IsSecondaryOverridden)
+                {
+                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
+                }
+            }
+            else
+            {
+                EditorManager.Instance.Creature.Constructor.SetShine(shine);
+            }
         }
         private void UpdateMetallic(float metallic)
         {
-            EditorManager.Instance.Creature.Constructor.SetMetallic(metallic);
+            BodyPartEditor paintedBodyPart = EditorManager.Instance.Creature.Editor.PaintedBodyPart;
+            if (paintedBodyPart != null)
+            {
+                paintedBodyPart.BodyPartConstructor.SetMetallic(metallic);
+
+                if (paintedBodyPart.BodyPartConstructor.IsPrimaryOverridden)
+                {
+                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
+                }
+                if (paintedBodyPart.BodyPartConstructor.IsSecondaryOverridden)
+                {
+                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
+                }
+            }
+            else
+            {
+                EditorManager.Instance.Creature.Constructor.SetMetallic(metallic);
+            }
         }
         #endregion
     }
