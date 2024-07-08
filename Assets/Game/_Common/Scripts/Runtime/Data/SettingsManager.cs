@@ -91,6 +91,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetInvertHorizontal(Data.InvertHorizontal);
             SetInvertVertical(Data.InvertVertical);
             SetFlipButton(Data.FlipButton);
+            SetZoomButtons(Data.ZoomButtons);
 
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {
@@ -681,6 +682,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetFlipButton(bool flipButton)
         {
             Data.FlipButton = flipButton;
+        }
+        public void SetZoomButtons(bool zoomButtons)
+        {
+            Data.ZoomButtons = zoomButtons;
         }
         #endregion
         #endregion

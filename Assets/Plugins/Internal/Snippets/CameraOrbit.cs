@@ -63,6 +63,16 @@ namespace DanielLochner.Assets
             get => handleClipping;
             set => handleClipping = value;
         }
+        public float TargetZoom
+        {
+            get => targetZoom;
+            set => targetZoom = Mathf.Clamp(value, minMaxZoom.x, minMaxZoom.y);
+        }
+        public Vector2 MinMaxZoom
+        {
+            get => minMaxZoom;
+            set => minMaxZoom = value;
+        }
 
         public virtual bool CanInput { get; set; } = true;
         public bool IsFrozen { get; private set; }

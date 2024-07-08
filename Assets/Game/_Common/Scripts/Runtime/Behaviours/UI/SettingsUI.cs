@@ -78,6 +78,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CanvasGroup joystickVerticalCG;
         [SerializeField] private Slider touchOffsetSlider;
         [SerializeField] private Toggle flipButtonToggle;
+        [SerializeField] private Toggle zoomButtonsToggle;
 
         private Coroutine previewMusicCoroutine;
         #endregion
@@ -552,6 +553,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 SettingsManager.Instance.SetFlipButton(isOn);
             });
             flipButtonToggle.isOn = SettingsManager.Data.FlipButton;
+
+            // Zoom Buttons
+            zoomButtonsToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetZoomButtons(isOn);
+            });
+            zoomButtonsToggle.isOn = SettingsManager.Data.ZoomButtons;
 
             if (SystemUtility.IsDevice(DeviceType.Handheld))
             {

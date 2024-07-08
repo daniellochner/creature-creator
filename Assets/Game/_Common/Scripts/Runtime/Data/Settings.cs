@@ -70,6 +70,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private float joystickPositionVertical = 0.4f;
         [SerializeField] private float interfaceScale = 1f;
         [SerializeField] private bool flipButton = false;
+        [SerializeField] private bool zoomButtons = false;
         #endregion
 
         #region Properties
@@ -348,6 +349,11 @@ namespace DanielLochner.Assets.CreatureCreator
             get => flipButton;
             set => flipButton = value;
         }
+        public bool ZoomButtons
+        {
+            get => zoomButtons;
+            set => zoomButtons = value;
+        }
         #endregion
 
         #region Methods
@@ -401,6 +407,7 @@ namespace DanielLochner.Assets.CreatureCreator
             InvertHorizontal = false;
             InvertVertical = false;
             FlipButton = false;
+            ZoomButtons = false;
 
             Joystick = JoystickType.Floating;
             JoystickPositionHorizontal = 0.2f;
@@ -421,6 +428,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 VSync = true;
                 CreatureRenderDistance = 25f;
                 FlipButton = true;
+                ZoomButtons = true;
 
                 if (SystemUtility.IsLowEndDevice)
                 {

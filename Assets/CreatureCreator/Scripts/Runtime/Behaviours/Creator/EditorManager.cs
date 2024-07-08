@@ -36,6 +36,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CanvasGroup editorCanvasGroup;
         [SerializeField] private CanvasGroup paginationCanvasGroup;
         [SerializeField] private int historyLimit;
+        [SerializeField] private float zoomIncrementAmount;
 
         [Header("Build")]
         [SerializeField] private Menu buildMenu;
@@ -66,6 +67,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject noPartsText;
         [SerializeField] private CanvasGroup undoBuildCG;
         [SerializeField] private CanvasGroup redoBuildCG;
+        [SerializeField] private CanvasGroup zoomInBuildCG;
+        [SerializeField] private CanvasGroup zoomOutBuildCG;
 
         [Header("Play")]
         [SerializeField] private Menu playMenu;
@@ -91,6 +94,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject noPatternsText;
         [SerializeField] private CanvasGroup undoPaintCG;
         [SerializeField] private CanvasGroup redoPaintCG;
+        [SerializeField] private CanvasGroup zoomInPaintCG;
+        [SerializeField] private CanvasGroup zoomOutPaintCG;
         [SerializeField] private CanvasGroup restrictedColoursCG;
         [SerializeField] private ClickUI restrictedColoursClickUI;
 
@@ -215,6 +220,10 @@ namespace DanielLochner.Assets.CreatureCreator
             if (SystemUtility.IsDevice(DeviceType.Desktop))
             {
                 HandleKeyboardShortcuts();
+            }
+            if (IsEditing)
+            {
+                HandleZoomButtons();
             }
         }
         protected override void OnDestroy()
@@ -865,6 +874,32 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Flip()
         {
             Player.Instance.Constructor.Flip();
+        }
+        public void ZoomIn()
+        {
+            Player.Instance.Camera.CameraOrbit.TargetZoom -= zoomIncrementAmount;
+        }
+        public void ZoomOut()
+        {
+            Player.Instance.Camera.CameraOrbit.TargetZoom += zoomIncrementAmount;
+        }
+
+        private void HandleZoomButtons()
+        {
+            if (!Player.Instance || !Player.Instance.Camera)
+            {
+                return;
+            }
+
+            CameraOrbit cameraOrbit = Player.Instance.Camera.CameraOrbit;
+
+            bool canZoomIn = cameraOrbit.TargetZoom < cameraOrbit.MinMaxZoom.y;
+            zoomInBuildCG.interactable = zoomInPaintCG.interactable = canZoomIn;
+            zoomInBuildCG.alpha = zoomInPaintCG.alpha = canZoomIn ? 1f : 0.25f;
+
+            bool canZoomOut = cameraOrbit.TargetZoom > cameraOrbit.MinMaxZoom.x;
+            zoomOutBuildCG.interactable = zoomOutPaintCG.interactable = canZoomOut;
+            zoomOutBuildCG.alpha = zoomOutPaintCG.alpha = canZoomOut ? 1f : 0.25f;
         }
 
         public bool CanLoadCreature(CreatureData creatureData, out string errorTitle, out string errorMessage)
