@@ -92,11 +92,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public bool CanOverridePrimary
         {
-            get => hasBodyPrimary && !hasBodyPartPrimary;
+            get => !isPrimaryOverridden && hasBodyPrimary && !hasBodyPartPrimary;
         }
         public bool CanOverrideSecondary
         {
-            get => hasBodySecondary && !hasBodyPartSecondary;
+            get => !isSecondaryOverridden && hasBodySecondary && !hasBodyPartSecondary;
         }
 
         public bool CanSetPrimary
@@ -113,25 +113,30 @@ namespace DanielLochner.Assets.CreatureCreator
             get => isPrimaryOverridden;
             set
             {
-                if (isPrimaryOverridden == value || !CanSetPrimary) return;
-                isPrimaryOverridden = value;
-
-                if (isPrimaryOverridden)
+                if (isPrimaryOverridden == value)
+                {
+                    return;
+                }
+                if (value)
                 {
                     OverrideMat("Body_Primary", BodyPartPrimaryMat, true);
                     Flipped.OverrideMat("Body_Primary", BodyPartPrimaryMat, true);
 
-                    BodyPartPrimaryMat.SetColor("_Color", CreatureConstructor.Data.PrimaryColour);
-                    BodyPartPrimaryMat.SetFloat("_Glossiness", CreatureConstructor.Data.Shine);
-                    BodyPartPrimaryMat.SetFloat("_Metallic", CreatureConstructor.Data.Metallic);
+                    SetPrimaryColour(CreatureConstructor.Data.PrimaryColour, false);
+                    SetShine(CreatureConstructor.Data.Shine, false);
+                    SetMetallic(CreatureConstructor.Data.Metallic, false);
                 }
                 else
                 {
                     OverrideMat("BodyPart_Primary", CreatureConstructor.BodyPrimaryMat, true);
                     Flipped.OverrideMat("BodyPart_Primary", CreatureConstructor.BodyPrimaryMat, true);
 
-                    AttachedBodyPart.primaryColour = BodyPart.DefaultColours.primary;
+                    SetPrimaryColour(default, false);
+                    SetShine(-1f, false);
+                    SetMetallic(-1f, false);
                 }
+
+                isPrimaryOverridden = value;
             }
         }
         public bool IsSecondaryOverridden
@@ -139,25 +144,30 @@ namespace DanielLochner.Assets.CreatureCreator
             get => isSecondaryOverridden;
             set
             {
-                if (isSecondaryOverridden == value || !CanSetSecondary) return;
-                isSecondaryOverridden = value;
-
-                if (isSecondaryOverridden)
+                if (isSecondaryOverridden == value)
+                {
+                    return;
+                }
+                if (value)
                 {
                     OverrideMat("Body_Secondary", BodyPartSecondaryMat, true);
                     Flipped.OverrideMat("Body_Secondary", BodyPartSecondaryMat, true);
 
-                    BodyPartSecondaryMat.SetColor("_Color", CreatureConstructor.Data.SecondaryColour);
-                    BodyPartSecondaryMat.SetFloat("_Glossiness", CreatureConstructor.Data.Shine);
-                    BodyPartSecondaryMat.SetFloat("_Metallic", CreatureConstructor.Data.Metallic);
+                    SetSecondaryColour(CreatureConstructor.Data.SecondaryColour, false);
+                    SetShine(CreatureConstructor.Data.Shine, false);
+                    SetMetallic(CreatureConstructor.Data.Metallic, false);
                 }
                 else
                 {
                     OverrideMat("BodyPart_Secondary", CreatureConstructor.BodySecondaryMat, true);
                     Flipped.OverrideMat("BodyPart_Secondary", CreatureConstructor.BodySecondaryMat, true);
 
-                    AttachedBodyPart.secondaryColour = BodyPart.DefaultColours.secondary;
+                    SetSecondaryColour(default, false);
+                    SetShine(-1f, false);
+                    SetMetallic(-1f, false);
                 }
+
+                isSecondaryOverridden = value;
             }
         }
 
@@ -258,30 +268,28 @@ namespace DanielLochner.Assets.CreatureCreator
             // Stretch
             SetStretch(abp.stretch, Vector3Int.one);
 
-            // Colours
+            // Material
             Color primary = abp.primaryColour;
+            Color secondary = abp.secondaryColour;
+            float shine = abp.shine;
+            float metallic = abp.metallic;
+
             if (primary.a != 0f)
             {
-                SetPrimaryColour(primary);
+                SetPrimaryColour(primary, primary != CreatureConstructor.Data.PrimaryColour);
             }
-            Color secondary = abp.secondaryColour;
             if (secondary.a != 0f)
             {
-                SetSecondaryColour(secondary);
+                SetSecondaryColour(secondary, secondary != CreatureConstructor.Data.SecondaryColour);
             }
-
-            // Shine
-            if (abp.shine > 0f)
+            if (shine != -1f)
             {
-                SetShine(abp.shine);
+                SetShine(shine, shine != CreatureConstructor.Data.Shine);
             }
-
-            // Metallic
-            if (abp.metallic > 0f)
+            if (metallic != -1f)
             {
-                SetMetallic(abp.metallic);
+                SetMetallic(metallic, metallic != CreatureConstructor.Data.Metallic);
             }
-
         }
         public virtual void SetupAttachment(AttachedBodyPart abp)
         {
@@ -289,15 +297,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Flipped.name = name + " (Flipped)";
 
             CreatureConstructor.Data.AttachedBodyParts.Add(AttachedBodyPart = Flipped.AttachedBodyPart = abp);
-
-            if (abp.primaryColour.a == 0f && bodyPart.DefaultColours.primary.a != 0f)
-            {
-                SetPrimaryColour(bodyPart.DefaultColours.primary);
-            }
-            if (abp.secondaryColour.a == 0f && bodyPart.DefaultColours.secondary.a != 0f)
-            {
-                SetSecondaryColour(bodyPart.DefaultColours.secondary);
-            }
 
             OnSetupAttachment?.Invoke();
         }
@@ -364,9 +363,14 @@ namespace DanielLochner.Assets.CreatureCreator
             Model.localScale = new Vector3(-Model.localScale.x, Model.localScale.y, Model.localScale.z);
         }
 
-        public void SetPrimaryColour(Color colour)
+        public void SetPrimaryColour(Color colour, bool isOverride)
         {
-            if (CanOverridePrimary)
+            if (!CanSetPrimary)
+            {
+                return;
+            }
+
+            if (CanOverridePrimary && isOverride)
             {
                 IsPrimaryOverridden = true;
             }
@@ -379,21 +383,34 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ResetPrimaryColour()
         {
-            if (CanSetPrimary)
+            if (!CanSetPrimary)
+            {
+                return;
+            }
+
+            if (IsPrimaryOverridden)
+            {
+                IsPrimaryOverridden = false;
+            }
+            else
+            if (!CanOverridePrimary)
             {
                 Color color = BodyPart.DefaultColours.primary;
                 if (color.a == 0f)
                 {
                     color = CreatureConstructor.Data.PrimaryColour;
                 }
-                SetPrimaryColour(color);
+                SetPrimaryColour(color, false);
             }
-            IsPrimaryOverridden = false;
         }
 
-        public void SetSecondaryColour(Color colour)
+        public void SetSecondaryColour(Color colour, bool isOverride)
         {
-            if (CanOverrideSecondary)
+            if (!CanSetSecondary)
+            {
+                return;
+            }
+            if (CanOverrideSecondary && isOverride)
             {
                 IsSecondaryOverridden = true;
             }
@@ -406,27 +423,39 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void ResetSecondaryColour()
         {
-            if (CanSetSecondary)
+            if (!CanSetSecondary)
+            {
+                return;
+            }
+
+            if (IsSecondaryOverridden)
+            {
+                IsSecondaryOverridden = false;
+            }
+            else
+            if (!CanOverrideSecondary)
             {
                 Color color = BodyPart.DefaultColours.secondary;
                 if (color.a == 0f)
                 {
                     color = CreatureConstructor.Data.SecondaryColour;
                 }
-                SetSecondaryColour(color);
+                SetSecondaryColour(color, false);
             }
-            IsSecondaryOverridden = false;
         }
 
-        public void SetShine(float shine)
+        public void SetShine(float shine, bool isOverride)
         {
-            if (CanOverridePrimary)
+            if (isOverride)
             {
-                IsPrimaryOverridden = true;
-            }
-            if (CanOverrideSecondary)
-            {
-                IsSecondaryOverridden = true;
+                if (CanSetPrimary && CanOverridePrimary)
+                {
+                    IsPrimaryOverridden = true;
+                }
+                if (CanSetSecondary && CanOverrideSecondary)
+                {
+                    IsSecondaryOverridden = true;
+                }
             }
 
             BodyPartPrimaryMat.SetFloat("_Glossiness", shine);
@@ -437,15 +466,18 @@ namespace DanielLochner.Assets.CreatureCreator
             OnSetShine?.Invoke(shine);
         }
 
-        public void SetMetallic(float metallic)
+        public void SetMetallic(float metallic, bool isOverride)
         {
-            if (CanOverridePrimary)
+            if (isOverride)
             {
-                IsPrimaryOverridden = true;
-            }
-            if (CanOverrideSecondary)
-            {
-                IsSecondaryOverridden = true;
+                if (CanSetPrimary && CanOverridePrimary)
+                {
+                    IsPrimaryOverridden = true;
+                }
+                if (CanSetSecondary && CanOverrideSecondary)
+                {
+                    IsSecondaryOverridden = true;
+                }
             }
 
             BodyPartPrimaryMat.SetFloat("_Metallic", metallic);

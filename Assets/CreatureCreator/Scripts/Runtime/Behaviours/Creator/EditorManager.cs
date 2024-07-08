@@ -1271,6 +1271,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
                         main.SetupAttachment(new AttachedBodyPart(bodyPartID));
 
+                        if (bodyPart.DefaultColours.primary.a != 0f)
+                        {
+                            main.SetPrimaryColour(bodyPart.DefaultColours.primary, true);
+                        }
+                        if (bodyPart.DefaultColours.secondary.a != 0f)
+                        {
+                            main.SetSecondaryColour(bodyPart.DefaultColours.secondary, true);
+                        }
+
                         main.Flipped.gameObject.SetActive(false);
                         BodyPartEditor bpe = main.GetComponent<BodyPartEditor>();
                         if (bpe != null)
@@ -1458,9 +1467,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Color colour = primaryColourPalette.Colour;
 
             BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
-            if (bodyPart)
+            if (bodyPart != null)
             {
-                bodyPart.BodyPartConstructor.SetPrimaryColour(colour);
+                bodyPart.BodyPartConstructor.SetPrimaryColour(colour, true);
             }
             else
             {
@@ -1475,9 +1484,9 @@ namespace DanielLochner.Assets.CreatureCreator
             Color colour = secondaryColourPalette.Colour;
 
             BodyPartEditor bodyPart = Creature.Editor.PaintedBodyPart;
-            if (bodyPart)
+            if (bodyPart != null)
             {
-                bodyPart.BodyPartConstructor.SetSecondaryColour(colour);
+                bodyPart.BodyPartConstructor.SetSecondaryColour(colour, true);
             }
             else
             {

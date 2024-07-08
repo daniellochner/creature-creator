@@ -61,16 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartEditor paintedBodyPart = EditorManager.Instance.Creature.Editor.PaintedBodyPart;
             if (paintedBodyPart != null)
             {
-                paintedBodyPart.BodyPartConstructor.SetShine(shine);
-
-                if (paintedBodyPart.BodyPartConstructor.IsPrimaryOverridden)
-                {
-                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
-                }
-                if (paintedBodyPart.BodyPartConstructor.IsSecondaryOverridden)
-                {
-                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
-                }
+                paintedBodyPart.BodyPartConstructor.SetShine(shine, true);
             }
             else
             {
@@ -82,16 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartEditor paintedBodyPart = EditorManager.Instance.Creature.Editor.PaintedBodyPart;
             if (paintedBodyPart != null)
             {
-                paintedBodyPart.BodyPartConstructor.SetMetallic(metallic);
-
-                if (paintedBodyPart.BodyPartConstructor.IsPrimaryOverridden)
-                {
-                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
-                }
-                if (paintedBodyPart.BodyPartConstructor.IsSecondaryOverridden)
-                {
-                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
-                }
+                paintedBodyPart.BodyPartConstructor.SetMetallic(metallic, true);
             }
             else
             {

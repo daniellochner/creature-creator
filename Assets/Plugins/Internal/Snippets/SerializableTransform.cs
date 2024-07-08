@@ -29,6 +29,12 @@ namespace DanielLochner.Assets
             position = world.InverseTransformPoint(position);
             rotation = Quaternion.Inverse(world.rotation) * rotation;
         }
+        public SerializableTransform(SerializableTransform st)
+        {
+            position = st.position;
+            scale = st.scale;
+            rotation = st.rotation;
+        }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {

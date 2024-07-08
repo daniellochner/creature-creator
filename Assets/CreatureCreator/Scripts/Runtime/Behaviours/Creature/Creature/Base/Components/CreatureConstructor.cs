@@ -147,17 +147,13 @@ namespace DanielLochner.Assets.CreatureCreator
             if (debug) Timer.Start("Creature");
 
             SetName(data.Name);
+
             for (int i = 0; i < data.Bones.Count; i++)
             {
                 Bone bone = data.Bones[i];
                 AddBone(i, bone.position, bone.rotation, bone.weight, i == data.Bones.Count - 1);
             }
-            for (int i = 0; i < data.AttachedBodyParts.Count; i++)
-            {
-                AttachedBodyPart attachedBodyPart = data.AttachedBodyParts[i];
-                BodyPartConstructor main = AddBodyPart(attachedBodyPart.bodyPartID);
-                main.Attach(attachedBodyPart);
-            }
+
             SetPrimaryColour(data.PrimaryColour);
             SetSecondaryColour(data.SecondaryColour);
             SetPattern(data.PatternID);
@@ -165,6 +161,13 @@ namespace DanielLochner.Assets.CreatureCreator
             SetOffset(data.Offset);
             SetShine(data.Shine);
             SetMetallic(data.Metallic);
+
+            for (int i = 0; i < data.AttachedBodyParts.Count; i++)
+            {
+                AttachedBodyPart attachedBodyPart = data.AttachedBodyParts[i];
+                BodyPartConstructor main = AddBodyPart(attachedBodyPart.bodyPartID);
+                main.Attach(attachedBodyPart);
+            }
 
             if (debug) Timer.Stop("Creature");
         }

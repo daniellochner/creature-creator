@@ -365,6 +365,43 @@ namespace DanielLochner.Assets.CreatureCreator
                 Flipped.connectionPoint.position = Flipped.transform.position;
             };
 
+            BodyPartConstructor.OnSetPrimaryColour += delegate (Color primary)
+            {
+                if (BodyPartConstructor.IsPrimaryOverridden)
+                {
+                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
+                }
+            };
+            BodyPartConstructor.OnSetSecondaryColour += delegate (Color secondary)
+            {
+                if (BodyPartConstructor.IsSecondaryOverridden)
+                {
+                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
+                }
+            };
+            BodyPartConstructor.OnSetMetallic += delegate (float metallic)
+            {
+                if (BodyPartConstructor.IsPrimaryOverridden)
+                {
+                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
+                }
+                if (BodyPartConstructor.IsSecondaryOverridden)
+                {
+                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
+                }
+            };
+            BodyPartConstructor.OnSetShine += delegate (float shine)
+            {
+                if (BodyPartConstructor.IsPrimaryOverridden)
+                {
+                    EditorManager.Instance.SetPrimaryColourOverrideUI(true);
+                }
+                if (BodyPartConstructor.IsSecondaryOverridden)
+                {
+                    EditorManager.Instance.SetSecondaryColourOverrideUI(true);
+                }
+            };
+
             BodyPartConstructor.OnPreOverrideMaterials += delegate (Renderer renderer)
             {
                 renderer.GetComponent<Outline>().enabled = false; // QuickOutline breaks if you modify the material while it is enabled
@@ -383,28 +420,26 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPartConstructor main = CreatureEditor.Constructor.AddBodyPart(bodyPartID);
             main.SetupAttachment(new AttachedBodyPart(bodyPartID));
 
-            Color pColour = abp.primaryColour;
-            if (pColour.a != 0)
-            {
-                main.SetPrimaryColour(pColour);
-            }
-
-            Color sColour = abp.secondaryColour;
-            if (sColour.a != 0)
-            {
-                main.SetSecondaryColour(sColour);
-            }
-
+            Color primary = abp.primaryColour;
+            Color secondary = abp.secondaryColour;
             float shine = abp.shine;
-            if (shine > 0f)
-            {
-                main.SetShine(shine);
-            }
-
             float metallic = abp.metallic;
-            if (metallic > 0f)
+
+            if (primary.a != 0f)
             {
-                main.SetMetallic(metallic);
+                main.SetPrimaryColour(primary, primary != CreatureEditor.Constructor.Data.PrimaryColour);
+            }
+            if (secondary.a != 0f)
+            {
+                main.SetSecondaryColour(secondary, secondary != CreatureEditor.Constructor.Data.SecondaryColour);
+            }
+            if (shine != -1f)
+            {
+                main.SetShine(shine, shine != CreatureEditor.Constructor.Data.Shine);
+            }
+            if (metallic != -1f)
+            {
+                main.SetMetallic(metallic, metallic != CreatureEditor.Constructor.Data.Metallic);
             }
 
             main.SetStretch(abp.stretch, Vector3Int.one);
