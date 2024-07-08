@@ -10,5 +10,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public string description;
         public Sprite unlockedIcon;
         public Sprite lockedIcon;
+        public string[] legacyIds;
     }
 }

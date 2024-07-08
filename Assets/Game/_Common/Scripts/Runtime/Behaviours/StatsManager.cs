@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 #if UNITY_STANDALONE
 using Steamworks;
@@ -168,6 +169,17 @@ namespace DanielLochner.Assets.CreatureCreator
             return DatabaseManager.GetDatabaseEntry<Achievement>("Achievements", achievementId);
         }
         public bool IsAchievementUnlocked(string achievementId)
+        {
+            foreach (string id in GetAchievement(achievementId).legacyIds)
+            {
+                if (IsAchievementUnlockedInternal(id))
+                {
+                    return true;
+                }
+            }
+            return IsAchievementUnlockedInternal(achievementId);
+        }
+        private bool IsAchievementUnlockedInternal(string achievementId)
         {
             if (Initialized)
             {
