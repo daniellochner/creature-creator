@@ -682,7 +682,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Other
-        private void OnClientDisconnectCallback(ulong clientId)
+        protected virtual void OnClientDisconnectCallback(ulong clientId)
         {
             players.Remove(clientId);
         }

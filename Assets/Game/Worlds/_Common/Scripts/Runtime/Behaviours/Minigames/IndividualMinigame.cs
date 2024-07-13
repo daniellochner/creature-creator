@@ -138,6 +138,20 @@ namespace DanielLochner.Assets.CreatureCreator
 
             base.OnClientShutdown();
         }
+
+        protected override void OnClientDisconnectCallback(ulong clientId)
+        {
+            base.OnClientDisconnectCallback(clientId);
+
+            for (int i = 0; i < Scoreboard.Count; i++)
+            {
+                if (ulong.Parse(Scoreboard[i].id.ToString()) == clientId)
+                {
+                    Scoreboard.RemoveAt(i);
+                    break;
+                }
+            }
+        }
         #endregion
         #endregion
     }
