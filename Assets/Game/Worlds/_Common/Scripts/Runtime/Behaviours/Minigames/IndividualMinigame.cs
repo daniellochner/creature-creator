@@ -143,6 +143,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnClientDisconnectCallback(clientId);
 
+            playerIndices.Remove(clientId);
+
             for (int i = 0; i < Scoreboard.Count; i++)
             {
                 if (ulong.Parse(Scoreboard[i].id.ToString()) == clientId)

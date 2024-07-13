@@ -570,10 +570,9 @@ namespace DanielLochner.Assets.CreatureCreator
             List<Transform> winnerTransforms = new List<Transform>();
             foreach (ulong clientId in winnerClientIds)
             {
-                NetworkObject winner = NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId);
-                if (winner != null)
+                if (NetworkManager.Singleton.ConnectedClients.ContainsKey(clientId))
                 {
-                    winnerTransforms.Add(winner.transform);
+                    winnerTransforms.Add(NetworkManager.SpawnManager.GetPlayerNetworkObject(clientId).transform);
                 }
             }
 
