@@ -115,6 +115,16 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnPlayingEnter()
         {
             StartCoroutine(KaijuTrackHealthRoutine());
+            SelectKaijuClientRpc(kaiju.NetworkObject, NetworkUtils.DontSendTo(players[0]));
+        }
+
+        [ClientRpc]
+        private void SelectKaijuClientRpc(NetworkObjectReference netObjRef, ClientRpcParams clientRpcParams)
+        {
+            if (netObjRef.TryGet(out var obj) && obj.TryGetComponent(out CreaturePlayerRemote creature))
+            {
+                creature.Selectable.SetSelected(true);
+            }
         }
 
         private IEnumerator KaijuTrackHealthRoutine()
