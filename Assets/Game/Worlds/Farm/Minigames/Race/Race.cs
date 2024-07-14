@@ -179,6 +179,14 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnClientShutdown();
         }
         #endregion
+
+        protected override void OnClientDisconnectCallback(ulong clientId)
+        {
+            base.OnClientDisconnectCallback(clientId);
+
+            playerDistances.Remove(clientId);
+            playerLaps.Remove(clientId);
+        }
         #endregion
 
         #region Nested

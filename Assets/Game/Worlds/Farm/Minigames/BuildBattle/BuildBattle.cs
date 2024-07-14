@@ -291,6 +291,13 @@ namespace DanielLochner.Assets.CreatureCreator
             base.OnServerShutdown();
         }
         #endregion
+
+        protected override void OnClientDisconnectCallback(ulong clientId)
+        {
+            base.OnClientDisconnectCallback(clientId);
+
+            playerRatings.Remove(clientId);
+        }
         #endregion
     }
 }
