@@ -31,6 +31,8 @@ namespace DanielLochner.Assets.CreatureCreator
                 abilityCG.interactable = value;
             }
         }
+
+        public bool CanAct => Player.Instance.Abilities.enabled;
         #endregion
 
         #region Methods
@@ -64,15 +66,21 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            ability.OnTryPerform();
+            if (CanAct)
+            {
+                ability.OnTryPerform();
+            }
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            ability.OnTryPrepare();
+            if (CanAct)
+            {
+                ability.OnTryPrepare();
+            }
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (ability.IsPrepared)
+            if (CanAct && ability.IsPrepared)
             {
                 ability.OnTryPerform();
             }

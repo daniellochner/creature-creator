@@ -60,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             OnCreature(other, delegate (CreatureBase creature)
             {
-                SetMover(creature as CreaturePlayerLocal, true);
+                SetEnabled(creature as CreaturePlayerLocal, true);
             });
         }
         private void OnTracking(Collider other)
@@ -77,7 +77,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     }
                 }
 
-                SetMover(creature as CreaturePlayerLocal, !IsMoving.Value);
+                SetEnabled(creature as CreaturePlayerLocal, !IsMoving.Value);
             });
         }
 
@@ -105,11 +105,12 @@ namespace DanielLochner.Assets.CreatureCreator
             isReady = true;
         }
 
-        private void SetMover(CreaturePlayerLocal player, bool canMove)
+        private void SetEnabled(CreaturePlayerLocal player, bool enabled)
         {
             if (player != null)
             {
-                player.Mover.enabled = !IsMoving.Value;
+                player.Mover.enabled = enabled;
+                player.Abilities.enabled = enabled;
             }
         }
         private void OnCreature(Collider other, UnityAction<CreatureBase> onCreature)
