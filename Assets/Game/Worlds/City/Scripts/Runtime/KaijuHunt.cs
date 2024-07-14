@@ -17,16 +17,15 @@ namespace DanielLochner.Assets.CreatureCreator
         private bool isKaijuDead;
         #endregion
 
-        #region Properties
-        private bool IsKaiju => InMinigame && (myIndex == 0);
-        #endregion
-
         #region Methods
         protected override void Setup()
         {
             base.Setup();
 
             waitingForPlayers.onExit += OnWaitingForPlayersExit;
+
+            building.onEnter += OnBuildingEnter;
+            building.onExit += OnBuildingExit;
 
             playing.onEnter += OnPlayingEnter;
         }
@@ -59,11 +58,20 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Building
+        private void OnBuildingEnter()
+        {
+            MinigameManager.Instance.SetTitle(LocalizationUtility.Localize((myIndex == 0) ? "minigame_kaiju-hunt_title_kaiju" : "minigame_kaiju-hunt_title_hunter"));
+        }
+        private void OnBuildingExit()
+        {
+            MinigameManager.Instance.SetTitle(null);
+        }
+
         protected override void OnApplyRestrictions()
         {
             base.OnApplyRestrictions();
 
-            if (!IsKaiju)
+            if (myIndex > 0)
             {
                 EditorManager.Instance.SetRestrictedBones(5);
                 EditorManager.Instance.SetRestrictedComplexity(50);
@@ -72,12 +80,16 @@ namespace DanielLochner.Assets.CreatureCreator
                 foreach (var obj in DatabaseManager.GetDatabase("Body Parts").Objects)
                 {
                     BodyPart bodyPart = obj.Value as BodyPart;
-                    if (bodyPart.Abilities.Find(x => x is Abilities.Emit || x is Abilities.Launch || x is Abilities.Spin || (x is Abilities.Bite && x.Level > 1)))
+                    if (bodyPart.Abilities.Find(x => (x is Abilities.Emit || x is Abilities.Launch || x is Abilities.Spin || (x is Abilities.Bite && x.Level > 1))))
                     {
                         bodyParts.Add(obj.Key);
                     }
                 }
                 EditorManager.Instance.SetRestrictedBodyParts(bodyParts);
+            }
+            else
+            {
+                EditorManager.Instance.ResetRestrictions();
             }
         }
         #endregion
