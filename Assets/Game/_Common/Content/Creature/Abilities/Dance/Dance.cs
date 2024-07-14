@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             // Music
             if (!string.IsNullOrEmpty(soundId))
             {
-                Player.Instance.Effects.PlaySound(soundId);
+                Player.Instance.Effects.PlaySound(soundId, 1f);
                 NotificationsManager.Notify($"{music} ~ {composer}", () => Application.OpenURL(url));
             }
         }

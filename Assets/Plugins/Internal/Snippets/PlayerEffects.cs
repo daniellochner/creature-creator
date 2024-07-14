@@ -40,18 +40,23 @@ namespace DanielLochner.Assets.CreatureCreator
                 PlaySound(sound.name, sound.volume);
             }
         }
-        public void PlaySound(string sound, float volume = 1f)
+        public void PlaySound(string sound, float volume)
         {
-            PlaySoundServerRpc(sound, volume);
+            PlaySoundSelf(sound, volume);
+            PlaySoundServerRpc(sound, volume, NetworkManager.Singleton.LocalClientId);
         }
         [ServerRpc]
-        private void PlaySoundServerRpc(string sound, float volume)
+        private void PlaySoundServerRpc(string sound, float volume, ulong clientId)
         {
             if (!soundFX.ContainsKey(sound)) return;
-            PlaySoundClientRpc(sound, volume);
+            PlaySoundClientRpc(sound, volume, NetworkUtils.SendTo(clientId));
         }
         [ClientRpc]
-        private void PlaySoundClientRpc(string sound, float volume)
+        private void PlaySoundClientRpc(string sound, float volume, ClientRpcParams clientRpcParams)
+        {
+            PlaySoundSelf(sound, volume);
+        }
+        private void PlaySoundSelf(string sound, float volume)
         {
             audioSource.PlayOneShot(soundFX[sound], volume);
             OnPlaySound?.Invoke(sound);
