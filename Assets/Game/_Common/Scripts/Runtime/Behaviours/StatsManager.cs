@@ -170,11 +170,15 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public bool IsAchievementUnlocked(string achievementId)
         {
-            foreach (string id in GetAchievement(achievementId).legacyIds)
+            var achievement = GetAchievement(achievementId);
+            if (achievement != null && achievement.legacyIds != null)
             {
-                if (IsAchievementUnlockedInternal(id))
+                foreach (string id in achievement.legacyIds)
                 {
-                    return true;
+                    if (IsAchievementUnlockedInternal(id))
+                    {
+                        return true;
+                    }
                 }
             }
             return IsAchievementUnlockedInternal(achievementId);
