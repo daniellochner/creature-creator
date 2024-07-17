@@ -103,7 +103,8 @@ namespace DanielLochner.Assets
             {
                 playerId = connectionData.playerId,
                 clientId = clientId,
-                username = connectionData.username
+                username = connectionData.username,
+                level = connectionData.level
             };
             Add(playerData);
 

@@ -8,7 +8,6 @@ namespace DanielLochner.Assets
         #region Fields
         [SerializeField] private PlayerName namePrefab;
         [SerializeField] protected float height;
-        [SerializeField] private Color colour = Color.white;
 
         protected PlayerName playerName;
         #endregion
@@ -26,13 +25,16 @@ namespace DanielLochner.Assets
         public virtual void Setup()
         {
             playerName = Instantiate(namePrefab, transform.position + transform.up * height, transform.rotation, transform);
-            playerName.Setup(DataContainer.Data.username, colour);
+            playerName.Setup(DataContainer.Data);
             SetVisible(false);
         }
 
+        public void SetName(string name, int experienceLevel)
+        {
+            playerName.SetName(name, experienceLevel);
+        }
         public virtual void SetColour(Color colour)
         {
-            this.colour = colour;
             playerName.SetColour(colour);
         }
         public virtual void SetVisible(bool isActive)

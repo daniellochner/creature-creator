@@ -26,7 +26,7 @@ namespace DanielLochner.Assets
         {
             this.playerData = playerData;
 
-            SetName(playerData.username);
+            SetName(playerData.username, playerData.level);
             if (NetworkUtils.IsPlayer(playerData.clientId))
             {
                 SetColour(playerColour);
@@ -47,9 +47,11 @@ namespace DanielLochner.Assets
             }
         }
 
-        public void SetName(string name)
+        public void SetName(string name, int level)
         {
-            nameText.text = name.NoParse();
+            string n = name.NoParse();
+            string l = $"[{level}]".ToBold();
+            nameText.text = $"{n} {l}";
         }
         public void SetColour(Color colour)
         {

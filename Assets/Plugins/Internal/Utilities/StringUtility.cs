@@ -17,6 +17,11 @@ namespace DanielLochner.Assets
             return $"<noparse>{str}</noparse>";
         }
 
+        public static string ToBold(this string str)
+        {
+            return $"<b>{str}</b>";
+        }
+
         public static string ToColour(this string str, Color colour)
         {
             return $"<color=#{ColorUtility.ToHtmlStringRGB(colour)}>{str}</color>";

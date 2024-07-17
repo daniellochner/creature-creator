@@ -12,17 +12,19 @@ namespace DanielLochner.Assets
         #endregion
 
         #region Methods
-        public void Setup(string name, Color colour)
+        public void Setup(PlayerData data)
         {
-            SetName(name);
-            SetColour(colour);
+            SetName(data.username, data.level);
+            SetColour(Color.white);
 
             lookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = CameraUtility.MainCamera.transform, weight = 1f });
         }
 
-        public void SetName(string name)
+        public void SetName(string name, int level)
         {
-            nameText.text = name.NoParse();
+            string n = name.NoParse();
+            string l = $"[{level}]".ToBold();
+            nameText.text = $"{n} {l}";
         }
         public void SetColour(Color colour)
         {
