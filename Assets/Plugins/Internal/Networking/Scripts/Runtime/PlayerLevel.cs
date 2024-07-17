@@ -27,7 +27,7 @@ namespace DanielLochner.Assets
         {
             string username = DataContainer.Data.username;
             Namer?.SetName(username, nextLevel);
-            NameUI.SetName(username, nextLevel);
+            NameUI?.SetName(username, nextLevel);
         }
     }
 }
