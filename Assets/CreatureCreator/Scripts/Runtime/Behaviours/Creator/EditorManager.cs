@@ -1716,6 +1716,8 @@ namespace DanielLochner.Assets.CreatureCreator
             this.StopStartCoroutine(paginationCanvasGroup.FadeRoutine(e, t), ref fadePaginationCoroutine);
             this.StopStartCoroutine(optionsCanvasGroup.FadeRoutine(e, t), ref fadeOptionsCoroutine);
 
+            Player.Instance.Camera.CameraOrbit.SetMinAngle(e ? -25f : -60f);
+
             if (!isEditing)
             {
                 optionsSideMenu.Close();

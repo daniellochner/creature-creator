@@ -73,6 +73,11 @@ namespace DanielLochner.Assets
             get => minMaxZoom;
             set => minMaxZoom = value;
         }
+        public Vector2 MinMaxRotation
+        {
+            get => minMaxRotation;
+            set => minMaxRotation = value;
+        }
 
         public virtual bool CanInput { get; set; } = true;
         public bool IsFrozen { get; private set; }
@@ -293,6 +298,11 @@ namespace DanielLochner.Assets
             {
                 zoomTransform.localPosition = offset;
             }
+        }
+
+        public void SetMinAngle(float angle)
+        {
+            minMaxRotation = new Vector2(angle, minMaxRotation.y);
         }
 
         private void AddVelocity(float deltaX, float deltaY, ref Vector3 velocity)
