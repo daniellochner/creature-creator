@@ -338,7 +338,7 @@ namespace DanielLochner.Assets.CreatureCreator
             protected void UpdateTarget()
             {
                 Transform nearest = trackRegion.Nearest.transform;
-                if (target == null || target.transform != nearest)
+                if ((nearest != null) && (target == null || target.transform != nearest))
                 {
                     target = nearest.GetComponent<CreatureBase>();
                 }
@@ -349,7 +349,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             protected void UpdateLookDir()
             {
-                lookDir = Vector3.ProjectOnPlane(target.transform.position - StateMachine.transform.position, StateMachine.transform.up).normalized;
+                if (target != null)
+                {
+                    lookDir = Vector3.ProjectOnPlane(target.transform.position - StateMachine.transform.position, StateMachine.transform.up).normalized;
+                }
             }
 
             public override void Enter()
