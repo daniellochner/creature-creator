@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace DanielLochner.Assets
 
         #region Properties
         public Action<PlayerData> OnConfirmFriendRequest { get; set; }
+
+        public Dictionary<ulong, PlayerData> Players { get; private set; } = new Dictionary<ulong, PlayerData>();
 
         public int NumPlayers => networkMenu.NumPlayers;
         #endregion
@@ -78,6 +81,8 @@ namespace DanielLochner.Assets
                 }
                 NotificationsManager.Notify(notification);
 
+                Players.Add(playerData.clientId, playerData);
+
                 NetworkPlayersMenu.Instance.AddPlayer(playerData);
             }
         }
@@ -91,6 +96,8 @@ namespace DanielLochner.Assets
                     notification = notification.ToColour(friendColour);
                 }
                 NotificationsManager.Notify(notification);
+
+                Players.Remove(playerData.clientId);
 
                 NetworkPlayersMenu.Instance.RemovePlayer(playerData.clientId);
             }
@@ -107,6 +114,7 @@ namespace DanielLochner.Assets
             foreach (PlayerData player in players)
             {
                 NetworkPlayersMenu.Instance.AddPlayer(player);
+                Players.Add(player.clientId, player);
             }
             hasHandledExistingPlayers = true;
         }
