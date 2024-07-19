@@ -152,6 +152,11 @@ namespace DanielLochner.Assets.CreatureCreator
             set => creativeMode = value;
         }
 
+        public bool CanPerformOperation
+        {
+            get => !Creature.Health.IsTakingDamage;
+        }
+
         public bool IsEditing => isEditing;
         public bool IsBuilding => buildMenu.IsOpen;
         public bool IsPainting => paintMenu.IsOpen;
@@ -522,6 +527,8 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Operations
         public void TrySave()
         {
+            if (!CanPerformOperation) return;
+
             UnityAction<string> saveOperation = delegate (string input)
             {
                 string savedCreatureName = PreProcessName(input);
@@ -568,6 +575,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryLoad()
         {
+            if (!CanPerformOperation) return;
+
             string creatureName = default;
 
             CreatureUI selectedCreatureUI = creaturesUI.Find(x => x.SelectToggle.isOn);
@@ -631,6 +640,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryClear()
         {
+            if (!CanPerformOperation) return;
+
             ConfirmUnsavedChanges(Clear);
         }
         public void Clear()
@@ -647,6 +658,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryImport()
         {
+            if (!CanPerformOperation) return;
+
             ConfirmUnsavedChanges(delegate
             {
                 if (SystemUtility.IsDevice(DeviceType.Desktop))
@@ -685,6 +698,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void TryExport()
         {
+            if (!CanPerformOperation) return;
+
             UnityAction<string, bool> exportDesktopOperation = delegate (string creatureName, bool exportAll)
             {
                 string exportedCreatureName = PreProcessName(creatureName);
