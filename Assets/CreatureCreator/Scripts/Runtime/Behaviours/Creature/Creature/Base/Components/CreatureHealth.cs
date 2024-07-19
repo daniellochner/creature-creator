@@ -27,7 +27,9 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override float MaxHealth => Constructor.Statistics.Health;
 
-        public override bool CanTakeDamage => base.CanTakeDamage && !CinematicManager.Instance.IsInCinematic;
+        public override bool CanTakeDamage => base.CanTakeDamage && !CinematicManager.Instance.IsInCinematic && !EditorManager.Instance.IsEditing;
+
+        public bool IsTakingDamage => damageCoroutine != null;
         #endregion
 
         #region Methods
