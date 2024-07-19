@@ -137,9 +137,10 @@ namespace DanielLochner.Assets.CreatureCreator
             
             public override void Enter()
             {
+                base.Enter();
                 DogAI.ResetPath();
                 UpdateTarget();
-                barkingCoroutine = DogAI.StartCoroutine(BarkingRoutine());
+                DogAI.StopStartCoroutine(BarkingRoutine(), ref barkingCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -148,7 +149,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
-                DogAI.StopCoroutine(barkingCoroutine);
+                base.Exit();
+                DogAI.TryStopCoroutine(barkingCoroutine);
             }
 
             private IEnumerator BarkingRoutine()
@@ -254,9 +256,9 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Enter()
             {
                 base.Enter();
-                DogAI.ResetPath();
 
-                bitingCoroutine = DogAI.StartCoroutine(BitingRoutine());
+                DogAI.ResetPath();
+                DogAI.StopStartCoroutine(BitingRoutine(), ref bitingCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -273,7 +275,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                DogAI.StopCoroutine(bitingCoroutine);
+                DogAI.TryStopCoroutine(bitingCoroutine);
             }
 
             private IEnumerator BitingRoutine()

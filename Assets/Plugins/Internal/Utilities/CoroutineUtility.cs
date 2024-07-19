@@ -13,5 +13,13 @@ namespace DanielLochner.Assets
             }
             current = monoBehaviour.StartCoroutine(enumerator);
         }
+
+        public static void TryStopCoroutine(this MonoBehaviour monoBehaviour, Coroutine coroutine)
+        {
+            if (coroutine != null)
+            {
+                monoBehaviour.StopCoroutine(coroutine);
+            }
+        }
     }
 }

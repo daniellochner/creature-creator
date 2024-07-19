@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateTarget();
 
                 OctopusAI.ResetPath();
-                spinningCoroutine = OctopusAI.StartCoroutine(SpinningRoutine());
+                OctopusAI.StopStartCoroutine(SpinningRoutine(), ref spinningCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -52,7 +52,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                OctopusAI.StopCoroutine(spinningCoroutine);
+                OctopusAI.TryStopCoroutine(spinningCoroutine);
             }
 
             private IEnumerator SpinningRoutine()

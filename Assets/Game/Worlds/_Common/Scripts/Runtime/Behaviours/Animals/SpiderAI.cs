@@ -63,7 +63,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 base.Enter();
                 SpiderAI.ResetPath();
 
-                bitingCoroutine = SpiderAI.StartCoroutine(BitingRoutine());
+                SpiderAI.StopStartCoroutine(BitingRoutine(), ref bitingCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                SpiderAI.StopCoroutine(bitingCoroutine);
+                SpiderAI.TryStopCoroutine(bitingCoroutine);
             }
 
             private IEnumerator BitingRoutine()

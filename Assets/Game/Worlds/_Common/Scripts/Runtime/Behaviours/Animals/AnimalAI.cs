@@ -189,6 +189,8 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private string[] actions;
             protected float silentTimeLeft, actionTimeLeft;
 
+            private Coroutine makeSoundCoroutine;
+
             public AnimalAI AnimalAI => StateMachine as AnimalAI;
 
             public override void Enter()
@@ -210,7 +212,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
             private void MakeSound()
             {
-                AnimalAI.StartCoroutine(MakeSoundRoutine());
+                if (makeSoundCoroutine == null)
+                {
+                    makeSoundCoroutine = AnimalAI.StartCoroutine(MakeSoundRoutine());
+                }
             }
             private IEnumerator MakeSoundRoutine()
             {
@@ -225,6 +230,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 // Close
                 AnimalAI.Params.SetBool("Mouth_IsOpen", false);
+
+                makeSoundCoroutine = null;
             }
 
             private void PerformAction()
@@ -277,6 +284,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
+                base.Exit();
                 AnimalAI.Creature.Health.OnTakeDamage -= OnTakeDamage;
             }
 

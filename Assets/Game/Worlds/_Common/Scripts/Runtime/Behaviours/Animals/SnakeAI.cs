@@ -62,7 +62,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 base.Enter();
                 SnakeAI.ResetPath();
-                strikeCoroutine = SnakeAI.StartCoroutine(StrikingRoutine());
+                SnakeAI.StopStartCoroutine(StrikingRoutine(), ref strikeCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                SnakeAI.StopCoroutine(strikeCoroutine);
+                SnakeAI.TryStopCoroutine(strikeCoroutine);
             }
 
             private IEnumerator StrikingRoutine()

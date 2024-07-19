@@ -58,6 +58,7 @@ namespace DanielLochner.Assets.CreatureCreator
             [SerializeField] private Vector3 chargeForce;
             [SerializeField] private MinMax chargeDamage;
             [SerializeField] private PlayerEffects.Sound[] impactSounds;
+            private Coroutine chargingCoroutine;
 
             private CowAI CowAI => StateMachine as CowAI;
 
@@ -70,12 +71,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             public override void Exit()
             {
+                CowAI.TryStopCoroutine(chargingCoroutine);
+
                 CowAI.Agent.speed /= chargeSpeedMultiplier;
             }
 
             private void Charge(Transform charged)
             {
-                CowAI.StartCoroutine(ChargeRoutine(charged));
+                CowAI.StopStartCoroutine(ChargeRoutine(charged), ref chargingCoroutine);
             }
             private IEnumerator ChargeRoutine(Transform charged)
             {

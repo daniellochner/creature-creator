@@ -84,7 +84,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateTarget();
 
                 HumanAI.ResetPath();
-                shootingCoroutine = HumanAI.StartCoroutine(ShootingRoutine());
+                HumanAI.StopStartCoroutine(ShootingRoutine(), ref shootingCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -94,7 +94,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                HumanAI.StopCoroutine(shootingCoroutine);
+                HumanAI.TryStopCoroutine(shootingCoroutine);
             }
 
             private IEnumerator ShootingRoutine()
@@ -136,7 +136,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateTarget();
 
                 HumanAI.ResetPath();
-                spinningCoroutine = HumanAI.StartCoroutine(SpinningRoutine());
+                HumanAI.StopStartCoroutine(SpinningRoutine(), ref spinningCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -160,7 +160,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                HumanAI.StopCoroutine(spinningCoroutine);
+                HumanAI.TryStopCoroutine(spinningCoroutine);
             }
 
             private IEnumerator SpinningRoutine()

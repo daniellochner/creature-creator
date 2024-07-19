@@ -108,7 +108,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 UpdateTarget();
 
                 FishAI.ResetPath();
-                bitingCoroutine = FishAI.StartCoroutine(BitingRoutine());
+                FishAI.StopStartCoroutine(BitingRoutine(), ref bitingCoroutine);
             }
             public override void UpdateLogic()
             {
@@ -132,7 +132,7 @@ namespace DanielLochner.Assets.CreatureCreator
             public override void Exit()
             {
                 base.Exit();
-                FishAI.StopCoroutine(bitingCoroutine);
+                FishAI.TryStopCoroutine(bitingCoroutine);
             }
 
             private IEnumerator BitingRoutine()
