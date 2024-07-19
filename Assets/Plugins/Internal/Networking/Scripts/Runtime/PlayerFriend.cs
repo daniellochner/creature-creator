@@ -61,7 +61,7 @@ namespace DanielLochner.Assets
 
         private void OnConfirmFriendRequest(PlayerData playerData)
         {
-            if (OwnerClientId == playerData.clientId)
+            if (playerData != null && OwnerClientId == playerData.clientId)
             {
                 SetAsFriend();
             }
