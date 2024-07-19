@@ -34,6 +34,15 @@ namespace DanielLochner.Assets
             }
         }
 
+        private void OnEnable()
+        {
+            sideMenu.gameObject.SetActive(true);
+        }
+        private void OnDisable()
+        {
+            sideMenu.gameObject.SetActive(false);
+        }
+
         public void TrySendChatMessage()
         {
             string message = messageInputField.text.NoParse();
