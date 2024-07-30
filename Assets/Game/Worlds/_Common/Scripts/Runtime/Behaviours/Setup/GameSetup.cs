@@ -97,12 +97,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 go.SetActive(false);
             }
 
-#if UNITY_STANDALONE
             if (!EducationManager.Instance.IsEducational)
             {
-                FactoryManager.Instance.LoadWorkshopItems();
+                FactoryManager.Instance.LoadWorkshopCreatures();
             }
-#endif
 
             IsSetup = true;
         }

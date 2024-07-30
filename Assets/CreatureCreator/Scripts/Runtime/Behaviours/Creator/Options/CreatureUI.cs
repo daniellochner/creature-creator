@@ -4,11 +4,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
-
-#if UNITY_STANDALONE
-using Steamworks;
-#endif
 
 namespace DanielLochner.Assets.CreatureCreator
 {
@@ -45,7 +40,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Setup(string creatureName)
         {
             nameText.text = name = creatureName;
-            transform.SetAsFirstSibling();
 
 #if UNITY_STANDALONE
             if (EducationManager.Instance.IsEducational)
@@ -54,17 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             else
             {
-                foreach (PublishedFileId_t fileId in FactoryManager.Instance.Files)
-                {
-                    if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp))
-                    {
-                        if (Path.GetFileNameWithoutExtension(Directory.GetFiles(folder)[0]) == creatureName)
-                        {
-                            shareButton.gameObject.SetActive(false);
-                            break;
-                        }
-                    }
-                }
+                shareButton.gameObject.SetActive(!FactoryManager.Instance.LoadedWorkshopCreatures.Contains(creatureName));
             }
 #endif
         }
