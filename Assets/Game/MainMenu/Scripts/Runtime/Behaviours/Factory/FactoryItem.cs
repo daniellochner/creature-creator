@@ -13,6 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public uint downVotes;
         public string previewURL;
         public FactoryTagType tag;
+        public uint timeCreated;
 
         public bool Equals(FactoryItem other)
         {

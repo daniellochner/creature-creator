@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public TextMeshProUGUI nameText;
         public TextMeshProUGUI authorText;
+        public TextMeshProUGUI timeCreatedText;
         public TextMeshProUGUI descriptionText;
         public TextMeshProUGUI upVotesText;
         public TextMeshProUGUI downVotesText;
@@ -44,6 +46,7 @@ namespace DanielLochner.Assets.CreatureCreator
             descriptionText.text = item.description;
             upVotesText.text = item.upVotes.ToString();
             downVotesText.text = item.downVotes.ToString();
+            timeCreatedText.text = DateTimeUtility.UnixTimeStampToDateTime(item.timeCreated).ToString();
 
             if (preview == null)
             {

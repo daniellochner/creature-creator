@@ -203,6 +203,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         item.name = details.m_rgchTitle;
                         item.description = details.m_rgchDescription;
                         item.upVotes = details.m_unVotesUp;
+                        item.timeCreated = details.m_rtimeCreated;
                     }
                     if (SteamUGC.GetQueryUGCPreviewURL(param.m_handle, i, out string url, 256))
                     {
@@ -284,6 +285,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         uint upVotes = file["vote_data"]["votes_up"].Value<uint>();
                         uint downVotes = file["vote_data"]["votes_down"].Value<uint>();
                         string previewURL = file["preview_url"].Value<string>();
+                        uint timeCreated = file["time_created"].Value<uint>();
 
                         FactoryItem item = new()
                         {
@@ -292,7 +294,8 @@ namespace DanielLochner.Assets.CreatureCreator
                             description = description,
                             upVotes = upVotes,
                             downVotes = downVotes,
-                            previewURL = previewURL
+                            previewURL = previewURL,
+                            timeCreated = timeCreated
                         };
                         items.Add(item);
                     }
