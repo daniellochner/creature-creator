@@ -29,7 +29,7 @@ namespace DanielLochner.Assets
         }
 
         public virtual bool CanSend => !InputDialog.Instance.IsOpen && cooldownTimeLeft < 0;
-        public virtual bool CanReceive => true;
+        public virtual bool CanReceive => Camera.main != null;
 
         public virtual bool TryOpen => Input.GetKeyDown(KeyCode.T);
         #endregion
@@ -69,8 +69,6 @@ namespace DanielLochner.Assets
 
         public new void SendMessage(string message)
         {
-            if (!CanSend) return;
-
             if (message.Length == 0)
             {
                 return;
@@ -91,8 +89,6 @@ namespace DanielLochner.Assets
         }
         protected virtual void ReceiveMessage(string message)
         {
-            if (!CanReceive || !Camera.main) return;
-
             if (messageGO != null)
             {
                 Destroy(messageGO);
@@ -114,7 +110,10 @@ namespace DanielLochner.Assets
         [ClientRpc]
         public void SendMessageClientRpc(string message)
         {
-            ReceiveMessage(message);
+            if (CanReceive)
+            {
+                ReceiveMessage(message);
+            }
         }
         #endregion
     }
