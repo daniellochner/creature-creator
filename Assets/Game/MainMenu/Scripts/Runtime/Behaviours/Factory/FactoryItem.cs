@@ -7,7 +7,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public ulong id;
         public string name;
-        public string author;
+        public ulong creatorId;
         public string description;
         public uint upVotes;
         public uint downVotes;

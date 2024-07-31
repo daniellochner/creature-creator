@@ -42,7 +42,6 @@ namespace DanielLochner.Assets.CreatureCreator
             this.itemUI = itemUI;
 
             nameText.text = item.name;
-            authorText.text = item.author;
             descriptionText.text = item.description;
             upVotesText.text = item.upVotes.ToString();
             downVotesText.text = item.downVotes.ToString();
@@ -56,6 +55,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 iconImg.sprite = preview;
             }
+
+            //SetCreator(item.creatorId);
 
             SetSubscribed(isSubscribed);
             SetLiked(isLiked);
@@ -158,6 +159,21 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             refreshIcon.SetActive(false);
+        }
+
+        private void SetCreator(ulong creatorId)
+        {
+            authorText.gameObject.SetActive(false);
+
+            FactoryManager.Instance.GetUsername(creatorId, delegate (string username)
+            {
+                authorText.text = username;
+                authorText.gameObject.SetActive(true);
+            }, 
+            delegate (string error)
+            {
+                Debug.Log(error);
+            });
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections;
 using System;
 using UnityEngine.Networking;
 using Newtonsoft.Json.Linq;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
 #if UNITY_STANDALONE
@@ -204,6 +203,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         item.description = details.m_rgchDescription;
                         item.upVotes = details.m_unVotesUp;
                         item.timeCreated = details.m_rtimeCreated;
+                        item.creatorId = details.m_ulSteamIDOwner;
                     }
                     if (SteamUGC.GetQueryUGCPreviewURL(param.m_handle, i, out string url, 256))
                     {
@@ -282,6 +282,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         string title = file["title"].Value<string>();
                         string description = file["file_description"].Value<string>();
                         ulong id = file["publishedfileid"].Value<ulong>();
+                        ulong creatorId = file["creator"].Value<ulong>();
                         uint upVotes = file["vote_data"]["votes_up"].Value<uint>();
                         uint downVotes = file["vote_data"]["votes_down"].Value<uint>();
                         string previewURL = file["preview_url"].Value<string>();
@@ -291,6 +292,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         {
                             id = id,
                             name = title,
+                            creatorId = creatorId,
                             description = description,
                             upVotes = upVotes,
                             downVotes = downVotes,
@@ -309,6 +311,37 @@ namespace DanielLochner.Assets.CreatureCreator
                     Total = total
                 });
                 Save();
+            }
+            else
+            {
+                onFailed?.Invoke(request.error);
+            }
+        }
+
+        public void GetUsername(ulong userId, Action<string> onLoaded, Action<string> onFailed)
+        {
+            string url = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={steamKey.Value}&steamids={userId}";
+            StartCoroutine(GetUsernameRoutine(url, onLoaded, onFailed));
+        }
+
+        private IEnumerator GetUsernameRoutine(string url, Action<string> onLoaded, Action<string> onFailed)
+        {
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                JObject data = JToken.Parse(request.downloadHandler.text).First.First as JObject;
+                
+                JArray players = data["players"] as JArray;
+                if (players.Count > 0)
+                {
+                    var player = players.First;
+
+                    string username = player["personaname"].Value<string>();
+
+                    onLoaded?.Invoke(username);
+                }
             }
             else
             {
