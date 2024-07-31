@@ -41,7 +41,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (other.CompareTag("Water"))
                 {
-                    StopCoroutine(burnCoroutine);
+                    if (burnCoroutine != null)
+                    {
+                        StopCoroutine(burnCoroutine);
+                    }
                     ExtinguishClientRpc();
                 }
             }

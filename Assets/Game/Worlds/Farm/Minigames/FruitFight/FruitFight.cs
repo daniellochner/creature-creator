@@ -70,7 +70,10 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.OnCinematic();
 
-            this.Invoke(RespawnFruit, respawnFruitTime);
+            if (IsServer)
+            {
+                this.Invoke(RespawnFruit, respawnFruitTime);
+            }
         }
 
         private void RespawnFruit()
