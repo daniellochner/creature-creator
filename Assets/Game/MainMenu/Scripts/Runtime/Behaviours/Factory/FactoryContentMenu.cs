@@ -18,7 +18,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             targetContent = content;
             prevParent = targetContent.transform.parent;
-            SetParent(content, contentRoot);
+            SetParent(content, contentRoot, 4);
 
             Open();
         }
@@ -27,14 +27,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             base.Close(instant);
 
-            SetParent(targetContent, prevParent);
+            SetParent(targetContent, prevParent, 3);
         }
 
-        private void SetParent(FactoryContentUI content, Transform parent)
+        private void SetParent(FactoryContentUI content, Transform parent, int columns)
         {
             content.RectTransform.SetParent(parent);
             content.RectTransform.offsetMin = content.RectTransform.offsetMax = Vector2.zero;
             content.RectTransform.localScale = Vector3.one;
+            content.csCalculator.NumberOfColumns = columns;
             content.csCalculator.Calculate();
         }
     }
