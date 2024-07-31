@@ -551,6 +551,10 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
                 drag.OnDrag.AddListener(delegate
                 {
+                    foreach (var bone in Constructor.Bones)
+                    {
+                        bone.localPosition = new Vector3(0f, bone.localPosition.y, bone.localPosition.z);
+                    }
                     Drag.OnDrag.Invoke();
                 });
                 drag.OnRelease.AddListener(delegate
