@@ -45,6 +45,7 @@ namespace DanielLochner.Assets
         }
         private void OnDisable()
         {
+            IsUnderwater = false;
             water = null;
         }
 
@@ -57,6 +58,8 @@ namespace DanielLochner.Assets
         }
         private void OnTriggerEnter(Collider other)
         {
+            if (!enabled) return;
+
             if (other.CompareTag("Water"))
             {
                 water = other.GetComponent<PWater>();

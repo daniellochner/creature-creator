@@ -33,7 +33,8 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnDisable()
         {
-            IsOnRaft = false;
+            IsOnRaft = IsUnderwater = false;
+            water = null;
         }
         private void FixedUpdate()
         {
@@ -49,6 +50,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!enabled) return;
+
             if (other.CompareTag("Raft"))
             {
                 IsOnRaft = true;
