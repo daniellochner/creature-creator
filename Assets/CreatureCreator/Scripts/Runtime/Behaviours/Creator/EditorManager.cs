@@ -637,6 +637,8 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             PrevCreatureData = null;
+
+            UpdateStatistics();
         }
         public void TryClear()
         {
