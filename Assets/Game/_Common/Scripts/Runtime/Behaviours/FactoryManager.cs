@@ -105,6 +105,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void GetItems(FactoryItemQuery itemQuery, Action<List<FactoryItem>, uint> onLoaded, Action<string> onFailed)
         {
+            if (!string.IsNullOrEmpty(itemQuery.SearchText))
+            {
+                itemQuery.SortByType = FactorySortByType.SearchText;
+            }
+
             if (WorldTimeManager.Instance.IsInitialized)
             {
                 var now = WorldTimeManager.Instance.UtcNow.Value;
@@ -148,11 +153,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 case FactoryTimePeriodType.AllTime:
                     days = uint.MaxValue;
                     break;
-            }
-
-            if (!string.IsNullOrEmpty(itemQuery.SearchText))
-            {
-                itemQuery.SortByType = FactorySortByType.SearchText;
             }
 
 #if UNITY_STANDALONE
@@ -216,12 +216,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 onLoaded?.Invoke(items, total);
 
-                Data.CachedItems.Add(itemQuery, new FactoryData.CachedItemData()
-                {
-                    Items = items,
-                    Total = total
-                });
-                Save();
+                CacheItems(itemQuery, items, total);
             });
 
             UGCQueryHandle_t handle = SteamUGC.CreateQueryAllUGCRequest(sortBy, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items_ReadyToUse, SteamUtils.GetAppID(), SteamUtils.GetAppID(), (uint)(itemQuery.Page + 1));
@@ -305,12 +300,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 onLoaded?.Invoke(items, total);
 
-                Data.CachedItems.Add(query, new FactoryData.CachedItemData()
-                {
-                    Items = items,
-                    Total = total
-                });
-                Save();
+                CacheItems(query, items, total);
             }
             else
             {
@@ -332,7 +322,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (request.result == UnityWebRequest.Result.Success)
             {
                 JObject data = JToken.Parse(request.downloadHandler.text).First.First as JObject;
-                
+
                 JArray players = data["players"] as JArray;
                 if (players.Count > 0)
                 {
@@ -349,6 +339,18 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        private void CacheItems(FactoryItemQuery query, List<FactoryItem> items, uint total)
+        {
+            if (!Data.CachedItems.ContainsKey(query))
+            {
+                Data.CachedItems.Add(query, new FactoryData.CachedItemData()
+                {
+                    Items = items,
+                    Total = total
+                });
+                Save();
+            }
+        }
 
         public void LoadWorkshopCreatures()
         {
