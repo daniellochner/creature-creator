@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731716, g: 0.13414738, b: 0.121078566, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -169,10 +169,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileName: factory.dat
   encryptionKey: {fileID: 11400000, guid: 30b425dec1a4c8a4eb7d5718b3d3c5dd, type: 2}
+  data:
+    SubscribedItems: 
+    LikedItems: 
+    DislikedItems: 
+    CachedItems:
+      reorderableList:
+        canAdd: 0
+        canRemove: 0
+        draggable: 0
+        expandable: 0
+        multipleSelection: 0
+        isExpanded: 0
+        label:
+          m_Text: 
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 0
+        footerHeight: 0
+        slideEasing: 0
+        verticalSpacing: 0
+        showDefaultBackground: 0
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 0
+      _keyValues: []
+      _keys: []
+      _values: []
   save: 0
   load: 0
   revert: 0
   steamKey: {fileID: 11400000, guid: 814b475415ce644e7bec9d6ee3c35d3c, type: 2}
+  hoursToCache: 1
 --- !u!1 &32830867
 GameObject:
   m_ObjectHideFlags: 0
@@ -5809,7 +5840,7 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: d0698c10d2fc6334eab5808539e4e975, type: 2}
+      - {fileID: 11400000, guid: b916079e79bd7584b8f52af2e73370e0, type: 2}
     TickRate: 20
     ClientConnectionBufferTimeout: 30
     ConnectionApproval: 1
