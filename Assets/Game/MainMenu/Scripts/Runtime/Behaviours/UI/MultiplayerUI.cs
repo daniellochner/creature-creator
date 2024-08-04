@@ -454,7 +454,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "enablePVE", new DataObject(DataObject.VisibilityOptions.Public, enablePVE.ToString()) },
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
-                        { "mode", new DataObject(DataObject.VisibilityOptions.Public, mode.ToString()) },
+                        { "mode", new DataObject(DataObject.VisibilityOptions.Public, ((int)mode).ToString()) },
                         { "spawnPoint", new DataObject(DataObject.VisibilityOptions.Public, spawnPoint.ToString()) },
                         { "hostPlayerId", new DataObject(DataObject.VisibilityOptions.Public, hostPlayerId) },
                         { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) },
