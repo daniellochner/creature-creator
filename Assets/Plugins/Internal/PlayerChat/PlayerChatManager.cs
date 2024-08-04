@@ -20,10 +20,16 @@ namespace DanielLochner.Assets
 
         private float lastMessageTime;
 
+        public bool IsOpen
+        {
+            get => sideMenu.CurrentState == State.Open;
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Return) && (sideMenu.CurrentState == State.Open) && !string.IsNullOrEmpty(messageInputField.text))
             {
+                messageInputField.text = messageInputField.text.TrimEnd(); // Trim end new-line character
                 TrySendChatMessage();
             }
 
@@ -45,9 +51,9 @@ namespace DanielLochner.Assets
 
         public void TrySendChatMessage()
         {
-            string message = messageInputField.text;
+            string message = messageInputField.text.Trim();
 
-            if (message.Length == 0)
+            if (string.IsNullOrEmpty(messageInputField.text))
             {
                 return;
             }

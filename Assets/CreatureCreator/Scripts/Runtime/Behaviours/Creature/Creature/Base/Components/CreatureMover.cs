@@ -75,7 +75,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return !CinematicManager.Instance.IsInCinematic && EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !PauseMenu.Instance.IsOpen;
+                return !CinematicManager.Instance.IsInCinematic && EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !PauseMenu.Instance.IsOpen && !PlayerChatManager.Instance.IsOpen;
             }
         }
 

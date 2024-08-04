@@ -32,7 +32,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get
             {
-                return EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen;
+                return EditorManager.Instance.IsPlaying && !InputDialog.Instance.IsOpen && !ConfirmationDialog.Instance.IsOpen && !InformationDialog.Instance.IsOpen && !PlayerChatManager.Instance.IsOpen;
             }
         }
         #endregion
