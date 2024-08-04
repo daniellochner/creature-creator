@@ -270,8 +270,10 @@ namespace DanielLochner.Assets.CreatureCreator
             Drag rDrag = constructor.gameObject.AddComponent<Drag>();
             rDrag.mouseButton = 1;
             rDrag.mousePlaneAlignment = Drag.MousePlaneAlignment.WithCamera;
-            rDrag.boundsShape = Drag.BoundsShape.Sphere;
-            rDrag.sphereRadius = 0.1f;
+            rDrag.isBounded = true;
+            rDrag.boundsShape = Drag.BoundsShape.Cylinder;
+            rDrag.cylinderHeight = 3f;
+            rDrag.cylinderRadius = 2f;
             rDrag.updatePlaneOnPress = true;
 
             constructor.gameObject.AddComponent<Click>();

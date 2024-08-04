@@ -74,18 +74,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3734823331203863715, guid: f6f2e0e8ba782c2469c00789be9f1441, type: 3}
   m_PrefabInstance: {fileID: 8783960582845637254}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6350975176645183649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5346379226242315813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d541a87082d210409ea511d7d3def86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &8918888200117339260
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -118,24 +106,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &7403907350625486606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5346379226242315813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onScrollUp:
-    m_PersistentCalls:
-      m_Calls: []
-  onScrollDown:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &2476596000709123036
@@ -173,63 +143,6 @@ MonoBehaviour:
   draggable: 1
   resetOnRelease: 0
   useOffsetPosition: 0
-  updatePlaneOnPress: 1
-  dragThreshold: 0
-  customCollider: {fileID: 0}
-  mobileTouchOffset: 0
-  onPress:
-    m_PersistentCalls:
-      m_Calls: []
-  onHold:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls: []
-  onDrag:
-    m_PersistentCalls:
-      m_Calls: []
-  onBeginDrag:
-    m_PersistentCalls:
-      m_Calls: []
-  onEndDrag:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &8320809254465129848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5346379226242315813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b214715c83905046a4d7e6ac545e11e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseButton: 1
-  mousePlaneAlignment: 2
-  localDirection: {x: 1, y: 0, z: 0}
-  worldDirection: {x: 1, y: 0, z: 0}
-  smoothing: 0
-  maxDistance: Infinity
-  maxDistanceFromTarget: {fileID: 0}
-  localMovement:
-    x: 1
-    y: 1
-    z: 1
-  isBounded: 1
-  boundsShape: 1
-  boxSize: Infinity
-  sphereRadius: 0.1
-  cylinderRadius: Infinity
-  cylinderHeight: Infinity
-  boundsOffset: {x: 0, y: 0, z: 0}
-  world: {fileID: 0}
-  controlDrag: 1
-  draggable: 1
-  resetOnRelease: 0
-  useOffsetPosition: 1
   updatePlaneOnPress: 1
   dragThreshold: 0
   customCollider: {fileID: 0}
@@ -291,6 +204,93 @@ MonoBehaviour:
   ignoredTags:
   - Tool
   useOutline: 1
+--- !u!114 &6350975176645183649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5346379226242315813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d541a87082d210409ea511d7d3def86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7403907350625486606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5346379226242315813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onScrollUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onScrollDown:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8320809254465129848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5346379226242315813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b214715c83905046a4d7e6ac545e11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseButton: 1
+  mousePlaneAlignment: 2
+  localDirection: {x: 1, y: 0, z: 0}
+  worldDirection: {x: 1, y: 0, z: 0}
+  smoothing: 0
+  maxDistance: Infinity
+  maxDistanceFromTarget: {fileID: 0}
+  localMovement:
+    x: 1
+    y: 1
+    z: 1
+  isBounded: 1
+  boundsShape: 2
+  boxSize: Infinity
+  sphereRadius: 0.1
+  cylinderRadius: 2
+  cylinderHeight: 3
+  boundsOffset: {x: 0, y: 0, z: 0}
+  world: {fileID: 0}
+  controlDrag: 1
+  draggable: 1
+  resetOnRelease: 0
+  useOffsetPosition: 1
+  updatePlaneOnPress: 1
+  dragThreshold: 0
+  customCollider: {fileID: 0}
+  mobileTouchOffset: 0
+  onPress:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onEndDrag:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7787626303632898919 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1582400919483111905, guid: f6f2e0e8ba782c2469c00789be9f1441, type: 3}

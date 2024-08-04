@@ -78,23 +78,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8472447577185483876, guid: cba71d6106c3b494c8bef80d349ea67e, type: 3}
   m_PrefabInstance: {fileID: 6976014926531531850}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3831098645807891898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1539077357438920750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c923237b0dda9a4fad4cceabd717e94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mask:
-    serializedVersion: 2
-    m_Bits: 280577
-  linePoints: 16
-  timeBetweenPoints: 0.1
 --- !u!120 &2724828637924149393
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -192,6 +175,23 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &3831098645807891898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539077357438920750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c923237b0dda9a4fad4cceabd717e94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 280577
+  linePoints: 16
+  timeBetweenPoints: 0.1
 --- !u!1 &6486615808468018243 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4236442665720705033, guid: cba71d6106c3b494c8bef80d349ea67e, type: 3}
@@ -293,11 +293,11 @@ MonoBehaviour:
     y: 1
     z: 1
   isBounded: 1
-  boundsShape: 1
+  boundsShape: 2
   boxSize: Infinity
   sphereRadius: 0.1
-  cylinderRadius: Infinity
-  cylinderHeight: Infinity
+  cylinderRadius: 2
+  cylinderHeight: 3
   boundsOffset: {x: 0, y: 0, z: 0}
   world: {fileID: 0}
   controlDrag: 1

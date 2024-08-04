@@ -74,18 +74,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6735790824386968147, guid: bc5a888aced251743a32ccca2385ef52, type: 3}
   m_PrefabInstance: {fileID: 2083007225678822423}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1429892438863844099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4724841262237337156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d541a87082d210409ea511d7d3def86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &4281053774945271815
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -102,7 +90,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4860027617547955512
+--- !u!114 &1429892438863844099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,15 +99,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4724841262237337156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1130929e55cd5ff43a05ca7699b6fdf3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d541a87082d210409ea511d7d3def86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onExit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3444551968460970309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +177,44 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4597223074696064144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724841262237337156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c3d4033e7a51b42a43c8ffc2f733ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  outlineWidth: 5
+  threshold: 0
+  ignoredTags:
+  - Tool
+  useOutline: 1
+--- !u!114 &4860027617547955512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724841262237337156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1130929e55cd5ff43a05ca7699b6fdf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7164752696222403204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,11 +239,11 @@ MonoBehaviour:
     y: 1
     z: 1
   isBounded: 1
-  boundsShape: 1
+  boundsShape: 2
   boxSize: Infinity
   sphereRadius: 0.1
-  cylinderRadius: Infinity
-  cylinderHeight: Infinity
+  cylinderRadius: 2
+  cylinderHeight: 3
   boundsOffset: {x: 0, y: 0, z: 0}
   world: {fileID: 0}
   controlDrag: 1
@@ -271,26 +291,6 @@ MonoBehaviour:
   onRightClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4597223074696064144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4724841262237337156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45c3d4033e7a51b42a43c8ffc2f733ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onSelect:
-    m_PersistentCalls:
-      m_Calls: []
-  outlineWidth: 5
-  threshold: 0
-  ignoredTags:
-  - Tool
-  useOutline: 1
 --- !u!1 &6149571492826343066 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5314246159229786765, guid: bc5a888aced251743a32ccca2385ef52, type: 3}

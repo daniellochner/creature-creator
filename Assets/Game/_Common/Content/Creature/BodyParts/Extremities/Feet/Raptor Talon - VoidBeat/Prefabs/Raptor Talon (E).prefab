@@ -74,18 +74,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1467999859647560206, guid: 79562d4601a50b14f8820c1c9421faae, type: 3}
   m_PrefabInstance: {fileID: 4328136696120571990}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6678174981173931597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2904755226097795672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37ab9e051451b504ab3cc6a6f667da28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &8459868074331402242
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -102,42 +90,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5227228205745631361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2904755226097795672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1130929e55cd5ff43a05ca7699b6fdf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onExit:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &7286426341846600294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2904755226097795672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onScrollUp:
-    m_PersistentCalls:
-      m_Calls: []
-  onScrollDown:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &362118965641655198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +147,44 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &402883144437039282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904755226097795672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c3d4033e7a51b42a43c8ffc2f733ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  outlineWidth: 5
+  threshold: 0
+  ignoredTags:
+  - Tool
+  useOutline: 1
+--- !u!114 &5227228205745631361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904755226097795672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1130929e55cd5ff43a05ca7699b6fdf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5241813004858743212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,11 +209,11 @@ MonoBehaviour:
     y: 1
     z: 1
   isBounded: 1
-  boundsShape: 1
+  boundsShape: 2
   boxSize: Infinity
   sphereRadius: 0.1
-  cylinderRadius: Infinity
-  cylinderHeight: Infinity
+  cylinderRadius: 2
+  cylinderHeight: 3
   boundsOffset: {x: 0, y: 0, z: 0}
   world: {fileID: 0}
   controlDrag: 1
@@ -252,6 +242,18 @@ MonoBehaviour:
   onEndDrag:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6678174981173931597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904755226097795672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37ab9e051451b504ab3cc6a6f667da28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7214052911433459128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +273,7 @@ MonoBehaviour:
   onRightClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &402883144437039282
+--- !u!114 &7286426341846600294
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -280,17 +282,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2904755226097795672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45c3d4033e7a51b42a43c8ffc2f733ac, type: 3}
+  m_Script: {fileID: 11500000, guid: d3f7295b1f7aaa14eb623371ad919a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSelect:
+  onScrollUp:
     m_PersistentCalls:
       m_Calls: []
-  outlineWidth: 5
-  threshold: 0
-  ignoredTags:
-  - Tool
-  useOutline: 1
+  onScrollDown:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8878022720119462492 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5126701407558705674, guid: 79562d4601a50b14f8820c1c9421faae, type: 3}

@@ -314,7 +314,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 LDrag.mobileTouchOffset = CreatureEditor.TouchOffset;
             }
 
-            RDrag.world = connectionPoint;
+            RDrag.world = CreatureEditor.transform;
             RDrag.OnDrag.AddListener(delegate
             {
                 if (EditorManager.Instance.IsBuilding)
