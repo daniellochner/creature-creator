@@ -26,6 +26,9 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<string> KickedPlayers { get; private set; }
 
         public string InstitutionId { get; private set; }
+
+        public bool IsBeta => Version.EndsWith("-beta");
+        public bool IsModded => false;
         #endregion
 
         #region Methods

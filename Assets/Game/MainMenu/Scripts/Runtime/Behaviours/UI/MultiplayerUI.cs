@@ -371,13 +371,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
                 string institutionId = EducationManager.Instance.InstitutionId;
-                bool isBeta = Application.version.EndsWith("beta");
-
-                // Check Beta
-                if (isBeta)
-                {
-                    worldName = $"[BETA] {worldName}";
-                }
 
                 // Check Premium
                 if (!PremiumManager.Data.IsPremium)

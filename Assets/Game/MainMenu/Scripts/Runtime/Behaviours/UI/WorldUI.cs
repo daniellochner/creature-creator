@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject padlockIcon;
         [SerializeField] private Button infoButton;
         [SerializeField] private Button joinButton;
+        [SerializeField] private Color moddedColour;
+        [SerializeField] private Color betaColour;
         #endregion
 
         #region Properties
@@ -29,7 +31,6 @@ namespace DanielLochner.Assets.CreatureCreator
             Players = lobby.Players.Count;
 
             playersText.text = $"{Players}/{lobby.MaxPlayers}";
-            nameText.text = lobby.Name.NoParse();
             joinButton.onClick.AddListener(delegate 
             {
                 multiplayerUI.Join(lobby.Id);
@@ -37,6 +38,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
             WorldMP world = new WorldMP(lobby);
             mapText.text = $"{FormatMap(world.MapId)} ({FormatMode(world.CreativeMode)})";
+
+            string worldName = lobby.Name.NoParse();
+            if (world.IsBeta)
+            {
+                worldName = "[BETA] ".ToColour(betaColour) + worldName;
+            }
+            if (world.IsModded)
+            {
+                worldName = "[MODDED] ".ToColour(moddedColour) + worldName;
+            }
+            nameText.text = worldName;
 
             infoButton.onClick.AddListener(delegate
             {
