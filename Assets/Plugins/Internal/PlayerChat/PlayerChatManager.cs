@@ -45,11 +45,17 @@ namespace DanielLochner.Assets
 
         public void TrySendChatMessage()
         {
-            string message = messageInputField.text.NoParse();
+            string message = messageInputField.text;
+
+            if (message.Length == 0)
+            {
+                return;
+            }
+
+            message = message.NoParse();
 
             if (message.Length > maxMessageLength)
             {
-                InformationDialog.Inform("Message Too Long", $"Your message cannot be more than {maxMessageLength} characters.");
                 return;
             }
 
