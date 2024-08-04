@@ -903,20 +903,18 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleZoomButtons()
         {
-            if (!Creature || !Creature.Camera)
+            if (Creature && Creature.Camera.IsSetup)
             {
-                return;
+                CameraOrbit cameraOrbit = Creature.Camera.CameraOrbit;
+
+                bool canZoomIn = cameraOrbit.TargetZoom > cameraOrbit.MinMaxZoom.x;
+                zoomInBuildCG.interactable = zoomInPaintCG.interactable = canZoomIn;
+                zoomInBuildCG.alpha = zoomInPaintCG.alpha = canZoomIn ? 1f : 0.25f;
+
+                bool canZoomOut = cameraOrbit.TargetZoom < cameraOrbit.MinMaxZoom.y;
+                zoomOutBuildCG.interactable = zoomOutPaintCG.interactable = canZoomOut;
+                zoomOutBuildCG.alpha = zoomOutPaintCG.alpha = canZoomOut ? 1f : 0.25f;
             }
-
-            CameraOrbit cameraOrbit = Creature.Camera.CameraOrbit;
-
-            bool canZoomIn = cameraOrbit.TargetZoom > cameraOrbit.MinMaxZoom.x;
-            zoomInBuildCG.interactable = zoomInPaintCG.interactable = canZoomIn;
-            zoomInBuildCG.alpha = zoomInPaintCG.alpha = canZoomIn ? 1f : 0.25f;
-
-            bool canZoomOut = cameraOrbit.TargetZoom < cameraOrbit.MinMaxZoom.y;
-            zoomOutBuildCG.interactable = zoomOutPaintCG.interactable = canZoomOut;
-            zoomOutBuildCG.alpha = zoomOutPaintCG.alpha = canZoomOut ? 1f : 0.25f;
         }
 
         public bool CanLoadCreature(CreatureData creatureData, out string errorTitle, out string errorMessage)
