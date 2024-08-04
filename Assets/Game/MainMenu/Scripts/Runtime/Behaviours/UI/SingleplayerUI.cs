@@ -51,11 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            mapOS.SetupUsingEnum<Map>();
-            if (!showComingSoon)
-            {
-                mapOS.Options.RemoveAt(mapOS.Options.Count - 1);
-            }
+            mapOS.SetupUsingEnum<Map>(Map.ComingSoon);
             mapOS.Select(Map.Island, false);
             singleplayerMenu.OnOpen += UpdateMap;
 

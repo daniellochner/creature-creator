@@ -180,11 +180,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
-            mapOS.SetupUsingEnum<Map>();
-            if (!showComingSoon)
-            {
-                mapOS.Options.RemoveAt(mapOS.Options.Count - 1);
-            }
+            mapOS.SetupUsingEnum<Map>(Map.ComingSoon);
             mapOS.OnSelected.AddListener(delegate (int option)
             {
                 int spawnPoints = DatabaseManager.GetDatabaseEntry<MapData>("Maps", ((Map)option).ToString())?.SpawnPoints ?? 1;
@@ -203,7 +199,7 @@ namespace DanielLochner.Assets.CreatureCreator
             mapOS.Select(Map.Island, false);
             multiplayerMenu.OnOpen += UpdateMap;
 
-            modeOS.SetupUsingEnum<Mode>();
+            modeOS.SetupUsingEnum<Mode>(Mode.Timed);
             modeOS.Select(Mode.Adventure, false);
             
             visibilityOS.SetupUsingEnum<Visibility>();

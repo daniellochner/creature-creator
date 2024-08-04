@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Image screenshotImg;
         [SerializeField] private Sprite[] screenshots;
         [SerializeField] private GameObject lockedIcon;
-        [SerializeField] private GameObject comingSoonIcon;
+        [SerializeField] private GameObject timedPanel;
+        [SerializeField] private TextMeshProUGUI timeText;
 
         private OptionSelector mapOS, modeOS;
         #endregion
@@ -30,10 +32,15 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             screenshotImg.sprite = screenshots[option];
             UpdatePadlock(mapOS, modeOS);
+
+            timeText.text = "";
         }
         public void OnModeChanged(int option)
         {
             UpdatePadlock(mapOS, modeOS);
+
+            Mode mode = (Mode)option;
+            timedPanel.SetActive(mode == Mode.Timed);
         }
 
         public void UpdatePadlock(OptionSelector mapOS, OptionSelector modeOS)

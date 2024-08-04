@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -43,14 +44,22 @@ namespace DanielLochner.Assets
             LocalizationSettings.Instance.OnSelectedLocaleChanged -= UpdateName;
         }
 
-        public void SetupUsingEnum<T>()
+        public void SetupUsingEnum<T>(params T[] ignored)
         {
-            foreach (var type in Enum.GetValues(typeof(T)))
+            var ignoredTypes = new List<T>(ignored);
+
+            foreach (var typeObj in Enum.GetValues(typeof(T)))
             {
+                T type = (T)typeObj;
+                if (ignoredTypes.Contains(type))
+                {
+                    continue;
+                }
+
                 string id = $"option_{typeof(T).Name}_{type.ToString()}".ToLower();
                 if (!LocalizationUtility.HasEntry(id))
                 {
-                    id = type.ToString();
+                    id = typeObj.ToString();
                 }
                 options.Add(new Option()
                 {
