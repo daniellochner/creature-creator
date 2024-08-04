@@ -17,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Keybind sprint = new Keybind(KeyCode.LeftShift);
         [SerializeField] private Keybind interact = new Keybind(KeyCode.E);
         [SerializeField] private Keybind drop = new Keybind(KeyCode.Q);
+        [SerializeField] private Keybind hold = new Keybind(KeyCode.E);
         [SerializeField] private Keybind talk = new Keybind(KeyCode.T);
         [SerializeField] private Keybind viewPlayers = new Keybind(KeyCode.Tab);
         [SerializeField] private Keybind freeLook = new Keybind(KeyCode.LeftAlt);
@@ -96,6 +97,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => drop;
             set => drop = value;
+        }
+        public Keybind Hold
+        {
+            get => hold;
+            set => hold = value;
         }
         public Keybind Talk
         {
@@ -261,6 +267,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Sprint = new Keybind(KeyCode.LeftShift);
             Interact = new Keybind(KeyCode.E);
             Drop = new Keybind(KeyCode.Q);
+            Hold = new Keybind(KeyCode.E);
             Talk = new Keybind(KeyCode.T);
             ViewPlayers = new Keybind(KeyCode.Tab);
             FreeLook = new Keybind(KeyCode.LeftAlt);

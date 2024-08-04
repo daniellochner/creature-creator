@@ -17,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private KeybindUI flapKUI;
         [SerializeField] private KeybindUI sprintKUI;
         [SerializeField] private KeybindUI dropKUI;
+        [SerializeField] private KeybindUI holdKUI;
         [SerializeField] private KeybindUI talkKUI;
         [SerializeField] private KeybindUI viewPlayersKUI;
         [SerializeField] private KeybindUI freeLookKUI;
@@ -114,7 +115,14 @@ namespace DanielLochner.Assets.CreatureCreator
             dropKUI.Rebind(KeybindingsManager.Data.Drop, false);
             dropKUI.OnRebind.AddListener(delegate (Keybind key)
             {
-                KeybindingsManager.Data.Drop = key;
+                KeybindingsManager.Instance.RebindDrop(key);
+            });
+
+            // Hold
+            holdKUI.Rebind(KeybindingsManager.Data.Hold, false);
+            holdKUI.OnRebind.AddListener(delegate (Keybind key)
+            {
+                KeybindingsManager.Instance.RebindHold(key);
             });
 
             // Talk
@@ -171,13 +179,6 @@ namespace DanielLochner.Assets.CreatureCreator
             biteKUI.OnRebind.AddListener(delegate (Keybind key)
             {
                 KeybindingsManager.Instance.RebindBite(key);
-            });
-
-            // Drop
-            dropKUI.Rebind(KeybindingsManager.Data.Drop, false);
-            dropKUI.OnRebind.AddListener(delegate (Keybind key)
-            {
-                KeybindingsManager.Instance.RebindDrop(key);
             });
 
             // Shoot

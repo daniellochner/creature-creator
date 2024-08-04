@@ -10,6 +10,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private NetworkPlayersMenu networkPlayersMenu;
         [Space]
         [SerializeField] private Drop dropAbility;
+        [SerializeField] private Hold holdAbility;
         [SerializeField] private Eat eatAbility;
         [SerializeField] private Shoot shootAbility;
         [SerializeField] private Spit spitAbility;
@@ -39,6 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
             RebindViewPlayers(Data.ViewPlayers);
             RebindBite(Data.Bite);
             RebindDrop(Data.Drop);
+            RebindHold(Data.Hold);
             RebindShoot(Data.Shoot);
             RebindFlap(Data.Flap);
             RebindJump(Data.Jump);
@@ -72,6 +74,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             dropAbility.PerformKeybind = key;
             Data.Drop = key;
+        }
+        public void RebindHold(Keybind key)
+        {
+            holdAbility.PerformKeybind = key;
+            Data.Hold = key;
         }
         public void RebindShoot(Keybind key)
         {
