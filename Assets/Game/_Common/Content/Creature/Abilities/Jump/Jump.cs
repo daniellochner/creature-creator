@@ -39,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
                 leg.Step(StepType.JumpStart, 1f);
             }
 
-            if (!WorldManager.Instance.World.CreativeMode)
+            if (!WorldManager.Instance.IsCreative)
             {
                 Player.Instance.Hunger.Hunger -= hungerCost;
             }

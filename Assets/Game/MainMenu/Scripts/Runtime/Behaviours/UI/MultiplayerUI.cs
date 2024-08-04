@@ -253,7 +253,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
                 }
-                if (!world.CreativeMode && !ProgressManager.Instance.IsMapUnlocked(map))
+                if ((world.Mode == Mode.Adventure) && !ProgressManager.Instance.IsMapUnlocked(map))
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(world.MapId)));
                 }
@@ -362,7 +362,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 bool spawnNPC = npcToggle.isOn;
                 bool enablePVE = pveToggle.isOn;
                 bool allowProfanity = profanityToggle.isOn;
-                bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
+                Mode mode = (Mode)modeOS.Selected;
                 int spawnPoint = spawnPointOS.Selected;
                 string hostPlayerId = AuthenticationService.Instance.PlayerId;
                 string kickedPlayers = "";
@@ -390,7 +390,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
                 }
-                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(map))
+                if ((mode == Mode.Adventure) && !ProgressManager.Instance.IsMapUnlocked(map))
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize(mapId)));
                 }
@@ -454,7 +454,7 @@ namespace DanielLochner.Assets.CreatureCreator
                         { "enablePVE", new DataObject(DataObject.VisibilityOptions.Public, enablePVE.ToString()) },
                         { "spawnNPC", new DataObject(DataObject.VisibilityOptions.Public, spawnNPC.ToString()) },
                         { "allowProfanity", new DataObject(DataObject.VisibilityOptions.Public, allowProfanity.ToString()) },
-                        { "creativeMode", new DataObject(DataObject.VisibilityOptions.Public, creativeMode.ToString()) },
+                        { "mode", new DataObject(DataObject.VisibilityOptions.Public, mode.ToString()) },
                         { "spawnPoint", new DataObject(DataObject.VisibilityOptions.Public, spawnPoint.ToString()) },
                         { "hostPlayerId", new DataObject(DataObject.VisibilityOptions.Public, hostPlayerId) },
                         { "kickedPlayers", new DataObject(DataObject.VisibilityOptions.Public, kickedPlayers) },

@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             });
 
             WorldMP world = new WorldMP(lobby);
-            mapText.text = $"{FormatMap(world.MapId)} ({FormatMode(world.CreativeMode)})";
+            mapText.text = $"{FormatMap(world.MapId)} ({FormatMode(world.Mode == Mode.Creative)})";
 
             string worldName = lobby.Name.NoParse();
             if (world.IsBeta)
@@ -55,7 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 InformationDialog.Inform(world.WorldName, 
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_version")}:</b> {world.Version}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_map")}:</b> {FormatMap(world.MapId)}<br>" + 
-                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_mode")}:</b> {FormatMode(world.CreativeMode)}<br>" +
+                    $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_mode")}:</b> {FormatMode(world.Mode == Mode.Creative)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pvp")}:</b> {FormatEnabled(world.EnablePVP)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_npcs")}:</b> {FormatEnabled(world.SpawnNPC)}<br>" +
                     $"<b>{LocalizationUtility.Localize("mainmenu_multiplayer_world_pve")}:</b> {FormatEnabled(world.EnablePVE)}<br>" +

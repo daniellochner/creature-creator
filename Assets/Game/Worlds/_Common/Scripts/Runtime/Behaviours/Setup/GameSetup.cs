@@ -149,7 +149,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             NetworkPlayersManager.Instance.Setup(world.Id);
 
-            EditorManager.Instance.CreativeMode = world.CreativeMode;
+            EditorManager.Instance.CreativeMode = world.Mode == Mode.Creative;
             EditorManager.Instance.CheckForProfanity = !world.AllowProfanity;
         }
         public void SetupSP()
@@ -168,7 +168,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Player.Instance.DeathMessenger.enabled = false;
             PlayerChatManager.Instance.enabled = false;
 
-            EditorManager.Instance.CreativeMode = world.CreativeMode;
+            EditorManager.Instance.CreativeMode = world.Mode == Mode.Creative;
         }
 
         public void Shutdown()

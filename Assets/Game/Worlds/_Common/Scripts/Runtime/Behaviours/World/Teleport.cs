@@ -171,7 +171,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [ClientRpc]
         private void UnlockMapClientRpc()
         {
-            if (!WorldManager.Instance.World.CreativeMode && !ProgressManager.Instance.IsMapUnlocked(targetMap))
+            if ((WorldManager.Instance.World.Mode == Mode.Adventure) && !ProgressManager.Instance.IsMapUnlocked(targetMap))
             {
                 ProgressManager.Instance.UnlockMap(targetMap);
                 NotificationsManager.Notify(LocalizationUtility.Localize("map_unlocked", LocalizationUtility.Localize(TargetMapId)));

@@ -30,7 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Start()
         {
-            if (WorldManager.Instance.World.CreativeMode)
+            if (WorldManager.Instance.IsCreative)
             {
                 if (IsServer)
                 {

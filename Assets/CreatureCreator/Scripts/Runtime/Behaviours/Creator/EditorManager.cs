@@ -217,6 +217,20 @@ namespace DanielLochner.Assets.CreatureCreator
             get => PlayerPrefs.GetString("PREV_CREATURE_DATA");
             set => PlayerPrefs.SetString("PREV_CREATURE_DATA", value);
         }
+
+
+        public List<string> UnlockedBodyParts
+        {
+            get => ProgressManager.Data.UnlockedBodyParts;
+        }
+        public List<string> UnlockedPatterns
+        {
+            get => ProgressManager.Data.UnlockedPatterns;
+        }
+        public List<string> CompletedQuests
+        {
+            get => ProgressManager.Data.CompletedQuests;
+        }
         #endregion
 
         #region Methods

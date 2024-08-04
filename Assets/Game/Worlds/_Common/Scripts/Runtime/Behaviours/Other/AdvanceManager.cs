@@ -68,7 +68,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void Start()
         {
-            if (!WorldManager.Instance.World.CreativeMode)
+            if (!WorldManager.Instance.IsCreative)
             {
                 progress.SetActive(true);
 
@@ -122,15 +122,23 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (isAllowedToAdvance && CanAdvance)
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onOkay: delegate
+                if (WorldManager.Instance.World.Mode == Mode.Adventure)
                 {
-                    foreach (Teleport teleport in teleports)
+                    InformationDialog.Inform(LocalizationUtility.Localize("cc_ready-to-advance_title"), LocalizationUtility.Localize("cc_ready-to-advance_message"), onOkay: delegate
                     {
-                        teleport.GetComponent<MinimapIcon>().MinimapIconUI.gameObject.AddComponent<BlinkingGraphic>();
-                        Instantiate(worldHintPrefab, teleport.transform, false).transform.localScale *= 3f;
-                    }
-                });
-                ProgressManager.Instance.UnlockMap(nextMap);
+                        foreach (Teleport teleport in teleports)
+                        {
+                            teleport.GetComponent<MinimapIcon>().MinimapIconUI.gameObject.AddComponent<BlinkingGraphic>();
+                            Instantiate(worldHintPrefab, teleport.transform, false).transform.localScale *= 3f;
+                        }
+                    });
+                    ProgressManager.Instance.UnlockMap(nextMap);
+                }
+                else
+                if (WorldManager.Instance.World.Mode == Mode.Timed)
+                {
+                    InformationDialog.Inform("Your time", "Your time is..."); // TODO: set time text
+                }
             }
         }
         #endregion

@@ -47,7 +47,7 @@ namespace DanielLochner.Assets.CreatureCreator
             EnablePVP = lobby.TryGetValue<bool>("enablePVP");
             EnablePVE = lobby.TryGetValue<bool>("enablePVE");
             SpawnNPC = lobby.TryGetValue<bool>("spawnNPC");
-            CreativeMode = lobby.TryGetValue<bool>("creativeMode");
+            Mode = lobby.TryGetValue<Mode>("mode");
             MapId = lobby.TryGetValue<string>("mapId");
             SpawnPoint = lobby.TryGetValue<int>("spawnPoint");
 

@@ -17,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
 
-            if (!WorldManager.Instance.World.CreativeMode)
+            if (!WorldManager.Instance.IsCreative)
             {
                 SpawnedNPC npc = null;
                 yield return new WaitUntil(() =>

@@ -26,7 +26,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             base.OnPerform();
             speedUp.SpeedUp(speed, duration);
 
-            if (!WorldManager.Instance.World.CreativeMode)
+            if (!WorldManager.Instance.IsCreative)
             {
                 Player.Instance.Hunger.Hunger -= hungerCost;
             }

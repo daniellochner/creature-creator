@@ -77,11 +77,11 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 // Setup World
                 string mapName = ((Map)mapOS.Selected).ToString();
-                bool creativeMode = ((Mode)modeOS.Selected) == Mode.Creative;
+                Mode mode = (Mode)modeOS.Selected;
                 bool spawnNPC = npcToggle.isOn;
                 bool enablePVE = pveToggle.isOn;
-                bool unlimited = unlimitedToggle.isOn && creativeMode;
-                WorldManager.Instance.World = new WorldSP(mapName, creativeMode, spawnNPC, enablePVE, unlimited);
+                bool unlimited = unlimitedToggle.isOn && (mode == Mode.Creative);
+                WorldManager.Instance.World = new WorldSP(mapName, mode, spawnNPC, enablePVE, unlimited);
 
                 // Check Premium
                 if (unlimited && !PremiumManager.Data.IsPremium)
@@ -95,7 +95,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-coming-soon"));
                 }
-                if (!creativeMode && !ProgressManager.Instance.IsMapUnlocked(map))
+                if ((mode == Mode.Adventure) && !ProgressManager.Instance.IsMapUnlocked(map))
                 {
                     throw new Exception(LocalizationUtility.Localize("mainmenu_map-locked", LocalizationUtility.Localize($"option_map_{mapName}".ToLower())));
                 }

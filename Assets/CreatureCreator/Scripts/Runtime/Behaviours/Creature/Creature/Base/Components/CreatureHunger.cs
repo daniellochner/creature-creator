@@ -120,7 +120,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     yield return new WaitForSeconds(1f / healthTickRate);
                 }
                 else 
-                if (!WorldManager.Instance.World.CreativeMode && hungerDepletionRate > 0)
+                if (!WorldManager.Instance.IsCreative && hungerDepletionRate > 0)
                 {
                     Hunger -= hungerDepletionRate;
                     yield return new WaitForSeconds(1f);

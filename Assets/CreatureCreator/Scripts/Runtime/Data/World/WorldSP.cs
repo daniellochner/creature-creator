@@ -10,10 +10,10 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        public WorldSP(string mapName, bool creativeMode, bool spawnNPC, bool enablePVE, bool unlimited)
+        public WorldSP(string mapName, Mode mode, bool spawnNPC, bool enablePVE, bool unlimited)
         {
             MapName = mapName;
-            CreativeMode = creativeMode;
+            Mode = mode;
             SpawnNPC = spawnNPC;
             EnablePVE = enablePVE;
             Unlimited = unlimited;

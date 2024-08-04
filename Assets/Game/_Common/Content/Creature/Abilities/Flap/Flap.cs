@@ -39,7 +39,7 @@ namespace DanielLochner.Assets.CreatureCreator.Abilities
             creatureAnimator.Params.SetTrigger("Wings_Flap");
             creatureEffector.PlaySound(flapSounds);
 
-            if (!WorldManager.Instance.World.CreativeMode)
+            if (!WorldManager.Instance.IsCreative)
             {
                 Player.Instance.Hunger.Hunger -= hungerCost;
             }

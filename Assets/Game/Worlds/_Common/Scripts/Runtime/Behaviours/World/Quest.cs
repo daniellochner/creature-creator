@@ -87,7 +87,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             yield return new WaitUntilSetup(GameSetup.Instance);
 
-            if (!WorldManager.Instance.World.CreativeMode)
+            if (!WorldManager.Instance.IsCreative)
             {
                 UpdateInfo();
 
