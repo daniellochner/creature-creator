@@ -17,7 +17,7 @@ namespace DanielLochner.Assets
             DataContainer = GetComponent<PlayerDataContainer>();
         }
 
-        private void Start()
+        public void Setup()
         {
             Level.OnValueChanged += OnLevelChanged;
             OnLevelChanged(default, Level.Value);

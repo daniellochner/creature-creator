@@ -45,6 +45,7 @@ namespace DanielLochner.Assets.CreatureCreator
             Selectable.Setup();
             Namer.Setup();
             Friend.Setup();
+            Level.Setup();
 
             Loader.OnShow += OnFirstTimeShown;
             Loader.ShowToMe();

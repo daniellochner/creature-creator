@@ -55,6 +55,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.Setup();
             Editor.Setup();
             Interactor.Setup();
+            Level.Setup();
 
             Age.OnAgeChanged += OnAge;
 

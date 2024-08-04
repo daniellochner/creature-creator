@@ -23,8 +23,8 @@ namespace DanielLochner.Assets
         public void SetName(string name, int level)
         {
             string n = name.NoParse();
-            string l = $"[{level}]".ToBold();
-            nameText.text = $"{n} {l}";
+            string l = $"{level}".ToColour("AAA");
+            nameText.text = $"{l} {n}";
         }
         public void SetColour(Color colour)
         {

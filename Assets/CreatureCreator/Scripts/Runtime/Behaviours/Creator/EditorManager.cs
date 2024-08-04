@@ -903,18 +903,18 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void HandleZoomButtons()
         {
-            if (!Player.Instance || !Player.Instance.Camera)
+            if (!Creature || !Creature.Camera)
             {
                 return;
             }
 
-            CameraOrbit cameraOrbit = Player.Instance.Camera.CameraOrbit;
+            CameraOrbit cameraOrbit = Creature.Camera.CameraOrbit;
 
-            bool canZoomIn = cameraOrbit.TargetZoom < cameraOrbit.MinMaxZoom.y;
+            bool canZoomIn = cameraOrbit.TargetZoom > cameraOrbit.MinMaxZoom.x;
             zoomInBuildCG.interactable = zoomInPaintCG.interactable = canZoomIn;
             zoomInBuildCG.alpha = zoomInPaintCG.alpha = canZoomIn ? 1f : 0.25f;
 
-            bool canZoomOut = cameraOrbit.TargetZoom > cameraOrbit.MinMaxZoom.x;
+            bool canZoomOut = cameraOrbit.TargetZoom < cameraOrbit.MinMaxZoom.y;
             zoomOutBuildCG.interactable = zoomOutPaintCG.interactable = canZoomOut;
             zoomOutBuildCG.alpha = zoomOutPaintCG.alpha = canZoomOut ? 1f : 0.25f;
         }
