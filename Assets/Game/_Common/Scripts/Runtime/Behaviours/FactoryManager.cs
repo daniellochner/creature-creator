@@ -352,6 +352,53 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+
+        public void DownloadItem(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
+        {
+            StartCoroutine(DownloadItemRoutine(itemId, onDownloaded, onFailed));
+        }
+        private IEnumerator DownloadItemRoutine(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
+        {
+            string url = $"https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1";
+            string dat = $"{{ 'itemcount':1, 'publishedfileids[0]':{itemId} }}";
+
+            WWWForm form = new WWWForm();
+            form.AddField("itemcount", 1);
+            form.AddField("publishedfileids[0]", itemId.ToString());
+
+            Debug.Log(form);
+
+            UnityWebRequest request = UnityWebRequest.Post(url, form);
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                //string url = $"https://api.steampowered.com/ISteamRemoteStorage/GetUGCFileDetails/v1/?key={steamKey.Value}&appid={STEAM_ID}&ugcid={itemId}";
+
+                Debug.Log(request.downloadHandler.text);
+
+                //JObject data = JToken.Parse(request.downloadHandler.text).First.First as JObject;
+
+                //JArray players = data["players"] as JArray;
+                //if (players.Count > 0)
+                //{
+                //    var player = players.First;
+
+                //    string username = player["personaname"].Value<string>();
+
+                //    onDownloaded?.Invoke(username);
+                //}
+            }
+            else
+            {
+                Debug.Log(request.error);
+
+                onFailed?.Invoke(request.error);
+            }
+        }
+
         public void LoadWorkshopCreatures()
         {
 #if UNITY_STANDALONE

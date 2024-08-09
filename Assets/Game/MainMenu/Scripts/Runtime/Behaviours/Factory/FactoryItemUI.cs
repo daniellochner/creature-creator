@@ -20,6 +20,8 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Button likeBtn;
         [SerializeField] private Sprite addIcon;
         [SerializeField] private Sprite removeIcon;
+        [SerializeField] private GameObject downloadBtn;
+        [SerializeField] private GameObject downloadingIcon;
         [Space]
         [SerializeField] private GameObject info;
         [SerializeField] private GameObject refreshIcon;
@@ -68,6 +70,19 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             SetSubscribed(!isSubscribed);
         }
+        public void Download()
+        {
+            SetDownloading(true);
+
+            FactoryManager.Instance.DownloadItem(item.id, delegate (string data)
+            {
+                SetDownloading(false, false);
+            },
+            delegate (string error)
+            {
+                SetDownloading(false);
+            });
+        }
 
         public void SetLiked(bool isLiked)
         {
@@ -108,6 +123,12 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             refreshIcon.SetActive(false);
+        }
+
+        private void SetDownloading(bool isDownloading, bool isDownloadable = true)
+        {
+            downloadingIcon.SetActive(isDownloading);
+            downloadBtn.SetActive(!isDownloading && isDownloadable);
         }
         #endregion
     }

@@ -1,4 +1,7 @@
 using UnityEngine;
-public class Testing : MonoBehaviour
+namespace DanielLochner.Assets.CreatureCreator
 {
+    public class Testing : MonoBehaviour
+    {
+    }
 }
