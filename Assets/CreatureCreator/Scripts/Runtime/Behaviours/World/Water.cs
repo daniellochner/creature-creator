@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void OnTriggerEnter(Collider other)
         {
             CreatureBase creature = other.GetComponent<CreatureBase>();
-            if (creature != null)
+            if (creature != null && !creature.Health.IsImmune.Value)
             {
                 Instantiate(splashPrefab, creature.transform.position, Quaternion.identity);
 

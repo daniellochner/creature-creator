@@ -4,6 +4,7 @@
 using DamageNumbersPro;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -27,9 +28,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public override float MaxHealth => Constructor.Statistics.Health;
 
-        public override bool CanTakeDamage => base.CanTakeDamage && !CinematicManager.Instance.IsInCinematic && !EditorManager.Instance.IsEditing;
+        public override bool CanTakeDamage => base.CanTakeDamage && !CinematicManager.Instance.IsInCinematic && !IsImmune.Value;
 
         public bool IsTakingDamage => damageCoroutine != null;
+
+        public NetworkVariable<bool> IsImmune { get; set; } = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner);
         #endregion
 
         #region Methods

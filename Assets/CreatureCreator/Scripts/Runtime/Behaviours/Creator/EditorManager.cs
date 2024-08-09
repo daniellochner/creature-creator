@@ -1742,6 +1742,8 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             isEditing = e;
 
+            Creature.Health.IsImmune.Value = isEditing;
+
             this.StopStartCoroutine(paginationCanvasGroup.FadeRoutine(e, t), ref fadePaginationCoroutine);
             this.StopStartCoroutine(optionsCanvasGroup.FadeRoutine(e, t), ref fadeOptionsCoroutine);
 
