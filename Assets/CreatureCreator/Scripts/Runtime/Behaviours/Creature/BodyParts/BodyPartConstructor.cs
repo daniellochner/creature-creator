@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [Header("Body Part")]
         [SerializeField] private Transform model;
+        [SerializeField] private Light lightSource;
         [SerializeField] private SerializableDictionaryBase<StretchAxis, StretchIndices> stretchMap = new SerializableDictionaryBase<StretchAxis, StretchIndices>();
 
         private bool hasBodyPrimary, hasBodySecondary, hasBodyPartPrimary, hasBodyPartSecondary, isPrimaryOverridden, isSecondaryOverridden;
@@ -36,6 +37,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 model = value;
             }
+        }
+        public Light LightSource
+        {
+            get => lightSource;
         }
         public SerializableDictionaryBase<StretchAxis, StretchIndices> StretchMap
         {
@@ -201,10 +206,20 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Awake()
+        public void Awake()
         {
             Initialize();
         }
+        public void OnDestroy()
+        {
+            Shutdown();
+        }
+#if UNITY_EDITOR
+        public void OnValidate()
+        {
+            lightSource = GetComponentInChildren<Light>(true);
+        }
+#endif
 
         public virtual void Initialize()
         {
@@ -220,12 +235,21 @@ namespace DanielLochner.Assets.CreatureCreator
 
             OverrideMat(null, null, false);
 
-            if (BodyPart.IsLightSource && CreatureConstructor.LightSources > CreatureConstructor.MaxLightSources)
+            if (LightSource != null)
             {
-                foreach (Light light in GetComponentsInChildren<Light>())
+                CreatureConstructor.LightSources.Add(LightSource);
+
+                if (CreatureConstructor.LightSources.Count > CreatureConstructor.MaxLightSources)
                 {
-                    light.enabled = false;
+                    LightSource.gameObject.SetActive(false);
                 }
+            }
+        }
+        public virtual void Shutdown()
+        {
+            if (LightSource != null)
+            {
+                CreatureConstructor.LightSources.Remove(LightSource);
             }
         }
 
@@ -547,7 +571,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SkinnedMeshRenderer.SetBlendShapeWeight(stretchMap[axis].positive, positive);
         }
 
-        #region Helper
+#region Helper
         public void OverrideMat(string matToOverride, Material overrideMat, bool notifyRenderer)
         {
             hasBodyPrimary = hasBodySecondary = hasBodyPartPrimary = hasBodyPartSecondary = false;
@@ -621,17 +645,17 @@ namespace DanielLochner.Assets.CreatureCreator
             name = name.TrimEnd();
             return name;
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
 
-        #region Enums
+#region Enums
         [Serializable] public enum StretchAxis
         {
             X, Y, Z
         }
-        #endregion
+#endregion
 
-        #region Nested
+#region Nested
         [Serializable] public class StretchIndices
         {
             public int negative = -1;
@@ -649,6 +673,6 @@ namespace DanielLochner.Assets.CreatureCreator
             public Material mat;
             public Action<Material> onMatOverride;
         }
-        #endregion
+#endregion
     }
 }

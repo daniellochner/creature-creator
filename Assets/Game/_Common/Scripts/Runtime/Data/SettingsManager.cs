@@ -66,6 +66,7 @@ namespace DanielLochner.Assets.CreatureCreator
             SetDepthOfField(Data.DepthOfField);
             SetMotionBlur(Data.MotionBlur);
             SetOptimizeCreatures(false); //SetOptimizeCreatures(Data.OptimizeCreatures);
+            SetOptimizeLighting(Data.OptimizeLighting);
             SetCreatureRenderDistance(Data.CreatureRenderDistance);
 
             SetMasterVolume(Data.MasterVolume);
@@ -431,6 +432,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void SetOptimizeCreatures(bool optimizeCreatures)
         {
             Data.OptimizeCreatures = optimizeCreatures;
+        }
+        public void SetOptimizeLighting(bool optimizeLighting)
+        {
+            Data.OptimizeLighting = optimizeLighting;
         }
         public void SetCreatureRenderDistance(float creatureRenderDistance)
         {

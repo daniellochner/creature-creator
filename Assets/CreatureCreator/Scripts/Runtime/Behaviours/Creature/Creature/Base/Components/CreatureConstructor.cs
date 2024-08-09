@@ -96,6 +96,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<LimbConstructor> Limbs { get; set; } = new List<LimbConstructor>();
         public List<LegConstructor> Legs { get; set; } = new List<LegConstructor>();
 
+        public List<Light> LightSources { get; set; } = new();
+
         public bool IsTextured
         {
             get => isTextured;
@@ -104,10 +106,6 @@ namespace DanielLochner.Assets.CreatureCreator
                 isTextured = value;
                 bodyMesh.uv = isTextured ? bodyMesh.uv8 : null;
             }
-        }
-        public int LightSources
-        {
-            get; set;
         }
         #endregion
 
@@ -576,11 +574,6 @@ namespace DanielLochner.Assets.CreatureCreator
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
             bodyPart.Add(statistics);
 
-            if (bodyPart.IsLightSource)
-            {
-                LightSources++;
-            }
-
             GameObject bodyPartPrefab = OnBodyPartPrefabOverride?.Invoke(bodyPart) ?? bodyPart.GetPrefab(BodyPart.PrefabType.Constructible);
 
             // Main
@@ -604,11 +597,6 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", main.AttachedBodyPart.bodyPartID);
             bodyPart.Remove(statistics);
-
-            if (bodyPart.IsLightSource)
-            {
-                LightSources--;
-            }
 
             main.Remove();
             Data.AttachedBodyParts.Remove(main.AttachedBodyPart);

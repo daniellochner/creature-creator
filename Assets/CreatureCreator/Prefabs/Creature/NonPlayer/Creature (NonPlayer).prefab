@@ -260,6 +260,52 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7193793692207522154, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
   m_PrefabInstance: {fileID: 4659165410360989413}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-6919987711047619138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557432704910178191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 931e3efde70bd5943a5a2013cd9c7aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isVisible: 1
+  radius: 50
+  onShow:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5876579444011830659}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CreatureLighting,
+          Assembly-CSharp
+        m_MethodName: FadeLighting
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onHide:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5876579444011830659}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CreatureLighting,
+          Assembly-CSharp
+        m_MethodName: FadeLighting
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &-5088887998042523459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,3 +470,14 @@ MonoBehaviour:
   cursor: {fileID: 2800000, guid: 70ecfbad4fb149f4f93f360da4c05c9d, type: 3}
   interactionRange: 25
   reqAbility: {fileID: 11400000, guid: a41e30eb4f457874e91b1ceff53fa85c, type: 2}
+--- !u!114 &5876579444011830659 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -7987868829304054938, guid: e3dcb06c37d3bb343a7facb93d7ab798, type: 3}
+  m_PrefabInstance: {fileID: 4659165410360989413}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557432704910178191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb98f3ff0fb94477eb67820f54855975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

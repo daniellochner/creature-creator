@@ -33,6 +33,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool depthOfField;
         [SerializeField] private bool motionBlur;
         [SerializeField] private bool optimizeCreatures;
+        [SerializeField] private bool optimizeLighting = true;
         [SerializeField] private float creatureRenderDistance = 50f;
 
         [Header("Audio")]
@@ -178,6 +179,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             get => optimizeCreatures;
             set => optimizeCreatures = value;
+        }
+        public bool OptimizeLighting
+        {
+            get => optimizeLighting;
+            set => optimizeLighting = value;
         }
         public float CreatureRenderDistance
         {
@@ -380,6 +386,7 @@ namespace DanielLochner.Assets.CreatureCreator
             DepthOfField = false;
             MotionBlur = false;
             OptimizeCreatures = false;
+            OptimizeLighting = true;
             CreatureRenderDistance = 50f;
 
             MasterVolume = 1f;

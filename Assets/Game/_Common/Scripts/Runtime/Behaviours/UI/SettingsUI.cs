@@ -40,6 +40,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Toggle depthOfFieldToggle;
         [SerializeField] private Toggle motionBlurToggle;
         [SerializeField] private Toggle optimizeCreaturesToggle;
+        [SerializeField] private Toggle optimizeLightingToggle;
         [SerializeField] private ParticleSystem[] ambientParticles;
         [SerializeField] private Slider creatureRenderDistanceSlider;
 
@@ -346,6 +347,13 @@ namespace DanielLochner.Assets.CreatureCreator
             optimizeCreaturesToggle.onValueChanged.AddListener(delegate (bool isOn)
             {
                 SettingsManager.Instance.SetOptimizeCreatures(isOn);
+            });
+
+            // Optimize Lighting
+            optimizeLightingToggle.SetIsOnWithoutNotify(SettingsManager.Data.OptimizeLighting);
+            optimizeLightingToggle.onValueChanged.AddListener(delegate (bool isOn)
+            {
+                SettingsManager.Instance.SetOptimizeLighting(isOn);
             });
 
             // Creature Render Distance

@@ -238,7 +238,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   namePrefab: {fileID: -442424232553638421, guid: 441cc6b5b21e77248900b15eff4eb100, type: 3}
   height: 0.15
-  colour: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2536677782364645307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +298,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 8793345479405706130}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CreatureLighting,
+          Assembly-CSharp
+        m_MethodName: FadeLighting
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHide:
     m_PersistentCalls:
       m_Calls:
@@ -331,6 +343,19 @@ MonoBehaviour:
       - m_Target: {fileID: 8166979559846952157}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8793345479405706130}
+        m_TargetAssemblyTypeName: DanielLochner.Assets.CreatureCreator.CreatureLighting,
+          Assembly-CSharp
+        m_MethodName: FadeLighting
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -453,10 +478,12 @@ MonoBehaviour:
   burner: {fileID: 3518922273884573130}
   optimizer: {fileID: 5803230153924989712}
   rider: {fileID: 4035477517654541939}
+  lighting: {fileID: 8793345479405706130}
   deathMessenger: {fileID: 5920988887648741201}
   messenger: {fileID: 4886571779201347070}
   speedup: {fileID: 5810437394869824179}
   dataContainer: {fileID: 4855141180603692903}
+  level: {fileID: 7495240236199700916}
   selectable: {fileID: 2536677782364645307}
   friend: {fileID: 7554131895373147696}
   namer: {fileID: 138451927741012597}
@@ -707,6 +734,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d71ead22d4823640887246afa879410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7495240236199700916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7629413026275061396, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 136638444904974112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646305851666112926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64dff26549c5d43a5a369e1c55d2534e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7568242897732286866 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7557782483153829554, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
@@ -771,5 +809,16 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cce1abf86bec7684683337d29b56cbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8793345479405706130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8929884821597625522, guid: 4298d9b1e2b478a46a560615fca45b56, type: 3}
+  m_PrefabInstance: {fileID: 136638444904974112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646305851666112926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb98f3ff0fb94477eb67820f54855975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

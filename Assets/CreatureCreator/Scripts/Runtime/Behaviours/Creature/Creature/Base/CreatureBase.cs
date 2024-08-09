@@ -30,6 +30,7 @@ namespace DanielLochner.Assets.CreatureCreator
     [RequireComponent(typeof(CreatureBurner))]
     [RequireComponent(typeof(CreatureOptimizer))]
     [RequireComponent(typeof(CreatureRider))]
+    [RequireComponent(typeof(CreatureLighting))]
     public class CreatureBase : NetworkBehaviour
     {
         #region Fields
@@ -60,6 +61,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private CreatureBurner burner;
         [SerializeField] private CreatureOptimizer optimizer;
         [SerializeField] private CreatureRider rider;
+        [SerializeField] private CreatureLighting lighting;
         #endregion
 
         #region Properties
@@ -90,6 +92,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public CreatureBurner Burner => burner;
         public CreatureOptimizer Optimizer => optimizer;
         public CreatureRider Rider => rider;
+        public CreatureLighting Lighting => lighting;
 
         public static List<CreatureBase> Creatures { get; set; } = new List<CreatureBase>();
         #endregion
@@ -125,6 +128,7 @@ namespace DanielLochner.Assets.CreatureCreator
             burner = GetComponent<CreatureBurner>();
             optimizer = GetComponent<CreatureOptimizer>();
             rider = GetComponent<CreatureRider>();
+            lighting = GetComponent<CreatureLighting>();
         }
 #endif
         protected virtual void OnEnable()
@@ -138,6 +142,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public virtual void Setup()
         {
+            Lighting.Setup();
             Animator.Setup();
             Launcher.Setup();
             Emitter.Setup();

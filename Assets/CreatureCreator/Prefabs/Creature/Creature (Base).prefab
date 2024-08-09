@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: -6441557127254294913}
   - component: {fileID: 6627301565326724414}
   - component: {fileID: 5993653298055792263}
+  - component: {fileID: -7987868829304054938}
   m_Layer: 18
   m_Name: Creature (Base)
   m_TagString: Untagged
@@ -378,7 +379,7 @@ MonoBehaviour:
     min: 2
     max: 20
   density: 400
-  maxLightSources: 1
+  maxLightSources: 2
   minMaxBodySpeed:
     min: -1
     max: 0
@@ -1284,6 +1285,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f6c02af840dd14890811001995fe07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7987868829304054938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193793692207522154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb98f3ff0fb94477eb67820f54855975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isLighting: 0
+  fadeTime: 0.25
 --- !u!1 &7193793692236944224
 GameObject:
   m_ObjectHideFlags: 0
