@@ -78,10 +78,13 @@ namespace DanielLochner.Assets.CreatureCreator
             Player.Instance.Editor.Platform = StartingPlatform;
             EditorManager.Instance.Setup();
 
-            if (SettingsManager.Instance.ShowTutorial)
+            if (SettingsManager.Instance.ShowTutorial || WorldManager.Instance.IsTimed)
             {
                 EditorManager.Instance.SetMode(EditorManager.EditorMode.Play, true);
-                onTutorial.Invoke();
+                if (!WorldManager.Instance.IsTimed)
+                {
+                    onTutorial.Invoke();
+                }
             }
             else
             {

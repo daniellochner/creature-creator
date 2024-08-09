@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private bool CanTeleport
         {
-            get => (WorldManager.Instance.IsCreative || (ProgressManager.Data.Experience >= requiredExperience)) && (!WorldManager.Instance.IsMultiplayer || (IsServer && (NumPlayers == MaxPlayers)));
+            get => !WorldManager.Instance.IsTimed && (WorldManager.Instance.IsCreative || (ProgressManager.Data.Experience >= requiredExperience)) && (!WorldManager.Instance.IsMultiplayer || (IsServer && (NumPlayers == MaxPlayers)));
         }
         private bool ShowRequiredExperience
         {
@@ -93,7 +93,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void OnTrack(Collider col)
         {
-            if (col.CompareTag("Player/Local"))
+            if (col.CompareTag("Player/Local") && !WorldManager.Instance.IsTimed)
             {
                 UpdateInfo();
                 IsVisible = true;
@@ -106,7 +106,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void OnLoseTrackOf(Collider col)
         {
-            if (col.CompareTag("Player/Local"))
+            if (col.CompareTag("Player/Local") && !WorldManager.Instance.IsTimed)
             {
                 IsVisible = false;
             }

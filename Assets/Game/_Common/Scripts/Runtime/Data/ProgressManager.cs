@@ -40,7 +40,36 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         // Body Parts
+        public void UnlockBodyPart(string bodyPartId)
+        {
+            if (!IsBodyPartUnlocked(bodyPartId))
+            {
+                Data.UnlockedBodyParts.Add(bodyPartId);
+                Save();
+
+                StatsManager.Instance.UnlockedBodyParts++;
+            }
+        }
+        public bool IsBodyPartUnlocked(string bodyPartId)
+        {
+            return Data.UnlockedBodyParts.Contains(bodyPartId);
+        }
+
         // Patterns
+        public void UnlockPattern(string patternId)
+        {
+            if (!IsPatternUnlocked(patternId))
+            {
+                Data.UnlockedPatterns.Add(patternId);
+                Save();
+
+                StatsManager.Instance.UnlockedPatterns++;
+            }
+        }
+        public bool IsPatternUnlocked(string patternId)
+        {
+            return Data.UnlockedPatterns.Contains(patternId);
+        }
 
         // Completed Quests
         public void CompleteQuest(string questId)

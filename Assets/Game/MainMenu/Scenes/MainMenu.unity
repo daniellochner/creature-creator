@@ -10110,7 +10110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1559615407858246120, guid: 0d62aa3fc237ea6459ce6da7dc322f3c, type: 3}
       propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1559615407858246120, guid: 0d62aa3fc237ea6459ce6da7dc322f3c, type: 3}
       propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -10146,7 +10146,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1559615407858246120, guid: 0d62aa3fc237ea6459ce6da7dc322f3c, type: 3}
       propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: OnModeChanged
+      value: OnMapChanged
       objectReference: {fileID: 0}
     - target: {fileID: 1559615407858246120, guid: 0d62aa3fc237ea6459ce6da7dc322f3c, type: 3}
       propertyPath: onSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -13809,6 +13809,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 638991714}
+  - component: {fileID: 638991715}
   m_Layer: 0
   m_Name: Leaderboard
   m_TagString: Untagged
@@ -13831,6 +13832,18 @@ Transform:
   m_Father: {fileID: 1314837234}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &638991715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638991713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aedcc80d4df3924b97ccd5894b5297d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &643002188
 GameObject:
   m_ObjectHideFlags: 0
@@ -25277,7 +25290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1135905742
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45228,7 +45241,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 00:00
+  m_text: --:--
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
@@ -48956,7 +48969,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 370
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_SizeDelta.y
@@ -48964,7 +48977,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 385
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 35098379388084152, guid: b467e61aa99c1c34db5b380336f87f92, type: 3}
       propertyPath: m_AnchoredPosition.y

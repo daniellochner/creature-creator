@@ -1,6 +1,7 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
+using UnityEditor;
 using UnityEngine;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -16,7 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public string PatternID => patternID;
-        public override bool IsUnlocked => ProgressManager.Data.UnlockedPatterns.Contains(patternID) || EditorManager.Instance.CreativeMode;
+        public override bool IsUnlocked => WorldManager.Instance.IsPatternUnlocked(PatternID);
 
         public Pattern Pattern => DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
         #endregion
@@ -24,9 +25,18 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected override void OnUnlock()
         {
-            EditorManager.Instance.UnlockPattern(patternID);
+            switch (WorldManager.Instance.World.Mode)
+            {
+                case Mode.Adventure:
+                    ProgressManager.Instance.UnlockPattern(patternID);
+                    break;
 
-            StatsManager.Instance.UnlockedPatterns++;
+                case Mode.Timed:
+                    TimedManager.Instance.UnlockPattern(patternID);
+                    break;
+            }
+
+            EditorManager.Instance.UnlockPattern(patternID);
         }
         protected override void OnSpawn()
         {

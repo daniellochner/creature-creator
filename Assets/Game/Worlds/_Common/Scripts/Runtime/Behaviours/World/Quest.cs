@@ -37,7 +37,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (hasCompleted == null)
                 {
-                    hasCompleted = ProgressManager.Instance.IsQuestCompleted(id);
+                    hasCompleted = WorldManager.Instance.IsQuestCompleted(id);
                 }
                 return (bool)hasCompleted;
             }
@@ -154,8 +154,20 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private void Complete()
         {
-            ProgressManager.Instance.CompleteQuest(id);
+            switch (WorldManager.Instance.World.Mode)
+            {
+                case Mode.Adventure:
+                    ProgressManager.Instance.CompleteQuest(id);
+                    StatsManager.Instance.CompletedQuests++;
+                    break;
+
+                case Mode.Timed:
+                    TimedManager.Instance.CompleteQuest(id);
+                    break;
+            }
+
             HasCompleted = true;
+
 
             // Items
             foreach (QuestItem item in items)
@@ -163,16 +175,13 @@ namespace DanielLochner.Assets.CreatureCreator
                 item.Snap();
             }
 
-            // Reward
+            // Experience
+            NotificationsManager.Notify(LocalizationUtility.Localize("experience-earned", experience));
             ProgressManager.Data.Experience += experience;
             ProgressManager.Instance.Save();
-
-            // Stats
-            StatsManager.Instance.CompletedQuests++;
             StatsManager.Instance.ExperienceEarned += experience;
 
-            // Other
-            NotificationsManager.Notify(LocalizationUtility.Localize("experience-earned", experience));
+            // Feedback
             source.Play();
             minimapIcon.enabled = false;
             onComplete.Invoke();

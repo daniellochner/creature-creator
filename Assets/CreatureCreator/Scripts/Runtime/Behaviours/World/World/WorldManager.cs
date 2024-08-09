@@ -42,6 +42,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
         public bool IsMultiplayer => World is WorldMP;
+        public bool IsTimed => World.Mode == Mode.Timed;
         public bool IsCreative => World.Mode == Mode.Creative;
         public bool IsUsingTeleport { get; set; }
         #endregion
@@ -105,6 +106,67 @@ namespace DanielLochner.Assets.CreatureCreator
             FriendsManager.Instance.SetStatus(Availability.Online, null);
 
             IsUsingTeleport = false;
+        }
+        
+        public bool IsBodyPartUnlocked(string id)
+        {
+            if (World == null)
+            {
+                return ProgressManager.Instance.IsBodyPartUnlocked(id);
+            }
+
+            switch (World.Mode)
+            {
+                case Mode.Adventure:
+                    return ProgressManager.Instance.IsBodyPartUnlocked(id);
+
+                case Mode.Timed:
+                    return TimedManager.Instance.IsBodyPartUnlocked(id);
+
+                case Mode.Creative:
+                default:
+                    return true;
+            }
+        }
+        public bool IsPatternUnlocked(string id)
+        {
+            if (World == null)
+            {
+                return ProgressManager.Instance.IsPatternUnlocked(id);
+            }
+
+            switch (World.Mode)
+            {
+                case Mode.Adventure:
+                    return ProgressManager.Instance.IsPatternUnlocked(id);
+
+                case Mode.Timed:
+                    return TimedManager.Instance.IsPatternUnlocked(id);
+
+                case Mode.Creative:
+                default:
+                    return true;
+            }
+        }
+        public bool IsQuestCompleted(string id)
+        {
+            if (World == null)
+            {
+                return ProgressManager.Instance.IsQuestCompleted(id);
+            }
+
+            switch (World.Mode)
+            {
+                case Mode.Adventure:
+                    return ProgressManager.Instance.IsQuestCompleted(id);
+
+                case Mode.Timed:
+                    return TimedManager.Instance.IsQuestCompleted(id);
+
+                case Mode.Creative:
+                default:
+                    return true;
+            }
         }
         #endregion
     }

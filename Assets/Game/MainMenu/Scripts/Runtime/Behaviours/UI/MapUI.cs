@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace DanielLochner.Assets.CreatureCreator
@@ -18,6 +19,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void Start()
+        {
+            OnMapChanged(0);
+        }
+
         public void View(Transform anchor)
         {
             mapMenu.transform.position = anchor.position;
@@ -33,7 +39,11 @@ namespace DanielLochner.Assets.CreatureCreator
             screenshotImg.sprite = screenshots[option];
             UpdatePadlock(mapOS, modeOS);
 
-            timeText.text = "";
+            int bestTime = PlayerPrefs.GetInt($"best_time_{(Map)option}".ToUpper(), -1);
+            if (bestTime > 0)
+            {
+                timeText.text = FormatTime(bestTime);
+            }
         }
         public void OnModeChanged(int option)
         {
@@ -76,6 +86,13 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             lockedIcon.SetActive(!unlocked);
+        }
+
+        private string FormatTime(int seconds)
+        {
+            int mins = seconds / 60;
+            int secs = seconds % 60;
+            return $"{mins:00}:{secs:00}";
         }
         #endregion
     }

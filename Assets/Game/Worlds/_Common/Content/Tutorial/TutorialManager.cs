@@ -69,6 +69,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Begin()
         {
+            if (WorldManager.Instance.IsTimed)
+            {
+                return;
+            }
+
             if (!eye || !pattern || !platform)
             {
                 return;

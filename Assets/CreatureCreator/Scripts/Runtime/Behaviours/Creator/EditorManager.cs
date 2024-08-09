@@ -217,20 +217,6 @@ namespace DanielLochner.Assets.CreatureCreator
             get => PlayerPrefs.GetString("PREV_CREATURE_DATA");
             set => PlayerPrefs.SetString("PREV_CREATURE_DATA", value);
         }
-
-
-        public List<string> UnlockedBodyParts
-        {
-            get => ProgressManager.Data.UnlockedBodyParts;
-        }
-        public List<string> UnlockedPatterns
-        {
-            get => ProgressManager.Data.UnlockedPatterns;
-        }
-        public List<string> CompletedQuests
-        {
-            get => ProgressManager.Data.CompletedQuests;
-        }
         #endregion
 
         #region Methods
@@ -263,13 +249,19 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             // Build
             List<string> unlockedBodyParts = null;
-            if (CreativeMode)
+            switch (WorldManager.Instance.World.Mode)
             {
-                unlockedBodyParts = DatabaseManager.GetDatabase("Body Parts").Objects.Keys.ToList();
-            }
-            else
-            {
-                unlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
+                case Mode.Adventure:
+                    unlockedBodyParts = ProgressManager.Data.UnlockedBodyParts;
+                    break;
+
+                case Mode.Timed:
+                    unlockedBodyParts = TimedManager.Instance.UnlockedBodyParts;
+                    break;
+
+                case Mode.Creative:
+                    unlockedBodyParts = DatabaseManager.GetDatabase("Body Parts").Objects.Keys.ToList();
+                    break;
             }
             noPartsText.SetActive(unlockedBodyParts.Count == 0);
             foreach (string bodyPartID in unlockedBodyParts)
@@ -281,13 +273,19 @@ namespace DanielLochner.Assets.CreatureCreator
             // Paint
             patternMaterial = new Material(patternMaterial);
             List<string> unlockedPatterns = null;
-            if (CreativeMode)
+            switch (WorldManager.Instance.World.Mode)
             {
-                unlockedPatterns = DatabaseManager.GetDatabase("Patterns").Objects.Keys.ToList();
-            }
-            else
-            {
-                unlockedPatterns = ProgressManager.Data.UnlockedPatterns;
+                case Mode.Adventure:
+                    unlockedPatterns = ProgressManager.Data.UnlockedPatterns;
+                    break;
+
+                case Mode.Timed:
+                    unlockedPatterns = TimedManager.Instance.UnlockedPatterns;
+                    break;
+
+                case Mode.Creative:
+                    unlockedPatterns = DatabaseManager.GetDatabase("Patterns").Objects.Keys.ToList();
+                    break;
             }
             noPatternsText.SetActive(unlockedPatterns.Count == 0);
             foreach (string patternID in unlockedPatterns)
@@ -945,7 +943,7 @@ namespace DanielLochner.Assets.CreatureCreator
             #region Unavailable
             // Load Conditions
             Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", creatureData.PatternID);
-            bool patternIsUnlocked = ProgressManager.Data.UnlockedPatterns.Contains(creatureData.PatternID) || CreativeMode || string.IsNullOrEmpty(creatureData.PatternID);
+            bool patternIsUnlocked = WorldManager.Instance.IsPatternUnlocked(creatureData.PatternID) || CreativeMode || string.IsNullOrEmpty(creatureData.PatternID);
             bool usesPremiumPattern = false, usesRestrictedPattern = false;
             if (pattern != null)
             {
@@ -992,7 +990,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     usesRestrictedColour = true;
                 }
 
-                if (!ProgressManager.Data.UnlockedBodyParts.Contains(attachedBodyPart.bodyPartID) && !CreativeMode)
+                if (!WorldManager.Instance.IsBodyPartUnlocked(attachedBodyPart.bodyPartID) && !CreativeMode)
                 {
                     bodyPartsAreUnlocked = false;
                 }
@@ -1204,16 +1202,27 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Unlocks
         public void UnlockPattern(string patternID, bool notify = true)
         {
-            if (ProgressManager.Data.UnlockedPatterns.Contains(patternID) || CreativeMode) return;
-
-            ProgressManager.Data.UnlockedPatterns.Add(patternID);
-
             if (notify)
             {
                 Pattern pattern = DatabaseManager.GetDatabaseEntry<Pattern>("Patterns", patternID);
                 Sprite icon = Sprite.Create(pattern.Texture, new Rect(0, 0, pattern.Texture.width, pattern.Texture.height), new Vector2(0.5f, 0.5f));
                 string title = pattern.name;
-                string description = $"{LocalizationUtility.Localize("cc_unlocked_pattern")} ({ProgressManager.Data.UnlockedPatterns.Count}/{DatabaseManager.GetDatabase("Patterns").Objects.Count})";
+
+                int unlocked = 0, total = 0;
+                switch (WorldManager.Instance.World.Mode)
+                {
+                    case Mode.Adventure:
+                        unlocked = ProgressManager.Data.UnlockedPatterns.Count;
+                        total = DatabaseManager.GetDatabase("Patterns").Objects.Count;
+                        break;
+
+                    case Mode.Timed:
+                        unlocked = TimedManager.Instance.UnlockedPatterns.Count;
+                        total = AdvanceManager.Instance.TotalPatterns;
+                        break;
+                }
+
+                string description = $"{LocalizationUtility.Localize("cc_unlocked_pattern")} ({unlocked}/{total})";
                 UnityAction onClose = () => UnlockablePatternsMenu.Instance.Open();
                 float iconScale = 0.8f;
                 NotificationsManager.Notify(icon, title, description, onClose, iconScale);
@@ -1223,31 +1232,32 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void UnlockBodyPart(string bodyPartID, bool notify = true)
         {
-            if (ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID) || CreativeMode) return;
-
-            ProgressManager.Data.UnlockedBodyParts.Add(bodyPartID);
-
             if (notify)
             {
                 BodyPart bodyPart = DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
                 Sprite icon = bodyPart.Icon;
                 string title = bodyPart.name;
-                string description = $"{LocalizationUtility.Localize("cc_unlocked_body-part")} ({ProgressManager.Data.UnlockedBodyParts.Count}/{DatabaseManager.GetDatabase("Body Parts").Objects.Count})";
+
+                int unlocked = 0, total = 0;
+                switch (WorldManager.Instance.World.Mode)
+                {
+                    case Mode.Adventure:
+                        unlocked = ProgressManager.Data.UnlockedBodyParts.Count;
+                        total = DatabaseManager.GetDatabase("Body Parts").Objects.Count;
+                        break;
+
+                    case Mode.Timed:
+                        unlocked = TimedManager.Instance.UnlockedBodyParts.Count;
+                        total = AdvanceManager.Instance.TotalBodyParts;
+                        break;
+                }
+
+                string description = $"{LocalizationUtility.Localize("cc_unlocked_body-part")} ({unlocked}/{total})";
                 UnityAction onClose = () => UnlockableBodyPartsMenu.Instance.Open();
                 NotificationsManager.Notify(icon, title, description, onClose);
             }
 
             AddBodyPartUI(bodyPartID, true, true);
-        }
-        public void UnlockRandomBodyPart()
-        {
-            Database bodyParts = DatabaseManager.GetDatabase("Body Parts");
-            UnlockBodyPart((bodyParts.Objects.ToArray()[UnityEngine.Random.Range(0, bodyParts.Objects.Count)]).Key);
-        }
-        public void UnlockRandomPattern()
-        {
-            Database patterns = DatabaseManager.GetDatabase("Patterns");
-            UnlockPattern((patterns.Objects.ToArray()[UnityEngine.Random.Range(0, patterns.Objects.Count)]).Key);
         }
         #endregion
 

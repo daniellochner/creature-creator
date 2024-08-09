@@ -24,11 +24,11 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Properties
-        public int BodyParts => bodyParts.Length;
-        public int Patterns => patterns.Length;
-        public int Quests => quests.Length;
+        public int TotalBodyParts => bodyParts.Length;
+        public int TotalPatterns => patterns.Length;
+        public int TotalQuests => quests.Length;
 
-        public int UnlockedBodyParts
+        public int NumUnlockedBodyParts
         {
             get => unlockedBodyParts;
             set
@@ -38,7 +38,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 TryAdvance();
             }
         }
-        public int UnlockedPatterns
+        public int NumUnlockedPatterns
         {
             get => unlockedPatterns;
             set
@@ -48,7 +48,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 TryAdvance();
             }
         }
-        public int CompletedQuests
+        public int NumCompletedQuests
         {
             get => completedQuests;
             set
@@ -59,9 +59,13 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
+        public bool IsTimed
+        {
+            get => WorldManager.Instance.World.Mode == Mode.Timed;
+        }
         public bool CanAdvance
         {
-            get => (nextMap != Map.ComingSoon) && (bodyParts.Length + patterns.Length + quests.Length) == (UnlockedBodyParts + UnlockedPatterns + CompletedQuests);
+            get => (nextMap != Map.ComingSoon) && (bodyParts.Length + patterns.Length + quests.Length) == (NumUnlockedBodyParts + NumUnlockedPatterns + NumCompletedQuests);
         }
         #endregion
 
@@ -73,44 +77,44 @@ namespace DanielLochner.Assets.CreatureCreator
                 progress.SetActive(true);
 
                 // Body Parts
-                UnlockedBodyParts = 0;
+                NumUnlockedBodyParts = 0;
                 foreach (UnlockableBodyPart bodyPart in bodyParts)
                 {
                     if (bodyPart.IsUnlocked)
                     {
-                        UnlockedBodyParts++;
+                        NumUnlockedBodyParts++;
                     }
                     else
                     {
-                        bodyPart.onUnlock.AddListener(() => UnlockedBodyParts++);
+                        bodyPart.onUnlock.AddListener(() => NumUnlockedBodyParts++);
                     }
                 }
 
                 // Patterns
-                UnlockedPatterns = 0;
+                NumUnlockedPatterns = 0;
                 foreach (UnlockablePattern pattern in patterns)
                 {
                     if (pattern.IsUnlocked)
                     {
-                        UnlockedPatterns++;
+                        NumUnlockedPatterns++;
                     }
                     else
                     {
-                        pattern.onUnlock.AddListener(() => UnlockedPatterns++);
+                        pattern.onUnlock.AddListener(() => NumUnlockedPatterns++);
                     }
                 }
 
                 // Quests
-                CompletedQuests = 0;
+                NumCompletedQuests = 0;
                 foreach (Quest quest in quests)
                 {
                     if (quest.HasCompleted)
                     {
-                        CompletedQuests++;
+                        NumCompletedQuests++;
                     }
                     else
                     {
-                        quest.onComplete.AddListener(() => CompletedQuests++);
+                        quest.onComplete.AddListener(() => NumCompletedQuests++);
                     }
                 }
 
@@ -137,7 +141,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (WorldManager.Instance.World.Mode == Mode.Timed)
                 {
-                    InformationDialog.Inform("Your time", "Your time is..."); // TODO: set time text
+                    TimedManager.Instance.RecordTime();
                 }
             }
         }

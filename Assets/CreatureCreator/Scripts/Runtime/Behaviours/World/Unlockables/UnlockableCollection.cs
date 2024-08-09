@@ -21,12 +21,12 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 foreach (var item in items)
                 {
-                    if ((item.itemType == UnlockableItemType.BodyPart) && !ProgressManager.Data.UnlockedBodyParts.Contains(item.itemID))
+                    if ((item.itemType == UnlockableItemType.BodyPart) && !WorldManager.Instance.IsBodyPartUnlocked(item.itemID))
                     {
                         return false;
                     }
                     else
-                    if ((item.itemType == UnlockableItemType.Pattern) && !ProgressManager.Data.UnlockedPatterns.Contains(item.itemID))
+                    if ((item.itemType == UnlockableItemType.Pattern) && !WorldManager.Instance.IsPatternUnlocked(item.itemID))
                     {
                         return false;
                     }
@@ -43,12 +43,36 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (item.itemType == UnlockableItemType.BodyPart)
                 {
-                    EditorManager.Instance.UnlockBodyPart(item.itemID);
+                    string bodyPartID = item.itemID;
+                    switch (WorldManager.Instance.World.Mode)
+                    {
+                        case Mode.Adventure:
+                            ProgressManager.Instance.UnlockBodyPart(bodyPartID);
+                            break;
+
+                        case Mode.Timed:
+                            TimedManager.Instance.UnlockBodyPart(bodyPartID);
+                            break;
+                    }
+
+                    EditorManager.Instance.UnlockBodyPart(bodyPartID);
                 }
                 else
                 if (item.itemType == UnlockableItemType.Pattern)
                 {
-                    EditorManager.Instance.UnlockPattern(item.itemID);
+                    string patternID = item.itemID;
+                    switch (WorldManager.Instance.World.Mode)
+                    {
+                        case Mode.Adventure:
+                            ProgressManager.Instance.UnlockPattern(patternID);
+                            break;
+
+                        case Mode.Timed:
+                            TimedManager.Instance.UnlockPattern(patternID);
+                            break;
+                    }
+
+                    EditorManager.Instance.UnlockPattern(patternID);
                 }
             }
         }

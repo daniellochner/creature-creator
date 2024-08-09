@@ -80,14 +80,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void TeleportTo()
         {
-            if (MinigameManager.Instance.CurrentMinigame == null)
+            if (WorldManager.Instance.IsTimed)
             {
-                TeleportTo(false, true);
+                InformationDialog.Inform(LocalizationUtility.Localize("cannot-teleport_title"), LocalizationUtility.Localize("cannot-teleport_timed_message"));
+                return;
             }
-            else
+
+            if (MinigameManager.Instance.CurrentMinigame != null)
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("minigame_cannot-teleport_title"), LocalizationUtility.Localize("minigame_cannot-teleport_message"));
+                InformationDialog.Inform(LocalizationUtility.Localize("cannot-teleport_title"), LocalizationUtility.Localize("cannot-teleport_minigame_message"));
+                return;
             }
+
+            TeleportTo(false, true);
         }
         public void TeleportTo(bool align, bool playSound)
         {

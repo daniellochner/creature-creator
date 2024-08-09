@@ -42,11 +42,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 OnUnlock();
                 onUnlock.Invoke();
 
+                // Experience
                 ProgressManager.Data.Experience += experience;
                 ProgressManager.Instance.Save();
-
                 StatsManager.Instance.ExperienceEarned += experience;
 
+                // Feedback
                 Instantiate(unlockFX, transform.position, transform.rotation);
                 Destroy(gameObject);
             }

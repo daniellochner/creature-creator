@@ -13,7 +13,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         #region Properties
         public string BodyPartID => bodyPartID;
-        public override bool IsUnlocked => ProgressManager.Data.UnlockedBodyParts.Contains(bodyPartID) || EditorManager.Instance.CreativeMode;
+        public override bool IsUnlocked => WorldManager.Instance.IsBodyPartUnlocked(BodyPartID);
 
         public BodyPart BodyPart => DatabaseManager.GetDatabaseEntry<BodyPart>("Body Parts", bodyPartID);
         #endregion
@@ -21,9 +21,18 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         protected override void OnUnlock()
         {
-            EditorManager.Instance.UnlockBodyPart(bodyPartID);
+            switch (WorldManager.Instance.World.Mode)
+            {
+                case Mode.Adventure:
+                    ProgressManager.Instance.UnlockBodyPart(bodyPartID);
+                    break;
 
-            StatsManager.Instance.UnlockedBodyParts++;
+                case Mode.Timed:
+                    TimedManager.Instance.UnlockBodyPart(bodyPartID);
+                    break;
+            }
+
+            EditorManager.Instance.UnlockBodyPart(bodyPartID);
         }
         protected override void OnSpawn()
         {
