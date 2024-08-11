@@ -19,9 +19,13 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
-        private void Start()
+        public void Setup(OptionSelector mapOS, OptionSelector modeOS)
         {
-            OnMapChanged(0);
+            this.mapOS = mapOS;
+            this.modeOS = modeOS;
+
+            OnMapChanged(mapOS.Selected);
+            OnModeChanged(modeOS.Selected);
         }
 
         public void View(Transform anchor)
@@ -36,37 +40,23 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void OnMapChanged(int option)
         {
+            Map map = (Map)option;
             screenshotImg.sprite = screenshots[option];
-            UpdatePadlock(mapOS, modeOS);
 
-            int bestTime = PlayerPrefs.GetInt($"best_time_{(Map)option}".ToUpper(), -1);
-            if (bestTime > 0)
-            {
-                timeText.text = FormatTime(bestTime);
-            }
+            UpdatePadlock();
+            UpdateTime();
         }
         public void OnModeChanged(int option)
         {
-            UpdatePadlock(mapOS, modeOS);
-
             Mode mode = (Mode)option;
             timedPanel.SetActive(mode == Mode.Timed);
+
+            UpdatePadlock();
+            UpdateTime();
         }
 
-        public void UpdatePadlock(OptionSelector mapOS, OptionSelector modeOS)
+        public void UpdatePadlock()
         {
-            if (!mapOS)
-            {
-                return;
-            }
-            this.mapOS = mapOS;
-
-            if (!modeOS)
-            {
-                return;
-            }
-            this.modeOS = modeOS;
-
             bool unlocked = true;
             Map map = (Map)mapOS.Selected;
             if (map == Map.ComingSoon)
@@ -86,6 +76,14 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             lockedIcon.SetActive(!unlocked);
+        }
+        public void UpdateTime()
+        {
+            Map map = (Map)mapOS.Selected;
+            if (LeaderboardsManager.Instance.myTimes.TryGetValue(map, out var time))
+            {
+                timeText.text = FormatTime((int)(time.Score));
+            }
         }
 
         private string FormatTime(int seconds)

@@ -141,7 +141,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 else
                 if (WorldManager.Instance.World.Mode == Mode.Timed)
                 {
-                    TimedManager.Instance.RecordTime();
+                    TimedManager.Instance.Complete();
                 }
             }
         }

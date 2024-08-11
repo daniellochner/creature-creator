@@ -1,7 +1,6 @@
 // Creature Creator - https://github.com/daniellochner/Creature-Creator
 // Copyright (c) Daniel Lochner
 
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Services.Friends.Models;
@@ -110,62 +109,47 @@ namespace DanielLochner.Assets.CreatureCreator
         
         public bool IsBodyPartUnlocked(string id)
         {
-            if (World == null)
+            if (World == null || World.Mode == Mode.Adventure)
             {
                 return ProgressManager.Instance.IsBodyPartUnlocked(id);
             }
-
-            switch (World.Mode)
+            else if (World.Mode == Mode.Timed)
             {
-                case Mode.Adventure:
-                    return ProgressManager.Instance.IsBodyPartUnlocked(id);
-
-                case Mode.Timed:
-                    return TimedManager.Instance.IsBodyPartUnlocked(id);
-
-                case Mode.Creative:
-                default:
-                    return true;
+                return TimedManager.Instance.IsBodyPartUnlocked(id);
+            }
+            else
+            {
+                return true;
             }
         }
         public bool IsPatternUnlocked(string id)
         {
-            if (World == null)
+            if (World == null || World.Mode == Mode.Adventure)
             {
                 return ProgressManager.Instance.IsPatternUnlocked(id);
             }
-
-            switch (World.Mode)
+            else if (World.Mode == Mode.Timed)
             {
-                case Mode.Adventure:
-                    return ProgressManager.Instance.IsPatternUnlocked(id);
-
-                case Mode.Timed:
-                    return TimedManager.Instance.IsPatternUnlocked(id);
-
-                case Mode.Creative:
-                default:
-                    return true;
+                return TimedManager.Instance.IsPatternUnlocked(id);
+            }
+            else
+            {
+                return true;
             }
         }
         public bool IsQuestCompleted(string id)
         {
-            if (World == null)
+            if (World == null || World.Mode == Mode.Adventure)
             {
                 return ProgressManager.Instance.IsQuestCompleted(id);
             }
-
-            switch (World.Mode)
+            else if (World.Mode == Mode.Timed)
             {
-                case Mode.Adventure:
-                    return ProgressManager.Instance.IsQuestCompleted(id);
-
-                case Mode.Timed:
-                    return TimedManager.Instance.IsQuestCompleted(id);
-
-                case Mode.Creative:
-                default:
-                    return true;
+                return TimedManager.Instance.IsQuestCompleted(id);
+            }
+            else
+            {
+                return true;
             }
         }
         #endregion

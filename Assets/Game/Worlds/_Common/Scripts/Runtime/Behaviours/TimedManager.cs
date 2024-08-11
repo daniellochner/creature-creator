@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Leaderboards;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,30 +13,37 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private TextMeshProUGUI timerText;
         [SerializeField] private GameObject timerRoot;
 
-        private int time;
+        private int time, myBestTime = -1;
         private Coroutine timerCoroutine;
 
-        public List<string> UnlockedBodyParts { get; } = new();
-        public List<string> UnlockedPatterns { get; } = new();
-        public List<string> CompletedQuests { get; } = new();
+        public List<string> UnlockedBodyParts { get; } = new List<string>();
+        public List<string> UnlockedPatterns { get; } = new List<string>();
+        public List<string> CompletedQuests { get; } = new List<string>();
 
-        public string BestTimeId
+        public string LeaderboardId
         {
-            get => $"best_time_{SceneManager.GetActiveScene().name}".ToUpper();
-        }
-        public int BestTime
-        {
-            get => PlayerPrefs.GetInt(BestTimeId, -1);
-            set => PlayerPrefs.SetInt(BestTimeId, value);
+            get => $"times_{SceneManager.GetActiveScene().name}".ToLower();
         }
 
-
-        private void Start()
+        private async void Start()
         {
             if (WorldManager.Instance.IsTimed)
             {
-                timerRoot.SetActive(true);
-                timerCoroutine = StartCoroutine(TimerRoutine());
+                InformationDialog.Inform(LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_okay"), onOkay: delegate
+                {
+                    timerRoot.SetActive(true);
+                    timerCoroutine = StartCoroutine(TimerRoutine());
+                });
+
+                try
+                {
+                    var myTime = await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
+                    myBestTime = (int)myTime.Score;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
             }
         }
 
@@ -48,6 +57,41 @@ namespace DanielLochner.Assets.CreatureCreator
                 time++;
             }
         }
+        
+        public void Complete()
+        {
+            StopCoroutine(timerCoroutine);
+            timerRoot.SetActive(true);
+
+            if (myBestTime == -1 || time < myBestTime)
+            {
+                myBestTime = time;
+            }
+
+            string message = LocalizationUtility.Localize("timed_complete_message", FormatTime(time), FormatTime(myBestTime));
+            if (myBestTime == time)
+            {
+                message = message.ToColour(Color.green);
+            }
+            InformationDialog.Inform(LocalizationUtility.Localize("timed_complete_title"), message);
+
+            try
+            {
+                LeaderboardsService.Instance.AddPlayerScoreAsync(LeaderboardId, time);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+        }
+
+        private string FormatTime(int seconds)
+        {
+            int mins = seconds / 60;
+            int secs = seconds % 60;
+            return $"{mins:00}:{secs:00}";
+        }
+
 
         public void UnlockBodyPart(string bodyPartId)
         {
@@ -83,33 +127,6 @@ namespace DanielLochner.Assets.CreatureCreator
         public bool IsQuestCompleted(string questId)
         {
             return CompletedQuests.Contains(questId);
-        }
-
-
-        public void RecordTime()
-        {
-            timerRoot.SetActive(true);
-            StopCoroutine(timerCoroutine);
-
-            if (BestTime == -1 || time < BestTime)
-            {
-                BestTime = time;
-            }
-
-            string title = LocalizationUtility.Localize("timed_complete_title");
-            string message = LocalizationUtility.Localize("timed_complete_message", FormatTime(time), FormatTime(BestTime));
-            if (BestTime == time)
-            {
-                message = message.ToColour(Color.green);
-            }
-            InformationDialog.Inform(title, message);;
-        }
-
-        private string FormatTime(int seconds)
-        {
-            int mins = seconds / 60;
-            int secs = seconds % 60;
-            return $"{mins:00}:{secs:00}";
         }
     }
 }

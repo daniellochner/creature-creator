@@ -611,7 +611,7 @@ namespace DanielLochner.Assets.CreatureCreator
         
         private void UpdateMap()
         {
-            mapUI.UpdatePadlock(mapOS, modeOS);
+            mapUI.Setup(mapOS, modeOS);
         }
         private void UpdateStatus(string status, Color color, float duration = 5)
         {
