@@ -31,11 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (WorldManager.Instance.IsTimed)
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("timed_begin_title"), LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_okay"), false, delegate
-                {
-                    timerRoot.SetActive(true);
-                    timerCoroutine = StartCoroutine(TimerRoutine());
-                });
+                InformationDialog.Inform(LocalizationUtility.Localize("timed_begin_title"), LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_okay"), true, Begin, Begin, Begin);
 
                 try
                 {
@@ -70,7 +66,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 time++;
             }
         }
-        
+
+        public void Begin()
+        {
+            timerRoot.SetActive(true);
+            timerCoroutine = StartCoroutine(TimerRoutine());
+        }
         public void Complete()
         {
             StopCoroutine(timerCoroutine);
@@ -104,7 +105,6 @@ namespace DanielLochner.Assets.CreatureCreator
             int secs = seconds % 60;
             return $"{mins:00}:{secs:00}";
         }
-
 
         public void UnlockBodyPart(string bodyPartId)
         {
