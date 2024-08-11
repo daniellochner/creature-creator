@@ -14,6 +14,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject lockedIcon;
         [SerializeField] private GameObject timedPanel;
         [SerializeField] private TextMeshProUGUI timeText;
+        [SerializeField] private SimpleScrollSnap.SimpleScrollSnap leaderboardsScrollSnap;
 
         private OptionSelector mapOS, modeOS;
         #endregion
@@ -36,6 +37,11 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Hide()
         {
             mapMenu.Close();
+        }
+        public void OpenLeaderboard()
+        {
+            LeaderboardsMenu.Instance.Open();
+            leaderboardsScrollSnap.GoToPanel(mapOS.Selected);
         }
 
         public void OnMapChanged(int option)
