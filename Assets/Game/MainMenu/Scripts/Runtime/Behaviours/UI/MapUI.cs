@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void UpdateTime()
         {
             Map map = (Map)mapOS.Selected;
-            if (LeaderboardsManager.Instance.myTimes.TryGetValue(map, out var time))
+            if (LeaderboardsManager.Instance.MyTimes.TryGetValue(map, out var time))
             {
                 timeText.text = FormatTime((int)(time.Score));
             }

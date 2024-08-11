@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
 {
     public class LeaderboardsManager : MonoBehaviourSingleton<LeaderboardsManager>
     {
-        public SerializableDictionaryBase<Map, LeaderboardEntry> myTimes;
+        public SerializableDictionaryBase<Map, LeaderboardEntry> MyTimes { get; set; } = new SerializableDictionaryBase<Map, LeaderboardEntry>();
 
         public async void Start()
         {
@@ -22,7 +22,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 try
                 {
                     LeaderboardEntry myTime = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboard.LeaderboardId);
-                    myTimes.Add(leaderboard.map, myTime);
+                    MyTimes.Add(leaderboard.map, myTime);
                 }
                 catch (LeaderboardsException le)
                 {

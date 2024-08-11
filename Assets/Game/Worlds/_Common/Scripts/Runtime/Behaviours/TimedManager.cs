@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Exceptions;
+using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (WorldManager.Instance.IsTimed)
             {
-                InformationDialog.Inform(LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_okay"), onOkay: delegate
+                InformationDialog.Inform(LocalizationUtility.Localize("timed_begin_title"), LocalizationUtility.Localize("timed_begin_message"), LocalizationUtility.Localize("timed_begin_okay"), false, delegate
                 {
                     timerRoot.SetActive(true);
                     timerCoroutine = StartCoroutine(TimerRoutine());
@@ -37,8 +39,19 @@ namespace DanielLochner.Assets.CreatureCreator
 
                 try
                 {
-                    var myTime = await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
+                    LeaderboardEntry myTime = await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
                     myBestTime = (int)myTime.Score;
+                }
+                catch (LeaderboardsException le)
+                {
+                    if (le.Reason == LeaderboardsExceptionReason.EntryNotFound)
+                    {
+                        // Ignore when no entry found...
+                    }
+                    else
+                    {
+                        Debug.Log(le);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -61,7 +74,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public void Complete()
         {
             StopCoroutine(timerCoroutine);
-            timerRoot.SetActive(true);
+            timerRoot.SetActive(false);
 
             if (myBestTime == -1 || time < myBestTime)
             {

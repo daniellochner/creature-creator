@@ -31,7 +31,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (myTime == null)
                 {
-                    LeaderboardsManager.Instance.myTimes.TryGetValue(map, out myTime);
+                    LeaderboardsManager.Instance.MyTimes.TryGetValue(map, out myTime);
                 }
 
                 LeaderboardScoresPage topTimes = await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions()
