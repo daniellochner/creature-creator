@@ -4,6 +4,8 @@ using Unity.Netcode;
 using TMPro;
 using UnityEngine.EventSystems;
 using static DanielLochner.Assets.SimpleSideMenu;
+using ProfanityDetector;
+using System.Collections.Generic;
 
 namespace DanielLochner.Assets
 {
@@ -17,6 +19,7 @@ namespace DanielLochner.Assets
         public SimpleSideMenu sideMenu;
         public Color friendColor;
         public Keybind keybind;
+        public bool checkForProfanity;
 
         private float lastMessageTime;
 
@@ -63,6 +66,24 @@ namespace DanielLochner.Assets
             if (message.Length > maxMessageLength)
             {
                 return;
+            }
+
+            if (checkForProfanity)
+            {
+                ProfanityFilter filter = new ProfanityFilter();
+                if (filter.ContainsProfanity(message))
+                {
+                    IReadOnlyCollection<string> profanities = filter.DetectAllProfanities(message);
+                    if (profanities.Count > 0)
+                    {
+                        InformationDialog.Inform(LocalizationUtility.Localize("profanity_detected_title"), LocalizationUtility.Localize("profanity_detected_message_terms", string.Join(", ", profanities)));
+                    }
+                    else
+                    {
+                        InformationDialog.Inform(LocalizationUtility.Localize("profanity_detected_title"), LocalizationUtility.Localize("profanity_detected_message"));
+                    }
+                    return;
+                }
             }
 
             if (Time.time > (lastMessageTime + messageCooldown))

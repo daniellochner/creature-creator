@@ -154,6 +154,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
             EditorManager.Instance.CreativeMode = world.Mode == Mode.Creative;
             EditorManager.Instance.CheckForProfanity = !world.AllowProfanity;
+
+            PlayerChatManager.Instance.checkForProfanity = !world.AllowProfanity;
         }
         public void SetupSP()
         {
