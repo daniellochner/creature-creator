@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
 using Unity.Services.Authentication;
+using Unity.Services.Core;
 using Unity.Services.Leaderboards;
 using Unity.Services.Leaderboards.Exceptions;
 using Unity.Services.Leaderboards.Models;
@@ -15,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public async void Start()
         {
-            await UniTask.WaitUntil(() => AuthenticationService.Instance.IsSignedIn);
+            await UniTask.WaitUntil(() => (UnityServices.Instance.State == ServicesInitializationState.Initialized) && (AuthenticationService.Instance.IsSignedIn));
 
             foreach (var leaderboard in LeaderboardsMenu.Instance.leaderboards)
             {
