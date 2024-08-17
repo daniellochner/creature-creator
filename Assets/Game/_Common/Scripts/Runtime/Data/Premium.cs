@@ -11,6 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private bool isPremium = false;
         [SerializeField] private UsableItems usableBodyParts = new UsableItems();
         [SerializeField] private UsableItems usablePatterns = new UsableItems();
+        [SerializeField] private int downloadsToday;
         #endregion
 
         #region Properties
@@ -21,6 +22,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public UsableItems UsableBodyParts => usableBodyParts;
         public UsableItems UsablePatterns => usablePatterns;
+        public int DownloadsToday
+        {
+            get => downloadsToday;
+            set => downloadsToday = value;
+        }
         #endregion
 
         #region Methods
@@ -29,6 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
             IsPremium = SystemUtility.IsDevice(DeviceType.Desktop);
             UsableBodyParts.Clear();
             UsablePatterns.Clear();
+            DownloadsToday = 0;
         }
         #endregion
 

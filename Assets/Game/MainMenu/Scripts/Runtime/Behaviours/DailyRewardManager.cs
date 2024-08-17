@@ -26,6 +26,9 @@ namespace DanielLochner.Assets.CreatureCreator
             string today = WorldTimeManager.Instance.UtcNow.Value.ToShortDateString();
             if (DailyReward != today)
             {
+                PremiumManager.Data.DownloadsToday = 0;
+                PremiumManager.Instance.Save();
+
                 RewardsMenu.Instance.Clear();
                 PremiumManager.Instance.RequestedItem = null;
                 PremiumManager.Instance.AccessRandom(4);

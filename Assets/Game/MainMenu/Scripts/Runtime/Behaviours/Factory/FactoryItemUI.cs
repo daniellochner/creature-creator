@@ -72,16 +72,29 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         public void Download()
         {
-            SetDownloading(true);
+            if (!PremiumManager.Data.IsPremium && PremiumManager.Data.DownloadsToday >= 3)
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("mainmenu_premium_factory_title"), LocalizationUtility.Localize("mainmenu_premium_factory_message"), onOkay: delegate
+                {
+                    PremiumMenu.Instance.RequestNothing();
+                });
+            }
+            else
+            {
+                SetDownloading(true);
 
-            FactoryManager.Instance.DownloadItem(item.id, delegate (string data)
-            {
-                SetDownloading(false, false);
-            },
-            delegate (string error)
-            {
-                SetDownloading(false);
-            });
+                FactoryManager.Instance.DownloadItem(item.id, delegate (string data)
+                {
+                    SetDownloading(false, false);
+                },
+                delegate (string error)
+                {
+                    SetDownloading(false);
+                });
+
+                PremiumManager.Data.DownloadsToday++;
+                PremiumManager.Instance.Save();
+            }
         }
 
         public void SetLiked(bool isLiked)
