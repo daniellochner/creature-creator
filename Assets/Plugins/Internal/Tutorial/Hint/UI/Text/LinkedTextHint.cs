@@ -6,7 +6,7 @@ namespace DanielLochner.Assets
     {
         public RectTransform copied;
 
-        private void Start()
+        private void Update()
         {
             RectTransform rt = transform as RectTransform;
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, copied.rect.width);

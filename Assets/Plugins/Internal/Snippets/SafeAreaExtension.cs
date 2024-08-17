@@ -7,37 +7,64 @@ namespace DanielLochner.Assets
     public class SafeAreaExtension : MonoBehaviour
     {
         private SafeArea safeArea;
+        private float prevWidth, prevHeight;
+
+        private RectTransform RectTransform => transform as RectTransform;
 
         private void Awake()
         {
             safeArea = GetComponentInParent<SafeArea>();
+            Setup();
+        }
 
-            RectTransform rectTransform = transform as RectTransform;
+        private void Update()
+        {
+            Setup();
+        }
+
+        public void Setup()
+        {
             RectTransform safeAreaRT = safeArea.transform as RectTransform;
+            if (RectTransform.pivot.x == 1)
+            {
+                SetWidth(safeAreaRT.anchorMin.x * Display.main.systemWidth);
+            }
+            else
+            if (RectTransform.pivot.x == 0)
+            {
+                SetWidth((1f - safeAreaRT.anchorMax.x) * Display.main.systemWidth);
+            }
+            else
+            if (RectTransform.pivot.y == 1)
+            {
+                SetHeight(safeAreaRT.anchorMin.y * Display.main.systemHeight);
+            }
+            else
+            if (RectTransform.pivot.y == 0)
+            {
+                SetHeight((1f - safeAreaRT.anchorMax.y) * Display.main.systemHeight);
+            }
+            else
+            {
+                SetWidth(Display.main.systemWidth);
+                SetHeight(Display.main.systemHeight);
+            }
+        }
 
-            if (rectTransform.pivot.x == 1)
+        private void SetWidth(float width)
+        {
+            if (width != prevWidth)
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.anchorMin.x * Display.main.systemWidth);
+                RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+                prevWidth = width;
             }
-            else 
-            if (rectTransform.pivot.x == 0)
+        }
+        private void SetHeight(float height)
+        {
+            if (height != prevHeight)
             {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (1f - safeAreaRT.anchorMax.x) * Display.main.systemWidth);
-            }
-            else 
-            if (rectTransform.pivot.y == 1)
-            {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.anchorMin.y * Display.main.systemHeight);
-            }
-            else
-            if (rectTransform.pivot.y == 0)
-            {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (1f - safeAreaRT.anchorMax.y) * Display.main.systemHeight);
-            }
-            else
-            {
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Display.main.systemWidth);
-                rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Display.main.systemHeight);
+                RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                prevHeight = height;
             }
         }
     }
