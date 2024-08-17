@@ -151,7 +151,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     break;
 
                 case FactoryTimePeriodType.AllTime:
-                    days = uint.MaxValue;
+                    days = 9999999;
                     break;
             }
 
@@ -221,6 +221,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             UGCQueryHandle_t handle = SteamUGC.CreateQueryAllUGCRequest(sortBy, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items_ReadyToUse, SteamUtils.GetAppID(), SteamUtils.GetAppID(), (uint)(itemQuery.Page + 1));
             SteamUGC.SetRankedByTrendDays(handle, days);
+            SteamUGC.SetReturnLongDescription(handle, true);
             SteamUGC.SetSearchText(handle, itemQuery.SearchText);
             SteamUGC.SetMatchAnyTag(handle, true); // TODO: Tags
 
