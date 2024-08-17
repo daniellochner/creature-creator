@@ -27,6 +27,12 @@ namespace DanielLochner.Assets.CreatureCreator
                 minigameText.gameObject.SetActive(isVisible);
             }
         }
+
+        protected bool HasRequestedMinigame
+        {
+            get => PlayerPrefs.GetInt("REQUESTED_MINIGAME", 0) == 1;
+            set => PlayerPrefs.SetInt("REQUESTED_MINIGAME", value ? 1 : 0);
+        }
         #endregion
 
         #region Methods
@@ -54,17 +60,10 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private void Setup()
         {
-            if (WorldManager.Instance.IsMultiplayer)
-            {
-                minigameLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
+            minigameLookAtConstraint.AddSource(new ConstraintSource() { sourceTransform = Player.Instance.Camera.MainCamera.transform, weight = 1f });
 
-                region.OnTrack += OnTrack;
-                region.OnLoseTrackOf += OnLoseTrackOf;
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            region.OnTrack += OnTrack;
+            region.OnLoseTrackOf += OnLoseTrackOf;
         }
         
         private void OnTrack(Collider col)
@@ -115,6 +114,17 @@ namespace DanielLochner.Assets.CreatureCreator
             minigame.SignMeUp(true);
 
             Player.Instance.Rider.Dismount();
+
+            if (!WorldManager.Instance.IsMultiplayer && !HasRequestedMinigame)
+            {
+                this.Invoke(delegate
+                {
+                    InformationDialog.Inform(LocalizationUtility.Localize("minigame_singleplayer_title"), LocalizationUtility.Localize("minigame_singleplayer_message"));
+                },
+                0.5f);
+            }
+
+            HasRequestedMinigame = true;
         }
         public void SignOut()
         {

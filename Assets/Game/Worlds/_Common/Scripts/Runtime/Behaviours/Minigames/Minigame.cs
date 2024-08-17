@@ -191,7 +191,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             if (isSignUp)
             {
-                if (WaitingPlayers.Value == 0)
+                if (WaitingPlayers.Value == 0 && WorldManager.Instance.IsMultiplayer)
                 {
                     RequestClientRpc(NetworkHostManager.Instance.Players[clientId].username);
                 }
