@@ -16,6 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         [Header("Factory")]
         public SecretKey steamKey;
+        public SecretKey serverAddress;
         public int hoursToCache = 1;
 
         private static ulong STEAM_ID = 1990050;
@@ -360,42 +361,31 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private IEnumerator DownloadItemRoutine(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
         {
-            string url = $"https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1";
-            string dat = $"{{ 'itemcount':1, 'publishedfileids[0]':{itemId} }}";
+            string url = $"http://{serverAddress.Value}/get_workshop_item?id={itemId}";
 
-            WWWForm form = new WWWForm();
-            form.AddField("itemcount", 1);
-            form.AddField("publishedfileids[0]", itemId.ToString());
-
-            Debug.Log(form);
-
-            UnityWebRequest request = UnityWebRequest.Post(url, form);
-            request.SetRequestHeader("Content-Type", "application/json");
-
+            UnityWebRequest request = UnityWebRequest.Get(url);
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                //string url = $"https://api.steampowered.com/ISteamRemoteStorage/GetUGCFileDetails/v1/?key={steamKey.Value}&appid={STEAM_ID}&ugcid={itemId}";
+                JObject obj = JToken.Parse(request.downloadHandler.text) as JObject;
 
-                Debug.Log(request.downloadHandler.text);
+                string name = obj["name"].Value<string>();
+                string data = obj["data"].Value<string>();
 
-                //JObject data = JToken.Parse(request.downloadHandler.text).First.First as JObject;
+                string creaturesDir = Path.Combine(Application.persistentDataPath, "creature");
+                if (!Directory.Exists(creaturesDir))
+                {
+                    Directory.CreateDirectory(creaturesDir);
+                }
 
-                //JArray players = data["players"] as JArray;
-                //if (players.Count > 0)
-                //{
-                //    var player = players.First;
+                string creaturePath = Path.Combine(creaturesDir, $"{name}.dat");
+                File.WriteAllText(creaturePath, data);
 
-                //    string username = player["personaname"].Value<string>();
-
-                //    onDownloaded?.Invoke(username);
-                //}
+                onDownloaded?.Invoke(name);
             }
             else
             {
-                Debug.Log(request.error);
-
                 onFailed?.Invoke(request.error);
             }
         }
