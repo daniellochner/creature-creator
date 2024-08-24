@@ -15,6 +15,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public TextMeshProUGUI descriptionText;
         public TextMeshProUGUI upVotesText;
         public TextMeshProUGUI downVotesText;
+        public GameObject downloadBtn;
+        public GameObject downloadingIcon;
 
         public Image iconImg;
         public Image subscribeImg;
@@ -25,13 +27,21 @@ namespace DanielLochner.Assets.CreatureCreator
         public GameObject refreshIcon;
         public GameObject errorIcon;
 
-
         private FactoryItem item;
 
         private bool isLiked, isDisliked, isSubscribed;
         private Coroutine previewCoroutine;
         private FactoryItemUI itemUI;
 
+
+        private void Update()
+        {
+            if (IsOpen)
+            {
+                downloadBtn.SetActive(itemUI.downloadBtn.activeSelf);
+                downloadingIcon.SetActive(itemUI.downloadingIcon.activeSelf);
+            }
+        }
 
         public void View(FactoryItem item, FactoryItemUI itemUI, Sprite preview = null, bool isSubscribed = false, bool isLiked = false, bool isDisliked = false)
         {
@@ -106,6 +116,10 @@ namespace DanielLochner.Assets.CreatureCreator
         public void ViewMore()
         {
             FactoryManager.Instance.ViewWorkshopItem(item.id);
+        }
+        public void Download()
+        {
+            itemUI.Download();
         }
 
         public void SetLiked(bool isLiked)

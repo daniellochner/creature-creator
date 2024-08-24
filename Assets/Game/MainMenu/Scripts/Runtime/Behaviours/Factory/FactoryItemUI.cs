@@ -12,20 +12,20 @@ namespace DanielLochner.Assets.CreatureCreator
     public class FactoryItemUI : MonoBehaviour
     {
         #region Fields
-        [SerializeField] private TextMeshProUGUI nameText;
-        [SerializeField] private TextMeshProUGUI upVotesText;
-        [SerializeField] private Image previewImg;
-        [SerializeField] private Button pageBtn;
-        [SerializeField] private Button subscribeBtn;
-        [SerializeField] private Button likeBtn;
-        [SerializeField] private Sprite addIcon;
-        [SerializeField] private Sprite removeIcon;
-        [SerializeField] private GameObject downloadBtn;
-        [SerializeField] private GameObject downloadingIcon;
+        public TextMeshProUGUI nameText;
+        public TextMeshProUGUI upVotesText;
+        public Image previewImg;
+        public Button pageBtn;
+        public Button subscribeBtn;
+        public Button likeBtn;
+        public Sprite addIcon;
+        public Sprite removeIcon;
+        public GameObject downloadBtn;
+        public GameObject downloadingIcon;
         [Space]
-        [SerializeField] private GameObject info;
-        [SerializeField] private GameObject refreshIcon;
-        [SerializeField] private GameObject errorIcon;
+        public GameObject info;
+        public GameObject refreshIcon;
+        public GameObject errorIcon;
 
         private Coroutine previewCoroutine;
         private bool isLiked, isDisliked, isSubscribed;
