@@ -55,15 +55,18 @@ namespace DanielLochner.Assets
             if (!NetworkManager.Singleton.IsHost) return;
 
             // Remove disconnecting player from joined lobby immediately...
-            try
+            if (LobbyHelper.Instance.JoinedLobby != null)
             {
-                var lobbyId = LobbyHelper.Instance.JoinedLobby.Id;
-                var playerId = Players[clientId].playerId;
-                LobbyService.Instance.RemovePlayerAsync(lobbyId, playerId);
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
+                try
+                {
+                    var lobbyId = LobbyHelper.Instance.JoinedLobby.Id;
+                    var playerId = Players[clientId].playerId;
+                    LobbyService.Instance.RemovePlayerAsync(lobbyId, playerId);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
             }
 
             OnPlayerRemove?.Invoke(Players[clientId]);
