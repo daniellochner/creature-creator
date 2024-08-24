@@ -254,7 +254,7 @@ namespace DanielLochner.Assets.CreatureCreator
                     break;
             }
 
-            string url = $"https://api.steampowered.com/IPublishedFileService/QueryFiles/v1/?key={steamKey.Value}&appid={STEAM_ID}&query_type={sortBy}&search_text={itemQuery.SearchText}&days={days}&numperpage={itemQuery.NumPerPage}&page={itemQuery.Page}&return_vote_data=true&return_previews=true";
+            string url = $"https://api.steampowered.com/IPublishedFileService/QueryFiles/v1/?key={steamKey.Value}&appid={STEAM_ID}&query_type={sortBy}&search_text={itemQuery.SearchText}&days={days}&numperpage={itemQuery.NumPerPage}&page={itemQuery.Page+1}&return_vote_data=true&return_previews=true";
             StartCoroutine(GetItemsRoutine(url, itemQuery, onLoaded, onFailed));
 #endif
         }
