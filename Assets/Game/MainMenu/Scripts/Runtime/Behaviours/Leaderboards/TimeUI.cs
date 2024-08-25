@@ -15,7 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup(string name, int rank, int time, bool isMine = false)
         {
-            nameText.text = $"{rank+1}.\t {name}";
+            nameText.text = $"{rank+1}.\t {name}".NoParse();
             timeText.text = TimeSpan.FromSeconds(time).ToString(@"hh\:mm\:ss");
 
             SetMine(isMine);
