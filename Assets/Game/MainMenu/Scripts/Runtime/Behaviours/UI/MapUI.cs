@@ -90,6 +90,10 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 timeText.text = FormatTime((int)(time.Score));
             }
+            else
+            {
+                timeText.text = "--:--";
+            }
         }
 
         private string FormatTime(int seconds)
