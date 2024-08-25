@@ -28,7 +28,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
                 leg.Anchor.SetParent(Dynamic.Transform);
             }
 
-            Creature.Effector.StopMySounds();
+            Creature.Effector.StopSoundsSelf();
             Creature.StopCoroutine(danceCoroutine);
         }
 

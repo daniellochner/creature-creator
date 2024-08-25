@@ -29,7 +29,7 @@ namespace DanielLochner.Assets.CreatureCreator.Animations
         public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             Creature.Constructor.Root.localRotation = Quaternion.identity;
-            Creature.Effector.StopMySounds();
+            Creature.Effector.StopSoundsSelf();
 
             foreach (LegAnimator leg in Creature.Legs)
             {

@@ -40,62 +40,72 @@ namespace DanielLochner.Assets.CreatureCreator
                 PlaySound(sound.name, sound.volume);
             }
         }
-        public void PlaySound(string sound, float volume)
+        public void PlaySound(string soundId, float volume)
         {
-            PlaySoundSelf(sound, volume);
-            PlaySoundServerRpc(sound, volume, NetworkManager.Singleton.LocalClientId);
+            PlaySoundSelf(soundId, volume);
+            PlaySoundServerRpc(soundId, volume, NetworkManager.Singleton.LocalClientId);
         }
-        [ServerRpc]
-        private void PlaySoundServerRpc(string sound, float volume, ulong clientId)
+        [ServerRpc(RequireOwnership = false)]
+        public void PlaySoundServerRpc(string soundId, float volume, ulong clientId)
         {
-            if (!soundFX.ContainsKey(sound)) return;
-            PlaySoundClientRpc(sound, volume, NetworkUtils.SendTo(clientId));
+            PlaySoundClientRpc(soundId, volume, NetworkUtils.DontSendTo(clientId));
         }
         [ClientRpc]
-        private void PlaySoundClientRpc(string sound, float volume, ClientRpcParams clientRpcParams)
+        public void PlaySoundClientRpc(string soundId, float volume, ClientRpcParams clientRpcParams)
         {
-            PlaySoundSelf(sound, volume);
+            PlaySoundSelf(soundId, volume);
         }
-        private void PlaySoundSelf(string sound, float volume)
+        public void PlaySoundSelf(string soundId, float volume)
         {
-            audioSource.PlayOneShot(soundFX[sound], volume);
-            OnPlaySound?.Invoke(sound);
+            if (soundFX.TryGetValue(soundId, out var clip))
+            {
+                audioSource.PlayOneShot(clip, volume);
+                OnPlaySound?.Invoke(soundId);
+            }
         }
 
-        public void StopMySounds()
+        public void StopSounds()
+        {
+            StopSoundsSelf();
+            StopSoundsServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
+        [ServerRpc(RequireOwnership = false)]
+        public void StopSoundsServerRpc(ulong clientId)
+        {
+            StopSoundsClientRpc(NetworkUtils.DontSendTo(clientId));
+        }
+        [ClientRpc]
+        public void StopSoundsClientRpc(ClientRpcParams clientRpcParams)
+        {
+            StopSoundsSelf();
+        }
+        public void StopSoundsSelf()
         {
             audioSource.Stop();
         }
-        public void StopSounds()
-        {
-            StopSoundsServerRpc();
-        }
-        [ServerRpc]
-        private void StopSoundsServerRpc()
-        {
-            StopSoundsClientRpc();
-        }
-        [ClientRpc]
-        private void StopSoundsClientRpc()
-        {
-            StopMySounds();
-        }
 
-        public void SpawnParticle(string particle, Vector3 position)
+        public void SpawnParticle(string particleId, Vector3 position)
         {
-            SpawnParticleServerRpc(particle, position);
+            SpawnParticleSelf(particleId, position);
+            SpawnParticleServerRpc(particleId, position, NetworkManager.Singleton.LocalClientId);
         }
-        [ServerRpc]
-        private void SpawnParticleServerRpc(string particle, Vector3 position)
+        [ServerRpc(RequireOwnership = false)]
+        public void SpawnParticleServerRpc(string particleId, Vector3 position, ulong clientId)
         {
-            if (!particleFX.ContainsKey(particle)) return;
-            SpawnParticleClientRpc(particle, position);
+            SpawnParticleClientRpc(particleId, position, NetworkUtils.DontSendTo(clientId));
         }
         [ClientRpc]
-        private void SpawnParticleClientRpc(string particle, Vector3 position)
+        public void SpawnParticleClientRpc(string particleId, Vector3 position, ClientRpcParams clientRpcParams)
         {
-            Instantiate(particleFX[particle], position, Quaternion.identity, Dynamic.Transform);
-            OnSpawnParticle?.Invoke(particle, position);
+            SpawnParticleSelf(particleId, position);
+        }
+        public void SpawnParticleSelf(string particleId, Vector3 position)
+        {
+            if (particleFX.TryGetValue(particleId, out var particle))
+            {
+                Instantiate(particle, position, Quaternion.identity, Dynamic.Transform);
+                OnSpawnParticle?.Invoke(particleId, position);
+            }
         }
         #endregion
 
