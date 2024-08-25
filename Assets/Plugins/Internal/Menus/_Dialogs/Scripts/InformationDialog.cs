@@ -39,22 +39,31 @@ namespace DanielLochner.Assets
             Instance.okayButton.onClick.RemoveAllListeners();
             Instance.okayButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onOkay?.Invoke();
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onOkay?.Invoke();
+                }
             });
 
             Instance.closeButton.onClick.RemoveAllListeners();
             Instance.closeButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onClose?.Invoke();
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onClose?.Invoke();
+                }
             });
 
             Instance.ignoreButton.onClick.RemoveAllListeners();
             Instance.ignoreButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onIgnore?.Invoke();
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onIgnore?.Invoke();
+                }
             });
 
             Instance.Open();

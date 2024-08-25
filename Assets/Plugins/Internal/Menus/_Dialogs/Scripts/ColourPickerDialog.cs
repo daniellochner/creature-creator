@@ -30,8 +30,11 @@ namespace DanielLochner.Assets
             Instance.confirmButton.onClick.RemoveAllListeners();
             Instance.confirmButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onPick?.Invoke(Instance.colorPicker.color);
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onPick?.Invoke(Instance.colorPicker.color);
+                }
             });
 
             Instance.gameObject.SetActive(true);

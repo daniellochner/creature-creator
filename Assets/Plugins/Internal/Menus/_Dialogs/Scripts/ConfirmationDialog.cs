@@ -47,13 +47,19 @@ namespace DanielLochner.Assets
             Instance.noButton.onClick.RemoveAllListeners();
             Instance.yesButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onYes?.Invoke();
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onYes?.Invoke();
+                }
             });
             Instance.noButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onNo?.Invoke();
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onNo?.Invoke();
+                }
             });
             Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.noButton.onClick;
 

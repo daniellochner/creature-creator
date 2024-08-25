@@ -86,14 +86,20 @@ namespace DanielLochner.Assets
             {
                 if (Instance.inputFieldText.text.Length <= maxCharacters || maxCharacters == -1)
                 {
-                    Instance.Close();
-                    onSubmit?.Invoke(Instance.inputFieldText.text);
+                    if (Instance.IsOpen)
+                    {
+                        Instance.Close();
+                        onSubmit?.Invoke(Instance.inputFieldText.text);
+                    }
                 }
             });
             Instance.cancelButton.onClick.AddListener(delegate
             {
-                Instance.Close();
-                onCancel?.Invoke(Instance.inputFieldText.text);
+                if (Instance.IsOpen)
+                {
+                    Instance.Close();
+                    onCancel?.Invoke(Instance.inputFieldText.text);
+                }
             });
             Instance.ignoreButton.onClick = Instance.closeButton.onClick = Instance.cancelButton.onClick;
 
