@@ -306,7 +306,10 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             foreach (string creaturePath in Directory.GetFiles(creaturesDirectory))
             {
-                AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
+                if (creaturePath.EndsWith(".dat"))
+                {
+                    AddCreatureUI(Path.GetFileNameWithoutExtension(creaturePath));
+                }
             }
             UpdateNoCreatures();
             UpdateLoadableCreatures();

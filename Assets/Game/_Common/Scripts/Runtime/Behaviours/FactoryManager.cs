@@ -393,9 +393,17 @@ namespace DanielLochner.Assets.CreatureCreator
         public void LoadWorkshopCreatures()
         {
 #if UNITY_STANDALONE
+            LoadedWorkshopCreatures.Clear();
+
             uint n = SteamUGC.GetNumSubscribedItems();
             if (n > 0)
             {
+                string creaturesDir = Path.Combine(Application.persistentDataPath, "creature");
+                if (!Directory.Exists(creaturesDir))
+                {
+                    Directory.CreateDirectory(creaturesDir);
+                }
+
                 PublishedFileId_t[] items = new PublishedFileId_t[n];
                 SteamUGC.GetSubscribedItems(items, n);
 
@@ -404,13 +412,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     if (SteamUGC.GetItemInstallInfo(fileId, out ulong sizeOnDisk, out string folder, 1024, out uint timeStamp) && Directory.Exists(folder))
                     {
                         string src = Directory.GetFiles(folder)[0];
-
-                        string creaturesDir = Path.Combine(Application.persistentDataPath, "creature");
-                        if (!Directory.Exists(creaturesDir))
-                        {
-                            Directory.CreateDirectory(creaturesDir);
-                        }
-
                         string dst = Path.Combine(creaturesDir, Path.GetFileName(src));
                         if (!File.Exists(dst))
                         {

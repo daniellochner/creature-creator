@@ -75,6 +75,11 @@ namespace DanielLochner.Assets.CreatureCreator
                 SetupSP();
             }
 
+            if (!EducationManager.Instance.IsEducational)
+            {
+                FactoryManager.Instance.LoadWorkshopCreatures();
+            }
+
             Player.Instance.Editor.Platform = StartingPlatform;
             EditorManager.Instance.Setup();
 
@@ -98,11 +103,6 @@ namespace DanielLochner.Assets.CreatureCreator
             foreach (GameObject go in toDisable)
             {
                 go.SetActive(false);
-            }
-
-            if (!EducationManager.Instance.IsEducational)
-            {
-                FactoryManager.Instance.LoadWorkshopCreatures();
             }
 
             IsSetup = true;
