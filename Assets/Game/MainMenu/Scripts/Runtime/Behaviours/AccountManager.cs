@@ -369,6 +369,7 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnSetup()
         {
             FriendsMenu.Instance.Setup();
+            LeaderboardsManager.Instance.Setup();
         }
         private void OnSignedInAnonymously()
         {

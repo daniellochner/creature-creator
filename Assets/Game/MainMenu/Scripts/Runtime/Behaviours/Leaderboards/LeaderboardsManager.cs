@@ -14,10 +14,8 @@ namespace DanielLochner.Assets.CreatureCreator
     {
         public SerializableDictionaryBase<Map, LeaderboardEntry> MyTimes { get; set; } = new SerializableDictionaryBase<Map, LeaderboardEntry>();
 
-        public async void Start()
+        public async void Setup()
         {
-            await UniTask.WaitUntil(() => (UnityServices.Instance.State == ServicesInitializationState.Initialized) && (AuthenticationService.Instance.IsSignedIn));
-
             foreach (var leaderboard in LeaderboardsMenu.Instance.leaderboards)
             {
                 try
