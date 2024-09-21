@@ -22,8 +22,6 @@ namespace DanielLochner.Assets
         public Action<PlayerData> OnConfirmFriendRequest { get; set; }
 
         public Dictionary<ulong, PlayerData> Players { get; private set; } = new Dictionary<ulong, PlayerData>();
-
-        public int NumPlayers => networkMenu.NumPlayers;
         #endregion
 
         #region Methods

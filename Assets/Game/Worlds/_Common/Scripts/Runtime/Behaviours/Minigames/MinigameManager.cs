@@ -15,6 +15,7 @@ namespace DanielLochner.Assets.CreatureCreator
         [Space]
         [SerializeField] private TextMeshProUGUI playText;
         [SerializeField] private Toggle playToggle;
+        [SerializeField] private CanvasGroup paginationCG;
         #endregion
 
         #region Properties
@@ -46,6 +47,11 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             playText.text = text;
             playToggle.interactable = isInteractable;
+        }
+        public void SetSwap(bool canSwap)
+        {
+            paginationCG.interactable = canSwap;
+            paginationCG.alpha = canSwap ? 1f : 0.5f;
         }
         #endregion
     }

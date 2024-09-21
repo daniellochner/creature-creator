@@ -58,7 +58,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public string Name => LocalizationUtility.Localize(nameId);
         public int MinPlayers => minPlayers;
-        public int MaxPlayers => Mathf.Min(maxPlayers, NetworkPlayersManager.Instance.NumPlayers);
+        public int MaxPlayers => Mathf.Min(maxPlayers, CreaturePlayer.Players.Count);
         public int WaitTime => waitTime;
         public bool EnablePVP => enablePVP;
 
@@ -335,10 +335,13 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (InMinigame)
             {
-                bool isInteractable = newTime <= 0;
-                string text = !isInteractable ? newTime.ToString() : LocalizationUtility.Localize("cc_pagination_play");
+                bool canSwap = newTime > 3;
+                bool canPlay = newTime <= 0;
 
-                MinigameManager.Instance.SetPlay(text, isInteractable);
+                string text = !canPlay ? newTime.ToString() : LocalizationUtility.Localize("cc_pagination_play");
+
+                MinigameManager.Instance.SetSwap(canSwap);
+                MinigameManager.Instance.SetPlay(text, canPlay);
             }
         }
         #endregion
