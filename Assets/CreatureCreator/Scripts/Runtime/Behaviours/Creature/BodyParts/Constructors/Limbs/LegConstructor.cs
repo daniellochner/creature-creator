@@ -16,7 +16,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Methods
         private void LateUpdate()
         {
-            Extremity.rotation = CreatureConstructor.Body.rotation;
+            Extremity.transform.forward = Vector3.ProjectOnPlane(CreatureConstructor.Root.forward, Vector3.up);
         }
 
         public override void Setup(CreatureConstructor creatureConstructor)

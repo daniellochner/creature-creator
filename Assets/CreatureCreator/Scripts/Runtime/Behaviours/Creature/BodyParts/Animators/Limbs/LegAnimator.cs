@@ -79,7 +79,7 @@ namespace DanielLochner.Assets.CreatureCreator
             base.LateUpdate();
             if (LegConstructor.ConnectedFoot != null)
             {
-                LegConstructor.ConnectedFoot.transform.forward = CreatureAnimator.Constructor.Body.forward;
+                LegConstructor.ConnectedFoot.transform.rotation = LegConstructor.Extremity.rotation;
             }
         }
 
