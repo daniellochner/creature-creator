@@ -21,7 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
             else
             {
                 // Daily Reward
-                if (!PremiumManager.Instance.IsEverythingUsable())
+                if (!PremiumManager.Data.IsPremium)
                 {
                     yield return DailyRewardManager.Instance.Setup();
                 }
