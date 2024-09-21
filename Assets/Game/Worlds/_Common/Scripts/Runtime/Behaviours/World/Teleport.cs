@@ -35,7 +35,7 @@ namespace DanielLochner.Assets.CreatureCreator
         }
         private bool ShowRequiredExperience
         {
-            get => !WorldManager.Instance.IsCreative && (!WorldManager.Instance.IsMultiplayer || IsServer);
+            get => !WorldManager.Instance.IsCreative && (!WorldManager.Instance.IsMultiplayer || IsServer) && (ProgressManager.Data.Experience < requiredExperience);
         }
         private bool ShowCount
         {
