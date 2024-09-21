@@ -17,6 +17,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public TextMeshProUGUI downVotesText;
         public GameObject downloadBtn;
         public GameObject downloadingIcon;
+        public Button authorBtn;
 
         public Image iconImg;
         public Image subscribeImg;
@@ -45,32 +46,36 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void View(FactoryItem item, FactoryItemUI itemUI, Sprite preview = null, bool isSubscribed = false, bool isLiked = false, bool isDisliked = false)
         {
-            this.item = item;
-            this.isSubscribed = isSubscribed;
-            this.isLiked = isLiked;
-            this.isDisliked = isDisliked;
-            this.itemUI = itemUI;
-
-            nameText.text = item.name;
-            descriptionText.text = item.description;
-            upVotesText.text = item.upVotes.ToString();
-            downVotesText.text = item.downVotes.ToString();
-            timeCreatedText.text = DateTimeUtility.UnixTimeStampToDateTime(item.timeCreated).ToString();
-
-            if (preview == null)
+            if (this.item != item)
             {
-                SetPreview(item.previewURL);
-            }
-            else
-            {
-                iconImg.sprite = preview;
-            }
+                this.item = item;
+                this.isSubscribed = isSubscribed;
+                this.isLiked = isLiked;
+                this.isDisliked = isDisliked;
+                this.itemUI = itemUI;
 
-            //SetCreator(item.creatorId);
+                nameText.text = item.name;
+                descriptionText.text = item.description;
+                upVotesText.text = item.upVotes.ToString();
+                downVotesText.text = item.downVotes.ToString();
+                timeCreatedText.text = DateTimeUtility.UnixTimeStampToDateTime(item.timeCreated).ToString();
 
-            SetSubscribed(isSubscribed);
-            SetLiked(isLiked);
-            SetDisliked(isDisliked);
+                if (preview == null)
+                {
+                    SetPreview(item.previewURL);
+                }
+                else
+                {
+                    iconImg.sprite = preview;
+                }
+
+                SetCreator($"[{item.creatorId}]");
+                authorBtn.interactable = true;
+
+                SetSubscribed(isSubscribed);
+                SetLiked(isLiked);
+                SetDisliked(isDisliked);
+            }
 
             Open();
         }
@@ -175,15 +180,18 @@ namespace DanielLochner.Assets.CreatureCreator
             refreshIcon.SetActive(false);
         }
 
-        private void SetCreator(ulong creatorId)
+        private void SetCreator(string username)
         {
-            authorText.gameObject.SetActive(false);
+            authorText.text = $"By {username}";
+        }
 
-            FactoryManager.Instance.GetUsername(creatorId, delegate (string username)
+        public void LoadCreatorUsername()
+        {
+            FactoryManager.Instance.GetUsername(item.creatorId, delegate (string username)
             {
-                authorText.text = username;
-                authorText.gameObject.SetActive(true);
-            }, 
+                SetCreator(username);
+                authorBtn.interactable = false;
+            },
             delegate (string error)
             {
                 Debug.Log(error);
