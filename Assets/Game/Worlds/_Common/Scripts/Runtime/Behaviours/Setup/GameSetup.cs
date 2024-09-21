@@ -172,7 +172,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             Player.Instance.DeathMessenger.enabled = false;
-            PlayerChatManager.Instance.enabled = false;
 
             EditorManager.Instance.CreativeMode = world.Mode == Mode.Creative;
         }

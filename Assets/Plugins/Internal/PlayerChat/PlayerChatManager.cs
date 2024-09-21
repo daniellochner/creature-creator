@@ -1,62 +1,35 @@
-using DanielLochner.Assets;
 using UnityEngine;
 using Unity.Netcode;
-using TMPro;
-using UnityEngine.EventSystems;
-using static DanielLochner.Assets.SimpleSideMenu;
 using ProfanityDetector;
 using System.Collections.Generic;
+using System;
 
 namespace DanielLochner.Assets
 {
     public class PlayerChatManager : NetworkSingleton<PlayerChatManager>
     {
-        public TMP_InputField messageInputField;
-        public TextMeshProUGUI messagePrefab;
+        public PlayerChatMenu chatMenu;
         public float messageCooldown = 1f;
         public int maxMessageLength = 256;
-        public Transform messagesRoot;
-        public SimpleSideMenu sideMenu;
         public Color friendColor;
         public Keybind keybind;
         public bool checkForProfanity;
 
         private float lastMessageTime;
 
-        public bool IsOpen
+        public Action<string> OnMessageSent { get; set; }
+        public Action<ulong, string> OnMessageReceived { get; set; }
+
+        public void Start()
         {
-            get => sideMenu.CurrentState == State.Open;
+            Instantiate(chatMenu, Dynamic.OverlayCanvas);
         }
 
-        private void Update()
+        public void TrySendChatMessage(string text)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && (sideMenu.CurrentState == State.Open) && !string.IsNullOrEmpty(messageInputField.text))
-            {
-                messageInputField.text = messageInputField.text.TrimEnd(); // Trim end new-line character
-                TrySendChatMessage();
-            }
+            string message = text.Trim();
 
-            if (InputUtility.GetKeyDown(keybind) && !InputDialog.Instance.IsOpen)
-            {
-                sideMenu.Open();
-                EventSystem.current.SetSelectedGameObject(messageInputField.gameObject);
-            }
-        }
-
-        private void OnEnable()
-        {
-            sideMenu.gameObject.SetActive(true);
-        }
-        private void OnDisable()
-        {
-            sideMenu.gameObject.SetActive(false);
-        }
-
-        public void TrySendChatMessage()
-        {
-            string message = messageInputField.text.Trim();
-
-            if (string.IsNullOrEmpty(messageInputField.text))
+            if (string.IsNullOrEmpty(text))
             {
                 return;
             }
@@ -90,11 +63,12 @@ namespace DanielLochner.Assets
             {
                 ulong clientId = NetworkManager.Singleton.LocalClientId;
 
-                SendChatMessageSelf(clientId, message);
+                OnMessageReceived(clientId, message);
                 SendChatMessageServerRpc(clientId, message);
 
                 lastMessageTime = Time.time;
-                messageInputField.text = null;
+
+                OnMessageSent?.Invoke(message);
             }
         }
 
@@ -107,16 +81,7 @@ namespace DanielLochner.Assets
         [ClientRpc]
         public void SendChatMessageClientRpc(ulong clientId, string message, ClientRpcParams clientRpcParams)
         {
-            SendChatMessageSelf(clientId, message);
-        }
-
-        public void SendChatMessageSelf(ulong clientId, string message)
-        {
-            PlayerData data = NetworkPlayersManager.Instance.Players[clientId];
-
-            var text = Instantiate(messagePrefab, messagesRoot);
-            string username = data.username.NoParse().ToColour(FriendsManager.Instance.IsFriended(data.playerId) ? friendColor : new(0.75f, 0.75f, 0.75f));
-            text.text = $"{username}: {message}";
+            OnMessageReceived?.Invoke(clientId, message);
         }
     }
 }

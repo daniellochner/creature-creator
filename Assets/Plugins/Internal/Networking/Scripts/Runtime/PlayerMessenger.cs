@@ -98,7 +98,7 @@ namespace DanielLochner.Assets
             messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message.NoParse();
             messageGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
 
-            PlayerChatManager.Instance.SendChatMessageSelf(OwnerClientId, message);
+            PlayerChatManager.Instance.OnMessageReceived(OwnerClientId, message);
         }
 
         [ServerRpc(RequireOwnership = false)]

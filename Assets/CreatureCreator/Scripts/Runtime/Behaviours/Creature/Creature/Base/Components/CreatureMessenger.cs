@@ -11,7 +11,7 @@ namespace DanielLochner.Assets.CreatureCreator
         #region Properties
         public CreatureConstructor Constructor { get; set; }
 
-        public override bool CanSend => base.CanSend && !CinematicManager.Instance.IsInCinematic && !EditorManager.Instance.IsEditing && SettingsManager.Data.WorldChat && WorldManager.Instance.IsMultiplayer && !PlayerChatManager.Instance.IsOpen;
+        public override bool CanSend => base.CanSend && !CinematicManager.Instance.IsInCinematic && !EditorManager.Instance.IsEditing && SettingsManager.Data.WorldChat && WorldManager.Instance.IsMultiplayer && (!PlayerChatMenu.Instance || !PlayerChatMenu.Instance.IsOpen);
         public override bool CanReceive => base.CanReceive && SettingsManager.Data.WorldChat;
 
         public override bool TryOpen => InputUtility.GetKeyDown(KeybindingsManager.Data.Talk);
