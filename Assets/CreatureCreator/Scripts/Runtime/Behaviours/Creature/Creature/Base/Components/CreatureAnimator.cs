@@ -55,6 +55,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public float DefaultHeight { get; private set; }
 
+        public bool IsInitialized
+        {
+            get; set;
+        }
+
         public bool IsOptimized
         {
             get => isOptimized;
@@ -194,6 +199,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 leg.Reinitialize();
             }
+
+            IsInitialized = true;
         }
         public void Rebuild()
         {

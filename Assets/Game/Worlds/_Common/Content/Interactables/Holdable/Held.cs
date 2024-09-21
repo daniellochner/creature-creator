@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -38,8 +39,17 @@ namespace DanielLochner.Assets.CreatureCreator
 
             Holdable = GetComponent<Holdable>();
         }
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitUntilSetup(GameSetup.Instance);
+            foreach (var creature in CreatureBase.Creatures)
+            {
+                if (creature.Holder.IsHolding.Value)
+                {
+                    yield return new WaitUntil(() => creature.Animator.IsInitialized);
+                }
+            }
+
             startPosition = transform.position;
             startRotation = transform.rotation;
 
