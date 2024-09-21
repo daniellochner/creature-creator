@@ -160,8 +160,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
             SetPremiumButtonsVisible(false);
 
-            EditorManager.Instance?.UpdateUsability();
-            PremiumManager.Instance?.HideBannerAd();
+            PremiumManager.Instance.HideBannerAd();
 
             InformationDialog.Inform(LocalizationUtility.Localize("premium_paid_success_title"), LocalizationUtility.Localize("premium_paid_success_message"));
         }

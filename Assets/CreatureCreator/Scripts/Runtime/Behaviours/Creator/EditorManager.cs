@@ -220,6 +220,20 @@ namespace DanielLochner.Assets.CreatureCreator
         #endregion
 
         #region Methods
+        private void OnEnable()
+        {
+            if (PremiumManager.Instance != null)
+            {
+                PremiumManager.Instance.OnPremiumPurchased += OnPremiumPurchased;
+            }
+        }
+        private void OnDisable()
+        {
+            if (PremiumManager.Instance != null)
+            {
+                PremiumManager.Instance.OnPremiumPurchased -= OnPremiumPurchased;
+            }
+        }
         private void Update()
         {
             if (SystemUtility.IsDevice(DeviceType.Desktop))
@@ -1261,6 +1275,13 @@ namespace DanielLochner.Assets.CreatureCreator
             }
 
             AddBodyPartUI(bodyPartID, true, true);
+        }
+        #endregion
+
+        #region Premium
+        public void OnPremiumPurchased()
+        {
+            UpdateLoadableCreatures();
         }
         #endregion
 
