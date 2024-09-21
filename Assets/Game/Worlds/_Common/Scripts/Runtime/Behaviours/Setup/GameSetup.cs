@@ -34,9 +34,9 @@ namespace DanielLochner.Assets.CreatureCreator
         {
             if (!NetworkManager.Singleton.IsHost)
             {
-                yield return new WaitUntil(() => Player.Instance); // wait until the player has been replicated...
-                Setup();
+                yield return new WaitUntil(() => Player.Instance && Player.Instance.DataContainer.Data != null); // wait until the player has been replicated...
             }
+            Setup();
         }
         protected override void OnDestroy()
         {
