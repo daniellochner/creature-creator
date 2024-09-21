@@ -73,7 +73,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (player != null)
                 {
                     Transform spawnPoint = spectatorSpawnPoints[Random.Range(0, spectatorSpawnPoints.Length)];
-                    player.Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true);
+                    player.Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true, false);
                 }
             }
         }

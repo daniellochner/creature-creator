@@ -217,7 +217,7 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 if (!EditorManager.Instance.IsEditing && !MinigameManager.Instance.CurrentMinigame && !MinigameManager.Instance.CurrentPad)
                 {
-                    Player.Instance.Mover.Teleport(pad.transform.position, Player.Instance.transform.rotation, true);
+                    Player.Instance.Mover.Teleport(pad.transform.position, Player.Instance.transform.rotation, true, false);
                 }
             }, 0.75f);
         }
@@ -391,7 +391,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (InMinigame)
             {
                 Transform spawnPoint = GetSpawnPoint();
-                Player.Instance.Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true);
+                Player.Instance.Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true, false);
             }
         }
 

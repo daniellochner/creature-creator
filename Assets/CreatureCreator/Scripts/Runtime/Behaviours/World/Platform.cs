@@ -97,14 +97,8 @@ namespace DanielLochner.Assets.CreatureCreator
         public void TeleportTo(bool align, bool playSound)
         {
             Player.Instance.Editor.Platform.HasEntered = false;
-            Player.Instance.Mover.Teleport(Position, align ? Rotation : Player.Instance.transform.rotation, playSound);
+            Player.Instance.Mover.Teleport(Position, Rotation, playSound, align);
             Enter();
-
-            if (align)
-            {
-                Player.Instance.Camera.Root.SetPositionAndRotation(Position, Rotation);
-                Player.Instance.Camera.CameraOrbit.Reset();
-            }
         }
         #endregion
     }

@@ -11,9 +11,12 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private GameObject cameraPrefab;
         [SerializeField] private MinMax minMaxDamage;
         [SerializeField] private MinMax minMaxStress;
+        [SerializeField] private Transform viewOffset;
         #endregion
 
         #region Properties
+        public Transform ViewOffset => viewOffset;
+
         public Transform Root { get; private set; }
         public CameraOrbit CameraOrbit { get; private set; }
         public Follower Follower { get; private set; }
@@ -48,7 +51,7 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void Setup()
         {
-            GameObject camera = Instantiate(cameraPrefab);
+            GameObject camera = Instantiate(cameraPrefab, viewOffset.position, viewOffset.rotation);
 
             Root = camera.transform;
             CameraOrbit = camera.GetComponent<CameraOrbit>();
@@ -57,7 +60,7 @@ namespace DanielLochner.Assets.CreatureCreator
             ToolCamera = Root.GetChild(0).GetChild(0).GetChild(0).GetComponent<Camera>();
             StressReceiver = MainCamera.GetComponent<StressReceiver>();
 
-            Follower.SetFollow(transform, true);
+            Follower.SetFollow(viewOffset);
 
             Health.OnTakeDamage += delegate (float damage, DamageReason reason, string inflicter)
             {

@@ -107,7 +107,7 @@ namespace DanielLochner.Assets.CreatureCreator
             if (MinigameManager.Instance.CurrentMinigame != null)
             {
                 Transform spawnPoint = MinigameManager.Instance.CurrentMinigame.GetSpawnPoint();
-                Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true);
+                Mover.Teleport(spawnPoint.position, spawnPoint.rotation, true, false);
 
                 Player.Instance.Loader.ShowMeToOthers();
             }

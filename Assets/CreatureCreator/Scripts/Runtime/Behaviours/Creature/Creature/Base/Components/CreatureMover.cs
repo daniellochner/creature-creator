@@ -375,7 +375,7 @@ namespace DanielLochner.Assets.CreatureCreator
             rigidbody.rotation *= rotation;
         }
 
-        public void Teleport(Vector3 position, Quaternion rotation, bool playSound)
+        public void Teleport(Vector3 position, Quaternion rotation, bool playSound, bool align)
         {
             StopMoving();
 
@@ -389,6 +389,12 @@ namespace DanielLochner.Assets.CreatureCreator
             if (playSound)
             {
                 EditorManager.Instance.EditorAudioSource.PlayOneShot(teleportFX);
+            }
+
+            if (align)
+            {
+                Camera.Root.SetPositionAndRotation(Camera.ViewOffset.position, Camera.ViewOffset.rotation);
+                Camera.CameraOrbit.Reset();
             }
         }
 
