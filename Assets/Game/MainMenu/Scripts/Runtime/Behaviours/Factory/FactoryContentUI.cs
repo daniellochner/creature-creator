@@ -101,7 +101,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 NumPerPage = SystemUtility.IsDevice(DeviceType.Handheld) ? 12 : 50,
                 SearchText = "",
                 SortByType = FactorySortByType.MostPopular,
-                TimePeriodType = FactoryTimePeriodType.AllTime,
+                TimePeriodType = FactoryTimePeriodType.ThisMonth,
                 TagType = tagType
             };
 
