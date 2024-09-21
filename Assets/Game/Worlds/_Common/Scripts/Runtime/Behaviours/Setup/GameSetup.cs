@@ -89,6 +89,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 if (!WorldManager.Instance.IsTimed)
                 {
                     onTutorial.Invoke();
+                    SettingsManager.Data.Tutorial = false;
                 }
             }
             else
