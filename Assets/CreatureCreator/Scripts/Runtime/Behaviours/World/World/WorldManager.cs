@@ -58,7 +58,6 @@ namespace DanielLochner.Assets.CreatureCreator
         private void OnServerStarted()
         {
             NetworkManager.Singleton.SceneManager.OnLoad += OnLoad;
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
 
             NetworkManager.Singleton.SceneManager.LoadScene(World.MapName, LoadSceneMode.Single);
         }
@@ -92,13 +91,6 @@ namespace DanielLochner.Assets.CreatureCreator
                     IsUsingTeleport = false;
                 }
             }));
-        }
-        private void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
-        {
-            if (GameSetup.Instance && !GameSetup.Instance.IsSetup)
-            {
-                GameSetup.Instance.Setup();
-            }
         }
         private void OnShutdown()
         {

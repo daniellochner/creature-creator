@@ -56,6 +56,8 @@ namespace DanielLochner.Assets
             {
                 Lobbies.Instance.DeleteLobbyAsync(lobbyId);
             }
+            JoinedLobby = null;
+
             if (heartbeatLobbyCoroutine != null)
             {
                 StopCoroutine(heartbeatLobbyCoroutine);

@@ -52,7 +52,7 @@ namespace DanielLochner.Assets
         }
         private void Remove(ulong clientId)
         {
-            if (!NetworkManager.Singleton.IsHost) return;
+            if (!NetworkManager.Singleton.IsHost || (clientId == 0)) return; // Ignore on clients and when disconnecting client is host.
 
             // Remove disconnecting player from joined lobby immediately...
             if (LobbyHelper.Instance.JoinedLobby != null)
@@ -74,6 +74,7 @@ namespace DanielLochner.Assets
         }
         private void Clear()
         {
+            Password = "";
             OnPlayerAdd = OnPlayerRemove = null;
             Players.Clear();
         }
