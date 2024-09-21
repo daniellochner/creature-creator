@@ -80,22 +80,27 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             }
             else
+            if (!FactoryManager.Instance.IsDownloading)
             {
                 SetDownloading(true);
 
                 FactoryManager.Instance.DownloadItem(item.id, delegate (string name)
-                {
-                    SetDownloading(false, false);
+                    {
+                        SetDownloading(false, false);
 
-                    InformationDialog.Inform(LocalizationUtility.Localize("factory_download_title"), LocalizationUtility.Localize("factory_download_message", name));
-                },
-                delegate (string error)
-                {
-                    SetDownloading(false);
-                });
+                        InformationDialog.Inform(LocalizationUtility.Localize("factory_download_title"), LocalizationUtility.Localize("factory_download_message", name));
+                    },
+                    delegate (string error)
+                    {
+                        SetDownloading(false);
+                    });
 
                 PremiumManager.Data.DownloadsToday++;
                 PremiumManager.Instance.Save();
+            }
+            else
+            {
+                InformationDialog.Inform(LocalizationUtility.Localize("factory_downloading_title"), LocalizationUtility.Localize("factory_downloading_message"));
             }
         }
 

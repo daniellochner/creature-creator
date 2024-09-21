@@ -23,6 +23,8 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public List<string> LoadedWorkshopCreatures { get; } = new();
 
+        public bool IsDownloading { get; private set; }
+
 
         protected override void Start()
         {
@@ -357,10 +359,15 @@ namespace DanielLochner.Assets.CreatureCreator
 
         public void DownloadItem(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
         {
-            StartCoroutine(DownloadItemRoutine(itemId, onDownloaded, onFailed));
+            if (!IsDownloading)
+            {
+                StartCoroutine(DownloadItemRoutine(itemId, onDownloaded, onFailed));
+            }
         }
         private IEnumerator DownloadItemRoutine(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
         {
+            IsDownloading = true;
+
             string url = $"http://{serverAddress.Value}/get_workshop_item?id={itemId}";
 
             UnityWebRequest request = UnityWebRequest.Get(url);
@@ -388,6 +395,8 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 onFailed?.Invoke(request.error);
             }
+
+            IsDownloading = false;
         }
 
         public void LoadWorkshopCreatures()
