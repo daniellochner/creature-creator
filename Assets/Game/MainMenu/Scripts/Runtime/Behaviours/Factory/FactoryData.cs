@@ -12,6 +12,7 @@ namespace DanielLochner.Assets.CreatureCreator
         public List<ulong> DislikedItems = new();
 
         public SerializableDictionaryBase<FactoryItemQuery, CachedItemData> CachedItems = new();
+        public SerializableDictionaryBase<ulong, string> CachedUsernames = new();
 
         public override void Revert()
         {
@@ -20,6 +21,7 @@ namespace DanielLochner.Assets.CreatureCreator
             DislikedItems.Clear();
 
             CachedItems.Clear();
+            CachedUsernames.Clear();
         }
 
         [Serializable]

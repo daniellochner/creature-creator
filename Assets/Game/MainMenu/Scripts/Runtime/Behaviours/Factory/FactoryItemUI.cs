@@ -80,7 +80,7 @@ namespace DanielLochner.Assets.CreatureCreator
                 });
             }
             else
-            if (!FactoryManager.Instance.IsDownloading)
+            if (!FactoryManager.Instance.IsDownloadingItem)
             {
                 SetDownloading(true);
 

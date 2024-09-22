@@ -21,9 +21,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         private static ulong STEAM_ID = 1990050;
 
+
         public List<string> LoadedWorkshopCreatures { get; } = new();
 
-        public bool IsDownloading { get; private set; }
+        public bool IsDownloadingItem { get; private set; }
+        public bool IsDownloadingUsername { get; private set; }
 
 
         protected override void Start()
@@ -312,61 +314,18 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        public void GetUsername(ulong userId, Action<string> onLoaded, Action<string> onFailed)
-        {
-            string url = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={steamKey.Value}&steamids={userId}";
-            StartCoroutine(GetUsernameRoutine(url, onLoaded, onFailed));
-        }
-
-        private IEnumerator GetUsernameRoutine(string url, Action<string> onLoaded, Action<string> onFailed)
-        {
-            UnityWebRequest request = UnityWebRequest.Get(url);
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                JObject data = JToken.Parse(request.downloadHandler.text).First.First as JObject;
-
-                JArray players = data["players"] as JArray;
-                if (players.Count > 0)
-                {
-                    var player = players.First;
-
-                    string username = player["personaname"].Value<string>();
-
-                    onLoaded?.Invoke(username);
-                }
-            }
-            else
-            {
-                onFailed?.Invoke(request.error);
-            }
-        }
-
-        private void CacheItems(FactoryItemQuery query, List<FactoryItem> items, uint total)
-        {
-            if (!Data.CachedItems.ContainsKey(query))
-            {
-                Data.CachedItems.Add(query, new FactoryData.CachedItemData()
-                {
-                    Items = items,
-                    Total = total
-                });
-                Save();
-            }
-        }
-
 
         public void DownloadItem(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
         {
-            if (!IsDownloading)
+            if (!IsDownloadingItem)
             {
                 StartCoroutine(DownloadItemRoutine(itemId, onDownloaded, onFailed));
             }
         }
+
         private IEnumerator DownloadItemRoutine(ulong itemId, Action<string> onDownloaded, Action<string> onFailed)
         {
-            IsDownloading = true;
+            IsDownloadingItem = true;
 
             string url = $"http://{serverAddress.Value}/get_workshop_item?id={itemId}";
 
@@ -396,8 +355,68 @@ namespace DanielLochner.Assets.CreatureCreator
                 onFailed?.Invoke(request.error);
             }
 
-            IsDownloading = false;
+            IsDownloadingItem = false;
         }
+
+        private void CacheItems(FactoryItemQuery query, List<FactoryItem> items, uint total)
+        {
+            if (!Data.CachedItems.ContainsKey(query))
+            {
+                Data.CachedItems.Add(query, new FactoryData.CachedItemData()
+                {
+                    Items = items,
+                    Total = total
+                });
+                Save();
+            }
+        }
+
+
+        public void DownloadUsername(ulong userId, Action<string> onLoaded, Action<string> onFailed)
+        {
+            if (!IsDownloadingUsername)
+            {
+                StartCoroutine(DownloadUsernameRoutine(userId, onLoaded, onFailed));
+            }
+        }
+
+        private IEnumerator DownloadUsernameRoutine(ulong userId, Action<string> onLoaded, Action<string> onFailed)
+        {
+            IsDownloadingUsername = true;
+
+            string url = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={steamKey.Value}&steamids={userId}";
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                JObject data = JToken.Parse(request.downloadHandler.text).First.First as JObject;
+
+                JArray players = data["players"] as JArray;
+                if (players.Count > 0)
+                {
+                    var player = players.First;
+
+                    string username = player["personaname"].Value<string>();
+
+                    onLoaded?.Invoke(username);
+
+                    if (!Data.CachedUsernames.ContainsKey(userId))
+                    {
+                        Data.CachedUsernames.Add(userId, username);
+                        Save();
+                    }
+                }
+            }
+            else
+            {
+                onFailed?.Invoke(request.error);
+            }
+
+            IsDownloadingUsername = false;
+        }
+
 
         public void LoadWorkshopCreatures()
         {

@@ -69,8 +69,14 @@ namespace DanielLochner.Assets.CreatureCreator
                     iconImg.sprite = preview;
                 }
 
-                SetCreator($"[{item.creatorId}]");
-                authorBtn.interactable = true;
+                if (FactoryManager.Data.CachedUsernames.TryGetValue(item.creatorId, out string username))
+                {
+                    SetCreator(username, false);
+                }
+                else
+                {
+                    SetCreator($"[{item.creatorId}]", true);
+                }
 
                 SetSubscribed(isSubscribed);
                 SetLiked(isLiked);
@@ -180,17 +186,17 @@ namespace DanielLochner.Assets.CreatureCreator
             refreshIcon.SetActive(false);
         }
 
-        private void SetCreator(string username)
+        private void SetCreator(string username, bool interactable)
         {
             authorText.text = $"By {username}";
+            authorBtn.interactable = interactable;
         }
 
         public void LoadCreatorUsername()
         {
-            FactoryManager.Instance.GetUsername(item.creatorId, delegate (string username)
+            FactoryManager.Instance.DownloadUsername(item.creatorId, delegate (string username)
             {
-                SetCreator(username);
-                authorBtn.interactable = false;
+                SetCreator(username, false);
             },
             delegate (string error)
             {
