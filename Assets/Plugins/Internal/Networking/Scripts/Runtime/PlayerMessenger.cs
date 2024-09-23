@@ -16,8 +16,7 @@ namespace DanielLochner.Assets
         [SerializeField] private float sendCooldown;
         [SerializeField] protected float height;
 
-        private ProfanityFilter filter = new ProfanityFilter();
-        private float cooldownTimeLeft;
+        private float lastMessageTime;
         protected GameObject messageGO;
         #endregion
 
@@ -28,7 +27,7 @@ namespace DanielLochner.Assets
             set => checkForProfanity = value;
         }
 
-        public virtual bool CanSend => !InputDialog.Instance.IsOpen && cooldownTimeLeft < 0;
+        public virtual bool CanSend => (Time.time > (lastMessageTime + sendCooldown));
         public virtual bool CanReceive => Camera.main != null;
 
         public virtual bool TryOpen => Input.GetKeyDown(KeyCode.T);
@@ -56,36 +55,23 @@ namespace DanielLochner.Assets
             {
                 Open();
             }
-            cooldownTimeLeft -= Time.deltaTime;
         }
 
         public void Open()
         {
-            if (CanSend)
+            if (!InputDialog.Instance.IsOpen && CanSend)
             {
-                InputDialog.Input(LocalizationUtility.Localize("send_message_title"), onSubmit: SendMessage, maxCharacters: characterLimit);
+                InputDialog.Input(LocalizationUtility.Localize("send_message_title"), onSubmit: TrySendMessage, maxCharacters: characterLimit);
             }
         }
 
-        public new void SendMessage(string message)
+        public void TrySendMessage(string input)
         {
-            if (message.Length == 0)
+            if (TextSanitizer.TrySanitize(input, characterLimit, checkForProfanity, out string output) && CanSend)
             {
-                return;
+                SendMessageServerRpc(output);
+                lastMessageTime = Time.time;
             }
-            if (message.Length > characterLimit)
-            {
-                InformationDialog.Inform(LocalizationUtility.Localize("sent_message_too_long_title"), LocalizationUtility.Localize("sent_message_too_long_message", characterLimit));
-                return;
-            }
-            if (checkForProfanity && filter.ContainsProfanity(message))
-            {
-                InformationDialog.Inform(LocalizationUtility.Localize("profanity_detected_title"), LocalizationUtility.Localize("profanity_detected_message"));
-                return;
-            }
-            cooldownTimeLeft = sendCooldown;
-
-            SendMessageServerRpc(message);
         }
         protected virtual void ReceiveMessage(string message)
         {
@@ -95,7 +81,7 @@ namespace DanielLochner.Assets
             }
             messageGO = Instantiate(messagePrefab, transform.position + transform.up * height, transform.rotation, transform);
 
-            messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message.NoParse();
+            messageGO.GetComponentInChildren<TextMeshProUGUI>().text = message;
             messageGO.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource() { sourceTransform = Camera.main.transform, weight = 1f });
 
             PlayerChatManager.Instance.OnMessageReceived(OwnerClientId, message);

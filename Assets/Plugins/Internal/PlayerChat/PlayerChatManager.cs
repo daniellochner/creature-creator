@@ -20,55 +20,30 @@ namespace DanielLochner.Assets
         public Action<string> OnMessageSent { get; set; }
         public Action<ulong, string> OnMessageReceived { get; set; }
 
+        public bool CanSend => Time.time > (lastMessageTime + messageCooldown);
+
         public void Start()
         {
-            Instantiate(chatMenu, Dynamic.OverlayCanvas);
+            Instantiate(chatMenu, Dynamic.OverlayCanvasSafe);
         }
 
-        public void TrySendChatMessage(string text)
+        public bool TrySendChatMessage(string input)
         {
-            string message = text.Trim();
-
-            if (string.IsNullOrEmpty(text))
-            {
-                return;
-            }
-
-            message = message.NoParse();
-
-            if (message.Length > maxMessageLength)
-            {
-                return;
-            }
-
-            if (checkForProfanity)
-            {
-                ProfanityFilter filter = new ProfanityFilter();
-                if (filter.ContainsProfanity(message))
-                {
-                    IReadOnlyCollection<string> profanities = filter.DetectAllProfanities(message);
-                    if (profanities.Count > 0)
-                    {
-                        InformationDialog.Inform(LocalizationUtility.Localize("profanity_detected_title"), LocalizationUtility.Localize("profanity_detected_message_terms", string.Join(", ", profanities)));
-                    }
-                    else
-                    {
-                        InformationDialog.Inform(LocalizationUtility.Localize("profanity_detected_title"), LocalizationUtility.Localize("profanity_detected_message"));
-                    }
-                    return;
-                }
-            }
-
-            if (Time.time > (lastMessageTime + messageCooldown))
+            if (TextSanitizer.TrySanitize(input, maxMessageLength, checkForProfanity, out string output) && CanSend)
             {
                 ulong clientId = NetworkManager.Singleton.LocalClientId;
 
-                OnMessageReceived(clientId, message);
-                SendChatMessageServerRpc(clientId, message);
+                OnMessageReceived(clientId, output);
+                SendChatMessageServerRpc(clientId, output);
+                OnMessageSent?.Invoke(output);
 
                 lastMessageTime = Time.time;
 
-                OnMessageSent?.Invoke(message);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

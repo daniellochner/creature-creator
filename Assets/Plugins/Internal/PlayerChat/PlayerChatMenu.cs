@@ -64,8 +64,7 @@ namespace DanielLochner.Assets
         {
             if (Input.GetKeyDown(KeyCode.Return) && (sideMenu.CurrentState == State.Open) && !string.IsNullOrEmpty(messageInputField.text))
             {
-                messageInputField.text = messageInputField.text.TrimEnd(); // Trim end new-line character
-                PlayerChatManager.Instance.TrySendChatMessage(messageInputField.text);
+                TrySendMessage();
             }
 
             if (InputUtility.GetKeyDown(keybind) && !InputDialog.Instance.IsOpen)
@@ -77,7 +76,10 @@ namespace DanielLochner.Assets
 
         public void TrySendMessage()
         {
-            PlayerChatManager.Instance.TrySendChatMessage(messageInputField.text);
+            if (!PlayerChatManager.Instance.TrySendChatMessage(messageInputField.text))
+            {
+                messageInputField.text = messageInputField.text.TrimEnd(); // Trim end new-line character
+            }
         }
 
         private void OnMessageSent(string message)
