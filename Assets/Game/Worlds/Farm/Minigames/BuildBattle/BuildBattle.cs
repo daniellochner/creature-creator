@@ -214,11 +214,11 @@ namespace DanielLochner.Assets.CreatureCreator
         }
 
         [ClientRpc]
-        private void DisplayCreatureClientRpc(ulong currentClientId, CreatureData data)
+        private void DisplayCreatureClientRpc(ulong clientId, CreatureData data)
         {
             if (InMinigame)
             {
-                SetRatingPadActiveClientRpc(!NetworkUtils.IsPlayer(currentClientId));
+                SetRatingPadActiveSelf(!NetworkUtils.IsPlayer(clientId));
             }
 
             creatureToRate.transform.parent.localRotation = Quaternion.identity;
@@ -248,6 +248,11 @@ namespace DanielLochner.Assets.CreatureCreator
 
         [ClientRpc]
         private void SetRatingPadActiveClientRpc(bool isActive)
+        {
+            SetRatingPadActiveSelf(isActive);
+        }
+
+        private void SetRatingPadActiveSelf(bool isActive)
         {
             if (InMinigame)
             {
