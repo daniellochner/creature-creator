@@ -142,8 +142,14 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return new WaitForSeconds(1f);
 
             // Rate
-            foreach (ulong clientId in players)
+            var clientIds = new List<ulong>(players);
+            foreach (ulong clientId in clientIds)
             {
+                if (!NetworkManager.Singleton.ConnectedClientIds.Contains(clientId))
+                {
+                    continue; // Skip if this player has disconnected!
+                }
+
                 playerRatings[clientId] = new Dictionary<ulong, int>();
                 currentClientId = clientId;
 
