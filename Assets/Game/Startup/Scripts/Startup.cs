@@ -1,5 +1,8 @@
 using System.Collections;
+using System.Text;
 using TMPro;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -46,23 +49,6 @@ namespace DanielLochner.Assets.CreatureCreator
             yield return LinkRoutine();
             yield return AuthenticateRoutine();
             yield return WaitRoutine();
-
-            if (ShowIntro && !EducationManager.Instance.IsEducational)
-            {
-                MusicManager.Instance.FadeTo(null);
-
-                Fader.FadeInOut(1f, delegate
-                {
-                    SceneManager.LoadScene("Intro");
-                });
-                ShowIntro = false;
-            }
-            else
-            {
-                LoadingManager.Instance.Load("MainMenu");
-            }
-            logoAnimator.SetTrigger("Hide");
-            enterAudioSource.Play();
         }
         private void Update()
         {
@@ -132,8 +118,34 @@ namespace DanielLochner.Assets.CreatureCreator
                 ATTrackingStatusBinding.RequestAuthorizationTracking();
             }
 #endif
-            SetPromptId(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
             yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
+
+            if (true)
+            {
+                LoadCustom();
+            }
+            else
+            {
+                SetPromptId(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
+                yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
+
+                if (ShowIntro && !EducationManager.Instance.IsEducational)
+                {
+                    MusicManager.Instance.FadeTo(null);
+
+                    Fader.FadeInOut(1f, delegate
+                    {
+                        SceneManager.LoadScene("Intro");
+                    });
+                    ShowIntro = false;
+                }
+                else
+                {
+                    LoadingManager.Instance.Load("MainMenu");
+                }
+                logoAnimator.SetTrigger("Hide");
+                enterAudioSource.Play();
+            }
         }
 
         private void SetInstitutionIdInputField(bool isActive)
@@ -156,6 +168,24 @@ namespace DanielLochner.Assets.CreatureCreator
             {
                 SetPromptId(currentPromptId);
             }
+        }
+
+        private void LoadCustom()
+        {
+            // Setup World
+            string mapName = "Custom";
+            Mode mode = Mode.Creative;
+            bool spawnNPC = true;
+            bool enablePVE = true;
+            bool unlimited = false;
+            WorldManager.Instance.World = new WorldSP(mapName, mode, spawnNPC, enablePVE, unlimited);
+
+            // Set Connection Data
+            NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkTransportPicker.Instance.GetTransport<UnityTransport>("localhost");
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(new ConnectionData("", "", "", ProgressManager.Data.Level)));
+
+            // Start Host
+            NetworkManager.Singleton.StartHost();
         }
         #endregion
     }
