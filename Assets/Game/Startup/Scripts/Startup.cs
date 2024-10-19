@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Text;
 using TMPro;
@@ -118,34 +119,47 @@ namespace DanielLochner.Assets.CreatureCreator
                 ATTrackingStatusBinding.RequestAuthorizationTracking();
             }
 #endif
+            SetPromptId(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
             yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
 
-            if (true)
+			string[] commandLineArgs = Environment.GetCommandLineArgs();
+
+			if(true)
+			{
+				LoadCustom(@"");
+				yield break;
+			}
+
+			for(int i = 0; i < commandLineArgs.Length; i++)
+			{
+				if(commandLineArgs[i] == "-loadmap")
+				{
+					LoadCustom(commandLineArgs[i + 1]);
+					yield break;
+				}
+				if(commandLineArgs[i] == "-uploadmap")
+				{
+					UploadMap(commandLineArgs[i + 1]);
+					yield break;
+				}
+			}
+
+            if (ShowIntro && !EducationManager.Instance.IsEducational)
             {
-                LoadCustom();
+                MusicManager.Instance.FadeTo(null);
+
+                Fader.FadeInOut(1f, delegate
+                {
+                    SceneManager.LoadScene("Intro");
+                });
+                ShowIntro = false;
             }
             else
             {
-                SetPromptId(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
-                yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
-
-                if (ShowIntro && !EducationManager.Instance.IsEducational)
-                {
-                    MusicManager.Instance.FadeTo(null);
-
-                    Fader.FadeInOut(1f, delegate
-                    {
-                        SceneManager.LoadScene("Intro");
-                    });
-                    ShowIntro = false;
-                }
-                else
-                {
-                    LoadingManager.Instance.Load("MainMenu");
-                }
-                logoAnimator.SetTrigger("Hide");
-                enterAudioSource.Play();
+                LoadingManager.Instance.Load("MainMenu");
             }
+            logoAnimator.SetTrigger("Hide");
+            enterAudioSource.Play();
         }
 
         private void SetInstitutionIdInputField(bool isActive)
@@ -170,7 +184,7 @@ namespace DanielLochner.Assets.CreatureCreator
             }
         }
 
-        private void LoadCustom()
+        private void LoadCustom(string path)
         {
             // Setup World
             string mapName = "Custom";
@@ -187,6 +201,11 @@ namespace DanielLochner.Assets.CreatureCreator
             // Start Host
             NetworkManager.Singleton.StartHost();
         }
-        #endregion
-    }
+
+		private void UploadMap(string path)
+		{
+
+		}
+		#endregion
+	}
 }
