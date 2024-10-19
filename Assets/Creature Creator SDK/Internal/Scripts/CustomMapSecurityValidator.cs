@@ -42,6 +42,7 @@ public static class CustomMapSecurityValidator
 		typeof(TMP_Text),
 		typeof(CameraFacingBillboard),
 		typeof(Terrain),
+		typeof(PlatformProxy),
 	};
 
 	public static bool IsGameObjectValid(GameObject go, out string error)
