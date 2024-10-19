@@ -74,7 +74,6 @@ namespace DanielLochner.Assets.CreatureCreator
         [SerializeField] private Menu playMenu;
         [SerializeField] private ToggleGraphic playTG;
         [SerializeField] private CreatureInformationMenu informationMenu;
-		public RawImage MiniMap;
 
         [Header("Paint")]
         [SerializeField] private Menu paintMenu;

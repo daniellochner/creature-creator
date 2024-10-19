@@ -38,10 +38,6 @@ namespace DanielLochner.Assets.CreatureCreator
             }
             Setup();
         }
-		public void SetPlatforms(Platform[] platforms)
-		{
-			this.platforms = platforms;
-		}
         protected override void OnDestroy()
         {
             base.OnDestroy();
