@@ -145,7 +145,7 @@ namespace DanielLochner.Assets.CreatureCreator
             var clientIds = new List<ulong>(players);
             foreach (ulong clientId in clientIds)
             {
-                if (!NetworkManager.Singleton.ConnectedClientIds.Contains(clientId))
+                if (!NetworkManager.Singleton.ConnectedClients.ContainsKey(clientId))
                 {
                     continue; // Skip if this player has disconnected!
                 }
