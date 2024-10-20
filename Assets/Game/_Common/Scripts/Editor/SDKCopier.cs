@@ -4,9 +4,9 @@ using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 
-public static class RedmatchSDKCopier
+public static class SDKCopier
 {
-	[MenuItem("Creature Creator/Copy SDK Files")]
+	[MenuItem("Tools/Creature Creator/Copy SDK Files")]
 	public static void CopyFiles()
 	{
 		string sourcePath = Path.Combine(Application.dataPath, "Creature Creator SDK");
