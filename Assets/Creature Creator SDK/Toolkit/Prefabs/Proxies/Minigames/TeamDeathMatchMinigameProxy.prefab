@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5683901836853776982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5683901836853776980}
+  - component: {fileID: -3184299331426972128}
+  m_Layer: 0
+  m_Name: TeamDeathMatchMinigameProxy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5683901836853776980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683901836853776982}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4106863799809798462}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3184299331426972128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683901836853776982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a425fd31b9a6a1c428553f3364a30bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitTime: 30
+  minPlayers: 2
+  maxPlayers: 12
+  cinematicCameraProxy: {fileID: 0}
+  zoneSize: {x: 25, y: 10, z: 25}
+  buildTime: 60
+  playTime: 120
+  enablePVP: 0
+  isAscendingOrder: 0
+--- !u!1001 &5683901837854565181
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5683901836853776980}
+    m_Modifications:
+    - target: {fileID: 268675280558754804, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_Name
+      value: CinematicCameraProxy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9914449
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.13052616
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+--- !u!4 &4106863799809798462 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8511737628751565315, guid: 91b6be61929b35041afa3515faf88bde, type: 3}
+  m_PrefabInstance: {fileID: 5683901837854565181}
+  m_PrefabAsset: {fileID: 0}

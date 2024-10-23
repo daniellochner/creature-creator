@@ -122,42 +122,42 @@ namespace DanielLochner.Assets.CreatureCreator
             SetPromptId(SystemUtility.IsDevice(DeviceType.Handheld) ? "startup_tap-to-start" : "startup_press-any-button");
             yield return new WaitUntil(() => Input.anyKeyDown && !CanvasUtility.IsPointerOverUI);
 
-			string[] commandLineArgs = Environment.GetCommandLineArgs();
+            OnStartup();
+        }
 
-			if(true)
-			{
-				LoadCustom(@"");
-				yield break;
-			}
+        private void OnStartup()
+        {
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
 
-			for(int i = 0; i < commandLineArgs.Length; i++)
-			{
-				if(commandLineArgs[i] == "-loadmap")
-				{
-					LoadCustom(commandLineArgs[i + 1]);
-					yield break;
-				}
-				if(commandLineArgs[i] == "-uploadmap")
-				{
-					UploadMap(commandLineArgs[i + 1]);
-					yield break;
-				}
-			}
-
-            if (ShowIntro && !EducationManager.Instance.IsEducational)
+            if (commandLineArgs.Length > 0)
             {
-                MusicManager.Instance.FadeTo(null);
-
-                Fader.FadeInOut(1f, delegate
+                if (commandLineArgs[0] == "-loadmap")
                 {
-                    SceneManager.LoadScene("Intro");
-                });
-                ShowIntro = false;
+                    LoadCustomMap("");
+                }
+                else
+                if (commandLineArgs[0] == "-uploadmap")
+                {
+                    UploadCustomMap("");
+                }
             }
             else
             {
-                LoadingManager.Instance.Load("MainMenu");
+                if (ShowIntro && !EducationManager.Instance.IsEducational)
+                {
+                    Fader.FadeInOut(1f, delegate
+                    {
+                        SceneManager.LoadScene("Intro");
+                        ShowIntro = false;
+                    });
+                }
+                else
+                {
+                    LoadingManager.Instance.Load("MainMenu");
+                }
             }
+
+            MusicManager.Instance.FadeTo(null);
             logoAnimator.SetTrigger("Hide");
             enterAudioSource.Play();
         }
@@ -176,15 +176,7 @@ namespace DanielLochner.Assets.CreatureCreator
             currentPromptId = null;
         }
 
-        private void OnLocaleChanged(Locale locale)
-        {
-            if (currentPromptId != null)
-            {
-                SetPromptId(currentPromptId);
-            }
-        }
-
-        private void LoadCustom(string path)
+        private void LoadCustomMap(string path)
         {
             // Setup World
             string mapName = "Custom";
@@ -201,11 +193,18 @@ namespace DanielLochner.Assets.CreatureCreator
             // Start Host
             NetworkManager.Singleton.StartHost();
         }
-
-		private void UploadMap(string path)
+		private void UploadCustomMap(string path)
 		{
 
 		}
-		#endregion
-	}
+
+        private void OnLocaleChanged(Locale locale)
+        {
+            if (currentPromptId != null)
+            {
+                SetPromptId(currentPromptId);
+            }
+        }
+        #endregion
+    }
 }
